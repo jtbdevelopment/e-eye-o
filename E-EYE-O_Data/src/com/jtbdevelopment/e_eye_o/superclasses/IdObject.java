@@ -1,4 +1,6 @@
-package com.jtbdevelopment.e_eye_o.data;
+package com.jtbdevelopment.e_eye_o.superclasses;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -28,12 +30,13 @@ public abstract class IdObject {
     }
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    private void setId(final String id) {
         this.id = id;
     }
 }

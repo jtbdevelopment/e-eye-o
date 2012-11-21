@@ -1,5 +1,6 @@
-package com.jtbdevelopment.e_eye_o.data;
+package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.superclasses.ArchivableAppUserOwnedObject;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
@@ -13,16 +14,25 @@ import java.util.Set;
  * Time: 7:26 PM
  */
 @Entity
-public class Observation extends IdObject {
+public class Observation extends ArchivableAppUserOwnedObject {
     private Student student;
     private LocalDateTime observationDate;
     private boolean significant = false;
-    private Set<ObservationCategory> categories = new HashSet<ObservationCategory>();
-    private Set<Photo> photos = new HashSet<Photo>();
+    private Set<ObservationCategory> categories = new HashSet<>();
+    private Set<Photo> photos = new HashSet<>();
 
     private boolean followUp = false;
     private LocalDate followUpReminder;
     private Observation followUpObservation;
+
+    @SuppressWarnings("unused")
+    private Observation() {
+        //  For hibernate
+    }
+
+    public Observation(final AppUser appUser) {
+        super(appUser);
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     public Student getStudent() {
@@ -33,7 +43,6 @@ public class Observation extends IdObject {
         this.student = student;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
     public LocalDateTime getObservationDate() {
         return observationDate;
     }
@@ -75,7 +84,6 @@ public class Observation extends IdObject {
         this.followUp = followUp;
     }
 
-    @Temporal(TemporalType.DATE)
     public LocalDate getFollowUpReminder() {
         return followUpReminder;
     }

@@ -3,10 +3,7 @@
   <component name="FacetManager">
     <facet type="hibernate" name="Hibernate">
       <configuration>
-        <datasource-map>
-          <unit-entry name="hibernate.cfg.xml" />
-        </datasource-map>
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/hibernate.cfg.xml" />
+        <datasource-map />
       </configuration>
     </facet>
     <facet type="ejb" name="EJB">
@@ -20,11 +17,7 @@
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
-      <configuration>
-        <fileset id="fileset1" name="Xml Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/spring-config.xml</file>
-        </fileset>
-      </configuration>
+      <configuration />
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
@@ -34,13 +27,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="groovy-2.0.5" level="application" />
-    <orderEntry type="library" name="Java EE 6-3.1" level="application" />
     <orderEntry type="library" name="Hibernate-4.1.8" level="application" />
+    <orderEntry type="library" name="Java EE 6-3.1" level="application" />
     <orderEntry type="library" name="Spring-3.1.2" level="application" />
-    <orderEntry type="library" name="scala-lib-2.9.2" level="application" />
-    <orderEntry type="library" name="joda-time-2.1" level="application" />
+    <orderEntry type="module" module-name="E-EYE-O_API" />
+    <orderEntry type="module" module-name="E-EYE-O_Data" />
     <orderEntry type="library" name="logback-1.0" level="application" />
+    <orderEntry type="library" name="slf4j-1.6" level="application" />
   </component>
 </module>
 
