@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.HibernateDAO;
 
-import com.jtbdevelopment.e_eye_o.DAO.WriteOnlyDataLayer;
+import com.jtbdevelopment.e_eye_o.DAO.WriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.superclasses.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.superclasses.IdObject;
@@ -21,9 +21,9 @@ import java.util.List;
 @Repository
 @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 @SuppressWarnings("unused")
-public class HibernateWriteOnlyDataLayer extends HibernateReadOnlyDataLayer implements WriteOnlyDataLayer {
+public class HibernateWriteDAO extends HibernateReadOnlyDAO implements WriteDAO {
     @Autowired
-    public HibernateWriteOnlyDataLayer(final SessionFactory sessionFactory) {
+    public HibernateWriteDAO(final SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 
@@ -62,19 +62,19 @@ public class HibernateWriteOnlyDataLayer extends HibernateReadOnlyDataLayer impl
     public void deleteUser(AppUser user) {
         Session currentSession = sessionFactory.getCurrentSession();
         Query query = currentSession.createQuery("from ClassList where appUser = :user");
-        query.setParameter("user", user );
+        query.setParameter("user", user);
         delete((List<ClassList>) query.list());
         query = currentSession.createQuery("from Student where appUser = :user");
-        query.setParameter("user", user );
+        query.setParameter("user", user);
         delete((List<Student>) query.list());
         query = currentSession.createQuery("from Observation where appUser = :user");
-        query.setParameter("user", user );
+        query.setParameter("user", user);
         delete((List<Observation>) query.list());
         query = currentSession.createQuery("from ObservationCategory where appUser = :user");
-        query.setParameter("user", user );
+        query.setParameter("user", user);
         delete((List<ObservationCategory>) query.list());
         query = currentSession.createQuery("from Photo where appUser = :user");
-        query.setParameter("user", user );
+        query.setParameter("user", user);
         delete((List<Photo>) query.list());
         currentSession.delete(get(AppUser.class,  user.getId()));
     }

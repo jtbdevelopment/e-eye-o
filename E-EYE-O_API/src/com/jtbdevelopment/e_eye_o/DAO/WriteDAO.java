@@ -8,7 +8,7 @@ import com.jtbdevelopment.e_eye_o.superclasses.AppUserOwnedObject;
  * Date: 11/19/12
  * Time: 5:32 PM
  */
-public interface WriteOnlyDataLayer extends ReadOnlyDataLayer {
+public interface WriteDAO extends ReadOnlyDAO {
     public <T extends IdObject> T create(final T entity);
 
     public <T extends IdObject> T update(final T entity);

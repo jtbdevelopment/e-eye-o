@@ -12,7 +12,7 @@ import java.util.Set;
  * Date: 11/18/12
  * Time: 12:18 AM
  */
-public interface ReadOnlyDataLayer {
+public interface ReadOnlyDAO {
 
     public <T> T get(Class<T> type, String id);
 

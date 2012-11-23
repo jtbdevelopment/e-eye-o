@@ -34,12 +34,15 @@ public class Observation extends ArchivableAppUserOwnedObject {
         super(appUser);
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     public Student getStudent() {
         return student;
     }
 
     public void setStudent(Student student) {
+        if( student == null ) {
+            throw new InvalidParameterException("student cannot be null");
+        }
         this.student = student;
     }
 
@@ -64,7 +67,7 @@ public class Observation extends ArchivableAppUserOwnedObject {
         return photos;
     }
 
-    public void setPhotos(Set<Photo> photos) {
+    private void setPhotos(Set<Photo> photos) {
         this.photos = photos;
     }
 
@@ -98,7 +101,7 @@ public class Observation extends ArchivableAppUserOwnedObject {
     }
 
     public void setFollowUpObservation(final Observation followUpObservation) {
-        if( id != null && this.id.equals(followUpObservation.id)) {
+        if( id != null && followUpObservation != null && this.id.equals(followUpObservation.id)) {
             throw new InvalidParameterException("Cannot follow-up observation with itself");
         }
         this.followUpObservation = followUpObservation;
@@ -109,7 +112,7 @@ public class Observation extends ArchivableAppUserOwnedObject {
         return categories;
     }
 
-    public void setCategories(Set<ObservationCategory> categories) {
+    private void setCategories(Set<ObservationCategory> categories) {
         this.categories = categories;
     }
 

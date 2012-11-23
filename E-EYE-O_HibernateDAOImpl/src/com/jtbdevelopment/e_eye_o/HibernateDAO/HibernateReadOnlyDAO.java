@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.HibernateDAO;
 
 
-import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDataLayer;
+import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.superclasses.ArchivableAppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.superclasses.AppUserOwnedObject;
@@ -23,12 +23,12 @@ import java.util.Set;
 @Repository
 @SuppressWarnings("unused")
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class HibernateReadOnlyDataLayer implements ReadOnlyDataLayer {
+public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     protected final SessionFactory sessionFactory;
 
     @Autowired
-    public HibernateReadOnlyDataLayer(final SessionFactory sessionFactory) {
+    public HibernateReadOnlyDAO(final SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

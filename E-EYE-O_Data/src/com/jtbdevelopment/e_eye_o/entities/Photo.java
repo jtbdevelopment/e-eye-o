@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.entities;
 import com.jtbdevelopment.e_eye_o.superclasses.ArchivableAppUserOwnedObject;
 import org.joda.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -25,13 +26,14 @@ public class Photo extends ArchivableAppUserOwnedObject {
     }
 
     public String getDescription() {
-        return description;
+        return description == null ? "" : description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Column(nullable = false)
     public LocalDateTime getTimestamp() {
         return timestamp;
     }

@@ -2,7 +2,11 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.superclasses.AppUserOwnedObject;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import java.security.InvalidParameterException;
 import java.util.*;
 
 /**
@@ -10,6 +14,7 @@ import java.util.*;
  * Time: 9:30 PM
  */
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"appUser_ID", "shortName"}))
 public class ObservationCategory extends AppUserOwnedObject {
     private static final Map<String, String> NEW_USER_DEFAULT_CATEGORIES = new HashMap<String, String>() {{
         put("SOCIAL", "Social Skills");
@@ -47,20 +52,26 @@ public class ObservationCategory extends AppUserOwnedObject {
         this.description = description;
     }
 
+    @Column(nullable = false)
     public String getShortName() {
         return shortName;
     }
 
-    public void setShortName(String shortName) {
+    public ObservationCategory setShortName(String shortName) {
+        if( shortName == null ) {
+            throw new InvalidParameterException("shortName can't be null");
+        }
         this.shortName = shortName;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public ObservationCategory setDescription(String description) {
         this.description = description;
+        return this;
     }
 }
 

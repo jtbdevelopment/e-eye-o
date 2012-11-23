@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.superclasses.ArchivableAppUserOwnedObject;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class ClassList extends ArchivableAppUserOwnedObject {
     }
 
     public String getDescription() {
-        return description;
+        return description == null ? "" : description;
     }
 
     public void setDescription(String description) {
@@ -36,10 +37,10 @@ public class ClassList extends ArchivableAppUserOwnedObject {
 
     @ElementCollection()
     public Set<Student> getStudents() {
-        return students;
+        return Collections.unmodifiableSet(students);
     }
 
-    public void setStudents(Set<Student> students) {
+    private void setStudents(Set<Student> students) {
         this.students = students;
     }
 
@@ -53,10 +54,10 @@ public class ClassList extends ArchivableAppUserOwnedObject {
 
     @ElementCollection
     public Set<Photo> getPhotos() {
-        return photos;
+        return Collections.unmodifiableSet(photos);
     }
 
-    public void setPhotos(final Set<Photo> photos) {
+    private void setPhotos(final Set<Photo> photos) {
         this.photos = photos;
     }
 

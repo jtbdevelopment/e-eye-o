@@ -2,9 +2,11 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.superclasses.ArchivableAppUserOwnedObject;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import java.security.InvalidParameterException;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,6 +30,7 @@ public class Student extends ArchivableAppUserOwnedObject {
             return o1.getId().compareTo(o2.getId());
         }
     });
+    //  TODO - default stock photo
     private Photo studentPhoto;
 
     @SuppressWarnings("unused")
@@ -40,41 +43,11 @@ public class Student extends ArchivableAppUserOwnedObject {
     }
 
     public String getFirstName() {
-        return firstName;
+        return firstName == null ? "" : firstName;
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    @ElementCollection()
-    public Set<Observation> getObservations() {
-        return observations;
-    }
-
-    public void setObservations(Set<Observation> observations) {
-        this.observations = observations;
-    }
-
-    public void addObservation(final Observation observation) {
-        observations.add(observation);
-    }
-
-    public void updateObservation(final Observation observation) {
-        observations.remove(observation);
-        observations.add(observation);
-    }
-
-    public void removeObservation(final Observation observation) {
-        observations.remove(observation);
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     public String getLastName() {
@@ -85,7 +58,33 @@ public class Student extends ArchivableAppUserOwnedObject {
         this.lastName = lastName;
     }
 
-    @OneToOne
+    @Column(nullable = false)
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    @ElementCollection()
+    public Set<Observation> getObservations() {
+        return observations;
+    }
+
+    private void setObservations(Set<Observation> observations) {
+        this.observations = observations;
+    }
+
+    public void addObservation(final Observation observation) {
+        observations.add(observation);
+    }
+
+    public void removeObservation(final Observation observation) {
+        observations.remove(observation);
+    }
+
+    @OneToOne(optional = false)
     public Photo getStudentPhoto() {
         return studentPhoto;
     }
