@@ -12,9 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Date: 11/18/12
@@ -39,6 +37,16 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     }
 
     @Override
+    public Map<String, ObservationCategory> getObservationCategoriesAsMap(final AppUser appUser) {
+        Set<ObservationCategory> ocs = getEntitiesForUser(ObservationCategory.class, appUser);
+        Map<String, ObservationCategory> map = new HashMap<>();
+        for(ObservationCategory oc : ocs) {
+            map.put(oc.getShortName(), oc);
+        }
+        return map;
+    }
+
+    @Override
     public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(Class<T> entityType, AppUser appUser) {
         Query query = sessionFactory.getCurrentSession().createQuery("from " + entityType.getSimpleName() + " where appUser = :user");
         query.setParameter("user", appUser);
@@ -56,7 +64,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     }
 
     private <T extends ArchivableAppUserOwnedObject> Set<T> loadEntitiesForUserWithArchiveFlag(Class<T> entityType, AppUser appUser, boolean archived) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from " + entityType.getSimpleName() + " where user = :user and archived = :archived");
+        Query query = sessionFactory.getCurrentSession().createQuery("from " + entityType.getSimpleName() + " where appUser = :user and archived = :archived");
         query.setParameter("user", appUser);
         query.setParameter("archived", archived);
         return new HashSet<>( (List<T>) query.list() );

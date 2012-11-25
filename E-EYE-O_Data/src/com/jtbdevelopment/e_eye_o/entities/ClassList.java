@@ -19,7 +19,7 @@ public class ClassList extends ArchivableAppUserOwnedObject {
     private Set<Photo> photos = new HashSet<>();
 
     @SuppressWarnings("unused")
-    private ClassList() {
+    protected ClassList() {
         //  For hibernate
     }
 
@@ -31,8 +31,9 @@ public class ClassList extends ArchivableAppUserOwnedObject {
         return description == null ? "" : description;
     }
 
-    public void setDescription(String description) {
+    public ClassList setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     @ElementCollection()
@@ -40,16 +41,19 @@ public class ClassList extends ArchivableAppUserOwnedObject {
         return Collections.unmodifiableSet(students);
     }
 
+    @SuppressWarnings("unused")  // hibernate
     private void setStudents(Set<Student> students) {
         this.students = students;
     }
 
-    public void addStudent(final Student student) {
+    public ClassList addStudent(final Student student) {
         students.add(student);
+        return this;
     }
 
-    public void removeStudent(final Student student) {
-        students.remove(students);
+    public ClassList removeStudent(final Student student) {
+        students.remove(student);
+        return this;
     }
 
     @ElementCollection
@@ -57,15 +61,18 @@ public class ClassList extends ArchivableAppUserOwnedObject {
         return Collections.unmodifiableSet(photos);
     }
 
+    @SuppressWarnings("unused")  // hibernate
     private void setPhotos(final Set<Photo> photos) {
         this.photos = photos;
     }
 
-    public void addPhoto(final Photo photo) {
+    public ClassList addPhoto(final Photo photo) {
         photos.add(photo);
+        return this;
     }
 
-    public void removePhoto(final Photo photo) {
+    public ClassList removePhoto(final Photo photo) {
         photos.remove(photo);
+        return this;
     }
 }

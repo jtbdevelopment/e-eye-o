@@ -2,11 +2,9 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.superclasses.ArchivableAppUserOwnedObject;
 
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-import java.security.InvalidParameterException;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -19,7 +17,6 @@ import java.util.TreeSet;
 public class Student extends ArchivableAppUserOwnedObject {
     private String firstName = "";
     private String lastName = "";
-    private String displayName = "";
     private Set<Observation> observations = new TreeSet<>(new Comparator<Observation>() {
         @Override
         public int compare(Observation o1, Observation o2) {
@@ -34,7 +31,7 @@ public class Student extends ArchivableAppUserOwnedObject {
     private Photo studentPhoto;
 
     @SuppressWarnings("unused")
-    private Student() {
+    protected Student() {
         //  For hibernate
     }
 
@@ -46,25 +43,18 @@ public class Student extends ArchivableAppUserOwnedObject {
         return firstName == null ? "" : firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public Student setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public Student setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    @Column(nullable = false)
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+        return this;
     }
 
     @ElementCollection()
@@ -72,16 +62,20 @@ public class Student extends ArchivableAppUserOwnedObject {
         return observations;
     }
 
-    private void setObservations(Set<Observation> observations) {
+    @SuppressWarnings("unused") // hibernate
+    private Student setObservations(Set<Observation> observations) {
         this.observations = observations;
+        return this;
     }
 
-    public void addObservation(final Observation observation) {
+    public Student addObservation(final Observation observation) {
         observations.add(observation);
+        return this;
     }
 
-    public void removeObservation(final Observation observation) {
+    public Student removeObservation(final Observation observation) {
         observations.remove(observation);
+        return this;
     }
 
     @OneToOne(optional = false)

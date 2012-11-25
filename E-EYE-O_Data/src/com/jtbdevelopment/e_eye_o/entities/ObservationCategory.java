@@ -38,7 +38,7 @@ public class ObservationCategory extends AppUserOwnedObject {
     private String description = "";
 
     @SuppressWarnings("unused")
-    private ObservationCategory() {
+    protected ObservationCategory() {
         //  For hibernate
     }
 

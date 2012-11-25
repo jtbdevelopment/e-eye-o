@@ -17,7 +17,7 @@ public class Photo extends ArchivableAppUserOwnedObject {
     //  TODO - actual photo
 
     @SuppressWarnings("unused")
-    private Photo() {
+    protected Photo() {
         //  For hibernate
     }
 
@@ -29,8 +29,9 @@ public class Photo extends ArchivableAppUserOwnedObject {
         return description == null ? "" : description;
     }
 
-    public void setDescription(String description) {
+    public Photo setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     @Column(nullable = false)
@@ -38,7 +39,8 @@ public class Photo extends ArchivableAppUserOwnedObject {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public Photo setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+        return this;
     }
 }

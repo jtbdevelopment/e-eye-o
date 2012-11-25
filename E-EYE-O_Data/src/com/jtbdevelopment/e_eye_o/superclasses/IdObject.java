@@ -36,6 +36,7 @@ public abstract class IdObject {
         return id;
     }
 
+    @SuppressWarnings("unused")  // hibernate
     private void setId(final String id) {
         this.id = id;
     }

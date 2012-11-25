@@ -6,6 +6,7 @@ import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.security.InvalidParameterException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,18 +16,19 @@ import java.util.Set;
  */
 @Entity
 public class Observation extends ArchivableAppUserOwnedObject {
-    private Student student;
+    private String comment;
     private LocalDateTime observationDate;
     private boolean significant = false;
+
     private Set<ObservationCategory> categories = new HashSet<>();
     private Set<Photo> photos = new HashSet<>();
 
-    private boolean followUp = false;
+    private boolean needsFollowUp = false;
     private LocalDate followUpReminder;
     private Observation followUpObservation;
 
     @SuppressWarnings("unused")
-    private Observation() {
+    protected Observation() {
         //  For hibernate
     }
 
@@ -34,93 +36,112 @@ public class Observation extends ArchivableAppUserOwnedObject {
         super(appUser);
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        if( student == null ) {
-            throw new InvalidParameterException("student cannot be null");
-        }
-        this.student = student;
-    }
-
     public LocalDateTime getObservationDate() {
         return observationDate;
     }
 
-    public void setObservationDate(LocalDateTime observationDate) {
+    public Observation setObservationDate(LocalDateTime observationDate) {
         this.observationDate = observationDate;
+        return this;
     }
 
     public boolean isSignificant() {
         return significant;
     }
 
-    public void setSignificant(boolean significant) {
+    public Observation setSignificant(boolean significant) {
         this.significant = significant;
+        return this;
     }
 
-    @ElementCollection
+    @ManyToMany
     public Set<Photo> getPhotos() {
         return photos;
     }
 
-    private void setPhotos(Set<Photo> photos) {
+    @SuppressWarnings("unused") //  hibernate
+    private Observation setPhotos(Set<Photo> photos) {
         this.photos = photos;
+        return this;
     }
 
-    public void addPhoto(final Photo photo) {
+    public Observation addPhoto(final Photo photo) {
         this.photos.add(photo);
+        return this;
     }
 
-    public void removePhoto(final Photo photo) {
+    public Observation addPhotos(final Collection<Photo> photos) {
+        this.photos.addAll(photos);
+        return this;
+    }
+
+    public Observation removePhoto(final Photo photo) {
         this.photos.remove(photo);
+        return this;
     }
 
-    public boolean isFollowUp() {
-        return followUp;
+    public boolean getNeedsFollowUp() {
+        return needsFollowUp;
     }
 
-    public void setFollowUp(boolean followUp) {
-        this.followUp = followUp;
+    public Observation setNeedsFollowUp(boolean needsFollowUp) {
+        this.needsFollowUp = needsFollowUp;
+        return this;
     }
 
     public LocalDate getFollowUpReminder() {
         return followUpReminder;
     }
 
-    public void setFollowUpReminder(LocalDate followUpReminder) {
+    public Observation setFollowUpReminder(LocalDate followUpReminder) {
         this.followUpReminder = followUpReminder;
+        return this;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     public Observation getFollowUpObservation() {
         return followUpObservation;
     }
 
-    public void setFollowUpObservation(final Observation followUpObservation) {
+    public Observation setFollowUpObservation(final Observation followUpObservation) {
         if( id != null && followUpObservation != null && this.id.equals(followUpObservation.id)) {
-            throw new InvalidParameterException("Cannot follow-up observation with itself");
+            throw new InvalidParameterException("Cannot follow-up comment with itself");
         }
         this.followUpObservation = followUpObservation;
+        return this;
     }
 
-    @ElementCollection
+    @ManyToMany
     public Set<ObservationCategory> getCategories() {
         return categories;
     }
 
+    @SuppressWarnings("unused")  // hibernate
     private void setCategories(Set<ObservationCategory> categories) {
         this.categories = categories;
     }
 
-    public void addCategory(final ObservationCategory observationCategory) {
+    public Observation addCategory(final ObservationCategory observationCategory) {
         categories.add(observationCategory);
+        return this;
     }
 
-    public void removeCategory(final ObservationCategory observationCategory) {
+    public Observation addCategories(final Collection<ObservationCategory> observationCategories) {
+        categories.addAll(observationCategories);
+        return this;
+    }
+
+    public Observation removeCategory(final ObservationCategory observationCategory) {
         categories.remove(observationCategory);
+        return this;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public Observation setComment(final String comment) {
+        this.comment = comment;
+        return this;
     }
 }
