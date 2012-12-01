@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HDBIdObjectWrapperFactory;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.GeneratedValue;

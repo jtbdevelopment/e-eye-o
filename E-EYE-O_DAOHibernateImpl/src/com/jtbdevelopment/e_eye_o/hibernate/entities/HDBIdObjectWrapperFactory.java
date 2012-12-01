@@ -1,9 +1,8 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper;
+package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.AbstractIdObjectWrapperFactoryImpl;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.*;
 import org.springframework.stereotype.Service;
 
 @Service

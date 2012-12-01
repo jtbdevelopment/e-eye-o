@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBAppUser;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HDBIdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBIdObjectWrapperFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
