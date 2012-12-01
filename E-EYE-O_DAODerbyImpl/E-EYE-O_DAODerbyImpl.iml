@@ -36,8 +36,7 @@
     <orderEntry type="library" name="Java EE 6-3.1" level="application" />
     <orderEntry type="library" name="Java EE 6-3.1" level="application" />
     <orderEntry type="library" name="Spring-3.1.2" level="application" />
-    <orderEntry type="module" module-name="E-EYE-O_API" />
-    <orderEntry type="module" module-name="E-EYE-O_Data" />
+    <orderEntry type="module" module-name="E-EYE-O_Interfaces" />
     <orderEntry type="library" name="derby" level="application" />
     <orderEntry type="library" scope="TEST" name="JUNIT-4.1.0" level="application" />
     <orderEntry type="library" name="cglib-3.0" level="application" />

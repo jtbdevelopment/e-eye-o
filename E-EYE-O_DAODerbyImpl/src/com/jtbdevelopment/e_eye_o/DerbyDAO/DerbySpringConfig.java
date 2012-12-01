@@ -1,15 +1,12 @@
 package com.jtbdevelopment.e_eye_o.DerbyDAO;
 
 import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40;
-import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 /**

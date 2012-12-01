@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="hibernate" name="Hibernate">
-      <configuration>
-        <datasource-map />
-      </configuration>
-    </facet>
-    <facet type="ejb" name="EJB">
-      <configuration>
-        <descriptors>
-          <deploymentDescriptor name="ejb-jar.xml" url="file://$MODULE_DIR$/META-INF/ejb-jar.xml" />
-        </descriptors>
-        <ejbRoots />
-      </configuration>
-    </facet>
     <facet type="Spring" name="Spring">
       <configuration />
     </facet>
@@ -26,14 +13,14 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Hibernate-4.1.8" level="application" />
-    <orderEntry type="library" name="Java EE 6-3.1" level="application" />
     <orderEntry type="library" name="Spring-3.1.2" level="application" />
-    <orderEntry type="module" module-name="E-EYE-O_Interfaces" />
     <orderEntry type="library" name="logback-1.0" level="application" />
-    <orderEntry type="library" name="slf4j-1.6" level="application" />
-    <orderEntry type="library" scope="TEST" name="JUNIT-4.1.0" level="application" />
     <orderEntry type="library" name="joda-time-2.1" level="application" />
+    <orderEntry type="library" scope="TEST" name="JMOCK2.5.1-JUNIT4" level="application" />
+    <orderEntry type="library" scope="TEST" name="JUNIT-4.1.0" level="application" />
+    <orderEntry type="library" scope="TEST" name="guava-12.0.1" level="application" />
+    <orderEntry type="library" scope="TEST" name="hamcrest-1" level="application" />
+    <orderEntry type="library" name="slf4j-1.6" level="application" />
   </component>
 </module>
 
