@@ -39,7 +39,7 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
 
     @Override
     public Student setFirstName(final String firstName) {
-        validateNonNullValue(firstName);
+        validateNonEmptyValue(firstName);
         this.firstName = firstName;
         return this;
     }

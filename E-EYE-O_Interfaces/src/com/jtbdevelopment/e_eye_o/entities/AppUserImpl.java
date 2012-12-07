@@ -9,11 +9,12 @@ import java.security.InvalidParameterException;
  * Time: 9:08 PM
  */
 public class AppUserImpl extends IdObjectImpl implements AppUser {
+    public static final DateTime NEVER_LOGGED_IN = new DateTime(2000, 1, 1, 0, 0);
     private String login = "";
     private String firstName = "";
     private String lastName = "";
     private String emailAddress = "";
-    private DateTime lastLogin;
+    private DateTime lastLogin = NEVER_LOGGED_IN;
 
     @Override
     public String getLogin() {
@@ -22,42 +23,43 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
 
     @Override
     public AppUser setLogin(final String login) {
-        if (login == null) {
-            throw new InvalidParameterException("login cannot be null");
-        }
+        validateNonEmptyValue(login);
         this.login = login;
         return this;
     }
 
     @Override
     public String getFirstName() {
-        return firstName == null ? "" : firstName;
+        return firstName;
     }
 
     @Override
-    public AppUser setFirstName(String firstName) {
+    public AppUser setFirstName(final String firstName) {
+        validateNonNullValue(firstName);
         this.firstName = firstName;
         return this;
     }
 
     @Override
     public String getLastName() {
-        return lastName == null ? "" : lastName;
+        return lastName;
     }
 
     @Override
-    public AppUser setLastName(String lastName) {
+    public AppUser setLastName(final String lastName) {
+        validateNonNullValue(lastName);
         this.lastName = lastName;
         return this;
     }
 
     @Override
     public String getEmailAddress() {
-        return emailAddress == null ? "" : emailAddress;
+        return emailAddress;
     }
 
     @Override
-    public AppUser setEmailAddress(String emailAddress) {
+    public AppUser setEmailAddress(final String emailAddress) {
+        validateNonNullValue(emailAddress);
         this.emailAddress = emailAddress;
         return this;
     }
@@ -68,7 +70,8 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
     }
 
     @Override
-    public AppUser setLastLogin(DateTime lastLogin) {
+    public AppUser setLastLogin(final DateTime lastLogin) {
+        validateNonNullValue(lastLogin);
         this.lastLogin = lastLogin;
         return this;
     }

@@ -20,7 +20,7 @@ public abstract class IdObjectImpl implements IdObject {
 
         IdObject idObject = (IdObject) o;
 
-        return !(id != null ? !id.equals(idObject.getId()) : idObject.getId() != null);
+        return (id != null && id.equals(idObject.getId()));
 
     }
 
@@ -36,8 +36,8 @@ public abstract class IdObjectImpl implements IdObject {
 
     @Override
     public IdObject setId(final String id) {
-        validateNonNullValue(id);
-        if (StringUtils.hasLength(this.id)) {
+        validateNonEmptyValue(id);
+        if (StringUtils.hasLength(this.id) && !this.id.equals(id)) {
             throw new InvalidStateException("Cannot re-assign id after assignment");
         }
         this.id = id;
@@ -47,6 +47,13 @@ public abstract class IdObjectImpl implements IdObject {
     protected void validateNonNullValue(final Object newValue) {
         if (newValue == null) {
             throw new InvalidParameterException("Cannot assign null");
+        }
+    }
+
+    protected void validateNonEmptyValue(final String newValue) {
+        validateNonNullValue(newValue);
+        if(!StringUtils.hasLength(newValue)) {
+            throw new InvalidParameterException("Cannot assign empty string");
         }
     }
 }

@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserImpl;
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.Column;
@@ -66,6 +67,7 @@ public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
     }
 
     @Override
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     public DateTime getLastLogin() {
         return wrapped.getLastLogin();
     }
