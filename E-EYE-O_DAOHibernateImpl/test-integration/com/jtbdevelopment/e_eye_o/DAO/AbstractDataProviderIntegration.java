@@ -6,22 +6,22 @@ import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBObservation;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBPhoto;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import static junit.framework.Assert.*;
+import static org.testng.Assert.*;
 
 /**
  * Date: 11/21/12
@@ -30,8 +30,10 @@ import static junit.framework.Assert.*;
  * Suite of tests that can be run against any data source provider to test hibernate.
  */
 @Transactional
-public abstract class AbstractDataProviderTest implements ApplicationContextAware {
-    private static Logger logger = LoggerFactory.getLogger(AbstractDataProviderTest.class);
+//public abstract class AbstractDataProviderIntegration implements ApplicationContextAware {
+@Test(groups = {"integration"})
+public abstract class AbstractDataProviderIntegration extends AbstractTransactionalTestNGSpringContextTests implements ApplicationContextAware {
+    private static Logger logger = LoggerFactory.getLogger(AbstractDataProviderIntegration.class);
 
     @Autowired
     private ReadWriteDAO readWriteDAO;
@@ -42,13 +44,7 @@ public abstract class AbstractDataProviderTest implements ApplicationContextAwar
     private static Map<String, ObservationCategory> testAppUser1OCs;
     private static AppUser testAppUser2;
 
-    //  Can't use junit beforeclass because we don't have app context or injected bean yet then
-    //  We do use this to setup and then junit afterclass
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        initialize();
-    }
-
+    @BeforeClass
     public synchronized void initialize() {
         if (readWriteDAO == null) {
             return;

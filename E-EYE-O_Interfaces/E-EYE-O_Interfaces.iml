@@ -21,6 +21,7 @@
     <orderEntry type="library" scope="TEST" name="guava-12.0.1" level="application" />
     <orderEntry type="library" scope="TEST" name="hamcrest-1" level="application" />
     <orderEntry type="library" name="slf4j-1.6" level="application" />
+    <orderEntry type="library" name="testng-6" level="application" />
   </component>
 </module>
 

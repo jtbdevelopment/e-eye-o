@@ -1,7 +1,8 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
 import static junit.framework.Assert.*;
-import org.junit.Test;
+
+import org.testng.annotations.Test;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import java.security.InvalidParameterException;
@@ -57,7 +58,7 @@ public class IdObjectImplTest {
         assertFalse(impl3.equals(impl1));
     }
 
-    @Test(expected = InvalidParameterException.class)
+    @Test(expectedExceptions = {InvalidParameterException.class})
     public void testSetIdNullExceptions() throws Exception {
         IdObjectExtends local = new IdObjectExtends();
         local.setId(null);
@@ -70,7 +71,7 @@ public class IdObjectImplTest {
         local.setId(ID + "");
     }
 
-    @Test(expected = InvalidStateException.class)
+    @Test(expectedExceptions = {InvalidStateException.class})
     public void testAssigningNewIdFails() {
         IdObjectExtends local = new IdObjectExtends();
         local.setId(ID);

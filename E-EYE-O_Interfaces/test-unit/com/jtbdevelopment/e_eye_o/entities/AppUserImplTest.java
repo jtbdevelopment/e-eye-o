@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 /**
  * Date: 12/5/12
