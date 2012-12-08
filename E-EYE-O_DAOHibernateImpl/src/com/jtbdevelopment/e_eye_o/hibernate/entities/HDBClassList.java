@@ -20,8 +20,8 @@ public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> imp
         super(new ClassListImpl());
     }
 
-    public HDBClassList(final ClassList clasList) {
-        super(clasList);
+    public HDBClassList(final ClassList classList) {
+        super(classList);
     }
 
     @Override
@@ -42,13 +42,13 @@ public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> imp
     }
 
     public ClassList setStudents(final Set<Student> students) {
-        wrapped.setStudents(getWrapper().wrap(students));
+        wrapped.setStudents(wrap(students));
         return this;
     }
 
     @Override
     public ClassList addStudent(final Student student) {
-        wrapped.addStudent(getWrapper().wrap(student));
+        wrapped.addStudent(wrap(student));
         return this;
     }
 
@@ -65,13 +65,13 @@ public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> imp
     }
 
     public ClassList setPhotos(final Set<Photo> photos) {
-        wrapped.setPhotos(getWrapper().wrap(photos));
+        wrapped.setPhotos(wrap(photos));
         return this;
     }
 
     @Override
     public ClassList addPhoto(final Photo photo) {
-        wrapped.addPhoto(getWrapper().wrap(photo));
+        wrapped.addPhoto(wrap(photo));
         return this;
     }
 

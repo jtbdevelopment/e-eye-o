@@ -6,7 +6,7 @@ import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HDBIdObjectWrapperFactory extends AbstractIdObjectWrapperFactoryImpl<HDBIdObject> implements IdObjectWrapperFactory<HDBIdObject> {
+public class HDBIdObjectWrapperFactory extends AbstractIdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
     private static HDBIdObjectWrapperFactory instance;
 
     public static HDBIdObjectWrapperFactory getInstance() {
@@ -14,7 +14,7 @@ public class HDBIdObjectWrapperFactory extends AbstractIdObjectWrapperFactoryImp
     }
 
     public HDBIdObjectWrapperFactory() {
-        super();
+        super(HDBIdObject.class);
         addMapping(AppUser.class, HDBAppUser.class);
         addMapping(Student.class, HDBStudent.class);
         addMapping(Photo.class, HDBPhoto.class);
@@ -22,13 +22,5 @@ public class HDBIdObjectWrapperFactory extends AbstractIdObjectWrapperFactoryImp
         addMapping(Observation.class, HDBObservation.class);
         addMapping(ClassList.class, HDBClassList.class);
         instance = this;
-    }
-
-    @Override
-    protected boolean needsWrapping(final Object entity) {
-        if (entity instanceof HDBIdObject) {
-            return false;
-        }
-        return true;
     }
 }

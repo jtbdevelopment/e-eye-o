@@ -34,8 +34,7 @@ public class ObservationCategoryImpl extends AppUserOwnedObjectImpl implements O
 
     @Override
     public ObservationCategory setDescription(final String description) {
-        validateNonNullValue(description);
-        this.description = description;
+        this.description = useBlankForNullValue(description);
         return this;
     }
 }

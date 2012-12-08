@@ -24,7 +24,7 @@ public abstract class HDBAppUserOwnedObject<T extends AppUserOwnedObject> extend
 
     @Override
     public T setAppUser(final AppUser appUser) {
-        wrapped.setAppUser(getWrapper().wrap(appUser));
+        wrapped.setAppUser(wrap(appUser));
         return (T) this;
     }
 }

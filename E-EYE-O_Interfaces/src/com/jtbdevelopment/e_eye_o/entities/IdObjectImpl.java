@@ -50,6 +50,10 @@ public abstract class IdObjectImpl implements IdObject {
         }
     }
 
+    protected String useBlankForNullValue(final String newValue) {
+        return newValue == null ? "" : newValue;
+    }
+
     protected void validateNonEmptyValue(final String newValue) {
         validateNonNullValue(newValue);
         if(!StringUtils.hasLength(newValue)) {

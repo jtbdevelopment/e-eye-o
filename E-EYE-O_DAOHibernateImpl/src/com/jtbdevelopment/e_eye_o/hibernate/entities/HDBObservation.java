@@ -59,19 +59,19 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
 
     @Override
     public Observation setPhotos(final Set<Photo> photos) {
-        wrapped.setPhotos(getWrapper().wrap(photos));
+        wrapped.setPhotos(wrap(photos));
         return this;
     }
 
     @Override
     public Observation addPhoto(final Photo photo) {
-        wrapped.addPhoto(getWrapper().wrap(photo));
+        wrapped.addPhoto(wrap(photo));
         return this;
     }
 
     @Override
     public Observation addPhotos(final Collection<Photo> photos) {
-        wrapped.addPhotos(getWrapper().wrap(photos));
+        wrapped.addPhotos(wrap(photos));
         return this;
     }
 
@@ -111,7 +111,7 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
 
     @Override
     public Observation setFollowUpObservation(final Observation followUpObservation) {
-        wrapped.setFollowUpObservation(getWrapper().wrap(followUpObservation));
+        wrapped.setFollowUpObservation(wrap(followUpObservation));
         return this;
     }
 
@@ -123,19 +123,19 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
 
     @Override
     public Observation setCategories(final Set<ObservationCategory> categories) {
-        wrapped.setCategories(getWrapper().wrap(categories));
+        wrapped.setCategories(wrap(categories));
         return this;
     }
 
     @Override
     public Observation addCategory(final ObservationCategory observationCategory) {
-        wrapped.addCategory(getWrapper().wrap(observationCategory));
+        wrapped.addCategory(wrap(observationCategory));
         return this;
     }
 
     @Override
     public Observation addCategories(final Collection<ObservationCategory> observationCategories) {
-        wrapped.addCategories(getWrapper().wrap(observationCategories));
+        wrapped.addCategories(wrap(observationCategories));
         return this;
     }
 

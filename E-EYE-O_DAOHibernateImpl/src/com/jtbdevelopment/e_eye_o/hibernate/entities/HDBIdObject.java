@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
+import java.util.Collection;
 
 /**
  * Date: 11/18/12
@@ -63,8 +64,18 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
     }
 
     @Transient
-    protected HDBIdObjectWrapperFactory getWrapper() {
+    private HDBIdObjectWrapperFactory getWrapper() {
         return HDBIdObjectWrapperFactory.getInstance();
+    }
+
+    @Transient
+    protected <T extends IdObject> T wrap(T entity) {
+        return getWrapper().wrap(entity);
+    }
+
+    @Transient
+    protected <T extends IdObject, C extends Collection<T>> C wrap(final C entities) {
+        return getWrapper().wrap(entities);
     }
 
 }

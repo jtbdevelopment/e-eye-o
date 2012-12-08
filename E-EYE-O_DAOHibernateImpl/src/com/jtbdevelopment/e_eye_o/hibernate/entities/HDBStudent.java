@@ -56,13 +56,13 @@ public class HDBStudent extends HDBArchivableAppUserOwnedObject<Student> impleme
 
     @Override
     public Student setObservations(final Set<Observation> observations) {
-        wrapped.setObservations(getWrapper().wrap(observations));
+        wrapped.setObservations(wrap(observations));
         return this;
     }
 
     @Override
     public Student addObservation(final Observation observation) {
-        wrapped.addObservation(getWrapper().wrap(observation));
+        wrapped.addObservation(wrap(observation));
         return this;
     }
 
@@ -80,7 +80,7 @@ public class HDBStudent extends HDBArchivableAppUserOwnedObject<Student> impleme
 
     @Override
     public Student setStudentPhoto(final Photo studentPhoto) {
-        wrapped.setStudentPhoto(getWrapper().wrap(studentPhoto));
+        wrapped.setStudentPhoto(wrap(studentPhoto));
         return this;
     }
 }

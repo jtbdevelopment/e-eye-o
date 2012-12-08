@@ -51,8 +51,7 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
 
     @Override
     public Student setLastName(final String lastName) {
-        validateNonNullValue(lastName);
-        this.lastName = lastName;
+        this.lastName = useBlankForNullValue(lastName);
         return this;
     }
 

@@ -7,6 +7,8 @@ import org.joda.time.DateTime;
  * Time: 3:12 PM
  */
 public interface AppUser extends IdObject {
+    DateTime NEVER_LOGGED_IN = new DateTime(2000, 1, 1, 0, 0);
+
     String getLogin();
 
     AppUser setLogin(String login);

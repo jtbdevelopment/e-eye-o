@@ -25,8 +25,7 @@ public class PhotoImpl extends ArchivableAppUserOwnedObjectImpl implements Photo
 
     @Override
     public Photo setDescription(final String description) {
-        validateNonNullValue(description);
-        this.description = description;
+        this.description = useBlankForNullValue(description);
         return this;
     }
 

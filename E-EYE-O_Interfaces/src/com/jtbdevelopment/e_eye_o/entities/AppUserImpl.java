@@ -2,14 +2,11 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import org.joda.time.DateTime;
 
-import java.security.InvalidParameterException;
-
 /**
  * Date: 11/28/12
  * Time: 9:08 PM
  */
 public class AppUserImpl extends IdObjectImpl implements AppUser {
-    public static final DateTime NEVER_LOGGED_IN = new DateTime(2000, 1, 1, 0, 0);
     private String login = "";
     private String firstName = "";
     private String lastName = "";
@@ -35,8 +32,7 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
 
     @Override
     public AppUser setFirstName(final String firstName) {
-        validateNonNullValue(firstName);
-        this.firstName = firstName;
+        this.firstName = useBlankForNullValue(firstName);
         return this;
     }
 
@@ -47,8 +43,7 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
 
     @Override
     public AppUser setLastName(final String lastName) {
-        validateNonNullValue(lastName);
-        this.lastName = lastName;
+        this.lastName = useBlankForNullValue(lastName);
         return this;
     }
 
@@ -59,8 +54,7 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
 
     @Override
     public AppUser setEmailAddress(final String emailAddress) {
-        validateNonNullValue(emailAddress);
-        this.emailAddress = emailAddress;
+        this.emailAddress = useBlankForNullValue(emailAddress);
         return this;
     }
 

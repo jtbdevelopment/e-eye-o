@@ -8,9 +8,7 @@ import java.util.Collection;
  * Date: 11/30/12
  * Time: 9:34 PM
  */
-public interface IdObjectWrapperFactory<T extends IdObjectWrapper> {
-    void addMapping(Class<? extends IdObject> entity, Class<? extends T> wrapper);
-
+public interface IdObjectWrapperFactory {
     <W extends IdObject> W wrap(final W entity);
 
     <W extends IdObject, C extends Collection<W>> C wrap(C entities);

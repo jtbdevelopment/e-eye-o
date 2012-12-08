@@ -9,14 +9,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.util.*;
 
-public abstract class AbstractIdObjectWrapperFactoryImpl<T extends IdObjectWrapper> implements IdObjectWrapperFactory<T> {
+public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
     private final Logger logger = LoggerFactory.getLogger(AbstractIdObjectWrapperFactoryImpl.class);
-    private Map<Class<? extends IdObject>, Class<? extends T>> entityWrapperMap = new HashMap<>();
+    private final Map<Class<? extends IdObject>, Class> entityWrapperMap = new HashMap<>();
+    private final Class<? extends IdObjectWrapper> baseClass;
 
-    protected abstract boolean needsWrapping(final Object entity);
+    protected AbstractIdObjectWrapperFactoryImpl(final Class<? extends IdObjectWrapper> baseClass) {
+        this.baseClass = baseClass;
+    }
 
-    @Override
-    public void addMapping(final Class<? extends IdObject> entity, final Class<? extends T> wrapper) {
+    protected boolean needsWrapping(final Object entity) {
+        return !(baseClass.isAssignableFrom(entity.getClass()));
+    }
+
+    protected void addMapping(final Class<? extends IdObject> entity, final Class wrapper) {
         entityWrapperMap.put(entity, wrapper);
     }
 
@@ -42,6 +48,7 @@ public abstract class AbstractIdObjectWrapperFactoryImpl<T extends IdObjectWrapp
         return newCollection;
     }
 
+    //  Can't just clone the collection - hibernate gives you it's own
     private <T extends IdObject, C extends Collection<T>> C constructNewCollection(final C entities) {
         if (entities instanceof Map) {
             return (C) new HashMap();
