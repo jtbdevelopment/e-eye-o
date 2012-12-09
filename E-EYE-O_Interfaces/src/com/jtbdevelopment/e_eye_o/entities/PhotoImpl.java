@@ -8,7 +8,7 @@ import org.joda.time.LocalDateTime;
  */
 public class PhotoImpl extends ArchivableAppUserOwnedObjectImpl implements Photo {
     private String description = "";
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp = new LocalDateTime();
     //  TODO - actual photo
 
     public PhotoImpl() {

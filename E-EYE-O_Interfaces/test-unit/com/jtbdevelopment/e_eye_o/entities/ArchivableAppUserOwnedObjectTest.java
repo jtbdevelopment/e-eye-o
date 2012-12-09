@@ -2,28 +2,25 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Date: 12/8/12
  * Time: 2:13 PM
  */
-public class ArchivableAppUserOwnedObjectTest {
-    private class LocalArchivableObject extends ArchivableAppUserOwnedObjectImpl {
+public class ArchivableAppUserOwnedObjectTest extends AbstractIdObjectTest {
+    public static class LocalArchivableObject extends ArchivableAppUserOwnedObjectImpl {
         public LocalArchivableObject() {
-            super(new AppUserImpl());
+            super();
+        }
+
+        public LocalArchivableObject(final AppUser appUser) {
+            super(appUser);
         }
     }
 
     @Test
-    public void testDefaultArchiveFlagIsFalse() {
-        assertEquals(false, new LocalArchivableObject().isArchived());
-    }
-
-    @Test
-    public void testGetSetArchived() throws Exception {
-        final LocalArchivableObject entity = new LocalArchivableObject();
-        assertEquals(true, entity.setArchived(true).isArchived());
-        assertEquals(false, entity.setArchived(false).isArchived());
+    public void testDefaultGetSetArchived() throws Exception {
+        booleanSetGetAndDefaultCheck(LocalArchivableObject.class, "archived", false);
     }
 }

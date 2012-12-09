@@ -22,8 +22,7 @@ public class ObservationCategoryImpl extends AppUserOwnedObjectImpl implements O
 
     @Override
     public ObservationCategory setShortName(final String shortName) {
-        validateNonEmptyValue(shortName);
-        this.shortName = shortName;
+        this.shortName = useBlankForNullValue(shortName);
         return this;
     }
 

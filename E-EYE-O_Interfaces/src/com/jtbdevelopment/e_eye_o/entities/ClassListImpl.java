@@ -27,7 +27,7 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
 
     @Override
     public ClassList setDescription(final String description) {
-        validateNonNullValue(description);
+        validateNonEmptyValue(description);
         this.description = description;
         return this;
     }

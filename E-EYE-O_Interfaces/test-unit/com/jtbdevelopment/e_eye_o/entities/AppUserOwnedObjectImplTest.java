@@ -9,13 +9,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Date: 12/8/12
  * Time: 2:18 PM
  */
-public class AppUserOwnedObjectImplTest {
+public class AppUserOwnedObjectImplTest extends AbstractIdObjectTest {
     private final AppUser user1 = (AppUser) new AppUserImpl().setId("123");
     private final AppUser user2 = (AppUser) new AppUserImpl().setId("456");
 
@@ -65,6 +65,11 @@ public class AppUserOwnedObjectImplTest {
         new LocalEntity().setAppUser(null);
     }
 
+    @Test(expectedExceptions = InvalidParameterException.class)
+    public void testSetNewAppUserExceptions() {
+        new LocalEntity(user1).setAppUser(user2);
+    }
+
     @Test
     public void testValidateSameAppUserMatches() {
         new LocalEntity(user1).addAnotherUserObject(new LocalEntity(user1));
@@ -89,12 +94,12 @@ public class AppUserOwnedObjectImplTest {
     public void testValidatingSameAppUserMultipleObjects() {
         int size = 20;
         List<LocalEntity> others = new ArrayList<>(size);
-        for(int i = 0; i < size; ++i) {
+        for (int i = 0; i < size; ++i) {
             others.add(new LocalEntity());
         }
         int wrongOne = new Random().nextInt(size - 5) + 5;  //  make sure bad one is more towards back
-        for(int i = 0; i < size; ++i) {
-            if(i != wrongOne) {
+        for (int i = 0; i < size; ++i) {
+            if (i != wrongOne) {
                 others.get(i).setAppUser(user1);
             } else {
                 others.get(i).setAppUser(user2);

@@ -27,8 +27,8 @@ public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements App
     @Override
     public AppUserOwnedObject setAppUser(final AppUser appUser) {
         validateNonNullValue(appUser);
-        if (this.appUser != null && !this.appUser.getId().equals(appUser.getId())) {
-            throw new InvalidStateException("Cannot reassign appuser after assignment");
+        if (this.appUser != null && !this.appUser.equals(appUser)) {
+            throw new InvalidParameterException("Cannot reassign appuser after assignment");
         }
         this.appUser = appUser;
         return this;

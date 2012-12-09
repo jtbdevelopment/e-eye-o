@@ -163,8 +163,7 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
 
     @Override
     public Observation setComment(final String comment) {
-        validateNonNullValue(comment);
-        this.comment = comment;
+        this.comment = useBlankForNullValue(comment);
         return this;
     }
 }

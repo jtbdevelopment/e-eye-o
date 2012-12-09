@@ -1,20 +1,22 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
-import static junit.framework.Assert.*;
 
 import org.testng.annotations.Test;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import java.security.InvalidParameterException;
 
+import static org.testng.Assert.*;
+
 /**
  * Date: 12/2/12
  * Time: 1:12 AM
  */
-public class IdObjectImplTest {
+public class IdObjectImplTest extends AbstractIdObjectTest {
     private class IdObjectExtends extends IdObjectImpl {
 
     }
+
     private static final String ID = "SOMETHING";
 
     @Test

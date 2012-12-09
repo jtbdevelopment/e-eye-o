@@ -87,8 +87,13 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
 
     @Override
     public Student setStudentPhoto(final Photo studentPhoto) {
-        validateSameAppUser(studentPhoto);
-        this.studentPhoto = studentPhoto;
+        if( studentPhoto != null ) {
+            validateSameAppUser(studentPhoto);
+            this.studentPhoto = studentPhoto;
+        } else {
+            //  TODO - default stock photo
+            this.studentPhoto = null;
+        }
         return this;
     }
 }
