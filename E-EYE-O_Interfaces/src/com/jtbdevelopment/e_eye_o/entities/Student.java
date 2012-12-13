@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -17,9 +18,11 @@ public interface Student extends ArchivableAppUserOwnedObject {
 
     Set<Observation> getObservations();
 
-    Student setObservations(final Set<Observation> observations);
+    Student setObservations(final Set<? extends Observation> observations);
 
     Student addObservation(final Observation observation);
+
+    Student addObservations(final Collection<? extends Observation> observations);
 
     Student removeObservation(final Observation observation);
 

@@ -30,13 +30,13 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
-    public LocalDateTime getObservationDate() {
-        return wrapped.getObservationDate();
+    public LocalDateTime getObservationTimestamp() {
+        return wrapped.getObservationTimestamp();
     }
 
     @Override
-    public Observation setObservationDate(final LocalDateTime observationDate) {
-        wrapped.setObservationDate(observationDate);
+    public Observation setObservationTimestamp(final LocalDateTime observationDate) {
+        wrapped.setObservationTimestamp(observationDate);
         return this;
     }
 
@@ -58,7 +58,7 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
-    public Observation setPhotos(final Set<Photo> photos) {
+    public Observation setPhotos(final Set<? extends Photo> photos) {
         wrapped.setPhotos(wrap(photos));
         return this;
     }
@@ -70,7 +70,7 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
-    public Observation addPhotos(final Collection<Photo> photos) {
+    public Observation addPhotos(final Collection<? extends Photo> photos) {
         wrapped.addPhotos(wrap(photos));
         return this;
     }
@@ -122,7 +122,7 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
-    public Observation setCategories(final Set<ObservationCategory> categories) {
+    public Observation setCategories(final Set<? extends ObservationCategory> categories) {
         wrapped.setCategories(wrap(categories));
         return this;
     }
@@ -134,7 +134,7 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
-    public Observation addCategories(final Collection<ObservationCategory> observationCategories) {
+    public Observation addCategories(final Collection<? extends ObservationCategory> observationCategories) {
         wrapped.addCategories(wrap(observationCategories));
         return this;
     }

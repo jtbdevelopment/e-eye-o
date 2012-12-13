@@ -207,7 +207,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     private Observation createObservation(final AppUser appUser, final Collection<ObservationCategory> ocs, final String comment, Collection<Photo> photos) {
         Observation o = new ObservationImpl(appUser);
         o.setNeedsFollowUp(false);
-        o.setObservationDate(new LocalDateTime());
+        o.setObservationTimestamp(new LocalDateTime());
         o.addCategories(ocs);
         o.setComment(comment);
         if (photos != null) {

@@ -15,22 +15,22 @@ public class AppUserImplTest extends AbstractIdObjectTest {
 
     @Test
     public void testSetGetLogin() {
-        stringSetGetsWithBlanksAndNullsAsException(AppUserImpl.class, "login");
+        checkStringSetGetsWithBlanksAndNullsAsException(AppUserImpl.class, "login");
     }
 
     @Test
     public void testSetFirstName() throws Exception {
-        stringSetGetsWithNullsSavedAsBlanks(AppUserImpl.class, "firstName");
+        checkStringSetGetsWithNullsSavedAsBlanks(AppUserImpl.class, "firstName");
     }
 
     @Test
     public void testSetLastName() throws Exception {
-        stringSetGetsWithNullsSavedAsBlanks(AppUserImpl.class, "lastName");
+        checkStringSetGetsWithNullsSavedAsBlanks(AppUserImpl.class, "lastName");
     }
 
     @Test
     public void testSetEmailAddress() throws Exception {
-        stringSetGetsWithNullsSavedAsBlanks(AppUserImpl.class, "emailAddress");
+        checkStringSetGetsWithNullsSavedAsBlanks(AppUserImpl.class, "emailAddress");
     }
 
     @Test

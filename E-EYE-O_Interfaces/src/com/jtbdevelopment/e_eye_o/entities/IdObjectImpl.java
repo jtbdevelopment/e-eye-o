@@ -35,13 +35,13 @@ public abstract class IdObjectImpl implements IdObject {
     }
 
     @Override
-    public IdObject setId(final String id) {
+    public <T extends IdObject> T setId(final String id) {
         validateNonEmptyValue(id);
         if (StringUtils.hasLength(this.id) && !this.id.equals(id)) {
             throw new InvalidStateException("Cannot re-assign id after assignment");
         }
         this.id = id;
-        return this;
+        return (T) this;
     }
 
     protected void validateNonNullValue(final Object newValue) {
@@ -56,7 +56,7 @@ public abstract class IdObjectImpl implements IdObject {
 
     protected void validateNonEmptyValue(final String newValue) {
         validateNonNullValue(newValue);
-        if(!StringUtils.hasLength(newValue)) {
+        if (!StringUtils.hasLength(newValue)) {
             throw new InvalidParameterException("Cannot assign empty string");
         }
     }

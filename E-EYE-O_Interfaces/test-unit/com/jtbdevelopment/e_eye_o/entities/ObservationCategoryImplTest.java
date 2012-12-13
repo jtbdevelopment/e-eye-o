@@ -8,12 +8,17 @@ import org.testng.annotations.Test;
  */
 public class ObservationCategoryImplTest extends AbstractIdObjectTest {
     @Test
+    public void testConstructors() {
+        checkDefaultAndAppUserConstructorTests(ClassListImpl.class);
+    }
+
+    @Test
     public void testSetGetShortName() throws Exception {
-        stringSetGetsWithNullsSavedAsBlanks(ObservationCategoryImpl.class, "shortName");
+        checkStringSetGetsWithNullsSavedAsBlanks(ObservationCategoryImpl.class, "shortName");
     }
 
     @Test
     public void testSetGetDescription() throws Exception {
-        stringSetGetsWithNullsSavedAsBlanks(ObservationCategoryImpl.class, "description");
+        checkStringSetGetsWithNullsSavedAsBlanks(ObservationCategoryImpl.class, "description");
     }
 }

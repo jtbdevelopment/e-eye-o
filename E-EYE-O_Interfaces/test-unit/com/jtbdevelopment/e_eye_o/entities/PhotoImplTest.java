@@ -15,19 +15,19 @@ import static org.testng.Assert.assertTrue;
 public class PhotoImplTest extends AbstractIdObjectTest {
 
     @Test
+    public void testConstructors() {
+        checkDefaultAndAppUserConstructorTests(PhotoImpl.class);
+    }
+
+    @Test
     public void testNewPhotoDefaultTimestamp() throws Exception {
         LocalDateTime before = new LocalDateTime();
         Thread.sleep(1);
-        PhotoImpl photo = new PhotoImpl(new AppUserImpl());
+        PhotoImpl photo = new PhotoImpl();
         Thread.sleep(1);
         LocalDateTime after = new LocalDateTime();
         assertTrue(before.compareTo(photo.getTimestamp()) < 0);
         assertTrue(after.compareTo(photo.getTimestamp()) > 0);
-    }
-
-    @Test
-    public void testSetGetDescription() {
-        stringSetGetsWithNullsSavedAsBlanks(PhotoImpl.class, "description");
     }
 
     @Test(expectedExceptions = InvalidParameterException.class)
@@ -40,4 +40,10 @@ public class PhotoImplTest extends AbstractIdObjectTest {
         LocalDateTime now = new LocalDateTime();
         assertEquals(now, new PhotoImpl().setTimestamp(now).getTimestamp());
     }
+
+    @Test
+    public void testSetGetDescription() {
+        checkStringSetGetsWithNullsSavedAsBlanks(PhotoImpl.class, "description");
+    }
+
 }

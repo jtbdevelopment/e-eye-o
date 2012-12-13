@@ -1,9 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Date: 11/4/12
@@ -15,7 +12,7 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
     private Set<Observation> observations = new TreeSet<>(new Comparator<Observation>() {
         @Override
         public int compare(Observation o1, Observation o2) {
-            int date = o1.getObservationDate().compareTo(o2.getObservationDate());
+            int date = o1.getObservationTimestamp().compareTo(o2.getObservationTimestamp());
             if (date != 0) {
                 return date;
             }
@@ -61,9 +58,10 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
     }
 
     @Override
-    public Student setObservations(final Set<Observation> observations) {
+    public Student setObservations(final Set<? extends Observation> observations) {
         validateSameAppUsers(observations);
-        this.observations = observations;
+        this.observations.clear();
+        this.observations.addAll(observations);
         return this;
     }
 
@@ -71,6 +69,13 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
     public Student addObservation(final Observation observation) {
         validateSameAppUser(observation);
         observations.add(observation);
+        return this;
+    }
+
+    @Override
+    public Student addObservations(final Collection<? extends Observation> observations) {
+        validateSameAppUsers(observations);
+        this.observations.addAll(observations);
         return this;
     }
 
@@ -87,7 +92,7 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
 
     @Override
     public Student setStudentPhoto(final Photo studentPhoto) {
-        if( studentPhoto != null ) {
+        if (studentPhoto != null) {
             validateSameAppUser(studentPhoto);
             this.studentPhoto = studentPhoto;
         } else {

@@ -11,9 +11,9 @@ import java.util.Set;
  * Time: 3:15 PM
  */
 public interface Observation extends ArchivableAppUserOwnedObject {
-    LocalDateTime getObservationDate();
+    LocalDateTime getObservationTimestamp();
 
-    Observation setObservationDate(final LocalDateTime observationDate);
+    Observation setObservationTimestamp(final LocalDateTime observationDate);
 
     boolean isSignificant();
 
@@ -21,11 +21,11 @@ public interface Observation extends ArchivableAppUserOwnedObject {
 
     Set<Photo> getPhotos();
 
-    Observation setPhotos(final Set<Photo> photos);
+    Observation setPhotos(final Set<? extends Photo> photos);
 
     Observation addPhoto(final Photo photo);
 
-    Observation addPhotos(final Collection<Photo> photos);
+    Observation addPhotos(final Collection<? extends Photo> photos);
 
     Observation removePhoto(final Photo photo);
 
@@ -43,11 +43,11 @@ public interface Observation extends ArchivableAppUserOwnedObject {
 
     Set<ObservationCategory> getCategories();
 
-    Observation setCategories(final Set<ObservationCategory> categories);
+    Observation setCategories(final Set<? extends ObservationCategory> categories);
 
     Observation addCategory(final ObservationCategory observationCategory);
 
-    Observation addCategories(final Collection<ObservationCategory> observationCategories);
+    Observation addCategories(final Collection<? extends ObservationCategory> observationCategories);
 
     Observation removeCategory(final ObservationCategory observationCategory);
 

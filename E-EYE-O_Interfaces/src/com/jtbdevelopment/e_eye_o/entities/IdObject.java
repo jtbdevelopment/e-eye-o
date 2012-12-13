@@ -7,5 +7,5 @@ package com.jtbdevelopment.e_eye_o.entities;
 public interface IdObject {
     String getId();
 
-    IdObject setId(final String id);
+    <T extends IdObject> T setId(final String id);
 }

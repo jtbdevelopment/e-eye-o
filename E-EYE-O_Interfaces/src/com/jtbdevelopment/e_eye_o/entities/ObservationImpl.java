@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements Observation {
     private String comment;
-    private LocalDateTime observationDate;
+    private LocalDateTime observationTimestamp = new LocalDateTime();
     private boolean significant = false;
 
     private Set<ObservationCategory> categories = new HashSet<>();
@@ -33,13 +33,13 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
     }
 
     @Override
-    public LocalDateTime getObservationDate() {
-        return observationDate;
+    public LocalDateTime getObservationTimestamp() {
+        return observationTimestamp;
     }
 
     @Override
-    public Observation setObservationDate(final LocalDateTime observationDate) {
-        this.observationDate = observationDate;
+    public Observation setObservationTimestamp(final LocalDateTime observationDate) {
+        this.observationTimestamp = observationDate;
         return this;
     }
 
@@ -60,7 +60,7 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
     }
 
     @Override
-    public Observation setPhotos(Set<Photo> photos) {
+    public Observation setPhotos(final Set<? extends Photo> photos) {
         validateSameAppUsers(photos);
         this.photos.clear();
         this.photos.addAll(photos);
@@ -75,7 +75,7 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
     }
 
     @Override
-    public Observation addPhotos(final Collection<Photo> photos) {
+    public Observation addPhotos(final Collection<? extends Photo> photos) {
         validateSameAppUsers(photos);
         this.photos.addAll(photos);
         return this;
@@ -129,7 +129,7 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
     }
 
     @Override
-    public Observation setCategories(final Set<ObservationCategory> categories) {
+    public Observation setCategories(final Set<? extends ObservationCategory> categories) {
         validateSameAppUsers(categories);
         this.categories.clear();
         this.categories.addAll(categories);
@@ -144,7 +144,7 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
     }
 
     @Override
-    public Observation addCategories(final Collection<ObservationCategory> observationCategories) {
+    public Observation addCategories(final Collection<? extends ObservationCategory> observationCategories) {
         validateSameAppUsers(observationCategories);
         categories.addAll(observationCategories);
         return this;

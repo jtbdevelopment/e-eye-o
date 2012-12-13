@@ -7,5 +7,5 @@ package com.jtbdevelopment.e_eye_o.entities;
 public interface ArchivableAppUserOwnedObject extends AppUserOwnedObject {
     boolean isArchived();
 
-    ArchivableAppUserOwnedObject setArchived(boolean archived);
+    <T extends ArchivableAppUserOwnedObject> T setArchived(boolean archived);
 }

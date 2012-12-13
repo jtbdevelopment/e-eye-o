@@ -7,5 +7,5 @@ package com.jtbdevelopment.e_eye_o.entities;
 public interface AppUserOwnedObject extends IdObject {
     AppUser getAppUser();
 
-    AppUserOwnedObject setAppUser(final AppUser appUser);
+    <T extends AppUserOwnedObject> T setAppUser(final AppUser appUser);
 }

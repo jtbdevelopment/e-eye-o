@@ -1,6 +1,10 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.InjectionMetadata;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.validation.Validator;
 import org.testng.annotations.Test;
 import sun.plugin.dom.exception.InvalidStateException;
 

@@ -8,6 +8,7 @@ import com.jtbdevelopment.e_eye_o.entities.StudentImpl;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -55,7 +56,7 @@ public class HDBStudent extends HDBArchivableAppUserOwnedObject<Student> impleme
     }
 
     @Override
-    public Student setObservations(final Set<Observation> observations) {
+    public Student setObservations(final Set<? extends Observation> observations) {
         wrapped.setObservations(wrap(observations));
         return this;
     }
@@ -63,6 +64,12 @@ public class HDBStudent extends HDBArchivableAppUserOwnedObject<Student> impleme
     @Override
     public Student addObservation(final Observation observation) {
         wrapped.addObservation(wrap(observation));
+        return this;
+    }
+
+    @Override
+    public Student addObservations(final Collection<? extends Observation> observations) {
+        wrapped.addObservations(wrap(observations));
         return this;
     }
 

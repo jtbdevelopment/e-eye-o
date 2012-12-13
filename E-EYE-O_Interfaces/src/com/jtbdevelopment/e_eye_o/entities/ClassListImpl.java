@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,7 +39,7 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
     }
 
     @Override
-    public ClassList setStudents(final Set<Student> students) {
+    public ClassList setStudents(final Set<? extends Student> students) {
         validateSameAppUsers(students);
         this.students.clear();
         this.students.addAll(students);
@@ -49,6 +50,13 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
     public ClassList addStudent(final Student student) {
         validateSameAppUser(student);
         students.add(student);
+        return this;
+    }
+
+    @Override
+    public ClassList addStudents(final Collection<? extends Student> students) {
+        validateSameAppUsers(students);
+        this.students.addAll(students);
         return this;
     }
 
@@ -64,7 +72,7 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
     }
 
     @Override
-    public ClassList setPhotos(final Set<Photo> photos) {
+    public ClassList setPhotos(final Set<? extends Photo> photos) {
         validateSameAppUsers(photos);
         this.photos.clear();
         this.photos.addAll(photos);
@@ -75,6 +83,13 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
     public ClassList addPhoto(final Photo photo) {
         validateSameAppUser(photo);
         photos.add(photo);
+        return this;
+    }
+
+    @Override
+    public ClassList addPhotos(final Collection<? extends Photo> photos) {
+        validateSameAppUsers(photos);
+        this.photos.addAll(photos);
         return this;
     }
 

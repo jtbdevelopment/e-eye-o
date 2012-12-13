@@ -7,6 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.Student;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -41,7 +42,7 @@ public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> imp
         return wrapped.getStudents();
     }
 
-    public ClassList setStudents(final Set<Student> students) {
+    public ClassList setStudents(final Set<? extends Student> students) {
         wrapped.setStudents(wrap(students));
         return this;
     }
@@ -49,6 +50,12 @@ public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> imp
     @Override
     public ClassList addStudent(final Student student) {
         wrapped.addStudent(wrap(student));
+        return this;
+    }
+
+    @Override
+    public ClassList addStudents(final Collection<? extends Student> students) {
+        wrapped.addStudents(wrap(students));
         return this;
     }
 
@@ -64,7 +71,7 @@ public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> imp
         return wrapped.getPhotos();
     }
 
-    public ClassList setPhotos(final Set<Photo> photos) {
+    public ClassList setPhotos(final Set<? extends Photo> photos) {
         wrapped.setPhotos(wrap(photos));
         return this;
     }
@@ -72,6 +79,12 @@ public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> imp
     @Override
     public ClassList addPhoto(final Photo photo) {
         wrapped.addPhoto(wrap(photo));
+        return this;
+    }
+
+    @Override
+    public ClassList addPhotos(final Collection<? extends Photo> photos) {
+        wrapped.addPhotos(wrap(photos));
         return this;
     }
 
