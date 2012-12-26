@@ -25,7 +25,7 @@ public class PhotoImpl extends ArchivableAppUserOwnedObjectImpl implements Photo
 
     @Override
     public Photo setDescription(final String description) {
-        this.description = useBlankForNullValue(description);
+        this.description = description;
         return this;
     }
 
@@ -36,7 +36,6 @@ public class PhotoImpl extends ArchivableAppUserOwnedObjectImpl implements Photo
 
     @Override
     public Photo setTimestamp(final LocalDateTime timestamp) {
-        validateNonNullValue(timestamp);
         this.timestamp = timestamp;
         return this;
     }

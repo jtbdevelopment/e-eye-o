@@ -7,23 +7,10 @@ import org.joda.time.DateTime;
  * Time: 9:08 PM
  */
 public class AppUserImpl extends IdObjectImpl implements AppUser {
-    private String login = "";
     private String firstName = "";
     private String lastName = "";
     private String emailAddress = "";
     private DateTime lastLogin = NEVER_LOGGED_IN;
-
-    @Override
-    public String getLogin() {
-        return login;
-    }
-
-    @Override
-    public AppUser setLogin(final String login) {
-        validateNonEmptyValue(login);
-        this.login = login;
-        return this;
-    }
 
     @Override
     public String getFirstName() {
@@ -32,7 +19,7 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
 
     @Override
     public AppUser setFirstName(final String firstName) {
-        this.firstName = useBlankForNullValue(firstName);
+        this.firstName = firstName;
         return this;
     }
 
@@ -43,7 +30,7 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
 
     @Override
     public AppUser setLastName(final String lastName) {
-        this.lastName = useBlankForNullValue(lastName);
+        this.lastName = lastName;
         return this;
     }
 
@@ -54,7 +41,7 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
 
     @Override
     public AppUser setEmailAddress(final String emailAddress) {
-        this.emailAddress = useBlankForNullValue(emailAddress);
+        this.emailAddress = emailAddress;
         return this;
     }
 
@@ -65,7 +52,6 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
 
     @Override
     public AppUser setLastLogin(final DateTime lastLogin) {
-        validateNonNullValue(lastLogin);
         this.lastLogin = lastLogin;
         return this;
     }

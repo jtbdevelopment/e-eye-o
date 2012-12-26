@@ -51,13 +51,13 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
     //  Can't just clone the collection - hibernate gives you it's own
     private <T extends IdObject, C extends Collection<T>> C constructNewCollection(final C entities) {
         if (entities instanceof Map) {
-            return (C) new HashMap();
+            return (C) new HashMap(entities.size());
         }
         if (entities instanceof List) {
             return (C) new ArrayList<T>(entities.size());
         }
         if (entities instanceof Set) {
-            return (C) new HashSet<T>();
+            return (C) new HashSet<T>(entities.size());
         }
         logger.warn("Don't know how to construct collection of " + entities.getClass().getSimpleName());
         throw new RuntimeException("Couldn't instantiate new collection");

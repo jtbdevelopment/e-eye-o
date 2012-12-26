@@ -19,7 +19,7 @@ public class AppUserOwnedObjectImplTest extends AbstractIdObjectTest {
     private final AppUser user1 = (AppUser) new AppUserImpl().setId("123");
     private final AppUser user2 = (AppUser) new AppUserImpl().setId("456");
 
-    private class LocalEntity extends AppUserOwnedObjectImpl {
+    private static class LocalEntity extends AppUserOwnedObjectImpl {
         public LocalEntity() {
             super();
         }
@@ -40,14 +40,17 @@ public class AppUserOwnedObjectImplTest extends AbstractIdObjectTest {
     }
 
     @Test
-    public void testGetAppUserForNewObjects() throws Exception {
-        assertEquals(user1, new LocalEntity(user1).getAppUser());
-        assertEquals(null, new LocalEntity().getAppUser());
+    public void testConstructorsForNewObjects() {
+        checkDefaultAndAppUserConstructorTests(LocalEntity.class);
+    }
+
+    @Test
+    public void testGetSetAppUserAfterConstruction() throws Exception {
         assertEquals(user2, new LocalEntity().setAppUser(user2).getAppUser());
     }
 
     @Test
-    public void testAssigningDifferentOwnerSameIDOK() {
+    public void testAssigningDifferentOwnerSameIDisOK() {
         AppUserImpl userCopy = new AppUserImpl();
         userCopy.setId(user1.getId());
 
@@ -57,7 +60,6 @@ public class AppUserOwnedObjectImplTest extends AbstractIdObjectTest {
     @Test(expectedExceptions = InvalidParameterException.class)
     public void testSetAppUserNullExceptionsOnConstructor() {
         new LocalEntity(null);
-
     }
 
     @Test(expectedExceptions = InvalidParameterException.class)

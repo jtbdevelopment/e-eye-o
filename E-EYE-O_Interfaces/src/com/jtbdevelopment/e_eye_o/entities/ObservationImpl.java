@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.entities;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -61,7 +60,6 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
 
     @Override
     public Observation setPhotos(final Set<? extends Photo> photos) {
-        validateSameAppUsers(photos);
         this.photos.clear();
         this.photos.addAll(photos);
         return this;
@@ -69,14 +67,12 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
 
     @Override
     public Observation addPhoto(final Photo photo) {
-        validateSameAppUser(photo);
         this.photos.add(photo);
         return this;
     }
 
     @Override
     public Observation addPhotos(final Collection<? extends Photo> photos) {
-        validateSameAppUsers(photos);
         this.photos.addAll(photos);
         return this;
     }
@@ -116,9 +112,6 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
 
     @Override
     public Observation setFollowUpObservation(final Observation followUpObservation) {
-        if (getId() != null && followUpObservation != null && this.getId().equals(followUpObservation.getId())) {
-            throw new InvalidParameterException("Cannot follow-up observation with itself");
-        }
         this.followUpObservation = followUpObservation;
         return this;
     }
@@ -130,7 +123,6 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
 
     @Override
     public Observation setCategories(final Set<? extends ObservationCategory> categories) {
-        validateSameAppUsers(categories);
         this.categories.clear();
         this.categories.addAll(categories);
         return this;
@@ -138,14 +130,12 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
 
     @Override
     public Observation addCategory(final ObservationCategory observationCategory) {
-        validateSameAppUser(observationCategory);
         categories.add(observationCategory);
         return this;
     }
 
     @Override
     public Observation addCategories(final Collection<? extends ObservationCategory> observationCategories) {
-        validateSameAppUsers(observationCategories);
         categories.addAll(observationCategories);
         return this;
     }
@@ -163,7 +153,7 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
 
     @Override
     public Observation setComment(final String comment) {
-        this.comment = useBlankForNullValue(comment);
+        this.comment = comment;
         return this;
     }
 }

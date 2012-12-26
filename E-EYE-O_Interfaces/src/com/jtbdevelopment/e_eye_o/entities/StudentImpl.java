@@ -36,7 +36,6 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
 
     @Override
     public Student setFirstName(final String firstName) {
-        validateNonEmptyValue(firstName);
         this.firstName = firstName;
         return this;
     }
@@ -48,7 +47,7 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
 
     @Override
     public Student setLastName(final String lastName) {
-        this.lastName = useBlankForNullValue(lastName);
+        this.lastName = lastName;
         return this;
     }
 
@@ -59,7 +58,6 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
 
     @Override
     public Student setObservations(final Set<? extends Observation> observations) {
-        validateSameAppUsers(observations);
         this.observations.clear();
         this.observations.addAll(observations);
         return this;
@@ -67,14 +65,12 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
 
     @Override
     public Student addObservation(final Observation observation) {
-        validateSameAppUser(observation);
         observations.add(observation);
         return this;
     }
 
     @Override
     public Student addObservations(final Collection<? extends Observation> observations) {
-        validateSameAppUsers(observations);
         this.observations.addAll(observations);
         return this;
     }
@@ -93,7 +89,6 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
     @Override
     public Student setStudentPhoto(final Photo studentPhoto) {
         if (studentPhoto != null) {
-            validateSameAppUser(studentPhoto);
             this.studentPhoto = studentPhoto;
         } else {
             //  TODO - default stock photo

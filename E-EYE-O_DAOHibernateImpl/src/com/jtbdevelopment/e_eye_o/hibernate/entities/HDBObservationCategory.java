@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategoryImpl;
 
@@ -26,7 +27,7 @@ public class HDBObservationCategory extends HDBAppUserOwnedObject<ObservationCat
     }
 
     @Override
-    @Column(nullable = false)
+    @Column(nullable = false, length = IdObject.MAX_SHORT_NAME_SIZE)
     public String getShortName() {
         return wrapped.getShortName();
     }
@@ -38,6 +39,7 @@ public class HDBObservationCategory extends HDBAppUserOwnedObject<ObservationCat
     }
 
     @Override
+    @Column(nullable = false)
     public String getDescription() {
         return wrapped.getDescription();
     }

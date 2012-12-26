@@ -25,21 +25,19 @@ public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements App
     }
 
     @Override
-    public AppUserOwnedObject setAppUser(final AppUser appUser) {
-        validateNonNullValue(appUser);
+    public <T extends AppUserOwnedObject> T setAppUser(final AppUser appUser) {
         if (this.appUser != null && !this.appUser.equals(appUser)) {
             throw new InvalidParameterException("Cannot reassign appuser after assignment");
         }
         this.appUser = appUser;
-        return this;
+        return (T) this;
     }
 
     protected void validateSameAppUser(final AppUserOwnedObject otherObject) {
-        validateNonNullValue(otherObject);
         if (this.appUser == null) {
             throw new InvalidStateException("No appUser for this object");
         }
-        if (otherObject.getAppUser() == null) {
+        if (otherObject == null || otherObject.getAppUser() == null) {
             throw new InvalidStateException("Neither object for comparison is owned");
         }
         if (!this.appUser.equals(otherObject.getAppUser())) {
@@ -48,9 +46,10 @@ public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements App
     }
 
     protected <T extends AppUserOwnedObject> void validateSameAppUsers(final Collection<T> others) {
-        validateNonNullValue(others);
-        for (AppUserOwnedObject otherObject : others) {
-            validateSameAppUser(otherObject);
+        if (others != null) {
+            for (AppUserOwnedObject otherObject : others) {
+                validateSameAppUser(otherObject);
+            }
         }
     }
 

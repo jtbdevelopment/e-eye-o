@@ -28,7 +28,6 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
 
     @Override
     public ClassList setDescription(final String description) {
-        validateNonEmptyValue(description);
         this.description = description;
         return this;
     }
@@ -40,7 +39,6 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
 
     @Override
     public ClassList setStudents(final Set<? extends Student> students) {
-        validateSameAppUsers(students);
         this.students.clear();
         this.students.addAll(students);
         return this;
@@ -48,14 +46,12 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
 
     @Override
     public ClassList addStudent(final Student student) {
-        validateSameAppUser(student);
         students.add(student);
         return this;
     }
 
     @Override
     public ClassList addStudents(final Collection<? extends Student> students) {
-        validateSameAppUsers(students);
         this.students.addAll(students);
         return this;
     }
@@ -73,7 +69,6 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
 
     @Override
     public ClassList setPhotos(final Set<? extends Photo> photos) {
-        validateSameAppUsers(photos);
         this.photos.clear();
         this.photos.addAll(photos);
         return this;
@@ -81,14 +76,12 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
 
     @Override
     public ClassList addPhoto(final Photo photo) {
-        validateSameAppUser(photo);
         photos.add(photo);
         return this;
     }
 
     @Override
     public ClassList addPhotos(final Collection<? extends Photo> photos) {
-        validateSameAppUsers(photos);
         this.photos.addAll(photos);
         return this;
     }

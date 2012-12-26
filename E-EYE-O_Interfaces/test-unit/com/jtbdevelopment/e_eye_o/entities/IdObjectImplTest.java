@@ -1,16 +1,14 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.InjectionMetadata;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.validation.Validator;
 import org.testng.annotations.Test;
 import sun.plugin.dom.exception.InvalidStateException;
 
-import java.security.InvalidParameterException;
+import javax.validation.ConstraintViolation;
+import java.util.Set;
 
-import static org.testng.Assert.*;
+import static org.testng.AssertJUnit.*;
+
 
 /**
  * Date: 12/2/12
@@ -24,11 +22,6 @@ public class IdObjectImplTest extends AbstractIdObjectTest {
     private static final String ID = "SOMETHING";
 
     @Test
-    public void testEquals() throws Exception {
-
-    }
-
-    @Test
     public void testHashCode() throws Exception {
         IdObjectExtends local = new IdObjectExtends();
         assertEquals(0, local.hashCode());
@@ -40,6 +33,19 @@ public class IdObjectImplTest extends AbstractIdObjectTest {
     public void testImplEqualsItself() {
         IdObjectExtends local = new IdObjectExtends();
         assertTrue(local.equals(local));
+    }
+
+    @Test
+    public void testEqualsNull() {
+        IdObjectExtends local = new IdObjectExtends();
+        assertFalse(local.equals(null));
+    }
+
+    @Test
+    public void testEqualsNonObjectIdType() {
+        IdObjectExtends local = new IdObjectExtends();
+        String s = "";
+        assertFalse(local.equals(s));
     }
 
     @Test
@@ -64,10 +70,13 @@ public class IdObjectImplTest extends AbstractIdObjectTest {
         assertFalse(impl3.equals(impl1));
     }
 
-    @Test(expectedExceptions = {InvalidParameterException.class})
+    @Test
     public void testSetIdNullExceptions() throws Exception {
         IdObjectExtends local = new IdObjectExtends();
         local.setId(null);
+        Set<ConstraintViolation<IdObjectExtends>> violations = validator.validate(local);
+        assertEquals(1, violations.size());
+        assertEquals(IdObject.ID_OBJECT_ID_MAY_NOT_BE_EMPTY_ERROR, violations.iterator().next().getMessage());
     }
 
     @Test

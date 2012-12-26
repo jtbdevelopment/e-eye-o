@@ -22,7 +22,7 @@ public class ObservationCategoryImpl extends AppUserOwnedObjectImpl implements O
 
     @Override
     public ObservationCategory setShortName(final String shortName) {
-        this.shortName = useBlankForNullValue(shortName);
+        this.shortName = shortName;
         return this;
     }
 
@@ -33,7 +33,7 @@ public class ObservationCategoryImpl extends AppUserOwnedObjectImpl implements O
 
     @Override
     public ObservationCategory setDescription(final String description) {
-        this.description = useBlankForNullValue(description);
+        this.description = description;
         return this;
     }
 }

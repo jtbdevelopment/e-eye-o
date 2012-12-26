@@ -22,18 +22,8 @@ public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
         super(appUser);
     }
 
-    @Column(nullable = false, unique = true)
-    public String getLogin() {
-        return wrapped.getLogin();
-    }
-
     @Override
-    public AppUser setLogin(final String login) {
-        wrapped.setLogin(login);
-        return this;
-    }
-
-    @Override
+    @Column(nullable = false, length = MAX_NAME_SIZE)
     public String getFirstName() {
         return wrapped.getFirstName();
     }
@@ -45,6 +35,7 @@ public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
     }
 
     @Override
+    @Column(length = MAX_NAME_SIZE)
     public String getLastName() {
         return wrapped.getLastName();
     }
@@ -56,6 +47,7 @@ public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
     }
 
     @Override
+    @Column(nullable = false, length = MAX_EMAIL_SIZE, unique = true)
     public String getEmailAddress() {
         return wrapped.getEmailAddress();
     }
@@ -68,6 +60,7 @@ public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
 
     @Override
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Column(nullable = false)
     public DateTime getLastLogin() {
         return wrapped.getLastLogin();
     }

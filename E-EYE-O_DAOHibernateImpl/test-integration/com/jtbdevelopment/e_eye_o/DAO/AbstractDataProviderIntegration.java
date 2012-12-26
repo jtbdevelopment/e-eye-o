@@ -30,7 +30,6 @@ import static org.testng.Assert.*;
  * Suite of tests that can be run against any data source provider to test hibernate.
  */
 @Transactional
-//public abstract class AbstractDataProviderIntegration implements ApplicationContextAware {
 @Test(groups = {"integration"})
 public abstract class AbstractDataProviderIntegration extends AbstractTransactionalTestNGSpringContextTests implements ApplicationContextAware {
     private static Logger logger = LoggerFactory.getLogger(AbstractDataProviderIntegration.class);
@@ -53,10 +52,10 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
             return;
         }
 
-        testAppUser1 = createUser("TT", "Testy", "Tester", "test@test.com");
+        testAppUser1 = createUser("Testy", "Tester", "test@test.com");
         observationCategoryHelper.createDefaultCategoriesForUser(testAppUser1);
         testAppUser1OCs = observationCategoryHelper.getObservationCategoriesAsMap(testAppUser1);
-        testAppUser2 = createUser("AT", "Another", "Tester", "another@test.com");
+        testAppUser2 = createUser("Another", "Tester", "another@test.com");
         logger.info("Created Test Tester with ID " + testAppUser1.getId());
         logger.info("Created Test Tester2 with ID " + testAppUser2.getId());
     }
@@ -66,7 +65,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     //  Otherwise exception is not raised until transaction committed outside this call
     public void duplicateLoginAppUserFails() {
         try {
-            createUser("TT", "Testy", "Tester", "test@test.com");
+            createUser("Testy", "Tester", "test@test.com");
         } catch (Exception e) {
             //  Expected
             return;
@@ -198,9 +197,9 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         assertEquals(o2.getFollowUpReminder(), reminderDate);
     }
 
-    private AppUser createUser(final String login, final String first, final String last, final String email) {
+    private AppUser createUser(final String first, final String last, final String email) {
         AppUser appUser = new AppUserImpl();
-        appUser.setLogin(login).setFirstName(first).setLastName(last).setEmailAddress(email);
+        appUser.setFirstName(first).setLastName(last).setEmailAddress(email);
         return readWriteDAO.create(appUser);
     }
 
