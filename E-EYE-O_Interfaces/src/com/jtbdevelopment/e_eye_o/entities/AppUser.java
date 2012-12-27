@@ -14,9 +14,7 @@ import javax.validation.constraints.Size;
 public interface AppUser extends IdObject {
     public final static DateTime NEVER_LOGGED_IN = new DateTime(2000, 1, 1, 0, 0);
 
-    public final static int MIN_LOGIN_SIZE = 5;
-    public final static int MAX_LOGIN_SIZE = 30;
-    public final static int MAX_EMAIL_SIZE = 75;
+    public final static int MAX_EMAIL_SIZE = 40;
     public final static String LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR = "AppUser.login" + CANNOT_BE_NULL_ERROR;
     public final static String EMAIL_MUST_BE_A_VALID_FORMAT_ERROR = "AppUser.email must be a valid format.";
     public final static String EMAIL_CANNOT_BE_NULL_ERROR = "AppUser.email" + CANNOT_BE_NULL_ERROR;

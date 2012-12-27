@@ -10,7 +10,7 @@ import static org.testng.Assert.assertTrue;
  * Date: 12/8/12
  * Time: 8:08 PM
  */
-public class ObservationImplTest extends AbstractIdObjectTest {
+public class ObservationImplTest extends AbstractAppUserOwnedObjectTest {
     @Test
     public void testConstructors() {
         checkDefaultAndAppUserConstructorTests(ClassListImpl.class);

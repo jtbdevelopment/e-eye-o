@@ -4,9 +4,6 @@ package com.jtbdevelopment.e_eye_o.entities;
 import org.testng.annotations.Test;
 import sun.plugin.dom.exception.InvalidStateException;
 
-import javax.validation.ConstraintViolation;
-import java.util.Set;
-
 import static org.testng.AssertJUnit.*;
 
 
@@ -14,7 +11,7 @@ import static org.testng.AssertJUnit.*;
  * Date: 12/2/12
  * Time: 1:12 AM
  */
-public class IdObjectImplTest extends AbstractIdObjectTest {
+public class IdObjectImplTest extends AbstractAppUserOwnedObjectTest {
     private class IdObjectExtends extends IdObjectImpl {
 
     }
@@ -74,9 +71,7 @@ public class IdObjectImplTest extends AbstractIdObjectTest {
     public void testSetIdNullExceptions() throws Exception {
         IdObjectExtends local = new IdObjectExtends();
         local.setId(null);
-        Set<ConstraintViolation<IdObjectExtends>> violations = validator.validate(local);
-        assertEquals(1, violations.size());
-        assertEquals(IdObject.ID_OBJECT_ID_MAY_NOT_BE_EMPTY_ERROR, violations.iterator().next().getMessage());
+        validateExpectingError(local, IdObject.ID_OBJECT_ID_MAY_NOT_BE_EMPTY_ERROR);
     }
 
     @Test

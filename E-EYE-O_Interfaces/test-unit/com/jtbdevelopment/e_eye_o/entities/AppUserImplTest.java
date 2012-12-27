@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.entities;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
-import java.security.InvalidParameterException;
+import java.lang.reflect.Method;
 
 import static org.testng.Assert.assertEquals;
 
@@ -11,11 +11,11 @@ import static org.testng.Assert.assertEquals;
  * Date: 12/5/12
  * Time: 11:05 PM
  */
-public class AppUserImplTest extends AbstractIdObjectTest {
+public class AppUserImplTest extends AbstractAppUserOwnedObjectTest {
 
     @Test
     public void testSetFirstName() throws Exception {
-        checkStringGetSetsAndValidateNullsAndBlanksAsError(AppUserImpl.class, "firstName", AppUser.FIRST_NAME_CANNOT_BE_BLANK_OR_NULL_ERROR);
+        checkStringSetGetsAndValidateNullsAndBlanksAsError(AppUserImpl.class, "firstName", AppUser.FIRST_NAME_CANNOT_BE_BLANK_OR_NULL_ERROR);
     }
 
     @Test
@@ -35,7 +35,16 @@ public class AppUserImplTest extends AbstractIdObjectTest {
 
     @Test
     public void testSetEmailAddress() throws Exception {
-        //checkStringSetGetsWithNullsSavedAsBlanks(AppUserImpl.class, "emailAddress");
+        Method setter = getSetMethod(AppUserImpl.class, "emailAddress", String.class);
+        Method getter = getGetMethod(AppUserImpl.class, "emailAddress");
+        checkStringSetGetValidateSingleValue(AppUserImpl.class, getter, setter, VALID_EMAIL, false, AppUser.EMAIL_MUST_BE_A_VALID_FORMAT_ERROR);
+        checkStringSetGetValidateSingleValue(AppUserImpl.class, getter, setter, NULL, true, AppUser.EMAIL_CANNOT_BE_NULL_ERROR);
+        checkStringSetGetValidateSingleValue(AppUserImpl.class, getter, setter, INVALID_EMAIL, true, AppUser.EMAIL_MUST_BE_A_VALID_FORMAT_ERROR);
+    }
+
+    @Test
+    public void testEmailSize() throws Exception {
+        checkStringSizeValidation(AppUserImpl.class, "emailAddress", TOO_LONG_FOR_EMAIL, AppUser.APP_USER_EMAIL_SIZE_ERROR);
     }
 
     @Test
@@ -46,11 +55,14 @@ public class AppUserImplTest extends AbstractIdObjectTest {
     @Test
     public void testGetSetLastLogin() throws Exception {
         DateTime now = new DateTime();
-        assertEquals(now, new AppUserImpl().setLastLogin(now).getLastLogin());
+        final AppUser appUser = new AppUserImpl().setLastLogin(now);
+        assertEquals(now, appUser.getLastLogin());
+        validateNotExpectingError(appUser, AppUser.LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR);
     }
 
-    @Test(expectedExceptions = InvalidParameterException.class)
+    @Test
     public void testSetLastLoginNullExceptions() throws Exception {
-        new AppUserImpl().setLastLogin(null);
+        final AppUser appUser = new AppUserImpl().setLastLogin(null);
+        validateExpectingError(appUser, AppUser.LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR);
     }
 }

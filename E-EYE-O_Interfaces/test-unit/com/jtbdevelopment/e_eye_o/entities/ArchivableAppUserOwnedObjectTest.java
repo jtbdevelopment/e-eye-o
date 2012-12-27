@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
  * Date: 12/8/12
  * Time: 2:13 PM
  */
-public class ArchivableAppUserOwnedObjectTest extends AbstractIdObjectTest {
+public class ArchivableAppUserOwnedObjectTest extends AbstractAppUserOwnedObjectTest {
     public static class LocalArchivableObject extends ArchivableAppUserOwnedObjectImpl {
         public LocalArchivableObject() {
             super();

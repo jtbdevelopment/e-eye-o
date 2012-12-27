@@ -4,15 +4,13 @@ import org.testng.annotations.Test;
 
 import java.util.Set;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Date: 12/9/12
  * Time: 9:47 AM
  */
-public class ClassListImplTest extends AbstractIdObjectTest {
+public class ClassListImplTest extends AbstractAppUserOwnedObjectTest {
 
     @Test
     public void testConstructors() {
@@ -21,7 +19,12 @@ public class ClassListImplTest extends AbstractIdObjectTest {
 
     @Test
     public void testSetDescription() throws Exception {
-        checkStringSetGetsWithBlanksAndNullsAsException(ClassListImpl.class, "description");
+        checkStringSetGetsAndValidateNullsAndBlanksAsError(ClassListImpl.class, "description", ClassList.CLASS_LIST_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL_ERROR);
+    }
+
+    @Test
+    public void testDescriptionSize() throws Exception {
+        checkStringSizeValidation(ClassListImpl.class, "description", TOO_LONG_FOR_DESCRIPTION, ClassList.CLASS_LIST_DESCRIPTION_SIZE_ERROR);
     }
 
     @Test(expectedExceptions = UnsupportedOperationException.class)
@@ -65,8 +68,8 @@ public class ClassListImplTest extends AbstractIdObjectTest {
         ClassList classList = new ClassListImpl(USER1).setStudents(students);
         StudentImpl student = students.iterator().next();
         classList.removeStudent(student);
-        Set<Student> classStudents =classList.getStudents();
-        assertEquals(students.size() -1, classStudents.size());
+        Set<Student> classStudents = classList.getStudents();
+        assertEquals(students.size() - 1, classStudents.size());
         assertFalse(classStudents.contains(student));
         students.remove(student);
         assertTrue(classStudents.containsAll(students));

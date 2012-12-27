@@ -10,7 +10,7 @@ import static org.testng.Assert.assertEquals;
  * Date: 12/8/12
  * Time: 6:52 PM
  */
-public class StudentImplTest extends AbstractIdObjectTest {
+public class StudentImplTest extends AbstractAppUserOwnedObjectTest {
 
     @Test
     public void testConstructors() {
@@ -19,12 +19,22 @@ public class StudentImplTest extends AbstractIdObjectTest {
 
     @Test
     public void testSetGetFirstName() throws Exception {
-        checkStringSetGetsWithBlanksAndNullsAsException(StudentImpl.class, "firstName");
+        checkStringSetGetsAndValidateNullsAndBlanksAsError(StudentImpl.class, "firstName", Student.STUDENT_FIRST_NAME_CANNOT_BE_NULL_OR_BLANK_ERROR);
+    }
+
+    @Test
+    public void testFirstNameSize() throws Exception {
+        checkStringSizeValidation(StudentImpl.class, "firstName", TOO_LONG_FOR_NAME, Student.STUDENT_FIRST_NAME_SIZE_ERROR);
     }
 
     @Test
     public void testSetLastName() throws Exception {
-//        checkStringSetGetsWithNullsSavedAsBlanks(StudentImpl.class, "lastName");
+        checkStringSetGetsAndValidateNullsAsError(StudentImpl.class, "lastName", Student.STUDENT_LAST_NAME_CANNOT_BE_NULL_ERROR);
+    }
+
+    @Test
+    public void testLastNameSize() throws Exception {
+        checkStringSizeValidation(StudentImpl.class, "lastName", TOO_LONG_FOR_NAME, Student.STUDENT_LAST_NAME_SIZE_ERROR);
     }
 
     @Test(expectedExceptions = UnsupportedOperationException.class)

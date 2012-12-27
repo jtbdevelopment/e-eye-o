@@ -6,15 +6,20 @@ import org.testng.annotations.Test;
  * Date: 12/8/12
  * Time: 2:53 PM
  */
-public class ObservationCategoryImplTest extends AbstractIdObjectTest {
+public class ObservationCategoryImplTest extends AbstractAppUserOwnedObjectTest {
     @Test
     public void testConstructors() {
-        checkDefaultAndAppUserConstructorTests(ClassListImpl.class);
+        checkDefaultAndAppUserConstructorTests(ObservationCategoryImpl.class);
     }
 
     @Test
     public void testSetGetShortName() throws Exception {
-//        checkStringSetGetsWithNullsSavedAsBlanks(ObservationCategoryImpl.class, "shortName");
+        checkStringSetGetsAndValidateNullsAsError(ObservationCategoryImpl.class, "shortName", ObservationCategory.OBSERVATION_CATEGORY_SHORT_NAME_CANNOT_BE_BLANK_OR_NULL);
+    }
+
+    @Test
+    public void testShortNameSize() throws Exception {
+        checkStringSizeValidation(ObservationCategoryImpl.class, "shortName", TOO_LONG_FOR_SHORT_NAME,ObservationCategory.OBSERVATION_CATEGORY_SHORT_NAME_SIZE_ERROR);
     }
 
     @Test

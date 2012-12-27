@@ -15,7 +15,7 @@ import static org.testng.Assert.assertEquals;
  * Date: 12/8/12
  * Time: 2:18 PM
  */
-public class AppUserOwnedObjectImplTest extends AbstractIdObjectTest {
+public class AppUserOwnedObjectImplTest extends AbstractAppUserOwnedObjectTest {
     private final AppUser user1 = (AppUser) new AppUserImpl().setId("123");
     private final AppUser user2 = (AppUser) new AppUserImpl().setId("456");
 
