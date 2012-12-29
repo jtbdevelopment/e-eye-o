@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.entities.ObservationCategoryImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.ObservationCategoryImpl;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

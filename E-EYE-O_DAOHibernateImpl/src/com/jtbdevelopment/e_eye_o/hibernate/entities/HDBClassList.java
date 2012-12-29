@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.ClassListImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.ClassListImpl;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 

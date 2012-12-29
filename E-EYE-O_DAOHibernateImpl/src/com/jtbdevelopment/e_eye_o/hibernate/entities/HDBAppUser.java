@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.AppUserImpl;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 

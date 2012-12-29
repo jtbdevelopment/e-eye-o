@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.Photo;
-import com.jtbdevelopment.e_eye_o.entities.PhotoImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.PhotoImpl;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.Column;

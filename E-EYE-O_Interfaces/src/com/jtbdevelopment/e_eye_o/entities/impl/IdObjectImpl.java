@@ -1,6 +1,7 @@
-package com.jtbdevelopment.e_eye_o.entities;
+package com.jtbdevelopment.e_eye_o.entities.impl;
 
 
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import org.springframework.util.StringUtils;
 import sun.plugin.dom.exception.InvalidStateException;
 

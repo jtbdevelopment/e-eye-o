@@ -2,6 +2,10 @@ package com.jtbdevelopment.e_eye_o.DAO;
 
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.impl.AppUserImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.ObservationCategoryImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.ObservationImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.PhotoImpl;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBObservation;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBPhoto;
 import org.joda.time.LocalDate;

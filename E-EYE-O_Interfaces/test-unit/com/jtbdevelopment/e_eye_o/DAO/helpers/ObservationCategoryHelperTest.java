@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.entities.ObservationCategoryImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.ObservationCategoryImpl;
 import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.Mockery;

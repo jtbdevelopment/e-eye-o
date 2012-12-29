@@ -1,5 +1,6 @@
-package com.jtbdevelopment.e_eye_o.entities;
+package com.jtbdevelopment.e_eye_o.entities.impl;
 
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import org.joda.time.DateTime;
 
 /**

@@ -1,4 +1,7 @@
-package com.jtbdevelopment.e_eye_o.entities;
+package com.jtbdevelopment.e_eye_o.entities.impl;
+
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.ArchivableAppUserOwnedObject;
 
 /**
  * Date: 11/28/12

@@ -1,5 +1,9 @@
-package com.jtbdevelopment.e_eye_o.entities;
+package com.jtbdevelopment.e_eye_o.entities.impl;
 
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.Observation;
+import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
+import com.jtbdevelopment.e_eye_o.entities.Photo;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 

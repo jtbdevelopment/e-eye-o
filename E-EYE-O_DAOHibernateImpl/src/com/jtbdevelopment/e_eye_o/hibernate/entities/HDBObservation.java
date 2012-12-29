@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.entities.ObservationImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.ObservationImpl;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;

@@ -1,6 +1,8 @@
-package com.jtbdevelopment.e_eye_o.entities;
+package com.jtbdevelopment.e_eye_o.entities.impl;
 
 import com.google.common.base.Strings;
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import org.springframework.util.StringUtils;
 
 import javax.validation.ConstraintViolation;

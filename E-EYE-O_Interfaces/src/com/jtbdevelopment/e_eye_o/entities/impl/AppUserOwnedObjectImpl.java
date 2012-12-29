@@ -1,9 +1,9 @@
-package com.jtbdevelopment.e_eye_o.entities;
+package com.jtbdevelopment.e_eye_o.entities.impl;
 
-import sun.plugin.dom.exception.InvalidStateException;
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 
 import java.security.InvalidParameterException;
-import java.util.Collection;
 
 /**
  * Date: 11/28/12

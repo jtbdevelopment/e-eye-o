@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
-import com.jtbdevelopment.e_eye_o.entities.StudentImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.StudentImpl;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
