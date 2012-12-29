@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
  * Date: 12/8/12
  * Time: 2:13 PM
  */
-public class ArchivableAppUserOwnedObjectTest extends AbstractAppUserOwnedObjectTest {
+public class ArchivableAppUserOwnedObjectTest extends AbstractAppUserOwnedObjectTest<ArchivableAppUserOwnedObjectTest.LocalArchivableObject> {
     public static class LocalArchivableObject extends ArchivableAppUserOwnedObjectImpl {
         public LocalArchivableObject() {
             super();
@@ -17,8 +17,18 @@ public class ArchivableAppUserOwnedObjectTest extends AbstractAppUserOwnedObject
         }
     }
 
+    public ArchivableAppUserOwnedObjectTest() {
+        super(LocalArchivableObject.class);
+    }
+
+    @Test
+    public void testConstructorsForNewObjects() {
+        checkDefaultAndAppUserConstructorTests();
+    }
+
     @Test
     public void testDefaultGetSetArchived() throws Exception {
-        checkBooleanDefaultAndSetGet(LocalArchivableObject.class, "archived", false);
+        checkBooleanDefaultAndSetGet("archived", false);
     }
+
 }

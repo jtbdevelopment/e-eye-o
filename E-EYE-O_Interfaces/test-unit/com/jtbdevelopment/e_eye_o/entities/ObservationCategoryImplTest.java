@@ -6,24 +6,32 @@ import org.testng.annotations.Test;
  * Date: 12/8/12
  * Time: 2:53 PM
  */
-public class ObservationCategoryImplTest extends AbstractAppUserOwnedObjectTest {
+public class ObservationCategoryImplTest extends AbstractAppUserOwnedObjectTest<ObservationCategoryImpl> {
+    public ObservationCategoryImplTest() {
+        super(ObservationCategoryImpl.class);
+    }
     @Test
-    public void testConstructors() {
-        checkDefaultAndAppUserConstructorTests(ObservationCategoryImpl.class);
+    public void testConstructorsForNewObjects() {
+        checkDefaultAndAppUserConstructorTests();
     }
 
     @Test
     public void testSetGetShortName() throws Exception {
-        checkStringSetGetsAndValidateNullsAsError(ObservationCategoryImpl.class, "shortName", ObservationCategory.OBSERVATION_CATEGORY_SHORT_NAME_CANNOT_BE_BLANK_OR_NULL);
+        checkStringSetGetsAndValidateNullsAndBlanksAsError("shortName", ObservationCategory.OBSERVATION_CATEGORY_SHORT_NAME_CANNOT_BE_BLANK_OR_NULL);
     }
 
     @Test
     public void testShortNameSize() throws Exception {
-        checkStringSizeValidation(ObservationCategoryImpl.class, "shortName", TOO_LONG_FOR_SHORT_NAME,ObservationCategory.OBSERVATION_CATEGORY_SHORT_NAME_SIZE_ERROR);
+        checkStringSizeValidation("shortName", TOO_LONG_FOR_SHORT_NAME,ObservationCategory.OBSERVATION_CATEGORY_SHORT_NAME_SIZE_ERROR);
     }
 
     @Test
     public void testSetGetDescription() throws Exception {
-//        checkStringSetGetsWithNullsSavedAsBlanks(ObservationCategoryImpl.class, "description");
+        checkStringSetGetsAndValidateNullsAndBlanksAsError("description", ObservationCategory.OBSERVATION_CATEGORY_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL);
+    }
+
+    @Test
+    public void testDescriptionSize() throws Exception {
+        checkStringSizeValidation("description", TOO_LONG_FOR_DESCRIPTION, ObservationCategory.OBSERVATION_CATEGORY_DESCRIPTION_SIZE_ERROR);
     }
 }

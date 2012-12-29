@@ -1,13 +1,8 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
 import org.testng.annotations.Test;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
 
 import static org.testng.Assert.assertEquals;
 
@@ -15,11 +10,10 @@ import static org.testng.Assert.assertEquals;
  * Date: 12/8/12
  * Time: 2:18 PM
  */
-public class AppUserOwnedObjectImplTest extends AbstractAppUserOwnedObjectTest {
-    private final AppUser user1 = (AppUser) new AppUserImpl().setId("123");
-    private final AppUser user2 = (AppUser) new AppUserImpl().setId("456");
+public class AppUserOwnedObjectImplTest extends AbstractAppUserOwnedObjectTest<AppUserOwnedObjectImplTest.LocalEntity> {
 
-    private static class LocalEntity extends AppUserOwnedObjectImpl {
+    public static class LocalEntity extends AppUserOwnedObjectImpl {
+
         public LocalEntity() {
             super();
         }
@@ -27,87 +21,39 @@ public class AppUserOwnedObjectImplTest extends AbstractAppUserOwnedObjectTest {
         public LocalEntity(final AppUser appUser) {
             super(appUser);
         }
+    }
 
-        public LocalEntity addAnotherUserObject(final LocalEntity other) {
-            validateSameAppUser(other);
-            return this;
-        }
-
-        public LocalEntity addAnotherUserObjectCollection(final Collection<LocalEntity> others) {
-            validateSameAppUsers(others);
-            return this;
-        }
+    public AppUserOwnedObjectImplTest() {
+        super(LocalEntity.class);
     }
 
     @Test
     public void testConstructorsForNewObjects() {
-        checkDefaultAndAppUserConstructorTests(LocalEntity.class);
+        checkDefaultAndAppUserConstructorTests();
     }
 
     @Test
     public void testGetSetAppUserAfterConstruction() throws Exception {
-        assertEquals(user2, new LocalEntity().setAppUser(user2).getAppUser());
+        assertEquals(USER2, new LocalEntity().setAppUser(USER2).getAppUser());
     }
 
     @Test
     public void testAssigningDifferentOwnerSameIDisOK() {
         AppUserImpl userCopy = new AppUserImpl();
-        userCopy.setId(user1.getId());
+        userCopy.setId(USER1.getId());
 
-        assertEquals(userCopy, new LocalEntity(user1).setAppUser(userCopy).getAppUser());
-    }
-
-    @Test(expectedExceptions = InvalidParameterException.class)
-    public void testSetAppUserNullExceptionsOnConstructor() {
-        new LocalEntity(null);
-    }
-
-    @Test(expectedExceptions = InvalidParameterException.class)
-    public void testSetAppUserNullExceptionsOnSet() {
-        new LocalEntity().setAppUser(null);
-    }
-
-    @Test(expectedExceptions = InvalidParameterException.class)
-    public void testSetNewAppUserExceptions() {
-        new LocalEntity(user1).setAppUser(user2);
+        assertEquals(userCopy, new LocalEntity(USER1).setAppUser(userCopy).getAppUser());
     }
 
     @Test
-    public void testValidateSameAppUserMatches() {
-        new LocalEntity(user1).addAnotherUserObject(new LocalEntity(user1));
-    }
-
-    @Test(expectedExceptions = InvalidStateException.class)
-    public void testValidateSameAppUserExceptionOnUnownedThis() {
-        new LocalEntity().addAnotherUserObject(new LocalEntity());
-    }
-
-    @Test(expectedExceptions = InvalidStateException.class)
-    public void testValidateSameAppUserExceptionsOnUnownedOther() {
-        new LocalEntity(user1).addAnotherUserObject(new LocalEntity());
+    public void testSetAppUserNullValidation() {
+        validateExpectingError(new LocalEntity(null), AppUserOwnedObject.APP_USER_CANNOT_BE_NULL_ERROR);
+        validateExpectingError(new LocalEntity().setAppUser(null), AppUserOwnedObject.APP_USER_CANNOT_BE_NULL_ERROR);
     }
 
     @Test(expectedExceptions = InvalidParameterException.class)
-    public void testValidateSameAppUserExceptionsOnDifferentOwners() {
-        new LocalEntity(user1).addAnotherUserObject(new LocalEntity(user2));
+    public void testChangeAppUserExceptions() {
+        new LocalEntity(USER1).setAppUser(USER2);
     }
 
-    @Test(expectedExceptions = InvalidParameterException.class)
-    public void testValidatingSameAppUserMultipleObjects() {
-        int size = 20;
-        List<LocalEntity> others = new ArrayList<>(size);
-        for (int i = 0; i < size; ++i) {
-            others.add(new LocalEntity());
-        }
-        int wrongOne = new Random().nextInt(size - 5) + 5;  //  make sure bad one is more towards back
-        for (int i = 0; i < size; ++i) {
-            if (i != wrongOne) {
-                others.get(i).setAppUser(user1);
-            } else {
-                others.get(i).setAppUser(user2);
-            }
-        }
-
-        new LocalEntity(user1).addAnotherUserObjectCollection(others);
-    }
 }

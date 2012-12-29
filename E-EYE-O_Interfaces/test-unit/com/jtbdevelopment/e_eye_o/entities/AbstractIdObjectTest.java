@@ -52,11 +52,11 @@ public class AbstractIdObjectTest<T extends IdObject> {
         checkStringSetGetsAndValidate(attribute, true, validationError);
     }
 
-    protected <T extends IdObject> void checkStringSetGetsAndValidateNullsAndBlanksAsError(final String attribute, final String validationError) {
+    protected void checkStringSetGetsAndValidateNullsAndBlanksAsError(final String attribute, final String validationError) {
         checkStringSetGetsAndValidate(attribute, false, validationError);
     }
 
-    private <T extends IdObject> void checkStringSetGetsAndValidate(final String attribute, boolean blanksOK, final String validationError) {
+    private void checkStringSetGetsAndValidate(final String attribute, boolean blanksOK, final String validationError) {
         try {
             Method setter = getSetMethod(attribute, String.class);
             Method getter = getGetMethod(attribute);
@@ -68,7 +68,7 @@ public class AbstractIdObjectTest<T extends IdObject> {
         }
     }
 
-    protected <T extends IdObject> void checkStringSizeValidation(final String attribute, final String tooBigValue, String sizeError) {
+    protected void checkStringSizeValidation(final String attribute, final String tooBigValue, String sizeError) {
         try {
             Method setter = getSetMethod(attribute, String.class);
             Method getter = getGetMethod(attribute);
@@ -108,12 +108,10 @@ public class AbstractIdObjectTest<T extends IdObject> {
         validateExpectingErrors(object, allowed, new HashSet<String>());
     }
 
-    protected void validateExpectingErrors(final IdObject object, final String[] allowedViolations, final String[] notAllowedViolations) {
+    protected void validateExpectingErrors(final IdObject object, final String[] expectedViolations) {
         Set<String> allowed = new HashSet<>();
-        Collections.addAll(allowed, allowedViolations);
-        Set<String> notAllowed = new HashSet<>();
-        Collections.addAll(notAllowed, notAllowedViolations);
-        validateExpectingErrors(object, allowed, notAllowed);
+        Collections.addAll(allowed, expectedViolations);
+        validateExpectingErrors(object, allowed, new HashSet<String>());
     }
 
     protected void validateExpectingErrors(final IdObject object, final Set<String> expectedViolations, final Set<String> notAllowedViolations) {

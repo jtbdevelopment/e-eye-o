@@ -10,11 +10,14 @@ import static org.testng.Assert.assertTrue;
  * Date: 12/8/12
  * Time: 2:58 PM
  */
-public class PhotoImplTest extends AbstractAppUserOwnedObjectTest {
+public class PhotoImplTest extends AbstractAppUserOwnedObjectTest<PhotoImpl> {
+    public PhotoImplTest() {
+        super(PhotoImpl.class);
+    }
 
     @Test
-    public void testConstructors() {
-        checkDefaultAndAppUserConstructorTests(PhotoImpl.class);
+    public void testConstructorsForNewObjects() {
+        checkDefaultAndAppUserConstructorTests();
     }
 
     @Test
@@ -44,12 +47,12 @@ public class PhotoImplTest extends AbstractAppUserOwnedObjectTest {
 
     @Test
     public void testSetGetDescription() {
-        checkStringSetGetsAndValidateNullsAsError(PhotoImpl.class, "description", Photo.PHOTO_DESCRIPTION_CANNOT_BE_NULL_ERROR);
+        checkStringSetGetsAndValidateNullsAsError("description", Photo.PHOTO_DESCRIPTION_CANNOT_BE_NULL_ERROR);
     }
 
     @Test
     public void testDescriptionSize() {
-        checkStringSizeValidation(PhotoImpl.class, "description", TOO_LONG_FOR_DESCRIPTION, Photo.PHOTO_DESCRIPTION_SIZE_ERROR);
+        checkStringSizeValidation("description", TOO_LONG_FOR_DESCRIPTION, Photo.PHOTO_DESCRIPTION_SIZE_ERROR);
     }
 
 }

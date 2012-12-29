@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.validation.ConsistentAppUserValidator;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Constructor;
@@ -20,6 +21,9 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
 
     protected static final AppUser USER1 = new AppUserImpl().setId("USER1");
     protected static final AppUser USER2 = new AppUserImpl().setId("USER2");
+    public static final String ADD = "add";
+    public static final String REMOVE = "remove";
+    public static final String IMPL = "Impl";
 
     protected AbstractAppUserOwnedObjectTest(Class<T> entityUnderTest) {
         super(entityUnderTest);
@@ -46,108 +50,157 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
         }
     }
 
-    protected void checkGetSetIsUnmodifiable(final Collection collection) {
-        collection.clear();
+    protected void checkCollectionIsUnmodifiable(final Collection collection) {
+        try {
+            collection.clear();
+        } catch (UnsupportedOperationException e) {
+            return;
+        }
+        fail("Should have thrown exception on clear");
     }
 
-    //  Check collection takes values but uses it's own set container
-    protected <T extends AppUserOwnedObject, C extends AppUserOwnedObject> void checkSetCollection(final Class<C> collectionEntity,
-                                                                                                   final String collectionName) {
+    @SuppressWarnings("unchecked")
+    protected <C extends AppUserOwnedObject> void checkSetCollection(final Class<C> collectionEntity,
+                                                                     final String collectionName,
+                                                                     final String nullValueError
+    ) {
         try {
-            T entity = entityUnderTest.newInstance().setAppUser(USER1);
             Method setter = getSetMethod(collectionName, Set.class);
             Method getter = getGetMethod(collectionName);
 
-            Set<T> resultSet = (Set<T>) getter.invoke(entity);
+            T entity = entityUnderTest.newInstance().setAppUser(USER1);
+            Set<C> resultSet = (Set<C>) getter.invoke(entity);
             assertTrue(resultSet.isEmpty());
+
             Set<C> newSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
             setter.invoke(entity, newSet);
-            resultSet = (Set<T>) getter.invoke(entity);
+            resultSet = (Set<C>) getter.invoke(entity);
             assertTrue(resultSet.containsAll(newSet));
             assertTrue(newSet.containsAll(resultSet));
-            validator.validate(entity);
+            validateNotExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity)});
 
             newSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
             setter.invoke(entity, newSet);
-            resultSet = (Set<T>) getter.invoke(entity);
+            resultSet = (Set<C>) getter.invoke(entity);
             assertTrue(resultSet.containsAll(newSet));
             assertTrue(newSet.containsAll(resultSet));
-            validator.validate(entity);
+            validateNotExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity)});
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
             throw new RuntimeException(e);
         }
     }
 
-    //  Check collection takes values but uses it's own set container
-    protected <C extends AppUserOwnedObject> void checkAddCollection(                                                                                                   final Class<C> collectionEntity,
-                                                                                                   final String collectionName) {
+    @SuppressWarnings("unchecked")
+    protected <C extends AppUserOwnedObject> void checkAddManyEntitiesToCollection(final Class<C> collectionEntity,
+                                                                                   final String collectionName,
+                                                                                   final String nullValueError) {
         try {
-            T entity = entityUnderTest.newInstance().setAppUser(USER1);
             Method setter = getSetMethod(collectionName, Set.class);
             Method adder = getAddMethod(collectionName, Collection.class);
             Method getter = getGetMethod(collectionName);
 
-            Set<T> resultSet = (Set<T>) getter.invoke(entity);
+            T entity = entityUnderTest.newInstance().setAppUser(USER1);
+            Set<C> resultSet = (Set<C>) getter.invoke(entity);
             assertTrue(resultSet.isEmpty());
             Set<C> firstSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
             setter.invoke(entity, firstSet);
 
             Set<C> secondSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
             adder.invoke(entity, secondSet);
-            resultSet = (Set<T>) getter.invoke(entity);
+            resultSet = (Set<C>) getter.invoke(entity);
             assertEquals(firstSet.size() + secondSet.size(), resultSet.size());
             assertTrue(resultSet.containsAll(firstSet));
             assertTrue(resultSet.containsAll(secondSet));
+            validateNotExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity)});
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected <T extends AppUserOwnedObject, C extends AppUserOwnedObject> void checkSetCollectionValidates( final Class<C> collectionEntity,
-                                                                                                            final String collectionName) {
+    @SuppressWarnings("unchecked")
+    protected <C extends AppUserOwnedObject> void checkAddSingleEntityToCollection(final Class<C> collectionEntity,
+                                                                                   final String singleName,
+                                                                                   final String collectionName,
+                                                                                   final String nullValueError) {
         try {
+            Method adder = getAddMethod(singleName, collectionEntity);
+            Method getter = getGetMethod(collectionName);
+
+            T entity = entityUnderTest.newInstance().setAppUser(USER1);
+
+            C ownedObject = getSingleOfFor(collectionEntity, USER1);
+            adder.invoke(entity, ownedObject);
+            Set<C> resultSet = (Set<C>) getter.invoke(entity);
+            assertEquals(1, resultSet.size());
+            assertTrue(resultSet.contains(ownedObject));
+            validateNotExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity)});
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <C extends AppUserOwnedObject> void checkRemoveSingleEntityToCollection(final Class<C> collectionEntity,
+                                                                                      final String singleName,
+                                                                                      final String collectionName,
+                                                                                      final String nullValueError) {
+        try {
+            Method adder = getAddMethod(singleName, collectionEntity);
+            Method remover = getRemoveMethod(singleName, collectionEntity);
+            Method getter = getGetMethod(collectionName);
+
+            T entity = entityUnderTest.newInstance().setAppUser(USER1);
+
+            C ownedObject1 = getSingleOfFor(collectionEntity, USER1);
+            C ownedObject2 = getSingleOfFor(collectionEntity, USER1);
+            adder.invoke(entity, ownedObject1);
+            adder.invoke(entity, ownedObject2);
+            Set<C> resultSet = (Set<C>) getter.invoke(entity);
+            assertEquals(2, resultSet.size());
+            assertTrue(resultSet.contains(ownedObject1));
+            assertTrue(resultSet.contains(ownedObject2));
+
+            remover.invoke(entity, ownedObject1);
+            resultSet = (Set<C>) getter.invoke(entity);
+            assertEquals(1, resultSet.size());
+            assertTrue(resultSet.contains(ownedObject2));
+            validateNotExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity)});
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected <C extends AppUserOwnedObject> void checkCollectionValidates(final Class<C> collectionEntity,
+                                                                           final String collectionName,
+                                                                           final String nullValueError) {
+        try {
+            T entity = entityUnderTest.newInstance().setAppUser(USER1);
+
+            Set<C> newSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
+
+            final C misMatchObject = getSingleOfFor(collectionEntity, USER2);
+            newSet.add(misMatchObject);
+
+            newSet.add(null);
+
             Method setter = getSetMethod(collectionName, Set.class);
-            checkCollectionFunctionValidates(collectionEntity, setter);
+            setter.invoke(entity, newSet);
+            validateExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity), ConsistentAppUserValidator.getSpecificErrorMessage(entity, misMatchObject)});
 
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected <T extends AppUserOwnedObject, C extends AppUserOwnedObject> void checkAddCollectionValidates(final Class<C> collectionEntity,
-                                                                                                            final String collectionName) {
-        try {
-            Method setter = getAddMethod(collectionName, Collection.class);
-            checkCollectionFunctionValidates(collectionEntity, setter);
-
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private <C extends AppUserOwnedObject> void checkCollectionFunctionValidates(final Class<C> collectionEntity, final Method changeMethod) throws InstantiationException, IllegalAccessException, InvocationTargetException {
-        T entity = entityUnderTest.newInstance().setAppUser(USER1);
-        Set<C> newSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
-        changeMethod.invoke(entity, newSet);
-        newSet.add(getSingleOfFor(collectionEntity, USER2));
-        try {
-            changeMethod.invoke(entity, newSet);
-        } catch (InvocationTargetException ip) {
-            if (ip.getTargetException() instanceof InvalidParameterException)
-                return;
-        }
-        fail(entityUnderTest.getSimpleName() + " did not catch setting collection where it contains different user owned object");
-    }
-
-    protected <T extends AppUserOwnedObject> Set<T> getSetOfFor(final Class<T> entityType, final AppUser user, final int size) {
-        Set<T> result = new HashSet<>();
+    protected <C extends AppUserOwnedObject> Set<C> getSetOfFor(final Class<C> entityType, final AppUser user, final int size) {
+        Set<C> result = new HashSet<>();
         for (int i = 0; i < size; ++i) {
             result.add(getSingleOfFor(entityType, user));
         }
         return result;
     }
 
-    private <T extends AppUserOwnedObject> T getSingleOfFor(final Class<T> entityType, final AppUser user) {
+    private <C extends AppUserOwnedObject> C getSingleOfFor(final Class<C> entityType, final AppUser user) {
         try {
             return entityType.newInstance().setAppUser(user).setId("" + (idCounter++));
         } catch (InstantiationException | IllegalAccessException e) {
@@ -156,7 +209,32 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
     }
 
     protected Method getAddMethod(final String attribute, final Class paramType) throws NoSuchMethodException {
-        return entityUnderTest.getMethod("add" + StringUtils.capitalize(attribute), paramType);
+        if (paramType.isInterface() || Collection.class.isAssignableFrom(paramType)) {
+            return entityUnderTest.getMethod(ADD + StringUtils.capitalize(attribute), paramType);
+        } else {
+            Class[] interfaces = paramType.getInterfaces();
+            String lookingFor = paramType.getSimpleName().replace(IMPL, BLANK);
+            for (Class iface : interfaces) {
+                if (iface.getSimpleName().equals(lookingFor)) {
+                    return entityUnderTest.getMethod(ADD + StringUtils.capitalize(attribute), iface);
+                }
+            }
+            throw new RuntimeException("Unable to find addMethod with paramType " + paramType.getSimpleName());
+        }
     }
 
+    protected Method getRemoveMethod(final String attribute, final Class paramType) throws NoSuchMethodException {
+        if (paramType.isInterface() || Collection.class.isAssignableFrom(paramType)) {
+            return entityUnderTest.getMethod(REMOVE + StringUtils.capitalize(attribute), paramType);
+        } else {
+            Class[] interfaces = paramType.getInterfaces();
+            String lookingFor = paramType.getSimpleName().replace(IMPL, BLANK);
+            for (Class iface : interfaces) {
+                if (iface.getSimpleName().equals(lookingFor)) {
+                    return entityUnderTest.getMethod(REMOVE + StringUtils.capitalize(attribute), iface);
+                }
+            }
+            throw new RuntimeException("Unable to find addMethod with paramType " + paramType.getSimpleName());
+        }
+    }
 }

@@ -9,16 +9,7 @@ import java.util.*;
 public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Student {
     private String firstName = "";
     private String lastName = "";
-    private Set<Observation> observations = new TreeSet<>(new Comparator<Observation>() {
-        @Override
-        public int compare(Observation o1, Observation o2) {
-            int date = o1.getObservationTimestamp().compareTo(o2.getObservationTimestamp());
-            if (date != 0) {
-                return date;
-            }
-            return o1.getId().compareTo(o2.getId());
-        }
-    });
+    private Set<Observation> observations = new HashSet<>();
     //  TODO - default stock photo
     private Photo studentPhoto;
 

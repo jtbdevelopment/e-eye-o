@@ -11,11 +11,14 @@ import static org.testng.AssertJUnit.*;
  * Date: 12/2/12
  * Time: 1:12 AM
  */
-public class IdObjectImplTest extends AbstractAppUserOwnedObjectTest {
-    private class IdObjectExtends extends IdObjectImpl {
+public class IdObjectImplTest extends AbstractIdObjectTest<IdObjectImplTest.IdObjectExtends> {
+    public static class IdObjectExtends extends IdObjectImpl {
 
     }
 
+    public IdObjectImplTest() {
+        super(IdObjectExtends.class);
+    }
     private static final String ID = "SOMETHING";
 
     @Test

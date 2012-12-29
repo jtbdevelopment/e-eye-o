@@ -33,24 +33,4 @@ public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements App
         return (T) this;
     }
 
-    protected void validateSameAppUser(final AppUserOwnedObject otherObject) {
-        if (this.appUser == null) {
-            throw new InvalidStateException("No appUser for this object");
-        }
-        if (otherObject == null || otherObject.getAppUser() == null) {
-            throw new InvalidStateException("Neither object for comparison is owned");
-        }
-        if (!this.appUser.equals(otherObject.getAppUser())) {
-            throw new InvalidParameterException("App Users Do Not Match");
-        }
-    }
-
-    protected <T extends AppUserOwnedObject> void validateSameAppUsers(final Collection<T> others) {
-        if (others != null) {
-            for (AppUserOwnedObject otherObject : others) {
-                validateSameAppUser(otherObject);
-            }
-        }
-    }
-
 }
