@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DAODerbyImpl/E-EYE-O_DAODerbyImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_DAODerbyImpl/E-EYE-O_DAODerbyImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DAOHibernateImpl/E-EYE-O_DAOHibernateImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_DAOHibernateImpl/E-EYE-O_DAOHibernateImpl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_EntitiesJavaImpl/E-EYE-O_EntitiesJavaImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_EntitiesJavaImpl/E-EYE-O_EntitiesJavaImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Interfaces/E-EYE-O_Interfaces.iml" filepath="$PROJECT_DIR$/E-EYE-O_Interfaces/E-EYE-O_Interfaces.iml" />
     </modules>
   </component>

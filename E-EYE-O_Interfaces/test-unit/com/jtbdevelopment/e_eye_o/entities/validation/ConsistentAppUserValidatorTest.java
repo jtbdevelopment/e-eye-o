@@ -1,8 +1,8 @@
 package com.jtbdevelopment.e_eye_o.entities.validation;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.impl.AppUserImpl;
-import com.jtbdevelopment.e_eye_o.entities.impl.AppUserOwnedObjectImpl;
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -26,11 +26,14 @@ public class ConsistentAppUserValidatorTest {
     private ConstraintValidatorContext validatorContext;
     private ConstraintValidatorContext.ConstraintViolationBuilder builder;
     final private ConsistentAppUserValidator check = new ConsistentAppUserValidator();
-    final private static AppUserImpl USER1 = new AppUserImpl().setId("1");
-    final private static AppUserImpl USER2 = new AppUserImpl().setId("2");
+    private AppUser USER1;
+    private AppUser USER2;
     private static int idCounter = 1;
 
-    public static class LocalEntity extends AppUserOwnedObjectImpl {
+    public static class LocalEntity implements AppUserOwnedObject {
+        private AppUser appUser;
+        private String id;
+
         public LocalEntity() {
             super();
             setId("" + idCounter++);
@@ -41,13 +44,11 @@ public class ConsistentAppUserValidatorTest {
         public Set<LocalEntity> collection1 = new HashSet<>();
         public List<LocalEntity> collection2 = new ArrayList<>();
 
-        public static LocalEntity createValidLE(boolean setLEOwner) {
+        public static LocalEntity createValidLE(AppUser owner) {
             LocalEntity le = new LocalEntity();
-            if (setLEOwner) {
-                le.setAppUser(USER1);
-            }
-            le.item1 = new LocalEntity().setAppUser(USER1);
-            le.item2 = new LocalEntity().setAppUser(USER1);
+            le.setAppUser(owner);
+            le.item1 = new LocalEntity().setAppUser(owner);
+            le.item2 = new LocalEntity().setAppUser(owner);
             le.collection1.add(le.item1);
             le.collection1.add(le.item2);
             le.collection2.add(le.item2);
@@ -86,6 +87,29 @@ public class ConsistentAppUserValidatorTest {
         public void setCollection2(final List<LocalEntity> collection2) {
             this.collection2 = collection2;
         }
+
+
+        @Override
+        public AppUser getAppUser() {
+            return appUser;
+        }
+
+        @Override
+        public <T extends AppUserOwnedObject> T setAppUser(final AppUser appUser) {
+            this.appUser = appUser;
+            return (T) this;
+        }
+
+        @Override
+        public String getId() {
+            return id;
+        }
+
+        @Override
+        public <T extends IdObject> T setId(final String id) {
+            this.id = id;
+            return (T) this;
+        }
     }
 
     @BeforeMethod
@@ -93,6 +117,14 @@ public class ConsistentAppUserValidatorTest {
         context = new JUnit4Mockery();
         validatorContext = context.mock(ConstraintValidatorContext.class);
         builder = context.mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
+        USER1 = context.mock(AppUser.class, "1");
+        USER2 = context.mock(AppUser.class, "2");
+        context.checking(new Expectations() {{
+            allowing(USER1).getId();
+            will(returnValue("1"));
+            allowing(USER2).getId();
+            will(returnValue("2"));
+        }});
     }
 
     @Test
@@ -110,7 +142,7 @@ public class ConsistentAppUserValidatorTest {
     public void testExceptionErrorMessageGenerator() {
         final String message = "MESSAGE";
         RuntimeException re = new RuntimeException(message);
-        LocalEntity le = LocalEntity.createValidLE(true);
+        LocalEntity le = LocalEntity.createValidLE(USER1);
         assertEquals("Error examining ownership of LocalEntity[" + le.getId() + "] with exception " + message, ConsistentAppUserValidator.getExceptionErrorMessage(le, re));
     }
 
@@ -148,7 +180,7 @@ public class ConsistentAppUserValidatorTest {
 
     @Test
     public void testAnUnownedObjectPassesValidationRegardlessOfSubObjects() {
-        LocalEntity le = LocalEntity.createValidLE(false);
+        LocalEntity le = LocalEntity.createValidLE(null);
         le.item2 = new LocalEntity().setAppUser(USER2);
 
         assertTrue(check.isValid(le, null));
@@ -156,7 +188,7 @@ public class ConsistentAppUserValidatorTest {
 
     @Test
     public void testACompletelyValidObject() {
-        final LocalEntity le = LocalEntity.createValidLE(true);
+        final LocalEntity le = LocalEntity.createValidLE(USER1);
         context.checking(new Expectations() {{
             one(validatorContext).disableDefaultConstraintViolation();
         }});
@@ -166,7 +198,7 @@ public class ConsistentAppUserValidatorTest {
 
     @Test
     public void testASimpleAppUserMismatch() {
-        final LocalEntity le = LocalEntity.createValidLE(true);
+        final LocalEntity le = LocalEntity.createValidLE(USER1);
         le.item2 = new LocalEntity().setAppUser(USER2);
 
         context.checking(new Expectations() {{
@@ -182,7 +214,7 @@ public class ConsistentAppUserValidatorTest {
 
     @Test
     public void testASimpleMultipleAppUserMismatch() {
-        final LocalEntity le = LocalEntity.createValidLE(true);
+        final LocalEntity le = LocalEntity.createValidLE(USER1);
         le.item2 = new LocalEntity().setAppUser(USER2);
         le.item1 = new LocalEntity().setAppUser(USER2);
 
@@ -201,7 +233,7 @@ public class ConsistentAppUserValidatorTest {
 
     @Test
     public void testASetContainingMismatch() {
-        final LocalEntity le = LocalEntity.createValidLE(true);
+        final LocalEntity le = LocalEntity.createValidLE(USER1);
         final LocalEntity le3 = new LocalEntity().setAppUser(USER2);
         le.collection1.add(le3);
 
@@ -218,7 +250,7 @@ public class ConsistentAppUserValidatorTest {
 
     @Test
     public void testAnExceptionHandling() {
-        final LocalEntity le = LocalEntity.createValidLE(true);
+        final LocalEntity le = LocalEntity.createValidLE(USER1);
         final AppUser USER3 = context.mock(AppUser.class);
         final LocalEntity le3 = new LocalEntity().setAppUser(USER3);
         le.collection1.add(le3);

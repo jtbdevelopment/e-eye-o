@@ -9,10 +9,10 @@ import javax.validation.ValidatorFactory;
  * Date: 12/13/12
  * Time: 11:23 PM
  */
-@Configuration
+//@Configuration
 public class ValidationFactoryBean {
 
-    public ValidatorFactory validationFactory() {
-        return Validation.buildDefaultValidatorFactory();
-    }
+//    public ValidatorFactory validationFactory() {
+  //      return Validation.buildDefaultValidatorFactory();
+//    }
 }

@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.DAO;
 
-import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelperImpl;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.impl.*;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBObservation;
@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -30,7 +31,7 @@ import static org.testng.Assert.*;
  * <p/>
  * Suite of tests that can be run against any data source provider to test hibernate.
  */
-@Transactional
+@Transactional(propagation = Propagation.NOT_SUPPORTED)      //  Otherwise exception is not raised until transaction committed outside this call
 @Test(groups = {"integration"})
 public abstract class AbstractDataProviderIntegration extends AbstractTransactionalTestNGSpringContextTests implements ApplicationContextAware {
     private static Logger logger = LoggerFactory.getLogger(AbstractDataProviderIntegration.class);
@@ -38,41 +39,61 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     @Autowired
     private ReadWriteDAO readWriteDAO;
     @Autowired
-    private ObservationCategoryHelper observationCategoryHelper;
+    private ObservationCategoryHelperImpl observationCategoryHelper;
 
-    private static AppUser testAppUser1;
-    private static Map<String, ObservationCategory> testAppUser1OCs;
-    private static AppUser testAppUser2;
-    private static ClassList testClassList;
-    private static Student testStudent;
-    private static Observation testObservation;
+    private static AppUser testUser1;
+    private static AppUser testUser2;
+    private static Map<String, ObservationCategory> testOCsForU1;
+    private static ClassList testClassListForU1;
+    private static Student testStudentForU1;
+    private static Observation testObservationForU1;
 
     @BeforeClass
     public synchronized void initialize() {
         if (readWriteDAO == null) {
             return;
         }
-        if (testAppUser1 != null) {
+        if (testUser1 != null) {
             return;
         }
-
-        testAppUser1 = createUser("Testy", "Tester", "test@test.com");
-        observationCategoryHelper.createDefaultCategoriesForUser(testAppUser1);
-        testAppUser1OCs = observationCategoryHelper.getObservationCategoriesAsMap(testAppUser1);
-        testAppUser2 = createUser("Another", "Tester", "another@test.com");
-        logger.info("Created Test Tester with ID " + testAppUser1.getId());
-        logger.info("Created Test Tester2 with ID " + testAppUser2.getId());
-        testClassList = new ClassListImpl(testAppUser1).setDescription("Test Class List");
-        testClassList = readWriteDAO.create(testClassList);
-        testStudent = new StudentImpl(testAppUser1).addClassList(testClassList).setFirstName("Test").setLastName("Student");
-        testStudent = readWriteDAO.create(testStudent);
-        testObservation = new ObservationImpl(testAppUser1).setComment("Test Observation").setObservationSubject(testStudent).addCategory(testAppUser1OCs.get("IDEA")).addCategory(testAppUser1OCs.get("PHYS"));
-        readWriteDAO.create(testObservation);
+        testUser1 = createUser("Testy", "Tester", "test@test.com");
+        observationCategoryHelper.createDefaultCategoriesForUser(testUser1);
+        testOCsForU1 = observationCategoryHelper.getObservationCategoriesAsMap(testUser1);
+        testUser2 = createUser("Another", "Tester", "another@test.com");
+        logger.info("Created Test Tester with ID " + testUser1.getId());
+        logger.info("Created Test Tester2 with ID " + testUser2.getId());
+        testClassListForU1 = new ClassListImpl(testUser1).setDescription("Test Class List");
+        testClassListForU1 = readWriteDAO.create(testClassListForU1);
+        testStudentForU1 = new StudentImpl(testUser1).addClassList(testClassListForU1).setFirstName("Test").setLastName("Student");
+        testStudentForU1 = readWriteDAO.create(testStudentForU1);
+        testObservationForU1 = new ObservationImpl(testUser1).setComment("Test Observation").setObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("IDEA")).addCategory(testOCsForU1.get("PHYS"));
+        readWriteDAO.create(testObservationForU1);
     }
 
     @Test
-    @Transactional(propagation = Propagation.NOT_SUPPORTED) //  Otherwise exception is not raised until transaction committed outside this call
-    public void duplicateLoginAppUserFails() {
+    public void testBeanValidationIsActive() {
+        boolean exception = false;
+        try {
+            AppUser user = createUser("", null, "INVALID_EMAIL");
+        } catch(ConstraintViolationException e) {
+            assertEquals(3, e.getConstraintViolations().size());
+            logger.info(e.getMessage());
+            exception = true;
+        }
+        assertTrue(exception, "What!");
+        exception = false;
+        try {
+            Student student = new StudentImpl(testUser2).addClassList(testClassListForU1).setFirstName("X").setLastName("Y");
+            readWriteDAO.create(student);
+        } catch(ConstraintViolationException e) {
+            assertEquals(2, e.getConstraintViolations().size());
+            logger.info(e.getMessage());
+        }
+        assertTrue(exception, "What!");
+    }
+
+    @Test
+    public void testDuplicateLoginAppUserFails() {
         try {
             createUser("Testy", "Tester", "test@test.com");
         } catch (Exception e) {
@@ -84,66 +105,64 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
 
     @Test
     public void testCreateDefaultCategories() {
-        Set<ObservationCategory> initialCategories = observationCategoryHelper.createDefaultCategoriesForUser(testAppUser2);
-        Set<ObservationCategory> reloaded = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testAppUser2);
+        Set<ObservationCategory> initialCategories = observationCategoryHelper.createDefaultCategoriesForUser(testUser2);
+        Set<ObservationCategory> reloaded = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testUser2);
         assertTrue(reloaded.containsAll(initialCategories));
     }
 
     @Test
     public void testAddCategory() {
-        ObservationCategory newCategory = createOC(testAppUser1, "TESTNEW", "Test New Category");
-        Set<ObservationCategory> categories = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testAppUser1);
+        ObservationCategory newCategory = createOC(testUser1, "TESTNEW", "Test New Category");
+        Set<ObservationCategory> categories = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testUser1);
         assertTrue(categories.contains(newCategory));
     }
 
     @Test
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
-    //  Otherwise exception is not raised until transaction committed outside this call
-    public void addDuplicateCategoryCodeFail() {
+    public void testAddDuplicateCategoryCodeFail() {
         ObservationCategory newTest1, newTest2 = null, newTest3;
-        newTest1 = createOC(testAppUser1, "TESTDUPE", "desc 1");
+        newTest1 = createOC(testUser1, "TESTDUPE", "desc 1");
 
         boolean exception = false;
         try {
-            newTest2 = createOC(testAppUser1, "TESTDUPE", "desc 2");
+            newTest2 = createOC(testUser1, "TESTDUPE", "desc 2");
         } catch (Exception e) {
             //  Expected
             exception = true;
         }
         assertTrue(exception);
-        newTest3 = createOC(testAppUser2, "TESTDUPE", "desc 1");
+        newTest3 = createOC(testUser2, "TESTDUPE", "desc 1");
 
-        Set<ObservationCategory> categories = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testAppUser1);
+        Set<ObservationCategory> categories = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testUser1);
         assertTrue(categories.contains(newTest1));
         assertFalse(categories.contains(newTest2));
-        categories = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testAppUser2);
+        categories = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testUser2);
         assertTrue(categories.contains(newTest3));
     }
 
     //  TODO - actual photo
     @Test
     public void testCreatePhoto() {
-        Photo photo = new PhotoImpl(testAppUser1);
-        photo.setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testStudent).setArchived(false);
+        Photo photo = new PhotoImpl(testUser1);
+        photo.setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testStudentForU1).setArchived(false);
         photo = readWriteDAO.create(photo);
-        Set<Photo> photos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testAppUser1);
+        Set<Photo> photos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
     }
 
     @Test
     public void testUpdateArchivePhoto() {
-        Photo photo = new PhotoImpl(testAppUser1);
-        photo.setDescription("UpdateTest").setTimestamp(new LocalDateTime()).setPhotoFor(testStudent).setArchived(false);
+        Photo photo = new PhotoImpl(testUser1);
+        photo.setDescription("UpdateTest").setTimestamp(new LocalDateTime()).setPhotoFor(testStudentForU1).setArchived(false);
         photo = readWriteDAO.create(photo);
-        Set<Photo> activePhotos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testAppUser1);
-        Set<Photo> archivePhotos = readWriteDAO.getArchivedEntitiesForUser(Photo.class, testAppUser1);
+        Set<Photo> activePhotos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        Set<Photo> archivePhotos = readWriteDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
         assertTrue(activePhotos.contains(photo));
         assertFalse(archivePhotos.contains(photo));
 
         photo.setDescription("Archived").setArchived(true);
         readWriteDAO.update(photo);
-        activePhotos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testAppUser1);
-        archivePhotos = readWriteDAO.getArchivedEntitiesForUser(Photo.class, testAppUser1);
+        activePhotos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        archivePhotos = readWriteDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
         assertFalse(activePhotos.contains(photo));
         assertTrue(archivePhotos.contains(photo));
         photo = readWriteDAO.get(HDBPhoto.class, photo.getId());
@@ -152,11 +171,11 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
 
     @Test
     public void testCreateObservation() {
-        Photo p = new HDBPhoto(new PhotoImpl()).setAppUser(testAppUser1).setDescription("Test Obs Create");
-        final ObservationCategory social = testAppUser1OCs.get("SOCIAL");
-        final ObservationCategory kauw = testAppUser1OCs.get("KAUW");
+        Photo p = new HDBPhoto(new PhotoImpl()).setAppUser(testUser1).setDescription("Test Obs Create");
+        final ObservationCategory social = testOCsForU1.get("SOCIAL");
+        final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment = "Test Observation";
-        Observation o = createObservation(testAppUser1, Arrays.asList(social, kauw), comment, Arrays.asList(p));
+        Observation o = createObservation(testUser1, Arrays.asList(social, kauw), comment, Arrays.asList(p));
         assertEquals(comment, o.getComment());
         assertEquals(2, o.getCategories().size());
         assertTrue(o.getCategories().contains(social));
@@ -170,12 +189,12 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
 
     @Test
     public void testModifyObservation() {
-        Photo p = new HDBPhoto(new PhotoImpl()).setAppUser(testAppUser1).setDescription("Test Obs Update");
-        final ObservationCategory social = testAppUser1OCs.get("SOCIAL");
-        final ObservationCategory kauw = testAppUser1OCs.get("KAUW");
-        final ObservationCategory lang = testAppUser1OCs.get("LANG");
+        Photo p = new HDBPhoto(new PhotoImpl()).setAppUser(testUser1).setDescription("Test Obs Update");
+        final ObservationCategory social = testOCsForU1.get("SOCIAL");
+        final ObservationCategory kauw = testOCsForU1.get("KAUW");
+        final ObservationCategory lang = testOCsForU1.get("LANG");
         final String comment = "Test Observation";
-        Observation o = createObservation(testAppUser1, Arrays.asList(social, kauw), comment, Arrays.asList(p));
+        Observation o = createObservation(testUser1, Arrays.asList(social, kauw), comment, Arrays.asList(p));
         o.removeCategory(social);
         o.addCategory(lang);
         readWriteDAO.update(o);
@@ -186,12 +205,12 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
 
     @Test
     public void testLinksObservations() {
-        final ObservationCategory social = testAppUser1OCs.get("SOCIAL");
-        final ObservationCategory kauw = testAppUser1OCs.get("KAUW");
+        final ObservationCategory social = testOCsForU1.get("SOCIAL");
+        final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment1 = "Test Observation 1";
         final String comment2 = "Test Observation 2";
-        Observation o1 = createObservation(testAppUser1, Arrays.asList(social, kauw), comment1, null);
-        Observation o2 = createObservation(testAppUser1, Arrays.asList(kauw), comment2, null);
+        Observation o1 = createObservation(testUser1, Arrays.asList(social, kauw), comment1, null);
+        Observation o2 = createObservation(testUser1, Arrays.asList(kauw), comment2, null);
         o1.setFollowUpObservation(o2);
         o2.setNeedsFollowUp(true);
         final LocalDate reminderDate = new LocalDate(2012, 11, 12);

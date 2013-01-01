@@ -25,11 +25,11 @@ import static org.testng.Assert.assertTrue;
  * Time: 8:40 PM
  */
 
-public class ObservationCategoryHelperTest {
+public class ObservationCategoryHelperImplTest {
     private final Mockery context = new JUnit4Mockery();
     private final ReadWriteDAO dao = context.mock(ReadWriteDAO.class);
     private final AppUser user = context.mock(AppUser.class);
-    private final ObservationCategoryHelper helper = new ObservationCategoryHelper(dao);
+    private final ObservationCategoryHelperImpl helper = new ObservationCategoryHelperImpl(dao);
 
     private static class ReturnMatchingObsCatAction implements Action {
         private final Map<String, ObservationCategory> ocMap;
@@ -56,7 +56,7 @@ public class ObservationCategoryHelperTest {
     @Test
     public void testCreatesDefault() {
         final Map<String, ObservationCategory> shortMap = new HashMap<>();
-        for (Map.Entry<String, String> entry : ObservationCategoryHelper.NEW_USER_DEFAULT_CATEGORIES.entrySet()) {
+        for (Map.Entry<String, String> entry : ObservationCategoryHelperImpl.NEW_USER_DEFAULT_CATEGORIES.entrySet()) {
             final ObservationCategory impl = new ObservationCategoryImpl(user).setShortName(entry.getKey()).setDescription(entry.getValue());
             impl.setId(entry.getKey());
             shortMap.put(entry.getKey(), impl);
@@ -67,7 +67,7 @@ public class ObservationCategoryHelperTest {
             will(ReturnMatchingObsCatAction.returnMatchingObservationCategory(shortMap));
         }});
         Set<ObservationCategory> ocs = helper.createDefaultCategoriesForUser(user);
-        assertEquals(ObservationCategoryHelper.NEW_USER_DEFAULT_CATEGORIES.size(), ocs.size());
+        assertEquals(ObservationCategoryHelperImpl.NEW_USER_DEFAULT_CATEGORIES.size(), ocs.size());
         assertTrue(ocs.containsAll(shortMap.values()));
     }
 
