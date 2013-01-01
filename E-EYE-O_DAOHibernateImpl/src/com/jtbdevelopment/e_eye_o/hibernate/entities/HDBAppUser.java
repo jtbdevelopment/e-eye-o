@@ -59,7 +59,7 @@ public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
     }
 
     @Override
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(nullable = false)
     public DateTime getLastLogin() {
         return wrapped.getLastLogin();

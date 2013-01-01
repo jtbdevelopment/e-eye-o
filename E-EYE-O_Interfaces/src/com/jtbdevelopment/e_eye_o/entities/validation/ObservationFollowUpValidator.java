@@ -12,12 +12,12 @@ import javax.validation.ConstraintValidatorContext;
 public class ObservationFollowUpValidator implements ConstraintValidator<ObservationFollowUpCheck, Observation> {
     @Override
     public void initialize(final ObservationFollowUpCheck observationFollowUpCheck) {
-
     }
 
     @Override
     public boolean isValid(final Observation observation, final ConstraintValidatorContext constraintValidatorContext) {
         return observation.getFollowUpObservation() == null ||
+                observation.getId() == null ||  //  Presume other validation will get it
                 !observation.getId().equals(observation.getFollowUpObservation().getId());
     }
 }

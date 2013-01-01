@@ -4,17 +4,15 @@ import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Collection;
 
 /**
  * Date: 11/18/12
  * Time: 12:45 AM
  */
-@MappedSuperclass
+@Entity(name = "IdObject")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper<T>, IdObject {
     protected T wrapped;
 
@@ -34,19 +32,12 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof IdObject)) return false;
-
-        IdObject idObject = (IdObject) o;
-
-        if (getId() != null ? !getId().equals(idObject.getId()) : idObject.getId() != null) return false;
-
-        return true;
+        return wrapped.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return getId() != null ? getId().hashCode() : 0;
+        return wrapped.hashCode();
     }
 
     @Override
@@ -69,12 +60,12 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
     }
 
     @Transient
-    protected <T extends IdObject> T wrap(T entity) {
+    protected <OO extends IdObject> OO wrap(OO entity) {
         return getWrapper().wrap(entity);
     }
 
     @Transient
-    protected <T extends IdObject, C extends Collection<T>> C wrap(final C entities) {
+    protected <OO extends IdObject, C extends Collection<OO>> C wrap(final C entities) {
         return getWrapper().wrap(entities);
     }
 

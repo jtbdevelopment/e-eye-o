@@ -1,13 +1,11 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
-import com.jtbdevelopment.e_eye_o.entities.Observation;
+import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.entities.impl.StudentImpl;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
 
@@ -28,6 +26,45 @@ public class HDBStudent extends HDBArchivableAppUserOwnedObject<Student> impleme
     }
 
     @Override
+    @ManyToMany(targetEntity = HDBClassList.class)
+    public Set<ClassList> getClassLists() {
+        return wrapped.getClassLists();
+    }
+
+    @Override
+    @Transient
+    public Set<ClassList> getActiveClassLists() {
+        return wrapped.getActiveClassLists();
+    }
+
+    @Override
+    @Transient
+    public Set<ClassList> getArchivedClassLists() {
+        return wrapped.getArchivedClassLists();
+    }
+
+    @Override
+    public Student setClassLists(final Set<ClassList> classLists) {
+        return wrapped.setClassLists(wrap(classLists));
+    }
+
+    @Override
+    public Student addClassList(final ClassList classList) {
+        return wrapped.addClassList(wrap(classList));
+    }
+
+    @Override
+    public Student addClassLists(final Collection<ClassList> classLists) {
+        return wrapped.addClassLists(wrap(classLists));
+    }
+
+    @Override
+    public Student removeClassList(final ClassList classList) {
+        return wrapped.removeClassList(wrap(classList));
+    }
+
+    @Override
+    @Column(nullable = false, length = Student.MAX_NAME_SIZE)
     public String getFirstName() {
         return wrapped.getFirstName();
     }
@@ -39,6 +76,7 @@ public class HDBStudent extends HDBArchivableAppUserOwnedObject<Student> impleme
     }
 
     @Override
+    @Column(length = Student.MAX_NAME_SIZE)
     public String getLastName() {
         return wrapped.getLastName();
     }
@@ -46,36 +84,6 @@ public class HDBStudent extends HDBArchivableAppUserOwnedObject<Student> impleme
     @Override
     public Student setLastName(final String lastName) {
         wrapped.setLastName(lastName);
-        return this;
-    }
-
-    @Override
-    @ElementCollection(targetClass = HDBObservation.class)
-    public Set<Observation> getObservations() {
-        return wrapped.getObservations();
-    }
-
-    @Override
-    public Student setObservations(final Set<? extends Observation> observations) {
-        wrapped.setObservations(wrap(observations));
-        return this;
-    }
-
-    @Override
-    public Student addObservation(final Observation observation) {
-        wrapped.addObservation(wrap(observation));
-        return this;
-    }
-
-    @Override
-    public Student addObservations(final Collection<? extends Observation> observations) {
-        wrapped.addObservations(wrap(observations));
-        return this;
-    }
-
-    @Override
-    public Student removeObservation(final Observation observation) {
-        wrapped.removeObservation(observation);
         return this;
     }
 

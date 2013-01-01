@@ -1,11 +1,16 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
+import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.entities.validation.ConsistentAppUserValidator;
 import org.testng.annotations.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Date: 12/8/12
@@ -44,38 +49,73 @@ public class StudentImplTest extends AbstractAppUserOwnedObjectTest<StudentImpl>
     }
 
     @Test
-    public void testGetObservationsNonModifiable() {
-        checkCollectionIsUnmodifiable(new StudentImpl().getObservations());
-    }
-
-    @Test
-    public void testSetObservations() throws Exception {
-        checkSetCollection(ObservationImpl.class, "observations", Student.STUDENT_OBSERVATIONS_CANNOT_CONTAIN_NULL_ERROR);
-    }
-
-    @Test
-    public void testObservationsValidates() throws Exception {
-        checkCollectionValidates(ObservationImpl.class, "observations", Student.STUDENT_OBSERVATIONS_CANNOT_CONTAIN_NULL_ERROR);
-    }
-
-    @Test
-    public void testAddObservation() throws Exception {
-        checkAddSingleEntityToCollection(ObservationImpl.class, "observation", "observations", Student.STUDENT_OBSERVATIONS_CANNOT_CONTAIN_NULL_ERROR);
-    }
-
-    @Test
-    public void testAddObservations() throws Exception {
-        checkAddManyEntitiesToCollection(ObservationImpl.class, "observations", Student.STUDENT_OBSERVATIONS_CANNOT_CONTAIN_NULL_ERROR);
-    }
-
-    @Test
-    public void testRemoveObservation() throws Exception {
-        checkRemoveSingleEntityToCollection(ObservationImpl.class, "observation", "observations", Student.STUDENT_OBSERVATIONS_CANNOT_CONTAIN_NULL_ERROR);
-    }
-
-    @Test
     public void testDefaultPhoto() {
         assertEquals(null, new StudentImpl().getStudentPhoto());
+    }
+
+    @Test
+    public void checkClassListsAreUnmodifiable() {
+        StudentImpl s = new StudentImpl();
+        checkCollectionIsUnmodifiable(s.getClassLists());
+        checkCollectionIsUnmodifiable(s.getActiveClassLists());
+        checkCollectionIsUnmodifiable(s.getArchivedClassLists());
+    }
+
+    @Test
+    public void testSetClassLists() throws Exception {
+        checkSetCollection(ClassListImpl.class, "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
+    }
+
+    @Test
+    public void testClassListsValidates() {
+        checkCollectionValidates(ClassListImpl.class, "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
+    }
+
+    @Test
+    public void testClassListSizeValidation() {
+        validateExpectingError(new StudentImpl(), Student.STUDENT_CLASS_LIST_SIZE_ERROR);
+    }
+
+    @Test
+    public void testAddClassList() throws Exception {
+        checkAddSingleEntityToCollection(ClassListImpl.class, "classList", "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
+    }
+
+    @Test
+    public void testAddClassLists() throws Exception {
+        checkAddManyEntitiesToCollection(ClassListImpl.class, "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
+    }
+
+    @Test
+    public void testRemoveClassLists() throws Exception {
+        checkRemoveSingleEntityToCollection(ClassListImpl.class, "classList", "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
+    }
+
+    @Test
+    public void testGetActiveAndArchivedClassLists() {
+        Set<ClassList> archived = new HashSet<ClassList>() {
+            {
+                add((ClassList) new ClassListImpl().setArchived(true));
+                add((ClassList) new ClassListImpl().setArchived(true));
+                add((ClassList) new ClassListImpl().setArchived(true));
+            }
+        };
+        Set<ClassList> active = new HashSet<ClassList>() {
+            {
+                add((ClassList) new ClassListImpl().setArchived(false));
+            }
+        };
+
+        Student student = new StudentImpl();
+        student.addClassLists(archived);
+        student.addClassLists(active);
+
+        Set<ClassList> activeGet = student.getActiveClassLists();
+        Set<ClassList> archivedGet = student.getArchivedClassLists();
+        assertTrue(active.containsAll(activeGet));
+        assertTrue(activeGet.containsAll(active));
+        assertTrue(archived.containsAll(archivedGet));
+        assertTrue(archivedGet.containsAll(archived));
     }
 
     @Test

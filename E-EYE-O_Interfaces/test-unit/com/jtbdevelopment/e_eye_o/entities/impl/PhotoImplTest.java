@@ -4,8 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.Photo;
 import org.joda.time.LocalDateTime;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Date: 12/8/12
@@ -19,6 +18,24 @@ public class PhotoImplTest extends AbstractAppUserOwnedObjectTest<PhotoImpl> {
     @Test
     public void testConstructorsForNewObjects() {
         checkDefaultAndAppUserConstructorTests();
+    }
+
+    @Test
+    public void testPhotoForDefaultAndValidation() {
+        PhotoImpl photo = new PhotoImpl();
+        assertNull(photo.getPhotoFor());
+        validateExpectingError(photo, Photo.PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR);
+    }
+
+    @Test
+    public void testPhotoForAssignment() {
+        PhotoImpl photo = new PhotoImpl();
+        photo.setPhotoFor(new StudentImpl());
+        validateNotExpectingError(photo, Photo.PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR);
+        photo.setPhotoFor(new ObservationImpl());
+        validateNotExpectingError(photo, Photo.PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR);
+        photo.setPhotoFor(new ClassListImpl());
+        validateNotExpectingError(photo, Photo.PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR);
     }
 
     @Test

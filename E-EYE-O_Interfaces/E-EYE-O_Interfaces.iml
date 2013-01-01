@@ -16,7 +16,6 @@
     <orderEntry type="library" exported="" name="logback-1.0" level="application" />
     <orderEntry type="library" exported="" name="joda-time-2.1" level="application" />
     <orderEntry type="library" scope="TEST" name="JMOCK2.5.1-JUNIT4" level="application" />
-    <orderEntry type="library" scope="TEST" name="guava-12.0.1" level="application" />
     <orderEntry type="library" scope="TEST" name="hamcrest-1" level="application" />
     <orderEntry type="library" exported="" name="slf4j-1.6" level="application" />
     <orderEntry type="library" scope="TEST" name="testng-6" level="application" />
@@ -25,6 +24,7 @@
     <orderEntry type="library" exported="" name="cglib-3.0" level="application" />
     <orderEntry type="library" exported="" name="Spring-3.2.0" level="application" />
     <orderEntry type="library" name="jboss-logging-3.1.0.CR2" level="application" />
+    <orderEntry type="library" exported="" name="guava-12.0.1" level="application" />
   </component>
 </module>
 

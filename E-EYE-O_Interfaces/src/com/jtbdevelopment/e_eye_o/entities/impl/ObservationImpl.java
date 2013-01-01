@@ -1,9 +1,9 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.entities.Photo;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
@@ -19,10 +19,10 @@ import java.util.Set;
 public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements Observation {
     private String comment;
     private LocalDateTime observationTimestamp = new LocalDateTime();
+    private AppUserOwnedObject observationSubject;
     private boolean significant = false;
 
     private Set<ObservationCategory> categories = new HashSet<>();
-    private Set<Photo> photos = new HashSet<>();
 
     private boolean needsFollowUp = false;
     private LocalDate followUpReminder;
@@ -33,6 +33,17 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
 
     public ObservationImpl(final AppUser appUser) {
         super(appUser);
+    }
+
+    @Override
+    public AppUserOwnedObject getObservationSubject() {
+        return observationSubject;
+    }
+
+    @Override
+    public Observation setObservationSubject(final AppUserOwnedObject observationSubject) {
+        this.observationSubject = observationSubject;
+        return this;
     }
 
     @Override
@@ -54,36 +65,6 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
     @Override
     public Observation setSignificant(final boolean significant) {
         this.significant = significant;
-        return this;
-    }
-
-    @Override
-    public Set<Photo> getPhotos() {
-        return Collections.unmodifiableSet(photos);
-    }
-
-    @Override
-    public Observation setPhotos(final Set<? extends Photo> photos) {
-        this.photos.clear();
-        this.photos.addAll(photos);
-        return this;
-    }
-
-    @Override
-    public Observation addPhoto(final Photo photo) {
-        this.photos.add(photo);
-        return this;
-    }
-
-    @Override
-    public Observation addPhotos(final Collection<? extends Photo> photos) {
-        this.photos.addAll(photos);
-        return this;
-    }
-
-    @Override
-    public Observation removePhoto(final Photo photo) {
-        this.photos.remove(photo);
         return this;
     }
 

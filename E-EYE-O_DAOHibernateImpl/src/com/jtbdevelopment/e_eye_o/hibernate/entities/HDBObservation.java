@@ -1,16 +1,13 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.entities.impl.ObservationImpl;
-import com.jtbdevelopment.e_eye_o.entities.Photo;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
 
@@ -30,6 +27,18 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
+    @ManyToOne(targetEntity = HDBAppUserOwnedObject.class, optional = false)
+    public AppUserOwnedObject getObservationSubject() {
+        return wrapped.getObservationSubject();
+    }
+
+    @Override
+    public Observation setObservationSubject(final AppUserOwnedObject observationSubject) {
+        return wrapped.setObservationSubject(observationSubject);
+    }
+
+    @Override
+    @Column(nullable = false)
     public LocalDateTime getObservationTimestamp() {
         return wrapped.getObservationTimestamp();
     }
@@ -41,6 +50,7 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
+    @Column(nullable = false)
     public boolean isSignificant() {
         return wrapped.isSignificant();
     }
@@ -52,36 +62,7 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
-    @ManyToMany(targetEntity = HDBPhoto.class)
-    public Set<Photo> getPhotos() {
-        return wrapped.getPhotos();
-    }
-
-    @Override
-    public Observation setPhotos(final Set<? extends Photo> photos) {
-        wrapped.setPhotos(wrap(photos));
-        return this;
-    }
-
-    @Override
-    public Observation addPhoto(final Photo photo) {
-        wrapped.addPhoto(wrap(photo));
-        return this;
-    }
-
-    @Override
-    public Observation addPhotos(final Collection<? extends Photo> photos) {
-        wrapped.addPhotos(wrap(photos));
-        return this;
-    }
-
-    @Override
-    public Observation removePhoto(final Photo photo) {
-        wrapped.removePhoto(photo);
-        return this;
-    }
-
-    @Override
+    @Column(nullable = false)
     public boolean getNeedsFollowUp() {
         return wrapped.getNeedsFollowUp();
     }
@@ -146,7 +127,7 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
-    @Column(length = 5000)
+    @Column(nullable = false, length = Observation.MAX_COMMENT_SIZE)
     public String getComment() {
         return wrapped.getComment();
     }

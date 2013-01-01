@@ -22,11 +22,15 @@ public interface Observation extends ArchivableAppUserOwnedObject {
     public final static String OBSERVATION_COMMENT_CANNOT_BE_BLANK_OR_NULL_ERROR = "Observation.comment" + CANNOT_BE_BLANK_OR_NULL_ERROR;
     public final static String OBSERVATION_CATEGORIES_CANNOT_CONTAIN_NULL_ERROR = "Observation.categories" + CANNOT_CONTAIN_NULL_ERROR;
     public final static String OBSERVATION_CATEGORIES_CANNOT_BE_NULL_ERROR = "Observation.categories" + CANNOT_BE_NULL_ERROR;
-    public final static String OBSERVATION_PHOTOS_CANNOT_CONTAIN_NULL_ERROR = "Observation.photos" + CANNOT_CONTAIN_NULL_ERROR;
-    public final static String OBSERVATION_PHOTOS_CANNOT_BE_NULL_ERROR = "Observation.photos" + CANNOT_BE_NULL_ERROR;
     public final static String OBSERVATION_OBSERVATION_TIMESTAMP_CANNOT_BE_NULL_ERROR = "Observation.observationTimestamp" + CANNOT_BE_NULL_ERROR;
+    public final static String OBSERVATION_OBSERVATION_SUBJECT_CANNOT_BE_NULL_ERROR = "Observation.observationSubject" + CANNOT_BE_NULL_ERROR;
     public final static int MAX_COMMENT_SIZE = 5000;
     public final static String OBSERVATION_COMMENT_SIZE_ERROR = "Observation.comment cannot be longer than " + MAX_COMMENT_SIZE + " characters.";
+
+    @NotNull(message = OBSERVATION_OBSERVATION_SUBJECT_CANNOT_BE_NULL_ERROR)
+    AppUserOwnedObject getObservationSubject();
+
+    Observation setObservationSubject(final AppUserOwnedObject observationSubject);
 
     @NotNull(message = OBSERVATION_OBSERVATION_TIMESTAMP_CANNOT_BE_NULL_ERROR)
     LocalDateTime getObservationTimestamp();
@@ -36,18 +40,6 @@ public interface Observation extends ArchivableAppUserOwnedObject {
     boolean isSignificant();
 
     Observation setSignificant(final boolean significant);
-
-    @NotNull(message = OBSERVATION_PHOTOS_CANNOT_BE_NULL_ERROR)
-    @NoNullsInCollectionCheck(message = OBSERVATION_PHOTOS_CANNOT_CONTAIN_NULL_ERROR)
-    Set<Photo> getPhotos();
-
-    Observation setPhotos(final Set<? extends Photo> photos);
-
-    Observation addPhoto(final Photo photo);
-
-    Observation addPhotos(final Collection<? extends Photo> photos);
-
-    Observation removePhoto(final Photo photo);
 
     boolean getNeedsFollowUp();
 

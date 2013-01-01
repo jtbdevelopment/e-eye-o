@@ -1,11 +1,16 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.Observation;
+import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Date: 11/4/12
@@ -14,7 +19,7 @@ import java.util.*;
 public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Student {
     private String firstName = "";
     private String lastName = "";
-    private Set<Observation> observations = new HashSet<>();
+    private Set<ClassList> classLists = new HashSet<>();
     //  TODO - default stock photo
     private Photo studentPhoto;
 
@@ -23,6 +28,58 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
 
     public StudentImpl(final AppUser appUser) {
         super(appUser);
+    }
+
+    @Override
+    public Set<ClassList> getClassLists() {
+        return Collections.unmodifiableSet(classLists);
+    }
+
+    @Override
+    public Set<ClassList> getActiveClassLists() {
+        return Collections.unmodifiableSet(new HashSet<>(
+                Collections2.filter(classLists, new Predicate<ClassList>() {
+                    @Override
+                    public boolean apply(final ClassList classList) {
+                        return (classList != null && !classList.isArchived());
+                    }
+                })));
+    }
+
+    @Override
+    public Set<ClassList> getArchivedClassLists() {
+        return Collections.unmodifiableSet(new HashSet<>(
+                Collections2.filter(classLists, new Predicate<ClassList>() {
+                    @Override
+                    public boolean apply(final ClassList classList) {
+                        return (classList != null && classList.isArchived());
+                    }
+                })));
+    }
+
+    @Override
+    public Student setClassLists(final Set<ClassList> classLists) {
+        this.classLists.clear();
+        this.classLists.addAll(classLists);
+        return this;
+    }
+
+    @Override
+    public Student addClassList(final ClassList classList) {
+        classLists.add(classList);
+        return this;
+    }
+
+    @Override
+    public Student addClassLists(final Collection<ClassList> classLists) {
+        this.classLists.addAll(classLists);
+        return this;
+    }
+
+    @Override
+    public Student removeClassList(final ClassList classList) {
+        classLists.remove(classList);
+        return this;
     }
 
     @Override
@@ -44,36 +101,6 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
     @Override
     public Student setLastName(final String lastName) {
         this.lastName = lastName;
-        return this;
-    }
-
-    @Override
-    public Set<Observation> getObservations() {
-        return Collections.unmodifiableSet(observations);
-    }
-
-    @Override
-    public Student setObservations(final Set<? extends Observation> observations) {
-        this.observations.clear();
-        this.observations.addAll(observations);
-        return this;
-    }
-
-    @Override
-    public Student addObservation(final Observation observation) {
-        observations.add(observation);
-        return this;
-    }
-
-    @Override
-    public Student addObservations(final Collection<? extends Observation> observations) {
-        this.observations.addAll(observations);
-        return this;
-    }
-
-    @Override
-    public Student removeObservation(final Observation observation) {
-        observations.remove(observation);
         return this;
     }
 

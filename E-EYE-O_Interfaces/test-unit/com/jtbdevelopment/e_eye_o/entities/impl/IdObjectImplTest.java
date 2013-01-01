@@ -20,6 +20,7 @@ public class IdObjectImplTest extends AbstractIdObjectTest<IdObjectImplTest.IdOb
     public IdObjectImplTest() {
         super(IdObjectExtends.class);
     }
+
     private static final String ID = "SOMETHING";
 
     @Test

@@ -23,8 +23,8 @@ public abstract class ArchivableAppUserOwnedObjectImpl extends AppUserOwnedObjec
     }
 
     @Override
-    public ArchivableAppUserOwnedObject setArchived(boolean archived) {
+    public <T extends ArchivableAppUserOwnedObject> T setArchived(boolean archived) {
         this.archived = archived;
-        return this;
+        return (T) this;
     }
 }

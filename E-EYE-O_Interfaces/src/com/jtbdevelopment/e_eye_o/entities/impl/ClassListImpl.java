@@ -5,8 +5,6 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,66 +32,6 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
     @Override
     public ClassList setDescription(final String description) {
         this.description = description;
-        return this;
-    }
-
-    @Override
-    public Set<Student> getStudents() {
-        return Collections.unmodifiableSet(students);
-    }
-
-    @Override
-    public ClassList setStudents(final Set<? extends Student> students) {
-        this.students.clear();
-        this.students.addAll(students);
-        return this;
-    }
-
-    @Override
-    public ClassList addStudent(final Student student) {
-        students.add(student);
-        return this;
-    }
-
-    @Override
-    public ClassList addStudents(final Collection<? extends Student> students) {
-        this.students.addAll(students);
-        return this;
-    }
-
-    @Override
-    public ClassList removeStudent(final Student student) {
-        students.remove(student);
-        return this;
-    }
-
-    @Override
-    public Set<Photo> getPhotos() {
-        return Collections.unmodifiableSet(photos);
-    }
-
-    @Override
-    public ClassList setPhotos(final Set<? extends Photo> photos) {
-        this.photos.clear();
-        this.photos.addAll(photos);
-        return this;
-    }
-
-    @Override
-    public ClassList addPhoto(final Photo photo) {
-        photos.add(photo);
-        return this;
-    }
-
-    @Override
-    public ClassList addPhotos(final Collection<? extends Photo> photos) {
-        this.photos.addAll(photos);
-        return this;
-    }
-
-    @Override
-    public ClassList removePhoto(final Photo photo) {
-        photos.remove(photo);
         return this;
     }
 }

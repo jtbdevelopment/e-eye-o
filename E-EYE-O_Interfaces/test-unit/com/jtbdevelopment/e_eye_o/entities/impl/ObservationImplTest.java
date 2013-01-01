@@ -7,9 +7,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Date: 12/8/12
@@ -32,6 +30,22 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
     }
 
     @Test
+    public void testDefaultObservationSubjectAndValidation() {
+        ObservationImpl o = new ObservationImpl();
+        assertNull(o.getObservationSubject());
+        validateExpectingError(o, Observation.OBSERVATION_OBSERVATION_SUBJECT_CANNOT_BE_NULL_ERROR);
+    }
+
+    @Test
+    public void testSettingObservationSubject() {
+        ObservationImpl o = new ObservationImpl();
+        o.setObservationSubject(new StudentImpl());
+        validateNotExpectingError(o, Observation.OBSERVATION_OBSERVATION_SUBJECT_CANNOT_BE_NULL_ERROR);
+        o.setObservationSubject(new ClassListImpl());
+        validateNotExpectingError(o, Observation.OBSERVATION_OBSERVATION_SUBJECT_CANNOT_BE_NULL_ERROR);
+    }
+
+    @Test
     public void testNewObservationDefaultTimestamp() throws Exception {
         LocalDateTime before = new LocalDateTime();
         Thread.sleep(1);
@@ -40,11 +54,6 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
         LocalDateTime after = new LocalDateTime();
         assertTrue(before.compareTo(observation.getObservationTimestamp()) < 0);
         assertTrue(after.compareTo(observation.getObservationTimestamp()) > 0);
-    }
-
-    @Test
-    public void testGetPhotosNonModifiable() {
-        checkCollectionIsUnmodifiable(new ObservationImpl().getPhotos());
     }
 
     @Test
@@ -61,31 +70,6 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
     @Test
     public void testSetSignificant() throws Exception {
         checkBooleanDefaultAndSetGet("significant", false);
-    }
-
-    @Test
-    public void testSetPhotos() throws Exception {
-        checkSetCollection(PhotoImpl.class, "photos", Observation.OBSERVATION_PHOTOS_CANNOT_CONTAIN_NULL_ERROR);
-    }
-
-    @Test
-    public void testPhotosValidates() {
-        checkCollectionValidates(PhotoImpl.class, "photos", Observation.OBSERVATION_PHOTOS_CANNOT_CONTAIN_NULL_ERROR);
-    }
-
-    @Test
-    public void testAddPhoto() throws Exception {
-        checkAddSingleEntityToCollection(PhotoImpl.class, "photo", "photos", Observation.OBSERVATION_PHOTOS_CANNOT_CONTAIN_NULL_ERROR);
-    }
-
-    @Test
-    public void testAddPhotos() throws Exception {
-        checkAddManyEntitiesToCollection(PhotoImpl.class, "photos", Observation.OBSERVATION_PHOTOS_CANNOT_CONTAIN_NULL_ERROR);
-    }
-
-    @Test
-    public void testRemovePhoto() throws Exception {
-        checkRemoveSingleEntityToCollection(PhotoImpl.class, "photo", "photos", Observation.OBSERVATION_PHOTOS_CANNOT_CONTAIN_NULL_ERROR);
     }
 
     @Test

@@ -12,7 +12,6 @@ import javax.validation.ValidatorFactory;
 @Configuration
 public class ValidationFactoryBean {
 
-    //@Bean
     public ValidatorFactory validationFactory() {
         return Validation.buildDefaultValidatorFactory();
     }

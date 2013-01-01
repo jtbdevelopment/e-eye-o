@@ -14,7 +14,7 @@ import javax.persistence.UniqueConstraint;
  * Time: 9:30 PM
  */
 @Entity(name = "ObservationCategory")
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"appUser_ID", "shortName"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"appUserID", "shortName"}))
 public class HDBObservationCategory extends HDBAppUserOwnedObject<ObservationCategory> implements ObservationCategory {
     @SuppressWarnings("unused")
     protected HDBObservationCategory() {
@@ -24,6 +24,16 @@ public class HDBObservationCategory extends HDBAppUserOwnedObject<ObservationCat
 
     public HDBObservationCategory(final ObservationCategory observationCategory) {
         super(observationCategory);
+    }
+
+    //  Duplicate column to allow a unique constraint at table level
+    @Column(nullable = false)
+    public String getAppUserID() {
+        return wrapped.getAppUser().getId();
+    }
+
+    public void setAppUserID(final String appUserID) {
+        //  Do nothing
     }
 
     @Override
@@ -39,7 +49,7 @@ public class HDBObservationCategory extends HDBAppUserOwnedObject<ObservationCat
     }
 
     @Override
-    @Column(nullable = false)
+    @Column(nullable = false, length = IdObject.MAX_DESCRIPTION_SIZE)
     public String getDescription() {
         return wrapped.getDescription();
     }

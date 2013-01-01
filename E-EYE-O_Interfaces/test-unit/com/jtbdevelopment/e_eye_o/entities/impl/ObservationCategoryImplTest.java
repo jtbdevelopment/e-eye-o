@@ -11,6 +11,7 @@ public class ObservationCategoryImplTest extends AbstractAppUserOwnedObjectTest<
     public ObservationCategoryImplTest() {
         super(ObservationCategoryImpl.class);
     }
+
     @Test
     public void testConstructorsForNewObjects() {
         checkDefaultAndAppUserConstructorTests();
@@ -23,7 +24,7 @@ public class ObservationCategoryImplTest extends AbstractAppUserOwnedObjectTest<
 
     @Test
     public void testShortNameSize() throws Exception {
-        checkStringSizeValidation("shortName", TOO_LONG_FOR_SHORT_NAME,ObservationCategory.OBSERVATION_CATEGORY_SHORT_NAME_SIZE_ERROR);
+        checkStringSizeValidation("shortName", TOO_LONG_FOR_SHORT_NAME, ObservationCategory.OBSERVATION_CATEGORY_SHORT_NAME_SIZE_ERROR);
     }
 
     @Test

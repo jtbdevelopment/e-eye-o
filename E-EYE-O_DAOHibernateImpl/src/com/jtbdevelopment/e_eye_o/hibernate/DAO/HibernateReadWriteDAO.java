@@ -104,13 +104,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             query = currentSession.createQuery("from ClassList as CL where :student member of CL.students");
             query.setParameter("student", entity);
             for (ClassList classList : (List<ClassList>) query.list()) {
-                classList.removeStudent((Student) entity);
+//                classList.removeStudent((Student) entity);
             }
         } else if (entity instanceof Observation) {
             query = currentSession.createQuery("from Student as S where :observation member of S.observations");
             query.setParameter("observation", entity);
             for (Student student : (List<Student>) query.list()) {
-                student.removeObservation((Observation) entity);
+//                student.removeObservation((Observation) entity);
             }
         } else if (entity instanceof ObservationCategory) {
             query = currentSession.createQuery("from Observation as O where :category member of O.categories");
@@ -122,12 +122,12 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             query = currentSession.createQuery("from ClassList as CL where :photo member of CL.photos");
             query.setParameter("photo", entity);
             for (ClassList classList : (List<ClassList>) query.list()) {
-                classList.removePhoto((Photo) entity);
+//                classList.removePhoto((Photo) entity);
             }
             query = currentSession.createQuery("from Observation as O where :photo member of O.photos");
             query.setParameter("photo", entity);
             for (Observation observation : (List<Observation>) query.list()) {
-                observation.removePhoto((Photo) entity);
+//                observation.removePhoto((Photo) entity);
             }
             query = currentSession.createQuery("from Student where studentPhoto = :photo");
             query.setParameter("photo", entity);

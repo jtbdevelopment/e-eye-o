@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
  * Time: 2:13 PM
  */
 public class ArchivableAppUserOwnedObjectTest extends AbstractAppUserOwnedObjectTest<ArchivableAppUserOwnedObjectTest.LocalArchivableObject> {
+    @SuppressWarnings("unused")
     public static class LocalArchivableObject extends ArchivableAppUserOwnedObjectImpl {
         public LocalArchivableObject() {
             super();
