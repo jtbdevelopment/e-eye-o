@@ -1,8 +1,7 @@
 package com.jtbdevelopment.e_eye_o.DAO;
 
-import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelperImpl;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.impl.*;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBObservation;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBPhoto;
 import org.joda.time.LocalDate;
@@ -31,7 +30,8 @@ import static org.testng.Assert.*;
  * <p/>
  * Suite of tests that can be run against any data source provider to test hibernate.
  */
-@Transactional(propagation = Propagation.NOT_SUPPORTED)      //  Otherwise exception is not raised until transaction committed outside this call
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
+//  Otherwise exception is not raised until transaction committed outside this call
 @Test(groups = {"integration"})
 public abstract class AbstractDataProviderIntegration extends AbstractTransactionalTestNGSpringContextTests implements ApplicationContextAware {
     private static Logger logger = LoggerFactory.getLogger(AbstractDataProviderIntegration.class);
@@ -39,7 +39,9 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     @Autowired
     private ReadWriteDAO readWriteDAO;
     @Autowired
-    private ObservationCategoryHelperImpl observationCategoryHelper;
+    private ObservationCategoryHelper observationCategoryHelper;
+    @Autowired
+    private IdObjectFactory objectFactory;
 
     private static AppUser testUser1;
     private static AppUser testUser2;
@@ -62,12 +64,12 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         testUser2 = createUser("Another", "Tester", "another@test.com");
         logger.info("Created Test Tester with ID " + testUser1.getId());
         logger.info("Created Test Tester2 with ID " + testUser2.getId());
-        testClassListForU1 = new ClassListImpl(testUser1).setDescription("Test Class List");
+        testClassListForU1 = objectFactory.newClassList(testUser1).setDescription("Test Class List");
         testClassListForU1 = readWriteDAO.create(testClassListForU1);
-        testStudentForU1 = new StudentImpl(testUser1).addClassList(testClassListForU1).setFirstName("Test").setLastName("Student");
+        testStudentForU1 = objectFactory.newStudent(testUser1).addClassList(testClassListForU1).setFirstName("Test").setLastName("Student");
         testStudentForU1 = readWriteDAO.create(testStudentForU1);
-        testObservationForU1 = new ObservationImpl(testUser1).setComment("Test Observation").setObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("IDEA")).addCategory(testOCsForU1.get("PHYS"));
-        readWriteDAO.create(testObservationForU1);
+        testObservationForU1 = objectFactory.newObservation(testUser1).setComment("Test Observation").setObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("IDEA")).addCategory(testOCsForU1.get("PHYS"));
+        testObservationForU1 = readWriteDAO.create(testObservationForU1);
     }
 
     @Test
@@ -75,21 +77,22 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         boolean exception = false;
         try {
             AppUser user = createUser("", null, "INVALID_EMAIL");
-        } catch(ConstraintViolationException e) {
+        } catch (ConstraintViolationException e) {
             assertEquals(3, e.getConstraintViolations().size());
             logger.info(e.getMessage());
             exception = true;
         }
-        assertTrue(exception, "What!");
+        assertTrue(exception, "Should have had an exception!");
         exception = false;
         try {
-            Student student = new StudentImpl(testUser2).addClassList(testClassListForU1).setFirstName("X").setLastName("Y");
+            Student student = objectFactory.newStudent(testUser2).addClassList(testClassListForU1).setFirstName("X").setLastName("Y");
             readWriteDAO.create(student);
-        } catch(ConstraintViolationException e) {
+        } catch (ConstraintViolationException e) {
             assertEquals(2, e.getConstraintViolations().size());
             logger.info(e.getMessage());
+            exception = true;
         }
-        assertTrue(exception, "What!");
+        assertTrue(exception, "Should have had an exception!");
     }
 
     @Test
@@ -100,7 +103,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
             //  Expected
             return;
         }
-        fail("Should have exceptioned");
+        fail("Should have had an exception.");
     }
 
     @Test
@@ -141,17 +144,52 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
 
     //  TODO - actual photo
     @Test
-    public void testCreatePhoto() {
-        Photo photo = new PhotoImpl(testUser1);
+    public void testCreatePhotoForStudent() {
+        Photo photo = objectFactory.newPhoto(testUser1);
         photo.setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testStudentForU1).setArchived(false);
         photo = readWriteDAO.create(photo);
         Set<Photo> photos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
+        for (Photo setPhoto : photos) {
+            if (setPhoto.equals(photo)) {
+                assertEquals(testStudentForU1, setPhoto.getPhotoFor());
+            }
+        }
+    }
+
+    //  TODO - actual photo
+    @Test
+    public void testCreatePhotoForClassList() {
+        Photo photo = objectFactory.newPhoto(testUser1);
+        photo.setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testClassListForU1).setArchived(false);
+        photo = readWriteDAO.create(photo);
+        Set<Photo> photos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        assertTrue(photos.contains(photo));
+        for (Photo setPhoto : photos) {
+            if (setPhoto.equals(photo)) {
+                assertEquals(testClassListForU1, setPhoto.getPhotoFor());
+            }
+        }
+    }
+
+    //  TODO - actual photo
+    @Test
+    public void testCreatePhotoForObservation() {
+        Photo photo = objectFactory.newPhoto(testUser1);
+        photo.setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testObservationForU1).setArchived(false);
+        photo = readWriteDAO.create(photo);
+        Set<Photo> photos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        assertTrue(photos.contains(photo));
+        for (Photo setPhoto : photos) {
+            if (setPhoto.equals(photo)) {
+                assertEquals(testObservationForU1, setPhoto.getPhotoFor());
+            }
+        }
     }
 
     @Test
     public void testUpdateArchivePhoto() {
-        Photo photo = new PhotoImpl(testUser1);
+        Photo photo = objectFactory.newPhoto(testUser1);
         photo.setDescription("UpdateTest").setTimestamp(new LocalDateTime()).setPhotoFor(testStudentForU1).setArchived(false);
         photo = readWriteDAO.create(photo);
         Set<Photo> activePhotos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
@@ -170,12 +208,11 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     }
 
     @Test
-    public void testCreateObservation() {
-        Photo p = new HDBPhoto(new PhotoImpl()).setAppUser(testUser1).setDescription("Test Obs Create");
+    public void testCreateObservationForStudent() {
         final ObservationCategory social = testOCsForU1.get("SOCIAL");
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment = "Test Observation";
-        Observation o = createObservation(testUser1, Arrays.asList(social, kauw), comment, Arrays.asList(p));
+        Observation o = createObservation(testUser1, Arrays.asList(social, kauw), comment, testStudentForU1);
         assertEquals(comment, o.getComment());
         assertEquals(2, o.getCategories().size());
         assertTrue(o.getCategories().contains(social));
@@ -183,24 +220,25 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         assertFalse(o.getNeedsFollowUp());
         assertNull(o.getFollowUpObservation());
         assertNull(o.getFollowUpReminder());
-//        assertEquals(1, o.getPhotos().size());
-//        assertTrue(o.getPhotos().contains(p));
+        assertEquals(testStudentForU1, o.getObservationSubject());
     }
 
     @Test
     public void testModifyObservation() {
-        Photo p = new HDBPhoto(new PhotoImpl()).setAppUser(testUser1).setDescription("Test Obs Update");
         final ObservationCategory social = testOCsForU1.get("SOCIAL");
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final ObservationCategory lang = testOCsForU1.get("LANG");
         final String comment = "Test Observation";
-        Observation o = createObservation(testUser1, Arrays.asList(social, kauw), comment, Arrays.asList(p));
+        Observation o = createObservation(testUser1, Arrays.asList(social, kauw), comment, testStudentForU1);
         o.removeCategory(social);
         o.addCategory(lang);
+        o.setObservationSubject(testClassListForU1);
         readWriteDAO.update(o);
+        o = readWriteDAO.get(HDBObservation.class, o.getId());
         assertEquals(2, o.getCategories().size());
         assertTrue(o.getCategories().contains(lang));
         assertTrue(o.getCategories().contains(kauw));
+        assertEquals(testClassListForU1, o.getObservationSubject());
     }
 
     @Test
@@ -209,8 +247,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment1 = "Test Observation 1";
         final String comment2 = "Test Observation 2";
-        Observation o1 = createObservation(testUser1, Arrays.asList(social, kauw), comment1, null);
-        Observation o2 = createObservation(testUser1, Arrays.asList(kauw), comment2, null);
+        Observation o1 = createObservation(testUser1, Arrays.asList(social, kauw), comment1, testStudentForU1);
+        Observation o2 = createObservation(testUser1, Arrays.asList(kauw), comment2, testStudentForU1);
         o1.setFollowUpObservation(o2);
         o2.setNeedsFollowUp(true);
         final LocalDate reminderDate = new LocalDate(2012, 11, 12);
@@ -226,25 +264,22 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     }
 
     private AppUser createUser(final String first, final String last, final String email) {
-        AppUser appUser = new AppUserImpl();
-        appUser.setFirstName(first).setLastName(last).setEmailAddress(email);
+        AppUser appUser = objectFactory.newAppUser().setFirstName(first).setLastName(last).setEmailAddress(email);
         return readWriteDAO.create(appUser);
     }
 
-    private Observation createObservation(final AppUser appUser, final Collection<ObservationCategory> ocs, final String comment, Collection<Photo> photos) {
-        Observation o = new ObservationImpl(appUser);
-        o.setNeedsFollowUp(false);
-        o.setObservationTimestamp(new LocalDateTime());
-        o.addCategories(ocs);
-        o.setComment(comment);
-        if (photos != null) {
-//            o.addPhotos(photos);
-        }
+    private Observation createObservation(final AppUser appUser, final Collection<ObservationCategory> ocs, final String comment, final AppUserOwnedObject observationFor) {
+        Observation o = objectFactory.newObservation(appUser)
+                .setNeedsFollowUp(false)
+                .setObservationTimestamp(new LocalDateTime())
+                .addCategories(ocs)
+                .setComment(comment)
+                .setObservationSubject(observationFor);
         return readWriteDAO.create(o);
     }
 
     private ObservationCategory createOC(final AppUser appuser, final String shortCode, final String description) {
-        ObservationCategory oc = new ObservationCategoryImpl(appuser).setShortName(shortCode).setDescription(description);
+        ObservationCategory oc = objectFactory.newObservationCategory(appuser).setShortName(shortCode).setDescription(description);
         return readWriteDAO.create(oc);
     }
 

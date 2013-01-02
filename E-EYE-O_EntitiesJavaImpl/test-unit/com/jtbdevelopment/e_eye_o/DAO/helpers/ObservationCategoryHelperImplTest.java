@@ -3,8 +3,9 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers;
 import com.google.common.collect.Sets;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.entities.impl.ObservationCategoryImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImplFactory;
 import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -29,7 +30,8 @@ public class ObservationCategoryHelperImplTest {
     private final Mockery context = new JUnit4Mockery();
     private final ReadWriteDAO dao = context.mock(ReadWriteDAO.class);
     private final AppUser user = context.mock(AppUser.class);
-    private final ObservationCategoryHelperImpl helper = new ObservationCategoryHelperImpl(dao);
+    private final IdObjectFactory factory = new IdObjectImplFactory();
+    private final ObservationCategoryHelperImpl helper = new ObservationCategoryHelperImpl(dao, factory);
 
     private static class ReturnMatchingObsCatAction implements Action {
         private final Map<String, ObservationCategory> ocMap;
@@ -57,7 +59,7 @@ public class ObservationCategoryHelperImplTest {
     public void testCreatesDefault() {
         final Map<String, ObservationCategory> shortMap = new HashMap<>();
         for (Map.Entry<String, String> entry : ObservationCategoryHelperImpl.NEW_USER_DEFAULT_CATEGORIES.entrySet()) {
-            final ObservationCategory impl = new ObservationCategoryImpl(user).setShortName(entry.getKey()).setDescription(entry.getValue());
+            final ObservationCategory impl = factory.newObservationCategory(user).setShortName(entry.getKey()).setDescription(entry.getValue());
             impl.setId(entry.getKey());
             shortMap.put(entry.getKey(), impl);
         }

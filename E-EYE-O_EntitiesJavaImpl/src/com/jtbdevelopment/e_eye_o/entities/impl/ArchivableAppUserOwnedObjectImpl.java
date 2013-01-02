@@ -13,7 +13,7 @@ public abstract class ArchivableAppUserOwnedObjectImpl extends AppUserOwnedObjec
     protected ArchivableAppUserOwnedObjectImpl() {
     }
 
-    public ArchivableAppUserOwnedObjectImpl(final AppUser appUser) {
+    protected ArchivableAppUserOwnedObjectImpl(final AppUser appUser) {
         super(appUser);
     }
 

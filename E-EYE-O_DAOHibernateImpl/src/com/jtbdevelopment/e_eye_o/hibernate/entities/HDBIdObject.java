@@ -1,7 +1,10 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.helpers.HDBFactoryContext;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,7 +21,7 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
 
     public HDBIdObject(final T wrapped) {
         if (wrapped instanceof IdObjectWrapper) {
-            this.wrapped = ((IdObjectWrapper<T>) wrapped).getWrapped();
+            this.wrapped = (T) ((IdObjectWrapper) wrapped).getWrapped();
         } else {
             this.wrapped = wrapped;
         }
@@ -54,19 +57,19 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
         return (T) this;
     }
 
-    @Transient
-    private HDBIdObjectWrapperFactory getWrapper() {
-        return HDBIdObjectWrapperFactory.getInstance();
+    private static IdObjectWrapperFactory getWrapperFactory() {
+        return HDBFactoryContext.getHibernateFactory();
     }
 
-    @Transient
-    protected <OO extends IdObject> OO wrap(OO entity) {
-        return getWrapper().wrap(entity);
+    protected static <OO extends IdObject> OO wrap(OO entity) {
+        return getWrapperFactory().wrap(entity);
     }
 
-    @Transient
-    protected <OO extends IdObject, C extends Collection<OO>> C wrap(final C entities) {
-        return getWrapper().wrap(entities);
+    protected static <OO extends IdObject, C extends Collection<OO>> C wrap(final C entities) {
+        return getWrapperFactory().wrap(entities);
     }
 
+    protected static IdObjectFactory getImplFactory() {
+        return HDBFactoryContext.getImplFactory();
+    }
 }

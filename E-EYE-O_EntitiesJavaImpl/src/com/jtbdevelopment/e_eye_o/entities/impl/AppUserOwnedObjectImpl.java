@@ -12,10 +12,10 @@ import java.security.InvalidParameterException;
 public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements AppUserOwnedObject {
     private AppUser appUser;
 
-    public AppUserOwnedObjectImpl() {
+    protected AppUserOwnedObjectImpl() {
     }
 
-    public AppUserOwnedObjectImpl(final AppUser appUser) {
+    protected AppUserOwnedObjectImpl(final AppUser appUser) {
         setAppUser(appUser);
     }
 

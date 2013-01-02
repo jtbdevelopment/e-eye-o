@@ -7,12 +7,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class HDBIdObjectWrapperFactory extends AbstractIdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
-    private static HDBIdObjectWrapperFactory instance;
-
-    public static HDBIdObjectWrapperFactory getInstance() {
-        return instance;
-    }
-
     public HDBIdObjectWrapperFactory() {
         super(HDBIdObject.class);
         addMapping(AppUser.class, HDBAppUser.class);
@@ -21,6 +15,5 @@ public class HDBIdObjectWrapperFactory extends AbstractIdObjectWrapperFactoryImp
         addMapping(ObservationCategory.class, HDBObservationCategory.class);
         addMapping(Observation.class, HDBObservation.class);
         addMapping(ClassList.class, HDBClassList.class);
-        instance = this;
     }
 }

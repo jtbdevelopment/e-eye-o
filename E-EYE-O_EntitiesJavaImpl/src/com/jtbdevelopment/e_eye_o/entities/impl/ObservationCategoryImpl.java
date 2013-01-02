@@ -11,10 +11,10 @@ public class ObservationCategoryImpl extends AppUserOwnedObjectImpl implements O
     private String shortName = "";
     private String description = "";
 
-    public ObservationCategoryImpl() {
+    ObservationCategoryImpl() {
     }
 
-    public ObservationCategoryImpl(final AppUser appUser) {
+    ObservationCategoryImpl(final AppUser appUser) {
         super(appUser);
     }
 

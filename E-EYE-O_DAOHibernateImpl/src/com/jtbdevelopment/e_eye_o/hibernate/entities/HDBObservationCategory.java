@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.entities.impl.ObservationCategoryImpl;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +17,7 @@ import javax.persistence.UniqueConstraint;
 public class HDBObservationCategory extends HDBAppUserOwnedObject<ObservationCategory> implements ObservationCategory {
     @SuppressWarnings("unused")
     protected HDBObservationCategory() {
-        super(new ObservationCategoryImpl());
+        super(getImplFactory().newObservationCategory());
         //  For hibernate
     }
 

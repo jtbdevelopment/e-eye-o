@@ -1,7 +1,6 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.impl.AppUserImpl;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -15,7 +14,7 @@ import javax.persistence.Entity;
 @Entity(name = "AppUser")
 public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
     protected HDBAppUser() {
-        super(new AppUserImpl());
+        super(getImplFactory().newAppUser());
     }
 
     public HDBAppUser(final AppUser appUser) {

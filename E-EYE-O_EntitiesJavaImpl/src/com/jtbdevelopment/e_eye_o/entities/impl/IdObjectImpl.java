@@ -12,6 +12,10 @@ import sun.plugin.dom.exception.InvalidStateException;
 public abstract class IdObjectImpl implements IdObject {
     protected String id;
 
+    protected IdObjectImpl() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

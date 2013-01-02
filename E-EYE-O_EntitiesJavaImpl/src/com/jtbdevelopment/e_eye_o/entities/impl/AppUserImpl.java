@@ -13,6 +13,10 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
     private String emailAddress = "";
     private DateTime lastLogin = NEVER_LOGGED_IN;
 
+    AppUserImpl() {
+
+    }
+
     @Override
     public String getFirstName() {
         return firstName;

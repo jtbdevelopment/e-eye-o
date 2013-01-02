@@ -1,7 +1,6 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.impl.ClassListImpl;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +13,7 @@ import javax.persistence.Entity;
 public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> implements ClassList {
     @SuppressWarnings("unused")
     protected HDBClassList() {
-        super(new ClassListImpl());
+        super(getImplFactory().newClassList());
     }
 
     public HDBClassList(final ClassList classList) {

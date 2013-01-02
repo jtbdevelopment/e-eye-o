@@ -17,10 +17,10 @@ public class ClassListImpl extends ArchivableAppUserOwnedObjectImpl implements C
     private Set<Student> students = new HashSet<>();
     private Set<Photo> photos = new HashSet<>();
 
-    public ClassListImpl() {
+    ClassListImpl() {
     }
 
-    public ClassListImpl(final AppUser appUser) {
+    ClassListImpl(final AppUser appUser) {
         super(appUser);
     }
 

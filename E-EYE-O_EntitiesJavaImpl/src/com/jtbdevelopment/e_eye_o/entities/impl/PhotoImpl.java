@@ -15,10 +15,10 @@ public class PhotoImpl extends ArchivableAppUserOwnedObjectImpl implements Photo
     private LocalDateTime timestamp = new LocalDateTime();
     //  TODO - actual photo
 
-    public PhotoImpl() {
+    PhotoImpl() {
     }
 
-    public PhotoImpl(final AppUser appUser) {
+    PhotoImpl(final AppUser appUser) {
         super(appUser);
     }
 

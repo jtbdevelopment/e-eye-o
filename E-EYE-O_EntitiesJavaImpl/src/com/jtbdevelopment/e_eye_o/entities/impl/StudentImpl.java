@@ -23,10 +23,10 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
     //  TODO - default stock photo
     private Photo studentPhoto;
 
-    public StudentImpl() {
+    StudentImpl() {
     }
 
-    public StudentImpl(final AppUser appUser) {
+    StudentImpl(final AppUser appUser) {
         super(appUser);
     }
 

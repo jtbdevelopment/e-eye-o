@@ -34,12 +34,14 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
     protected void checkDefaultAndAppUserConstructorTests() {
         try {
             if (AppUserOwnedObject.class.isAssignableFrom(entityUnderTest)) {
-                Constructor<? extends AppUserOwnedObject> def = entityUnderTest.getConstructor();
+                Constructor<? extends AppUserOwnedObject> def = entityUnderTest.getDeclaredConstructor();
+                def.setAccessible(true);
                 AppUserOwnedObject entityFromDefaultConstructor = def.newInstance();
                 assertEquals(null, entityFromDefaultConstructor.getAppUser());
                 validateExpectingError(entityFromDefaultConstructor, AppUserOwnedObject.APP_USER_CANNOT_BE_NULL_ERROR);
 
-                Constructor<? extends AppUserOwnedObject> appUser = entityUnderTest.getConstructor(AppUser.class);
+                Constructor<? extends AppUserOwnedObject> appUser = entityUnderTest.getDeclaredConstructor(AppUser.class);
+                appUser.setAccessible(true);
                 final AppUserImpl user = new AppUserImpl();
                 AppUserOwnedObject appUserO = appUser.newInstance(user);
                 assertEquals(user, appUserO.getAppUser());

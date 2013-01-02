@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
-import com.jtbdevelopment.e_eye_o.entities.impl.PhotoImpl;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -17,7 +16,7 @@ import javax.persistence.ManyToOne;
 public class HDBPhoto extends HDBArchivableAppUserOwnedObject<Photo> implements Photo {
     @SuppressWarnings("unused")
     protected HDBPhoto() {
-        super(new PhotoImpl());
+        super(getImplFactory().newPhoto());
         //  For hibernate
     }
 

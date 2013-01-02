@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.entities.impl.ObservationImpl;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
@@ -19,7 +18,7 @@ import java.util.Set;
 public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation> implements Observation {
     @SuppressWarnings("unused")
     protected HDBObservation() {
-        super(new ObservationImpl());
+        super(getImplFactory().newObservation());
     }
 
     public HDBObservation(final Observation observation) {
