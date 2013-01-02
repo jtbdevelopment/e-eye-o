@@ -1,7 +1,7 @@
 E-EYE-O
 Electronic-Early Years Educator Observations
 
-A tracking system for recording class and student observations.
+A tracking and reporting system for recording class and student observations.
 
 Primarily building for my own purposes but engineering for wider usage.
 
