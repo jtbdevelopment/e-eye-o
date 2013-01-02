@@ -12,6 +12,7 @@ import java.util.*;
 public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
     private final Logger logger = LoggerFactory.getLogger(AbstractIdObjectWrapperFactoryImpl.class);
     private final Map<Class<? extends IdObject>, Class> entityWrapperMap = new HashMap<>();
+    private final Map<Class, Class<? extends IdObject>> wrapperEntityMap = new HashMap<>();
     private final Class<? extends IdObjectWrapper> baseClass;
 
     protected AbstractIdObjectWrapperFactoryImpl(final Class<? extends IdObjectWrapper> baseClass) {
@@ -22,8 +23,9 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         return !(baseClass.isAssignableFrom(entity.getClass()));
     }
 
-    protected void addMapping(final Class<? extends IdObject> entity, final Class wrapper) {
+    protected <T extends IdObject, W extends IdObjectWrapper> void addMapping(final Class<T> entity, final Class<W> wrapper) {
         entityWrapperMap.put(entity, wrapper);
+        wrapperEntityMap.put(wrapper, entity);
     }
 
     @Override
@@ -46,6 +48,16 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
             newCollection.add(wrap(entity));
         }
         return newCollection;
+    }
+
+    @Override
+    public <T extends IdObject, W extends IdObjectWrapper> Class<W> getWrapperFor(final Class<T> entity) {
+        return (Class<W>) entityWrapperMap.get(entity);
+    }
+
+    @Override
+    public <T extends IdObject, W extends IdObjectWrapper> Class<T> getUnderlyingFor(final Class<W> entity) {
+        return (Class<T>) wrapperEntityMap.get(entity);
     }
 
     //  Can't just clone the collection - hibernate gives you it's own

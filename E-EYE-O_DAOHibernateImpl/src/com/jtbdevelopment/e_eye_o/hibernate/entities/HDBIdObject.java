@@ -17,7 +17,10 @@ import java.util.Collection;
 @Entity(name = "IdObject")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper<T>, IdObject {
-    protected T wrapped;
+    private T wrapped;
+
+    protected HDBIdObject() {
+    }
 
     public HDBIdObject(final T wrapped) {
         if (wrapped instanceof IdObjectWrapper) {
@@ -30,17 +33,19 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
     @Override
     @Transient
     public T getWrapped() {
+        if (wrapped != null) return wrapped;
+        wrapped = (T) getImplFactory().newIdObject(getWrapperFactory().getUnderlyingFor(getClass()));
         return wrapped;
     }
 
     @Override
     public boolean equals(Object o) {
-        return wrapped.equals(o);
+        return getWrapped().equals(o);
     }
 
     @Override
     public int hashCode() {
-        return wrapped.hashCode();
+        return getWrapped().hashCode();
     }
 
     @Override
@@ -48,12 +53,15 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     public String getId() {
-        return wrapped.getId();
+        if (wrapped == null) {
+            return null;
+        }  //  Hibernate initialization seems to call this before everything is ready.
+        return getWrapped().getId();
     }
 
     @SuppressWarnings("unused")
     public T setId(final String id) {
-        wrapped.setId(id);
+        getWrapped().setId(id);
         return (T) this;
     }
 
@@ -69,7 +77,7 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
         return getWrapperFactory().wrap(entities);
     }
 
-    protected static IdObjectFactory getImplFactory() {
+    private static IdObjectFactory getImplFactory() {
         return HDBFactoryContext.getImplFactory();
     }
 }

@@ -14,7 +14,7 @@ import javax.persistence.Entity;
 @Entity(name = "AppUser")
 public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
     protected HDBAppUser() {
-        super(getImplFactory().newAppUser());
+        super();
     }
 
     public HDBAppUser(final AppUser appUser) {
@@ -24,36 +24,36 @@ public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
     @Override
     @Column(nullable = false, length = MAX_NAME_SIZE)
     public String getFirstName() {
-        return wrapped.getFirstName();
+        return getWrapped().getFirstName();
     }
 
     @Override
     public AppUser setFirstName(final String firstName) {
-        wrapped.setFirstName(firstName);
+        getWrapped().setFirstName(firstName);
         return this;
     }
 
     @Override
     @Column(length = MAX_NAME_SIZE)
     public String getLastName() {
-        return wrapped.getLastName();
+        return getWrapped().getLastName();
     }
 
     @Override
     public AppUser setLastName(final String lastName) {
-        wrapped.setLastName(lastName);
+        getWrapped().setLastName(lastName);
         return this;
     }
 
     @Override
     @Column(nullable = false, length = MAX_EMAIL_SIZE, unique = true)
     public String getEmailAddress() {
-        return wrapped.getEmailAddress();
+        return getWrapped().getEmailAddress();
     }
 
     @Override
     public AppUser setEmailAddress(final String emailAddress) {
-        wrapped.setEmailAddress(emailAddress);
+        getWrapped().setEmailAddress(emailAddress);
         return this;
     }
 
@@ -61,12 +61,12 @@ public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(nullable = false)
     public DateTime getLastLogin() {
-        return wrapped.getLastLogin();
+        return getWrapped().getLastLogin();
     }
 
     @Override
     public AppUser setLastLogin(final DateTime lastLogin) {
-        wrapped.setLastLogin(lastLogin);
+        getWrapped().setLastLogin(lastLogin);
         return this;
     }
 }

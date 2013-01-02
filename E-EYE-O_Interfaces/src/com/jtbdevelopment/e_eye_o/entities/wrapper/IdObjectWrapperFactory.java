@@ -11,5 +11,10 @@ import java.util.Collection;
 public interface IdObjectWrapperFactory {
     <W extends IdObject> W wrap(final W entity);
 
-    <W extends IdObject, C extends Collection<W>> C wrap(C entities);
+    <W extends IdObject, C extends Collection<W>> C wrap(final C entities);
+
+    <T extends IdObject, W extends IdObjectWrapper> Class<W> getWrapperFor(final Class<T> entity);
+
+    <T extends IdObject, W extends IdObjectWrapper> Class<T> getUnderlyingFor(final Class<W> entity);
+
 }

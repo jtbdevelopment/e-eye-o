@@ -11,6 +11,10 @@ import javax.persistence.Entity;
  */
 @Entity(name = "Archivable")
 public abstract class HDBArchivableAppUserOwnedObject<T extends ArchivableAppUserOwnedObject> extends HDBAppUserOwnedObject<T> implements ArchivableAppUserOwnedObject {
+    protected HDBArchivableAppUserOwnedObject() {
+        super();
+    }
+
     protected HDBArchivableAppUserOwnedObject(final T wrapped) {
         super(wrapped);
     }
@@ -18,12 +22,12 @@ public abstract class HDBArchivableAppUserOwnedObject<T extends ArchivableAppUse
     @Override
     @Column(nullable = false)
     public boolean isArchived() {
-        return wrapped.isArchived();
+        return getWrapped().isArchived();
     }
 
     @Override
     public T setArchived(final boolean archived) {
-        wrapped.setArchived(archived);
+        getWrapped().setArchived(archived);
         return (T) this;
     }
 }

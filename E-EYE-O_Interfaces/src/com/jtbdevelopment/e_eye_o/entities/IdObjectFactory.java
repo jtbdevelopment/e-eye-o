@@ -5,6 +5,7 @@ package com.jtbdevelopment.e_eye_o.entities;
  * Time: 7:47 PM
  */
 public interface IdObjectFactory {
+    <T extends IdObject> T newIdObject(Class<T> idObjectType);
     AppUser newAppUser();
     ClassList newClassList();
     ClassList newClassList(final AppUser appUser);

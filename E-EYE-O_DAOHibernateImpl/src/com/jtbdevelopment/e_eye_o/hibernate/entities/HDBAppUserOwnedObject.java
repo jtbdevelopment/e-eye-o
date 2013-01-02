@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
  */
 @Entity(name = "OwnedObject")
 public abstract class HDBAppUserOwnedObject<T extends AppUserOwnedObject> extends HDBIdObject<T> implements AppUserOwnedObject {
+    protected HDBAppUserOwnedObject() {
+    }
+
     protected HDBAppUserOwnedObject(final T appUserOwnedObject) {
         super(appUserOwnedObject);
     }
@@ -19,12 +22,12 @@ public abstract class HDBAppUserOwnedObject<T extends AppUserOwnedObject> extend
     @Override
     @ManyToOne(targetEntity = HDBAppUser.class, optional = false)
     public AppUser getAppUser() {
-        return wrapped.getAppUser();
+        return getWrapped().getAppUser();
     }
 
     @Override
     public T setAppUser(final AppUser appUser) {
-        wrapped.setAppUser(wrap(appUser));
+        getWrapped().setAppUser(wrap(appUser));
         return (T) this;
     }
 }

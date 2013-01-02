@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 public class HDBPhoto extends HDBArchivableAppUserOwnedObject<Photo> implements Photo {
     @SuppressWarnings("unused")
     protected HDBPhoto() {
-        super(getImplFactory().newPhoto());
+        super();
         //  For hibernate
     }
 
@@ -27,35 +27,35 @@ public class HDBPhoto extends HDBArchivableAppUserOwnedObject<Photo> implements 
     @Override
     @ManyToOne(targetEntity = HDBAppUserOwnedObject.class, optional = false)
     public AppUserOwnedObject getPhotoFor() {
-        return wrapped.getPhotoFor();
+        return getWrapped().getPhotoFor();
     }
 
     @Override
     public Photo setPhotoFor(final AppUserOwnedObject photoFor) {
-        return wrapped.setPhotoFor(wrap(photoFor));
+        return getWrapped().setPhotoFor(wrap(photoFor));
     }
 
     @Override
     @Column(nullable = false, length = Photo.MAX_DESCRIPTION_SIZE)
     public String getDescription() {
-        return wrapped.getDescription();
+        return getWrapped().getDescription();
     }
 
     @Override
     public Photo setDescription(final String description) {
-        wrapped.setDescription(description);
+        getWrapped().setDescription(description);
         return this;
     }
 
     @Override
     @Column(nullable = false)
     public LocalDateTime getTimestamp() {
-        return wrapped.getTimestamp();
+        return getWrapped().getTimestamp();
     }
 
     @Override
     public Photo setTimestamp(final LocalDateTime timestamp) {
-        wrapped.setTimestamp(timestamp);
+        getWrapped().setTimestamp(timestamp);
         return this;
     }
 }

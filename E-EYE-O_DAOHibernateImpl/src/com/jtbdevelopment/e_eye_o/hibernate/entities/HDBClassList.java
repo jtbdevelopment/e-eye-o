@@ -13,7 +13,7 @@ import javax.persistence.Entity;
 public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> implements ClassList {
     @SuppressWarnings("unused")
     protected HDBClassList() {
-        super(getImplFactory().newClassList());
+        super();
     }
 
     public HDBClassList(final ClassList classList) {
@@ -23,12 +23,12 @@ public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> imp
     @Override
     @Column(nullable = false, length = ClassList.MAX_DESCRIPTION_SIZE)
     public String getDescription() {
-        return wrapped.getDescription();
+        return getWrapped().getDescription();
     }
 
     @Override
     public ClassList setDescription(final String description) {
-        wrapped.setDescription(description);
+        getWrapped().setDescription(description);
         return this;
     }
 }

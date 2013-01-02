@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
 public class HDBObservationCategory extends HDBAppUserOwnedObject<ObservationCategory> implements ObservationCategory {
     @SuppressWarnings("unused")
     protected HDBObservationCategory() {
-        super(getImplFactory().newObservationCategory());
+        super();
         //  For hibernate
     }
 
@@ -28,7 +28,7 @@ public class HDBObservationCategory extends HDBAppUserOwnedObject<ObservationCat
     //  Duplicate column to allow a unique constraint at table level
     @Column(nullable = false)
     public String getAppUserID() {
-        return wrapped.getAppUser().getId();
+        return getWrapped().getAppUser().getId();
     }
 
     public void setAppUserID(final String appUserID) {
@@ -38,24 +38,24 @@ public class HDBObservationCategory extends HDBAppUserOwnedObject<ObservationCat
     @Override
     @Column(nullable = false, length = IdObject.MAX_SHORT_NAME_SIZE)
     public String getShortName() {
-        return wrapped.getShortName();
+        return getWrapped().getShortName();
     }
 
     @Override
     public ObservationCategory setShortName(final String shortName) {
-        wrapped.setShortName(shortName);
+        getWrapped().setShortName(shortName);
         return this;
     }
 
     @Override
     @Column(nullable = false, length = IdObject.MAX_DESCRIPTION_SIZE)
     public String getDescription() {
-        return wrapped.getDescription();
+        return getWrapped().getDescription();
     }
 
     @Override
     public ObservationCategory setDescription(final String description) {
-        wrapped.setDescription(description);
+        getWrapped().setDescription(description);
         return this;
     }
 }

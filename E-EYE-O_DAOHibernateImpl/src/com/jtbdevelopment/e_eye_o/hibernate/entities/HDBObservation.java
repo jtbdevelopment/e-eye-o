@@ -18,7 +18,7 @@ import java.util.Set;
 public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation> implements Observation {
     @SuppressWarnings("unused")
     protected HDBObservation() {
-        super(getImplFactory().newObservation());
+        super();
     }
 
     public HDBObservation(final Observation observation) {
@@ -28,112 +28,112 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     @Override
     @ManyToOne(targetEntity = HDBAppUserOwnedObject.class, optional = false)
     public AppUserOwnedObject getObservationSubject() {
-        return wrapped.getObservationSubject();
+        return getWrapped().getObservationSubject();
     }
 
     @Override
     public Observation setObservationSubject(final AppUserOwnedObject observationSubject) {
-        return wrapped.setObservationSubject(observationSubject);
+        return getWrapped().setObservationSubject(observationSubject);
     }
 
     @Override
     @Column(nullable = false)
     public LocalDateTime getObservationTimestamp() {
-        return wrapped.getObservationTimestamp();
+        return getWrapped().getObservationTimestamp();
     }
 
     @Override
     public Observation setObservationTimestamp(final LocalDateTime observationDate) {
-        wrapped.setObservationTimestamp(observationDate);
+        getWrapped().setObservationTimestamp(observationDate);
         return this;
     }
 
     @Override
     @Column(nullable = false)
     public boolean isSignificant() {
-        return wrapped.isSignificant();
+        return getWrapped().isSignificant();
     }
 
     @Override
     public Observation setSignificant(final boolean significant) {
-        wrapped.setSignificant(significant);
+        getWrapped().setSignificant(significant);
         return this;
     }
 
     @Override
     @Column(nullable = false)
     public boolean getNeedsFollowUp() {
-        return wrapped.getNeedsFollowUp();
+        return getWrapped().getNeedsFollowUp();
     }
 
     @Override
     public Observation setNeedsFollowUp(final boolean needsFollowUp) {
-        wrapped.setNeedsFollowUp(needsFollowUp);
+        getWrapped().setNeedsFollowUp(needsFollowUp);
         return this;
     }
 
     @Override
     public LocalDate getFollowUpReminder() {
-        return wrapped.getFollowUpReminder();
+        return getWrapped().getFollowUpReminder();
     }
 
     @Override
     public Observation setFollowUpReminder(final LocalDate followUpReminder) {
-        wrapped.setFollowUpReminder(followUpReminder);
+        getWrapped().setFollowUpReminder(followUpReminder);
         return this;
     }
 
     @Override
     @OneToOne(targetEntity = HDBObservation.class)
     public Observation getFollowUpObservation() {
-        return wrapped.getFollowUpObservation();
+        return getWrapped().getFollowUpObservation();
     }
 
     @Override
     public Observation setFollowUpObservation(final Observation followUpObservation) {
-        wrapped.setFollowUpObservation(wrap(followUpObservation));
+        getWrapped().setFollowUpObservation(wrap(followUpObservation));
         return this;
     }
 
     @Override
     @ManyToMany(targetEntity = HDBObservationCategory.class)
     public Set<ObservationCategory> getCategories() {
-        return wrapped.getCategories();
+        return getWrapped().getCategories();
     }
 
     @Override
     public Observation setCategories(final Set<? extends ObservationCategory> categories) {
-        wrapped.setCategories(wrap(categories));
+        getWrapped().setCategories(wrap(categories));
         return this;
     }
 
     @Override
     public Observation addCategory(final ObservationCategory observationCategory) {
-        wrapped.addCategory(wrap(observationCategory));
+        getWrapped().addCategory(wrap(observationCategory));
         return this;
     }
 
     @Override
     public Observation addCategories(final Collection<? extends ObservationCategory> observationCategories) {
-        wrapped.addCategories(wrap(observationCategories));
+        getWrapped().addCategories(wrap(observationCategories));
         return this;
     }
 
     @Override
     public Observation removeCategory(final ObservationCategory observationCategory) {
-        wrapped.removeCategory(observationCategory);
+        getWrapped().removeCategory(observationCategory);
         return this;
     }
 
     @Override
     @Column(nullable = false, length = Observation.MAX_COMMENT_SIZE)
     public String getComment() {
-        return wrapped.getComment();
+        return getWrapped().getComment();
     }
 
     @Override
     public Observation setComment(final String comment) {
-        wrapped.setComment(comment);
+        getWrapped().setComment(comment);
         return this;
     }
 }

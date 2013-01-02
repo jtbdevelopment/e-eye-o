@@ -14,6 +14,7 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.validation.ConstraintViolationException;
@@ -50,7 +51,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     private static Student testStudentForU1;
     private static Observation testObservationForU1;
 
-    @BeforeClass
+    @BeforeMethod
     public synchronized void initialize() {
         if (readWriteDAO == null) {
             return;
