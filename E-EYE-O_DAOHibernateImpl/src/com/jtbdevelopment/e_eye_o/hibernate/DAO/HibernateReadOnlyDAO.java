@@ -5,6 +5,8 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.ArchivableAppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBIdObjectWrapperFactory;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +28,22 @@ import java.util.Set;
 public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     protected final SessionFactory sessionFactory;
+    protected final HDBIdObjectWrapperFactory wrapperFactory;
 
     @Autowired
-    public HibernateReadOnlyDAO(final SessionFactory sessionFactory) {
+    public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final HDBIdObjectWrapperFactory wrapperFactory) {
         this.sessionFactory = sessionFactory;
+        this.wrapperFactory = wrapperFactory;
     }
 
 
     @Override
-    public <T> T get(Class<T> type, String id) {
-        return (T) sessionFactory.getCurrentSession().get(type, id);
+    public <T extends IdObject> T get(final Class<T> type, final String id) {
+        Class wrapperFor = wrapperFactory.getWrapperFor(type);
+        if (wrapperFor == null) {
+            wrapperFor = type;
+        }
+        return (T) sessionFactory.getCurrentSession().get(wrapperFor, id);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.DAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.ArchivableAppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
 
 import java.util.Set;
 
@@ -13,9 +14,9 @@ import java.util.Set;
  */
 public interface ReadOnlyDAO {
 
-    public <T> T get(Class<T> type, String id);
+    public <T extends IdObject> T get(final Class<T> type, final String id);
 
-    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(Class<T> entityType, final AppUser appUser);
+    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser);
 
     public <T extends ArchivableAppUserOwnedObject> Set<T> getActiveEntitiesForUser(Class<T> entityType, final AppUser appUser);
 

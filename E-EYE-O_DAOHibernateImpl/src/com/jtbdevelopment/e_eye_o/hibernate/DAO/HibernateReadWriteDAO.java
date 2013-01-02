@@ -24,12 +24,9 @@ import java.util.List;
 @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 @SuppressWarnings("unused")
 public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadWriteDAO {
-    private final HDBIdObjectWrapperFactory wrapperFactory;
-
     @Autowired
     public HibernateReadWriteDAO(final SessionFactory sessionFactory, final HDBIdObjectWrapperFactory wrapperFactory) {
-        super(sessionFactory);
-        this.wrapperFactory = wrapperFactory;
+        super(sessionFactory, wrapperFactory);
     }
 
     @Override

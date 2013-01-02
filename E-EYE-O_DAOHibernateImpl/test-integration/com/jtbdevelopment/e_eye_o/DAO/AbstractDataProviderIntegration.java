@@ -2,8 +2,6 @@ package com.jtbdevelopment.e_eye_o.DAO;
 
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBObservation;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBPhoto;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
@@ -13,7 +11,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -204,7 +201,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         archivePhotos = readWriteDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
         assertFalse(activePhotos.contains(photo));
         assertTrue(archivePhotos.contains(photo));
-        photo = readWriteDAO.get(HDBPhoto.class, photo.getId());
+        photo = readWriteDAO.get(Photo.class, photo.getId());
         assertEquals("Archived", photo.getDescription());
     }
 
@@ -235,7 +232,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         o.addCategory(lang);
         o.setObservationSubject(testClassListForU1);
         readWriteDAO.update(o);
-        o = readWriteDAO.get(HDBObservation.class, o.getId());
+        o = readWriteDAO.get(Observation.class, o.getId());
         assertEquals(2, o.getCategories().size());
         assertTrue(o.getCategories().contains(lang));
         assertTrue(o.getCategories().contains(kauw));
@@ -255,8 +252,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         final LocalDate reminderDate = new LocalDate(2012, 11, 12);
         o2.setFollowUpReminder(reminderDate);
         readWriteDAO.update(Arrays.asList(o1, o2));
-        o1 = readWriteDAO.get(HDBObservation.class, o1.getId());
-        o2 = readWriteDAO.get(HDBObservation.class, o2.getId());
+        o1 = readWriteDAO.get(Observation.class, o1.getId());
+        o2 = readWriteDAO.get(Observation.class, o2.getId());
         assertEquals(o1.getFollowUpObservation(), o2);
         assertNull(o2.getFollowUpObservation());
         assertTrue(o2.getNeedsFollowUp());
