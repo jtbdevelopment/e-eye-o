@@ -13,8 +13,8 @@ public interface IdObjectWrapperFactory {
 
     <W extends IdObject, C extends Collection<W>> C wrap(final C entities);
 
-    <T extends IdObject, W extends IdObjectWrapper> Class<W> getWrapperFor(final Class<T> entity);
+    <T extends IdObject> Class<T> getWrapperForEntity(final Class<T> entityType);
 
-    <T extends IdObject, W extends IdObjectWrapper> Class<T> getUnderlyingFor(final Class<W> entity);
+    <T extends IdObject> Class<T> getEntityForWrapper(final Class<T> wrapperType);
 
 }

@@ -39,7 +39,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     public <T extends IdObject> T get(final Class<T> type, final String id) {
-        Class wrapperFor = wrapperFactory.getWrapperFor(type);
+        Class<T> wrapperFor = wrapperFactory.getWrapperForEntity(type);
         if (wrapperFor == null) {
             wrapperFor = type;
         }

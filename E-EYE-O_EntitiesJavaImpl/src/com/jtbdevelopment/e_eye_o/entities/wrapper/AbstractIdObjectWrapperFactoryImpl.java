@@ -11,8 +11,8 @@ import java.util.*;
 
 public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
     private final Logger logger = LoggerFactory.getLogger(AbstractIdObjectWrapperFactoryImpl.class);
-    private final Map<Class<? extends IdObject>, Class> entityWrapperMap = new HashMap<>();
-    private final Map<Class, Class<? extends IdObject>> wrapperEntityMap = new HashMap<>();
+    private final Map<Class<? extends IdObject>, Class<? extends IdObject>> entityToWrapperMap = new HashMap<>();
+    private final Map<Class<? extends IdObject>, Class<? extends IdObject>> wrapperToEntityMap = new HashMap<>();
     private final Class<? extends IdObjectWrapper> baseClass;
 
     protected AbstractIdObjectWrapperFactoryImpl(final Class<? extends IdObjectWrapper> baseClass) {
@@ -23,9 +23,20 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         return !(baseClass.isAssignableFrom(entity.getClass()));
     }
 
-    protected <T extends IdObject, W extends IdObjectWrapper> void addMapping(final Class<T> entity, final Class<W> wrapper) {
-        entityWrapperMap.put(entity, wrapper);
-        wrapperEntityMap.put(wrapper, entity);
+    protected <T extends IdObject, W extends T> void addMapping(final Class<T> entity, final Class<W> wrapper) {
+        if(!baseClass.isAssignableFrom(wrapper)) {
+            throw new IllegalArgumentException("wrapper class of " + wrapper.getSimpleName() + " must be subclass of " + baseClass.getSimpleName());
+        }
+        final Class<W> idObjectInterfaceForWrapper = getIdObjectInterfaceForClass(wrapper);
+        if (!entity.equals(idObjectInterfaceForWrapper)) {
+            throw new IllegalArgumentException(
+                    "entity and wrapper should implement same IdObject interface entity = "
+                            + entity.getSimpleName()
+                            + ", wrapper = "
+                            + idObjectInterfaceForWrapper.getSimpleName());
+        }
+        entityToWrapperMap.put(entity, wrapper);
+        wrapperToEntityMap.put(wrapper, entity);
     }
 
     @Override
@@ -37,12 +48,17 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         if (!needsWrapping(entity)) {
             return entity;
         }
-        return constructNewWrapper(getEntityToWrap(entity));
+
+        return newWrapperFor(getEntityToWrap(entity));
     }
 
     @Override
     public <T extends IdObject, C extends Collection<T>> C wrap(final C entities) {
-        C newCollection = constructNewCollection(entities);
+        if(entities == null) {
+            return entities;
+        }
+
+        C newCollection = newCollectionFor(entities);
         //  TODO - might be more efficient to get constructor once but probably not an issue for now
         for (T entity : entities) {
             newCollection.add(wrap(entity));
@@ -51,20 +67,20 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
     }
 
     @Override
-    public <T extends IdObject, W extends IdObjectWrapper> Class<W> getWrapperFor(final Class<T> entity) {
-        return (Class<W>) entityWrapperMap.get(entity);
+    @SuppressWarnings("unchecked")
+    public <T extends IdObject> Class<T> getWrapperForEntity(final Class<T> entityType) {
+        return (Class<T>) entityToWrapperMap.get(entityType);
     }
 
     @Override
-    public <T extends IdObject, W extends IdObjectWrapper> Class<T> getUnderlyingFor(final Class<W> entity) {
-        return (Class<T>) wrapperEntityMap.get(entity);
+    @SuppressWarnings("unchecked")
+    public <T extends IdObject> Class<T> getEntityForWrapper(final Class<T> wrapperType) {
+        return (Class<T>) wrapperToEntityMap.get(wrapperType);
     }
 
-    //  Can't just clone the collection - hibernate gives you it's own
-    private <T extends IdObject, C extends Collection<T>> C constructNewCollection(final C entities) {
-        if (entities instanceof Map) {
-            return (C) new HashMap(entities.size());
-        }
+    //  Can't just clone the collection - hibernate gives you it's own internal types for example
+    @SuppressWarnings("unchecked")
+    private <T extends IdObject, C extends Collection<T>> C newCollectionFor(final C entities) {
         if (entities instanceof List) {
             return (C) new ArrayList<T>(entities.size());
         }
@@ -75,32 +91,65 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         throw new RuntimeException("Couldn't instantiate new collection");
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends IdObject> T getEntityToWrap(final T entity) {
-        return (entity instanceof IdObjectWrapper) ? ((IdObjectWrapper<T>) entity).getWrapped() : entity;
+        if (entity instanceof IdObjectWrapper) {
+            IdObjectWrapper asWrapper = (IdObjectWrapper) entity;
+            final IdObject wrapped = asWrapper.getWrapped();
+            if (wrapped == null) {
+                throw new IllegalArgumentException("Cannot re-wrap a wrapper of " + entity.getClass().getSimpleName() + " with null for wrapped object");
+            }
+            Class wrappedInterface = getIdObjectInterfaceForClass(wrapped.getClass());
+            Class wrapperInterface = getIdObjectInterfaceForClass(entity.getClass());
+            if (wrappedInterface.equals(wrapperInterface)) {
+                return (T) wrapped;
+            } else {
+                throw new IllegalArgumentException("Mismatched wrapper to wrapped.  Wrapped = " + wrapped.getClass().getSimpleName() + ", wrapper = " + asWrapper.getClass().getSimpleName());
+            }
+        } else {
+            return entity;
+        }
     }
 
-    private <T extends IdObject> T constructNewWrapper(final T entityToWrap) {
+    private <T extends IdObject> T newWrapperFor(final T entityToWrap) {
         final Constructor<T> constructor = getConstructor(entityToWrap);
         try {
             return constructor.newInstance(entityToWrap);
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
             logger.warn("Could not instantiate new wrapper for " + constructor.getClass().getSimpleName() + " with exception", e);
-            throw new RuntimeException("Couldn't instantiate new HDBImpl");
+            throw new RuntimeException("Couldn't instantiate new wrapper");
         }
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends IdObject> Constructor<T> getConstructor(final T entity) {
-        Class<? extends IdObjectWrapper> impl = getImplForClass(entity.getClass());
-        //  TODO - bad assumption
-        return (Constructor<T>) impl.getConstructors()[0];
+        Class<T> idObjectInterface = (Class<T>) getIdObjectInterfaceForClass(entity.getClass());
+        Class<T> impl = getWrapperForInterface(idObjectInterface);
+        try {
+            return impl.getConstructor(idObjectInterface);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Not able to find constructor accepting " + idObjectInterface.getSimpleName(), e);
+        }
     }
 
-    private Class<? extends IdObjectWrapper> getImplForClass(final Class<? extends IdObject> entity) {
-        for (Class i : entity.getInterfaces()) {
+    @SuppressWarnings("unchecked")
+    private <T extends IdObject> Class<T> getWrapperForInterface(final Class<T> idObjectType) {
+        if (entityToWrapperMap.containsKey(idObjectType)) {
+            return (Class<T>) entityToWrapperMap.get(idObjectType);
+        }
+        throw new InvalidParameterException("Not able to find wrapper mapping for " + idObjectType.getSimpleName());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends IdObject> Class<T> getIdObjectInterfaceForClass(final Class<T> entityType) {
+        Class<T> found = null;
+        for (Class i : entityType.getInterfaces()) {
             if (IdObject.class.isAssignableFrom(i)) {
-                return entityWrapperMap.get(i);
+                found = (Class<T>) i;
+                break;
             }
         }
-        throw new InvalidParameterException("Not able to find HDB mapping for " + entity.getSimpleName());
+        return found;
     }
+
 }

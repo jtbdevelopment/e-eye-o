@@ -34,7 +34,7 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
     @Transient
     public T getWrapped() {
         if (wrapped != null) return wrapped;
-        wrapped = (T) getImplFactory().newIdObject(getWrapperFactory().getUnderlyingFor(getClass()));
+        wrapped = (T) getImplFactory().newIdObject(getWrapperFactory().getEntityForWrapper(getClass()));
         return wrapped;
     }
 
