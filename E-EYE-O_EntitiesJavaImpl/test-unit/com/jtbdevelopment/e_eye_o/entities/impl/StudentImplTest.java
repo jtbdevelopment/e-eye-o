@@ -64,11 +64,6 @@ public class StudentImplTest extends AbstractAppUserOwnedObjectTest<StudentImpl>
     }
 
     @Test
-    public void testClassListSizeValidation() {
-        validateExpectingError(new StudentImpl(), Student.STUDENT_CLASS_LIST_SIZE_ERROR);
-    }
-
-    @Test
     public void testAddClassList() throws Exception {
         checkAddSingleEntityToCollection(ClassListImpl.class, "classList", "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
     }

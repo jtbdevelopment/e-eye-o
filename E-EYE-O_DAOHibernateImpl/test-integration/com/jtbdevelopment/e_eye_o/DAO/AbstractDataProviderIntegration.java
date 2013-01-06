@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,11 +35,11 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     private static Logger logger = LoggerFactory.getLogger(AbstractDataProviderIntegration.class);
 
     @Autowired
-    private ReadWriteDAO readWriteDAO;
+    private ReadWriteDAO rwDAO;
     @Autowired
     private ObservationCategoryHelper observationCategoryHelper;
     @Autowired
-    private IdObjectFactory objectFactory;
+    private IdObjectFactory factory;
 
     private static AppUser testUser1;
     private static AppUser testUser2;
@@ -50,31 +50,31 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
 
     @BeforeMethod
     public synchronized void initialize() {
-        if (readWriteDAO == null) {
+        if (rwDAO == null) {
             return;
         }
         if (testUser1 != null) {
             return;
         }
-        testUser1 = createUser("Testy", "Tester", "test@test.com");
+        testUser1 = rwDAO.create(factory.newAppUser().setFirstName("Testy").setLastName("Tester").setEmailAddress("test@test.com"));
         observationCategoryHelper.createDefaultCategoriesForUser(testUser1);
         testOCsForU1 = observationCategoryHelper.getObservationCategoriesAsMap(testUser1);
-        testUser2 = createUser("Another", "Tester", "another@test.com");
+        testClassListForU1 = rwDAO.create(factory.newClassList(testUser1).setDescription("Test Class List"));
+        testStudentForU1 = rwDAO.create(factory.newStudent(testUser1).addClassList(testClassListForU1).setFirstName("Test").setLastName("Student"));
+        testObservationForU1 = rwDAO.create(factory.newObservation(testUser1).setComment("Test Observation").setObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("IDEA")).addCategory(testOCsForU1.get("PHYS")));
+
+        testUser2 = rwDAO.create(factory.newAppUser().setFirstName("Another").setLastName("Tester").setEmailAddress("another@test.com"));
+
         logger.info("Created Test Tester with ID " + testUser1.getId());
         logger.info("Created Test Tester2 with ID " + testUser2.getId());
-        testClassListForU1 = objectFactory.newClassList(testUser1).setDescription("Test Class List");
-        testClassListForU1 = readWriteDAO.create(testClassListForU1);
-        testStudentForU1 = objectFactory.newStudent(testUser1).addClassList(testClassListForU1).setFirstName("Test").setLastName("Student");
-        testStudentForU1 = readWriteDAO.create(testStudentForU1);
-        testObservationForU1 = objectFactory.newObservation(testUser1).setComment("Test Observation").setObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("IDEA")).addCategory(testOCsForU1.get("PHYS"));
-        testObservationForU1 = readWriteDAO.create(testObservationForU1);
     }
 
     @Test
     public void testBeanValidationIsActive() {
+        //  Not testing them all, just a few
         boolean exception = false;
         try {
-            createUser("", null, "INVALID_EMAIL");
+            rwDAO.create(factory.newAppUser().setFirstName("").setLastName(null).setEmailAddress("INVALID_EMAIL"));
         } catch (ConstraintViolationException e) {
             assertEquals(3, e.getConstraintViolations().size());
             logger.info(e.getMessage());
@@ -83,8 +83,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         assertTrue(exception, "Should have had an exception!");
         exception = false;
         try {
-            Student student = objectFactory.newStudent(testUser2).addClassList(testClassListForU1).setFirstName("X").setLastName("Y");
-            readWriteDAO.create(student);
+            rwDAO.create(factory.newStudent(testUser2).addClassList(testClassListForU1).setFirstName("X").setLastName("Y"));
         } catch (ConstraintViolationException e) {
             assertEquals(2, e.getConstraintViolations().size());
             logger.info(e.getMessage());
@@ -96,7 +95,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     @Test
     public void testDuplicateLoginAppUserFails() {
         try {
-            createUser("Testy", "Tester", "test@test.com");
+            rwDAO.create(factory.newAppUser().setFirstName("Testy").setLastName("Tester").setEmailAddress("test@test.com"));
         } catch (Exception e) {
             //  Expected
             return;
@@ -107,46 +106,44 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     @Test
     public void testCreateDefaultCategories() {
         Set<ObservationCategory> initialCategories = observationCategoryHelper.createDefaultCategoriesForUser(testUser2);
-        Set<ObservationCategory> reloaded = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testUser2);
+        Set<ObservationCategory> reloaded = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser2);
         assertTrue(reloaded.containsAll(initialCategories));
     }
 
     @Test
     public void testAddCategory() {
-        ObservationCategory newCategory = createOC(testUser1, "TESTNEW", "Test New Category");
-        Set<ObservationCategory> categories = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testUser1);
+        ObservationCategory newCategory = rwDAO.create(factory.newObservationCategory(testUser1).setShortName("TESTNEW").setDescription("Test New Category"));
+        Set<ObservationCategory> categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser1);
         assertTrue(categories.contains(newCategory));
     }
 
     @Test
     public void testAddDuplicateCategoryCodeFail() {
         ObservationCategory newTest1, newTest2 = null, newTest3;
-        newTest1 = createOC(testUser1, "TESTDUPE", "desc 1");
+        newTest1 = rwDAO.create(factory.newObservationCategory(testUser1).setShortName("TESTDUPE").setDescription("desc 1"));
 
         boolean exception = false;
         try {
-            newTest2 = createOC(testUser1, "TESTDUPE", "desc 2");
+            newTest2 = rwDAO.create(factory.newObservationCategory(testUser1).setShortName("TESTDUPE").setDescription("desc 2"));
         } catch (Exception e) {
             //  Expected
             exception = true;
         }
         assertTrue(exception);
-        newTest3 = createOC(testUser2, "TESTDUPE", "desc 1");
+        newTest3 = rwDAO.create(factory.newObservationCategory(testUser2).setShortName("TESTDUPE").setDescription("desc 1"));
 
-        Set<ObservationCategory> categories = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testUser1);
+        Set<ObservationCategory> categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser1);
         assertTrue(categories.contains(newTest1));
         assertFalse(categories.contains(newTest2));
-        categories = readWriteDAO.getEntitiesForUser(ObservationCategory.class, testUser2);
+        categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser2);
         assertTrue(categories.contains(newTest3));
     }
 
     //  TODO - actual photo
     @Test
     public void testCreatePhotoForStudent() {
-        Photo photo = objectFactory.newPhoto(testUser1);
-        photo.setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testStudentForU1).setArchived(false);
-        photo = readWriteDAO.create(photo);
-        Set<Photo> photos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        Photo photo = rwDAO.create(factory.newPhoto(testUser1).setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testStudentForU1));
+        Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
             if (setPhoto.equals(photo)) {
@@ -158,10 +155,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     //  TODO - actual photo
     @Test
     public void testCreatePhotoForClassList() {
-        Photo photo = objectFactory.newPhoto(testUser1);
-        photo.setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testClassListForU1).setArchived(false);
-        photo = readWriteDAO.create(photo);
-        Set<Photo> photos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        Photo photo = rwDAO.create(factory.newPhoto(testUser1).setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testClassListForU1));
+        Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
             if (setPhoto.equals(photo)) {
@@ -173,10 +168,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     //  TODO - actual photo
     @Test
     public void testCreatePhotoForObservation() {
-        Photo photo = objectFactory.newPhoto(testUser1);
-        photo.setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testObservationForU1).setArchived(false);
-        photo = readWriteDAO.create(photo);
-        Set<Photo> photos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        Photo photo = rwDAO.create(factory.newPhoto(testUser1).setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testObservationForU1));
+        Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
             if (setPhoto.equals(photo)) {
@@ -187,21 +180,19 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
 
     @Test
     public void testUpdateArchivePhoto() {
-        Photo photo = objectFactory.newPhoto(testUser1);
-        photo.setDescription("UpdateTest").setTimestamp(new LocalDateTime()).setPhotoFor(testStudentForU1).setArchived(false);
-        photo = readWriteDAO.create(photo);
-        Set<Photo> activePhotos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
-        Set<Photo> archivePhotos = readWriteDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
+        Photo photo = rwDAO.create(factory.newPhoto(testUser1).setDescription("UpdateTest").setTimestamp(new LocalDateTime()).setPhotoFor(testStudentForU1));
+        Set<Photo> activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        Set<Photo> archivePhotos = rwDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
         assertTrue(activePhotos.contains(photo));
         assertFalse(archivePhotos.contains(photo));
 
         photo.setDescription("Archived").setArchived(true);
-        readWriteDAO.update(photo);
-        activePhotos = readWriteDAO.getActiveEntitiesForUser(Photo.class, testUser1);
-        archivePhotos = readWriteDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
+        photo = rwDAO.update(photo);
+        activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        archivePhotos = rwDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
         assertFalse(activePhotos.contains(photo));
         assertTrue(archivePhotos.contains(photo));
-        photo = readWriteDAO.get(Photo.class, photo.getId());
+        photo = rwDAO.get(Photo.class, photo.getId());
         assertEquals("Archived", photo.getDescription());
     }
 
@@ -210,7 +201,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         final ObservationCategory social = testOCsForU1.get("SOCIAL");
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment = "Test Observation";
-        Observation o = createObservation(testUser1, Arrays.asList(social, kauw), comment, testStudentForU1);
+        Observation o = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment).setObservationSubject(testStudentForU1));
         assertEquals(comment, o.getComment());
         assertEquals(2, o.getCategories().size());
         assertTrue(o.getCategories().contains(social));
@@ -227,12 +218,12 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final ObservationCategory lang = testOCsForU1.get("LANG");
         final String comment = "Test Observation";
-        Observation o = createObservation(testUser1, Arrays.asList(social, kauw), comment, testStudentForU1);
+        Observation o = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment).setObservationSubject(testStudentForU1));
         o.removeCategory(social);
         o.addCategory(lang);
         o.setObservationSubject(testClassListForU1);
-        readWriteDAO.update(o);
-        o = readWriteDAO.get(Observation.class, o.getId());
+        o = rwDAO.update(o);
+        o = rwDAO.get(Observation.class, o.getId());
         assertEquals(2, o.getCategories().size());
         assertTrue(o.getCategories().contains(lang));
         assertTrue(o.getCategories().contains(kauw));
@@ -245,15 +236,15 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment1 = "Test Observation 1";
         final String comment2 = "Test Observation 2";
-        Observation o1 = createObservation(testUser1, Arrays.asList(social, kauw), comment1, testStudentForU1);
-        Observation o2 = createObservation(testUser1, Arrays.asList(kauw), comment2, testStudentForU1);
+        Observation o1 = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment1).setObservationSubject(testStudentForU1));
+        Observation o2 = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(kauw)).setComment(comment2).setObservationSubject(testStudentForU1));
         o1.setFollowUpObservation(o2);
         o2.setNeedsFollowUp(true);
         final LocalDate reminderDate = new LocalDate(2012, 11, 12);
         o2.setFollowUpReminder(reminderDate);
-        readWriteDAO.update(Arrays.asList(o1, o2));
-        o1 = readWriteDAO.get(Observation.class, o1.getId());
-        o2 = readWriteDAO.get(Observation.class, o2.getId());
+        rwDAO.update(Arrays.asList(o1, o2));
+        o1 = rwDAO.get(Observation.class, o1.getId());
+        o2 = rwDAO.get(Observation.class, o2.getId());
         assertEquals(o1.getFollowUpObservation(), o2);
         assertNull(o2.getFollowUpObservation());
         assertTrue(o2.getNeedsFollowUp());
@@ -261,24 +252,33 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         assertEquals(o2.getFollowUpReminder(), reminderDate);
     }
 
-    private AppUser createUser(final String first, final String last, final String email) {
-        AppUser appUser = objectFactory.newAppUser().setFirstName(first).setLastName(last).setEmailAddress(email);
-        return readWriteDAO.create(appUser);
-    }
+    @Test
+    public void testDeletingAUser() {
+        AppUser deleteUser1 = rwDAO.create(factory.newAppUser().setEmailAddress("delete1@delete.test").setFirstName("delete").setLastName("delete"));
+        AppUser deleteUser2 = rwDAO.create(factory.newAppUser().setEmailAddress("delete2@delete.test").setFirstName("delete").setLastName("delete"));
+        observationCategoryHelper.createDefaultCategoriesForUser(deleteUser1);
+        Set<ObservationCategory> deleteCategories = rwDAO.getEntitiesForUser(ObservationCategory.class, deleteUser1);
+        ClassList cl = rwDAO.create(factory.newClassList(deleteUser1).setDescription("delete"));
+        Student s1 = rwDAO.create(factory.newStudent(deleteUser1).setFirstName("deleteS1").setLastName("deleteS1").addClassList(cl));
+        Student s2 = rwDAO.create(factory.newStudent(deleteUser1).setFirstName("deleteS2").setLastName("deleteS2").addClassList(cl));
+        Photo p = rwDAO.create(factory.newPhoto(deleteUser1).setPhotoFor(cl).setDescription("deletePhoto"));
+        Observation o = rwDAO.create(factory.newObservation(deleteUser1).setObservationSubject(cl).setObservationTimestamp(new LocalDateTime()).addCategories(deleteCategories).setComment("delete"));
+        Map<String, Class<? extends IdObject>> idMap = new HashMap<>();
+        idMap.put(deleteUser1.getId(), AppUser.class);
+        idMap.put(deleteUser2.getId(), AppUser.class);
+        idMap.put(cl.getId(), ClassList.class);
+        idMap.put(s1.getId(), Student.class);
+        idMap.put(s2.getId(), Student.class);
+        idMap.put(p.getId(), Photo.class);
+        idMap.put(o.getId(), Observation.class);
+        for(ObservationCategory oc : deleteCategories) {
+            idMap.put(oc.getId(), ObservationCategory.class);
+        }
 
-    private Observation createObservation(final AppUser appUser, final Collection<ObservationCategory> ocs, final String comment, final AppUserOwnedObject observationFor) {
-        Observation o = objectFactory.newObservation(appUser)
-                .setNeedsFollowUp(false)
-                .setObservationTimestamp(new LocalDateTime())
-                .addCategories(ocs)
-                .setComment(comment)
-                .setObservationSubject(observationFor);
-        return readWriteDAO.create(o);
-    }
+        rwDAO.deleteUsers(Arrays.<AppUser>asList(deleteUser1, deleteUser2));
 
-    private ObservationCategory createOC(final AppUser appuser, final String shortCode, final String description) {
-        ObservationCategory oc = objectFactory.newObservationCategory(appuser).setShortName(shortCode).setDescription(description);
-        return readWriteDAO.create(oc);
+        for(Map.Entry<String, Class<? extends IdObject>> entry : idMap.entrySet()) {
+            assertNull(rwDAO.get(entry.getValue(), entry.getKey()));
+        }
     }
-
 }

@@ -17,7 +17,6 @@ public interface Student extends ArchivableAppUserOwnedObject {
 
     public static final String STUDENT_CLASS_LISTS_CANNOT_BE_NULL = "Student.classLists" + CANNOT_BE_NULL_ERROR;
     public static final String STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL = "Student.classLists" + CANNOT_CONTAIN_NULL_ERROR;
-    public static final String STUDENT_CLASS_LIST_SIZE_ERROR = "Student.classLists must contain at least one entry";
     public static final String STUDENT_FIRST_NAME_CANNOT_BE_NULL_OR_BLANK_ERROR = "Student.firstName" + CANNOT_BE_BLANK_OR_NULL_ERROR;
     public static final String STUDENT_FIRST_NAME_SIZE_ERROR = "Student.firstName" + NAME_SIZE_ERROR;
     public static final String STUDENT_LAST_NAME_CANNOT_BE_NULL_ERROR = "Student.lastName" + CANNOT_BE_NULL_ERROR;
@@ -25,8 +24,6 @@ public interface Student extends ArchivableAppUserOwnedObject {
 
     @NotNull(message = STUDENT_CLASS_LISTS_CANNOT_BE_NULL)
     @NoNullsInCollectionCheck(message = STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL)
-    @Size(min = 1, message = STUDENT_CLASS_LIST_SIZE_ERROR)
-    //  TODO - revisit min size = probably not feasible since they could delete only class list a student was in
     Set<ClassList> getClassLists();
 
     @Transient
