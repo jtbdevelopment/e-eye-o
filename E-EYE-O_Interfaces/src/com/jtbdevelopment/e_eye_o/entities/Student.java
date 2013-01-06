@@ -26,6 +26,7 @@ public interface Student extends ArchivableAppUserOwnedObject {
     @NotNull(message = STUDENT_CLASS_LISTS_CANNOT_BE_NULL)
     @NoNullsInCollectionCheck(message = STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL)
     @Size(min = 1, message = STUDENT_CLASS_LIST_SIZE_ERROR)
+    //  TODO - revisit min size = probably not feasible since they could delete only class list a student was in
     Set<ClassList> getClassLists();
 
     @Transient
