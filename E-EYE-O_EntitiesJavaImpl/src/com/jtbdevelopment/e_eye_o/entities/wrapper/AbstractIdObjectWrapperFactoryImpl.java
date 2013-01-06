@@ -1,8 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.wrapper;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,7 +8,6 @@ import java.security.InvalidParameterException;
 import java.util.*;
 
 public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
-    private final Logger logger = LoggerFactory.getLogger(AbstractIdObjectWrapperFactoryImpl.class);
     private final Map<Class<? extends IdObject>, Class<? extends IdObject>> entityToWrapperMap = new HashMap<>();
     private final Map<Class<? extends IdObject>, Class<? extends IdObject>> wrapperToEntityMap = new HashMap<>();
     private final Class<? extends IdObjectWrapper> baseClass;
@@ -24,7 +21,7 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
     }
 
     protected <T extends IdObject, W extends T> void addMapping(final Class<T> entity, final Class<W> wrapper) {
-        if(!baseClass.isAssignableFrom(wrapper)) {
+        if (!baseClass.isAssignableFrom(wrapper)) {
             throw new IllegalArgumentException("wrapper class of " + wrapper.getSimpleName() + " must be subclass of " + baseClass.getSimpleName());
         }
         final Class<W> idObjectInterfaceForWrapper = getIdObjectInterfaceForClass(wrapper);
@@ -54,12 +51,12 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
 
     @Override
     public <T extends IdObject, C extends Collection<T>> C wrap(final C entities) {
-        if(entities == null) {
+        if (entities == null) {
             return entities;
         }
 
         C newCollection = newCollectionFor(entities);
-        //  TODO - might be more efficient to get constructor once but probably not an issue for now
+        //  TODO - more efficient to get constructor once but probably not an issue for now
         for (T entity : entities) {
             newCollection.add(wrap(entity));
         }
@@ -87,8 +84,7 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         if (entities instanceof Set) {
             return (C) new HashSet<T>(entities.size());
         }
-        logger.warn("Don't know how to construct collection of " + entities.getClass().getSimpleName());
-        throw new RuntimeException("Couldn't instantiate new collection");
+        throw new RuntimeException("Don't know how to construct collection of " + entities.getClass().getSimpleName());
     }
 
     @SuppressWarnings("unchecked")
@@ -116,8 +112,7 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         try {
             return constructor.newInstance(entityToWrap);
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            logger.warn("Could not instantiate new wrapper for " + constructor.getClass().getSimpleName() + " with exception", e);
-            throw new RuntimeException("Couldn't instantiate new wrapper");
+            throw new RuntimeException("Could not instantiate new wrapper for " + constructor.getClass().getSimpleName() + " with exception", e);
         }
     }
 

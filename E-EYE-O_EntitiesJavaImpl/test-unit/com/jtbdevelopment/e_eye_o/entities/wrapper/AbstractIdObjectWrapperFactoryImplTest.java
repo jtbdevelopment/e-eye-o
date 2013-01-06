@@ -1,13 +1,14 @@
 package com.jtbdevelopment.e_eye_o.entities.wrapper;
 
+import com.google.common.collect.LinkedHashMultiset;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImpl;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import static org.testng.AssertJUnit.*;
 
@@ -16,17 +17,12 @@ import static org.testng.AssertJUnit.*;
  * Time: 1:34 PM
  */
 public class AbstractIdObjectWrapperFactoryImplTest {
+    public static int idCounter = 0;
+
     public static interface LocalSomeIdObject extends IdObject {
-        IdObject getSomeVariable();
-
-        LocalSomeIdObject setSomeVariable(final IdObject someVariable);
-
-        Set<IdObject> getSomeCollection();
-
-        LocalSomeIdObject setSomeCollection(final Set<IdObject> someCollection);
     }
 
-    public static class LocallAppUserImpl implements AppUser {
+    public static class LocalAppUserImpl implements AppUser {
         //  not necessary to implement anything just have something
         @Override
         public String getFirstName() {
@@ -78,43 +74,12 @@ public class AbstractIdObjectWrapperFactoryImplTest {
             return null;
         }
     }
-    public static class LocalSomeIdObjectImpl implements LocalSomeIdObject {
-        private String id;
-        private IdObject someVariable;
-        private Set<IdObject> someCollection = new HashSet<>();
 
-        @Override
-        public String getId() {
-            return id;
-        }
+    //  Handy to extend IdObjectmpl to get equals/hash implementations
+    public static class LocalSomeIdObjectImpl extends IdObjectImpl implements LocalSomeIdObject {
 
-        @Override
-        public <T extends IdObject> T setId(final String id) {
-            this.id = id;
-            return (T) this;
-        }
-
-        @Override
-        public IdObject getSomeVariable() {
-            return someVariable;
-        }
-
-        @Override
-        public LocalSomeIdObject setSomeVariable(final IdObject someVariable) {
-            this.someVariable = someVariable;
-            return this;
-        }
-
-        @Override
-        public Set<IdObject> getSomeCollection() {
-            return someCollection;                // not worrying about non-modifiable like for real implementations
-        }
-
-        @Override
-        public LocalSomeIdObject setSomeCollection(final Set<IdObject> someCollection) {
-            this.someCollection.clear();
-            this.someCollection.addAll(someCollection);
-            return this;
+        public LocalSomeIdObjectImpl() {
+            setId("" + idCounter++);
         }
     }
 
@@ -146,31 +111,11 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         public LocalSomeIdObjectWrapper(final LocalSomeIdObject entityToWrap) {
             super(entityToWrap);
         }
-
-        @Override
-        public IdObject getSomeVariable() {
-            return wrapped.getSomeVariable();
-        }
-
-        @Override
-        public LocalSomeIdObject setSomeVariable(final IdObject someVariable) {
-            return wrapped.setSomeVariable(wrapperFactory.wrap(someVariable));
-        }
-
-        @Override
-        public Set<IdObject> getSomeCollection() {
-            return wrapped.getSomeCollection();
-        }
-
-        @Override
-        public LocalSomeIdObject setSomeCollection(final Set<IdObject> someCollection) {
-            return wrapped.setSomeCollection(wrapperFactory.wrap(someCollection));
-        }
     }
 
     //  broken with no constructor that accepts wrapped
     public static class LocalBrokenNoCCSomeIdObjectWrapper extends LocalSomeIdObjectWrapper implements LocalSomeIdObject {
-        public  LocalBrokenNoCCSomeIdObjectWrapper() {
+        public LocalBrokenNoCCSomeIdObjectWrapper() {
             super(new LocalSomeIdObjectImpl());
         }
     }
@@ -183,7 +128,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
     }
 
-        //  Oddly defined to allow some bad injections
+    //  Oddly defined to allow some bad injections
     public static class SomeOtherWrapperClass implements IdObjectWrapper<IdObject>, LocalSomeIdObject {
         protected IdObject wrapped;
 
@@ -204,26 +149,6 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         @Override
         public <T extends IdObject> T setId(final String id) {
             return wrapped.setId(id);
-        }
-
-        @Override
-        public IdObject getSomeVariable() {
-            return ((LocalSomeIdObject)wrapped).getSomeVariable();
-        }
-
-        @Override
-        public LocalSomeIdObject setSomeVariable(final IdObject someVariable) {
-            return ((LocalSomeIdObject)wrapped).setSomeVariable(wrapperFactory.wrap(someVariable));
-        }
-
-        @Override
-        public Set<IdObject> getSomeCollection() {
-            return ((LocalSomeIdObject)wrapped).getSomeCollection();
-        }
-
-        @Override
-        public LocalSomeIdObject setSomeCollection(final Set<IdObject> someCollection) {
-            return ((LocalSomeIdObject)wrapped).setSomeCollection(wrapperFactory.wrap(someCollection));
         }
     }
 
@@ -310,25 +235,25 @@ public class AbstractIdObjectWrapperFactoryImplTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testWrapBlowsUpOnOtherWrapperWithInconsistentWrapped() {
         //  forcing a bad cast
-        SomeOtherWrapperClass badWrapper = new SomeOtherWrapperClass(new LocallAppUserImpl());
+        SomeOtherWrapperClass badWrapper = new SomeOtherWrapperClass(new LocalAppUserImpl());
         wrapperFactory.wrap(badWrapper);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testWrapBlowsUpWhenUnderlyingInterfaceIsUnknown() {
-        wrapperFactory.wrap(new LocallAppUserImpl());
+        wrapperFactory.wrap(new LocalAppUserImpl());
     }
 
     @Test(expectedExceptions = RuntimeException.class)
     public void testWrapBlowsUpIfWrapperHasNoCopyConstructor() {
-        LocalIdObjectWrapperFactory factory= new LocalIdObjectWrapperFactory();
+        LocalIdObjectWrapperFactory factory = new LocalIdObjectWrapperFactory();
         factory.addMapping(LocalSomeIdObject.class, LocalBrokenNoCCSomeIdObjectWrapper.class);
         factory.wrap(new LocalSomeIdObjectImpl());
     }
 
     @Test(expectedExceptions = RuntimeException.class)
     public void testWrapBlowsUpIfWrapperHasNoPublicCopyConstructor() {
-        LocalIdObjectWrapperFactory factory= new LocalIdObjectWrapperFactory();
+        LocalIdObjectWrapperFactory factory = new LocalIdObjectWrapperFactory();
         factory.addMapping(LocalSomeIdObject.class, LocalBrokenNoPublicCSomeIdObjectWrapper.class);
         factory.wrap(new LocalSomeIdObjectImpl());
     }
@@ -339,10 +264,130 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         assertNull(wrapperFactory.wrap((Collection) null));
     }
 
+    @Test
+    public void testCollectionReturnedTypes() {
+        List returnList = wrapperFactory.wrap(new LinkedList<LocalSomeIdObject>());
+        assertTrue(returnList instanceof ArrayList);
+        Set returnSet = wrapperFactory.wrap(new ConcurrentSkipListSet<LocalSomeIdObject>());
+        assertTrue(returnSet instanceof HashSet);
+    }
 
     @Test
-    public void testWrapCollection() throws Exception {
+    public void testCollectionBlowsUpOnUnsupportedCollection() {
+        List<Collection<LocalSomeIdObject>> collections = Arrays.<Collection<LocalSomeIdObject>>asList(
+                new ArrayDeque<LocalSomeIdObject>(),
+                LinkedHashMultiset.<LocalSomeIdObject>create()
+        );
+        for (Collection<LocalSomeIdObject> c : collections) {
+            boolean exception = false;
+            try {
+                wrapperFactory.wrap(c);
+            } catch (RuntimeException e) {
+                exception = true;
+                assertEquals("Don't know how to construct collection of " + c.getClass().getSimpleName(), e.getMessage());
+            }
+            assertTrue("Should have had exception", exception);
+        }
+    }
 
+    @Test
+    public void testWrapCollectionImplsSupportedCollections() throws Exception {
+        Set<LocalSomeIdObject> original = new HashSet<>();
+        for (int i = 0; i < 5; ++i) {
+            original.add(new LocalSomeIdObjectImpl());
+        }
+
+        final ArrayList<LocalSomeIdObject> listInput = new ArrayList<>(original);
+        List<LocalSomeIdObject> listOutput = wrapperFactory.wrap(listInput);
+        assertFalse(listOutput == listInput);
+        assertEquals(original.size(), listOutput.size());
+        List<LocalSomeIdObject> listWrapped = new ArrayList<>();
+        for (LocalSomeIdObject returned : listOutput) {
+            assertTrue(returned instanceof LocalSomeIdObjectWrapper);
+            listWrapped.add(((LocalSomeIdObjectWrapper) returned).getWrapped());
+        }
+        assertTrue(listWrapped.containsAll(original));
+        assertTrue(original.containsAll(listWrapped));
+
+        final HashSet<LocalSomeIdObject> setInput = new HashSet<>(original);
+        Set<LocalSomeIdObject> setOutput = wrapperFactory.wrap(setInput);
+        assertFalse(setOutput == setInput);
+        assertEquals(original.size(), setOutput.size());
+        List<LocalSomeIdObject> setWrapped = new ArrayList<>();
+        for (LocalSomeIdObject returned : setOutput) {
+            assertTrue(returned instanceof LocalSomeIdObjectWrapper);
+            setWrapped.add(((LocalSomeIdObjectWrapper) returned).getWrapped());
+        }
+        assertTrue(setWrapped.containsAll(original));
+        assertTrue(original.containsAll(setWrapped));
+    }
+
+    @Test
+    public void testWrapCollectionOtherWrappedSupportedCollections() throws Exception {
+        Set<LocalSomeIdObject> originalImpl = new HashSet<>();
+        for (int i = 0; i < 5; ++i) {
+            originalImpl.add(new LocalSomeIdObjectImpl());
+        }
+        Set<LocalSomeIdObject> originalOther = new HashSet<>();
+        for (LocalSomeIdObject impl : originalImpl) {
+            originalOther.add(new SomeOtherWrapperClass(impl));
+        }
+
+        final ArrayList<LocalSomeIdObject> listInput = new ArrayList<>(originalOther);
+        List<LocalSomeIdObject> listOutput = wrapperFactory.wrap(listInput);
+        assertFalse(listOutput == listInput);
+        assertEquals(originalImpl.size(), listOutput.size());
+        List<LocalSomeIdObject> listWrapped = new ArrayList<>();
+        for (LocalSomeIdObject returned : listOutput) {
+            assertTrue(returned instanceof LocalSomeIdObjectWrapper);
+            listWrapped.add(((LocalSomeIdObjectWrapper) returned).getWrapped());
+        }
+        assertTrue(listWrapped.containsAll(originalImpl));
+        assertTrue(originalImpl.containsAll(listWrapped));
+
+        final HashSet<LocalSomeIdObject> setInput = new HashSet<>(originalOther);
+        Set<LocalSomeIdObject> setOutput = wrapperFactory.wrap(setInput);
+        assertFalse(setOutput == setInput);
+        assertEquals(originalImpl.size(), setOutput.size());
+        List<LocalSomeIdObject> setWrapped = new ArrayList<>();
+        for (LocalSomeIdObject returned : setOutput) {
+            assertTrue(returned instanceof LocalSomeIdObjectWrapper);
+            setWrapped.add(((LocalSomeIdObjectWrapper) returned).getWrapped());
+        }
+        assertTrue(setWrapped.containsAll(originalImpl));
+        assertTrue(originalImpl.containsAll(setWrapped));
+    }
+
+    @Test
+    public void testWrapCollectionAlreadyWrappedSupportedCollections() throws Exception {
+        Set<LocalSomeIdObject> originalImpl = new HashSet<>();
+        for (int i = 0; i < 5; ++i) {
+            originalImpl.add(new LocalSomeIdObjectImpl());
+        }
+        Set<LocalSomeIdObject> originalWrapped = new HashSet<>();
+        for (LocalSomeIdObject impl : originalImpl) {
+            originalWrapped.add(new LocalSomeIdObjectWrapper(impl));
+        }
+
+        final ArrayList<LocalSomeIdObject> listInput = new ArrayList<>(originalWrapped);
+        List<LocalSomeIdObject> listOutput = wrapperFactory.wrap(listInput);
+        assertFalse(listOutput == listInput);
+        assertEquals(originalImpl.size(), listOutput.size());
+        for (LocalSomeIdObject returned : listOutput) {
+            assertTrue(returned instanceof LocalSomeIdObjectWrapper);
+        }
+        assertTrue(listOutput.containsAll(originalWrapped));
+        assertTrue(originalWrapped.containsAll(listOutput));
+
+        final HashSet<LocalSomeIdObject> setInput = new HashSet<>(originalWrapped);
+        Set<LocalSomeIdObject> setOutput = wrapperFactory.wrap(setInput);
+        assertFalse(setOutput == setInput);
+        assertEquals(originalImpl.size(), setOutput.size());
+        for (LocalSomeIdObject returned : setOutput) {
+            assertTrue(returned instanceof LocalSomeIdObjectWrapper);
+        }
+        assertTrue(setOutput.containsAll(originalWrapped));
+        assertTrue(originalWrapped.containsAll(setOutput));
     }
 
     @Test
