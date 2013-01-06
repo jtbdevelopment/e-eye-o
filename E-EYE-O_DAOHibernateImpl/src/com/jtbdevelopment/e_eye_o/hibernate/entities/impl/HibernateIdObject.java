@@ -68,7 +68,7 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
     }
 
     private static IdObjectWrapperFactory getWrapperFactory() {
-        return HibernateFactoryContext.getHibernateFactory();
+        return HibernateFactoryContext.getDaoIdObjectWrapperFactory();
     }
 
     protected static <OO extends IdObject> OO wrap(OO entity) {

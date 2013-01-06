@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class HibernateFactoryContext implements ApplicationContextAware {
     private static IdObjectFactory implFactory;
-    private static DAOIdObjectWrapperFactory hibernateFactory;
+    private static DAOIdObjectWrapperFactory daoIdObjectWrapperFactory;
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         implFactory = applicationContext.getBean(IdObjectFactory.class);
-        hibernateFactory = applicationContext.getBean(DAOIdObjectWrapperFactory.class);
+        daoIdObjectWrapperFactory = applicationContext.getBean(DAOIdObjectWrapperFactory.class);
     }
 
     public static IdObjectFactory getImplFactory() {
@@ -27,7 +27,7 @@ public class HibernateFactoryContext implements ApplicationContextAware {
     }
 
 
-    public static DAOIdObjectWrapperFactory getHibernateFactory() {
-        return hibernateFactory;
+    public static DAOIdObjectWrapperFactory getDaoIdObjectWrapperFactory() {
+        return daoIdObjectWrapperFactory;
     }
 }
