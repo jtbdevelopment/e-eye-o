@@ -20,20 +20,23 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         return !(baseClass.isAssignableFrom(entity.getClass()));
     }
 
-    protected <T extends IdObject, W extends T> void addMapping(final Class<T> entity, final Class<W> wrapper) {
-        if (!baseClass.isAssignableFrom(wrapper)) {
-            throw new IllegalArgumentException("wrapper class of " + wrapper.getSimpleName() + " must be subclass of " + baseClass.getSimpleName());
+    protected <T extends IdObject, W extends T> void addMapping(final Class<T> entityType, final Class<W> wrapperType) {
+        if( !entityType.isInterface() ) {
+            throw new IllegalArgumentException("entityType should be interface not " + entityType.getSimpleName());
         }
-        final Class<W> idObjectInterfaceForWrapper = getIdObjectInterfaceForClass(wrapper);
-        if (!entity.equals(idObjectInterfaceForWrapper)) {
+        if (!baseClass.isAssignableFrom(wrapperType)) {
+            throw new IllegalArgumentException("wrapperType class of " + wrapperType.getSimpleName() + " must be subclass of " + baseClass.getSimpleName());
+        }
+        final Class<W> idObjectInterfaceForWrapper = getIdObjectInterfaceForClass(wrapperType);
+        if (!entityType.equals(idObjectInterfaceForWrapper)) {
             throw new IllegalArgumentException(
-                    "entity and wrapper should implement same IdObject interface entity = "
-                            + entity.getSimpleName()
-                            + ", wrapper = "
+                    "entityType and wrapperType should implement same IdObject interface entityType = "
+                            + entityType.getSimpleName()
+                            + ", wrapperType = "
                             + idObjectInterfaceForWrapper.getSimpleName());
         }
-        entityToWrapperMap.put(entity, wrapper);
-        wrapperToEntityMap.put(wrapper, entity);
+        entityToWrapperMap.put(entityType, wrapperType);
+        wrapperToEntityMap.put(wrapperType, entityType);
     }
 
     @Override
@@ -93,14 +96,14 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
             IdObjectWrapper asWrapper = (IdObjectWrapper) entity;
             final IdObject wrapped = asWrapper.getWrapped();
             if (wrapped == null) {
-                throw new IllegalArgumentException("Cannot re-wrap a wrapper of " + entity.getClass().getSimpleName() + " with null for wrapped object");
+                throw new IllegalArgumentException("Cannot re-wrap a wrapperType of " + entity.getClass().getSimpleName() + " with null for wrapped object");
             }
             Class wrappedInterface = getIdObjectInterfaceForClass(wrapped.getClass());
             Class wrapperInterface = getIdObjectInterfaceForClass(entity.getClass());
             if (wrappedInterface.equals(wrapperInterface)) {
                 return (T) wrapped;
             } else {
-                throw new IllegalArgumentException("Mismatched wrapper to wrapped.  Wrapped = " + wrapped.getClass().getSimpleName() + ", wrapper = " + asWrapper.getClass().getSimpleName());
+                throw new IllegalArgumentException("Mismatched wrapperType to wrapped.  Wrapped = " + wrapped.getClass().getSimpleName() + ", wrapperType = " + asWrapper.getClass().getSimpleName());
             }
         } else {
             return entity;
@@ -112,7 +115,7 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         try {
             return constructor.newInstance(entityToWrap);
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException("Could not instantiate new wrapper for " + constructor.getClass().getSimpleName() + " with exception", e);
+            throw new RuntimeException("Could not instantiate new wrapperType for " + constructor.getClass().getSimpleName() + " with exception", e);
         }
     }
 
@@ -132,7 +135,7 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         if (entityToWrapperMap.containsKey(idObjectType)) {
             return (Class<T>) entityToWrapperMap.get(idObjectType);
         }
-        throw new InvalidParameterException("Not able to find wrapper mapping for " + idObjectType.getSimpleName());
+        throw new InvalidParameterException("Not able to find wrapperType mapping for " + idObjectType.getSimpleName());
     }
 
     @SuppressWarnings("unchecked")

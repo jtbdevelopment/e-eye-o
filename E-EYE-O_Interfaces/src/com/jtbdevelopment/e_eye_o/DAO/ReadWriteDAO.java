@@ -9,6 +9,10 @@ import java.util.Collection;
 /**
  * Date: 11/19/12
  * Time: 5:32 PM
+ *
+ * All create/update functions may return new instances of the save object
+ * Always use new object provided
+ *
  */
 public interface ReadWriteDAO extends ReadOnlyDAO {
     public <T extends IdObject> T create(final T entity);

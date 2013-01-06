@@ -2,8 +2,8 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBAppUser;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBIdObjectWrapperFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -25,7 +25,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadWriteDAO {
     @Autowired
-    public HibernateReadWriteDAO(final SessionFactory sessionFactory, final HDBIdObjectWrapperFactory wrapperFactory) {
+    public HibernateReadWriteDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory) {
         super(sessionFactory, wrapperFactory);
     }
 
@@ -45,19 +45,22 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     @Override
     public <T extends IdObject> Collection<T> create(final Collection<T> entities) {
+        Session session = sessionFactory.getCurrentSession();
+        Collection<T> cT =  wrapperFactory.wrap(entities);
         for (T entity : entities) {
-            entities.remove(entity);
-            entities.add(create(entity));
+            session.save(entity);
         }
-        return entities;
+        return cT;
     }
 
     @Override
     public <T extends IdObject> Collection<T> update(final Collection<T> entities) {
+        Session session = sessionFactory.getCurrentSession();
+        Collection<T> cT =  wrapperFactory.wrap(entities);
         for (T entity : entities) {
-            update(entity);
+            session.update(entity);
         }
-        return entities;
+        return cT;
     }
 
     //  TODO - mark delete and allow undelete

@@ -128,6 +128,11 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
     }
 
+    public static class LocalBrokenImplements extends LocalSomeIdObjectWrapper implements IdObject {
+        public LocalBrokenImplements() {
+            super(null);
+        }
+    }
     //  Oddly defined to allow some bad injections
     public static class SomeOtherWrapperClass implements IdObjectWrapper<IdObject>, LocalSomeIdObject {
         protected IdObject wrapped;
@@ -178,6 +183,12 @@ public class AbstractIdObjectWrapperFactoryImplTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddMappingBlowsUpWhenEntityIsNotInterface() throws Exception {
+        LocalIdObjectWrapperFactory testFactory = new LocalIdObjectWrapperFactory();
+        testFactory.addMapping(LocalSomeIdObjectWrapper.class, LocalSomeIdObjectWrapper.class);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddMappingBlowsUpWhenMappingNotOfWrapper() throws Exception {
         LocalIdObjectWrapperFactory testFactory = new LocalIdObjectWrapperFactory();
         testFactory.addMapping(LocalSomeIdObject.class, LocalSomeIdObjectImpl.class);
@@ -192,7 +203,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddMappingBlowsUpWhenClassesDontMatch() throws Exception {
         LocalIdObjectWrapperFactory testFactory = new LocalIdObjectWrapperFactory();
-        testFactory.addMapping(LocalIdObjectWrapper.class, LocalSomeIdObjectWrapper.class);
+        testFactory.addMapping(LocalSomeIdObject.class, LocalBrokenImplements.class);
     }
 
     @Test

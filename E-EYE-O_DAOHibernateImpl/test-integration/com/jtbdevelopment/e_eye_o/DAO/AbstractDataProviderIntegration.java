@@ -74,7 +74,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     public void testBeanValidationIsActive() {
         boolean exception = false;
         try {
-            AppUser user = createUser("", null, "INVALID_EMAIL");
+            createUser("", null, "INVALID_EMAIL");
         } catch (ConstraintViolationException e) {
             assertEquals(3, e.getConstraintViolations().size());
             logger.info(e.getMessage());

@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  * Date: 11/19/12
  * Time: 10:40 PM
  */
-@Entity(name = "Archivable")
+@Entity(name = "ArchivableAppUserOwnedObject")
 public abstract class HDBArchivableAppUserOwnedObject<T extends ArchivableAppUserOwnedObject> extends HDBAppUserOwnedObject<T> implements ArchivableAppUserOwnedObject {
     protected HDBArchivableAppUserOwnedObject() {
         super();

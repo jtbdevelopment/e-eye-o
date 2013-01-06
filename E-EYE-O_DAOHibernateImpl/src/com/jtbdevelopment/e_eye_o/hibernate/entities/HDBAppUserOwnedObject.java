@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
  * Date: 11/19/12
  * Time: 10:21 PM
  */
-@Entity(name = "OwnedObject")
+@Entity(name = "AppUserOwnedObject")
 public abstract class HDBAppUserOwnedObject<T extends AppUserOwnedObject> extends HDBIdObject<T> implements AppUserOwnedObject {
     protected HDBAppUserOwnedObject() {
     }
