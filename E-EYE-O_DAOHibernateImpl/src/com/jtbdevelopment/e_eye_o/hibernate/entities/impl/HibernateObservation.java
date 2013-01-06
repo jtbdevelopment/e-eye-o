@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities;
+package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
@@ -15,18 +15,18 @@ import java.util.Set;
  * Time: 7:26 PM
  */
 @Entity(name = "Observation")
-public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation> implements Observation {
+public class HibernateObservation extends HibernateArchivableAppUserOwnedObject<Observation> implements Observation {
     @SuppressWarnings("unused")
-    protected HDBObservation() {
+    protected HibernateObservation() {
         super();
     }
 
-    public HDBObservation(final Observation observation) {
+    public HibernateObservation(final Observation observation) {
         super(observation);
     }
 
     @Override
-    @ManyToOne(targetEntity = HDBAppUserOwnedObject.class, optional = false)
+    @ManyToOne(targetEntity = HibernateAppUserOwnedObject.class, optional = false)
     public AppUserOwnedObject getObservationSubject() {
         return getWrapped().getObservationSubject();
     }
@@ -84,7 +84,7 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
-    @OneToOne(targetEntity = HDBObservation.class)
+    @OneToOne(targetEntity = HibernateObservation.class)
     public Observation getFollowUpObservation() {
         return getWrapped().getFollowUpObservation();
     }
@@ -96,7 +96,7 @@ public class HDBObservation extends HDBArchivableAppUserOwnedObject<Observation>
     }
 
     @Override
-    @ManyToMany(targetEntity = HDBObservationCategory.class)
+    @ManyToMany(targetEntity = HibernateObservationCategory.class)
     public Set<ObservationCategory> getCategories() {
         return getWrapped().getCategories();
     }

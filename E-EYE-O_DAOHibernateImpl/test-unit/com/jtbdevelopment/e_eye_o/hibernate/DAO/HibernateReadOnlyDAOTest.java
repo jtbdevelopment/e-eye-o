@@ -4,7 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ArchivableAppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.impl.ArchivableAppUserOwnedObjectImpl;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.HDBArchivableAppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateArchivableAppUserOwnedObject;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -40,8 +40,8 @@ public class HibernateReadOnlyDAOTest {
     private static class LocalImpl extends ArchivableAppUserOwnedObjectImpl implements LocalInterface {
     }
 
-    private static class HDBWrapper extends HDBArchivableAppUserOwnedObject<LocalInterface> implements LocalInterface {
-        public HDBWrapper() {
+    private static class HibernateWrapper extends HibernateArchivableAppUserOwnedObject<LocalInterface> implements LocalInterface {
+        public HibernateWrapper() {
             super(new LocalImpl());
             setId("1");
         }
@@ -49,7 +49,7 @@ public class HibernateReadOnlyDAOTest {
 
     private static final String HQLNAME = "HQLNAME";
     private static final String SOMEID = "AnId";
-    private static final HDBWrapper A_WRAPPER = new HDBWrapper();
+    private static final HibernateWrapper A_WRAPPER = new HibernateWrapper();
 
     @BeforeMethod
     public void initializeMockery() {
@@ -63,10 +63,10 @@ public class HibernateReadOnlyDAOTest {
         dao = new HibernateReadOnlyDAO(sessionFactory, wrapperFactory);
         context.checking(new Expectations() {{
             allowing(wrapperFactory).getWrapperForEntity(LocalInterface.class);
-            will(returnValue(HDBWrapper.class));
-            allowing(wrapperFactory).getWrapperForEntity(HDBWrapper.class);
+            will(returnValue(HibernateWrapper.class));
+            allowing(wrapperFactory).getWrapperForEntity(HibernateWrapper.class);
             will(returnValue(null));
-            allowing(sessionFactory).getClassMetadata(HDBWrapper.class);
+            allowing(sessionFactory).getClassMetadata(HibernateWrapper.class);
             will(returnValue(hibernateData));
             allowing(hibernateData).getEntityName();
             will(returnValue(HQLNAME));
@@ -82,12 +82,12 @@ public class HibernateReadOnlyDAOTest {
             will(returnValue(A_WRAPPER));
         }});
         assertSame(A_WRAPPER, dao.get(LocalInterface.class, SOMEID));
-        assertSame(A_WRAPPER, dao.get(HDBWrapper.class, SOMEID));
+        assertSame(A_WRAPPER, dao.get(HibernateWrapper.class, SOMEID));
     }
 
     @Test
     public void testGetEntitiesForUser() throws Exception {
-        final List<HDBWrapper> result = Arrays.asList(A_WRAPPER);
+        final List<HibernateWrapper> result = Arrays.asList(A_WRAPPER);
         context.checking(new Expectations() {{
             allowing(session).createQuery("from " + HQLNAME + " where appUser = :user");
             will(returnValue(query));
@@ -95,7 +95,7 @@ public class HibernateReadOnlyDAOTest {
             allowing(query).list();
             will(returnValue(result));
         }});
-        for (Class<? extends LocalInterface> c : Arrays.asList(LocalInterface.class, HDBWrapper.class)) {
+        for (Class<? extends LocalInterface> c : Arrays.asList(LocalInterface.class, HibernateWrapper.class)) {
             Set entitiesForUser = dao.getEntitiesForUser(c, appUser);
             assertTrue(entitiesForUser.containsAll(result));
             assertTrue(result.containsAll(entitiesForUser));
@@ -114,7 +114,7 @@ public class HibernateReadOnlyDAOTest {
     }
 
     private void testGetArchivableEntitiesForUser(final boolean archived) {
-        final List<HDBWrapper> result = Arrays.asList(A_WRAPPER);
+        final List<HibernateWrapper> result = Arrays.asList(A_WRAPPER);
         context.checking(new Expectations() {{
             allowing(session).createQuery("from " + HQLNAME + " where appUser = :user and archived = :archived");
             will(returnValue(query));
@@ -123,7 +123,7 @@ public class HibernateReadOnlyDAOTest {
             allowing(query).list();
             will(returnValue(result));
         }});
-        for (Class<? extends LocalInterface> c : Arrays.asList(LocalInterface.class, HDBWrapper.class)) {
+        for (Class<? extends LocalInterface> c : Arrays.asList(LocalInterface.class, HibernateWrapper.class)) {
             Set entitiesForUser = archived ? dao.getArchivedEntitiesForUser(c, appUser) : dao.getActiveEntitiesForUser(c, appUser);
             assertTrue(entitiesForUser.containsAll(result));
             assertTrue(result.containsAll(entitiesForUser));
@@ -139,7 +139,7 @@ public class HibernateReadOnlyDAOTest {
 
     @Test
     public void testGetHibernateEntityNameWhereFactoryDoesNotProvidesMapping() throws Exception {
-        assertEquals(HQLNAME, dao.getHibernateEntityName(HDBWrapper.class));
+        assertEquals(HQLNAME, dao.getHibernateEntityName(HibernateWrapper.class));
     }
 
     @Test(expectedExceptions = NullPointerException.class)

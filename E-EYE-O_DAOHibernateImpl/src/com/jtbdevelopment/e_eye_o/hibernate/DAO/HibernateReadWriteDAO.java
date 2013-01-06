@@ -29,16 +29,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     @Override
     public <T extends IdObject> T create(final T entity) {
-        final T t = wrapperFactory.wrap(entity);
-        sessionFactory.getCurrentSession().save(t);
-        return t;
-    }
-
-    @Override
-    public <T extends IdObject> T update(final T entity) {
-        final T t = wrapperFactory.wrap(entity);
-        sessionFactory.getCurrentSession().update(t);
-        return t;
+        final T wrapped = wrapperFactory.wrap(entity);
+        sessionFactory.getCurrentSession().save(wrapped);
+        return wrapped;
     }
 
     @Override
@@ -52,35 +45,42 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     }
 
     @Override
+    public <T extends IdObject> T update(final T entity) {
+        final T wrapped = wrapperFactory.wrap(entity);
+        sessionFactory.getCurrentSession().update(wrapped);
+        return wrapped;
+    }
+
+    @Override
     public <T extends IdObject> Collection<T> update(final Collection<T> entities) {
         Session session = sessionFactory.getCurrentSession();
-        Collection<T> wrappedCollection = wrapperFactory.wrap(entities);
-        for (T entity : wrappedCollection) {
+        Collection<T> wrappedEntities = wrapperFactory.wrap(entities);
+        for (T entity : wrappedEntities) {
             session.update(entity);
         }
-        return wrappedCollection;
+        return wrappedEntities;
     }
 
     //  TODO - mark delete and allow undelete
     @Override
-    public void deleteUser(final AppUser paramUser) {
+    public void deleteUser(final AppUser appUser) {
         Session currentSession = sessionFactory.getCurrentSession();
 
-        AppUser user = wrapperFactory.wrap(paramUser);
-        user = get(AppUser.class, user.getId());
-        if(user == null) {
+        AppUser wrapped = wrapperFactory.wrap(appUser);
+        wrapped = get(AppUser.class, wrapped.getId());
+        if(wrapped == null) {
             return;  //  Already deleted?
         }
 
-        Query query = currentSession.createQuery("from AppUserOwnedObject where appUser = :user");
-        query.setParameter("user", user);
+        Query query = currentSession.createQuery("from AppUserOwnedObject where appUser = :appUser");
+        query.setParameter("appUser", wrapped);
         delete((List<AppUserOwnedObject>) query.list());
 
-        currentSession.delete(user);
+        currentSession.delete(wrapped);
     }
 
     @Override
-    public void deleteUsers(final Iterable<AppUser> users) {
+    public void deleteUsers(final Collection<AppUser> users) {
         for (AppUser user : users) {
             deleteUser(user);
         }
@@ -88,41 +88,41 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     //  TODO - mark delete and allow undelete
     @Override
-    public <T extends AppUserOwnedObject> void delete(final T paramEntity) {
+    public <T extends AppUserOwnedObject> void delete(final T entity) {
         Session currentSession = sessionFactory.getCurrentSession();
 
-        T entity = wrapperFactory.wrap(paramEntity);
-        entity = (T) get(entity.getClass(), entity.getId());
-        if(entity == null) {
+        T wrapped = wrapperFactory.wrap(entity);
+        wrapped = (T) get(wrapped.getClass(), wrapped.getId());
+        if(wrapped == null) {
             //  Already deleted
             return;
         }
 
-        if (entity instanceof ObservationCategory) {
+        if (wrapped instanceof ObservationCategory) {
             Query query = currentSession.createQuery("from Observation as O where :category member of O.categories");
-            query.setParameter("category", entity);
+            query.setParameter("category", wrapped);
             for (Observation observation : (List<Observation>) query.list()) {
-                observation.removeCategory((ObservationCategory) entity);
+                observation.removeCategory((ObservationCategory) wrapped);
                 currentSession.update(observation);
             }
-        } else if ( entity instanceof ClassList) {
+        } else if ( wrapped instanceof ClassList) {
             Query query = currentSession.createQuery("from Student as S where :classList member of S.classLists");
-            query.setParameter("classList", entity);
+            query.setParameter("classList", wrapped);
             for (Student student : (List<Student>) query.list()) {
-                student.removeClassList((ClassList) entity);
+                student.removeClassList((ClassList) wrapped);
                 currentSession.update(student);
             }
         }
-        if (entity instanceof AppUserOwnedObject) {
+        if (wrapped instanceof AppUserOwnedObject) {
             Query query = currentSession.createQuery("from Photo where photoFor = :photoFor");
-            query.setParameter("photoFor", entity);
+            query.setParameter("photoFor", wrapped);
             delete((List<Photo>)query.list());
             query = currentSession.createQuery("from Observation where observationSubject = :observationSubject");
-            query.setParameter("observationSubject", entity);
+            query.setParameter("observationSubject", wrapped);
             delete((List<Observation>)query.list());
         }
 
-        currentSession.delete(entity);
+        currentSession.delete(wrapped);
     }
 
     @Override

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * Time: 8:18 PM
  */
 @Service
-public class HDBFactoryContext implements ApplicationContextAware {
+public class HibernateFactoryContext implements ApplicationContextAware {
     private static IdObjectFactory implFactory;
     private static DAOIdObjectWrapperFactory hibernateFactory;
 

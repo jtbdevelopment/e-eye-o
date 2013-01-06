@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities;
+package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
@@ -14,14 +14,14 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity(name = "ObservationCategory")
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"appUserID", "shortName"}))
-public class HDBObservationCategory extends HDBAppUserOwnedObject<ObservationCategory> implements ObservationCategory {
+public class HibernateObservationCategory extends HibernateAppUserOwnedObject<ObservationCategory> implements ObservationCategory {
     @SuppressWarnings("unused")
-    protected HDBObservationCategory() {
+    protected HibernateObservationCategory() {
         super();
         //  For hibernate
     }
 
-    public HDBObservationCategory(final ObservationCategory observationCategory) {
+    public HibernateObservationCategory(final ObservationCategory observationCategory) {
         super(observationCategory);
     }
 

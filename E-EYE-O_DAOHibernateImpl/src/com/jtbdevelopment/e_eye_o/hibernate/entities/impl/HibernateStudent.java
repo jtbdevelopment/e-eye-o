@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities;
+package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Student;
@@ -15,19 +15,19 @@ import java.util.Set;
  * Time: 7:24 PM
  */
 @Entity(name = "Student")
-public class HDBStudent extends HDBArchivableAppUserOwnedObject<Student> implements Student {
+public class HibernateStudent extends HibernateArchivableAppUserOwnedObject<Student> implements Student {
     @SuppressWarnings("unused")
-    protected HDBStudent() {
+    protected HibernateStudent() {
         super();
         //  For hibernate
     }
 
-    public HDBStudent(final Student student) {
+    public HibernateStudent(final Student student) {
         super(student);
     }
 
     @Override
-    @ManyToMany(targetEntity = HDBClassList.class)
+    @ManyToMany(targetEntity = HibernateClassList.class)
     public Set<ClassList> getClassLists() {
         return getWrapped().getClassLists();
     }

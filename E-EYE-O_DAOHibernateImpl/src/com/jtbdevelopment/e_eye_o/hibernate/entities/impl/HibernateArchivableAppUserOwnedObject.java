@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities;
+package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.ArchivableAppUserOwnedObject;
 
@@ -10,12 +10,12 @@ import javax.persistence.Entity;
  * Time: 10:40 PM
  */
 @Entity(name = "ArchivableAppUserOwnedObject")
-public abstract class HDBArchivableAppUserOwnedObject<T extends ArchivableAppUserOwnedObject> extends HDBAppUserOwnedObject<T> implements ArchivableAppUserOwnedObject {
-    protected HDBArchivableAppUserOwnedObject() {
+public abstract class HibernateArchivableAppUserOwnedObject<T extends ArchivableAppUserOwnedObject> extends HibernateAppUserOwnedObject<T> implements ArchivableAppUserOwnedObject {
+    protected HibernateArchivableAppUserOwnedObject() {
         super();
     }
 
-    protected HDBArchivableAppUserOwnedObject(final T wrapped) {
+    protected HibernateArchivableAppUserOwnedObject(final T wrapped) {
         super(wrapped);
     }
 

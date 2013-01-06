@@ -17,15 +17,15 @@ import java.util.Collection;
 public interface ReadWriteDAO extends ReadOnlyDAO {
     public <T extends IdObject> T create(final T entity);
 
-    public <T extends IdObject> T update(final T entity);
-
     public <T extends IdObject> Collection<T> create(final Collection<T> entities);
+
+    public <T extends IdObject> T update(final T entity);
 
     public <T extends IdObject> Collection<T> update(final Collection<T> entities);
 
     public void deleteUser(final AppUser user);
 
-    public void deleteUsers(final Iterable<AppUser> users);
+    public void deleteUsers(final Collection<AppUser> users);
 
     public <T extends AppUserOwnedObject> void delete(final T entity);
 

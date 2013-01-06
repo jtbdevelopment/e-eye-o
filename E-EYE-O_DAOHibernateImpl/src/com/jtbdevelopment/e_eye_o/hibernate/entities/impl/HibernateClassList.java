@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities;
+package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 
@@ -10,13 +10,13 @@ import javax.persistence.Entity;
  * Time: 2:05 PM
  */
 @Entity(name = "ClassList")
-public class HDBClassList extends HDBArchivableAppUserOwnedObject<ClassList> implements ClassList {
+public class HibernateClassList extends HibernateArchivableAppUserOwnedObject<ClassList> implements ClassList {
     @SuppressWarnings("unused")
-    protected HDBClassList() {
+    protected HibernateClassList() {
         super();
     }
 
-    public HDBClassList(final ClassList classList) {
+    public HibernateClassList(final ClassList classList) {
         super(classList);
     }
 

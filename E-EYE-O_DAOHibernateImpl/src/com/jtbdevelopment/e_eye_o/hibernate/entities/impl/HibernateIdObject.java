@@ -1,10 +1,10 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities;
+package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.helpers.HDBFactoryContext;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.helpers.HibernateFactoryContext;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -16,15 +16,16 @@ import java.util.Collection;
  */
 @Entity(name = "IdObject")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper<T>, IdObject {
+public abstract class HibernateIdObject<T extends IdObject> implements IdObjectWrapper<T>, IdObject {
     private T wrapped;
 
-    protected HDBIdObject() {
+    protected HibernateIdObject() {
     }
 
-    public HDBIdObject(final T wrapped) {
+    @SuppressWarnings("unchecked")
+    public HibernateIdObject(final T wrapped) {
         if (wrapped instanceof IdObjectWrapper) {
-            this.wrapped = (T) ((IdObjectWrapper) wrapped).getWrapped();
+            this.wrapped = ((IdObjectWrapper<T>) wrapped).getWrapped();
         } else {
             this.wrapped = wrapped;
         }
@@ -32,6 +33,7 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
 
     @Override
     @Transient
+    @SuppressWarnings("unchecked")
     public T getWrapped() {
         if (wrapped != null) return wrapped;
         wrapped = (T) getImplFactory().newIdObject(getWrapperFactory().getEntityForWrapper(getClass()));
@@ -59,14 +61,14 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
         return getWrapped().getId();
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unchecked")
     public T setId(final String id) {
         getWrapped().setId(id);
         return (T) this;
     }
 
     private static IdObjectWrapperFactory getWrapperFactory() {
-        return HDBFactoryContext.getHibernateFactory();
+        return HibernateFactoryContext.getHibernateFactory();
     }
 
     protected static <OO extends IdObject> OO wrap(OO entity) {
@@ -78,6 +80,6 @@ public abstract class HDBIdObject<T extends IdObject> implements IdObjectWrapper
     }
 
     private static IdObjectFactory getImplFactory() {
-        return HDBFactoryContext.getImplFactory();
+        return HibernateFactoryContext.getImplFactory();
     }
 }

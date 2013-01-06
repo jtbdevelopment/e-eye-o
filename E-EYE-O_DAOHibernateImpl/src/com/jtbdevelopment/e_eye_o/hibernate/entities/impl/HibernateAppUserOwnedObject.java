@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities;
+package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
@@ -11,16 +11,16 @@ import javax.persistence.ManyToOne;
  * Time: 10:21 PM
  */
 @Entity(name = "AppUserOwnedObject")
-public abstract class HDBAppUserOwnedObject<T extends AppUserOwnedObject> extends HDBIdObject<T> implements AppUserOwnedObject {
-    protected HDBAppUserOwnedObject() {
+public abstract class HibernateAppUserOwnedObject<T extends AppUserOwnedObject> extends HibernateIdObject<T> implements AppUserOwnedObject {
+    protected HibernateAppUserOwnedObject() {
     }
 
-    protected HDBAppUserOwnedObject(final T appUserOwnedObject) {
+    protected HibernateAppUserOwnedObject(final T appUserOwnedObject) {
         super(appUserOwnedObject);
     }
 
     @Override
-    @ManyToOne(targetEntity = HDBAppUser.class, optional = false)
+    @ManyToOne(targetEntity = HibernateAppUser.class, optional = false)
     public AppUser getAppUser() {
         return getWrapped().getAppUser();
     }

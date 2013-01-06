@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities;
+package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
@@ -13,19 +13,19 @@ import javax.persistence.ManyToOne;
  * Time: 12:56 AM
  */
 @Entity(name = "Photo")
-public class HDBPhoto extends HDBArchivableAppUserOwnedObject<Photo> implements Photo {
+public class HibernatePhoto extends HibernateArchivableAppUserOwnedObject<Photo> implements Photo {
     @SuppressWarnings("unused")
-    protected HDBPhoto() {
+    protected HibernatePhoto() {
         super();
         //  For hibernate
     }
 
-    public HDBPhoto(final Photo photo) {
+    public HibernatePhoto(final Photo photo) {
         super(photo);
     }
 
     @Override
-    @ManyToOne(targetEntity = HDBAppUserOwnedObject.class, optional = false)
+    @ManyToOne(targetEntity = HibernateAppUserOwnedObject.class, optional = false)
     public AppUserOwnedObject getPhotoFor() {
         return getWrapped().getPhotoFor();
     }

@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public interface ReadOnlyDAO {
 
-    public <T extends IdObject> T get(final Class<T> type, final String id);
+    public <T extends IdObject> T get(final Class<T> entityType, final String id);
 
     public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser);
 

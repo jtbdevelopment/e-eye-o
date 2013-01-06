@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities;
+package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import org.hibernate.annotations.Type;
@@ -12,12 +12,12 @@ import javax.persistence.Entity;
  * Time: 10:17 PM
  */
 @Entity(name = "AppUser")
-public class HDBAppUser extends HDBIdObject<AppUser> implements AppUser {
-    protected HDBAppUser() {
+public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppUser {
+    protected HibernateAppUser() {
         super();
     }
 
-    public HDBAppUser(final AppUser appUser) {
+    public HibernateAppUser(final AppUser appUser) {
         super(appUser);
     }
 
