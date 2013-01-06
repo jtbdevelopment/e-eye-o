@@ -5,7 +5,6 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -114,7 +113,7 @@ public class ConsistentAppUserValidatorTest {
 
     @BeforeMethod
     public void beforeTest() {
-        context = new JUnit4Mockery();
+        context = new Mockery();
         validatorContext = context.mock(ConstraintValidatorContext.class);
         builder = context.mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
         USER1 = context.mock(AppUser.class, "1");

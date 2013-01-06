@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.entities.validation;
 
 import com.sun.jmx.remote.internal.ArrayQueue;
 import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
 import org.testng.annotations.Test;
 
 import javax.validation.ConstraintValidatorContext;
@@ -20,7 +19,7 @@ import static org.testng.AssertJUnit.assertTrue;
 public class NoNullsInCollectionValidatorTest {
     public static final String STRING_1 = "String1";
     public static final String STRING_2 = "String2";
-    private final Mockery context = new JUnit4Mockery();
+    private final Mockery context = new Mockery();
     private final ConstraintValidatorContext validatorContext = context.mock(ConstraintValidatorContext.class);
     final private NoNullsInCollectionValidator check = new NoNullsInCollectionValidator();
 
