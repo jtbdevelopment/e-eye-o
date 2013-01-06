@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     @Override
     public <T extends IdObject> Collection<T> create(final Collection<T> entities) {
         Session session = sessionFactory.getCurrentSession();
-        Collection<T> cT =  wrapperFactory.wrap(entities);
+        Collection<T> cT = wrapperFactory.wrap(entities);
         for (T entity : entities) {
             session.save(entity);
         }
@@ -56,7 +55,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     @Override
     public <T extends IdObject> Collection<T> update(final Collection<T> entities) {
         Session session = sessionFactory.getCurrentSession();
-        Collection<T> cT =  wrapperFactory.wrap(entities);
+        Collection<T> cT = wrapperFactory.wrap(entities);
         for (T entity : entities) {
             session.update(entity);
         }
@@ -100,44 +99,12 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         T entity = wrapperFactory.wrap(paramEntity);
         Session currentSession = sessionFactory.getCurrentSession();
         Query query;
-        if (entity instanceof Student) {
-            query = currentSession.createQuery("from ClassList as CL where :student member of CL.students");
-            query.setParameter("student", entity);
-            for (ClassList classList : (List<ClassList>) query.list()) {
-//                classList.removeStudent((Student) entity);
-            }
-        } else if (entity instanceof Observation) {
-            query = currentSession.createQuery("from Student as S where :observation member of S.observations");
-            query.setParameter("observation", entity);
-            for (Student student : (List<Student>) query.list()) {
-//                student.removeObservation((Observation) entity);
-            }
-        } else if (entity instanceof ObservationCategory) {
+        if (entity instanceof ObservationCategory) {
             query = currentSession.createQuery("from Observation as O where :category member of O.categories");
             query.setParameter("category", entity);
             for (Observation observation : (List<Observation>) query.list()) {
                 observation.removeCategory((ObservationCategory) entity);
             }
-        } else if (entity instanceof Photo) {
-            query = currentSession.createQuery("from ClassList as CL where :photo member of CL.photos");
-            query.setParameter("photo", entity);
-            for (ClassList classList : (List<ClassList>) query.list()) {
-//                classList.removePhoto((Photo) entity);
-            }
-            query = currentSession.createQuery("from Observation as O where :photo member of O.photos");
-            query.setParameter("photo", entity);
-            for (Observation observation : (List<Observation>) query.list()) {
-//                observation.removePhoto((Photo) entity);
-            }
-            query = currentSession.createQuery("from Student where studentPhoto = :photo");
-            query.setParameter("photo", entity);
-            for (Student student : (List<Student>) query.list()) {
-                student.setStudentPhoto(null);
-            }
-        } else if (entity instanceof ClassList) {
-            //
-        } else {
-            throw new InvalidParameterException("Do not know how to delete type " + entity.getClass().getSimpleName());
         }
         currentSession.delete(entity);
     }

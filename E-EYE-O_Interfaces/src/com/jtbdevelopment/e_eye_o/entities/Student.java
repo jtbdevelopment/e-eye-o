@@ -54,8 +54,4 @@ public interface Student extends ArchivableAppUserOwnedObject {
     String getLastName();
 
     Student setLastName(final String lastName);
-
-    Photo getStudentPhoto();
-
-    Student setStudentPhoto(final Photo studentPhoto);
 }

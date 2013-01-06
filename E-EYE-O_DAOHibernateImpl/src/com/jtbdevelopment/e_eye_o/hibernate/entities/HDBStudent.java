@@ -1,10 +1,12 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 import java.util.Collection;
 import java.util.Set;
 
@@ -83,18 +85,6 @@ public class HDBStudent extends HDBArchivableAppUserOwnedObject<Student> impleme
     @Override
     public Student setLastName(final String lastName) {
         getWrapped().setLastName(lastName);
-        return this;
-    }
-
-    @Override
-    @OneToOne(targetEntity = HDBPhoto.class)
-    public Photo getStudentPhoto() {
-        return getWrapped().getStudentPhoto();
-    }
-
-    @Override
-    public Student setStudentPhoto(final Photo studentPhoto) {
-        getWrapped().setStudentPhoto(wrap(studentPhoto));
         return this;
     }
 }

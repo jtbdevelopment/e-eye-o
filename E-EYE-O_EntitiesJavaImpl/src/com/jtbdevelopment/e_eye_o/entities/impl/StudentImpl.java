@@ -4,7 +4,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 
 import java.util.Collection;
@@ -20,8 +19,6 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
     private String firstName = "";
     private String lastName = "";
     private Set<ClassList> classLists = new HashSet<>();
-    //  TODO - default stock photo
-    private Photo studentPhoto;
 
     StudentImpl() {
     }
@@ -101,22 +98,6 @@ public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Stu
     @Override
     public Student setLastName(final String lastName) {
         this.lastName = lastName;
-        return this;
-    }
-
-    @Override
-    public Photo getStudentPhoto() {
-        return studentPhoto;
-    }
-
-    @Override
-    public Student setStudentPhoto(final Photo studentPhoto) {
-        if (studentPhoto != null) {
-            this.studentPhoto = studentPhoto;
-        } else {
-            //  TODO - default stock photo
-            this.studentPhoto = null;
-        }
         return this;
     }
 }

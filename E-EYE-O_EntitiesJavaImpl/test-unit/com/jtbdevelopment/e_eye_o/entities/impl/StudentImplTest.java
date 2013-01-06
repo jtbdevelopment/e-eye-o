@@ -1,15 +1,12 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
-import com.jtbdevelopment.e_eye_o.entities.validation.ConsistentAppUserValidator;
 import org.testng.annotations.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -46,11 +43,6 @@ public class StudentImplTest extends AbstractAppUserOwnedObjectTest<StudentImpl>
     @Test
     public void testLastNameSize() throws Exception {
         checkStringSizeValidation("lastName", TOO_LONG_FOR_NAME, Student.STUDENT_LAST_NAME_SIZE_ERROR);
-    }
-
-    @Test
-    public void testDefaultPhoto() {
-        assertEquals(null, new StudentImpl().getStudentPhoto());
     }
 
     @Test
@@ -116,21 +108,5 @@ public class StudentImplTest extends AbstractAppUserOwnedObjectTest<StudentImpl>
         assertTrue(activeGet.containsAll(active));
         assertTrue(archived.containsAll(archivedGet));
         assertTrue(archivedGet.containsAll(archived));
-    }
-
-    @Test
-    public void testSetStudentPhoto() throws Exception {
-        Photo photo = new PhotoImpl(USER1);
-        StudentImpl student = new StudentImpl(USER1);
-        assertEquals(photo, student.setStudentPhoto(photo).getStudentPhoto());
-        assertEquals(null, student.setStudentPhoto(null).getStudentPhoto());
-    }
-
-    @Test
-    public void testSetStudentPhotoValidates() {
-        Photo photo = new PhotoImpl(USER2);
-        StudentImpl student = new StudentImpl(USER1);
-        student.setStudentPhoto(photo);
-        validateExpectingErrors(student, new String[]{ConsistentAppUserValidator.getSpecificErrorMessage(student, photo), ConsistentAppUserValidator.getGeneralErrorMessage(student)});
     }
 }
