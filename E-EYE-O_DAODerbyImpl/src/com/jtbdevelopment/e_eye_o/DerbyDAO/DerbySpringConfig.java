@@ -16,10 +16,10 @@ import java.util.Properties;
 @Configuration
 @ImportResource(value = "classpath*:spring-config.xml")
 public class DerbySpringConfig {
-    private final static String DEFAULT_DATABASE = "EEYEODB";
-    private final static String DATABASE_NAME = "derbyDatabaseName";
-    private final static String CREATE_FLAG = "derbyCreateDatabase";
-    private final static String DEFAULT_CREATE = "create";
+    public final static String DEFAULT_DATABASE = "EEYEODB";
+    public final static String DATABASE_NAME = "derbyDatabaseName";
+    public final static String CREATE_FLAG = "derbyCreateDatabase";
+    public final static String DEFAULT_CREATE = "create";
 
     @Bean
     public Properties derbyOverrideProperties() {
