@@ -5,7 +5,6 @@ import org.jmock.Mockery;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.sql.DataSource;
@@ -18,19 +17,10 @@ import static org.testng.AssertJUnit.*;
  * Time: 9:28 PM
  */
 public class HibernateDAOSpringConfigTest {
-    private HibernateDAOSpringConfig config;
-    private Mockery context;
-    private SessionFactory sessionFactory;
-    private DataSource dataSource;
-
-    @BeforeMethod
-    public void setUp() {
-        config = new HibernateDAOSpringConfig();
-        context = new Mockery();
-        sessionFactory = context.mock(SessionFactory.class);
-        dataSource = context.mock(DataSource.class);
-
-    }
+    private final HibernateDAOSpringConfig config = new HibernateDAOSpringConfig();
+    private final Mockery context = new Mockery();
+    private final SessionFactory sessionFactory = context.mock(SessionFactory.class);
+    private final DataSource dataSource = context.mock(DataSource.class);
 
     @Test
     public void testHibernateOverrideProperties() throws Exception {
