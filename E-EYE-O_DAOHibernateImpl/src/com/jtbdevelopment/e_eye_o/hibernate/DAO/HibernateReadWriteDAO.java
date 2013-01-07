@@ -105,7 +105,8 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 observation.removeCategory((ObservationCategory) wrapped);
                 currentSession.update(observation);
             }
-        } else if ( wrapped instanceof ClassList) {
+        }
+        if ( wrapped instanceof ClassList) {
             Query query = currentSession.createQuery("from Student as S where :classList member of S.classLists");
             query.setParameter("classList", wrapped);
             for (Student student : (List<Student>) query.list()) {
@@ -113,13 +114,25 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 currentSession.update(student);
             }
         }
+        if ( wrapped instanceof Observation) {
+            Query query = currentSession.createQuery("from Observation as O where followUpObservation = :followUpObservation");
+            query.setParameter("followUpObservation", wrapped);
+            for (Observation observation : (List<Observation>) query.list()) {
+                observation.setFollowUpObservation(null);
+                currentSession.update(observation);
+            }
+        }
         if (wrapped instanceof AppUserOwnedObject) {
             Query query = currentSession.createQuery("from Photo where photoFor = :photoFor");
             query.setParameter("photoFor", wrapped);
-            delete((List<Photo>)query.list());
+            for(Photo p : (List<Photo>)query.list()) {
+                currentSession.delete(p);
+            }
             query = currentSession.createQuery("from Observation where observationSubject = :observationSubject");
             query.setParameter("observationSubject", wrapped);
-            delete((List<Observation>)query.list());
+            for(Observation o : (List<Observation>)query.list()) {
+                currentSession.delete(o);
+            }
         }
 
         currentSession.delete(wrapped);
