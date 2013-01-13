@@ -14,12 +14,11 @@ import javax.persistence.ManyToOne;
  */
 @Entity(name = "Photo")
 public class HibernatePhoto extends HibernateArchivableAppUserOwnedObject<Photo> implements Photo {
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused")    // Hibernate
     protected HibernatePhoto() {
-        super();
-        //  For hibernate
     }
 
+    @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
     public HibernatePhoto(final Photo photo) {
         super(photo);
     }

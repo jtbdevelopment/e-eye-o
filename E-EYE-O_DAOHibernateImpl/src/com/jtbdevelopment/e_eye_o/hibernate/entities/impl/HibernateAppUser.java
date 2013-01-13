@@ -13,10 +13,11 @@ import javax.persistence.Entity;
  */
 @Entity(name = "AppUser")
 public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppUser {
+    @SuppressWarnings("unused")  //  Hibernate
     protected HibernateAppUser() {
-        super();
     }
 
+    @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
     public HibernateAppUser(final AppUser appUser) {
         super(appUser);
     }

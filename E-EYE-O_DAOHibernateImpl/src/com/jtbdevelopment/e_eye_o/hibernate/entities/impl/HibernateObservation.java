@@ -16,11 +16,11 @@ import java.util.Set;
  */
 @Entity(name = "Observation")
 public class HibernateObservation extends HibernateArchivableAppUserOwnedObject<Observation> implements Observation {
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused")    // Hibernate
     protected HibernateObservation() {
-        super();
     }
 
+    @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
     public HibernateObservation(final Observation observation) {
         super(observation);
     }

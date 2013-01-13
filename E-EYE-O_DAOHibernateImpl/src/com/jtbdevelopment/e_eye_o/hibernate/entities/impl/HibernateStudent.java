@@ -16,12 +16,11 @@ import java.util.Set;
  */
 @Entity(name = "Student")
 public class HibernateStudent extends HibernateArchivableAppUserOwnedObject<Student> implements Student {
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused")    // Hibernate
     protected HibernateStudent() {
-        super();
-        //  For hibernate
     }
 
+    @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
     public HibernateStudent(final Student student) {
         super(student);
     }

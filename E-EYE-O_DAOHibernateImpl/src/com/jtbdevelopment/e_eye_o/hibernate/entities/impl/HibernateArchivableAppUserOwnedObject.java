@@ -12,9 +12,9 @@ import javax.persistence.Entity;
 @Entity(name = "ArchivableAppUserOwnedObject")
 public abstract class HibernateArchivableAppUserOwnedObject<T extends ArchivableAppUserOwnedObject> extends HibernateAppUserOwnedObject<T> implements ArchivableAppUserOwnedObject {
     protected HibernateArchivableAppUserOwnedObject() {
-        super();
     }
 
+    @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
     protected HibernateArchivableAppUserOwnedObject(final T wrapped) {
         super(wrapped);
     }

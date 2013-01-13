@@ -22,7 +22,7 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
     protected HibernateIdObject() {
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
     public HibernateIdObject(final T wrapped) {
         if (wrapped instanceof IdObjectWrapper) {
             this.wrapped = ((IdObjectWrapper<T>) wrapped).getWrapped();

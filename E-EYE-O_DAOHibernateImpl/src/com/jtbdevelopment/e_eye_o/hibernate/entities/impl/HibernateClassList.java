@@ -11,11 +11,11 @@ import javax.persistence.Entity;
  */
 @Entity(name = "ClassList")
 public class HibernateClassList extends HibernateArchivableAppUserOwnedObject<ClassList> implements ClassList {
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused")    // Hibernate
     protected HibernateClassList() {
-        super();
     }
 
+    @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
     public HibernateClassList(final ClassList classList) {
         super(classList);
     }

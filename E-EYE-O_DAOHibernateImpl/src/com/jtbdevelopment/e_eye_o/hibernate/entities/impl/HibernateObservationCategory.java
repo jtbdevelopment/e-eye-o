@@ -15,12 +15,11 @@ import javax.persistence.UniqueConstraint;
 @Entity(name = "ObservationCategory")
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"appUserID", "shortName"}))
 public class HibernateObservationCategory extends HibernateAppUserOwnedObject<ObservationCategory> implements ObservationCategory {
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused")    // Hibernate
     protected HibernateObservationCategory() {
-        super();
-        //  For hibernate
     }
 
+    @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
     public HibernateObservationCategory(final ObservationCategory observationCategory) {
         super(observationCategory);
     }
