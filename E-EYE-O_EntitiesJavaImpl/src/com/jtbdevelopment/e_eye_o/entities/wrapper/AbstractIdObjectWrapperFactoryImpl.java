@@ -124,7 +124,9 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         Class<T> idObjectInterface = (Class<T>) getIdObjectInterfaceForClass(entity.getClass());
         Class<T> impl = getWrapperForInterface(idObjectInterface);
         try {
-            return impl.getConstructor(idObjectInterface);
+            final Constructor<T> declaredConstructor = impl.getDeclaredConstructor(idObjectInterface);
+            declaredConstructor.setAccessible(true);
+            return declaredConstructor;
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Not able to find constructor accepting " + idObjectInterface.getSimpleName(), e);
         }

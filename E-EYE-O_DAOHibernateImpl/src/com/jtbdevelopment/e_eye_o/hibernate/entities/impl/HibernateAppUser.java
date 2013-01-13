@@ -18,43 +18,43 @@ public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppU
     }
 
     @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
-    public HibernateAppUser(final AppUser appUser) {
+    protected HibernateAppUser(final AppUser appUser) {
         super(appUser);
     }
 
     @Override
     @Column(nullable = false, length = MAX_NAME_SIZE)
     public String getFirstName() {
-        return getWrapped().getFirstName();
+        return wrapped.getFirstName();
     }
 
     @Override
     public AppUser setFirstName(final String firstName) {
-        getWrapped().setFirstName(firstName);
+        wrapped.setFirstName(firstName);
         return this;
     }
 
     @Override
     @Column(length = MAX_NAME_SIZE)
     public String getLastName() {
-        return getWrapped().getLastName();
+        return wrapped.getLastName();
     }
 
     @Override
     public AppUser setLastName(final String lastName) {
-        getWrapped().setLastName(lastName);
+        wrapped.setLastName(lastName);
         return this;
     }
 
     @Override
     @Column(nullable = false, length = MAX_EMAIL_SIZE, unique = true)
     public String getEmailAddress() {
-        return getWrapped().getEmailAddress();
+        return wrapped.getEmailAddress();
     }
 
     @Override
     public AppUser setEmailAddress(final String emailAddress) {
-        getWrapped().setEmailAddress(emailAddress);
+        wrapped.setEmailAddress(emailAddress);
         return this;
     }
 
@@ -62,12 +62,12 @@ public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppU
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(nullable = false)
     public DateTime getLastLogin() {
-        return getWrapped().getLastLogin();
+        return wrapped.getLastLogin();
     }
 
     @Override
     public AppUser setLastLogin(final DateTime lastLogin) {
-        getWrapped().setLastLogin(lastLogin);
+        wrapped.setLastLogin(lastLogin);
         return this;
     }
 }

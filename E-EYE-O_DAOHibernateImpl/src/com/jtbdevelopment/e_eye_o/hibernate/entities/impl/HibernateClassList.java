@@ -16,19 +16,19 @@ public class HibernateClassList extends HibernateArchivableAppUserOwnedObject<Cl
     }
 
     @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
-    public HibernateClassList(final ClassList classList) {
+    protected HibernateClassList(final ClassList classList) {
         super(classList);
     }
 
     @Override
     @Column(nullable = false, length = ClassList.MAX_DESCRIPTION_SIZE)
     public String getDescription() {
-        return getWrapped().getDescription();
+        return wrapped.getDescription();
     }
 
     @Override
     public ClassList setDescription(final String description) {
-        getWrapped().setDescription(description);
+        wrapped.setDescription(description);
         return this;
     }
 }

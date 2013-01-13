@@ -21,69 +21,69 @@ public class HibernateStudent extends HibernateArchivableAppUserOwnedObject<Stud
     }
 
     @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
-    public HibernateStudent(final Student student) {
+    protected HibernateStudent(final Student student) {
         super(student);
     }
 
     @Override
     @ManyToMany(targetEntity = HibernateClassList.class)
     public Set<ClassList> getClassLists() {
-        return getWrapped().getClassLists();
+        return wrapped.getClassLists();
     }
 
     @Override
     @Transient
     public Set<ClassList> getActiveClassLists() {
-        return getWrapped().getActiveClassLists();
+        return wrapped.getActiveClassLists();
     }
 
     @Override
     @Transient
     public Set<ClassList> getArchivedClassLists() {
-        return getWrapped().getArchivedClassLists();
+        return wrapped.getArchivedClassLists();
     }
 
     @Override
     public Student setClassLists(final Set<ClassList> classLists) {
-        return getWrapped().setClassLists(wrap(classLists));
+        return wrapped.setClassLists(wrap(classLists));
     }
 
     @Override
     public Student addClassList(final ClassList classList) {
-        return getWrapped().addClassList(wrap(classList));
+        return wrapped.addClassList(wrap(classList));
     }
 
     @Override
     public Student addClassLists(final Collection<ClassList> classLists) {
-        return getWrapped().addClassLists(wrap(classLists));
+        return wrapped.addClassLists(wrap(classLists));
     }
 
     @Override
     public Student removeClassList(final ClassList classList) {
-        return getWrapped().removeClassList(wrap(classList));
+        return wrapped.removeClassList(wrap(classList));
     }
 
     @Override
     @Column(nullable = false, length = Student.MAX_NAME_SIZE)
     public String getFirstName() {
-        return getWrapped().getFirstName();
+        return wrapped.getFirstName();
     }
 
     @Override
     public Student setFirstName(String firstName) {
-        getWrapped().setFirstName(firstName);
+        wrapped.setFirstName(firstName);
         return this;
     }
 
     @Override
     @Column(length = Student.MAX_NAME_SIZE)
     public String getLastName() {
-        return getWrapped().getLastName();
+        return wrapped.getLastName();
     }
 
     @Override
     public Student setLastName(final String lastName) {
-        getWrapped().setLastName(lastName);
+        wrapped.setLastName(lastName);
         return this;
     }
 }

@@ -22,12 +22,13 @@ public abstract class HibernateArchivableAppUserOwnedObject<T extends Archivable
     @Override
     @Column(nullable = false)
     public boolean isArchived() {
-        return getWrapped().isArchived();
+        return wrapped.isArchived();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public T setArchived(final boolean archived) {
-        getWrapped().setArchived(archived);
+        wrapped.setArchived(archived);
         return (T) this;
     }
 }

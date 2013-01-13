@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import org.springframework.util.StringUtils;
+import org.testng.annotations.Test;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -23,6 +24,7 @@ import static org.testng.Assert.assertTrue;
  * Date: 12/26/12
  * Time: 7:27 PM
  */
+@Test
 public class AbstractIdObjectTest<T extends IdObject> {
     protected static final String BLANK = "";
     protected static final String GENERALLY_ACCEPTABLE_VALUE = "A Value";

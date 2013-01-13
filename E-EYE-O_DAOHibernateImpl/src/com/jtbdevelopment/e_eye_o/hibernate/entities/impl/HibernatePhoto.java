@@ -19,42 +19,42 @@ public class HibernatePhoto extends HibernateArchivableAppUserOwnedObject<Photo>
     }
 
     @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
-    public HibernatePhoto(final Photo photo) {
+    protected HibernatePhoto(final Photo photo) {
         super(photo);
     }
 
     @Override
     @ManyToOne(targetEntity = HibernateAppUserOwnedObject.class, optional = false)
     public AppUserOwnedObject getPhotoFor() {
-        return getWrapped().getPhotoFor();
+        return wrapped.getPhotoFor();
     }
 
     @Override
     public Photo setPhotoFor(final AppUserOwnedObject photoFor) {
-        return getWrapped().setPhotoFor(wrap(photoFor));
+        return wrapped.setPhotoFor(wrap(photoFor));
     }
 
     @Override
     @Column(nullable = false, length = Photo.MAX_DESCRIPTION_SIZE)
     public String getDescription() {
-        return getWrapped().getDescription();
+        return wrapped.getDescription();
     }
 
     @Override
     public Photo setDescription(final String description) {
-        getWrapped().setDescription(description);
+        wrapped.setDescription(description);
         return this;
     }
 
     @Override
     @Column(nullable = false)
     public LocalDateTime getTimestamp() {
-        return getWrapped().getTimestamp();
+        return wrapped.getTimestamp();
     }
 
     @Override
     public Photo setTimestamp(final LocalDateTime timestamp) {
-        getWrapped().setTimestamp(timestamp);
+        wrapped.setTimestamp(timestamp);
         return this;
     }
 }

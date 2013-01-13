@@ -22,12 +22,13 @@ public abstract class HibernateAppUserOwnedObject<T extends AppUserOwnedObject> 
     @Override
     @ManyToOne(targetEntity = HibernateAppUser.class, optional = false)
     public AppUser getAppUser() {
-        return getWrapped().getAppUser();
+        return wrapped.getAppUser();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public T setAppUser(final AppUser appUser) {
-        getWrapped().setAppUser(wrap(appUser));
+        wrapped.setAppUser(wrap(appUser));
         return (T) this;
     }
 }

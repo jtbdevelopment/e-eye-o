@@ -20,16 +20,18 @@ public class HibernateObservationCategory extends HibernateAppUserOwnedObject<Ob
     }
 
     @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
-    public HibernateObservationCategory(final ObservationCategory observationCategory) {
+    protected HibernateObservationCategory(final ObservationCategory observationCategory) {
         super(observationCategory);
     }
 
     //  Duplicate column to allow a unique constraint at table level
     @Column(nullable = false)
+    @SuppressWarnings("unused")  // Hibernate
     public String getAppUserID() {
-        return getWrapped().getAppUser().getId();
+        return wrapped.getAppUser().getId();
     }
 
+    @SuppressWarnings("unused")  // Hibernate
     public void setAppUserID(final String appUserID) {
         //  Do nothing
     }
@@ -37,24 +39,24 @@ public class HibernateObservationCategory extends HibernateAppUserOwnedObject<Ob
     @Override
     @Column(nullable = false, length = IdObject.MAX_SHORT_NAME_SIZE)
     public String getShortName() {
-        return getWrapped().getShortName();
+        return wrapped.getShortName();
     }
 
     @Override
     public ObservationCategory setShortName(final String shortName) {
-        getWrapped().setShortName(shortName);
+        wrapped.setShortName(shortName);
         return this;
     }
 
     @Override
     @Column(nullable = false, length = IdObject.MAX_DESCRIPTION_SIZE)
     public String getDescription() {
-        return getWrapped().getDescription();
+        return wrapped.getDescription();
     }
 
     @Override
     public ObservationCategory setDescription(final String description) {
-        getWrapped().setDescription(description);
+        wrapped.setDescription(description);
         return this;
     }
 }
