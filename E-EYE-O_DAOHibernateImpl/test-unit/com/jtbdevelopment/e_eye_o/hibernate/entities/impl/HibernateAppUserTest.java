@@ -23,7 +23,6 @@ public class HibernateAppUserTest {
     private HibernateAppUser hibernateAppUser;
     private HibernateIdObjectWrapperFactory daoFactory;
     private final DateTime DATE_VALUE = new DateTime();
-    private final String APP_USER_ID = "AUID";
     private final String STRING_VALUE = "S";
 
     @BeforeMethod
@@ -36,8 +35,6 @@ public class HibernateAppUserTest {
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(AppUser.class);
             will(returnValue(implAppUser));
-            allowing(implAppUser).getId();
-            will(returnValue(APP_USER_ID));
         }});
     }
 

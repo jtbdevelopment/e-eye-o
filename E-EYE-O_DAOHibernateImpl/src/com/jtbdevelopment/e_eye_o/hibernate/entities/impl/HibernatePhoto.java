@@ -31,7 +31,8 @@ public class HibernatePhoto extends HibernateArchivableAppUserOwnedObject<Photo>
 
     @Override
     public Photo setPhotoFor(final AppUserOwnedObject photoFor) {
-        return wrapped.setPhotoFor(wrap(photoFor));
+        wrapped.setPhotoFor(wrap(photoFor));
+        return this;
     }
 
     @Override
