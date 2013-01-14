@@ -54,7 +54,7 @@ public class HibernateClassListTest {
     @Test
     public void testGetDescription() throws Exception {
         final String desc = "desc";
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implClassList).getDescription();
             will(returnValue(desc));
         }});
@@ -65,7 +65,7 @@ public class HibernateClassListTest {
     @Test
     public void testSetDescription() throws Exception {
         final String desc = "desc";
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implClassList).setDescription(desc);
             will(returnValue(implClassList));
         }});
