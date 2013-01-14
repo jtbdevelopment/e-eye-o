@@ -133,6 +133,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
             super(null);
         }
     }
+
     //  Oddly defined to allow some bad injections
     public static class SomeOtherWrapperClass implements IdObjectWrapper<IdObject>, LocalSomeIdObject {
         protected IdObject wrapped;

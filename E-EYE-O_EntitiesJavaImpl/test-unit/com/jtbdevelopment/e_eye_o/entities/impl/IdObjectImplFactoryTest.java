@@ -34,11 +34,11 @@ public class IdObjectImplFactoryTest {
     @Test
     public void testNewIdObjectForUnknownClasses() throws Exception {
         boolean exception;
-        for(Class c :Arrays.asList(Object.class, List.class, String.class, Integer.class, Set.class, HashMap.class)) {
+        for (Class c : Arrays.asList(Object.class, List.class, String.class, Integer.class, Set.class, HashMap.class)) {
             exception = false;
             try {
                 factory.newIdObject(c);
-            } catch ( IllegalArgumentException e ) {
+            } catch (IllegalArgumentException e) {
                 exception = true;
                 assertEquals("Unknown class type " + c.getSimpleName(), e.getMessage());
             }

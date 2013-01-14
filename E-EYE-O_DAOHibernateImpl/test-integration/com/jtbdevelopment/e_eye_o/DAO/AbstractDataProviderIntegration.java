@@ -271,13 +271,13 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         idMap.put(s2.getId(), Student.class);
         idMap.put(p.getId(), Photo.class);
         idMap.put(o.getId(), Observation.class);
-        for(ObservationCategory oc : deleteCategories) {
+        for (ObservationCategory oc : deleteCategories) {
             idMap.put(oc.getId(), ObservationCategory.class);
         }
 
         rwDAO.deleteUsers(Arrays.<AppUser>asList(deleteUser1, deleteUser2));
 
-        for(Map.Entry<String, Class<? extends IdObject>> entry : idMap.entrySet()) {
+        for (Map.Entry<String, Class<? extends IdObject>> entry : idMap.entrySet()) {
             assertNull(rwDAO.get(entry.getValue(), entry.getKey()));
         }
     }

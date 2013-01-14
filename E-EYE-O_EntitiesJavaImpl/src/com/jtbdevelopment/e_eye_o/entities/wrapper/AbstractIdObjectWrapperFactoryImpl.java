@@ -21,7 +21,7 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
     }
 
     protected <T extends IdObject, W extends T> void addMapping(final Class<T> entityType, final Class<W> wrapperType) {
-        if( !entityType.isInterface() ) {
+        if (!entityType.isInterface()) {
             throw new IllegalArgumentException("entityType should be interface not " + entityType.getSimpleName());
         }
         if (!baseClass.isAssignableFrom(wrapperType)) {

@@ -21,15 +21,15 @@ import java.util.Collection;
  * In addition, unfortunately, Hibernate also constructs sample objects as part of initialization
  * which means we have to cater for not only using the default constructor, but some test objects
  * being created where factories not yet available.
- *
+ * <p/>
  * Using the static factories is distasteful, but allows for independent testing and injection
- *
  */
 @Entity(name = "IdObject")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class HibernateIdObject<T extends IdObject> implements IdObjectWrapper<T>, IdObject {
     private static IdObjectFactory implFactory;
     private static DAOIdObjectWrapperFactory daoFactory;
+
     public static IdObjectFactory getImplFactory() {
         return implFactory;
     }
@@ -77,7 +77,7 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
 
     @Override
     public boolean equals(Object o) {
-        return (o instanceof IdObject)  && wrapped.equals(o);
+        return (o instanceof IdObject) && wrapped.equals(o);
     }
 
     @Override

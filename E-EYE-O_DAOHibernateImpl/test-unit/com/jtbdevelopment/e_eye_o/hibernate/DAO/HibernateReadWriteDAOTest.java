@@ -140,7 +140,7 @@ public class HibernateReadWriteDAOTest {
             one(session).save(appUserWrapped);
         }});
 
-        for(IdObject i : impl) {
+        for (IdObject i : impl) {
             IdObject r = dao.create(i);
             assertNotSame(i, r);
             assertTrue(wrapped.contains(r));
@@ -158,7 +158,7 @@ public class HibernateReadWriteDAOTest {
             one(session).save(appUserWrapped);
         }});
 
-        for(IdObject i : wrapped) {
+        for (IdObject i : wrapped) {
             IdObject r = dao.create(i);
             assertSame(i, r);
             assertTrue(wrapped.contains(r));
@@ -206,7 +206,7 @@ public class HibernateReadWriteDAOTest {
             one(session).update(appUserWrapped);
         }});
 
-        for(IdObject i : impl) {
+        for (IdObject i : impl) {
             IdObject r = dao.update(i);
             assertNotSame(i, r);
             assertTrue(wrapped.contains(r));
@@ -224,7 +224,7 @@ public class HibernateReadWriteDAOTest {
             one(session).update(appUserWrapped);
         }});
 
-        for(IdObject i : wrapped) {
+        for (IdObject i : wrapped) {
             IdObject r = dao.update(i);
             assertSame(i, r);
             assertTrue(wrapped.contains(r));
@@ -424,7 +424,7 @@ public class HibernateReadWriteDAOTest {
         final Student sImpl = studentImpl;
         final Student sWrapped = studentWrapped;
         final Student sLoaded = studentLoaded;
-        final List<Photo> sRelatedPhotos =  Arrays.asList(photoLoaded);
+        final List<Photo> sRelatedPhotos = Arrays.asList(photoLoaded);
         final List<Observation> sRelatedObservations = Arrays.asList(observationLoaded);
 
         createStandardDeleteExpectations(sWrapped, sLoaded, sRelatedPhotos, sRelatedObservations);
@@ -472,7 +472,7 @@ public class HibernateReadWriteDAOTest {
 
         final Student sWrapped = studentWrapped;
         final Student sLoaded = studentLoaded;
-        final List<Photo> sRelatedPhotos =  Arrays.asList(photoLoaded);
+        final List<Photo> sRelatedPhotos = Arrays.asList(photoLoaded);
         final List<Observation> sRelatedObservations = Arrays.asList(observationLoaded);
 
         createStandardDeleteExpectations(sWrapped, sLoaded, sRelatedPhotos, sRelatedObservations);
@@ -490,7 +490,7 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(query));
             one(query).list();
             will(returnValue(relatedPhotos));
-            for(Photo p : relatedPhotos) {
+            for (Photo p : relatedPhotos) {
                 one(session).delete(p);
             }
             one(session).createQuery("from Observation where observationSubject = :observationSubject");
@@ -499,7 +499,7 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(query));
             one(query).list();
             will(returnValue(relatedObservations));
-            for(Observation o : relatedObservations) {
+            for (Observation o : relatedObservations) {
                 one(session).delete(o);
             }
             one(session).delete(loaded);

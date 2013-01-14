@@ -46,7 +46,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(Class<T> entityType, AppUser appUser) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from " +  getHibernateEntityName(entityType) + " where appUser = :user");
+        Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user");
         query.setParameter("user", appUser);
         return new HashSet<>((List<T>) query.list());
     }

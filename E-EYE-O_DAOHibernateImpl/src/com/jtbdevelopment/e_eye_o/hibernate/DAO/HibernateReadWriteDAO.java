@@ -68,7 +68,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
         AppUser wrapped = wrapperFactory.wrap(appUser);
         wrapped = get(AppUser.class, wrapped.getId());
-        if(wrapped == null) {
+        if (wrapped == null) {
             return;  //  Already deleted?
         }
 
@@ -93,7 +93,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
         T wrapped = wrapperFactory.wrap(entity);
         wrapped = (T) get(wrapped.getClass(), wrapped.getId());
-        if(wrapped == null) {
+        if (wrapped == null) {
             //  Already deleted
             return;
         }
@@ -106,7 +106,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 currentSession.update(observation);
             }
         }
-        if ( wrapped instanceof ClassList) {
+        if (wrapped instanceof ClassList) {
             Query query = currentSession.createQuery("from Student as S where :classList member of S.classLists");
             query.setParameter("classList", wrapped);
             for (Student student : (List<Student>) query.list()) {
@@ -114,7 +114,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 currentSession.update(student);
             }
         }
-        if ( wrapped instanceof Observation) {
+        if (wrapped instanceof Observation) {
             Query query = currentSession.createQuery("from Observation as O where followUpObservation = :followUpObservation");
             query.setParameter("followUpObservation", wrapped);
             for (Observation observation : (List<Observation>) query.list()) {
@@ -125,12 +125,12 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (wrapped instanceof AppUserOwnedObject) {
             Query query = currentSession.createQuery("from Photo where photoFor = :photoFor");
             query.setParameter("photoFor", wrapped);
-            for(Photo p : (List<Photo>)query.list()) {
+            for (Photo p : (List<Photo>) query.list()) {
                 currentSession.delete(p);
             }
             query = currentSession.createQuery("from Observation where observationSubject = :observationSubject");
             query.setParameter("observationSubject", wrapped);
-            for(Observation o : (List<Observation>)query.list()) {
+            for (Observation o : (List<Observation>) query.list()) {
                 currentSession.delete(o);
             }
         }

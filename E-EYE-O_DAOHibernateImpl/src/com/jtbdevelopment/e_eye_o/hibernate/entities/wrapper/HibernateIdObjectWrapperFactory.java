@@ -19,6 +19,7 @@ public class HibernateIdObjectWrapperFactory extends AbstractIdObjectWrapperFact
         addMapping(ObservationCategory.class, HibernateObservationCategory.class);
         addMapping(Observation.class, HibernateObservation.class);
         addMapping(ClassList.class, HibernateClassList.class);
+
         HibernateIdObject.setImplFactory(implFactory);
         HibernateIdObject.setDaoFactory(this);
     }
