@@ -19,6 +19,7 @@ public class HibernateClassListTest {
     private IdObjectFactory implFactory;
     private ClassList implClassList;
     private HibernateClassList hibernateClassList;
+    @SuppressWarnings("unused")  //  used if run standalone to init factory
     private HibernateIdObjectWrapperFactory daoFactory;
 
     @BeforeMethod

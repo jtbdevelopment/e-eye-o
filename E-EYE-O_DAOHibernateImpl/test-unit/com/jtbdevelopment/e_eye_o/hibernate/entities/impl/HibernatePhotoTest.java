@@ -22,8 +22,8 @@ public class HibernatePhotoTest {
     private IdObjectFactory implFactory;
     private Photo implPhoto;
     private Student implStudent;
-    private HibernateStudent hibernateStudent;
     private HibernatePhoto hibernatePhoto;
+    @SuppressWarnings("unused")  //  used if run standalone to init factory
     private HibernateIdObjectWrapperFactory daoFactory;
     private final LocalDateTime DATE_VALUE = new LocalDateTime();
     private final String STRING_VALUE = "S";
@@ -36,7 +36,6 @@ public class HibernatePhotoTest {
         daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernatePhoto = new HibernatePhoto(implPhoto);
         implStudent = context.mock(Student.class);
-        hibernateStudent = new HibernateStudent(implStudent);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(Photo.class);
             will(returnValue(implPhoto));

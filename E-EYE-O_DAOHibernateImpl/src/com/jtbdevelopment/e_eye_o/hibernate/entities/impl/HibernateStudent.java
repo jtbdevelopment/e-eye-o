@@ -45,22 +45,26 @@ public class HibernateStudent extends HibernateArchivableAppUserOwnedObject<Stud
 
     @Override
     public Student setClassLists(final Set<ClassList> classLists) {
-        return wrapped.setClassLists(wrap(classLists));
+        wrapped.setClassLists(wrap(classLists));
+        return this;
     }
 
     @Override
     public Student addClassList(final ClassList classList) {
-        return wrapped.addClassList(wrap(classList));
+        wrapped.addClassList(wrap(classList));
+        return this;
     }
 
     @Override
     public Student addClassLists(final Collection<ClassList> classLists) {
-        return wrapped.addClassLists(wrap(classLists));
+        wrapped.addClassLists(wrap(classLists));
+        return this;
     }
 
     @Override
     public Student removeClassList(final ClassList classList) {
-        return wrapped.removeClassList(wrap(classList));
+        wrapped.removeClassList(wrap(classList));
+        return this;
     }
 
     @Override

@@ -21,6 +21,7 @@ public class HibernateAppUserTest {
     private IdObjectFactory implFactory;
     private AppUser implAppUser;
     private HibernateAppUser hibernateAppUser;
+    @SuppressWarnings("unused")  //  used if run standalone to init factory
     private HibernateIdObjectWrapperFactory daoFactory;
     private final DateTime DATE_VALUE = new DateTime();
     private final String STRING_VALUE = "S";
