@@ -27,14 +27,15 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Hibernate-4.1.8" level="application" />
-    <orderEntry type="library" exported="" name="Java EE 6-3.1" level="application" />
-    <orderEntry type="library" exported="" name="usertype-3.0" level="application" />
-    <orderEntry type="library" scope="TEST" name="testng-6" level="application" />
-    <orderEntry type="library" exported="" name="Spring-3.2.0" level="application" />
     <orderEntry type="module" module-name="E-EYE-O_EntitiesJavaImpl" exported="" />
-    <orderEntry type="library" scope="TEST" name="JMOCK2.5.1-JUNIT4" level="application" />
-    <orderEntry type="library" scope="TEST" name="hamcrest-1" level="application" />
+    <orderEntry type="library" exported="" name="org.hibernate:hibernate-core:4.1.9.Final" level="project" />
+    <orderEntry type="library" exported="" name="org.springframework:org.springframework.orm:3.2.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="org.springframework:org.springframework.transaction:3.2.0.RELEASE" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.testng:testng:6.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.jmock:jmock:2.5.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.springframework:spring-test:3.2.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="org.joda:joda-convert:1.2" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="org.jadira.usertype:usertype.core:3.0.0.GA" level="project" />
   </component>
 </module>
 

@@ -32,11 +32,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="derby" level="application" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="aopalliance-1" level="application" />
     <orderEntry type="module" module-name="E-EYE-O_DAOHibernateImpl" exported="" />
-    <orderEntry type="library" scope="TEST" name="testng-6" level="application" />
-    <orderEntry type="library" exported="" name="Spring-3.2.0" level="application" />
+    <orderEntry type="library" exported="" name="org.apache.derby:derby:10.9.1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.testng:testng:6.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.springframework:spring-test:3.2.0.RELEASE" level="project" />
   </component>
 </module>
 

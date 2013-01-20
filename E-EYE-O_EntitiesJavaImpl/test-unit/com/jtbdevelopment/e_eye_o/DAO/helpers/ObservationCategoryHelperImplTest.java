@@ -11,7 +11,6 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
-import org.jmock.integration.junit4.JUnit4Mockery;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
@@ -27,7 +26,7 @@ import static org.testng.Assert.assertTrue;
  */
 
 public class ObservationCategoryHelperImplTest {
-    private final Mockery context = new JUnit4Mockery();
+    private final Mockery context = new Mockery();
     private final ReadWriteDAO dao = context.mock(ReadWriteDAO.class);
     private final AppUser user = context.mock(AppUser.class);
     private final IdObjectFactory factory = new IdObjectImplFactory();
