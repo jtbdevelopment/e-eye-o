@@ -20,9 +20,11 @@ import java.util.Collection;
  * <p/>
  * In addition, unfortunately, Hibernate also constructs sample objects as part of initialization
  * which means we have to cater for not only using the default constructor, but some test objects
- * being created where factories not yet available.
+ * being created where factories not yet available.  These aren't used but you have to cater for
+ * all states of initialization.
  * <p/>
  * Using the static factories is distasteful, but allows for independent testing and injection
+ * for objects not being instantiated via Spring
  */
 @Entity(name = "IdObject")
 @Inheritance(strategy = InheritanceType.JOINED)

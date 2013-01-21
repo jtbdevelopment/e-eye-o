@@ -14,7 +14,6 @@ public abstract class HibernateArchivableAppUserOwnedObject<T extends Archivable
     protected HibernateArchivableAppUserOwnedObject() {
     }
 
-    @SuppressWarnings("unused")  //  HibernateIdObjectWrapperFactory via reflection
     protected HibernateArchivableAppUserOwnedObject(final T wrapped) {
         super(wrapped);
     }
