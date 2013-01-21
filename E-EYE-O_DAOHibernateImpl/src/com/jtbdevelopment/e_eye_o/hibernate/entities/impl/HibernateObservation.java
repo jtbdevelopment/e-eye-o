@@ -33,7 +33,8 @@ public class HibernateObservation extends HibernateArchivableAppUserOwnedObject<
 
     @Override
     public Observation setObservationSubject(final AppUserOwnedObject observationSubject) {
-        return wrapped.setObservationSubject(observationSubject);
+        wrapped.setObservationSubject(observationSubject);
+        return this;
     }
 
     @Override
