@@ -19,15 +19,14 @@ public class HibernateClassListTest {
     private IdObjectFactory implFactory;
     private ClassList implClassList;
     private HibernateClassList hibernateClassList;
-    @SuppressWarnings("unused")  //  used if run standalone to init factory
-    private HibernateIdObjectWrapperFactory daoFactory;
 
     @BeforeMethod
     public void setUp() {
         context = new Mockery();
         implFactory = context.mock(IdObjectFactory.class);
         implClassList = context.mock(ClassList.class, "default");
-        daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
+        @SuppressWarnings("unused")
+        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernateClassList = new HibernateClassList(implClassList);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(ClassList.class);

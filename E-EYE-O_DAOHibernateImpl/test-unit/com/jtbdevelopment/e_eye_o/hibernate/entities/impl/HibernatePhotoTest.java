@@ -23,8 +23,6 @@ public class HibernatePhotoTest {
     private Photo implPhoto;
     private Student implStudent;
     private HibernatePhoto hibernatePhoto;
-    @SuppressWarnings("unused")  //  used if run standalone to init factory
-    private HibernateIdObjectWrapperFactory daoFactory;
     private final LocalDateTime DATE_VALUE = new LocalDateTime();
     private final String STRING_VALUE = "S";
 
@@ -33,7 +31,8 @@ public class HibernatePhotoTest {
         context = new Mockery();
         implFactory = context.mock(IdObjectFactory.class);
         implPhoto = context.mock(Photo.class, "default");
-        daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
+        @SuppressWarnings("unused")
+        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernatePhoto = new HibernatePhoto(implPhoto);
         implStudent = context.mock(Student.class);
         context.checking(new Expectations() {{

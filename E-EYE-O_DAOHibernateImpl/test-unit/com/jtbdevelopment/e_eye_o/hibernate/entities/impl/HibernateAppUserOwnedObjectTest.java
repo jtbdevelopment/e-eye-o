@@ -30,15 +30,14 @@ public class HibernateAppUserOwnedObjectTest {
     private IdObjectFactory implFactory;
     private LocalInterface impl;
     private HibernateLocal hibernateLocal;
-    @SuppressWarnings("unused")  //  used if run standalone to init factory
-    private HibernateIdObjectWrapperFactory daoFactory;
 
     @BeforeMethod
     public void setUp() {
         context = new Mockery();
         implFactory = context.mock(IdObjectFactory.class);
         impl = context.mock(LocalInterface.class, "default");
-        daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
+        @SuppressWarnings("unused")
+        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernateLocal = new HibernateLocal(impl);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(Photo.class);

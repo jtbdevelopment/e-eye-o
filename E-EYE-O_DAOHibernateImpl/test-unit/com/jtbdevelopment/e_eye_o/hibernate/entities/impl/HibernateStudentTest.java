@@ -25,8 +25,6 @@ public class HibernateStudentTest {
     private IdObjectFactory implFactory;
     private Student implStudent;
     private HibernateStudent hibernateStudent;
-    @SuppressWarnings("unused")  //  used if run standalone to init factory
-    private HibernateIdObjectWrapperFactory daoFactory;
     private final String STRING_VALUE = "S";
 
     @BeforeMethod
@@ -35,7 +33,8 @@ public class HibernateStudentTest {
         implFactory = context.mock(IdObjectFactory.class);
         implStudent = context.mock(Student.class);
         hibernateStudent = new HibernateStudent(implStudent);
-        daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
+        @SuppressWarnings("unused")
+        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(Student.class);
             will(returnValue(implStudent));

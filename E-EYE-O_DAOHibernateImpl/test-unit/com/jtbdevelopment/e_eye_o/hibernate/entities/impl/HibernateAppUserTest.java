@@ -21,8 +21,6 @@ public class HibernateAppUserTest {
     private IdObjectFactory implFactory;
     private AppUser implAppUser;
     private HibernateAppUser hibernateAppUser;
-    @SuppressWarnings("unused")  //  used if run standalone to init factory
-    private HibernateIdObjectWrapperFactory daoFactory;
     private final DateTime DATE_VALUE = new DateTime();
     private final String STRING_VALUE = "S";
 
@@ -31,7 +29,8 @@ public class HibernateAppUserTest {
         context = new Mockery();
         implFactory = context.mock(IdObjectFactory.class);
         implAppUser = context.mock(AppUser.class, "default");
-        daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
+        @SuppressWarnings("unused")  // inits id object ref to itself
+        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernateAppUser = new HibernateAppUser(implAppUser);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(AppUser.class);

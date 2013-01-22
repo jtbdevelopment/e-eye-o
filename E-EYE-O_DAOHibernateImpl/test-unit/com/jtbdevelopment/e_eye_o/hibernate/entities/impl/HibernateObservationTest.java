@@ -4,7 +4,6 @@ import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HibernateIdObjectWrapperFactory;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.testng.annotations.BeforeMethod;
@@ -26,9 +25,6 @@ public class HibernateObservationTest {
     private IdObjectFactory implFactory;
     private Observation implObservation;
     private HibernateObservation hibernateObservation;
-    @SuppressWarnings("unused")  //  used if run standalone to init factory
-    private HibernateIdObjectWrapperFactory daoFactory;
-    private final DateTime DATE_VALUE = new DateTime();
     private final LocalDateTime LOCALDATETIME_VALUE = new LocalDateTime();
     private final LocalDate LOCALDATE_VALUE = new LocalDate();
     private final String STRING_VALUE = "S";
@@ -40,7 +36,8 @@ public class HibernateObservationTest {
         implFactory = context.mock(IdObjectFactory.class);
         implObservation = context.mock(Observation.class, "default");
         hibernateObservation = new HibernateObservation(implObservation);
-        daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
+        @SuppressWarnings("unused")
+        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(Observation.class);
             will(returnValue(implObservation));
@@ -67,7 +64,7 @@ public class HibernateObservationTest {
     @Test
     public void testGetObservationSubject() throws Exception {
         final Student s = context.mock(Student.class);
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).getObservationSubject();
             will(returnValue(s));
         }});
@@ -77,7 +74,7 @@ public class HibernateObservationTest {
     @Test
     public void testSetObservationSubject() throws Exception {
         final ClassList cl = context.mock(ClassList.class);
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).setObservationSubject(with(any(HibernateClassList.class)));
             will(returnValue(implObservation));
         }});
@@ -86,7 +83,7 @@ public class HibernateObservationTest {
 
     @Test
     public void testGetObservationTimestamp() throws Exception {
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).getObservationTimestamp();
             will(returnValue(LOCALDATETIME_VALUE));
         }});
@@ -95,7 +92,7 @@ public class HibernateObservationTest {
 
     @Test
     public void testSetObservationTimestamp() throws Exception {
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).setObservationTimestamp(LOCALDATETIME_VALUE);
             will(returnValue(implObservation));
         }});
@@ -104,7 +101,7 @@ public class HibernateObservationTest {
 
     @Test
     public void testIsSignificant() throws Exception {
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).isSignificant();
             will(returnValue(true));
         }});
@@ -113,7 +110,7 @@ public class HibernateObservationTest {
 
     @Test
     public void testSetSignificant() throws Exception {
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).setSignificant(false);
             will(returnValue(implObservation));
         }});
@@ -122,7 +119,7 @@ public class HibernateObservationTest {
 
     @Test
     public void testGetNeedsFollowUp() throws Exception {
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).getNeedsFollowUp();
             will(returnValue(false));
         }});
@@ -131,7 +128,7 @@ public class HibernateObservationTest {
 
     @Test
     public void testSetNeedsFollowUp() throws Exception {
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).setNeedsFollowUp(true);
             will(returnValue(implObservation));
         }});
@@ -140,7 +137,7 @@ public class HibernateObservationTest {
 
     @Test
     public void testGetFollowUpReminder() throws Exception {
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).getFollowUpReminder();
             will(returnValue(LOCALDATE_VALUE));
         }});
@@ -149,7 +146,7 @@ public class HibernateObservationTest {
 
     @Test
     public void testSetFollowUpReminder() throws Exception {
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).setFollowUpReminder(LOCALDATE_VALUE);
             will(returnValue(implObservation));
         }});
@@ -159,7 +156,7 @@ public class HibernateObservationTest {
     @Test
     public void testGetFollowUpObservation() throws Exception {
         final HibernateObservation fu = new HibernateObservation();
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).getFollowUpObservation();
             will(returnValue(fu));
         }});
@@ -170,7 +167,7 @@ public class HibernateObservationTest {
     @Test
     public void testSetFollowUpObservation() throws Exception {
         final Observation fu = context.mock(Observation.class, "local");
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).setFollowUpObservation(with(any(HibernateObservation.class)));
             will(returnValue(implObservation));
         }});
@@ -181,7 +178,7 @@ public class HibernateObservationTest {
     @Test
     public void testGetCategories() throws Exception {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).getCategories();
             will(returnValue(ocs));
         }});
@@ -191,7 +188,7 @@ public class HibernateObservationTest {
     @Test
     public void testSetCategories() throws Exception {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).setCategories(with(new IsEqualButNotTheSame<>(ocs)));
             will(returnValue(implObservation));
         }});
@@ -201,7 +198,7 @@ public class HibernateObservationTest {
     @Test
     public void testAddCategory() throws Exception {
         final ObservationCategory ocs = context.mock(ObservationCategory.class);
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).addCategory(with(any(HibernateObservationCategory.class)));
             will(returnValue(implObservation));
         }});
@@ -211,7 +208,7 @@ public class HibernateObservationTest {
     @Test
     public void testAddCategories() throws Exception {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).addCategories(with(new IsEqualButNotTheSame<>(ocs)));
             will(returnValue(implObservation));
         }});
@@ -221,7 +218,7 @@ public class HibernateObservationTest {
     @Test
     public void testRemoveCategory() throws Exception {
         final ObservationCategory ocs = context.mock(ObservationCategory.class);
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).removeCategory(ocs);
             will(returnValue(implObservation));
         }});
@@ -230,7 +227,7 @@ public class HibernateObservationTest {
 
     @Test
     public void testGetComment() throws Exception {
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).getComment();
             will(returnValue(STRING_VALUE));
         }});
@@ -239,7 +236,7 @@ public class HibernateObservationTest {
 
     @Test
     public void testSetComment() throws Exception {
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(implObservation).setComment(STRING_VALUE);
             will(returnValue(implObservation));
         }});

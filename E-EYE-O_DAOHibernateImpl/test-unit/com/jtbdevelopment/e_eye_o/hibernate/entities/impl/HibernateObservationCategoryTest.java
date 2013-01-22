@@ -21,7 +21,6 @@ public class HibernateObservationCategoryTest {
     private IdObjectFactory implFactory;
     private ObservationCategory implOC;
     private HibernateObservationCategory hibernateOC;
-    private HibernateIdObjectWrapperFactory daoFactory;
     private final String APP_USER_ID = "AUID";
     private final String STRING_VALUE = "S";
 
@@ -30,7 +29,8 @@ public class HibernateObservationCategoryTest {
         context = new Mockery();
         implFactory = context.mock(IdObjectFactory.class);
         implOC = context.mock(ObservationCategory.class, "default");
-        daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
+        @SuppressWarnings("unused")
+        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernateOC = new HibernateObservationCategory(implOC);
         final AppUser appUser = context.mock(AppUser.class);
         context.checking(new Expectations() {{
