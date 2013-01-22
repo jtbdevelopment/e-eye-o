@@ -6,16 +6,11 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImplFactory;
-import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -32,40 +27,21 @@ public class ObservationCategoryHelperImplTest {
     private final IdObjectFactory factory = new IdObjectImplFactory();
     private final ObservationCategoryHelperImpl helper = new ObservationCategoryHelperImpl(dao, factory);
 
-    private static class ReturnMatchingObsCatAction implements Action {
-        private final Map<String, ObservationCategory> ocMap;
-
-        private ReturnMatchingObsCatAction(final Map<String, ObservationCategory> ocMap) {
-            this.ocMap = ocMap;
-        }
-
-        @Override
-        public Object invoke(final Invocation invocation) throws Throwable {
-            return ocMap.get(((ObservationCategory) invocation.getParameter(0)).getShortName());
-        }
-
-        @Override
-        public void describeTo(final Description description) {
-            description.appendText("looks up short code from map and returns expected impl version");
-        }
-
-        public static Action returnMatchingObservationCategory(final Map<String, ObservationCategory> ocMap) {
-            return new ReturnMatchingObsCatAction(ocMap);
-        }
-    }
-
     @Test
+    @SuppressWarnings("unchecked")
     public void testCreatesDefault() {
         final Map<String, ObservationCategory> shortMap = new HashMap<>();
+        final List<ObservationCategory> initialList = new ArrayList<>();
         for (Map.Entry<String, String> entry : ObservationCategoryHelperImpl.NEW_USER_DEFAULT_CATEGORIES.entrySet()) {
             final ObservationCategory impl = factory.newObservationCategory(user).setShortName(entry.getKey()).setDescription(entry.getValue());
             impl.setId(entry.getKey());
+            initialList.add(impl);
             shortMap.put(entry.getKey(), impl);
         }
 
         context.checking(new Expectations() {{
-            allowing(dao).create(with(any(ObservationCategory.class)));
-            will(ReturnMatchingObsCatAction.returnMatchingObservationCategory(shortMap));
+            allowing(dao).create(with(any(List.class)));
+            will(returnValue(initialList));
         }});
         Set<ObservationCategory> ocs = helper.createDefaultCategoriesForUser(user);
         assertEquals(ObservationCategoryHelperImpl.NEW_USER_DEFAULT_CATEGORIES.size(), ocs.size());

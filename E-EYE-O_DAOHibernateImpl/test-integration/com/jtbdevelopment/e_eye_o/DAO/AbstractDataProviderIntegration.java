@@ -44,7 +44,9 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     private static AppUser testUser1;
     private static AppUser testUser2;
     private static Map<String, ObservationCategory> testOCsForU1;
-    private static ClassList testClassListForU1;
+    private static ClassList testClassList1ForU1;
+    private static ClassList testClassList2ForU1;
+    private static ClassList testClassList3ForU1;
     private static Student testStudentForU1;
     private static Observation testObservationForU1;
 
@@ -59,8 +61,10 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         testUser1 = rwDAO.create(factory.newAppUser().setFirstName("Testy").setLastName("Tester").setEmailAddress("test@test.com"));
         observationCategoryHelper.createDefaultCategoriesForUser(testUser1);
         testOCsForU1 = observationCategoryHelper.getObservationCategoriesAsMap(testUser1);
-        testClassListForU1 = rwDAO.create(factory.newClassList(testUser1).setDescription("Test Class List"));
-        testStudentForU1 = rwDAO.create(factory.newStudent(testUser1).addClassList(testClassListForU1).setFirstName("Test").setLastName("Student"));
+        testClassList1ForU1 = rwDAO.create(factory.newClassList(testUser1).setDescription("Test Class List1"));
+        testClassList2ForU1 = rwDAO.create(factory.newClassList(testUser1).setDescription("Test Class List2"));
+        testClassList3ForU1 = rwDAO.create(factory.newClassList(testUser1).setDescription("Test Class List3"));
+        testStudentForU1 = rwDAO.create(factory.newStudent(testUser1).addClassList(testClassList1ForU1).setFirstName("Test").setLastName("Student"));
         testObservationForU1 = rwDAO.create(factory.newObservation(testUser1).setComment("Test Observation").setObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("IDEA")).addCategory(testOCsForU1.get("PHYS")));
 
         testUser2 = rwDAO.create(factory.newAppUser().setFirstName("Another").setLastName("Tester").setEmailAddress("another@test.com"));
@@ -83,7 +87,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         assertTrue(exception, "Should have had an exception!");
         exception = false;
         try {
-            rwDAO.create(factory.newStudent(testUser2).addClassList(testClassListForU1).setFirstName("X").setLastName("Y"));
+            rwDAO.create(factory.newStudent(testUser2).addClassList(testClassList1ForU1).setFirstName("X").setLastName("Y"));
         } catch (ConstraintViolationException e) {
             assertEquals(2, e.getConstraintViolations().size());
             logger.info(e.getMessage());
@@ -155,12 +159,12 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
     //  TODO - actual photo
     @Test
     public void testCreatePhotoForClassList() {
-        Photo photo = rwDAO.create(factory.newPhoto(testUser1).setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testClassListForU1));
+        Photo photo = rwDAO.create(factory.newPhoto(testUser1).setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testClassList1ForU1));
         Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
             if (setPhoto.equals(photo)) {
-                assertEquals(testClassListForU1, setPhoto.getPhotoFor());
+                assertEquals(testClassList1ForU1, setPhoto.getPhotoFor());
             }
         }
     }
@@ -221,13 +225,13 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         Observation o = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment).setObservationSubject(testStudentForU1));
         o.removeCategory(social);
         o.addCategory(lang);
-        o.setObservationSubject(testClassListForU1);
+        o.setObservationSubject(testClassList1ForU1);
         o = rwDAO.update(o);
         o = rwDAO.get(Observation.class, o.getId());
         assertEquals(2, o.getCategories().size());
         assertTrue(o.getCategories().contains(lang));
         assertTrue(o.getCategories().contains(kauw));
-        assertEquals(testClassListForU1, o.getObservationSubject());
+        assertEquals(testClassList1ForU1, o.getObservationSubject());
     }
 
     @Test
@@ -242,6 +246,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         o2.setNeedsFollowUp(true);
         final LocalDate reminderDate = new LocalDate(2012, 11, 12);
         o2.setFollowUpReminder(reminderDate);
+        o2.addCategories(testOCsForU1.values());
         rwDAO.update(Arrays.asList(o1, o2));
         o1 = rwDAO.get(Observation.class, o1.getId());
         o2 = rwDAO.get(Observation.class, o2.getId());
@@ -250,6 +255,22 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         assertTrue(o2.getNeedsFollowUp());
         assertFalse(o1.getNeedsFollowUp());
         assertEquals(o2.getFollowUpReminder(), reminderDate);
+    }
+
+    @Test
+    public void testDeleteLinkedObservations() {
+        final ObservationCategory social = testOCsForU1.get("SOCIAL");
+        final ObservationCategory kauw = testOCsForU1.get("KAUW");
+        final String comment1 = "Test Observation 1";
+        final String comment2 = "Test Observation 2";
+        Observation o1 = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment1).setObservationSubject(testStudentForU1));
+        Observation o2 = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(kauw)).setComment(comment2).setObservationSubject(testStudentForU1));
+        o1.setFollowUpObservation(o2);
+        rwDAO.update(Arrays.asList(o1, o2));
+
+        rwDAO.delete(o2);
+        o1 = rwDAO.get(Observation.class, o1.getId());
+        assertNull(o1.getFollowUpObservation());
     }
 
     @Test
@@ -280,5 +301,25 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         for (Map.Entry<String, Class<? extends IdObject>> entry : idMap.entrySet()) {
             assertNull(rwDAO.get(entry.getValue(), entry.getKey()));
         }
+    }
+
+    @Test
+    public void testDeletingUserTwiceOK() {
+        AppUser appUser = rwDAO.create(factory.newAppUser().setFirstName("Double").setLastName("Delete").setEmailAddress("delete@double.com"));
+        String id = appUser.getId();
+        rwDAO.deleteUser(appUser);
+        rwDAO.deleteUser(appUser);
+        assertNull(rwDAO.get(AppUser.class, id));
+    }
+
+    @Test
+    public void testAddingClassListsToStudent() {
+        testStudentForU1.removeClassList(testClassList1ForU1);
+        testStudentForU1 = rwDAO.update(testStudentForU1);
+        assertTrue(testStudentForU1.getClassLists().isEmpty());
+        testStudentForU1.addClassList(testClassList1ForU1);
+        testStudentForU1.addClassLists(Arrays.asList(testClassList2ForU1, testClassList3ForU1));
+        testStudentForU1 = rwDAO.update(testStudentForU1);
+        assertTrue(testStudentForU1.getClassLists().containsAll(Arrays.asList(testClassList1ForU1, testClassList2ForU1, testClassList3ForU1)));
     }
 }

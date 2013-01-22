@@ -81,7 +81,7 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
     //  Can't just clone the collection - hibernate gives you it's own internal types for example
     @SuppressWarnings("unchecked")
     private <T extends IdObject, C extends Collection<T>> C newCollectionFor(final C entities) {
-        if (entities instanceof List) {
+        if (entities instanceof List || entities.getClass().getSimpleName().equals("Values")) {
             return (C) new ArrayList<T>(entities.size());
         }
         if (entities instanceof Set) {

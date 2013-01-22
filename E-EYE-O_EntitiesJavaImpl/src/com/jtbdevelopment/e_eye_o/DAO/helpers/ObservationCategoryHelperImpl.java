@@ -7,10 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Date: 11/25/12
@@ -28,11 +25,11 @@ public class ObservationCategoryHelperImpl implements ObservationCategoryHelper 
     }
 
     public Set<ObservationCategory> createDefaultCategoriesForUser(final AppUser appUser) {
-        Set<ObservationCategory> defaults = new HashSet<>();
+        List<ObservationCategory> defaults = new ArrayList<>(NEW_USER_DEFAULT_CATEGORIES.size());
         for (Map.Entry<String, String> entry : NEW_USER_DEFAULT_CATEGORIES.entrySet()) {
-            defaults.add(dao.create(objectFactory.newObservationCategory(appUser).setShortName(entry.getKey()).setDescription(entry.getValue())));
+            defaults.add(objectFactory.newObservationCategory(appUser).setShortName(entry.getKey()).setDescription(entry.getValue()));
         }
-        return defaults;
+        return new HashSet<>(dao.create(defaults));
     }
 
     public Map<String, ObservationCategory> getObservationCategoriesAsMap(final AppUser appUser) {
