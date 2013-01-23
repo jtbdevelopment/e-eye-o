@@ -32,6 +32,7 @@ public class IdObjectImplFactoryTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testNewIdObjectForUnknownClasses() throws Exception {
         boolean exception;
         for (Class c : Arrays.asList(Object.class, List.class, String.class, Integer.class, Set.class, HashMap.class)) {

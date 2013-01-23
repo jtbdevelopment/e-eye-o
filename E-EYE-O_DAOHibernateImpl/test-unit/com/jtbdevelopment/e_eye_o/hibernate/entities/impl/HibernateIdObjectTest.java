@@ -186,7 +186,6 @@ public class HibernateIdObjectTest {
 
     @Test
     public void testWrapCollection() {
-        final LocalIdObjectWrapper inputItem = new LocalIdObjectWrapper();
         final List<LocalIdObject> inputList = Arrays.asList(idObjectImpl);
 
         final LocalIdObjectWrapper returnedItem = new LocalIdObjectWrapper();

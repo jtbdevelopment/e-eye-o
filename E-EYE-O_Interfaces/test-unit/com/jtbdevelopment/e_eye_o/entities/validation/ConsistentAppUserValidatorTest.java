@@ -29,6 +29,7 @@ public class ConsistentAppUserValidatorTest {
     private AppUser USER2;
     private static int idCounter = 1;
 
+    @SuppressWarnings("unused")
     public static class LocalEntity implements AppUserOwnedObject {
         private AppUser appUser;
         private String id;
@@ -94,6 +95,7 @@ public class ConsistentAppUserValidatorTest {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <T extends AppUserOwnedObject> T setAppUser(final AppUser appUser) {
             this.appUser = appUser;
             return (T) this;
@@ -105,6 +107,7 @@ public class ConsistentAppUserValidatorTest {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <T extends IdObject> T setId(final String id) {
             this.id = id;
             return (T) this;

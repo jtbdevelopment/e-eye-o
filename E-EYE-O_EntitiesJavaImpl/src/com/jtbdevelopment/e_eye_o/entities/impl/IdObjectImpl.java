@@ -38,6 +38,7 @@ public abstract class IdObjectImpl implements IdObject {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends IdObject> T setId(final String id) {
         if (StringUtils.hasLength(this.id) && !this.id.equals(id)) {
             throw new InvalidStateException("Cannot re-assign id after assignment");
