@@ -27,7 +27,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="E-EYE-O_EntitiesJavaImpl" exported="" />
     <orderEntry type="library" exported="" name="org.hibernate:hibernate-core:4.1.9.Final" level="project" />
     <orderEntry type="library" exported="" name="org.springframework:org.springframework.orm:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="org.springframework:org.springframework.transaction:3.2.0.RELEASE" level="project" />
@@ -36,6 +35,8 @@
     <orderEntry type="library" scope="TEST" name="org.springframework:spring-test:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="org.joda:joda-convert:1.2" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="org.jadira.usertype:usertype.core:3.0.0.GA" level="project" />
+    <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
+    <orderEntry type="module" module-name="E-EYE-O_EntitiesJavaImpl" exported="" />
   </component>
 </module>
 
