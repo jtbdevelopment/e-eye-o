@@ -95,7 +95,7 @@ public class HibernateStudentTest {
     public void testSetClassLists() throws Exception {
         final Set<ClassList> cl = new HashSet<>(Arrays.asList(context.mock(ClassList.class)));
         context.checking(new Expectations() {{
-            one(implStudent).setClassLists(cl);
+            oneOf(implStudent).setClassLists(with(new IsEqualButNotTheSame<>(cl)));
             will(returnValue(implStudent));
         }});
 
@@ -115,13 +115,14 @@ public class HibernateStudentTest {
 
     @Test
     public void testAddClassLists() throws Exception {
-        final Set<ClassList> cl = new HashSet<>(Arrays.asList(context.mock(ClassList.class)));
+        final ClassList cl = context.mock(ClassList.class);
+        final Set<ClassList> cls = new HashSet<>(Arrays.asList(cl));
         context.checking(new Expectations() {{
-            one(implStudent).addClassLists(with(new IsEqualButNotTheSame<>(cl)));
+            oneOf(implStudent).addClassLists(with(new IsEqualButNotTheSame<>(cls)));
             will(returnValue(implStudent));
         }});
 
-        assertSame(hibernateStudent, hibernateStudent.addClassLists(cl));
+        assertSame(hibernateStudent, hibernateStudent.addClassLists(cls));
     }
 
     @Test

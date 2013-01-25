@@ -6,9 +6,6 @@
       <root url="jar://$PROJECT_DIR$/lib/org.springframework.core-3.2.0.RELEASE.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/lib/org.springframework.beans-3.2.0.RELEASE-sources.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/org.springframework.core-3.2.0.RELEASE-sources.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

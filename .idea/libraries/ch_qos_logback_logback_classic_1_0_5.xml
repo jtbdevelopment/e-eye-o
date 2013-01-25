@@ -4,17 +4,20 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/logback-classic-1.0.5.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/logback-core-1.0.5.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.6.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/log4j-over-slf4j-1.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.2.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/lib/logback-classic-1.0.5-javadoc.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/logback-core-1.0.5-javadoc.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.6.5-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/log4j-over-slf4j-1.7.2-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.2-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/lib/logback-classic-1.0.5-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/logback-core-1.0.5-sources.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.6.5-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/log4j-over-slf4j-1.7.2-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.2-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

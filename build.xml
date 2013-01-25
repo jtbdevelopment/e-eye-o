@@ -1,0 +1,16 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="e_eye_o" default="resolve">
+    <property name="junit.version" value="4.11"/>
+    <property name="cdi.api.version" value="1.1-PRD"/>
+    <property name="jsr250.api.version" value="1.0"/>
+    <property name="interceptor.api.version" value="1.0.1.Final"/>
+    <property name="uel.api.version" value="1.0"/>
+    <property name="uel.api.version" value="1.0"/>
+    <property name="atinject.api.version" value="1"/>
+    <property name="slf4j.version" value="1.6.5"/>
+    <!-- =================================
+          target: resolve
+         ================================= -->
+    <target name="resolve" description="--> retrieve dependencies with ivy">
+        <ivy:retrieve sync="true" type="jar,source,javadoc" pattern="lib/[artifact]-[revision](-[classifier]).[ext]"/>
+    </target>
+</project>
