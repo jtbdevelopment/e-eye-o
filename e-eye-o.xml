@@ -377,6 +377,7 @@
     <pathelement location="${e-eye-o_jsonjacksonimpl.output.dir}"/>
     <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.com.fasterxml.jackson.core:jackson-annotations:2.1.2.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
   </path>
   
   <path id="e-eye-o_jsonjacksonimpl.runtime.module.classpath">
@@ -384,6 +385,7 @@
     <pathelement location="${e-eye-o_jsonjacksonimpl.output.dir}"/>
     <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.com.fasterxml.jackson.core:jackson-annotations:2.1.2.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
   </path>
   
   
@@ -398,6 +400,12 @@
   <path id="e-eye-o_jsonjacksonimpl.module.sourcepath">
     <dirset dir="${module.e-eye-o_jsonjacksonimpl.basedir}/E-EYE-O_JSONJacksonImpl">
       <include name="src"/>
+    </dirset>
+  </path>
+  
+  <path id="e-eye-o_jsonjacksonimpl.module.test.sourcepath">
+    <dirset dir="${module.e-eye-o_jsonjacksonimpl.basedir}/E-EYE-O_JSONJacksonImpl">
+      <include name="test-unit"/>
     </dirset>
   </path>
   
@@ -422,7 +430,23 @@
     </copy>
   </target>
   
-  <target name="compile.module.e-eye-o_jsonjacksonimpl.tests" depends="compile.module.e-eye-o_jsonjacksonimpl.production" description="compile module E-EYE-O_JSONJacksonImpl; test classes" unless="skip.tests"/>
+  <target name="compile.module.e-eye-o_jsonjacksonimpl.tests" depends="compile.module.e-eye-o_jsonjacksonimpl.production" description="compile module E-EYE-O_JSONJacksonImpl; test classes" unless="skip.tests">
+    <mkdir dir="${e-eye-o_jsonjacksonimpl.testoutput.dir}"/>
+    <javac destdir="${e-eye-o_jsonjacksonimpl.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_jsonjacksonimpl}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_jsonjacksonimpl}"/>
+      <bootclasspath refid="e-eye-o_jsonjacksonimpl.module.bootclasspath"/>
+      <classpath refid="e-eye-o_jsonjacksonimpl.module.classpath"/>
+      <src refid="e-eye-o_jsonjacksonimpl.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_jsonjacksonimpl"/>
+    </javac>
+    
+    <copy todir="${e-eye-o_jsonjacksonimpl.testoutput.dir}">
+      <fileset dir="${module.e-eye-o_jsonjacksonimpl.basedir}/E-EYE-O_JSONJacksonImpl/test-unit">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
   
   <target name="clean.module.e-eye-o_jsonjacksonimpl" description="cleanup module">
     <delete dir="${e-eye-o_jsonjacksonimpl.output.dir}"/>
