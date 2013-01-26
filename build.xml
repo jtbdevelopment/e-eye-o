@@ -1,4 +1,4 @@
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="e_eye_o" default="rebuild-with-libs">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="e_eye_o" default="all-with-libs">
     <include file="e-eye-o.xml"/>
     <property name="junit.version" value="4.11"/>
     <property name="cdi.api.version" value="1.1-PRD"/>
