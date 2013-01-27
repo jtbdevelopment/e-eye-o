@@ -894,7 +894,9 @@
     <property name="artifact.output.e-eye-o_daoderbyimpl:ejb_exploded" value="${basedir}/out/artifacts/E_EYE_O_DAODerbyImpl_ejb_exploded"/>
     <property name="artifact.output.e-eye-o_data:ejb_exploded" value="${basedir}/out/artifacts/E_EYE_O_Data_ejb_exploded"/>
     <property name="artifact.output.e-eye-o_hibernatedaoimpl:ejb_exploded" value="${basedir}/out/artifacts/E_EYE_O_HibernateDAOImpl_ejb_exploded"/>
+    <property name="artifact.output.e-eye-o_interfaces" value="${basedir}/out/artifacts/E_EYE_O_Interfaces"/>
     <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.E-EYE-O_Interfaces.jar" value="${artifacts.temp.dir}/E-EYE-O_Interfaces.jar"/>
   </target>
   
   <target name="clean.artifact.e-eye-o_daoderbyimpl:ejb_exploded" description="clean E-EYE-O_DAODerbyImpl:ejb exploded artifact output">
@@ -929,7 +931,20 @@
     </copy>
   </target>
   
-  <target name="build.all.artifacts" depends="artifact.e-eye-o_daoderbyimpl:ejb_exploded, artifact.e-eye-o_data:ejb_exploded, artifact.e-eye-o_hibernatedaoimpl:ejb_exploded" description="Build all artifacts">
+  <target name="artifact.e-eye-o_interfaces" depends="init.artifacts, compile.module.e-eye-o_interfaces" description="Build &#39;E-EYE-O_Interfaces&#39; artifact">
+    <property name="artifact.temp.output.e-eye-o_interfaces" value="${artifacts.temp.dir}/E_EYE_O_Interfaces"/>
+    <mkdir dir="${artifact.temp.output.e-eye-o_interfaces}"/>
+    <jar destfile="${temp.jar.path.E-EYE-O_Interfaces.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${e-eye-o_interfaces.output.dir}"/>
+    </jar>
+    <copy file="${temp.jar.path.E-EYE-O_Interfaces.jar}" tofile="${artifact.temp.output.e-eye-o_interfaces}/E-EYE-O_Interfaces.jar"/>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.e-eye-o_daoderbyimpl:ejb_exploded, artifact.e-eye-o_data:ejb_exploded, artifact.e-eye-o_hibernatedaoimpl:ejb_exploded, artifact.e-eye-o_interfaces" description="Build all artifacts">
+    <mkdir dir="${artifact.output.e-eye-o_interfaces}"/>
+    <copy todir="${artifact.output.e-eye-o_interfaces}">
+      <fileset dir="${artifact.temp.output.e-eye-o_interfaces}"/>
+    </copy>
     
     <!-- Delete temporary files -->
     <delete dir="${artifacts.temp.dir}"/>

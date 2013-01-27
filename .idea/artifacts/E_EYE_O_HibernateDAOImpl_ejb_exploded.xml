@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-ejb" name="E-EYE-O_HibernateDAOImpl:ejb exploded">
+  <artifact type="exploded-ejb" build-on-make="true" name="E-EYE-O_HibernateDAOImpl:ejb exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/E_EYE_O_HibernateDAOImpl_ejb_exploded</output-path>
     <root id="root">
       <element id="module-output" name="E-EYE-O_DAOHibernateImpl" />
