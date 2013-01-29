@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DAODerbyImpl/E-EYE-O_DAODerbyImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_DAODerbyImpl/E-EYE-O_DAODerbyImpl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DAODerbyHibernateImpl/E-EYE-O_DAODerbyHibernateImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_DAODerbyHibernateImpl/E-EYE-O_DAODerbyHibernateImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DAOHibernateImpl/E-EYE-O_DAOHibernateImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_DAOHibernateImpl/E-EYE-O_DAOHibernateImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_EntitiesJavaImpl/E-EYE-O_EntitiesJavaImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_EntitiesJavaImpl/E-EYE-O_EntitiesJavaImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Interfaces/E-EYE-O_Interfaces.iml" filepath="$PROJECT_DIR$/E-EYE-O_Interfaces/E-EYE-O_Interfaces.iml" />
-      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_JSONJacksonImpl/E-EYE-O_JSONJacksonImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_JSONJacksonImpl/E-EYE-O_JSONJacksonImpl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_SerializationJacksonImpl/E-EYE-O_SerializationJacksonImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_SerializationJacksonImpl/E-EYE-O_SerializationJacksonImpl.iml" />
     </modules>
   </component>
 </project>

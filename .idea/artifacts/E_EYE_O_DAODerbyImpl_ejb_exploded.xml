@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/E_EYE_O_DAODerbyImpl_ejb_exploded</output-path>
     <root id="root">
       <element id="javaee-facet-resources" facet="E-EYE-O_DAODerbyImpl/ejb/EJB" />
-      <element id="module-output" name="E-EYE-O_DAODerbyImpl" />
+      <element id="module-output" name="E-EYE-O_DAODerbyHibernateImpl" />
     </root>
   </artifact>
 </component>
