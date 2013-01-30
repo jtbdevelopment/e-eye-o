@@ -1,10 +1,8 @@
 package com.jtbdevelopment.e_eye_o.DAO;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.ArchivableAppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.*;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,5 +20,14 @@ public interface ReadOnlyDAO {
 
     public <T extends ArchivableAppUserOwnedObject> Set<T> getArchivedEntitiesForUser(Class<T> entityType, final AppUser appUser);
 
+    public List<Photo> getAllPhotosForEntity(AppUserOwnedObject ownedObject);
+
+    public List<Observation> getAllObservationsForEntity(AppUserOwnedObject ownedObject);
+
+    public List<Observation> getAllObservationsForObservationCategory(ObservationCategory observationCategory);
+
+    public List<Observation> getAllObservationsForFollowup(Observation followup);
+
+    public List<Student> getAllStudentsForClassList(ClassList classList);
 }
 

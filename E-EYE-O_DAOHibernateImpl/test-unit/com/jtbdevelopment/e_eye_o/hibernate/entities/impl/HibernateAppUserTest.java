@@ -1,11 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HibernateIdObjectWrapperFactory;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.joda.time.DateTime;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -16,21 +12,14 @@ import static org.testng.AssertJUnit.assertSame;
  * Date: 1/13/13
  * Time: 7:55 PM
  */
-public class HibernateAppUserTest {
-    private Mockery context;
-    private IdObjectFactory implFactory;
+public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     private AppUser implAppUser;
     private HibernateAppUser hibernateAppUser;
-    private final DateTime DATE_VALUE = new DateTime();
-    private final String STRING_VALUE = "S";
 
     @BeforeMethod
     public void setUp() {
-        context = new Mockery();
-        implFactory = context.mock(IdObjectFactory.class);
+        super.setUp();
         implAppUser = context.mock(AppUser.class, "default");
-        @SuppressWarnings("unused")  // inits id object ref to itself
-        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernateAppUser = new HibernateAppUser(implAppUser);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(AppUser.class);
@@ -114,17 +103,17 @@ public class HibernateAppUserTest {
     public void testGetLastLogin() throws Exception {
         context.checking(new Expectations() {{
             one(implAppUser).getLastLogin();
-            will(returnValue(DATE_VALUE));
+            will(returnValue(DATETIME_VALUE));
         }});
-        assertEquals(DATE_VALUE, hibernateAppUser.getLastLogin());
+        assertEquals(DATETIME_VALUE, hibernateAppUser.getLastLogin());
     }
 
     @Test
     public void testSetLastLogin() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).setLastLogin(DATE_VALUE);
+            one(implAppUser).setLastLogin(DATETIME_VALUE);
             will(returnValue(implAppUser));
         }});
-        assertSame(hibernateAppUser, hibernateAppUser.setLastLogin(DATE_VALUE));
+        assertSame(hibernateAppUser, hibernateAppUser.setLastLogin(DATETIME_VALUE));
     }
 }

@@ -1,11 +1,8 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.Student;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HibernateIdObjectWrapperFactory;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -20,21 +17,15 @@ import static org.testng.AssertJUnit.assertSame;
  * Date: 1/20/13
  * Time: 3:19 PM
  */
-public class HibernateStudentTest {
-    private Mockery context;
-    private IdObjectFactory implFactory;
+public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     private Student implStudent;
     private HibernateStudent hibernateStudent;
-    private final String STRING_VALUE = "S";
 
     @BeforeMethod
     public void setUp() {
-        context = new Mockery();
-        implFactory = context.mock(IdObjectFactory.class);
+        super.setUp();
         implStudent = context.mock(Student.class);
         hibernateStudent = new HibernateStudent(implStudent);
-        @SuppressWarnings("unused")
-        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(Student.class);
             will(returnValue(implStudent));

@@ -1,7 +1,6 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.ArchivableAppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.impl.ArchivableAppUserOwnedObjectImpl;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateArchivableAppUserOwnedObject;
@@ -15,6 +14,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -86,6 +86,76 @@ public class HibernateReadOnlyDAOTest {
     }
 
     @Test
+    public void testGetStudentsForClass() throws Exception {
+        final List<Student> result = Collections.unmodifiableList(Arrays.asList(context.mock(Student.class)));
+        final ClassList cl = context.mock(ClassList.class);
+        context.checking(new Expectations() {{
+            allowing(session).createQuery("from Student as S where :classList member of S.classLists");
+            will(returnValue(query));
+            allowing(query).setParameter("classList", cl);
+            allowing(query).list();
+            will(returnValue(result));
+        }});
+        assertSame(result, dao.getAllStudentsForClassList(cl));
+    }
+
+    @Test
+    public void testGetObservationsForCategory() throws Exception {
+        final List<Observation> result = Collections.unmodifiableList(Arrays.asList(context.mock(Observation.class)));
+        final ObservationCategory oc = context.mock(ObservationCategory.class);
+        context.checking(new Expectations() {{
+            allowing(session).createQuery("from Observation as O where :category member of O.categories");
+            will(returnValue(query));
+            allowing(query).setParameter("category", oc);
+            allowing(query).list();
+            will(returnValue(result));
+        }});
+        assertSame(result, dao.getAllObservationsForObservationCategory(oc));
+    }
+
+    @Test
+    public void testGetObservationsForEntity() throws Exception {
+        final List<Observation> result = Collections.unmodifiableList(Arrays.asList(context.mock(Observation.class)));
+        final AppUserOwnedObject oc = context.mock(AppUserOwnedObject.class);
+        context.checking(new Expectations() {{
+            allowing(session).createQuery("from Observation where observationSubject = :observationSubject");
+            will(returnValue(query));
+            allowing(query).setParameter("observationSubject", oc);
+            allowing(query).list();
+            will(returnValue(result));
+        }});
+        assertSame(result, dao.getAllObservationsForEntity(oc));
+    }
+
+    @Test
+    public void testGetObservationsForFollowup() throws Exception {
+        final List<Observation> result = Collections.unmodifiableList(Arrays.asList(context.mock(Observation.class)));
+        final Observation o = context.mock(Observation.class, "2");
+        context.checking(new Expectations() {{
+            allowing(session).createQuery("from Observation as O where followUpObservation = :followUpObservation");
+            will(returnValue(query));
+            allowing(query).setParameter("followUpObservation", o);
+            allowing(query).list();
+            will(returnValue(result));
+        }});
+        assertSame(result, dao.getAllObservationsForFollowup(o));
+    }
+
+    @Test
+    public void testGetPhotosForEntity() throws Exception {
+        final List<Photo> result = Collections.unmodifiableList(Arrays.asList(context.mock(Photo.class)));
+        final AppUserOwnedObject o = context.mock(AppUserOwnedObject.class);
+        context.checking(new Expectations() {{
+            allowing(session).createQuery("from Photo where photoFor = :photoFor");
+            will(returnValue(query));
+            allowing(query).setParameter("photoFor", o);
+            allowing(query).list();
+            will(returnValue(result));
+        }});
+        assertSame(result, dao.getAllPhotosForEntity(o));
+    }
+
+    @Test
     public void testGetEntitiesForUser() throws Exception {
         final List<HibernateWrapper> result = Arrays.asList(A_WRAPPER);
         context.checking(new Expectations() {{
@@ -99,7 +169,6 @@ public class HibernateReadOnlyDAOTest {
             Set entitiesForUser = dao.getEntitiesForUser(c, appUser);
             assertTrue(entitiesForUser.containsAll(result));
             assertTrue(result.containsAll(entitiesForUser));
-
         }
     }
 
@@ -131,7 +200,6 @@ public class HibernateReadOnlyDAOTest {
         }
     }
 
-
     @Test
     public void testGetHibernateEntityNameWhereFactoryProvidesMapping() throws Exception {
         assertEquals(HQLNAME, dao.getHibernateEntityName(LocalInterface.class));
@@ -142,7 +210,7 @@ public class HibernateReadOnlyDAOTest {
         assertEquals(HQLNAME, dao.getHibernateEntityName(HibernateWrapper.class));
     }
 
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetHibernateEntityNameWhereFactoryDoesNotProvidesMappingAndNeitherDoesHibernate() throws Exception {
         context.checking(new Expectations() {{
             one(wrapperFactory).getWrapperForEntity(LocalImpl.class);

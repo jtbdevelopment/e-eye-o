@@ -110,6 +110,8 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(wrapped));
             allowing(daoIdObjectWrapperFactory).getWrapperForEntity(AppUser.class);
             will(returnValue(HibernateAppUser.class));
+            allowing(daoIdObjectWrapperFactory).getWrapperForEntity(AppUserOwnedObject.class);
+            will(returnValue(HibernateAppUserOwnedObject.class));
             allowing(daoIdObjectWrapperFactory).getWrapperForEntity(studentImpl.getClass());
             will(returnValue(HibernateStudent.class));
             allowing(daoIdObjectWrapperFactory).getWrapperForEntity(photoImpl.getClass());
@@ -454,9 +456,9 @@ public class HibernateReadWriteDAOTest {
             will(returnValue("X"));
             one(session).get(TN, "X");
             will(returnValue(appUserLoaded));
-            one(session).createQuery("from AppUserOwnedObject where appUser = :appUser");
+            one(session).createQuery("from TN where appUser = :user");
             will(returnValue(query));
-            one(query).setParameter("appUser", appUserLoaded);
+            one(query).setParameter("user", appUserLoaded);
             will(returnValue(query));
             one(query).list();
             will(returnValue(ownedObjects));

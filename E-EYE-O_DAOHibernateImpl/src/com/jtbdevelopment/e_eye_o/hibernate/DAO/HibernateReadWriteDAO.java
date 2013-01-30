@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
-import org.hibernate.Query;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Date: 11/19/12
@@ -63,6 +62,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     //  TODO - mark delete and allow undelete
     @Override
+    @SuppressWarnings("unchecked")
     public void deleteUser(final AppUser appUser) {
         Session currentSession = sessionFactory.getCurrentSession();
 
@@ -72,9 +72,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             return;  //  Already deleted?
         }
 
-        Query query = currentSession.createQuery("from AppUserOwnedObject where appUser = :appUser");
-        query.setParameter("appUser", wrapped);
-        delete((List<AppUserOwnedObject>) query.list());
+        delete(getEntitiesForUser(HibernateAppUserOwnedObject.class, wrapped));
 
         currentSession.delete(wrapped);
     }
@@ -88,6 +86,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     //  TODO - mark delete and allow undelete
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> void delete(final T entity) {
         Session currentSession = sessionFactory.getCurrentSession();
 
@@ -99,38 +98,28 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
 
         if (wrapped instanceof ObservationCategory) {
-            Query query = currentSession.createQuery("from Observation as O where :category member of O.categories");
-            query.setParameter("category", wrapped);
-            for (Observation observation : (List<Observation>) query.list()) {
+            for (Observation observation : getAllObservationsForObservationCategory((ObservationCategory) wrapped)) {
                 observation.removeCategory((ObservationCategory) wrapped);
                 currentSession.update(observation);
             }
         }
         if (wrapped instanceof ClassList) {
-            Query query = currentSession.createQuery("from Student as S where :classList member of S.classLists");
-            query.setParameter("classList", wrapped);
-            for (Student student : (List<Student>) query.list()) {
+            for (Student student : getAllStudentsForClassList((ClassList) wrapped)) {
                 student.removeClassList((ClassList) wrapped);
                 currentSession.update(student);
             }
         }
         if (wrapped instanceof Observation) {
-            Query query = currentSession.createQuery("from Observation as O where followUpObservation = :followUpObservation");
-            query.setParameter("followUpObservation", wrapped);
-            for (Observation observation : (List<Observation>) query.list()) {
+            for (Observation observation : getAllObservationsForFollowup((Observation) wrapped)) {
                 observation.setFollowUpObservation(null);
                 currentSession.update(observation);
             }
         }
         if (wrapped instanceof AppUserOwnedObject) {
-            Query query = currentSession.createQuery("from Photo where photoFor = :photoFor");
-            query.setParameter("photoFor", wrapped);
-            for (Photo p : (List<Photo>) query.list()) {
+            for (Photo p : getAllPhotosForEntity(wrapped)) {
                 currentSession.delete(p);
             }
-            query = currentSession.createQuery("from Observation where observationSubject = :observationSubject");
-            query.setParameter("observationSubject", wrapped);
-            for (Observation o : (List<Observation>) query.list()) {
+            for (Observation o : getAllObservationsForEntity(wrapped)) {
                 currentSession.delete(o);
             }
         }

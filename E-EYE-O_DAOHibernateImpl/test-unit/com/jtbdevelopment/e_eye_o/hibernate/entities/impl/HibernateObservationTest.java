@@ -1,11 +1,10 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
-import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HibernateIdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.entities.ClassList;
+import com.jtbdevelopment.e_eye_o.entities.Observation;
+import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
+import com.jtbdevelopment.e_eye_o.entities.Student;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -20,24 +19,15 @@ import static org.testng.AssertJUnit.assertSame;
  * Date: 1/20/13
  * Time: 5:29 PM
  */
-public class HibernateObservationTest {
-    private Mockery context;
-    private IdObjectFactory implFactory;
+public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     private Observation implObservation;
     private HibernateObservation hibernateObservation;
-    private final LocalDateTime LOCALDATETIME_VALUE = new LocalDateTime();
-    private final LocalDate LOCALDATE_VALUE = new LocalDate();
-    private final String STRING_VALUE = "S";
-
 
     @BeforeMethod
     public void setUp() {
-        context = new Mockery();
-        implFactory = context.mock(IdObjectFactory.class);
+        super.setUp();
         implObservation = context.mock(Observation.class, "default");
         hibernateObservation = new HibernateObservation(implObservation);
-        @SuppressWarnings("unused")
-        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(Observation.class);
             will(returnValue(implObservation));

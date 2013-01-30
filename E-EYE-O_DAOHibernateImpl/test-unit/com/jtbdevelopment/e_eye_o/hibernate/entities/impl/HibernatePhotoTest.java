@@ -1,12 +1,8 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HibernateIdObjectWrapperFactory;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.joda.time.LocalDateTime;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -17,22 +13,15 @@ import static org.testng.AssertJUnit.assertSame;
  * Date: 1/13/13
  * Time: 8:02 PM
  */
-public class HibernatePhotoTest {
-    private Mockery context;
-    private IdObjectFactory implFactory;
+public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     private Photo implPhoto;
     private Student implStudent;
     private HibernatePhoto hibernatePhoto;
-    private final LocalDateTime DATE_VALUE = new LocalDateTime();
-    private final String STRING_VALUE = "S";
 
     @BeforeMethod
     public void setUp() {
-        context = new Mockery();
-        implFactory = context.mock(IdObjectFactory.class);
+        super.setUp();
         implPhoto = context.mock(Photo.class, "default");
-        @SuppressWarnings("unused")
-        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernatePhoto = new HibernatePhoto(implPhoto);
         implStudent = context.mock(Student.class);
         context.checking(new Expectations() {{
@@ -99,17 +88,17 @@ public class HibernatePhotoTest {
     public void testGetTimestamp() throws Exception {
         context.checking(new Expectations() {{
             one(implPhoto).getTimestamp();
-            will(returnValue(DATE_VALUE));
+            will(returnValue(LOCALDATETIME_VALUE));
         }});
-        assertEquals(DATE_VALUE, hibernatePhoto.getTimestamp());
+        assertEquals(LOCALDATETIME_VALUE, hibernatePhoto.getTimestamp());
     }
 
     @Test
     public void testSetTimestamp() throws Exception {
         context.checking(new Expectations() {{
-            one(implPhoto).setTimestamp(DATE_VALUE);
+            one(implPhoto).setTimestamp(LOCALDATETIME_VALUE);
             will(returnValue(implPhoto));
         }});
-        assertSame(hibernatePhoto, hibernatePhoto.setTimestamp(DATE_VALUE));
+        assertSame(hibernatePhoto, hibernatePhoto.setTimestamp(LOCALDATETIME_VALUE));
     }
 }

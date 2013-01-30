@@ -4,9 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
-import org.hamcrest.core.CombinableMatcher;
 import org.hamcrest.core.IsEqual;
-import org.hamcrest.core.IsNot;
 import org.hamcrest.core.IsSame;
 
 import java.util.HashSet;
@@ -17,12 +15,10 @@ import java.util.Set;
  * Time: 5:23 PM
  */
 public class IsEqualButNotTheSame<I extends IdObject, T extends Set<I>> extends BaseMatcher<T> {
-    private final CombinableMatcher<T> matcher;
     private final IsEqual<T> equalMatcher;
     private final IsSame<T> sameMatcher;
 
     public IsEqualButNotTheSame(final T arg) {
-        matcher = new CombinableMatcher<>(new IsEqual<>(arg)).and(new IsNot<>(new IsSame<>(arg)));
         equalMatcher = new IsEqual<>(arg);
         sameMatcher = new IsSame<>(arg);
     }
@@ -46,6 +42,7 @@ public class IsEqualButNotTheSame<I extends IdObject, T extends Set<I>> extends 
 
     @Override
     public void describeTo(final Description description) {
-        matcher.describeTo(description);
+        equalMatcher.describeTo(description);
+        sameMatcher.describeTo(description);
     }
 }

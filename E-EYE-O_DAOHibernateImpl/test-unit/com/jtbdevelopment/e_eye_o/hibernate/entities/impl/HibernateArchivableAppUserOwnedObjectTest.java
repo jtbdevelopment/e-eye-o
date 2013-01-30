@@ -1,11 +1,8 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.ArchivableAppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HibernateIdObjectWrapperFactory;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -16,7 +13,7 @@ import static org.testng.AssertJUnit.assertTrue;
  * Date: 1/21/13
  * Time: 12:22 PM
  */
-public class HibernateArchivableAppUserOwnedObjectTest {
+public class HibernateArchivableAppUserOwnedObjectTest extends HibernateAbstractIdObjectTest {
     public static interface LocalInterface extends ArchivableAppUserOwnedObject {
     }
 
@@ -26,18 +23,13 @@ public class HibernateArchivableAppUserOwnedObjectTest {
         }
     }
 
-    private Mockery context;
-    private IdObjectFactory implFactory;
     private LocalInterface impl;
     private HibernateLocal hibernateLocal;
 
     @BeforeMethod
     public void setUp() {
-        context = new Mockery();
-        implFactory = context.mock(IdObjectFactory.class);
+        super.setUp();
         impl = context.mock(LocalInterface.class, "default");
-        @SuppressWarnings("unused")
-        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernateLocal = new HibernateLocal(impl);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(Photo.class);

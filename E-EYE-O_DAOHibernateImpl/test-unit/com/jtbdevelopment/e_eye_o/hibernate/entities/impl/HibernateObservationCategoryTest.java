@@ -1,11 +1,8 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HibernateIdObjectWrapperFactory;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -16,21 +13,15 @@ import static org.testng.AssertJUnit.assertSame;
  * Date: 1/13/13
  * Time: 7:25 PM
  */
-public class HibernateObservationCategoryTest {
-    private Mockery context;
-    private IdObjectFactory implFactory;
+public class HibernateObservationCategoryTest extends HibernateAbstractIdObjectTest {
     private ObservationCategory implOC;
     private HibernateObservationCategory hibernateOC;
     private final String APP_USER_ID = "AUID";
-    private final String STRING_VALUE = "S";
 
     @BeforeMethod
     public void setUp() {
-        context = new Mockery();
-        implFactory = context.mock(IdObjectFactory.class);
+        super.setUp();
         implOC = context.mock(ObservationCategory.class, "default");
-        @SuppressWarnings("unused")
-        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernateOC = new HibernateObservationCategory(implOC);
         final AppUser appUser = context.mock(AppUser.class);
         context.checking(new Expectations() {{

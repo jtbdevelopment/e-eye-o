@@ -1,10 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HibernateIdObjectWrapperFactory;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -14,19 +11,14 @@ import static org.testng.AssertJUnit.assertSame;
  * Date: 1/13/13
  * Time: 7:13 PM
  */
-public class HibernateClassListTest {
-    private Mockery context;
-    private IdObjectFactory implFactory;
+public class HibernateClassListTest extends HibernateAbstractIdObjectTest {
     private ClassList implClassList;
     private HibernateClassList hibernateClassList;
 
     @BeforeMethod
     public void setUp() {
-        context = new Mockery();
-        implFactory = context.mock(IdObjectFactory.class);
+        super.setUp();
         implClassList = context.mock(ClassList.class, "default");
-        @SuppressWarnings("unused")
-        HibernateIdObjectWrapperFactory daoFactory = new HibernateIdObjectWrapperFactory(implFactory);
         hibernateClassList = new HibernateClassList(implClassList);
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(ClassList.class);

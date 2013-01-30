@@ -4,6 +4,7 @@ import com.google.common.collect.LinkedHashMultiset;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.helpers.IdObjectInterfaceResolverImpl;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
@@ -160,7 +161,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
 
     private static class LocalIdObjectWrapperFactory extends AbstractIdObjectWrapperFactoryImpl {
         public LocalIdObjectWrapperFactory() {
-            super(LocalIdObjectWrapper.class);
+            super(LocalIdObjectWrapper.class, new IdObjectInterfaceResolverImpl());
             addMapping(LocalSomeIdObject.class, LocalSomeIdObjectWrapper.class);
         }
     }
