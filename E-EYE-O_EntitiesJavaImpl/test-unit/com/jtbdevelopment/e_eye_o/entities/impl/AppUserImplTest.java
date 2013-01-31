@@ -41,7 +41,7 @@ public class AppUserImplTest extends AbstractIdObjectTest<AppUserImpl> {
     @Test
     public void testSetEmailAddress() throws Exception {
         Method setter = getSetMethod("emailAddress", String.class);
-        Method getter = getGetMethod("emailAddress");
+        Method getter = getIsOrGetMethod("emailAddress");
         checkStringSetGetValidateSingleValue(getter, setter, VALID_EMAIL, false, AppUser.EMAIL_MUST_BE_A_VALID_FORMAT_ERROR);
         checkStringSetGetValidateSingleValue(getter, setter, NULL, true, AppUser.EMAIL_CANNOT_BE_NULL_ERROR);
         checkStringSetGetValidateSingleValue(getter, setter, INVALID_EMAIL, true, AppUser.EMAIL_MUST_BE_A_VALID_FORMAT_ERROR);

@@ -70,7 +70,7 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
     ) {
         try {
             Method setter = getSetMethod(collectionName, Set.class);
-            Method getter = getGetMethod(collectionName);
+            Method getter = getIsOrGetMethod(collectionName);
 
             T entity = entityUnderTest.newInstance().setAppUser(USER1);
             Set<C> resultSet = (Set<C>) getter.invoke(entity);
@@ -101,7 +101,7 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
         try {
             Method setter = getSetMethod(collectionName, Set.class);
             Method adder = getAddMethod(collectionName, Collection.class);
-            Method getter = getGetMethod(collectionName);
+            Method getter = getIsOrGetMethod(collectionName);
 
             T entity = entityUnderTest.newInstance().setAppUser(USER1);
             Set<C> resultSet = (Set<C>) getter.invoke(entity);
@@ -128,7 +128,7 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
                                                                                    final String nullValueError) {
         try {
             Method adder = getAddMethod(singleName, collectionEntity);
-            Method getter = getGetMethod(collectionName);
+            Method getter = getIsOrGetMethod(collectionName);
 
             T entity = entityUnderTest.newInstance().setAppUser(USER1);
 
@@ -151,7 +151,7 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
         try {
             Method adder = getAddMethod(singleName, collectionEntity);
             Method remover = getRemoveMethod(singleName, collectionEntity);
-            Method getter = getGetMethod(collectionName);
+            Method getter = getIsOrGetMethod(collectionName);
 
             T entity = entityUnderTest.newInstance().setAppUser(USER1);
 

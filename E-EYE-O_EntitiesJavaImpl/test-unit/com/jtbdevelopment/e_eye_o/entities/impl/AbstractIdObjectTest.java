@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 import com.google.common.base.Strings;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import org.springframework.util.StringUtils;
+import com.jtbdevelopment.e_eye_o.entities.impl.helpers.IdObjectInterfaceResolverImpl;
 import org.testng.annotations.Test;
 
 import javax.validation.ConstraintViolation;
@@ -26,6 +26,7 @@ import static org.testng.Assert.assertTrue;
  */
 @Test
 public class AbstractIdObjectTest<T extends IdObject> {
+    protected static final IdObjectInterfaceResolverImpl resolver = new IdObjectInterfaceResolverImpl();
     protected static final String BLANK = "";
     protected static final String GENERALLY_ACCEPTABLE_VALUE = "A Value";
     protected static final String NULL = null;
@@ -63,7 +64,7 @@ public class AbstractIdObjectTest<T extends IdObject> {
     private void checkStringSetGetsAndValidate(final String attribute, boolean blanksOK, final String validationError) {
         try {
             Method setter = getSetMethod(attribute, String.class);
-            Method getter = getGetMethod(attribute);
+            Method getter = getIsOrGetMethod(attribute);
             checkStringSetGetValidateSingleValue(getter, setter, GENERALLY_ACCEPTABLE_VALUE, false, validationError);
             checkStringSetGetValidateSingleValue(getter, setter, BLANK, !blanksOK, validationError);
             checkStringSetGetValidateSingleValue(getter, setter, NULL, true, validationError);
@@ -75,7 +76,7 @@ public class AbstractIdObjectTest<T extends IdObject> {
     protected void checkStringSizeValidation(final String attribute, final String tooBigValue, String sizeError) {
         try {
             Method setter = getSetMethod(attribute, String.class);
-            Method getter = getGetMethod(attribute);
+            Method getter = getIsOrGetMethod(attribute);
             checkStringSetGetValidateSingleValue(getter, setter, tooBigValue, true, sizeError);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -151,19 +152,10 @@ public class AbstractIdObjectTest<T extends IdObject> {
     }
 
     protected Method getIsOrGetMethod(final String attribute) throws NoSuchMethodException {
-        try {
-            return entityUnderTest.getMethod("is" + StringUtils.capitalize(attribute));
-        } catch (NoSuchMethodException e) {
-            //
-        }
-        return getGetMethod(attribute);
-    }
-
-    protected Method getGetMethod(final String attribute) throws NoSuchMethodException {
-        return entityUnderTest.getMethod("get" + StringUtils.capitalize(attribute));
+        return resolver.getIsOrGetMethod(entityUnderTest, attribute);
     }
 
     protected Method getSetMethod(final String attribute, final Class paramType) throws NoSuchMethodException {
-        return entityUnderTest.getMethod("set" + StringUtils.capitalize(attribute), paramType);
+        return resolver.getSetMethod(entityUnderTest, attribute, paramType);
     }
 }
