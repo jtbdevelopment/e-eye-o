@@ -244,6 +244,7 @@
     <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
     <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
   </path>
   
   <path id="e-eye-o_interfaces.runtime.production.module.classpath">
@@ -253,6 +254,7 @@
     <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
     <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
   </path>
   
   <path id="e-eye-o_interfaces.module.classpath">
@@ -265,6 +267,7 @@
     <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
   </path>
   
   <path id="e-eye-o_interfaces.runtime.module.classpath">
@@ -277,6 +280,7 @@
     <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
   </path>
   
   
