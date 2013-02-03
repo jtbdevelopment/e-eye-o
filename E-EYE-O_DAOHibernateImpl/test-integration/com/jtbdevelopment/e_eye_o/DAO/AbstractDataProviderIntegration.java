@@ -205,12 +205,12 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         final ObservationCategory social = testOCsForU1.get("SOCIAL");
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment = "Test Observation";
-        Observation o = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment).setObservationSubject(testStudentForU1));
+        Observation o = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment).setObservationSubject(testStudentForU1));
         assertEquals(comment, o.getComment());
         assertEquals(2, o.getCategories().size());
         assertTrue(o.getCategories().contains(social));
         assertTrue(o.getCategories().contains(kauw));
-        assertFalse(o.getNeedsFollowUp());
+        assertFalse(o.isFollowUpNeeded());
         assertNull(o.getFollowUpObservation());
         assertNull(o.getFollowUpReminder());
         assertEquals(testStudentForU1, o.getObservationSubject());
@@ -222,7 +222,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final ObservationCategory lang = testOCsForU1.get("LANG");
         final String comment = "Test Observation";
-        Observation o = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment).setObservationSubject(testStudentForU1));
+        Observation o = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment).setObservationSubject(testStudentForU1));
         o.removeCategory(social);
         o.addCategory(lang);
         o.setObservationSubject(testClassList1ForU1);
@@ -240,10 +240,10 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment1 = "Test Observation 1";
         final String comment2 = "Test Observation 2";
-        Observation o1 = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment1).setObservationSubject(testStudentForU1));
-        Observation o2 = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(kauw)).setComment(comment2).setObservationSubject(testStudentForU1));
+        Observation o1 = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment1).setObservationSubject(testStudentForU1));
+        Observation o2 = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(kauw)).setComment(comment2).setObservationSubject(testStudentForU1));
         o1.setFollowUpObservation(o2);
-        o2.setNeedsFollowUp(true);
+        o2.setFollowUpNeeded(true);
         final LocalDate reminderDate = new LocalDate(2012, 11, 12);
         o2.setFollowUpReminder(reminderDate);
         o2.addCategories(testOCsForU1.values());
@@ -252,8 +252,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         o2 = rwDAO.get(Observation.class, o2.getId());
         assertEquals(o1.getFollowUpObservation(), o2);
         assertNull(o2.getFollowUpObservation());
-        assertTrue(o2.getNeedsFollowUp());
-        assertFalse(o1.getNeedsFollowUp());
+        assertTrue(o2.isFollowUpNeeded());
+        assertFalse(o1.isFollowUpNeeded());
         assertEquals(o2.getFollowUpReminder(), reminderDate);
     }
 
@@ -263,8 +263,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTransactio
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment1 = "Test Observation 1";
         final String comment2 = "Test Observation 2";
-        Observation o1 = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment1).setObservationSubject(testStudentForU1));
-        Observation o2 = rwDAO.create(factory.newObservation(testUser1).setNeedsFollowUp(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(kauw)).setComment(comment2).setObservationSubject(testStudentForU1));
+        Observation o1 = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment1).setObservationSubject(testStudentForU1));
+        Observation o2 = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(kauw)).setComment(comment2).setObservationSubject(testStudentForU1));
         o1.setFollowUpObservation(o2);
         rwDAO.update(Arrays.asList(o1, o2));
 

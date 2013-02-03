@@ -9,6 +9,27 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class IdObjectImplFactory implements IdObjectFactory {
+
+    @Override
+    public <T extends IdObject> Class<T> newIdObjectImplementation(final Class<T> idObjectType) {
+        switch (idObjectType.getSimpleName()) {
+            case "AppUser":
+                return (Class<T>) AppUserImpl.class;
+            case "Observation":
+                return (Class<T>) ObservationImpl.class;
+            case "ObservationCategory":
+                return (Class<T>) ObservationCategory.class;
+            case "Student":
+                return (Class<T>) StudentImpl.class;
+            case "Photo":
+                return (Class<T>) PhotoImpl.class;
+            case "ClassList":
+                return (Class<T>) ClassListImpl.class;
+            default:
+                throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
+        }
+    }
+
     @Override
     public <T extends IdObject> T newIdObject(final Class<T> idObjectType) {
         switch (idObjectType.getSimpleName()) {

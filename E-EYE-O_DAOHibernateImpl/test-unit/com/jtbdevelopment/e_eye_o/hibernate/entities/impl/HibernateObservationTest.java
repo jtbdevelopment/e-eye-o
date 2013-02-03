@@ -110,19 +110,19 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetNeedsFollowUp() throws Exception {
         context.checking(new Expectations() {{
-            one(implObservation).getNeedsFollowUp();
+            one(implObservation).isFollowUpNeeded();
             will(returnValue(false));
         }});
-        assertEquals(false, hibernateObservation.getNeedsFollowUp());
+        assertEquals(false, hibernateObservation.isFollowUpNeeded());
     }
 
     @Test
     public void testSetNeedsFollowUp() throws Exception {
         context.checking(new Expectations() {{
-            one(implObservation).setNeedsFollowUp(true);
+            one(implObservation).setFollowUpNeeded(true);
             will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.setNeedsFollowUp(true));
+        assertSame(hibernateObservation, hibernateObservation.setFollowUpNeeded(true));
     }
 
     @Test

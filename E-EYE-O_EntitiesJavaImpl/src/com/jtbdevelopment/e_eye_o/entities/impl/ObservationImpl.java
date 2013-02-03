@@ -24,7 +24,7 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
 
     private Set<ObservationCategory> categories = new HashSet<>();
 
-    private boolean needsFollowUp = false;
+    private boolean followUpNeeded = false;
     private LocalDate followUpReminder;
     private Observation followUpObservation;
 
@@ -69,13 +69,13 @@ public class ObservationImpl extends ArchivableAppUserOwnedObjectImpl implements
     }
 
     @Override
-    public boolean getNeedsFollowUp() {
-        return needsFollowUp;
+    public boolean isFollowUpNeeded() {
+        return followUpNeeded;
     }
 
     @Override
-    public Observation setNeedsFollowUp(final boolean needsFollowUp) {
-        this.needsFollowUp = needsFollowUp;
+    public Observation setFollowUpNeeded(final boolean followUpNeeded) {
+        this.followUpNeeded = followUpNeeded;
         return this;
     }
 

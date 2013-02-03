@@ -41,9 +41,9 @@ public interface Observation extends ArchivableAppUserOwnedObject {
 
     Observation setSignificant(final boolean significant);
 
-    boolean getNeedsFollowUp();
+    boolean isFollowUpNeeded();
 
-    Observation setNeedsFollowUp(final boolean needsFollowUp);
+    Observation setFollowUpNeeded(final boolean followUpNeeded);
 
     LocalDate getFollowUpReminder();
 

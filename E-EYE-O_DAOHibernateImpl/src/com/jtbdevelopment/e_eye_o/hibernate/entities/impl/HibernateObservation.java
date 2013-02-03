@@ -63,13 +63,13 @@ public class HibernateObservation extends HibernateArchivableAppUserOwnedObject<
 
     @Override
     @Column(nullable = false)
-    public boolean getNeedsFollowUp() {
-        return wrapped.getNeedsFollowUp();
+    public boolean isFollowUpNeeded() {
+        return wrapped.isFollowUpNeeded();
     }
 
     @Override
-    public Observation setNeedsFollowUp(final boolean needsFollowUp) {
-        wrapped.setNeedsFollowUp(needsFollowUp);
+    public Observation setFollowUpNeeded(final boolean followUpNeeded) {
+        wrapped.setFollowUpNeeded(followUpNeeded);
         return this;
     }
 

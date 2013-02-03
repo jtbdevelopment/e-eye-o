@@ -25,6 +25,9 @@ public interface IdObjectInterfaceResolver {
     @Cacheable("idObjectInterface")
     <T extends IdObject> Method getSetMethod(final Class<T> entityType, final String attribute, final Class valueType);
 
+    /**
+     *  Returns sorted list of getters
+     */
     @Cacheable("idObjectInterface")
     <T extends IdObject> List<Method> getAllGetters(final Class<T> entityType);
 }

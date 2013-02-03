@@ -7,6 +7,8 @@ import org.springframework.util.StringUtils;
 
 import java.beans.Transient;
 import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,16 +69,26 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
         List<Method> methods = new LinkedList<>();
         Class<T> iface = getIdObjectInterfaceForClass(entityType);
         for (Method method : iface.getMethods()) {
-            String methodName = method.getName();
             if (method.isAnnotationPresent(Transient.class)) {
                 continue;
             }
 
-            if (method.getName().startsWith(GET) || method.getName().startsWith(IS)) {
+            String methodName = method.getName();
+            if (methodName.startsWith(GET) || methodName.startsWith(IS)) {
                 methods.add(method);
             }
 
         }
+        return getSortedMethods(methods);
+    }
+
+    private List<Method> getSortedMethods(final List<Method> methods) {
+        Collections.sort(methods, new Comparator<Method>() {
+            @Override
+            public int compare(final Method o1, final Method o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
         return methods;
     }
 }
