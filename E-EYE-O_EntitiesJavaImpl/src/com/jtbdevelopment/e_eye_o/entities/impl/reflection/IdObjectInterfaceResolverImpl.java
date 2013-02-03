@@ -1,7 +1,7 @@
-package com.jtbdevelopment.e_eye_o.entities.impl.helpers;
+package com.jtbdevelopment.e_eye_o.entities.impl.reflection;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.helpers.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 import com.google.common.base.Strings;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.impl.helpers.IdObjectInterfaceResolverImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.reflection.IdObjectInterfaceResolverImpl;
 import org.testng.annotations.Test;
 
 import javax.validation.ConstraintViolation;

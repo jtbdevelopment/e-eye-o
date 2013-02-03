@@ -4,7 +4,7 @@ import com.google.common.collect.LinkedHashMultiset;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImpl;
-import com.jtbdevelopment.e_eye_o.entities.impl.helpers.IdObjectInterfaceResolverImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.reflection.IdObjectInterfaceResolverImpl;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 

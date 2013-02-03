@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.entities.helpers;
+package com.jtbdevelopment.e_eye_o.entities.reflection;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import org.springframework.cache.annotation.Cacheable;
