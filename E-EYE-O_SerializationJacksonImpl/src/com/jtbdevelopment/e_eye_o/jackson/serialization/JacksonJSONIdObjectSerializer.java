@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
@@ -35,10 +36,18 @@ public class JacksonJSONIdObjectSerializer implements IdObjectSerializer {
         }
     }
 
-    public <T extends IdObject> T read(final String input, Class<T> entityType) {
+    @SuppressWarnings("unchecked")
+    public <T extends IdObject> T read(final String input) {
         try {
-            return mapper.readValue(input, entityType);
-        } catch (IOException e) {
+            JsonNode rootNode = mapper.readTree(input);
+            String entityTypeString = rootNode.get(JacksonIdObjectConstants.ENTITY_TYPE_FIELD).asText();
+            Class entityType = Class.forName(entityTypeString);
+            if (IdObject.class.isAssignableFrom(entityType)) {
+                return mapper.readValue(input, (Class<T>) entityType);
+            } else {
+                throw new IllegalArgumentException("Unable to parse " + input + " as IdObject");
+            }
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

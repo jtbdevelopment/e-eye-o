@@ -35,7 +35,6 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
         return found;
     }
 
-
     @Override
     public <T extends IdObject> Method getSetMethod(final Class<T> entityType, final String attribute, final Class valueType) {
         try {

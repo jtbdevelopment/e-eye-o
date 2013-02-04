@@ -8,7 +8,6 @@ import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateIdObject;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,6 @@ import java.util.Set;
  * Date: 11/18/12
  * Time: 10:29 PM
  */
-@Repository
 @SuppressWarnings("unused")
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public class HibernateReadOnlyDAO implements ReadOnlyDAO {

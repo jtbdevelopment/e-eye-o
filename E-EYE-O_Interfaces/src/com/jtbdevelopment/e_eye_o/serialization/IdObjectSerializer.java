@@ -1,5 +1,7 @@
 package com.jtbdevelopment.e_eye_o.serialization;
 
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
+
 /**
  * Date: 1/26/13
  * Time: 10:29 PM
@@ -18,4 +20,5 @@ package com.jtbdevelopment.e_eye_o.serialization;
 public interface IdObjectSerializer {
     String write(final Object entity);
 
+    <T extends IdObject> T read(final String input);
 }

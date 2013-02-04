@@ -2,13 +2,18 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import org.springframework.cache.annotation.Cacheable;
 
+import java.util.Map;
+
 /**
  * Date: 1/1/13
  * Time: 7:47 PM
  */
 public interface IdObjectFactory {
     @Cacheable("idObjectInterfaceToImplementation")
-    <T extends IdObject> Class<T> newIdObjectImplementation(Class<T> idObjectType);
+    <T extends IdObject> Class<T> implementationForInterface(Class<T> interfaceType);
+
+    @Cacheable("idObjectInterfacesToImplementations")
+    Map<Class<? extends IdObject>, Class<? extends IdObject>> implementationsForInterfaces();
 
     <T extends IdObject> T newIdObject(Class<T> idObjectType);
 

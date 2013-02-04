@@ -631,142 +631,6 @@
   </target>
   
   
-  <!-- Module E-EYE-O_SerializationJacksonImpl -->
-  
-  <dirname property="module.e-eye-o_serializationjacksonimpl.basedir" file="${ant.file}"/>
-  
-  
-  <property name="module.jdk.home.e-eye-o_serializationjacksonimpl" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.e-eye-o_serializationjacksonimpl" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.e-eye-o_serializationjacksonimpl" value="${project.jdk.classpath}"/>
-  
-  <property name="compiler.args.e-eye-o_serializationjacksonimpl" value="${compiler.args}"/>
-  
-  <property name="e-eye-o_serializationjacksonimpl.output.dir" value="${module.e-eye-o_serializationjacksonimpl.basedir}/out/production/E-EYE-O_SerializationJacksonImpl"/>
-  <property name="e-eye-o_serializationjacksonimpl.testoutput.dir" value="${module.e-eye-o_serializationjacksonimpl.basedir}/out/test/E-EYE-O_SerializationJacksonImpl"/>
-  
-  <path id="e-eye-o_serializationjacksonimpl.module.bootclasspath">
-    <!-- Paths to be included in compilation bootclasspath -->
-  </path>
-  
-  <path id="e-eye-o_serializationjacksonimpl.module.production.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_serializationjacksonimpl}"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
-    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
-    <path refid="library.joda-time:joda-time:2.1.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
-    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
-    <path refid="library.com.google.guava:guava:13.0.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_serializationjacksonimpl.runtime.production.module.classpath">
-    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
-    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
-    <path refid="e-eye-o_entitiesjavaimpl.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_serializationjacksonimpl.module.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_serializationjacksonimpl}"/>
-    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
-    <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
-    <path refid="library.joda-time:joda-time:2.1.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
-    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
-    <path refid="library.com.google.guava:guava:13.0.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_serializationjacksonimpl.runtime.module.classpath">
-    <pathelement location="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
-    <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
-    <path refid="e-eye-o_entitiesjavaimpl.runtime.module.classpath"/>
-    <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
-  </path>
-  
-  
-  <patternset id="excluded.from.module.e-eye-o_serializationjacksonimpl">
-    <patternset refid="ignored.files"/>
-  </patternset>
-  
-  <patternset id="excluded.from.compilation.e-eye-o_serializationjacksonimpl">
-    <patternset refid="excluded.from.module.e-eye-o_serializationjacksonimpl"/>
-  </patternset>
-  
-  <path id="e-eye-o_serializationjacksonimpl.module.sourcepath">
-    <dirset dir="${module.e-eye-o_serializationjacksonimpl.basedir}/E-EYE-O_SerializationJacksonImpl">
-      <include name="src"/>
-    </dirset>
-  </path>
-  
-  <path id="e-eye-o_serializationjacksonimpl.module.test.sourcepath">
-    <dirset dir="${module.e-eye-o_serializationjacksonimpl.basedir}/E-EYE-O_SerializationJacksonImpl">
-      <include name="test-unit"/>
-    </dirset>
-  </path>
-  
-  
-  <target name="compile.module.e-eye-o_serializationjacksonimpl" depends="compile.module.e-eye-o_serializationjacksonimpl.production,compile.module.e-eye-o_serializationjacksonimpl.tests" description="Compile module E-EYE-O_SerializationJacksonImpl"/>
-  
-  <target name="compile.module.e-eye-o_serializationjacksonimpl.production" depends="compile.module.e-eye-o_entitiesjavaimpl,compile.module.e-eye-o_interfaces" description="Compile module E-EYE-O_SerializationJacksonImpl; production classes">
-    <mkdir dir="${e-eye-o_serializationjacksonimpl.output.dir}"/>
-    <javac destdir="${e-eye-o_serializationjacksonimpl.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_serializationjacksonimpl}/javac">
-      <compilerarg line="${compiler.args.e-eye-o_serializationjacksonimpl}"/>
-      <bootclasspath refid="e-eye-o_serializationjacksonimpl.module.bootclasspath"/>
-      <classpath refid="e-eye-o_serializationjacksonimpl.module.production.classpath"/>
-      <src refid="e-eye-o_serializationjacksonimpl.module.sourcepath"/>
-      <patternset refid="excluded.from.compilation.e-eye-o_serializationjacksonimpl"/>
-    </javac>
-    
-    <copy todir="${e-eye-o_serializationjacksonimpl.output.dir}">
-      <fileset dir="${module.e-eye-o_serializationjacksonimpl.basedir}/E-EYE-O_SerializationJacksonImpl/src">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-    </copy>
-  </target>
-  
-  <target name="compile.module.e-eye-o_serializationjacksonimpl.tests" depends="compile.module.e-eye-o_serializationjacksonimpl.production" description="compile module E-EYE-O_SerializationJacksonImpl; test classes" unless="skip.tests">
-    <mkdir dir="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
-    <javac destdir="${e-eye-o_serializationjacksonimpl.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_serializationjacksonimpl}/javac">
-      <compilerarg line="${compiler.args.e-eye-o_serializationjacksonimpl}"/>
-      <bootclasspath refid="e-eye-o_serializationjacksonimpl.module.bootclasspath"/>
-      <classpath refid="e-eye-o_serializationjacksonimpl.module.classpath"/>
-      <src refid="e-eye-o_serializationjacksonimpl.module.test.sourcepath"/>
-      <patternset refid="excluded.from.compilation.e-eye-o_serializationjacksonimpl"/>
-    </javac>
-    
-    <copy todir="${e-eye-o_serializationjacksonimpl.testoutput.dir}">
-      <fileset dir="${module.e-eye-o_serializationjacksonimpl.basedir}/E-EYE-O_SerializationJacksonImpl/test-unit">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-    </copy>
-  </target>
-  
-  <target name="clean.module.e-eye-o_serializationjacksonimpl" description="cleanup module">
-    <delete dir="${e-eye-o_serializationjacksonimpl.output.dir}"/>
-    <delete dir="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
-  </target>
-  
-  
   <!-- Module E-EYE-O_DAODerbyHibernateImpl -->
   
   <dirname property="module.e-eye-o_daoderbyhibernateimpl.basedir" file="${ant.file}"/>
@@ -860,7 +724,6 @@
   <path id="e-eye-o_daoderbyhibernateimpl.module.test.sourcepath">
     <dirset dir="${module.e-eye-o_daoderbyhibernateimpl.basedir}/E-EYE-O_DAODerbyHibernateImpl">
       <include name="test-unit"/>
-      <include name="test-integration"/>
     </dirset>
   </path>
   
@@ -900,10 +763,6 @@
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
-      <fileset dir="${module.e-eye-o_daoderbyhibernateimpl.basedir}/E-EYE-O_DAODerbyHibernateImpl/test-integration">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
     </copy>
   </target>
   
@@ -912,13 +771,288 @@
     <delete dir="${e-eye-o_daoderbyhibernateimpl.testoutput.dir}"/>
   </target>
   
+  
+  <!-- Module E-EYE-O_SerializationJacksonImpl -->
+  
+  <dirname property="module.e-eye-o_serializationjacksonimpl.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.e-eye-o_serializationjacksonimpl" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.e-eye-o_serializationjacksonimpl" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.e-eye-o_serializationjacksonimpl" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.e-eye-o_serializationjacksonimpl" value="${compiler.args}"/>
+  
+  <property name="e-eye-o_serializationjacksonimpl.output.dir" value="${module.e-eye-o_serializationjacksonimpl.basedir}/out/production/E-EYE-O_SerializationJacksonImpl"/>
+  <property name="e-eye-o_serializationjacksonimpl.testoutput.dir" value="${module.e-eye-o_serializationjacksonimpl.basedir}/out/test/E-EYE-O_SerializationJacksonImpl"/>
+  
+  <path id="e-eye-o_serializationjacksonimpl.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="e-eye-o_serializationjacksonimpl.module.production.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_serializationjacksonimpl}"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
+    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
+    <path refid="library.joda-time:joda-time:2.1.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_serializationjacksonimpl.runtime.production.module.classpath">
+    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_serializationjacksonimpl.module.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_serializationjacksonimpl}"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
+    <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
+    <path refid="library.joda-time:joda-time:2.1.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.com.google.guava:guava:13.0.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
+    <pathelement location="${e-eye-o_daoderbyhibernateimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
+    <pathelement location="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
+    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
+    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_serializationjacksonimpl.runtime.module.classpath">
+    <pathelement location="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
+    <path refid="e-eye-o_entitiesjavaimpl.runtime.module.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
+    <path refid="e-eye-o_daoderbyhibernateimpl.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.e-eye-o_serializationjacksonimpl">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.e-eye-o_serializationjacksonimpl">
+    <patternset refid="excluded.from.module.e-eye-o_serializationjacksonimpl"/>
+  </patternset>
+  
+  <path id="e-eye-o_serializationjacksonimpl.module.sourcepath">
+    <dirset dir="${module.e-eye-o_serializationjacksonimpl.basedir}/E-EYE-O_SerializationJacksonImpl">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.e-eye-o_serializationjacksonimpl" depends="compile.module.e-eye-o_serializationjacksonimpl.production,compile.module.e-eye-o_serializationjacksonimpl.tests" description="Compile module E-EYE-O_SerializationJacksonImpl"/>
+  
+  <target name="compile.module.e-eye-o_serializationjacksonimpl.production" depends="compile.module.e-eye-o_entitiesjavaimpl,compile.module.e-eye-o_interfaces,compile.module.e-eye-o_daoderbyhibernateimpl" description="Compile module E-EYE-O_SerializationJacksonImpl; production classes">
+    <mkdir dir="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <javac destdir="${e-eye-o_serializationjacksonimpl.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_serializationjacksonimpl}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_serializationjacksonimpl}"/>
+      <bootclasspath refid="e-eye-o_serializationjacksonimpl.module.bootclasspath"/>
+      <classpath refid="e-eye-o_serializationjacksonimpl.module.production.classpath"/>
+      <src refid="e-eye-o_serializationjacksonimpl.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_serializationjacksonimpl"/>
+    </javac>
+    
+    <copy todir="${e-eye-o_serializationjacksonimpl.output.dir}">
+      <fileset dir="${module.e-eye-o_serializationjacksonimpl.basedir}/E-EYE-O_SerializationJacksonImpl/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.e-eye-o_serializationjacksonimpl.tests" depends="compile.module.e-eye-o_serializationjacksonimpl.production" description="compile module E-EYE-O_SerializationJacksonImpl; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.e-eye-o_serializationjacksonimpl" description="cleanup module">
+    <delete dir="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <delete dir="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
+  </target>
+  
+  
+  <!-- Module E-EYE-O_DerbyJacksonBasedIntegrationTests -->
+  
+  <dirname property="module.e-eye-o_derbyjacksonbasedintegrationtests.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.e-eye-o_derbyjacksonbasedintegrationtests" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.e-eye-o_derbyjacksonbasedintegrationtests" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.e-eye-o_derbyjacksonbasedintegrationtests" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.e-eye-o_derbyjacksonbasedintegrationtests" value="${compiler.args}"/>
+  
+  <property name="e-eye-o_derbyjacksonbasedintegrationtests.output.dir" value="${module.e-eye-o_derbyjacksonbasedintegrationtests.basedir}/out/production/E-EYE-O_DerbyJacksonBasedIntegrationTests"/>
+  <property name="e-eye-o_derbyjacksonbasedintegrationtests.testoutput.dir" value="${module.e-eye-o_derbyjacksonbasedintegrationtests.basedir}/out/test/E-EYE-O_DerbyJacksonBasedIntegrationTests"/>
+  
+  <path id="e-eye-o_derbyjacksonbasedintegrationtests.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="e-eye-o_derbyjacksonbasedintegrationtests.module.production.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_derbyjacksonbasedintegrationtests}"/>
+    <pathelement location="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
+    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
+    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
+    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
+    <path refid="library.joda-time:joda-time:2.1.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
+    <path refid="library.com.google.guava:guava:13.0.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_derbyjacksonbasedintegrationtests.runtime.production.module.classpath">
+    <pathelement location="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}"/>
+    <path refid="e-eye-o_daoderbyhibernateimpl.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_serializationjacksonimpl.runtime.production.module.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_derbyjacksonbasedintegrationtests.module.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_derbyjacksonbasedintegrationtests}"/>
+    <pathelement location="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}"/>
+    <pathelement location="${e-eye-o_daoderbyhibernateimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
+    <pathelement location="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
+    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
+    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
+    <path refid="library.joda-time:joda-time:2.1.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
+    <path refid="library.com.google.guava:guava:13.0.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_derbyjacksonbasedintegrationtests.runtime.module.classpath">
+    <pathelement location="${e-eye-o_derbyjacksonbasedintegrationtests.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}"/>
+    <path refid="e-eye-o_daoderbyhibernateimpl.runtime.module.classpath"/>
+    <path refid="e-eye-o_serializationjacksonimpl.runtime.module.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.e-eye-o_derbyjacksonbasedintegrationtests">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.e-eye-o_derbyjacksonbasedintegrationtests">
+    <patternset refid="excluded.from.module.e-eye-o_derbyjacksonbasedintegrationtests"/>
+  </patternset>
+  
+  <path id="e-eye-o_derbyjacksonbasedintegrationtests.module.sourcepath">
+    <dirset dir="${module.e-eye-o_derbyjacksonbasedintegrationtests.basedir}/E-EYE-O_DerbyJacksonBasedIntegrationTests">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  <path id="e-eye-o_derbyjacksonbasedintegrationtests.module.test.sourcepath">
+    <dirset dir="${module.e-eye-o_derbyjacksonbasedintegrationtests.basedir}/E-EYE-O_DerbyJacksonBasedIntegrationTests">
+      <include name="test-integration"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.e-eye-o_derbyjacksonbasedintegrationtests" depends="compile.module.e-eye-o_derbyjacksonbasedintegrationtests.production,compile.module.e-eye-o_derbyjacksonbasedintegrationtests.tests" description="Compile module E-EYE-O_DerbyJacksonBasedIntegrationTests"/>
+  
+  <target name="compile.module.e-eye-o_derbyjacksonbasedintegrationtests.production" depends="compile.module.e-eye-o_daoderbyhibernateimpl,compile.module.e-eye-o_serializationjacksonimpl" description="Compile module E-EYE-O_DerbyJacksonBasedIntegrationTests; production classes">
+    <mkdir dir="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}"/>
+    <javac destdir="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_derbyjacksonbasedintegrationtests}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_derbyjacksonbasedintegrationtests}"/>
+      <bootclasspath refid="e-eye-o_derbyjacksonbasedintegrationtests.module.bootclasspath"/>
+      <classpath refid="e-eye-o_derbyjacksonbasedintegrationtests.module.production.classpath"/>
+      <src refid="e-eye-o_derbyjacksonbasedintegrationtests.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_derbyjacksonbasedintegrationtests"/>
+    </javac>
+    
+    <copy todir="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}">
+      <fileset dir="${module.e-eye-o_derbyjacksonbasedintegrationtests.basedir}/E-EYE-O_DerbyJacksonBasedIntegrationTests/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.e-eye-o_derbyjacksonbasedintegrationtests.tests" depends="compile.module.e-eye-o_derbyjacksonbasedintegrationtests.production" description="compile module E-EYE-O_DerbyJacksonBasedIntegrationTests; test classes" unless="skip.tests">
+    <mkdir dir="${e-eye-o_derbyjacksonbasedintegrationtests.testoutput.dir}"/>
+    <javac destdir="${e-eye-o_derbyjacksonbasedintegrationtests.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_derbyjacksonbasedintegrationtests}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_derbyjacksonbasedintegrationtests}"/>
+      <bootclasspath refid="e-eye-o_derbyjacksonbasedintegrationtests.module.bootclasspath"/>
+      <classpath refid="e-eye-o_derbyjacksonbasedintegrationtests.module.classpath"/>
+      <src refid="e-eye-o_derbyjacksonbasedintegrationtests.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_derbyjacksonbasedintegrationtests"/>
+    </javac>
+    
+    <copy todir="${e-eye-o_derbyjacksonbasedintegrationtests.testoutput.dir}">
+      <fileset dir="${module.e-eye-o_derbyjacksonbasedintegrationtests.basedir}/E-EYE-O_DerbyJacksonBasedIntegrationTests/test-integration">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.e-eye-o_derbyjacksonbasedintegrationtests" description="cleanup module">
+    <delete dir="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}"/>
+    <delete dir="${e-eye-o_derbyjacksonbasedintegrationtests.testoutput.dir}"/>
+  </target>
+  
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
   </target>
   
-  <target name="clean" depends="clean.module.e-eye-o_interfaces, clean.module.e-eye-o_entitiesjavaimpl, clean.module.e-eye-o_daohibernateimpl, clean.module.e-eye-o_serializationjacksonimpl, clean.module.e-eye-o_daoderbyhibernateimpl, clean.artifact.e-eye-o_daoderbyimpl:ejb_exploded, clean.artifact.e-eye-o_data:ejb_exploded, clean.artifact.e-eye-o_hibernatedaoimpl:ejb_exploded" description="cleanup all"/>
+  <target name="clean" depends="clean.module.e-eye-o_interfaces, clean.module.e-eye-o_entitiesjavaimpl, clean.module.e-eye-o_daohibernateimpl, clean.module.e-eye-o_daoderbyhibernateimpl, clean.module.e-eye-o_serializationjacksonimpl, clean.module.e-eye-o_derbyjacksonbasedintegrationtests, clean.artifact.e-eye-o_daoderbyimpl:ejb_exploded, clean.artifact.e-eye-o_data:ejb_exploded, clean.artifact.e-eye-o_hibernatedaoimpl:ejb_exploded" description="cleanup all"/>
   
-  <target name="build.modules" depends="init, clean, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_daohibernateimpl, compile.module.e-eye-o_serializationjacksonimpl, compile.module.e-eye-o_daoderbyhibernateimpl" description="build all modules"/>
+  <target name="build.modules" depends="init, clean, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_daohibernateimpl, compile.module.e-eye-o_daoderbyhibernateimpl, compile.module.e-eye-o_serializationjacksonimpl, compile.module.e-eye-o_derbyjacksonbasedintegrationtests" description="build all modules"/>
   
   <target name="init.artifacts">
     <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>

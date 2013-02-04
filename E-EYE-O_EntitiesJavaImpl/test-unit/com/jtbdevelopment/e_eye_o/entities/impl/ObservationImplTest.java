@@ -74,7 +74,7 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
 
     @Test
     public void testSetNeedsFollowUp() throws Exception {
-        checkBooleanDefaultAndSetGet("needsFollowUp", false);
+        checkBooleanDefaultAndSetGet("followUpNeeded", false);
     }
 
     @Test

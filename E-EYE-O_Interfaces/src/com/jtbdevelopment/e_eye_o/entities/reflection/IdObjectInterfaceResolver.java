@@ -16,18 +16,18 @@ public interface IdObjectInterfaceResolver {
     public static final String GET = "get";
     public static final String IS = "is";
 
-    @Cacheable("idObjectInterface")
+    @Cacheable("idObjectInterfaceForImpl")
     <T extends IdObject> Class<T> getIdObjectInterfaceForClass(final Class<T> entityType);
 
-    @Cacheable("idObjectInterface")
+    @Cacheable("idObjectGetMethod")
     <T extends IdObject> Method getIsOrGetMethod(final Class<T> entityType, final String attribute);
 
-    @Cacheable("idObjectInterface")
+    @Cacheable("idObjectSetMethod")
     <T extends IdObject> Method getSetMethod(final Class<T> entityType, final String attribute, final Class valueType);
 
     /**
      *  Returns sorted list of getters
      */
-    @Cacheable("idObjectInterface")
+    @Cacheable("idObjectGetMethods")
     <T extends IdObject> List<Method> getAllGetters(final Class<T> entityType);
 }

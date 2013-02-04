@@ -3,34 +3,39 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Date: 1/1/13
  * Time: 7:53 PM
  */
 @Service
 public class IdObjectImplFactory implements IdObjectFactory {
+    private static Map<Class<? extends IdObject>, Class<? extends IdObject>> interfaceToImplementationMap = new HashMap<Class<? extends IdObject>, Class<? extends IdObject>>() {{
+        put(AppUser.class, AppUserImpl.class);
+        put(Observation.class, ObservationImpl.class);
+        put(ObservationCategory.class, ObservationCategory.class);
+        put(Student.class, StudentImpl.class);
+        put(Photo.class, PhotoImpl.class);
+        put(ClassList.class, ClassListImpl.class);
+    }};
+
 
     @Override
-    public <T extends IdObject> Class<T> newIdObjectImplementation(final Class<T> idObjectType) {
-        switch (idObjectType.getSimpleName()) {
-            case "AppUser":
-                return (Class<T>) AppUserImpl.class;
-            case "Observation":
-                return (Class<T>) ObservationImpl.class;
-            case "ObservationCategory":
-                return (Class<T>) ObservationCategory.class;
-            case "Student":
-                return (Class<T>) StudentImpl.class;
-            case "Photo":
-                return (Class<T>) PhotoImpl.class;
-            case "ClassList":
-                return (Class<T>) ClassListImpl.class;
-            default:
-                throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
-        }
+    @SuppressWarnings("unchecked")
+    public <T extends IdObject> Class<T> implementationForInterface(final Class<T> interfaceType) {
+        return (Class<T>) interfaceToImplementationMap.get(interfaceType);
     }
 
     @Override
+    public Map<Class<? extends IdObject>, Class<? extends IdObject>> implementationsForInterfaces() {
+        return Collections.unmodifiableMap(interfaceToImplementationMap);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public <T extends IdObject> T newIdObject(final Class<T> idObjectType) {
         switch (idObjectType.getSimpleName()) {
             case "AppUser":
