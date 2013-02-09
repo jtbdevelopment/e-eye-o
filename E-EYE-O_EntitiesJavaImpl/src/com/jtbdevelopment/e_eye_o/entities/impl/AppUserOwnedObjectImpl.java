@@ -25,6 +25,7 @@ public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements App
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> T setAppUser(final AppUser appUser) {
         if (this.appUser != null && !this.appUser.equals(appUser)) {
             throw new InvalidParameterException("Cannot reassign appuser after assignment");

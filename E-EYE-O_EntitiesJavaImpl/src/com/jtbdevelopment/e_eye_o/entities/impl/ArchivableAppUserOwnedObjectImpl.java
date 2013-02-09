@@ -23,6 +23,7 @@ public abstract class ArchivableAppUserOwnedObjectImpl extends AppUserOwnedObjec
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends ArchivableAppUserOwnedObject> T setArchived(boolean archived) {
         this.archived = archived;
         return (T) this;
