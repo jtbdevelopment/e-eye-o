@@ -19,6 +19,12 @@ import java.util.List;
  * Date: 1/26/13
  * Time: 10:35 PM
  *
+ * The intent of this customization is to provide two features:
+ *  1)  clearly identify entity type on serialization
+ *  2)  automatic type detection on deserialization from 1)
+ *  3)  only shallow serialize to other entities - if a photo refers to a student, do not serialize out all the student details, just the entity type and id
+ *  4)  load referred shallow entities from dao / cache on deserialization
+ *
  * TODO - now that this is working, we don't seem to be getting much value out of using mapper and may make more sense to use streaming or node api's directly
  *
  */
