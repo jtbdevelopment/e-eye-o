@@ -11,10 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Date: 1/26/13
  * Time: 10:35 PM
+ *
+ * TODO - now that this is working, we don't seem to be getting much value out of using mapper and may make more sense to use streaming or node api's directly
+ *
  */
 @Service
 public class JacksonJSONIdObjectSerializer implements IdObjectSerializer {
@@ -28,7 +34,7 @@ public class JacksonJSONIdObjectSerializer implements IdObjectSerializer {
     }
 
     @Override
-    public String write(final Object entity) {
+    public String write(final IdObject entity) {
         try {
             return mapper.writeValueAsString(entity);
         } catch (JsonProcessingException e) {
@@ -36,19 +42,41 @@ public class JacksonJSONIdObjectSerializer implements IdObjectSerializer {
         }
     }
 
+    @Override
+    public String write(final Collection<? extends IdObject> entities) {
+        try {
+            return mapper.writeValueAsString(entities);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @SuppressWarnings("unchecked")
-    public <T extends IdObject> T read(final String input) {
+    public <T> T read(final String input) {
         try {
             JsonNode rootNode = mapper.readTree(input);
-            String entityTypeString = rootNode.get(JacksonIdObjectConstants.ENTITY_TYPE_FIELD).asText();
-            Class entityType = Class.forName(entityTypeString);
-            if (IdObject.class.isAssignableFrom(entityType)) {
-                return mapper.readValue(input, (Class<T>) entityType);
+            if (rootNode.isArray()) {
+                List<IdObject> returnList = new LinkedList<>();
+                for(JsonNode child : rootNode) {
+                    returnList.add((IdObject) read(child.toString()));
+                }
+                return (T) returnList;
             } else {
-                throw new IllegalArgumentException("Unable to parse " + input + " as IdObject");
+                return readSingleObject(input, rootNode);
             }
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T readSingleObject(final String input, final JsonNode rootNode) throws ClassNotFoundException, IOException {
+        String entityTypeString = rootNode.get(JacksonIdObjectConstants.ENTITY_TYPE_FIELD).asText();
+        Class entityType = Class.forName(entityTypeString);
+        if (IdObject.class.isAssignableFrom(entityType)) {
+            return mapper.readValue(input, (Class<T>) entityType);
+        } else {
+            throw new IllegalArgumentException("Unable to parse " + input + " as IdObject");
         }
     }
 }

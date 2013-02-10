@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.reflection;
 
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,13 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
         try {
             return entityType.getMethod("set" + StringUtils.capitalize(attribute), valueType);
         } catch (NoSuchMethodException e) {
+            if(AppUserOwnedObject.class.isAssignableFrom(entityType)) {
+                try {
+                    return entityType.getMethod("set" + StringUtils.capitalize(attribute), AppUserOwnedObject.class);
+                } catch (NoSuchMethodException e2) {
+                    throw new RuntimeException(e2);
+                }
+            }
             throw new RuntimeException(e);
         }
     }

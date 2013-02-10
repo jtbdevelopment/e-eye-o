@@ -7,6 +7,8 @@ import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateIdObject;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,8 @@ import java.util.Set;
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
+    private final static Logger logger = LoggerFactory.getLogger(HibernateReadOnlyDAO.class);
+
     protected final SessionFactory sessionFactory;
     protected final DAOIdObjectWrapperFactory wrapperFactory;
 
@@ -36,7 +40,9 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends IdObject> T get(final Class<T> entityType, final String id) {
-        return (T) sessionFactory.getCurrentSession().get(getHibernateEntityName(entityType), id);
+        final String entityName = getHibernateEntityName(entityType);
+        logger.info("Fetching entityType = '" + entityName + "', id = '" + id + "'");
+        return (T) sessionFactory.getCurrentSession().get(entityName, id);
     }
 
     @Override

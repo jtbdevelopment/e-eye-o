@@ -51,22 +51,26 @@ public class JacksonIdObjectSerializer extends StdSerializer<IdObject> {
                 Class<? extends IdObject> fieldValueClass = (Class<? extends IdObject>) (fieldValue == null ? valueType : fieldValue.getClass());
                 writeSubEntity(jgen, fieldValueClass, (IdObject) fieldValue);
             } else if (Set.class.isAssignableFrom(valueType)) {
-                jgen.writeStartArray();
-                for (Object object : (Set) fieldValue) {
-                    if (object instanceof IdObject) {
-                        @SuppressWarnings("unchecked")
-                        Class<? extends IdObject> objectClass = (Class<? extends IdObject>) (object.getClass());
-                        writeSubEntity(jgen, objectClass, (IdObject) object);
-                    } else {
-                        jgen.writeObject(object);
-                    }
-                }
-                jgen.writeEndArray();
+                writeSet(jgen, (Set) fieldValue);
             } else {
                 jgen.writeObject(fieldValue);
             }
         }
         jgen.writeEndObject();
+    }
+
+    private void writeSet(final JsonGenerator jgen, final Set fieldValue) throws IOException {
+        jgen.writeStartArray();
+        for (Object object : fieldValue) {
+            if (object instanceof IdObject) {
+                @SuppressWarnings("unchecked")
+                Class<? extends IdObject> objectClass = (Class<? extends IdObject>) (object.getClass());
+                writeSubEntity(jgen, objectClass, (IdObject) object);
+            } else {
+                jgen.writeObject(object);
+            }
+        }
+        jgen.writeEndArray();
     }
 
     private Object getFieldValue(final IdObject value, final Method method) {

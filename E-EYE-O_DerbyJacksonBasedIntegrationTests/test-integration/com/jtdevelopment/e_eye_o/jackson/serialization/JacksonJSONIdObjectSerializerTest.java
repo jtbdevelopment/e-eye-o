@@ -9,10 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -23,6 +27,7 @@ import static org.testng.AssertJUnit.assertEquals;
  */
 @ContextConfiguration("/test-integration-context.xml")
 @Test(groups = {"integration"})
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class JacksonJSONIdObjectSerializerTest extends AbstractTransactionalTestNGSpringContextTests implements ApplicationContextAware {
     private final static String newline = System.getProperty("line.separator");
 
@@ -66,10 +71,10 @@ public class JacksonJSONIdObjectSerializerTest extends AbstractTransactionalTest
             return;
         }
 
-        appUser1 = factory.newAppUser().setEmailAddress("test@test.com").setFirstName("Testy")
+        appUser1 = factory.newAppUser().setEmailAddress("jtest@test.com").setFirstName("Testy")
                 .setLastName("Tester").setLastLogin(new DateTime(2012, 12, 12, 12, 12, 13));
         appUser1 = readWriteDAO.create(appUser1);
-        appUser2 = factory.newAppUser().setEmailAddress("test2@test.com").setFirstName("Testier").setLastName("Tester");
+        appUser2 = factory.newAppUser().setEmailAddress("jtest2@test.com").setFirstName("Testier").setLastName("Tester");
         appUser2 = readWriteDAO.create(appUser2);
         classList1For1 = factory.newClassList().setDescription("CL1-1").setAppUser(appUser1);
         classList1For1 = readWriteDAO.create(classList1For1);
@@ -81,11 +86,11 @@ public class JacksonJSONIdObjectSerializerTest extends AbstractTransactionalTest
         oc1For1 = readWriteDAO.create(oc1For1);
         oc2For1 = factory.newObservationCategory().setDescription("Description").setShortName("OC-2").setAppUser(appUser1);
         oc2For1 = readWriteDAO.create(oc2For1);
-        student1For1 = factory.newStudent().setLastName("Last").setFirstName("First")
+        student1For1 = factory.newStudent().setLastName("Last1-1").setFirstName("First1-1")
                 .addClassList(classList1For1).setArchived(true).setAppUser(appUser1);
         student1For1 = readWriteDAO.create(student1For1);
-        student2For1 = factory.newStudent().setLastName("Last").setFirstName("First")
-                .addClassList(classList1For1).addClassList(classList2For1).setAppUser(appUser1);
+        student2For1 = factory.newStudent().setLastName("Last2-1").setFirstName("First2-1")
+                .addClassList(classList2For1).setAppUser(appUser1);
         student2For1 = readWriteDAO.create(student2For1);
         o1ForS1 = factory.newObservation().addCategory(oc1For1).setObservationSubject(student1For1)
                 .setComment("Comment").setObservationTimestamp(new LocalDateTime(2013, 1, 18, 15, 12)).setAppUser(appUser1);
@@ -104,36 +109,46 @@ public class JacksonJSONIdObjectSerializerTest extends AbstractTransactionalTest
     }
 
     @Test
-    public void testWriteSingleEntities() throws Exception {
-        for (Map.Entry<IdObject, String> entry : jsonValues.entrySet()) {
-            final String jsonOutput = serializer.write(entry.getKey());
-            assertEquals(entry.getValue(), jsonOutput);
-        }
-    }
-
-    @Test
-    public void testWriteCollectionEntity() throws Exception {
-
-    }
-
-    @Test
-    public void testReadSingle() throws Exception {
+    //  Easiest way to deep compare is to test read and write in one function
+    public void testReadAndWriteSingleEntities() throws Exception {
         for (Map.Entry<IdObject, String> entry : jsonValues.entrySet()) {
             final IdObject object = serializer.read(entry.getValue());
             assertEquals(entry.getKey(), object);
+            assertEquals(entry.getValue(), serializer.write(object));
         }
     }
 
     @Test
-    public void testReadCollection() throws Exception {
+    //  Easiest way to deep compare is to test read and write in one function
+    public void testReadAndWriteCollection() throws Exception {
+        final StringBuilder builder = new StringBuilder("[ ");
+        final List<IdObject> entities = new LinkedList<>();
+        boolean first = true;
+        for (Map.Entry<IdObject, String> entry : jsonValues.entrySet()) {
+            if (first) {
+                first = false;
+            } else {
+                builder.append(", ");
+            }
+            builder.append(entry.getValue());
+            entities.add(entry.getKey());
+        }
+        builder.append(" ]");
 
+        List<? extends IdObject> objects = serializer.read(builder.toString());
+        assertEquals(entities.size(), objects.size());
+        for (int i = 0; i < entities.size(); ++i) {
+            assertEquals(entities.get(i), objects.get(i));
+        }
+        String jsonOutput = serializer.write(entities);
+        assertEquals(builder.toString(), jsonOutput);
     }
 
     private void buildObjectToExpectedJSONMap() {
         jsonValues = new HashMap<IdObject, String>() {{
             put(appUser1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
-                    "  \"emailAddress\" : \"test@test.com\"," + newline +
+                    "  \"emailAddress\" : \"jtest@test.com\"," + newline +
                     "  \"firstName\" : \"Testy\"," + newline +
                     "  \"id\" : \"" + appUser1.getId() + "\"," + newline +
                     "  \"lastLogin\" : 1355332333000," + newline +
@@ -141,7 +156,7 @@ public class JacksonJSONIdObjectSerializerTest extends AbstractTransactionalTest
                     "}");
             put(appUser2, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
-                    "  \"emailAddress\" : \"test2@test.com\"," + newline +
+                    "  \"emailAddress\" : \"jtest2@test.com\"," + newline +
                     "  \"firstName\" : \"Testier\"," + newline +
                     "  \"id\" : \"" + appUser2.getId() + "\"," + newline +
                     "  \"lastLogin\" : 946702800000," + newline +
@@ -207,9 +222,9 @@ public class JacksonJSONIdObjectSerializerTest extends AbstractTransactionalTest
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ClassList\"," + newline +
                     "    \"id\" : \"" + classList1For1.getId() + "\"" + newline +
                     "  } ]," + newline +
-                    "  \"firstName\" : \"First\"," + newline +
+                    "  \"firstName\" : \"First1-1\"," + newline +
                     "  \"id\" : \"" + student1For1.getId() + "\"," + newline +
-                    "  \"lastName\" : \"Last\"," + newline +
+                    "  \"lastName\" : \"Last1-1\"," + newline +
                     "  \"archived\" : true" + newline +
                     "}");
             put(student2For1, "{" + newline +
@@ -221,13 +236,10 @@ public class JacksonJSONIdObjectSerializerTest extends AbstractTransactionalTest
                     "  \"classLists\" : [ {" + newline +
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ClassList\"," + newline +
                     "    \"id\" : \"" + classList2For1.getId() + "\"" + newline +
-                    "  }, {" + newline +
-                    "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ClassList\"," + newline +
-                    "    \"id\" : \"" + classList1For1.getId() + "\"" + newline +
                     "  } ]," + newline +
-                    "  \"firstName\" : \"First\"," + newline +
+                    "  \"firstName\" : \"First2-1\"," + newline +
                     "  \"id\" : \"" + student2For1.getId() + "\"," + newline +
-                    "  \"lastName\" : \"Last\"," + newline +
+                    "  \"lastName\" : \"Last2-1\"," + newline +
                     "  \"archived\" : false" + newline +
                     "}");
             put(o1ForS1, "{" + newline +
