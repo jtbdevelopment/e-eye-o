@@ -65,17 +65,17 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     }
 
     @Override
-    public <T extends ArchivableAppUserOwnedObject> Set<T> getActiveEntitiesForUser(Class<T> entityType, AppUser appUser) {
+    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(Class<T> entityType, AppUser appUser) {
         return getEntitiesForUserWithArchiveFlag(entityType, appUser, false);
     }
 
     @Override
-    public <T extends ArchivableAppUserOwnedObject> Set<T> getArchivedEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
+    public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
         return getEntitiesForUserWithArchiveFlag(entityType, appUser, true);
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends ArchivableAppUserOwnedObject> Set<T> getEntitiesForUserWithArchiveFlag(final Class<T> entityType, final AppUser appUser, final boolean archived) {
+    private <T extends AppUserOwnedObject> Set<T> getEntitiesForUserWithArchiveFlag(final Class<T> entityType, final AppUser appUser, final boolean archived) {
         Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user and archived = :archived");
         query.setParameter("user", appUser);
         query.setParameter("archived", archived);

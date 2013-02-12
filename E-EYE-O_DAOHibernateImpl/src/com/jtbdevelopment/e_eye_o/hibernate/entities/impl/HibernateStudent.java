@@ -15,7 +15,7 @@ import java.util.Set;
  * Time: 7:24 PM
  */
 @Entity(name = "Student")
-public class HibernateStudent extends HibernateArchivableAppUserOwnedObject<Student> implements Student {
+public class HibernateStudent extends HibernateAppUserOwnedObject<Student> implements Student {
     @SuppressWarnings("unused")    // Hibernate
     protected HibernateStudent() {
     }

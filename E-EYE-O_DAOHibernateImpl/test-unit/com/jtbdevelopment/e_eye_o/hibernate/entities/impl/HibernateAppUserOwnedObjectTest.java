@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.testng.AssertJUnit.assertSame;
+import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * Date: 1/21/13
@@ -57,5 +58,23 @@ public class HibernateAppUserOwnedObjectTest extends HibernateAbstractIdObjectTe
         }});
 
         assertSame(hibernateLocal, hibernateLocal.setAppUser(au));
+    }
+
+    @Test
+    public void testIsArchived() throws Exception {
+        context.checking(new Expectations() {{
+            one(impl).isArchived();
+            will(returnValue(true));
+        }});
+        assertTrue(hibernateLocal.isArchived());
+    }
+
+    @Test
+    public void testSetArchived() throws Exception {
+        context.checking(new Expectations() {{
+            one(impl).setArchived(false);
+            will(returnValue(impl));
+        }});
+        assertSame(hibernateLocal, hibernateLocal.setArchived(false));
     }
 }

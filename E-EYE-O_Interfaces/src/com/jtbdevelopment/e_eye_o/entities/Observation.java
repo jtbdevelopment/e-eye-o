@@ -16,7 +16,7 @@ import java.util.Set;
  * Time: 3:15 PM
  */
 @ObservationFollowUpCheck(message = Observation.OBSERVATION_FOLLOW_UP_OBSERVATION_SELF_REFERENCE_ERROR)
-public interface Observation extends ArchivableAppUserOwnedObject {
+public interface Observation extends AppUserOwnedObject {
 
     public final static String OBSERVATION_FOLLOW_UP_OBSERVATION_SELF_REFERENCE_ERROR = "Observation.followUpObservation cannot refer to itself.";
     public final static String OBSERVATION_COMMENT_CANNOT_BE_BLANK_OR_NULL_ERROR = "Observation.comment" + CANNOT_BE_BLANK_OR_NULL_ERROR;

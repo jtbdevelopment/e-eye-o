@@ -1,17 +1,11 @@
 package com.jtbdevelopment.e_eye_o.jersey.rest;
 
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
-
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.UriInfo;
-
 /**
  * Date: 2/10/13
  * Time: 7:07 PM
  */
 public class AppUserEntityResource {
+    /*
     private final ReadWriteDAO readWriteDAO;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final AppUser appUser;
@@ -26,4 +20,5 @@ public class AppUserEntityResource {
         this.appUser = readWriteDAO.get(AppUser.class, userId);
         readWriteDAO
     }
+    */
 }

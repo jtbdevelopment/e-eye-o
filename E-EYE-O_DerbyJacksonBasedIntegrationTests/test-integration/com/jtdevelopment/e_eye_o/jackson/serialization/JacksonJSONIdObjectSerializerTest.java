@@ -196,7 +196,8 @@ public class JacksonJSONIdObjectSerializerTest extends AbstractTestNGSpringConte
                     "  }," + newline +
                     "  \"description\" : \"Description\"," + newline +
                     "  \"id\" : \"" + oc1For1.getId() + "\"," + newline +
-                    "  \"shortName\" : \"OC-1\"" + newline +
+                    "  \"shortName\" : \"OC-1\"," + newline +
+                    "  \"archived\" : false" + newline +
                     "}");
             put(oc2For1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ObservationCategory\"," + newline +
@@ -206,7 +207,8 @@ public class JacksonJSONIdObjectSerializerTest extends AbstractTestNGSpringConte
                     "  }," + newline +
                     "  \"description\" : \"Description\"," + newline +
                     "  \"id\" : \"" + oc2For1.getId() + "\"," + newline +
-                    "  \"shortName\" : \"OC-2\"" + newline +
+                    "  \"shortName\" : \"OC-2\"," + newline +
+                    "  \"archived\" : false" + newline +
                     "}");
             put(student1For1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Student\"," + newline +

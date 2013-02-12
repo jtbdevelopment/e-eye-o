@@ -1,9 +1,9 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.impl.ArchivableAppUserOwnedObjectImpl;
+import com.jtbdevelopment.e_eye_o.entities.impl.AppUserOwnedObjectImpl;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateArchivableAppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -34,13 +34,13 @@ public class HibernateReadOnlyDAOTest {
     private Query query;
     private HibernateReadOnlyDAO dao;
 
-    private static interface LocalInterface extends ArchivableAppUserOwnedObject {
+    private static interface LocalInterface extends AppUserOwnedObject {
     }
 
-    private static class LocalImpl extends ArchivableAppUserOwnedObjectImpl implements LocalInterface {
+    private static class LocalImpl extends AppUserOwnedObjectImpl implements LocalInterface {
     }
 
-    private static class HibernateWrapper extends HibernateArchivableAppUserOwnedObject<LocalInterface> implements LocalInterface {
+    private static class HibernateWrapper extends HibernateAppUserOwnedObject<LocalInterface> implements LocalInterface, AppUserOwnedObject {
         public HibernateWrapper() {
             super(new LocalImpl());
             setId("1");

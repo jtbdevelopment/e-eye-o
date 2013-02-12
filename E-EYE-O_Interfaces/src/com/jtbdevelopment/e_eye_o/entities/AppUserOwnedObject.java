@@ -7,6 +7,11 @@ import javax.validation.constraints.NotNull;
 /**
  * Date: 11/25/12
  * Time: 3:10 PM
+ *
+ * Base for any object that is associated for a user
+ *
+ * Archived objects will generally not be synced with smart devices
+ * but will still be visible on web pages
  */
 @ConsistentAppUserCheck(message = AppUserOwnedObject.ALL_OWNED_OBJECTS_MUST_BE_FOR_SAME_USER_ERROR)
 public interface AppUserOwnedObject extends IdObject {
@@ -18,4 +23,8 @@ public interface AppUserOwnedObject extends IdObject {
     AppUser getAppUser();
 
     <T extends AppUserOwnedObject> T setAppUser(final AppUser appUser);
+
+    boolean isArchived();
+
+    <T extends AppUserOwnedObject> T setArchived(boolean archived);
 }

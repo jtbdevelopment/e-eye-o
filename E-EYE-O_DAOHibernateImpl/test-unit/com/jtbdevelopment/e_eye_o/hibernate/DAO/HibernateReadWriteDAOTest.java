@@ -431,7 +431,7 @@ public class HibernateReadWriteDAOTest {
 
         createStandardDeleteExpectations(sWrapped, sLoaded, sRelatedPhotos, sRelatedObservations);
 
-        final List<ArchivableAppUserOwnedObject> entities = Arrays.asList(pImpl, sImpl);
+        final List<AppUserOwnedObject> entities = Arrays.asList(pImpl, sImpl);
         dao.delete(entities);
     }
 
@@ -450,7 +450,7 @@ public class HibernateReadWriteDAOTest {
     }
 
     private void createDeleteUserExpectations() {
-        final List<ArchivableAppUserOwnedObject> ownedObjects = Arrays.asList(photoLoaded, studentLoaded);
+        final List<AppUserOwnedObject> ownedObjects = Arrays.asList(photoLoaded, studentLoaded);
         context.checking(new Expectations() {{
             one(appUserWrapped).getId();
             will(returnValue("X"));

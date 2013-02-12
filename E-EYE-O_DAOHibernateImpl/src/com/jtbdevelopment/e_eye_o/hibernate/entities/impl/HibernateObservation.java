@@ -15,7 +15,7 @@ import java.util.Set;
  * Time: 7:26 PM
  */
 @Entity(name = "Observation")
-public class HibernateObservation extends HibernateArchivableAppUserOwnedObject<Observation> implements Observation {
+public class HibernateObservation extends HibernateAppUserOwnedObject<Observation> implements Observation {
     @SuppressWarnings("unused")    // Hibernate
     protected HibernateObservation() {
     }

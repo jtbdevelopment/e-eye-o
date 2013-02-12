@@ -15,7 +15,7 @@ import java.util.Set;
  * Date: 11/4/12
  * Time: 7:24 PM
  */
-public class StudentImpl extends ArchivableAppUserOwnedObjectImpl implements Student {
+public class StudentImpl extends AppUserOwnedObjectImpl implements Student {
     private String firstName = "";
     private String lastName = "";
     private Set<ClassList> classLists = new HashSet<>();

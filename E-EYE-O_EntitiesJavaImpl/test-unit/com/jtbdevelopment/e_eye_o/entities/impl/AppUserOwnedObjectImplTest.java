@@ -30,6 +30,11 @@ public class AppUserOwnedObjectImplTest extends AbstractAppUserOwnedObjectTest<A
     }
 
     @Test
+    public void testDefaultGetSetArchived() throws Exception {
+        checkBooleanDefaultAndSetGet("archived", false);
+    }
+
+    @Test
     public void testConstructorsForNewObjects() {
         checkDefaultAndAppUserConstructorTests();
     }

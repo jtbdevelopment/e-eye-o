@@ -9,7 +9,7 @@ import org.joda.time.LocalDateTime;
  * Date: 11/18/12
  * Time: 12:56 AM
  */
-public class PhotoImpl extends ArchivableAppUserOwnedObjectImpl implements Photo {
+public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo, AppUserOwnedObject {
     private String description = "";
     private AppUserOwnedObject photoFor;
     private LocalDateTime timestamp = new LocalDateTime();

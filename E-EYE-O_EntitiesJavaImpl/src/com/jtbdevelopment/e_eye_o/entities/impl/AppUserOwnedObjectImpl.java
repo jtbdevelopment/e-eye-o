@@ -11,6 +11,7 @@ import java.security.InvalidParameterException;
  */
 public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements AppUserOwnedObject {
     private AppUser appUser;
+    private boolean archived = false;
 
     protected AppUserOwnedObjectImpl() {
     }
@@ -34,4 +35,14 @@ public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements App
         return (T) this;
     }
 
+    @Override
+    public boolean isArchived() {
+        return archived;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends AppUserOwnedObject> T setArchived(boolean archived) {
+        this.archived = archived;
+        return (T) this;
+    }
 }

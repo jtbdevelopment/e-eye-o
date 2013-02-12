@@ -102,6 +102,17 @@ public class ConsistentAppUserValidatorTest {
         }
 
         @Override
+        public boolean isArchived() {
+            return false;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AppUserOwnedObject> T setArchived(final boolean archived) {
+            return (T) this;
+        }
+
+        @Override
         public String getId() {
             return id;
         }

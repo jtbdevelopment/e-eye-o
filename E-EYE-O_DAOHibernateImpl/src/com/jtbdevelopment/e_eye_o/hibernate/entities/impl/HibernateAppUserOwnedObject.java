@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -29,6 +30,19 @@ public abstract class HibernateAppUserOwnedObject<T extends AppUserOwnedObject> 
     @SuppressWarnings("unchecked")
     public T setAppUser(final AppUser appUser) {
         wrapped.setAppUser(wrap(appUser));
+        return (T) this;
+    }
+
+    @Override
+    @Column(nullable = false)
+    public boolean isArchived() {
+        return wrapped.isArchived();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public T setArchived(final boolean archived) {
+        wrapped.setArchived(archived);
         return (T) this;
     }
 }

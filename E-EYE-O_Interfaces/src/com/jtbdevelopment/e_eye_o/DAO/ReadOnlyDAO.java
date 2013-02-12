@@ -18,9 +18,9 @@ public interface ReadOnlyDAO {
 
     public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser);
 
-    public <T extends ArchivableAppUserOwnedObject> Set<T> getActiveEntitiesForUser(Class<T> entityType, final AppUser appUser);
+    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(Class<T> entityType, final AppUser appUser);
 
-    public <T extends ArchivableAppUserOwnedObject> Set<T> getArchivedEntitiesForUser(Class<T> entityType, final AppUser appUser);
+    public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(Class<T> entityType, final AppUser appUser);
 
     public List<Photo> getAllPhotosForEntity(AppUserOwnedObject ownedObject);
 

@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
  * Time: 12:56 AM
  */
 @Entity(name = "Photo")
-public class HibernatePhoto extends HibernateArchivableAppUserOwnedObject<Photo> implements Photo {
+public class HibernatePhoto extends HibernateAppUserOwnedObject<Photo> implements Photo {
     @SuppressWarnings("unused")    // Hibernate
     protected HibernatePhoto() {
     }
