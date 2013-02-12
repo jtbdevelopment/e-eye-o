@@ -41,7 +41,7 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
         try {
             return entityType.getMethod("set" + StringUtils.capitalize(attribute), valueType);
         } catch (NoSuchMethodException e) {
-            if(AppUserOwnedObject.class.isAssignableFrom(entityType)) {
+            if(AppUserOwnedObject.class.isAssignableFrom(valueType)) {
                 try {
                     return entityType.getMethod("set" + StringUtils.capitalize(attribute), AppUserOwnedObject.class);
                 } catch (NoSuchMethodException e2) {

@@ -13,10 +13,7 @@ import org.jmock.Mockery;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.testng.AssertJUnit.*;
 
@@ -75,6 +72,19 @@ public class HibernateReadOnlyDAOTest {
         }});
     }
 
+    @Test
+    public void testGetUserIds() {
+        final List A_LIST = Arrays.asList(A_WRAPPER);
+        final Set A_SET = new HashSet(A_LIST);
+        context.checking(new Expectations(){{
+            allowing(session).createQuery("from AppUser");
+            will(returnValue(query));
+            one(query).list();
+            will(returnValue(A_LIST));
+        }});
+
+        assertEquals(A_SET, dao.getUsers());
+    }
     @Test
     public void testGet() throws Exception {
         context.checking(new Expectations() {{

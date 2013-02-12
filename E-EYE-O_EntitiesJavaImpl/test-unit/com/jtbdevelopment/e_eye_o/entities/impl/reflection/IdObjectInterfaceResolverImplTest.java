@@ -23,6 +23,10 @@ import static org.testng.AssertJUnit.assertSame;
 public class IdObjectInterfaceResolverImplTest {
     @SuppressWarnings("unused")
     public static interface LocalOne extends IdObject {
+        public AppUserOwnedObject getAppUserOwnedObject();
+
+        public void setAppUserOwnedObject(final AppUserOwnedObject appUserOwnedObject);
+
         public int getIntValue();
 
         public void setIntValue(final int value);
@@ -54,6 +58,17 @@ public class IdObjectInterfaceResolverImplTest {
         public boolean boolValue;
         public Set<String> stringValues = new HashSet<>();
         public Object objectValue;
+        public AppUserOwnedObject appUserOwnedObject;
+
+        @Override
+        public AppUserOwnedObject getAppUserOwnedObject() {
+            return appUserOwnedObject;
+        }
+
+        @Override
+        public void setAppUserOwnedObject(final AppUserOwnedObject appUserOwnedObject) {
+            this.appUserOwnedObject = appUserOwnedObject;
+        }
 
         @Override
         public int getIntValue() {
@@ -165,6 +180,7 @@ public class IdObjectInterfaceResolverImplTest {
     @Test
     public void testGettingAllGetters() {
         Set<String> expected = new HashSet<String>() {{
+            add("getAppUserOwnedObject");
             add("isBooleanValue");
             add("getStringValues");
             add("getIntValue");
@@ -195,6 +211,24 @@ public class IdObjectInterfaceResolverImplTest {
         Method method = resolver.getSetMethod(oneImpl.getClass(), "objectValue", Object.class);
         method.invoke(oneImpl, value);
         assertSame(value, oneImpl.objectValue);
+    }
+
+    @Test
+    public void testGettingAppUserOwnedObjectViaSubclass() throws InvocationTargetException, IllegalAccessException {
+        LocalThreeImpl value = new LocalThreeImpl();
+        LocalOneImpl oneImpl = new LocalOneImpl();
+        Method method = resolver.getSetMethod(oneImpl.getClass(), "appUserOwnedObject", LocalThree.class);
+        method.invoke(oneImpl, value);
+        assertSame(value, oneImpl.appUserOwnedObject);
+    }
+
+    @Test(expectedExceptions = RuntimeException.class)
+    public void testGettingBadAppUserOwnedObjectViaSubclass() throws InvocationTargetException, IllegalAccessException {
+        LocalThreeImpl value = new LocalThreeImpl();
+        LocalOneImpl oneImpl = new LocalOneImpl();
+        Method method = resolver.getSetMethod(oneImpl.getClass(), "noAppUserOwnedObject", LocalThree.class);
+        method.invoke(oneImpl, value);
+        assertSame(value, oneImpl.appUserOwnedObject);
     }
 
     @Test

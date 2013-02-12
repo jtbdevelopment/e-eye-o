@@ -44,7 +44,6 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     public Set<AppUser> getUsers() {
         Set<AppUser> returnSet = new LinkedHashSet<>();
         returnSet.addAll((List<AppUser>) sessionFactory.getCurrentSession().createQuery("from AppUser").list());
-
         return returnSet;
     }
 
