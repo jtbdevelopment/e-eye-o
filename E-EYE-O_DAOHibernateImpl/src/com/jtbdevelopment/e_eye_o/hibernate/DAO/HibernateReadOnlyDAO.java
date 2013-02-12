@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +37,16 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         this.wrapperFactory = wrapperFactory;
     }
 
+
+    @Override
+    //  TODO - paging
+    @SuppressWarnings("unchecked")
+    public Set<AppUser> getUsers() {
+        Set<AppUser> returnSet = new LinkedHashSet<>();
+        returnSet.addAll((List<AppUser>) sessionFactory.getCurrentSession().createQuery("from AppUser").list());
+
+        return returnSet;
+    }
 
     @Override
     @SuppressWarnings("unchecked")

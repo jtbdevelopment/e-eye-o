@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Spring" name="Spring">
+      <configuration>
+        <fileset id="fileset1" name="XML Application Context" removed="false">
+          <file>file://$MODULE_DIR$/test-integration/test-integration-context.xml</file>
+        </fileset>
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -8,10 +17,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="E-EYE-O_DAODerbyHibernateImpl" />
-    <orderEntry type="module" module-name="E-EYE-O_SerializationJacksonImpl" />
-    <orderEntry type="library" name="org.testng:testng:6.8" level="project" />
-    <orderEntry type="library" name="org.springframework:spring-test:3.2.0.RELEASE" level="project" />
+    <orderEntry type="module" module-name="E-EYE-O_DAODerbyHibernateImpl" exported="" />
+    <orderEntry type="module" module-name="E-EYE-O_SerializationJacksonImpl" exported="" />
+    <orderEntry type="library" exported="" name="org.testng:testng:6.8" level="project" />
+    <orderEntry type="library" exported="" name="org.springframework:spring-test:3.2.0.RELEASE" level="project" />
+    <orderEntry type="library" name="com.sun.jersey:jersey-grizzly2:1.17" level="project" />
+    <orderEntry type="module" module-name="E-EYE-O_RESTJSONJersey" />
   </component>
 </module>
 

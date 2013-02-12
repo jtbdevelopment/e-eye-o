@@ -6,11 +6,8 @@ import com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObjectSeria
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -27,8 +24,7 @@ import static org.testng.AssertJUnit.assertEquals;
  */
 @ContextConfiguration("/test-integration-context.xml")
 @Test(groups = {"integration"})
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
-public class JacksonJSONIdObjectSerializerTest extends AbstractTransactionalTestNGSpringContextTests implements ApplicationContextAware {
+public class JacksonJSONIdObjectSerializerTest extends AbstractTestNGSpringContextTests {
     private final static String newline = System.getProperty("line.separator");
 
     @Autowired

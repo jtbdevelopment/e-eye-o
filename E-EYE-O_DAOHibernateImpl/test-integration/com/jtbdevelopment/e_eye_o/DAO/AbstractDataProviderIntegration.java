@@ -7,10 +7,7 @@ import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -28,10 +25,8 @@ import static org.testng.Assert.*;
  * <p/>
  * Suite of tests that can be run against any data source provider to test hibernate.
  */
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
-//  Otherwise exception is not raised until transaction committed outside this call
 @Test(groups = {"integration"})
-public abstract class AbstractDataProviderIntegration extends AbstractTransactionalTestNGSpringContextTests implements ApplicationContextAware {
+public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpringContextTests {
     private static Logger logger = LoggerFactory.getLogger(AbstractDataProviderIntegration.class);
 
     @Autowired
