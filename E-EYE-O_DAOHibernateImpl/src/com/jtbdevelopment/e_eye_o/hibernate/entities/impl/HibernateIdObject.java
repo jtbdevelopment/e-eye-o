@@ -5,6 +5,8 @@ import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -97,6 +99,20 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
             return null;
         }
         return wrapped.getId();
+    }
+
+    @Override
+    @Column(nullable = false)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    public DateTime getModificationTimestamp() {
+        return wrapped.getModificationTimestamp();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
+        wrapped.setModificationTimestamp(modificationTimestamp);
+        return (T) this;
     }
 
     @SuppressWarnings("unchecked")

@@ -74,6 +74,16 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         public <T extends IdObject> T setId(final String id) {
             return null;
         }
+
+        @Override
+        public DateTime getModificationTimestamp() {
+            return null;
+        }
+
+        @Override
+        public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
+            return null;
+        }
     }
 
     //  Handy to extend IdObjectmpl to get equals/hash implementations
@@ -104,6 +114,16 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         @Override
         public <T extends IdObject> T setId(final String id) {
             return wrapped.setId(id);
+        }
+
+        @Override
+        public DateTime getModificationTimestamp() {
+            return wrapped.getModificationTimestamp();
+        }
+
+        @Override
+        public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
+            return wrapped.setModificationTimestamp(modificationTimestamp);
         }
 
     }
@@ -156,6 +176,16 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         @Override
         public <T extends IdObject> T setId(final String id) {
             return wrapped.setId(id);
+        }
+
+        @Override
+        public DateTime getModificationTimestamp() {
+            return wrapped.getModificationTimestamp();
+        }
+
+        @Override
+        public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
+            return wrapped.setModificationTimestamp(modificationTimestamp);
         }
     }
 

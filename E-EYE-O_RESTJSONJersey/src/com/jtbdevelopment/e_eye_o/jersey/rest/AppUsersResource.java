@@ -34,12 +34,15 @@ public class AppUsersResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     //  TODO - dangerous only let super users do this
+    //  TODO - paging?
     public String getUsers() {
         return jsonIdObjectSerializer.write(readWriteDAO.getUsers());
     }
 
+    //  TODO - validate userId versus connected session
+
     @Path("{userId}")
     public AppUserResource getUserEntities(@PathParam("userId") final String userId) {
-        return new AppUserResource(readWriteDAO, jsonIdObjectSerializer, uriInfo, request, userId);
+        return new AppUserResource(readWriteDAO, jsonIdObjectSerializer, uriInfo, request, userId, null, null);
     }
 }

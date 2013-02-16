@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import org.joda.time.DateTime;
 import org.springframework.util.StringUtils;
 import sun.plugin.dom.exception.InvalidStateException;
 
@@ -11,9 +12,10 @@ import sun.plugin.dom.exception.InvalidStateException;
  */
 public abstract class IdObjectImpl implements IdObject {
     protected String id;
+    private DateTime modificationTimestamp;
 
     protected IdObjectImpl() {
-
+        modificationTimestamp = new DateTime();
     }
 
     @Override
@@ -46,4 +48,18 @@ public abstract class IdObjectImpl implements IdObject {
         this.id = id;
         return (T) this;
     }
+
+    @Override
+    public DateTime getModificationTimestamp() {
+        return modificationTimestamp;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
+        this.modificationTimestamp = modificationTimestamp;
+        return (T) this;
+    }
+
+
 }

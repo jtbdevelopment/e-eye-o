@@ -180,6 +180,7 @@ public class IdObjectInterfaceResolverImplTest {
     @Test
     public void testGettingAllGetters() {
         Set<String> expected = new HashSet<String>() {{
+            add("getModificationTimestamp");
             add("getAppUserOwnedObject");
             add("isBooleanValue");
             add("getStringValues");

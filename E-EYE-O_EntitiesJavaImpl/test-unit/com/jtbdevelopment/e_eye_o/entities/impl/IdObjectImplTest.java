@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 import sun.plugin.dom.exception.InvalidStateException;
 
@@ -22,6 +23,26 @@ public class IdObjectImplTest extends AbstractIdObjectTest<IdObjectImplTest.IdOb
     }
 
     private static final String ID = "SOMETHING";
+
+    @Test
+    public void testModificationTimestampOnInit() throws InterruptedException {
+        DateTime before = new DateTime();
+        Thread.sleep(1);
+        IdObjectExtends local = new IdObjectExtends();
+        Thread.sleep(1);
+        DateTime after = new DateTime();
+
+        assertTrue(before.compareTo(local.getModificationTimestamp()) < 0);
+        assertTrue(after.compareTo(local.getModificationTimestamp()) > 0);
+    }
+
+    @Test
+    public void testModificationTimestampSet() {
+        final DateTime dateTime = new DateTime().minusHours(1);
+        IdObjectExtends local = new IdObjectExtends().setModificationTimestamp(dateTime);
+
+        assertEquals(dateTime, local.getModificationTimestamp());
+    }
 
     @Test
     public void testHashCode() throws Exception {

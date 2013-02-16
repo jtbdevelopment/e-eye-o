@@ -45,12 +45,14 @@ public class JerseyRestViaGrizzlyTest extends AbstractTestNGSpringContextTests {
         if (httpServer == null) {
             return;
         }
+/*
         System.out.println("Press enter to stop");
         try {
             System.in.read();
         } catch (IOException e) {
             e.printStackTrace();
         }
+*/
         httpServer.stop();
     }
 

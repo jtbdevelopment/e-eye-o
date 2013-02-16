@@ -5,6 +5,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.joda.time.DateTime;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -122,6 +123,16 @@ public class ConsistentAppUserValidatorTest {
         public <T extends IdObject> T setId(final String id) {
             this.id = id;
             return (T) this;
+        }
+
+        @Override
+        public DateTime getModificationTimestamp() {
+            return null;
+        }
+
+        @Override
+        public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
+            return null;
         }
     }
 

@@ -1,6 +1,9 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.DateTime;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Date: 11/25/12
@@ -24,4 +27,9 @@ public interface IdObject {
     String getId();
 
     <T extends IdObject> T setId(final String id);
+
+    @NotNull
+    DateTime getModificationTimestamp();
+
+    <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp);
 }

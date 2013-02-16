@@ -5,6 +5,7 @@ import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.joda.time.DateTime;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -145,6 +146,28 @@ public class HibernateIdObjectTest {
     @Test
     public void testHashCode() {
         assertEquals(new LocalIdObjectWrapper(idObjectImpl).hashCode(), new LocalIdObjectWrapper(idObjectImpl).hashCode());
+    }
+
+    @Test
+    public void testGetModificationTimestamp() {
+        final DateTime time = new DateTime();
+        context.checking(new Expectations() {{
+            one(idObjectImpl).getModificationTimestamp();
+            will(returnValue(time));
+        }});
+        assertSame(time, new LocalIdObjectWrapper(idObjectImpl).getModificationTimestamp());
+    }
+
+    @Test
+    public void tesSetModificationTimestamp() {
+        final DateTime time = new DateTime();
+        context.checking(new Expectations() {{
+            one(idObjectImpl).setModificationTimestamp(time);
+            will(returnValue(idObjectImpl));
+        }});
+
+        final LocalIdObjectWrapper localIdObjectWrapper = new LocalIdObjectWrapper(idObjectImpl);
+        assertSame(localIdObjectWrapper, localIdObjectWrapper.setModificationTimestamp(time));
     }
 
     @Test
