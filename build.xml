@@ -8,16 +8,14 @@
     <property name="uel.api.version" value="1.0"/>
     <property name="atinject.api.version" value="1"/>
     <property name="slf4j.version" value="1.7.2"/>
+    <mkdir dir="${basedir}/out/production"/>
+    <mkdir dir="${basedir}/out/test"/>
+    <mkdir dir="${basedir}/lib"/>
+
     <!-- =================================
           target: resolve
          ================================= -->
-    <target name="all-with-libs" depends="makeoutdirs,resolve,e-eye-o.all" description="rebuild with lib check"/>
-
-    <target name="makeoutdirs">
-        <mkdir dir="${basedir}/out/production"/>
-        <mkdir dir="${basedir}/out/test"/>
-        <mkdir dir="${basedir}/lib"/>
-    </target>
+    <target name="all-with-libs" depends="resolve,e-eye-o.all" description="rebuild with lib check"/>
 
     <target name="resolve" description="--> retrieve dependencies with ivy">
         <ivy:retrieve sync="true" type="jar,source,javadoc,bundle" pattern="lib/[artifact]-[revision](-[classifier]).[ext]"/>
