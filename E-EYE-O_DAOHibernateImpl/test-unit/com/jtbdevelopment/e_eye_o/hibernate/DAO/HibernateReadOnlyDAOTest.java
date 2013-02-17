@@ -35,6 +35,9 @@ public class HibernateReadOnlyDAOTest {
     }
 
     private static class LocalImpl extends AppUserOwnedObjectImpl implements LocalInterface {
+        public LocalImpl() {
+            super(null);
+        }
     }
 
     private static class HibernateWrapper extends HibernateAppUserOwnedObject<LocalInterface> implements LocalInterface, AppUserOwnedObject {

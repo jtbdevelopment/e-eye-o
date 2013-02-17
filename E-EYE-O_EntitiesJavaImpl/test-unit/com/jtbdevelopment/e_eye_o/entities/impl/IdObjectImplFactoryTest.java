@@ -22,13 +22,42 @@ public class IdObjectImplFactoryTest {
     private static final IdObjectImplFactory factory = new IdObjectImplFactory();
 
     @Test
+    public void testImplementationMap() throws Exception {
+        assertEquals(AppUserImpl.class, factory.implementationForInterface(AppUser.class));
+        assertEquals(ClassListImpl.class, factory.implementationForInterface(ClassList.class));
+        assertEquals(ObservationImpl.class, factory.implementationForInterface(Observation.class));
+        assertEquals(ObservationCategoryImpl.class, factory.implementationForInterface(ObservationCategory.class));
+        assertEquals(PhotoImpl.class, factory.implementationForInterface(Photo.class));
+        assertEquals(StudentImpl.class, factory.implementationForInterface(Student.class));
+        assertEquals(DeletedObjectImpl.class, factory.implementationForInterface(DeletedObject.class));
+    }
+
+
+    @Test
     public void testNewIdObjectForKnownClasses() throws Exception {
         assertEquals(AppUserImpl.class, factory.newIdObject(AppUser.class).getClass());
-        assertEquals(ClassListImpl.class, factory.newIdObject(ClassList.class).getClass());
-        assertEquals(ObservationImpl.class, factory.newIdObject(Observation.class).getClass());
-        assertEquals(ObservationCategoryImpl.class, factory.newIdObject(ObservationCategory.class).getClass());
-        assertEquals(PhotoImpl.class, factory.newIdObject(Photo.class).getClass());
-        assertEquals(StudentImpl.class, factory.newIdObject(Student.class).getClass());
+        assertEquals(ClassListImpl.class, factory.newAppUserOwnedObject(ClassList.class, appUser).getClass());
+        assertEquals(ObservationImpl.class, factory.newAppUserOwnedObject(Observation.class, appUser).getClass());
+        assertEquals(ObservationCategoryImpl.class, factory.newAppUserOwnedObject(ObservationCategory.class, appUser).getClass());
+        assertEquals(PhotoImpl.class, factory.newAppUserOwnedObject(Photo.class, appUser).getClass());
+        assertEquals(StudentImpl.class, factory.newAppUserOwnedObject(Student.class, appUser).getClass());
+        assertEquals(DeletedObjectImpl.class, factory.newAppUserOwnedObject(DeletedObject.class, appUser).getClass());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testNewIdObjectForAppUserOwnedObjects() {
+        boolean exception;
+        for (Class c : Arrays.asList(ClassList.class, Student.class, DeletedObject.class, Photo.class, Observation.class, ObservationCategory.class)) {
+            exception = false;
+            try {
+                factory.newIdObject(c);
+            } catch (IllegalArgumentException e) {
+                exception = true;
+                assertEquals("You cannot use this method to create app user owned objects.", e.getMessage());
+            }
+            assertTrue("Expected exception for " + c.getSimpleName(), exception);
+        }
     }
 
     @Test
@@ -48,13 +77,41 @@ public class IdObjectImplFactoryTest {
     }
 
     @Test
-    public void testNewAppUser() throws Exception {
-        assertEquals(AppUserImpl.class, factory.newAppUser().getClass());
+    @SuppressWarnings("unchecked")
+    public void testNewAppUserObjectForNonAppUserOwnedObjects() {
+        boolean exception;
+        for (Class c : Arrays.asList(AppUser.class)) {
+            exception = false;
+            try {
+                factory.newAppUserOwnedObject(c, null);
+            } catch (IllegalArgumentException e) {
+                exception = true;
+                assertEquals("You cannot use this method to create non-app user owned objects.", e.getMessage());
+            }
+            assertTrue("Expected exception for " + c.getSimpleName(), exception);
+        }
     }
 
     @Test
-    public void testNewClassList() throws Exception {
-        assertEquals(ClassListImpl.class, factory.newClassList().getClass());
+    @SuppressWarnings("unchecked")
+    public void testNewAppUserObjectForUnknownClasses() throws Exception {
+        boolean exception;
+        for (Class c : Arrays.asList(Object.class, List.class, String.class, Integer.class, Set.class, HashMap.class)) {
+            exception = false;
+            try {
+                factory.newAppUserOwnedObject(c, null);
+            } catch (IllegalArgumentException e) {
+                exception = true;
+                assertEquals("Unknown class type " + c.getSimpleName(), e.getMessage());
+            }
+            assertTrue("Expected exception for " + c.getSimpleName(), exception);
+        }
+    }
+
+
+    @Test
+    public void testNewAppUser() throws Exception {
+        assertEquals(AppUserImpl.class, factory.newAppUser().getClass());
     }
 
     @Test
@@ -65,20 +122,10 @@ public class IdObjectImplFactoryTest {
     }
 
     @Test
-    public void testNewObservation() throws Exception {
-        assertEquals(ObservationImpl.class, factory.newObservation().getClass());
-    }
-
-    @Test
     public void testNewObservationWAppUser() throws Exception {
         final AppUserOwnedObject object = factory.newObservation(appUser);
         assertEquals(ObservationImpl.class, object.getClass());
         assertEquals(appUser, object.getAppUser());
-    }
-
-    @Test
-    public void testNewObservationCategory() throws Exception {
-        assertEquals(ObservationCategoryImpl.class, factory.newObservationCategory().getClass());
     }
 
     @Test
@@ -89,20 +136,10 @@ public class IdObjectImplFactoryTest {
     }
 
     @Test
-    public void testNewPhoto() throws Exception {
-        assertEquals(PhotoImpl.class, factory.newPhoto().getClass());
-    }
-
-    @Test
     public void testNewPhotoWAppUser() throws Exception {
         final AppUserOwnedObject object = factory.newPhoto(appUser);
         assertEquals(PhotoImpl.class, object.getClass());
         assertEquals(appUser, object.getAppUser());
-    }
-
-    @Test
-    public void testNewStudent() throws Exception {
-        assertEquals(StudentImpl.class, factory.newStudent().getClass());
     }
 
     @Test

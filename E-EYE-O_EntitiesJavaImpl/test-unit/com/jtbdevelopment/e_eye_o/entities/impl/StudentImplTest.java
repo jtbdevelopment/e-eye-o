@@ -15,6 +15,7 @@ import static org.testng.Assert.assertTrue;
  */
 public class StudentImplTest extends AbstractAppUserOwnedObjectTest<StudentImpl> {
 
+
     public StudentImplTest() {
         super(StudentImpl.class);
     }
@@ -47,7 +48,7 @@ public class StudentImplTest extends AbstractAppUserOwnedObjectTest<StudentImpl>
 
     @Test
     public void checkClassListsAreUnmodifiable() {
-        StudentImpl s = new StudentImpl();
+        StudentImpl s = new StudentImpl(USER1);
         checkCollectionIsUnmodifiable(s.getClassLists());
         checkCollectionIsUnmodifiable(s.getActiveClassLists());
         checkCollectionIsUnmodifiable(s.getArchivedClassLists());
@@ -82,18 +83,18 @@ public class StudentImplTest extends AbstractAppUserOwnedObjectTest<StudentImpl>
     public void testGetActiveAndArchivedClassLists() {
         Set<ClassList> archived = new HashSet<ClassList>() {
             {
-                add((ClassList) new ClassListImpl().setArchived(true));
-                add((ClassList) new ClassListImpl().setArchived(true));
-                add((ClassList) new ClassListImpl().setArchived(true));
+                add((ClassList) new ClassListImpl(USER1).setArchived(true));
+                add((ClassList) new ClassListImpl(USER1).setArchived(true));
+                add((ClassList) new ClassListImpl(USER1).setArchived(true));
             }
         };
         Set<ClassList> active = new HashSet<ClassList>() {
             {
-                add((ClassList) new ClassListImpl().setArchived(false));
+                add((ClassList) new ClassListImpl(USER1).setArchived(false));
             }
         };
 
-        Student student = new StudentImpl();
+        Student student = new StudentImpl(USER1);
         student.addClassLists(archived);
         student.addClassLists(active);
 

@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
+import org.hibernate.Interceptor;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,11 +39,17 @@ public class HibernateDAOSpringConfig {
     }
 
     @Bean
+    public Interceptor timestampInterceptor() {
+        return new HibernateTimestampInterceptor();
+    }
+
+    @Bean
     @Autowired
-    public LocalSessionFactoryBean sessionFactory(final javax.sql.DataSource dataSource, final @Qualifier("hibernateProperties") Properties hibernateProperties) {
+    public LocalSessionFactoryBean sessionFactory(final javax.sql.DataSource dataSource, final @Qualifier("hibernateProperties") Properties hibernateProperties, final Interceptor timestampInterceptor) {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
         sessionFactoryBean.setHibernateProperties(hibernateProperties);
         sessionFactoryBean.setDataSource(dataSource);
+        sessionFactoryBean.setEntityInterceptor(timestampInterceptor);
         sessionFactoryBean.setPackagesToScan("com.jtbdevelopment");
         return sessionFactoryBean;
     }

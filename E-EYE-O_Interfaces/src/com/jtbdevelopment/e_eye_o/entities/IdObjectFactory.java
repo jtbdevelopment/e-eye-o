@@ -17,25 +17,19 @@ public interface IdObjectFactory {
 
     <T extends IdObject> T newIdObject(Class<T> idObjectType);
 
-    AppUser newAppUser();
+    <T extends AppUserOwnedObject> T newAppUserOwnedObject(Class<T> idObjectType, final AppUser appUser);
 
-    ClassList newClassList();
+    AppUser newAppUser();
 
     ClassList newClassList(final AppUser appUser);
 
-    Observation newObservation();
-
     Observation newObservation(final AppUser appUser);
-
-    ObservationCategory newObservationCategory();
 
     ObservationCategory newObservationCategory(final AppUser appUser);
 
-    Photo newPhoto();
-
     Photo newPhoto(final AppUser appUser);
 
-    Student newStudent();
-
     Student newStudent(final AppUser appUser);
+
+    DeletedObject newDeletedObject(final AppUser appUser);
 }

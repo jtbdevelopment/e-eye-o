@@ -20,9 +20,6 @@ public class StudentImpl extends AppUserOwnedObjectImpl implements Student {
     private String lastName = "";
     private Set<ClassList> classLists = new HashSet<>();
 
-    StudentImpl() {
-    }
-
     StudentImpl(final AppUser appUser) {
         super(appUser);
     }

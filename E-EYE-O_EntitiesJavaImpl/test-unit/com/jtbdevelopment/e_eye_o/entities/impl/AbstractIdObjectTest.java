@@ -53,6 +53,10 @@ public class AbstractIdObjectTest<T extends IdObject> {
         this.entityUnderTest = entityUnderTest;
     }
 
+    protected T newDefaultInstance() throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+        return entityUnderTest.newInstance();
+    }
+
     protected void checkStringSetGetsAndValidateNullsAsError(final String attribute, final String validationError) {
         checkStringSetGetsAndValidate(attribute, true, validationError);
     }
@@ -83,9 +87,8 @@ public class AbstractIdObjectTest<T extends IdObject> {
         }
     }
 
-    protected void checkStringSetGetValidateSingleValue(final Method getter, final Method setter, final String value, final boolean expectingError, final String validationError) throws InstantiationException, IllegalAccessException, InvocationTargetException {
-        T o;
-        o = entityUnderTest.newInstance();
+    protected void checkStringSetGetValidateSingleValue(final Method getter, final Method setter, final String value, final boolean expectingError, final String validationError) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        T o = newDefaultInstance();
         setter.invoke(o, value);
         assertEquals(value, getter.invoke(o));
         if (!expectingError) {
@@ -140,7 +143,7 @@ public class AbstractIdObjectTest<T extends IdObject> {
         try {
             Method setter = getSetMethod(attribute, boolean.class);
             Method getter = getIsOrGetMethod(attribute);
-            T o = entityUnderTest.newInstance();
+            T o = newDefaultInstance();
             assertEquals(defaultValue, getter.invoke(o));
             setter.invoke(o, !defaultValue);
             assertEquals(!defaultValue, getter.invoke(o));

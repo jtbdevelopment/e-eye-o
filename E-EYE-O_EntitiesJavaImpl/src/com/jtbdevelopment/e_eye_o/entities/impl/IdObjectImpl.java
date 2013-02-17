@@ -12,10 +12,9 @@ import sun.plugin.dom.exception.InvalidStateException;
  */
 public abstract class IdObjectImpl implements IdObject {
     protected String id;
-    private DateTime modificationTimestamp;
+    private DateTime modificationTimestamp = new DateTime();
 
     protected IdObjectImpl() {
-        modificationTimestamp = new DateTime();
     }
 
     @Override

@@ -22,19 +22,19 @@ public class PhotoImplTest extends AbstractAppUserOwnedObjectTest<PhotoImpl> {
 
     @Test
     public void testPhotoForDefaultAndValidation() {
-        PhotoImpl photo = new PhotoImpl();
+        PhotoImpl photo = new PhotoImpl(USER1);
         assertNull(photo.getPhotoFor());
         validateExpectingError(photo, Photo.PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR);
     }
 
     @Test
     public void testPhotoForAssignment() {
-        PhotoImpl photo = new PhotoImpl();
-        photo.setPhotoFor(new StudentImpl());
+        PhotoImpl photo = new PhotoImpl(USER1);
+        photo.setPhotoFor(new StudentImpl(USER1));
         validateNotExpectingError(photo, Photo.PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR);
-        photo.setPhotoFor(new ObservationImpl());
+        photo.setPhotoFor(new ObservationImpl(USER1));
         validateNotExpectingError(photo, Photo.PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR);
-        photo.setPhotoFor(new ClassListImpl());
+        photo.setPhotoFor(new ClassListImpl(USER1));
         validateNotExpectingError(photo, Photo.PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR);
     }
 
@@ -42,7 +42,7 @@ public class PhotoImplTest extends AbstractAppUserOwnedObjectTest<PhotoImpl> {
     public void testNewPhotoDefaultTimestamp() throws Exception {
         LocalDateTime before = new LocalDateTime();
         Thread.sleep(1);
-        PhotoImpl photo = new PhotoImpl();
+        PhotoImpl photo = new PhotoImpl(USER1);
         Thread.sleep(1);
         LocalDateTime after = new LocalDateTime();
         assertTrue(before.compareTo(photo.getTimestamp()) < 0);
@@ -51,14 +51,14 @@ public class PhotoImplTest extends AbstractAppUserOwnedObjectTest<PhotoImpl> {
 
     @Test
     public void testValidationOnNullTimestamp() {
-        Photo photo = new PhotoImpl().setTimestamp(null);
+        Photo photo = new PhotoImpl(USER1).setTimestamp(null);
         validateExpectingError(photo, Photo.PHOTO_TIMESTAMP_CANNOT_BE_NULL_ERROR);
     }
 
     @Test
     public void testSetGetTimestamp() {
         LocalDateTime now = new LocalDateTime();
-        final Photo photo = new PhotoImpl().setTimestamp(now);
+        final Photo photo = new PhotoImpl(USER1).setTimestamp(now);
         assertEquals(now, photo.getTimestamp());
         validateNotExpectingError(photo, Photo.PHOTO_TIMESTAMP_CANNOT_BE_NULL_ERROR);
     }

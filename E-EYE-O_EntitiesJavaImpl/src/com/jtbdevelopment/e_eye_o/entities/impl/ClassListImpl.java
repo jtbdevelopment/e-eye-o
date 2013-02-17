@@ -11,9 +11,6 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
 public class ClassListImpl extends AppUserOwnedObjectImpl implements ClassList, AppUserOwnedObject {
     private String description = "";
 
-    ClassListImpl() {
-    }
-
     ClassListImpl(final AppUser appUser) {
         super(appUser);
     }

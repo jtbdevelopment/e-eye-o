@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.DAO;
 
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
@@ -100,6 +101,26 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
             return;
         }
         fail("Should have had an exception.");
+    }
+
+    @Test
+    public void testModificationTimestampSetOnNewObjectCreate() throws InterruptedException {
+        Student student = factory.newStudent(testUser1).setFirstName("X").setLastName("Y");
+        final DateTime initialTimestamp = student.getModificationTimestamp();
+        assertNotNull(initialTimestamp);
+        Thread.sleep(1);
+        student = rwDAO.create(student);
+        assertTrue(student.getModificationTimestamp().isAfter(initialTimestamp));
+    }
+
+    @Test
+    public void testModificationTimestampSetOnUppdate() throws InterruptedException {
+        Student student = factory.newStudent(testUser1).setFirstName("X").setLastName("Y");
+        student = rwDAO.create(student);
+        final DateTime initialTimestamp = student.getModificationTimestamp();
+        student.setFirstName("XX");
+        rwDAO.update(student);
+        assertTrue(student.getModificationTimestamp().isAfter(initialTimestamp));
     }
 
     @Test

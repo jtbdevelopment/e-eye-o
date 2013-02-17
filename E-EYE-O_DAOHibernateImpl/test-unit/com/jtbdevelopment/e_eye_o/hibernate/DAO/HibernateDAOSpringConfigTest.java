@@ -59,7 +59,7 @@ public class HibernateDAOSpringConfigTest {
     @Test
     public void testSessionFactory() throws Exception {
         Properties props = new Properties();
-        LocalSessionFactoryBean sf = config.sessionFactory(dataSource, props);
+        LocalSessionFactoryBean sf = config.sessionFactory(dataSource, props, null);
         assertSame(props, sf.getHibernateProperties());
         //  Can't currently verify packages to scan or data source
     }

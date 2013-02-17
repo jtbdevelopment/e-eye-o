@@ -31,16 +31,25 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
         super(entityUnderTest);
     }
 
+    @Override
+    protected T newDefaultInstance() throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+        return newDefaultInstance(entityUnderTest);
+    }
+
+    protected <T extends AppUserOwnedObject> T newDefaultInstance(final Class<T> entityType) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+        Constructor<T> constructor = entityType.getDeclaredConstructor(AppUser.class);
+        constructor.setAccessible(true);
+        return constructor.newInstance((AppUser) null);
+    }
+
     protected void checkDefaultAndAppUserConstructorTests() {
         try {
             if (AppUserOwnedObject.class.isAssignableFrom(entityUnderTest)) {
-                Constructor<? extends AppUserOwnedObject> def = entityUnderTest.getDeclaredConstructor();
-                def.setAccessible(true);
-                AppUserOwnedObject entityFromDefaultConstructor = def.newInstance();
+                AppUserOwnedObject entityFromDefaultConstructor = newDefaultInstance();
                 assertEquals(null, entityFromDefaultConstructor.getAppUser());
                 validateExpectingError(entityFromDefaultConstructor, AppUserOwnedObject.APP_USER_CANNOT_BE_NULL_ERROR);
 
-                Constructor<? extends AppUserOwnedObject> appUser = entityUnderTest.getDeclaredConstructor(AppUser.class);
+                Constructor<T> appUser = entityUnderTest.getDeclaredConstructor(AppUser.class);
                 appUser.setAccessible(true);
                 final AppUserImpl user = new AppUserImpl();
                 AppUserOwnedObject appUserO = appUser.newInstance(user);
@@ -72,7 +81,7 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
             Method setter = getSetMethod(collectionName, Set.class);
             Method getter = getIsOrGetMethod(collectionName);
 
-            T entity = entityUnderTest.newInstance().setAppUser(USER1);
+            T entity = newDefaultInstance().setAppUser(USER1);
             Set<C> resultSet = (Set<C>) getter.invoke(entity);
             assertTrue(resultSet.isEmpty());
 
@@ -103,7 +112,7 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
             Method adder = getAddMethod(collectionName, Collection.class);
             Method getter = getIsOrGetMethod(collectionName);
 
-            T entity = entityUnderTest.newInstance().setAppUser(USER1);
+            T entity = newDefaultInstance().setAppUser(USER1);
             Set<C> resultSet = (Set<C>) getter.invoke(entity);
             assertTrue(resultSet.isEmpty());
             Set<C> firstSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
@@ -130,7 +139,7 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
             Method adder = getAddMethod(singleName, collectionEntity);
             Method getter = getIsOrGetMethod(collectionName);
 
-            T entity = entityUnderTest.newInstance().setAppUser(USER1);
+            T entity = newDefaultInstance().setAppUser(USER1);
 
             C ownedObject = getSingleOfFor(collectionEntity, USER1);
             adder.invoke(entity, ownedObject);
@@ -153,7 +162,7 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
             Method remover = getRemoveMethod(singleName, collectionEntity);
             Method getter = getIsOrGetMethod(collectionName);
 
-            T entity = entityUnderTest.newInstance().setAppUser(USER1);
+            T entity = newDefaultInstance().setAppUser(USER1);
 
             C ownedObject1 = getSingleOfFor(collectionEntity, USER1);
             C ownedObject2 = getSingleOfFor(collectionEntity, USER1);
@@ -178,7 +187,7 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
                                                                            final String collectionName,
                                                                            final String nullValueError) {
         try {
-            T entity = entityUnderTest.newInstance().setAppUser(USER1);
+            T entity = newDefaultInstance().setAppUser(USER1);
 
             Set<C> newSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
 
@@ -206,8 +215,8 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
 
     private <C extends AppUserOwnedObject> C getSingleOfFor(final Class<C> entityType, final AppUser user) {
         try {
-            return entityType.newInstance().setAppUser(user).setId("" + (idCounter++));
-        } catch (InstantiationException | IllegalAccessException e) {
+            return newDefaultInstance(entityType).setAppUser(user).setId("" + (idCounter++));
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }

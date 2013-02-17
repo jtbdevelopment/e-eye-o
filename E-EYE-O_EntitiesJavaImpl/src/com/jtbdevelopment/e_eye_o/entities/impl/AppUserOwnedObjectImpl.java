@@ -13,9 +13,6 @@ public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements App
     private AppUser appUser;
     private boolean archived = false;
 
-    protected AppUserOwnedObjectImpl() {
-    }
-
     protected AppUserOwnedObjectImpl(final AppUser appUser) {
         setAppUser(appUser);
     }

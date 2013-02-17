@@ -16,10 +16,11 @@ public class IdObjectImplFactory implements IdObjectFactory {
     private static Map<Class<? extends IdObject>, Class<? extends IdObject>> interfaceToImplementationMap = new HashMap<Class<? extends IdObject>, Class<? extends IdObject>>() {{
         put(AppUser.class, AppUserImpl.class);
         put(Observation.class, ObservationImpl.class);
-        put(ObservationCategory.class, ObservationCategory.class);
+        put(ObservationCategory.class, ObservationCategoryImpl.class);
         put(Student.class, StudentImpl.class);
         put(Photo.class, PhotoImpl.class);
         put(ClassList.class, ClassListImpl.class);
+        put(DeletedObject.class, DeletedObjectImpl.class);
     }};
 
 
@@ -40,18 +41,37 @@ public class IdObjectImplFactory implements IdObjectFactory {
         switch (idObjectType.getSimpleName()) {
             case "AppUser":
                 return (T) newAppUser();
-            case "Observation":
-                return (T) newObservation();
-            case "ObservationCategory":
-                return (T) newObservationCategory();
-            case "Student":
-                return (T) newStudent();
-            case "Photo":
-                return (T) newPhoto();
-            case "ClassList":
-                return (T) newClassList();
             default:
-                throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
+                if (AppUserOwnedObject.class.isAssignableFrom(idObjectType)) {
+                    throw new IllegalArgumentException("You cannot use this method to create app user owned objects.");
+                } else {
+                    throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
+                }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends AppUserOwnedObject> T newAppUserOwnedObject(final Class<T> idObjectType, final AppUser appUser) {
+        switch (idObjectType.getSimpleName()) {
+            case "Observation":
+                return (T) newObservation(appUser);
+            case "ObservationCategory":
+                return (T) newObservationCategory(appUser);
+            case "Student":
+                return (T) newStudent(appUser);
+            case "Photo":
+                return (T) newPhoto(appUser);
+            case "ClassList":
+                return (T) newClassList(appUser);
+            case "DeletedObject":
+                return (T) newDeletedObject(appUser);
+            default:
+                if (IdObject.class.isAssignableFrom(idObjectType)) {
+                    throw new IllegalArgumentException("You cannot use this method to create non-app user owned objects.");
+                } else {
+                    throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
+                }
         }
     }
 
@@ -61,18 +81,8 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
-    public ClassList newClassList() {
-        return new ClassListImpl();
-    }
-
-    @Override
     public ClassList newClassList(final AppUser appUser) {
         return new ClassListImpl(appUser);
-    }
-
-    @Override
-    public Observation newObservation() {
-        return new ObservationImpl();
     }
 
     @Override
@@ -81,18 +91,8 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
-    public ObservationCategory newObservationCategory() {
-        return new ObservationCategoryImpl();
-    }
-
-    @Override
     public ObservationCategory newObservationCategory(final AppUser appUser) {
         return new ObservationCategoryImpl(appUser);
-    }
-
-    @Override
-    public Photo newPhoto() {
-        return new PhotoImpl();
     }
 
     @Override
@@ -101,12 +101,12 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
-    public Student newStudent() {
-        return new StudentImpl();
+    public Student newStudent(final AppUser appUser) {
+        return new StudentImpl(appUser);
     }
 
     @Override
-    public Student newStudent(final AppUser appUser) {
-        return new StudentImpl(appUser);
+    public DeletedObject newDeletedObject(final AppUser appUser) {
+        return new DeletedObjectImpl(appUser);
     }
 }

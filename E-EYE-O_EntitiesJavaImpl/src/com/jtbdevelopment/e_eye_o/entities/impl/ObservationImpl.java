@@ -28,9 +28,6 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     private LocalDate followUpReminder;
     private Observation followUpObservation;
 
-    ObservationImpl() {
-    }
-
     ObservationImpl(final AppUser appUser) {
         super(appUser);
     }

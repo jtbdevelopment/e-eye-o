@@ -31,17 +31,17 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
 
     @Test
     public void testDefaultObservationSubjectAndValidation() {
-        ObservationImpl o = new ObservationImpl();
+        ObservationImpl o = new ObservationImpl(USER1);
         assertNull(o.getObservationSubject());
         validateExpectingError(o, Observation.OBSERVATION_OBSERVATION_SUBJECT_CANNOT_BE_NULL_ERROR);
     }
 
     @Test
     public void testSettingObservationSubject() {
-        ObservationImpl o = new ObservationImpl();
-        o.setObservationSubject(new StudentImpl());
+        ObservationImpl o = new ObservationImpl(USER1);
+        o.setObservationSubject(new StudentImpl(USER1));
         validateNotExpectingError(o, Observation.OBSERVATION_OBSERVATION_SUBJECT_CANNOT_BE_NULL_ERROR);
-        o.setObservationSubject(new ClassListImpl());
+        o.setObservationSubject(new ClassListImpl(USER1));
         validateNotExpectingError(o, Observation.OBSERVATION_OBSERVATION_SUBJECT_CANNOT_BE_NULL_ERROR);
     }
 
@@ -49,7 +49,7 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
     public void testNewObservationDefaultTimestamp() throws Exception {
         LocalDateTime before = new LocalDateTime();
         Thread.sleep(1);
-        ObservationImpl observation = new ObservationImpl();
+        ObservationImpl observation = new ObservationImpl(USER1);
         Thread.sleep(1);
         LocalDateTime after = new LocalDateTime();
         assertTrue(before.compareTo(observation.getObservationTimestamp()) < 0);
@@ -58,13 +58,13 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
 
     @Test
     public void testGetCategoriesNonModifiable() {
-        checkCollectionIsUnmodifiable(new ObservationImpl().getCategories());
+        checkCollectionIsUnmodifiable(new ObservationImpl(USER1).getCategories());
     }
 
     @Test
     public void testSetObservationDate() throws Exception {
         LocalDateTime timestamp = new LocalDateTime().minusDays(1);
-        assertEquals(timestamp, new ObservationImpl().setObservationTimestamp(timestamp).getObservationTimestamp());
+        assertEquals(timestamp, new ObservationImpl(USER1).setObservationTimestamp(timestamp).getObservationTimestamp());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
 
     @Test
     public void testSetFollowUpReminder() throws Exception {
-        ObservationImpl o = new ObservationImpl();
+        ObservationImpl o = new ObservationImpl(USER1);
         assertNull(o.getFollowUpReminder());
         LocalDate reminder = new LocalDate(2012, 4, 1);
         assertEquals(reminder, o.setFollowUpReminder(reminder).getFollowUpReminder());

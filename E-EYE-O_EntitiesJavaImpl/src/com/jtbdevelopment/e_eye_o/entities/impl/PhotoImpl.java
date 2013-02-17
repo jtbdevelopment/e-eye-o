@@ -15,9 +15,6 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo, AppUserO
     private LocalDateTime timestamp = new LocalDateTime();
     //  TODO - actual photo
 
-    PhotoImpl() {
-    }
-
     PhotoImpl(final AppUser appUser) {
         super(appUser);
     }

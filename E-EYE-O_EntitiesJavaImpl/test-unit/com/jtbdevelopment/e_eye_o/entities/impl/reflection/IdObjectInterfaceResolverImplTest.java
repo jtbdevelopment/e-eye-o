@@ -123,6 +123,9 @@ public class IdObjectInterfaceResolverImplTest {
     }
 
     public static class LocalThreeImpl extends AppUserOwnedObjectImpl implements LocalThree {
+        public LocalThreeImpl() {
+            super(null);
+        }
     }
 
     private final IdObjectInterfaceResolverImpl resolver = new IdObjectInterfaceResolverImpl();
