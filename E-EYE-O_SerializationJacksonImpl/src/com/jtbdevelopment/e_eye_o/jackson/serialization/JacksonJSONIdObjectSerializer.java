@@ -1,9 +1,10 @@
 package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,20 +31,37 @@ import java.util.List;
  */
 @Service
 public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
-    private final ObjectMapper mapper = new ObjectMapper();
+    public static final String ENTITY_TYPE_FIELD = "entityType";
+    public static final String ID_FIELD = "id";
+
+    private final MappingJsonFactory jsonFactory;
+    private final JacksonIdObjectSerializer jacksonIdObjectSerializer;
+    private final JacksonIdObjectDeserializer jacksonIdObjectDeserializer;
 
     @Autowired
-    public JacksonJSONIdObjectSerializer(final JacksonIdObjectModule idObjectModule) {
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        mapper.registerModule(new JodaModule());
-        mapper.registerModule(idObjectModule);
+    public JacksonJSONIdObjectSerializer(final JacksonIdObjectSerializer jacksonIdObjectSerializer, final JacksonIdObjectDeserializer jacksonIdObjectDeserializer) {
+        jsonFactory = new MappingJsonFactory();
+        jsonFactory.getCodec().registerModule(new JodaModule());
+        this.jacksonIdObjectSerializer = jacksonIdObjectSerializer;
+        this.jacksonIdObjectDeserializer = jacksonIdObjectDeserializer;
+    }
+
+    private JsonGenerator createGenerator() throws IOException {
+        return jsonFactory.createGenerator(new StringWriter()).setPrettyPrinter(new DefaultPrettyPrinter());
+    }
+
+    private String completeGeneration(final JsonGenerator generator) throws IOException {
+        generator.close();
+        return generator.getOutputTarget().toString();
     }
 
     @Override
     public String write(final IdObject entity) {
         try {
-            return mapper.writeValueAsString(entity);
-        } catch (JsonProcessingException e) {
+            final JsonGenerator generator = createGenerator();
+            jacksonIdObjectSerializer.serialize(entity, generator);
+            return completeGeneration(generator);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -50,8 +69,14 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
     @Override
     public String write(final Collection<? extends IdObject> entities) {
         try {
-            return mapper.writeValueAsString(entities);
-        } catch (JsonProcessingException e) {
+            final JsonGenerator generator = createGenerator();
+            generator.writeStartArray();
+            for (IdObject entity : entities) {
+                jacksonIdObjectSerializer.serialize(entity, generator);
+            }
+            generator.writeEndArray();
+            return completeGeneration(generator);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -59,29 +84,24 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
     @SuppressWarnings("unchecked")
     public <T> T read(final String input) {
         try {
-            JsonNode rootNode = mapper.readTree(input);
-            if (rootNode.isArray()) {
+            JsonParser parser = jsonFactory.createJsonParser(input);
+            JsonToken token = parser.nextToken();
+            if(token == JsonToken.START_OBJECT)             {
+                final T deserialized = (T) jacksonIdObjectDeserializer.deserialize(parser);
+                parser.close();
+                return deserialized;
+            } else if (token == JsonToken.START_ARRAY) {
                 List<IdObject> returnList = new LinkedList<>();
-                for (JsonNode child : rootNode) {
-                    returnList.add((IdObject) read(child.toString()));
+                while(parser.nextToken() != JsonToken.END_ARRAY) {
+                    returnList.add(jacksonIdObjectDeserializer.deserialize(parser));
                 }
+                parser.close();
                 return (T) returnList;
             } else {
-                return readSingleObject(input, rootNode);
+                throw new IllegalArgumentException("Invalid json input - does not start with array or object.");
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> T readSingleObject(final String input, final JsonNode rootNode) throws ClassNotFoundException, IOException {
-        String entityTypeString = rootNode.get(JacksonIdObjectConstants.ENTITY_TYPE_FIELD).asText();
-        Class entityType = Class.forName(entityTypeString);
-        if (IdObject.class.isAssignableFrom(entityType)) {
-            return mapper.readValue(input, (Class<T>) entityType);
-        } else {
-            throw new IllegalArgumentException("Unable to parse " + input + " as IdObject");
         }
     }
 }
