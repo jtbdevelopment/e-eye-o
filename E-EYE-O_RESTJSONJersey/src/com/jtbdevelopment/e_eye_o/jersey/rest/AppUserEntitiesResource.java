@@ -30,7 +30,7 @@ public class AppUserEntitiesResource {
         this.request = request;
         this.appUser = appUser;
         try {
-            this.entityType =  (Class<? extends AppUserOwnedObject>) Class.forName("com.jtbdevelopment.e_eye_o.entities." + entityType);
+            this.entityType = (Class<? extends AppUserOwnedObject>) Class.forName("com.jtbdevelopment.e_eye_o.entities." + entityType);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

@@ -28,7 +28,7 @@ public class JerseyRestViaGrizzlyTest extends AbstractTestNGSpringContextTests {
 
     @BeforeMethod
     public synchronized void setup() {
-        if( httpServer != null) {
+        if (httpServer != null) {
             return;
         }
         ResourceConfig rc = new PackagesResourceConfig("com.jtbdevelopment.e_eye_o");
@@ -41,7 +41,7 @@ public class JerseyRestViaGrizzlyTest extends AbstractTestNGSpringContextTests {
     }
 
     @AfterGroups({"integration"})
-    public synchronized  void teardown() {
+    public synchronized void teardown() {
         if (httpServer == null) {
             return;
         }

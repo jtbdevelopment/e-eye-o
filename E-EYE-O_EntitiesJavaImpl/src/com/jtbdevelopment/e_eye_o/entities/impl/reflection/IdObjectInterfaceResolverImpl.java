@@ -23,7 +23,7 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
 
     @SuppressWarnings("unchecked")
     public <T extends IdObject> Class<T> getIdObjectInterfaceForClass(final Class<T> entityType) {
-        if(entityType.isInterface())
+        if (entityType.isInterface())
             return entityType;
 
         Class<T> found = null;
@@ -41,7 +41,7 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
         try {
             return entityType.getMethod("set" + StringUtils.capitalize(attribute), valueType);
         } catch (NoSuchMethodException e) {
-            if(AppUserOwnedObject.class.isAssignableFrom(valueType)) {
+            if (AppUserOwnedObject.class.isAssignableFrom(valueType)) {
                 try {
                     return entityType.getMethod("set" + StringUtils.capitalize(attribute), AppUserOwnedObject.class);
                 } catch (NoSuchMethodException e2) {

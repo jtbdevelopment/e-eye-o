@@ -9,7 +9,7 @@ import static org.testng.Assert.assertEquals;
  * Date: 2/16/13
  * Time: 7:58 PM
  */
-public class DeletedObjectImplTest  extends AbstractAppUserOwnedObjectTest<DeletedObjectImpl> {
+public class DeletedObjectImplTest extends AbstractAppUserOwnedObjectTest<DeletedObjectImpl> {
     public DeletedObjectImplTest() {
         super(DeletedObjectImpl.class);
     }

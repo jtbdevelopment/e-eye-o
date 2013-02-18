@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Date: 11/25/12
  * Time: 7:54 PM
- *
+ * <p/>
  * Observation Category Helpers.
  */
 public interface ObservationCategoryHelper {
@@ -28,7 +28,7 @@ public interface ObservationCategoryHelper {
      *
      * @param appUser user to create defaults for
      * @return returns generated and saved values
-     **/
+     */
     public Set<ObservationCategory> createDefaultCategoriesForUser(final AppUser appUser);
 
     /**

@@ -31,7 +31,7 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
-    public  Map<Class<? extends IdObject>, Class<? extends IdObject>> implementationsForInterfaces() {
+    public Map<Class<? extends IdObject>, Class<? extends IdObject>> implementationsForInterfaces() {
         return Collections.unmodifiableMap(interfaceToImplementationMap);
     }
 
@@ -54,7 +54,7 @@ public class IdObjectImplFactory implements IdObjectFactory {
             case "DeletedObject":
                 return (T) newDeletedObject(null);
             default:
-                    throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
+                throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
         }
     }
 

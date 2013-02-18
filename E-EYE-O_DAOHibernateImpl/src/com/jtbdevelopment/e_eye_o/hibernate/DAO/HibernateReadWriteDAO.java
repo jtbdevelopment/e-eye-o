@@ -29,7 +29,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     @Override
     public <T extends IdObject> T create(final T entity) {
-        if(entity instanceof DeletedObject) {
+        if (entity instanceof DeletedObject) {
             throw new IllegalArgumentException("You cannot explicitly create a DeletedObject.");
         }
         final T wrapped = wrapperFactory.wrap(entity);
@@ -42,7 +42,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         Session session = sessionFactory.getCurrentSession();
         Collection<T> wrappedCollection = wrapperFactory.wrap(entities);
         for (T entity : wrappedCollection) {
-            if(entity instanceof DeletedObject) {
+            if (entity instanceof DeletedObject) {
                 throw new IllegalArgumentException("You cannot explicitly create a DeletedObject.");
             }
             session.save(entity);
@@ -52,7 +52,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     @Override
     public <T extends IdObject> T update(final T entity) {
-        if(entity instanceof DeletedObject) {
+        if (entity instanceof DeletedObject) {
             throw new IllegalArgumentException("You cannot explicitly update a DeletedObject.");
         }
         final T wrapped = wrapperFactory.wrap(entity);
@@ -65,7 +65,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         Session session = sessionFactory.getCurrentSession();
         Collection<T> wrappedEntities = wrapperFactory.wrap(entities);
         for (T entity : wrappedEntities) {
-            if(entity instanceof DeletedObject) {
+            if (entity instanceof DeletedObject) {
                 throw new IllegalArgumentException("You cannot explicitly update a DeletedObject.");
             }
             session.update(entity);
@@ -86,7 +86,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
 
         delete(getEntitiesForUser(HibernateAppUserOwnedObject.class, wrapped));
-        for(DeletedObject deletedObject : getEntitiesForUser(DeletedObject.class, wrapped)) {
+        for (DeletedObject deletedObject : getEntitiesForUser(DeletedObject.class, wrapped)) {
             currentSession.delete(deletedObject);
         }
 
@@ -104,7 +104,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> void delete(final T entity) {
-        if(entity instanceof DeletedObject) {
+        if (entity instanceof DeletedObject) {
             throw new IllegalArgumentException("You can not manually delete DeletedObjects.  These are only cleaned up by deleting user.");
         }
         Session currentSession = sessionFactory.getCurrentSession();

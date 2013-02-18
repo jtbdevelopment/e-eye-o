@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Date: 1/28/13
  * Time: 10:36 PM
- *
+ * <p/>
  * Given a concrete implementation of an IdObject returns the interface it implements
  */
 public interface IdObjectInterfaceResolver {
@@ -26,7 +26,7 @@ public interface IdObjectInterfaceResolver {
     <T extends IdObject> Method getSetMethod(final Class<T> entityType, final String attribute, final Class valueType);
 
     /**
-     *  Returns sorted list of getters
+     * Returns sorted list of getters
      */
     @Cacheable("idObjectGetMethods")
     <T extends IdObject> List<Method> getAllGetters(final Class<T> entityType);

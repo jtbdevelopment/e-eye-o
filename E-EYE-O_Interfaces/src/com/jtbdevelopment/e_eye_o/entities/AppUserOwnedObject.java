@@ -7,9 +7,9 @@ import javax.validation.constraints.NotNull;
 /**
  * Date: 11/25/12
  * Time: 3:10 PM
- *
+ * <p/>
  * Base for any object that is associated for a user
- *
+ * <p/>
  * Archived objects will generally not be synced with smart devices
  * but will still be visible on web pages
  */

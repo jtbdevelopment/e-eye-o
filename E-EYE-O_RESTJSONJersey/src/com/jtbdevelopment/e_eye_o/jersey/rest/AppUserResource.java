@@ -80,14 +80,14 @@ public class AppUserResource {
 
     @Path("archived")
     public AppUserResource getArchived() {
-        if(archiveFlag == null)
+        if (archiveFlag == null)
             return new AppUserResource(this, Boolean.TRUE);
         return null;
     }
 
     @Path("active")
     public AppUserResource getActive() {
-        if(archiveFlag == null)
+        if (archiveFlag == null)
             return new AppUserResource(this, Boolean.FALSE);
         return null;
     }
@@ -123,7 +123,7 @@ public class AppUserResource {
     }
 
     private AppUserResource getEntityRefinedResource(final Class<? extends AppUserOwnedObject> entityType) {
-        if(this.entityType.equals(AppUserOwnedObject.class))
+        if (this.entityType.equals(AppUserOwnedObject.class))
             return new AppUserResource(this, entityType);
         return null;
     }

@@ -26,10 +26,11 @@ public interface ReadOnlyDAO {
     /**
      * Generally expected to return an ordered set by modification timestamp ascending
      * Note this function is also expected to include DeletedObjects which are generally filtered out of other queries
+     *
      * @param entityType - use AppUserOwnedObject for all entities by appuser
-     * @param appUser - the user
-     * @param since - timestamp
-     * @param <T> - see entityType
+     * @param appUser    - the user
+     * @param since      - timestamp
+     * @param <T>        - see entityType
      * @return an ordered set of modified entities, ordered by modification timestamp ascending
      */
     public <T extends AppUserOwnedObject> Set<T> getEntitiesModifiedSince(final Class<T> entityType, final AppUser appUser, final DateTime since);
