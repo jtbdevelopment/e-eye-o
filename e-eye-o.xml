@@ -325,6 +325,7 @@
   <path id="e-eye-o_interfaces.module.test.sourcepath">
     <dirset dir="${module.e-eye-o_interfaces.basedir}/E-EYE-O_Interfaces">
       <include name="test-unit"/>
+      <include name="test-integration"/>
     </dirset>
   </path>
   
@@ -361,6 +362,10 @@
     
     <copy todir="${e-eye-o_interfaces.testoutput.dir}">
       <fileset dir="${module.e-eye-o_interfaces.basedir}/E-EYE-O_Interfaces/test-unit">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.e-eye-o_interfaces.basedir}/E-EYE-O_Interfaces/test-integration">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
@@ -550,6 +555,8 @@
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
     <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
   </path>
   
   <path id="e-eye-o_restjsonjersey.runtime.module.classpath">
@@ -557,6 +564,8 @@
     <pathelement location="${e-eye-o_restjsonjersey.output.dir}"/>
     <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
   </path>
   
   
@@ -571,6 +580,12 @@
   <path id="e-eye-o_restjsonjersey.module.sourcepath">
     <dirset dir="${module.e-eye-o_restjsonjersey.basedir}/E-EYE-O_RESTJSONJersey">
       <include name="src"/>
+    </dirset>
+  </path>
+  
+  <path id="e-eye-o_restjsonjersey.module.test.sourcepath">
+    <dirset dir="${module.e-eye-o_restjsonjersey.basedir}/E-EYE-O_RESTJSONJersey">
+      <include name="test-unit"/>
     </dirset>
   </path>
   
@@ -595,7 +610,23 @@
     </copy>
   </target>
   
-  <target name="compile.module.e-eye-o_restjsonjersey.tests" depends="compile.module.e-eye-o_restjsonjersey.production" description="compile module E-EYE-O_RESTJSONJersey; test classes" unless="skip.tests"/>
+  <target name="compile.module.e-eye-o_restjsonjersey.tests" depends="compile.module.e-eye-o_restjsonjersey.production" description="compile module E-EYE-O_RESTJSONJersey; test classes" unless="skip.tests">
+    <mkdir dir="${e-eye-o_restjsonjersey.testoutput.dir}"/>
+    <javac destdir="${e-eye-o_restjsonjersey.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_restjsonjersey}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_restjsonjersey}"/>
+      <bootclasspath refid="e-eye-o_restjsonjersey.module.bootclasspath"/>
+      <classpath refid="e-eye-o_restjsonjersey.module.classpath"/>
+      <src refid="e-eye-o_restjsonjersey.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_restjsonjersey"/>
+    </javac>
+    
+    <copy todir="${e-eye-o_restjsonjersey.testoutput.dir}">
+      <fileset dir="${module.e-eye-o_restjsonjersey.basedir}/E-EYE-O_RESTJSONJersey/test-unit">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
   
   <target name="clean.module.e-eye-o_restjsonjersey" description="cleanup module">
     <delete dir="${e-eye-o_restjsonjersey.output.dir}"/>
@@ -683,6 +714,12 @@
     </dirset>
   </path>
   
+  <path id="e-eye-o_serializationjacksonimpl.module.test.sourcepath">
+    <dirset dir="${module.e-eye-o_serializationjacksonimpl.basedir}/E-EYE-O_SerializationJacksonImpl">
+      <include name="test-units"/>
+    </dirset>
+  </path>
+  
   
   <target name="compile.module.e-eye-o_serializationjacksonimpl" depends="compile.module.e-eye-o_serializationjacksonimpl.production,compile.module.e-eye-o_serializationjacksonimpl.tests" description="Compile module E-EYE-O_SerializationJacksonImpl"/>
   
@@ -704,7 +741,23 @@
     </copy>
   </target>
   
-  <target name="compile.module.e-eye-o_serializationjacksonimpl.tests" depends="compile.module.e-eye-o_serializationjacksonimpl.production" description="compile module E-EYE-O_SerializationJacksonImpl; test classes" unless="skip.tests"/>
+  <target name="compile.module.e-eye-o_serializationjacksonimpl.tests" depends="compile.module.e-eye-o_serializationjacksonimpl.production" description="compile module E-EYE-O_SerializationJacksonImpl; test classes" unless="skip.tests">
+    <mkdir dir="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
+    <javac destdir="${e-eye-o_serializationjacksonimpl.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_serializationjacksonimpl}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_serializationjacksonimpl}"/>
+      <bootclasspath refid="e-eye-o_serializationjacksonimpl.module.bootclasspath"/>
+      <classpath refid="e-eye-o_serializationjacksonimpl.module.classpath"/>
+      <src refid="e-eye-o_serializationjacksonimpl.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_serializationjacksonimpl"/>
+    </javac>
+    
+    <copy todir="${e-eye-o_serializationjacksonimpl.testoutput.dir}">
+      <fileset dir="${module.e-eye-o_serializationjacksonimpl.basedir}/E-EYE-O_SerializationJacksonImpl/test-units">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
   
   <target name="clean.module.e-eye-o_serializationjacksonimpl" description="cleanup module">
     <delete dir="${e-eye-o_serializationjacksonimpl.output.dir}"/>
@@ -812,7 +865,6 @@
   <path id="e-eye-o_daohibernateimpl.module.test.sourcepath">
     <dirset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl">
       <include name="test-unit"/>
-      <include name="test-integration"/>
     </dirset>
   </path>
   
@@ -849,10 +901,6 @@
     
     <copy todir="${e-eye-o_daohibernateimpl.testoutput.dir}">
       <fileset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl/test-unit">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-      <fileset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl/test-integration">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
@@ -1058,6 +1106,7 @@
     <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
     <path refid="e-eye-o_restjsonjersey.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
   </path>
   
   <path id="e-eye-o_derbyjacksonbasedintegrationtests.module.classpath">
@@ -1102,6 +1151,7 @@
     <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
     <path refid="e-eye-o_restjsonjersey.runtime.module.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
   </path>
   
   
@@ -1128,7 +1178,7 @@
   
   <target name="compile.module.e-eye-o_derbyjacksonbasedintegrationtests" depends="compile.module.e-eye-o_derbyjacksonbasedintegrationtests.production,compile.module.e-eye-o_derbyjacksonbasedintegrationtests.tests" description="Compile module E-EYE-O_DerbyJacksonBasedIntegrationTests"/>
   
-  <target name="compile.module.e-eye-o_derbyjacksonbasedintegrationtests.production" depends="compile.module.e-eye-o_daoderbyhibernateimpl,compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_restjsonjersey" description="Compile module E-EYE-O_DerbyJacksonBasedIntegrationTests; production classes">
+  <target name="compile.module.e-eye-o_derbyjacksonbasedintegrationtests.production" depends="compile.module.e-eye-o_daoderbyhibernateimpl,compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_interfaces" description="Compile module E-EYE-O_DerbyJacksonBasedIntegrationTests; production classes">
     <mkdir dir="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}"/>
     <javac destdir="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_derbyjacksonbasedintegrationtests}/javac">
       <compilerarg line="${compiler.args.e-eye-o_derbyjacksonbasedintegrationtests}"/>
