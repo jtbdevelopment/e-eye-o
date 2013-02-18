@@ -558,7 +558,7 @@ public class HibernateReadWriteDAOTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testCreatingDeletedObjectAsListExceptions() {
         final List<DeletedObject> entities = Arrays.asList(deletedImpl);
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(daoIdObjectWrapperFactory).wrap(entities);
             will(returnValue(entities));
         }});
@@ -583,7 +583,7 @@ public class HibernateReadWriteDAOTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testUpdatingDeletedObjectAsListExceptions() {
         final List<DeletedObject> entities = Arrays.asList(deletedImpl);
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(daoIdObjectWrapperFactory).wrap(entities);
             will(returnValue(entities));
         }});

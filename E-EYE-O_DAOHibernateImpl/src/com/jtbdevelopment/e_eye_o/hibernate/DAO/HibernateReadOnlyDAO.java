@@ -61,7 +61,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
         Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user");
         query.setParameter("user", appUser);
-        return new HashSet<>(Collections2.filter((List < T >) query.list(), new Predicate<T>() {
+        return new HashSet<>(Collections2.filter((List<T>) query.list(), new Predicate<T>() {
             @Override
             public boolean apply(@Nullable final T input) {
                 return (input != null) && ((entityType == DeletedObject.class) || !(input instanceof DeletedObject));
@@ -85,7 +85,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user and modificationTimestamp > :since");
         query.setParameter("user", appUser);
         query.setParameter("since", since);
-        TreeSet<T> sortedResults = new TreeSet<>(new Comparator<T>(){
+        TreeSet<T> sortedResults = new TreeSet<>(new Comparator<T>() {
             @Override
             public int compare(final T o1, final T o2) {
                 return o1.getModificationTimestamp().compareTo(o2.getModificationTimestamp());
@@ -97,7 +97,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @SuppressWarnings("unchecked")
     private <T extends AppUserOwnedObject> Set<T> getEntitiesForUserWithArchiveFlag(final Class<T> entityType, final AppUser appUser, final boolean archived) {
-        return new HashSet<>( Collections2.filter(getEntitiesForUser(entityType, appUser), new Predicate<T>() {
+        return new HashSet<>(Collections2.filter(getEntitiesForUser(entityType, appUser), new Predicate<T>() {
             @Override
             public boolean apply(@Nullable final T input) {
                 return (input != null) && (input.isArchived() == archived);
@@ -149,7 +149,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         Class<T> wrapperFor;
         if (!HibernateIdObject.class.isAssignableFrom(entityType)) {
             wrapperFor = wrapperFactory.getWrapperForEntity(entityType);
-            if( wrapperFor == null) {
+            if (wrapperFor == null) {
                 throw new IllegalArgumentException("Unknown entity type " + entityType.getSimpleName());
             }
         } else {

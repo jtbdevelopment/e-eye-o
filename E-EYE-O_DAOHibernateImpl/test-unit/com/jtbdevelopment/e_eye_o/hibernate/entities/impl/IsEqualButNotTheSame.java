@@ -25,11 +25,11 @@ public class IsEqualButNotTheSame<I extends IdObject, T extends Set<I>> extends 
 
     @Override
     public boolean matches(final Object o) {
-        if(o instanceof Set) {
+        if (o instanceof Set) {
             Set oAsS = (Set) o;
             Set local = new HashSet<>();
-            for(Object i : oAsS) {
-                if(i instanceof IdObjectWrapper) {
+            for (Object i : oAsS) {
+                if (i instanceof IdObjectWrapper) {
                     local.add(((IdObjectWrapper) i).getWrapped());
                 } else {
                     local.add(i);

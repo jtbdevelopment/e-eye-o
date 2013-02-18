@@ -284,8 +284,8 @@ public class HibernateReadOnlyDAOTest {
         ARCHIVED_WRAPPER.setModificationTimestamp(ts2);
         ACTIVE_WRAPPER.setModificationTimestamp(ts3);
 
-        context.checking(new Expectations(){{
-           allowing(DELETED_WRAPPER).getModificationTimestamp();
+        context.checking(new Expectations() {{
+            allowing(DELETED_WRAPPER).getModificationTimestamp();
             will(returnValue(ts1));
 
             one(sessionFactory).getCurrentSession();

@@ -42,7 +42,7 @@ public class HibernatePreDeleteEventListenerTest {
         session = context.mock(Session.class);
         listener = new HibernatePreDeleteEventListener(wrapper, factory, null);
         eventSource = context.mock(EventSource.class);
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
         }});
     }
 
@@ -71,7 +71,7 @@ public class HibernatePreDeleteEventListenerTest {
         final AppUserOwnedObject local = context.mock(AppUserOwnedObject.class);
         final String localId = "X";
 
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(local).getAppUser();
             will(returnValue(appUser));
             one(local).getId();
