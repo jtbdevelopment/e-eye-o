@@ -4,13 +4,9 @@ import com.jtbdevelopment.e_eye_o.entities.*;
 import org.jmock.Mockery;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.AssertJUnit.*;
 
 /**
  * Date: 1/5/13
@@ -22,7 +18,27 @@ public class IdObjectImplFactoryTest {
     private static final IdObjectImplFactory factory = new IdObjectImplFactory();
 
     @Test
-    public void testImplementationMap() throws Exception {
+    public void testInterfaceMap() {
+        Map<Class<? extends IdObject>, Class<? extends IdObject>> map = factory.implementationsForInterfaces();
+        assertEquals(7, map.size());
+        assertEquals(AppUserImpl.class, map.get(AppUser.class));
+        assertEquals(ClassListImpl.class, map.get(ClassList.class));
+        assertEquals(ObservationImpl.class, map.get(Observation.class));
+        assertEquals(ObservationCategoryImpl.class, map.get(ObservationCategory.class));
+        assertEquals(PhotoImpl.class, map.get(Photo.class));
+        assertEquals(StudentImpl.class, map.get(Student.class));
+        assertEquals(DeletedObjectImpl.class, map.get(DeletedObject.class));
+    }
+
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void testInterfaceMapIsUnmodifiable() {
+        Map<Class<? extends IdObject>, Class<? extends IdObject>> map = factory.implementationsForInterfaces();
+        map.clear();
+    }
+
+
+    @Test
+    public void testImplementationForInterface() throws Exception {
         assertEquals(AppUserImpl.class, factory.implementationForInterface(AppUser.class));
         assertEquals(ClassListImpl.class, factory.implementationForInterface(ClassList.class));
         assertEquals(ObservationImpl.class, factory.implementationForInterface(Observation.class));
@@ -47,16 +63,8 @@ public class IdObjectImplFactoryTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testNewIdObjectForAppUserOwnedObjects() {
-        boolean exception;
         for (Class c : Arrays.asList(ClassList.class, Student.class, DeletedObject.class, Photo.class, Observation.class, ObservationCategory.class)) {
-            exception = false;
-            try {
-                factory.newIdObject(c);
-            } catch (IllegalArgumentException e) {
-                exception = true;
-                assertEquals("You cannot use this method to create app user owned objects.", e.getMessage());
-            }
-            assertTrue("Expected exception for " + c.getSimpleName(), exception);
+            assertNull(((AppUserOwnedObject) factory.newIdObject(c)).getAppUser());
         }
     }
 

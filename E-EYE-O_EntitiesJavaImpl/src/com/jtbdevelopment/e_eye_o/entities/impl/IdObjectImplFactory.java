@@ -31,7 +31,7 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
-    public Map<Class<? extends IdObject>, Class<? extends IdObject>> implementationsForInterfaces() {
+    public  Map<Class<? extends IdObject>, Class<? extends IdObject>> implementationsForInterfaces() {
         return Collections.unmodifiableMap(interfaceToImplementationMap);
     }
 
@@ -41,12 +41,20 @@ public class IdObjectImplFactory implements IdObjectFactory {
         switch (idObjectType.getSimpleName()) {
             case "AppUser":
                 return (T) newAppUser();
+            case "Observation":
+                return (T) newObservation(null);
+            case "ObservationCategory":
+                return (T) newObservationCategory(null);
+            case "Student":
+                return (T) newStudent(null);
+            case "Photo":
+                return (T) newPhoto(null);
+            case "ClassList":
+                return (T) newClassList(null);
+            case "DeletedObject":
+                return (T) newDeletedObject(null);
             default:
-                if (AppUserOwnedObject.class.isAssignableFrom(idObjectType)) {
-                    throw new IllegalArgumentException("You cannot use this method to create app user owned objects.");
-                } else {
                     throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
-                }
         }
     }
 

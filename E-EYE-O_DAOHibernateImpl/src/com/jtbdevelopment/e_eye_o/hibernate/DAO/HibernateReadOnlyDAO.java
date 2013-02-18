@@ -1,22 +1,23 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateIdObject;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Date: 11/18/12
@@ -57,14 +58,19 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(Class<T> entityType, AppUser appUser) {
+    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
         Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user");
         query.setParameter("user", appUser);
-        return new HashSet<>((List<T>) query.list());
+        return new HashSet<>(Collections2.filter((List < T >) query.list(), new Predicate<T>() {
+            @Override
+            public boolean apply(@Nullable final T input) {
+                return (input != null) && ((entityType == DeletedObject.class) || !(input instanceof DeletedObject));
+            }
+        }));
     }
 
     @Override
-    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(Class<T> entityType, AppUser appUser) {
+    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
         return getEntitiesForUserWithArchiveFlag(entityType, appUser, false);
     }
 
@@ -73,12 +79,30 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         return getEntitiesForUserWithArchiveFlag(entityType, appUser, true);
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends AppUserOwnedObject> Set<T> getEntitiesModifiedSince(final Class<T> entityType, final AppUser appUser, final DateTime since) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user and modificationTimestamp > :since");
+        query.setParameter("user", appUser);
+        query.setParameter("since", since);
+        TreeSet<T> sortedResults = new TreeSet<>(new Comparator<T>(){
+            @Override
+            public int compare(final T o1, final T o2) {
+                return o1.getModificationTimestamp().compareTo(o2.getModificationTimestamp());
+            }
+        });
+        sortedResults.addAll((List<T>) query.list());
+        return sortedResults;
+    }
+
     @SuppressWarnings("unchecked")
     private <T extends AppUserOwnedObject> Set<T> getEntitiesForUserWithArchiveFlag(final Class<T> entityType, final AppUser appUser, final boolean archived) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user and archived = :archived");
-        query.setParameter("user", appUser);
-        query.setParameter("archived", archived);
-        return new HashSet<>((List<T>) query.list());
+        return new HashSet<>( Collections2.filter(getEntitiesForUser(entityType, appUser), new Predicate<T>() {
+            @Override
+            public boolean apply(@Nullable final T input) {
+                return (input != null) && (input.isArchived() == archived);
+            }
+        }));
     }
 
     @Override

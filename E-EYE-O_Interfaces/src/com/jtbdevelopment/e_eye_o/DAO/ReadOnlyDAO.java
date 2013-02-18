@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.DAO;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
+import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.Set;
@@ -18,18 +19,29 @@ public interface ReadOnlyDAO {
 
     public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser);
 
-    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(Class<T> entityType, final AppUser appUser);
+    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(final Class<T> entityType, final AppUser appUser);
 
-    public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(Class<T> entityType, final AppUser appUser);
+    public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(final Class<T> entityType, final AppUser appUser);
 
-    public List<Photo> getAllPhotosForEntity(AppUserOwnedObject ownedObject);
+    /**
+     * Generally expected to return an ordered set by modification timestamp ascending
+     * Note this function is also expected to include DeletedObjects which are generally filtered out of other queries
+     * @param entityType - use AppUserOwnedObject for all entities by appuser
+     * @param appUser - the user
+     * @param since - timestamp
+     * @param <T> - see entityType
+     * @return an ordered set of modified entities, ordered by modification timestamp ascending
+     */
+    public <T extends AppUserOwnedObject> Set<T> getEntitiesModifiedSince(final Class<T> entityType, final AppUser appUser, final DateTime since);
 
-    public List<Observation> getAllObservationsForEntity(AppUserOwnedObject ownedObject);
+    public List<Photo> getAllPhotosForEntity(final AppUserOwnedObject ownedObject);
 
-    public List<Observation> getAllObservationsForObservationCategory(ObservationCategory observationCategory);
+    public List<Observation> getAllObservationsForEntity(final AppUserOwnedObject ownedObject);
 
-    public List<Observation> getAllObservationsForFollowup(Observation followup);
+    public List<Observation> getAllObservationsForObservationCategory(final ObservationCategory observationCategory);
 
-    public List<Student> getAllStudentsForClassList(ClassList classList);
+    public List<Observation> getAllObservationsForFollowup(final Observation followup);
+
+    public List<Student> getAllStudentsForClassList(final ClassList classList);
 }
 

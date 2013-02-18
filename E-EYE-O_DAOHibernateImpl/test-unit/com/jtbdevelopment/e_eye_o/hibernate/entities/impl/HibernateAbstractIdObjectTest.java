@@ -40,6 +40,8 @@ public class HibernateAbstractIdObjectTest {
             will(returnValue(Student.class));
             allowing(interfaceResolver).getIdObjectInterfaceForClass(with(new IsInstanceOf(Photo.class)));
             will(returnValue(Photo.class));
+            allowing(interfaceResolver).getIdObjectInterfaceForClass(with(new IsInstanceOf(DeletedObject.class)));
+            will(returnValue(DeletedObject.class));
             allowing(interfaceResolver).getIdObjectInterfaceForClass(with(new IsInstanceOf(AppUserOwnedObject.class)));
             will(returnValue(AppUserOwnedObject.class));
         }});

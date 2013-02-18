@@ -29,6 +29,11 @@ public class HibernateDAOSpringConfigTest {
     }
 
     @Test
+    public void testTimestampIntercepter() {
+        assertTrue(config.timestampInterceptor() instanceof HibernateTimestampInterceptor);
+    }
+
+    @Test
     public void testHibernatePropertiesNoOverrides() throws Exception {
         Properties overrides = new Properties();
         final String mydialect = "MYDIALECT";

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Date: 11/19/12
@@ -73,6 +74,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
 
         delete(getEntitiesForUser(HibernateAppUserOwnedObject.class, wrapped));
+        for(DeletedObject deletedObject : getEntitiesForUser(DeletedObject.class, wrapped)) {
+            currentSession.delete(deletedObject);
+        }
 
         currentSession.delete(wrapped);
     }
@@ -88,6 +92,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> void delete(final T entity) {
+        if(entity instanceof DeletedObject) {
+            throw new IllegalArgumentException("You can not manually delete DeletedObjects.  These are only cleaned up by deleting user.");
+        }
         Session currentSession = sessionFactory.getCurrentSession();
 
         T wrapped = wrapperFactory.wrap(entity);
@@ -115,13 +122,12 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 currentSession.update(observation);
             }
         }
-        if (wrapped instanceof AppUserOwnedObject) {
-            for (Photo p : getAllPhotosForEntity(wrapped)) {
-                currentSession.delete(p);
-            }
-            for (Observation o : getAllObservationsForEntity(wrapped)) {
-                currentSession.delete(o);
-            }
+        final List<Photo> allPhotosForEntity = getAllPhotosForEntity(wrapped);
+        for (Photo p : allPhotosForEntity) {
+            currentSession.delete(p);
+        }
+        for (Observation o : getAllObservationsForEntity(wrapped)) {
+            currentSession.delete(o);
         }
 
         currentSession.delete(wrapped);

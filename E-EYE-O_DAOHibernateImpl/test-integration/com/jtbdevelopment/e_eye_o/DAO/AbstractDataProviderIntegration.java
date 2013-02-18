@@ -13,10 +13,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.testng.Assert.*;
 
@@ -24,7 +21,7 @@ import static org.testng.Assert.*;
  * Date: 11/21/12
  * Time: 1:45 AM
  * <p/>
- * Suite of tests that can be run against any data source provider to test hibernate.
+ * Suite of tests that can be run against any data source provider.
  */
 @Test(groups = {"integration"})
 public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpringContextTests {
@@ -207,7 +204,9 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         assertFalse(archivePhotos.contains(photo));
 
         photo.setDescription("Archived").setArchived(true);
+        DateTime originalTS = photo.getModificationTimestamp();
         photo = rwDAO.update(photo);
+        assertTrue(originalTS.isBefore(photo.getModificationTimestamp()));
         activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         archivePhotos = rwDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
         assertFalse(activePhotos.contains(photo));
@@ -242,8 +241,10 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         o.removeCategory(social);
         o.addCategory(lang);
         o.setObservationSubject(testClassList1ForU1);
+        DateTime originalTS = o.getModificationTimestamp();
         o = rwDAO.update(o);
         o = rwDAO.get(Observation.class, o.getId());
+        assertTrue(originalTS.isBefore(o.getModificationTimestamp()));
         assertEquals(2, o.getCategories().size());
         assertTrue(o.getCategories().contains(lang));
         assertTrue(o.getCategories().contains(kauw));
@@ -287,6 +288,52 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         rwDAO.delete(o2);
         o1 = rwDAO.get(Observation.class, o1.getId());
         assertNull(o1.getFollowUpObservation());
+    }
+
+    @Test
+    public void testGetModifiedSince() throws InterruptedException {
+        AppUser updateUser = rwDAO.create(factory.newAppUser().setEmailAddress("updateUser@delete.test").setFirstName("delete").setLastName("delete"));
+        DateTime firstTS = new DateTime();
+        Thread.sleep(1);
+        ObservationCategory oc = rwDAO.create(factory.newObservationCategory(updateUser).setShortName("X").setDescription("X"));
+        ClassList cl = rwDAO.create(factory.newClassList(updateUser).setDescription("CL"));
+        Student s = rwDAO.create(factory.newStudent(updateUser).setFirstName("A").setLastName("B"));
+        Photo p = rwDAO.create(factory.newPhoto(updateUser).setDescription("D").setPhotoFor(s));
+        Observation o = rwDAO.create(factory.newObservation(updateUser).setComment("T").setObservationSubject(cl));
+
+        Set<AppUserOwnedObject> firstSet = rwDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, updateUser, firstTS);
+        final List<AppUserOwnedObject> initialList = Arrays.asList(oc, cl, s, p, o);
+        assertEquals(initialList.size(), firstSet.size());
+        assertTrue(firstSet.containsAll(initialList));
+
+        DateTime secondTS = new DateTime();
+        Thread.sleep(1);
+        p.setDescription("P2");
+        s.addClassList(cl);
+        p = rwDAO.update(p);
+        s =rwDAO.update(s);
+        final List<AppUserOwnedObject> secondList = Arrays.asList(s, p);
+        final Set<AppUserOwnedObject> secondSet = rwDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, updateUser, secondTS);
+        assertEquals(secondList.size(), secondSet.size());
+        assertTrue(secondSet.containsAll(secondList));
+
+    }
+    @Test
+    public void testDeletingObjectsCreatesDeletedObjects() throws InterruptedException {
+        AppUser deleteUserThings = rwDAO.create(factory.newAppUser().setEmailAddress("deleteUserThings@delete.test").setFirstName("delete").setLastName("delete"));
+        ObservationCategory oc = rwDAO.create(factory.newObservationCategory(deleteUserThings).setShortName("X").setDescription("X"));
+        ClassList cl = rwDAO.create(factory.newClassList(deleteUserThings).setDescription("CL"));
+        Student s = rwDAO.create(factory.newStudent(deleteUserThings).setFirstName("A").setLastName("B"));
+        Photo p = rwDAO.create(factory.newPhoto(deleteUserThings).setDescription("D").setPhotoFor(s));
+        Observation o = rwDAO.create(factory.newObservation(deleteUserThings).setComment("T").setObservationSubject(cl));
+
+        DateTime baseTime = new DateTime();
+        List<String> ids = Arrays.asList(oc.getId(), cl.getId(), s.getId(), p.getId(), o.getId());
+        Thread.sleep(1);
+
+        rwDAO.delete(Arrays.asList(oc, cl, s, p, o));
+        assertTrue(rwDAO.getEntitiesForUser(AppUserOwnedObject.class, deleteUserThings).isEmpty());
+        assertFalse(rwDAO.getEntitiesForUser(DeletedObject.class, deleteUserThings).isEmpty());
     }
 
     @Test

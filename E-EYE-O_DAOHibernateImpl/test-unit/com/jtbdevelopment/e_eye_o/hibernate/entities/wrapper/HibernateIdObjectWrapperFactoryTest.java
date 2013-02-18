@@ -32,7 +32,7 @@ public class HibernateIdObjectWrapperFactoryTest extends HibernateAbstractIdObje
         put(ObservationCategory.class, HibernateObservationCategory.class);
         put(Observation.class, HibernateObservation.class);
         put(ClassList.class, HibernateClassList.class);
-
+        put(DeletedObject.class, HibernateDeletedObject.class);
     }};
 
     @Test

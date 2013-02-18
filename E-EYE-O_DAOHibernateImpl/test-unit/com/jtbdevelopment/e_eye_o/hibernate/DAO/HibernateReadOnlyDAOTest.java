@@ -1,18 +1,23 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.impl.AppUserOwnedObjectImpl;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateDeletedObject;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.metadata.ClassMetadata;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.joda.time.DateTime;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 import static org.testng.AssertJUnit.*;
@@ -41,15 +46,18 @@ public class HibernateReadOnlyDAOTest {
     }
 
     private static class HibernateWrapper extends HibernateAppUserOwnedObject<LocalInterface> implements LocalInterface, AppUserOwnedObject {
-        public HibernateWrapper() {
+        public HibernateWrapper(final String id, final boolean archived) {
             super(new LocalImpl());
-            setId("1");
+            setId(id);
+            setArchived(archived);
         }
     }
 
     private static final String HQLNAME = "HQLNAME";
     private static final String SOMEID = "AnId";
-    private static final HibernateWrapper A_WRAPPER = new HibernateWrapper();
+    private static final HibernateWrapper ACTIVE_WRAPPER = new HibernateWrapper("1", false);
+    private static final HibernateWrapper ARCHIVED_WRAPPER = new HibernateWrapper("2", true);
+    private DeletedObject DELETED_WRAPPER;
 
     @BeforeMethod
     public void initializeMockery() {
@@ -60,13 +68,22 @@ public class HibernateReadOnlyDAOTest {
         session = context.mock(Session.class);
         appUser = context.mock(AppUser.class);
         query = context.mock(Query.class);
+        DELETED_WRAPPER = context.mock(DeletedObject.class);
         dao = new HibernateReadOnlyDAO(sessionFactory, wrapperFactory);
         context.checking(new Expectations() {{
             allowing(wrapperFactory).getWrapperForEntity(LocalInterface.class);
             will(returnValue(HibernateWrapper.class));
+            allowing(wrapperFactory).getWrapperForEntity(DeletedObject.class);
+            will(returnValue(HibernateDeletedObject.class));
             allowing(wrapperFactory).getWrapperForEntity(HibernateWrapper.class);
             will(returnValue(null));
+            allowing(wrapperFactory).getWrapperForEntity(AppUserOwnedObject.class);
+            will(returnValue(HibernateAppUserOwnedObject.class));
             allowing(sessionFactory).getClassMetadata(HibernateWrapper.class);
+            will(returnValue(hibernateData));
+            allowing(sessionFactory).getClassMetadata(HibernateDeletedObject.class);
+            will(returnValue(hibernateData));
+            allowing(sessionFactory).getClassMetadata(HibernateAppUserOwnedObject.class);
             will(returnValue(hibernateData));
             allowing(hibernateData).getEntityName();
             will(returnValue(HQLNAME));
@@ -77,9 +94,9 @@ public class HibernateReadOnlyDAOTest {
 
     @Test
     public void testGetUserIds() {
-        final List A_LIST = Arrays.asList(A_WRAPPER);
+        final List A_LIST = Arrays.asList(ACTIVE_WRAPPER);
         final Set A_SET = new HashSet(A_LIST);
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             allowing(session).createQuery("from AppUser");
             will(returnValue(query));
             one(query).list();
@@ -88,14 +105,15 @@ public class HibernateReadOnlyDAOTest {
 
         assertEquals(A_SET, dao.getUsers());
     }
+
     @Test
     public void testGet() throws Exception {
         context.checking(new Expectations() {{
             allowing(session).get(HQLNAME, SOMEID);
-            will(returnValue(A_WRAPPER));
+            will(returnValue(ACTIVE_WRAPPER));
         }});
-        assertSame(A_WRAPPER, dao.get(LocalInterface.class, SOMEID));
-        assertSame(A_WRAPPER, dao.get(HibernateWrapper.class, SOMEID));
+        assertSame(ACTIVE_WRAPPER, dao.get(LocalInterface.class, SOMEID));
+        assertSame(ACTIVE_WRAPPER, dao.get(HibernateWrapper.class, SOMEID));
     }
 
     @Test
@@ -170,19 +188,36 @@ public class HibernateReadOnlyDAOTest {
 
     @Test
     public void testGetEntitiesForUser() throws Exception {
-        final List<HibernateWrapper> result = Arrays.asList(A_WRAPPER);
+        final List<AppUserOwnedObject> fromDB = Arrays.asList(ACTIVE_WRAPPER, ARCHIVED_WRAPPER, DELETED_WRAPPER);
+        final List<HibernateWrapper> expected = Arrays.asList(ACTIVE_WRAPPER, ARCHIVED_WRAPPER);
         context.checking(new Expectations() {{
             allowing(session).createQuery("from " + HQLNAME + " where appUser = :user");
             will(returnValue(query));
             allowing(query).setParameter("user", appUser);
             allowing(query).list();
-            will(returnValue(result));
+            will(returnValue(fromDB));
         }});
         for (Class<? extends LocalInterface> c : Arrays.asList(LocalInterface.class, HibernateWrapper.class)) {
             Set entitiesForUser = dao.getEntitiesForUser(c, appUser);
-            assertTrue(entitiesForUser.containsAll(result));
-            assertTrue(result.containsAll(entitiesForUser));
+            assertTrue(entitiesForUser.containsAll(expected));
+            assertTrue(expected.containsAll(entitiesForUser));
         }
+    }
+
+    @Test
+    public void testGetEntitiesForUserForDeletedObjects() throws Exception {
+        final List<DeletedObject> fromDB = Arrays.asList(DELETED_WRAPPER);
+        final List<DeletedObject> expected = Arrays.asList(DELETED_WRAPPER);
+        context.checking(new Expectations() {{
+            allowing(session).createQuery("from " + HQLNAME + " where appUser = :user");
+            will(returnValue(query));
+            allowing(query).setParameter("user", appUser);
+            allowing(query).list();
+            will(returnValue(fromDB));
+        }});
+        Set entitiesForUser = dao.getEntitiesForUser(DeletedObject.class, appUser);
+        assertTrue(entitiesForUser.containsAll(expected));
+        assertTrue(expected.containsAll(entitiesForUser));
     }
 
     @Test
@@ -196,19 +231,24 @@ public class HibernateReadOnlyDAOTest {
     }
 
     private void testGetArchivableEntitiesForUser(final boolean archived) {
-        final List<HibernateWrapper> result = Arrays.asList(A_WRAPPER);
+        final List<AppUserOwnedObject> fromDB = Arrays.asList(ACTIVE_WRAPPER, ARCHIVED_WRAPPER, DELETED_WRAPPER);
+        final Collection<AppUserOwnedObject> expected = Collections2.filter(fromDB, new Predicate<AppUserOwnedObject>() {
+            @Override
+            public boolean apply(@Nullable final AppUserOwnedObject input) {
+                return input != DELETED_WRAPPER && input.isArchived() == archived;
+            }
+        });
         context.checking(new Expectations() {{
-            allowing(session).createQuery("from " + HQLNAME + " where appUser = :user and archived = :archived");
+            allowing(session).createQuery("from " + HQLNAME + " where appUser = :user");
             will(returnValue(query));
             allowing(query).setParameter("user", appUser);
-            allowing(query).setParameter("archived", archived);
             allowing(query).list();
-            will(returnValue(result));
+            will(returnValue(fromDB));
         }});
         for (Class<? extends LocalInterface> c : Arrays.asList(LocalInterface.class, HibernateWrapper.class)) {
             Set entitiesForUser = archived ? dao.getArchivedEntitiesForUser(c, appUser) : dao.getActiveEntitiesForUser(c, appUser);
-            assertTrue(entitiesForUser.containsAll(result));
-            assertTrue(result.containsAll(entitiesForUser));
+            assertTrue(entitiesForUser.containsAll(expected));
+            assertTrue(expected.containsAll(entitiesForUser));
 
         }
     }
@@ -233,4 +273,38 @@ public class HibernateReadOnlyDAOTest {
         }});
         dao.getHibernateEntityName(LocalImpl.class);
     }
+
+    @Test
+    public void testGetEntitiesModifiedSinceReturnsSortedOrderList() {
+        final DateTime baseTS = new DateTime();
+        final DateTime ts1 = baseTS.minusMillis(1);
+        final DateTime ts2 = baseTS;
+        final DateTime ts3 = baseTS.plusMillis(1);
+        final DateTime since = baseTS.minusMillis(2);
+        ARCHIVED_WRAPPER.setModificationTimestamp(ts2);
+        ACTIVE_WRAPPER.setModificationTimestamp(ts3);
+
+        context.checking(new Expectations(){{
+           allowing(DELETED_WRAPPER).getModificationTimestamp();
+            will(returnValue(ts1));
+
+            one(sessionFactory).getCurrentSession();
+            will(returnValue(session));
+            one(session).createQuery("from HQLNAME where appUser = :user and modificationTimestamp > :since");
+            will(returnValue(query));
+            one(query).setParameter("user", appUser);
+            one(query).setParameter("since", since);
+            one(query).list();
+            will(returnValue(Arrays.asList(ACTIVE_WRAPPER, DELETED_WRAPPER, ARCHIVED_WRAPPER)));
+        }});
+
+        Set<AppUserOwnedObject> set = dao.getEntitiesModifiedSince(AppUserOwnedObject.class, appUser, since);
+        Iterator<AppUserOwnedObject> iter = set.iterator();
+        assertSame(DELETED_WRAPPER, iter.next());
+        assertSame(ARCHIVED_WRAPPER, iter.next());
+        assertSame(ACTIVE_WRAPPER, iter.next());
+        assertFalse(iter.hasNext());
+    }
 }
+
+
