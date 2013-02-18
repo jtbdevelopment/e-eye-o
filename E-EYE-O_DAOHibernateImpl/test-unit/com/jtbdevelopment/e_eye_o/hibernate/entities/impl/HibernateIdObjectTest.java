@@ -89,12 +89,6 @@ public class HibernateIdObjectTest {
     }
 
     @Test
-    public void testFactoryGetters() {
-        assertSame(daoFactory, HibernateIdObject.getDaoFactory());
-        assertSame(implFactory, HibernateIdObject.getImplFactory());
-    }
-
-    @Test
     public void testDefaultConstructorWhenFactoriesAreNull() {
         HibernateIdObject.setDaoFactory(null);
         HibernateIdObject.setImplFactory(null);

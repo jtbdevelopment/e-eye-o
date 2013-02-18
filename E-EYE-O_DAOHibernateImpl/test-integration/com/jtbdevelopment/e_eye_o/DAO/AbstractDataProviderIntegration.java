@@ -311,13 +311,14 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         p.setDescription("P2");
         s.addClassList(cl);
         p = rwDAO.update(p);
-        s =rwDAO.update(s);
+        s = rwDAO.update(s);
         final List<AppUserOwnedObject> secondList = Arrays.asList(s, p);
         final Set<AppUserOwnedObject> secondSet = rwDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, updateUser, secondTS);
         assertEquals(secondList.size(), secondSet.size());
         assertTrue(secondSet.containsAll(secondList));
 
     }
+
     @Test
     public void testDeletingObjectsCreatesDeletedObjects() throws InterruptedException {
         AppUser deleteUserThings = rwDAO.create(factory.newAppUser().setEmailAddress("deleteUserThings@delete.test").setFirstName("delete").setLastName("delete"));
@@ -328,12 +329,20 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Observation o = rwDAO.create(factory.newObservation(deleteUserThings).setComment("T").setObservationSubject(cl));
 
         DateTime baseTime = new DateTime();
-        List<String> ids = Arrays.asList(oc.getId(), cl.getId(), s.getId(), p.getId(), o.getId());
+        List<String> ids = new ArrayList<>(Arrays.asList(oc.getId(), cl.getId(), s.getId(), p.getId(), o.getId()));
         Thread.sleep(1);
 
         rwDAO.delete(Arrays.asList(oc, cl, s, p, o));
         assertTrue(rwDAO.getEntitiesForUser(AppUserOwnedObject.class, deleteUserThings).isEmpty());
-        assertFalse(rwDAO.getEntitiesForUser(DeletedObject.class, deleteUserThings).isEmpty());
+        final Set<DeletedObject> deletedObjects = rwDAO.getEntitiesForUser(DeletedObject.class, deleteUserThings);
+        assertFalse(deletedObjects.isEmpty());
+        for (DeletedObject deletedObject : deletedObjects) {
+            assertTrue(baseTime.isBefore(deletedObject.getModificationTimestamp()));
+            assertTrue(ids.contains(deletedObject.getDeletedId()));
+            ids.remove(deletedObject.getDeletedId());
+        }
+        assertTrue(ids.isEmpty());
+
     }
 
     @Test
@@ -384,5 +393,67 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         testStudentForU1.addClassLists(Arrays.asList(testClassList2ForU1, testClassList3ForU1));
         testStudentForU1 = rwDAO.update(testStudentForU1);
         assertTrue(testStudentForU1.getClassLists().containsAll(Arrays.asList(testClassList1ForU1, testClassList2ForU1, testClassList3ForU1)));
+    }
+
+    @Test
+    public void testGetAppUsers() {
+        Set<AppUser> users = rwDAO.getUsers();
+        assertTrue(users.size() >= 2);
+        assertTrue(users.contains(testUser1));
+        assertTrue(users.contains(testUser2));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testExplicitlyCreatingADeletedObjectListExceptions() {
+        rwDAO.create(Arrays.asList(factory.newDeletedObject(testUser2).setDeletedId("TEST")));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testExplicitlyCreatingADeletedObjectExceptions() {
+        rwDAO.create(factory.newDeletedObject(testUser2).setDeletedId("TEST"));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testExplicitlyUpdatingADeletedObjectExceptions() {
+        ClassList cl = rwDAO.create(factory.newClassList(testUser2).setDescription("CLTODELETE1"));
+        rwDAO.delete(cl);
+        Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
+        assertFalse(deleted.isEmpty());
+        DeletedObject dobj = deleted.iterator().next();
+        dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));
+        rwDAO.update(dobj);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testExplicitlyUpdatingAsListADeletedObjectExceptions() {
+        ClassList cl = rwDAO.create(factory.newClassList(testUser2).setDescription("CLTODELETE1"));
+        rwDAO.delete(cl);
+        Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
+        assertFalse(deleted.isEmpty());
+        DeletedObject dobj = deleted.iterator().next();
+        dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));
+        rwDAO.update(Arrays.asList(dobj));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testExplicitlyDeletingADeletedObjectExceptions() {
+        ClassList cl = rwDAO.create(factory.newClassList(testUser2).setDescription("CLTODELETE1"));
+        rwDAO.delete(cl);
+        Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
+        assertFalse(deleted.isEmpty());
+        DeletedObject dobj = deleted.iterator().next();
+        dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));
+        rwDAO.delete(dobj);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testExplicitlyDeletingAsListADeletedObjectExceptions() {
+        ClassList cl = rwDAO.create(factory.newClassList(testUser2).setDescription("CLTODELETE1"));
+        rwDAO.delete(cl);
+        Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
+        assertFalse(deleted.isEmpty());
+        DeletedObject dobj = deleted.iterator().next();
+        dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));
+        rwDAO.delete(Arrays.asList(dobj));
     }
 }

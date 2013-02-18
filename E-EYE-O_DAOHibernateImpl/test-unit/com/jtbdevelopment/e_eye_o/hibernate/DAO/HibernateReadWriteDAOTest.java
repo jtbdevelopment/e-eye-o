@@ -75,11 +75,11 @@ public class HibernateReadWriteDAOTest {
         deletedMetaData = context.mock(ClassMetadata.class, "DMD");
 
         impl.clear();
-        Collections.addAll(impl, classListImpl, appUserImpl, studentImpl, photoImpl, observationImpl, observationCategoryImpl, deletedImpl);
+        Collections.addAll(impl, classListImpl, appUserImpl, studentImpl, photoImpl, observationImpl, observationCategoryImpl);
         loaded.clear();
-        Collections.addAll(loaded, classListLoaded, appUserLoaded, studentLoaded, photoLoaded, observationLoaded, observationCategoryLoaded, deletedLoaded);
+        Collections.addAll(loaded, classListLoaded, appUserLoaded, studentLoaded, photoLoaded, observationLoaded, observationCategoryLoaded);
         wrapped.clear();
-        Collections.addAll(wrapped, classListWrapped, appUserWrapped, studentWrapped, photoWrapped, observationWrapped, observationCategoryWrapped, deletedWrapped);
+        Collections.addAll(wrapped, classListWrapped, appUserWrapped, studentWrapped, photoWrapped, observationWrapped, observationCategoryWrapped);
         context.checking(new Expectations() {{
             allowing(sessionFactory).getCurrentSession();
             will(returnValue(session));
@@ -209,7 +209,6 @@ public class HibernateReadWriteDAOTest {
             one(session).save(observationWrapped);
             one(session).save(photoWrapped);
             one(session).save(appUserWrapped);
-            one(session).save(deletedWrapped);
         }});
 
         Collection<IdObject> r = dao.create(impl);
@@ -225,7 +224,6 @@ public class HibernateReadWriteDAOTest {
             one(session).save(observationWrapped);
             one(session).save(photoWrapped);
             one(session).save(appUserWrapped);
-            one(session).save(deletedWrapped);
         }});
 
         Collection<IdObject> r = dao.create(wrapped);
@@ -241,7 +239,6 @@ public class HibernateReadWriteDAOTest {
             one(session).update(observationWrapped);
             one(session).update(photoWrapped);
             one(session).update(appUserWrapped);
-            one(session).update(deletedWrapped);
         }});
 
         for (IdObject i : impl) {
@@ -260,7 +257,6 @@ public class HibernateReadWriteDAOTest {
             one(session).update(observationWrapped);
             one(session).update(photoWrapped);
             one(session).update(appUserWrapped);
-            one(session).update(deletedWrapped);
         }});
 
         for (IdObject i : wrapped) {
@@ -279,7 +275,6 @@ public class HibernateReadWriteDAOTest {
             one(session).update(observationWrapped);
             one(session).update(photoWrapped);
             one(session).update(appUserWrapped);
-            one(session).update(deletedWrapped);
         }});
 
         Collection<IdObject> r = dao.update(impl);
@@ -295,7 +290,6 @@ public class HibernateReadWriteDAOTest {
             one(session).update(observationWrapped);
             one(session).update(photoWrapped);
             one(session).update(appUserWrapped);
-            one(session).update(deletedWrapped);
         }});
 
         Collection<IdObject> r = dao.update(wrapped);
@@ -348,11 +342,6 @@ public class HibernateReadWriteDAOTest {
         }});
 
         dao.delete(studentWrapped);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testDeletingDeletedObjectExceptions() {
-        dao.delete(deletedImpl);
     }
 
     @Test
@@ -557,6 +546,47 @@ public class HibernateReadWriteDAOTest {
                 one(session).delete(o);
             }
             one(session).delete(loaded);
+            one(session).flush();
         }});
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCreatingDeletedObjectExceptions() {
+        dao.create(deletedImpl);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCreatingDeletedObjectAsListExceptions() {
+        final List<DeletedObject> entities = Arrays.asList(deletedImpl);
+        context.checking(new Expectations(){{
+            one(daoIdObjectWrapperFactory).wrap(entities);
+            will(returnValue(entities));
+        }});
+        dao.create(entities);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testDeletingDeletedObjectExceptions() {
+        dao.delete(deletedImpl);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testDeletingDeletedObjectAsListExceptions() {
+        dao.delete(Arrays.asList(deletedImpl));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testUdpdateingDeletedObjectExceptions() {
+        dao.update(deletedImpl);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testUpdatingDeletedObjectAsListExceptions() {
+        final List<DeletedObject> entities = Arrays.asList(deletedImpl);
+        context.checking(new Expectations(){{
+            one(daoIdObjectWrapperFactory).wrap(entities);
+            will(returnValue(entities));
+        }});
+        dao.update(entities);
     }
 }

@@ -34,16 +34,8 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
     private static IdObjectFactory implFactory;
     private static DAOIdObjectWrapperFactory daoFactory;
 
-    public static IdObjectFactory getImplFactory() {
-        return implFactory;
-    }
-
     public static void setImplFactory(final IdObjectFactory implFactory) {
         HibernateIdObject.implFactory = implFactory;
-    }
-
-    public static DAOIdObjectWrapperFactory getDaoFactory() {
-        return daoFactory;
     }
 
     public static void setDaoFactory(final DAOIdObjectWrapperFactory daoFactory) {

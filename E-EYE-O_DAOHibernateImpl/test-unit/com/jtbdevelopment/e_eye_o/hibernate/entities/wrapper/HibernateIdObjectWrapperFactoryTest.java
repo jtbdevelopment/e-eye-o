@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertSame;
 
 /**
  * Date: 1/6/13
@@ -34,12 +33,6 @@ public class HibernateIdObjectWrapperFactoryTest extends HibernateAbstractIdObje
         put(ClassList.class, HibernateClassList.class);
         put(DeletedObject.class, HibernateDeletedObject.class);
     }};
-
-    @Test
-    public void testSetsHibernateIdObjectFactories() {
-        assertSame(implFactory, HibernateIdObject.getImplFactory());
-        assertSame(factory, HibernateIdObject.getDaoFactory());
-    }
 
     @Test
     public void testEntitiesToWrappers() {

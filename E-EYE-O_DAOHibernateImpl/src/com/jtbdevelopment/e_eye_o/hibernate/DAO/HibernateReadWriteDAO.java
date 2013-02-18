@@ -29,6 +29,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     @Override
     public <T extends IdObject> T create(final T entity) {
+        if(entity instanceof DeletedObject) {
+            throw new IllegalArgumentException("You cannot explicitly create a DeletedObject.");
+        }
         final T wrapped = wrapperFactory.wrap(entity);
         sessionFactory.getCurrentSession().save(wrapped);
         return wrapped;
@@ -39,6 +42,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         Session session = sessionFactory.getCurrentSession();
         Collection<T> wrappedCollection = wrapperFactory.wrap(entities);
         for (T entity : wrappedCollection) {
+            if(entity instanceof DeletedObject) {
+                throw new IllegalArgumentException("You cannot explicitly create a DeletedObject.");
+            }
             session.save(entity);
         }
         return wrappedCollection;
@@ -46,6 +52,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     @Override
     public <T extends IdObject> T update(final T entity) {
+        if(entity instanceof DeletedObject) {
+            throw new IllegalArgumentException("You cannot explicitly update a DeletedObject.");
+        }
         final T wrapped = wrapperFactory.wrap(entity);
         sessionFactory.getCurrentSession().update(wrapped);
         return wrapped;
@@ -56,6 +65,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         Session session = sessionFactory.getCurrentSession();
         Collection<T> wrappedEntities = wrapperFactory.wrap(entities);
         for (T entity : wrappedEntities) {
+            if(entity instanceof DeletedObject) {
+                throw new IllegalArgumentException("You cannot explicitly update a DeletedObject.");
+            }
             session.update(entity);
         }
         return wrappedEntities;
@@ -131,6 +143,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
 
         currentSession.delete(wrapped);
+        currentSession.flush();   //  Force any delete object generations inside this session
     }
 
     @Override
