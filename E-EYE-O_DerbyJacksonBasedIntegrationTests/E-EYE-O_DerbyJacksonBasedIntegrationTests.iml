@@ -23,6 +23,7 @@
     <orderEntry type="library" exported="" name="org.springframework:spring-test:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" name="com.sun.jersey:jersey-grizzly2:1.17" level="project" />
     <orderEntry type="module" module-name="E-EYE-O_RESTJSONJersey" />
+    <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
   </component>
 </module>
 

@@ -57,8 +57,7 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
 
     @Override
     public String write(final IdObject entity) {
-        try {
-            final JsonGenerator generator = createGenerator();
+        try (final JsonGenerator generator = createGenerator()) {
             jacksonIdObjectSerializer.serialize(entity, generator);
             return completeGeneration(generator);
         } catch (IOException e) {
@@ -68,8 +67,7 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
 
     @Override
     public String write(final Collection<? extends IdObject> entities) {
-        try {
-            final JsonGenerator generator = createGenerator();
+        try (final JsonGenerator generator = createGenerator()) {
             generator.writeStartArray();
             for (IdObject entity : entities) {
                 jacksonIdObjectSerializer.serialize(entity, generator);
@@ -83,22 +81,22 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
 
     @SuppressWarnings("unchecked")
     public <T> T read(final String input) {
-        try {
-            JsonParser parser = jsonFactory.createJsonParser(input);
+        try (final JsonParser parser = jsonFactory.createJsonParser(input)) {
             JsonToken token = parser.nextToken();
-            if(token == JsonToken.START_OBJECT)             {
-                final T deserialized = (T) jacksonIdObjectDeserializer.deserialize(parser);
-                parser.close();
-                return deserialized;
-            } else if (token == JsonToken.START_ARRAY) {
-                List<IdObject> returnList = new LinkedList<>();
-                while(parser.nextToken() != JsonToken.END_ARRAY) {
-                    returnList.add(jacksonIdObjectDeserializer.deserialize(parser));
-                }
-                parser.close();
-                return (T) returnList;
-            } else {
-                throw new IllegalArgumentException("Invalid json input - does not start with array or object.");
+            switch (token) {
+                case START_OBJECT:
+                    final T deserialized = (T) jacksonIdObjectDeserializer.deserialize(parser);
+                    parser.close();
+                    return deserialized;
+                case START_ARRAY:
+                    final List<IdObject> returnList = new LinkedList<>();
+                    while (parser.nextToken() != JsonToken.END_ARRAY) {
+                        returnList.add(jacksonIdObjectDeserializer.deserialize(parser));
+                    }
+                    parser.close();
+                    return (T) returnList;
+                default:
+                    throw new IllegalArgumentException("Invalid json input - does not start with array or object.");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -9,10 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.UriInfo;
 
 /**
  * Date: 2/10/13
@@ -21,15 +18,14 @@ import javax.ws.rs.core.UriInfo;
 @Service
 @Path("/users")
 public class AppUsersResource {
-    @Autowired
     private ReadWriteDAO readWriteDAO;
-    @Autowired
     private JSONIdObjectSerializer jsonIdObjectSerializer;
 
-    @Context
-    private UriInfo uriInfo;
-    @Context
-    private Request request;
+    @Autowired
+    public AppUsersResource(final ReadWriteDAO readWriteDAO, final JSONIdObjectSerializer jsonIdObjectSerializer) {
+        this.readWriteDAO = readWriteDAO;
+        this.jsonIdObjectSerializer = jsonIdObjectSerializer;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,9 +36,8 @@ public class AppUsersResource {
     }
 
     //  TODO - validate userId versus connected session
-
     @Path("{userId}")
     public AppUserResource getUserEntities(@PathParam("userId") final String userId) {
-        return new AppUserResource(readWriteDAO, jsonIdObjectSerializer, uriInfo, request, userId, null, null);
+        return new AppUserResource(readWriteDAO, jsonIdObjectSerializer, userId, null, null);
     }
 }

@@ -9,8 +9,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.UriInfo;
 import java.util.Set;
 
 /**
@@ -21,22 +19,16 @@ public class AppUserResource {
     private final ReadWriteDAO readWriteDAO;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final AppUser appUser;
-    private final UriInfo uriInfo;
-    private final Request request;
     private Boolean archiveFlag;
     private Class<? extends AppUserOwnedObject> entityType;
 
     public AppUserResource(final ReadWriteDAO readWriteDAO,
                            final JSONIdObjectSerializer jsonIdObjectSerializer,
-                           final UriInfo uriInfo,
-                           final Request request,
                            final String userId,
                            final Boolean archiveFlag,
                            final Class<? extends AppUserOwnedObject> entityType) {
         this.readWriteDAO = readWriteDAO;
         this.jsonIdObjectSerializer = jsonIdObjectSerializer;
-        this.uriInfo = uriInfo;
-        this.request = request;
         this.appUser = readWriteDAO.get(AppUser.class, userId);
         this.archiveFlag = archiveFlag;
         this.entityType = entityType == null ? AppUserOwnedObject.class : entityType;
@@ -45,8 +37,6 @@ public class AppUserResource {
     private AppUserResource(final AppUserResource appUserResource) {
         this.readWriteDAO = appUserResource.readWriteDAO;
         this.jsonIdObjectSerializer = appUserResource.jsonIdObjectSerializer;
-        this.uriInfo = appUserResource.uriInfo;
-        this.request = appUserResource.request;
         this.appUser = appUserResource.appUser;
     }
 
@@ -119,7 +109,7 @@ public class AppUserResource {
 
     @Path("{entityId}")
     public AppUserEntityResource getAppUserEntityResource(@PathParam("entityId") final String entityId) {
-        return new AppUserEntityResource(readWriteDAO, jsonIdObjectSerializer, uriInfo, request, appUser, entityId);
+        return new AppUserEntityResource(readWriteDAO, jsonIdObjectSerializer, entityId);
     }
 
     private AppUserResource getEntityRefinedResource(final Class<? extends AppUserOwnedObject> entityType) {
