@@ -9,7 +9,7 @@ import java.io.IOException;
  * Date: 2/18/13
  * Time: 11:26 AM
  */
-public interface JacksonIdObjectDeserializer<T extends IdObject> {
+public interface JacksonIdObjectDeserializer {
     @SuppressWarnings("unchecked")
-    T deserialize(JsonParser parser) throws IOException;
+    IdObject deserialize(JsonParser parser) throws IOException;
 }

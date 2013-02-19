@@ -22,7 +22,7 @@ import java.net.URI;
  */
 @ContextConfiguration("/test-integration-context.xml")
 @Test(groups = {"integration"})
-public class JerseyRestViaGrizzlyTest extends AbstractTestNGSpringContextTests {
+public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContextTests {
     private static HttpServer httpServer;
     private static final URI BASE_URI = UriBuilder.fromUri("http://localhost/").port(9998).build();
 

@@ -28,7 +28,7 @@ import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObje
  * Time: 10:55 PM
  */
 @Service
-public class JacksonIdObjectDeserializerImpl<T extends IdObject> implements JacksonIdObjectDeserializer<T> {
+public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeserializer {
     private final ReadOnlyDAO readOnlyDAO;
     private final IdObjectFactory idObjectFactory;
     private final IdObjectInterfaceResolver interfaceResolver;
@@ -42,7 +42,7 @@ public class JacksonIdObjectDeserializerImpl<T extends IdObject> implements Jack
 
     @Override
     @SuppressWarnings("unchecked")
-    public T deserialize(final JsonParser parser) throws IOException {
+    public IdObject deserialize(final JsonParser parser) throws IOException {
         checkStartingPosition(parser);
         JsonToken currentToken = parser.nextToken();
 
@@ -95,7 +95,7 @@ public class JacksonIdObjectDeserializerImpl<T extends IdObject> implements Jack
                 }
                 currentToken = parser.nextToken();
             }
-            return (T) returnObject;
+            return returnObject;
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
