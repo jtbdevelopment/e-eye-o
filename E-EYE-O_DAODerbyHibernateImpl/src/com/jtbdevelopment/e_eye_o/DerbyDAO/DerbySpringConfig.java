@@ -14,7 +14,7 @@ import java.util.Properties;
  * Time: 10:55 PM
  */
 @Configuration
-@ImportResource(value = "classpath*:spring-config.xml")
+@ImportResource(value = "classpath*:spring-config*.xml")
 public class DerbySpringConfig {
     public final static String DEFAULT_DATABASE = "EEYEODB";
     public final static String DATABASE_NAME = "derbyDatabaseName";

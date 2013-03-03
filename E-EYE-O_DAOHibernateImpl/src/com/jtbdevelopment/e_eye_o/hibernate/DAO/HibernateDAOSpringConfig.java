@@ -18,7 +18,7 @@ import java.util.Properties;
  * Time: 5:26 PM
  */
 @Configuration
-@ImportResource(value = "classpath*:spring-config.xml")
+@ImportResource(value = "classpath*:spring-config*.xml")
 public class HibernateDAOSpringConfig {
 
     @Bean

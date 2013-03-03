@@ -4,7 +4,6 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import static org.testng.AssertJUnit.*;
 
@@ -107,7 +106,7 @@ public class IdObjectImplTest extends AbstractIdObjectTest<IdObjectImplTest.IdOb
         local.setId(ID + "");
     }
 
-    @Test(expectedExceptions = {InvalidStateException.class})
+    @Test(expectedExceptions = {IllegalStateException.class})
     public void testAssigningNewIdFails() {
         IdObjectExtends local = new IdObjectExtends();
         local.setId(ID);
