@@ -50,6 +50,21 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
+    public AppUser getUser(final String emailAddress) {
+        final Query query = sessionFactory.getCurrentSession().createQuery("from AppUser where emailAddress = :emailAddress");
+        query.setParameter("emailAddress", emailAddress);
+        List<AppUser> users =  (List<AppUser>) query.list();
+        if(users.isEmpty()) {
+            return null;
+        }
+        if(users.size() > 1) {
+            throw new IllegalStateException("Duplicate users with same emailAddress - not possible");
+        }
+        return users.get(0);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public <T extends IdObject> T get(final Class<T> entityType, final String id) {
         final String entityName = getHibernateEntityName(entityType);
         logger.info("Fetching entityType = '" + entityName + "', id = '" + id + "'");

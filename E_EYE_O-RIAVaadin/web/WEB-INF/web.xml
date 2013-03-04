@@ -5,35 +5,78 @@
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
-    <context-param>
-        <param-name>contextClass</param-name>
-        <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:spring-config*.xml,com.jtbdevelopment.*</param-value>
-    </context-param>
-
-    <servlet>
-        <servlet-name>myservlet</servlet-name>
-        <servlet-class>
-            com.jtbdevelopment.e_eye_o.ria.security.authentication.vaadin.RequestHolderApplicationServlet
-        </servlet-class>
-
-        <init-param>
-            <param-name>UI</param-name>
-            <param-value>com.jtbdevelopment.e_eye_o.ria.security.authentication.vaadin.SecuredRoot</param-value>
-        </init-param>
-
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>myservlet</servlet-name>
-        <url-pattern>/*</url-pattern>
-    </servlet-mapping>
-
+    <!-- SPRING  -->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/root-context.xml</param-value>
+    </context-param>
+
+    <!--  Vaadin  -->
+    <servlet>
+        <servlet-name>E-EYE-O</servlet-name>
+        <servlet-class>ru.xpoft.vaadin.SpringVaadinServlet</servlet-class>
+
+        <init-param>
+            <param-name>beanName</param-name>
+            <param-value>eeyeoUI</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>systemMessagesBeanName</param-name>
+            <param-value>DEFAULT</param-value>
+        </init-param>
+
+        <load-on-startup>10</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>E-EYE-O Login</servlet-name>
+        <servlet-class>ru.xpoft.vaadin.SpringVaadinServlet</servlet-class>
+
+        <init-param>
+            <param-name>beanName</param-name>
+            <param-value>eeyeoLoginUI</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>systemMessagesBeanName</param-name>
+            <param-value>DEFAULT</param-value>
+        </init-param>
+
+        <load-on-startup>10</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>E-EYE-O Login</servlet-name>
+        <url-pattern>/E-EYE-O/Login/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>E-EYE-O</servlet-name>
+        <url-pattern>/E-EYE-O/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>E-EYE-O</servlet-name>
+        <url-pattern>/VAADIN/*</url-pattern>
+    </servlet-mapping>
+
+    <!--  TODO - param for vaadin prod mode -->
+    <context-param>
+        <param-name>productionMode</param-name>
+        <param-value>false</param-value>
+    </context-param>
+
+    <!-- Spring Security -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 </web-app>

@@ -107,6 +107,55 @@ public class HibernateReadOnlyDAOTest {
     }
 
     @Test
+    public void testGetUserIdByEmail() {
+        final String emailAddress = "x@y";
+        final AppUser appUser = context.mock(AppUser.class, "Email");
+        final List A_LIST = Arrays.asList(appUser);
+        context.checking(new Expectations() {{
+            allowing(session).createQuery("from AppUser where emailAddress = :emailAddress");
+            will(returnValue(query));
+            one(query).setParameter("emailAddress", emailAddress);
+            will(returnValue(query));
+            one(query).list();
+            will(returnValue(A_LIST));
+        }});
+
+        assertSame(appUser, dao.getUser(emailAddress));
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void testGetUserIdByEmailExceptionsIfDupes() {
+        final String emailAddress = "x@y";
+        final AppUser appUser = context.mock(AppUser.class, "Email");
+        final List A_LIST = Arrays.asList(appUser, context.mock(AppUser.class, "Email2"));
+        context.checking(new Expectations() {{
+            allowing(session).createQuery("from AppUser where emailAddress = :emailAddress");
+            will(returnValue(query));
+            one(query).setParameter("emailAddress", emailAddress);
+            will(returnValue(query));
+            one(query).list();
+            will(returnValue(A_LIST));
+        }});
+        dao.getUser(emailAddress);
+    }
+
+    @Test
+    public void testGetUserReturnsNullIffEmptyList() {
+        final String emailAddress = "x@y";
+        final List A_LIST = new LinkedList<>();
+        context.checking(new Expectations() {{
+            allowing(session).createQuery("from AppUser where emailAddress = :emailAddress");
+            will(returnValue(query));
+            one(query).setParameter("emailAddress", emailAddress);
+            will(returnValue(query));
+            one(query).list();
+            will(returnValue(A_LIST));
+        }});
+
+        assertSame(null, dao.getUser(emailAddress));
+    }
+
+    @Test
     public void testGet() throws Exception {
         context.checking(new Expectations() {{
             allowing(session).get(HQLNAME, SOMEID);

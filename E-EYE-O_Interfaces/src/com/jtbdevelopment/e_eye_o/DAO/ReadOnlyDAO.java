@@ -15,6 +15,8 @@ public interface ReadOnlyDAO {
 
     public Set<AppUser> getUsers();
 
+    public AppUser getUser(final String emailAddress);
+
     public <T extends IdObject> T get(final Class<T> entityType, final String id);
 
     public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser);

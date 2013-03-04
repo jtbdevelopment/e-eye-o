@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <global-method-security secured-annotations="enabled"/>
+
+    <http auto-config="true">
+        <intercept-url pattern="/E-EYE-O/Login/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/VAADIN/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/**" access="ROLE_USER, ROLE_ADMIN" />
+        <form-login login-page="/E-EYE-O/Login" default-target-url="/E-EYE-O/" always-use-default-target="true"/>
+    </http>
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider>
+            <user-service>
+                <user name="c" authorities="ROLE_USER" password="c"/>
+                <user name="x" authorities="ROLE_ADMIN" password="x"/>
+                <user name="admin" authorities="ROLE_ADMIN, ROLE_USER" password="admin"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+    <beans:bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" name="logoutHandler">
+        <beans:property name="invalidateHttpSession" value="false"/>
+    </beans:bean>
+
+</beans:beans>
