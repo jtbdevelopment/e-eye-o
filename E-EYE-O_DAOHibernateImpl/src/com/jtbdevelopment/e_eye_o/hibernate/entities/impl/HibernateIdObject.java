@@ -107,6 +107,12 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
         return (T) this;
     }
 
+    @Override
+    @Transient
+    public String getViewableDescription() {
+        return wrapped.getViewableDescription();
+    }
+
     @SuppressWarnings("unchecked")
     public T setId(final String id) {
         wrapped.setId(id);

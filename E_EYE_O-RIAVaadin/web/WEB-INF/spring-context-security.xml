@@ -24,8 +24,4 @@
         </authentication-provider>
     </authentication-manager>
 
-    <beans:bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" name="logoutHandler">
-        <beans:property name="invalidateHttpSession" value="false"/>
-    </beans:bean>
-
 </beans:beans>

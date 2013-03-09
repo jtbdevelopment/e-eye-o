@@ -59,5 +59,10 @@ public abstract class IdObjectImpl implements IdObject {
         return (T) this;
     }
 
+    @Override
+    public String getViewableDescription() {
+        return id;
+    }
+
 
 }

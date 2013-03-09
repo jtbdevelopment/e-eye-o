@@ -134,6 +134,11 @@ public class ConsistentAppUserValidatorTest {
         public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
             return null;
         }
+
+        @Override
+        public String getViewableDescription() {
+            return id;
+        }
     }
 
     @BeforeMethod

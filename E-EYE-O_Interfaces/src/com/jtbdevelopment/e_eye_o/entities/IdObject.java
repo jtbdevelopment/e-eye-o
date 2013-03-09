@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
 import javax.validation.constraints.NotNull;
+import java.beans.Transient;
 
 /**
  * Date: 11/25/12
@@ -32,4 +33,7 @@ public interface IdObject {
     DateTime getModificationTimestamp();
 
     <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp);
+
+    @Transient
+    String getViewableDescription();
 }

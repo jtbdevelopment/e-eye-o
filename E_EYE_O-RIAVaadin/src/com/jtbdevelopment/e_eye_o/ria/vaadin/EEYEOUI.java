@@ -2,11 +2,12 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.views.ToDoView;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TitleBarComposite;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.WorkAreaComposite;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-import ru.xpoft.vaadin.DiscoveryNavigator;
 
 /**
  * Date: 3/3/13
@@ -27,10 +27,13 @@ import ru.xpoft.vaadin.DiscoveryNavigator;
 @PreserveOnRefresh
 public class EEYEOUI extends EEYEOErrorHandlingUI {
     @Autowired
-    private ToDoView toDoView;
+    private ReadWriteDAO readWriteDAO;
 
     @Autowired
-    private ReadWriteDAO readWriteDAO;
+    private TitleBarComposite titleBarComposite;
+
+    @Autowired
+    private WorkAreaComposite workAreaComposite;
 
     @Override
     protected void init(final VaadinRequest request) {
@@ -43,9 +46,18 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
 
         setSizeFull();
 
-        DiscoveryNavigator navigator = new DiscoveryNavigator(this, this);
-        navigator.addView(ToDoView.VIEW_NAME, toDoView);
-        navigator.navigateTo(UI.getCurrent().getPage().getUriFragment());
+        VerticalLayout outer = new VerticalLayout();
+        outer.setSizeFull();
+        outer.setMargin(true);
+        outer.setStyleName(Reindeer.LAYOUT_BLUE);
+        setContent(outer);
+
+        outer.addComponent(titleBarComposite);
+        outer.addComponent(workAreaComposite);
+        outer.setExpandRatio(workAreaComposite, 1.0f);
+
+//        DiscoveryNavigator navigator = new DiscoveryNavigator(this, this);
+//        navigator.navigateTo(UI.getCurrent().getPage().getUriFragment());
 
         getSession().setAttribute(AppUser.class, appUser);
     }

@@ -51,4 +51,9 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo, AppUserO
         this.timestamp = timestamp;
         return this;
     }
+
+    @Override
+    public String getViewableDescription() {
+        return (description + " " + timestamp.toString("MMM dd")).trim();
+    }
 }

@@ -60,4 +60,9 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
         this.lastLogin = lastLogin;
         return this;
     }
+
+    @Override
+    public String getViewableDescription() {
+        return (firstName + " " + lastName).trim();
+    }
 }

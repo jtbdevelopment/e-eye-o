@@ -4,10 +4,11 @@ import com.google.common.base.Joiner;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.ria.security.authentication.util.SpringSecurityHelper;
 import com.vaadin.annotations.Theme;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.ExternalResource;
-import com.vaadin.ui.*;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Link;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -15,7 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-import ru.xpoft.vaadin.VaadinView;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -27,10 +27,8 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@VaadinView(UserRoleTestView.VIEW_NAME)
 @Theme(Reindeer.THEME_NAME)
-public class UserRoleTestView extends Panel implements View {
-    public static final String VIEW_NAME = "UserRoleTestView";
+public class UserRoleTestComponent extends VerticalLayout {
 
     private Label usernameLabel = new Label();
     private Label rolesLabel = new Label();
@@ -81,11 +79,11 @@ public class UserRoleTestView extends Panel implements View {
         outerLayout.setStyleName(Reindeer.LAYOUT_BLUE);
         outerLayout.addComponent(layout);
 
-        setContent(outerLayout);
+        addComponent(outerLayout);
     }
 
     @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
+    public void attach() {
         AppUser appUser = getSession().getAttribute(AppUser.class);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<String> roles = new ArrayList<>();

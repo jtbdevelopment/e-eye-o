@@ -86,12 +86,12 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
-        return getEntitiesForUserWithArchiveFlag(entityType, appUser, false);
+        return getEntitiesForUser(entityType, appUser, false);
     }
 
     @Override
     public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
-        return getEntitiesForUserWithArchiveFlag(entityType, appUser, true);
+        return getEntitiesForUser(entityType, appUser, true);
     }
 
     @Override
@@ -111,11 +111,11 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends AppUserOwnedObject> Set<T> getEntitiesForUserWithArchiveFlag(final Class<T> entityType, final AppUser appUser, final boolean archived) {
+    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, final boolean archivedFlag) {
         return new HashSet<>(Collections2.filter(getEntitiesForUser(entityType, appUser), new Predicate<T>() {
             @Override
             public boolean apply(@Nullable final T input) {
-                return (input != null) && (input.isArchived() == archived);
+                return (input != null) && (input.isArchived() == archivedFlag);
             }
         }));
     }

@@ -97,4 +97,9 @@ public class StudentImpl extends AppUserOwnedObjectImpl implements Student {
         this.lastName = lastName;
         return this;
     }
+
+    @Override
+    public String getViewableDescription() {
+        return (firstName + " " + lastName).trim();
+    }
 }
