@@ -1,8 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.builders.AppUserOwnedObjectBuilder;
-import com.jtbdevelopment.e_eye_o.entities.builders.IdObjectBuilder;
+import com.jtbdevelopment.e_eye_o.entities.builders.*;
 import com.jtbdevelopment.e_eye_o.entities.impl.builders.*;
 import org.springframework.stereotype.Service;
 
@@ -37,23 +36,23 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends IdObject, B extends IdObjectBuilder<T>> B newIdObjectBuilder(final Class<T> idObjectType) {
-        T entity = newIdObject(idObjectType);
         switch (idObjectType.getSimpleName()) {
             case "AppUser":
-                return (B) new AppUserBuilderImpl((AppUser) entity);
+                return (B) newAppUserBuilder();
             case "Observation":
-                return (B) new ObservationBuilderImpl((Observation) entity);
+                return (B) newObservationBuilder(null);
             case "ObservationCategory":
-                return (B) new ObservationCategoryBuilderImpl((ObservationCategory) entity);
+                return (B) newObservationCategoryBuilder(null);
             case "Student":
-                return (B) new StudentBuilderImpl((Student) entity);
+                return (B) newStudentBuilder(null);
             case "Photo":
-                return (B) new PhotoBuilderImpl((Photo) entity);
+                return (B) newPhotoBuilder(null);
             case "ClassList":
-                return (B) new ClassListBuilderImpl((ClassList) entity);
+                return (B) newClassListBuilder(null);
             case "DeletedObject":
-                return (B) new DeletedObjectBuilderImpl((DeletedObject) entity);
+                return (B) newDeletedObjectBuilder(null);
             default:
                 throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
         }
@@ -86,8 +85,18 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
+    public AppUserBuilder newAppUserBuilder() {
+        return new AppUserBuilderImpl(newAppUser());
+    }
+
+    @Override
     public ClassList newClassList(final AppUser appUser) {
         return new ClassListImpl(appUser);
+    }
+
+    @Override
+    public ClassListBuilder newClassListBuilder(final AppUser appUser) {
+        return new ClassListBuilderImpl(newClassList(appUser));
     }
 
     @Override
@@ -96,8 +105,18 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
+    public ObservationBuilder newObservationBuilder(final AppUser appUser) {
+        return new ObservationBuilderImpl(newObservation(appUser));
+    }
+
+    @Override
     public ObservationCategory newObservationCategory(final AppUser appUser) {
         return new ObservationCategoryImpl(appUser);
+    }
+
+    @Override
+    public ObservationCategoryBuilder newObservationCategoryBuilder(final AppUser appUser) {
+        return new ObservationCategoryBuilderImpl(newObservationCategory(appUser));
     }
 
     @Override
@@ -106,12 +125,27 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
+    public PhotoBuilder newPhotoBuilder(final AppUser appUser) {
+        return new PhotoBuilderImpl(newPhoto(appUser));
+    }
+
+    @Override
     public Student newStudent(final AppUser appUser) {
         return new StudentImpl(appUser);
     }
 
     @Override
+    public StudentBuilder newStudentBuilder(final AppUser appUser) {
+        return new StudentBuilderImpl(newStudent(appUser));
+    }
+
+    @Override
     public DeletedObject newDeletedObject(final AppUser appUser) {
         return new DeletedObjectImpl(appUser);
+    }
+
+    @Override
+    public DeletedObjectBuilder newDeletedObjectBuilder(final AppUser appUser) {
+        return new DeletedObjectBuilderImpl(newDeletedObject(appUser));
     }
 }

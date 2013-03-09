@@ -1,7 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
-import com.jtbdevelopment.e_eye_o.entities.builders.AppUserOwnedObjectBuilder;
-import com.jtbdevelopment.e_eye_o.entities.builders.IdObjectBuilder;
+import com.jtbdevelopment.e_eye_o.entities.builders.*;
 
 /**
  * Date: 1/1/13
@@ -18,15 +17,29 @@ public interface IdObjectFactory {
 
     AppUser newAppUser();
 
+    AppUserBuilder newAppUserBuilder();
+
     ClassList newClassList(final AppUser appUser);
+
+    ClassListBuilder newClassListBuilder(final AppUser appUser);
 
     Observation newObservation(final AppUser appUser);
 
+    ObservationBuilder newObservationBuilder(final AppUser appUser);
+
     ObservationCategory newObservationCategory(final AppUser appUser);
+
+    ObservationCategoryBuilder newObservationCategoryBuilder(final AppUser appUser);
 
     Photo newPhoto(final AppUser appUser);
 
+    PhotoBuilder newPhotoBuilder(final AppUser appUser);
+
     Student newStudent(final AppUser appUser);
 
+    StudentBuilder newStudentBuilder(final AppUser appUser);
+
     DeletedObject newDeletedObject(final AppUser appUser);
+
+    DeletedObjectBuilder newDeletedObjectBuilder(final AppUser appUser);
 }
