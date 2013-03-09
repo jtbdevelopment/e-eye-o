@@ -74,9 +74,8 @@ public class HibernateStudent extends HibernateAppUserOwnedObject<Student> imple
     }
 
     @Override
-    public Student setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         wrapped.setFirstName(firstName);
-        return this;
     }
 
     @Override
@@ -86,8 +85,7 @@ public class HibernateStudent extends HibernateAppUserOwnedObject<Student> imple
     }
 
     @Override
-    public Student setLastName(final String lastName) {
+    public void setLastName(final String lastName) {
         wrapped.setLastName(lastName);
-        return this;
     }
 }

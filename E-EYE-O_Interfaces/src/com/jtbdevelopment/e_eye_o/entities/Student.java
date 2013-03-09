@@ -44,11 +44,11 @@ public interface Student extends AppUserOwnedObject {
     @Size(max = MAX_NAME_SIZE, message = STUDENT_FIRST_NAME_SIZE_ERROR)
     String getFirstName();
 
-    Student setFirstName(final String firstName);
+    void setFirstName(final String firstName);
 
     @NotNull(message = STUDENT_LAST_NAME_CANNOT_BE_NULL_ERROR)
     @Size(max = MAX_NAME_SIZE, message = STUDENT_LAST_NAME_SIZE_ERROR)
     String getLastName();
 
-    Student setLastName(final String lastName);
+    void setLastName(final String lastName);
 }

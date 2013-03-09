@@ -37,30 +37,27 @@ public class StudentForm extends CustomComponent {
         mainLayout.setSizeUndefined();
         mainLayout.setMargin(true);
 
-        //BeanItem<Student> bean = new BeanItem<>(student);
         final BeanFieldGroup<Student> beanFieldGroup = new BeanFieldGroup<>(Student.class);
         beanFieldGroup.setItemDataSource(student);
-        TextField idField = new TextField("ID");
-        idField.setReadOnly(true);
-        beanFieldGroup.bind(idField, "id");
-        mainLayout.addComponent(idField);
 
         TextField firstName = new TextField("First Name");
         beanFieldGroup.bind(firstName, "firstName");
         firstName.addValidator(new BeanValidator(Student.class, "firstName"));
         firstName.setReadOnly(false);
+        firstName.setImmediate(true);
         mainLayout.addComponent(firstName);
 
         final TextField lastName = new TextField("Last Name");
         beanFieldGroup.bind(lastName, "lastName");
-        firstName.addValidator(new BeanValidator(Student.class, "lastName"));
+        lastName.addValidator(new BeanValidator(Student.class, "lastName"));
+        lastName.setImmediate(true);
         mainLayout.addComponent(lastName);
 
         mainLayout.addComponent(new TwinColSelect("Classes"));
 
         final Button save = new Button("Do Something");
         mainLayout.addComponent(save);
-        mainLayout.setReadOnly(false);
+        mainLayout.setImmediate(true);
         save.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
@@ -73,7 +70,7 @@ public class StudentForm extends CustomComponent {
         });
         final Button reset = new Button("Reset");
         mainLayout.addComponent(reset);
-        save.addClickListener(new Button.ClickListener() {
+        reset.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 beanFieldGroup.discard();

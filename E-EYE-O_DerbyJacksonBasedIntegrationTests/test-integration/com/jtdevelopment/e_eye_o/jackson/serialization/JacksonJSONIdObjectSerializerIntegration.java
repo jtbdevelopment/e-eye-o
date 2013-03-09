@@ -82,11 +82,13 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
         oc1For1 = readWriteDAO.create(oc1For1);
         oc2For1 = factory.newObservationCategory(appUser1).setDescription("Description").setShortName("OC-2");
         oc2For1 = readWriteDAO.create(oc2For1);
-        student1For1 = factory.newStudent(appUser1).setLastName("Last1-1").setFirstName("First1-1")
-                .addClassList(classList1For1).setArchived(true);
+//  fixme
+//        student1For1 = factory.newStudent(appUser1).setLastName("Last1-1").setFirstName("First1-1")
+//                .addClassList(classList1For1).setArchived(true);
         student1For1 = readWriteDAO.create(student1For1);
-        student2For1 = factory.newStudent(appUser1).setLastName("Last2-1").setFirstName("First2-1")
-                .addClassList(classList2For1);
+//  fixme
+//        student2For1 = factory.newStudent(appUser1).setLastName("Last2-1").setFirstName("First2-1")
+//                .addClassList(classList2For1);
         student2For1 = readWriteDAO.create(student2For1);
         o1ForS1 = factory.newObservation(appUser1).addCategory(oc1For1).setObservationSubject(student1For1)
                 .setComment("Comment").setObservationTimestamp(new LocalDateTime(2013, 1, 18, 15, 12));

@@ -144,7 +144,7 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
             will(returnValue(implStudent));
         }});
 
-        assertSame(hibernateStudent, hibernateStudent.setFirstName(STRING_VALUE));
+        hibernateStudent.setFirstName(STRING_VALUE);
     }
 
     @Test
@@ -164,6 +164,6 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
             will(returnValue(implStudent));
         }});
 
-        assertSame(hibernateStudent, hibernateStudent.setLastName(STRING_VALUE));
+        hibernateStudent.setLastName(STRING_VALUE);
     }
 }

@@ -82,9 +82,8 @@ public class StudentImpl extends AppUserOwnedObjectImpl implements Student {
     }
 
     @Override
-    public Student setFirstName(final String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
-        return this;
     }
 
     @Override
@@ -93,9 +92,8 @@ public class StudentImpl extends AppUserOwnedObjectImpl implements Student {
     }
 
     @Override
-    public Student setLastName(final String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
-        return this;
     }
 
     @Override
