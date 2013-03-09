@@ -136,7 +136,6 @@
   </path>
   
   <path id="library.com.vaadin:vaadin-server:7.0.1.classpath">
-    <pathelement location="${basedir}/lib/appengine-api-1.0-sdk-1.2.1.jar"/>
     <pathelement location="${basedir}/lib/commons-cli-1.2.jar"/>
     <pathelement location="${basedir}/lib/commons-jexl-2.1.1.jar"/>
     <pathelement location="${basedir}/lib/commons-logging-1.1.1.jar"/>
@@ -1572,7 +1571,6 @@
     <copy file="${basedir}/lib/vaadin-server-7.0.1.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/vaadin-server-7.0.1.jar"/>
     <copy file="${basedir}/lib/portal-service-6.0.2.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/portal-service-6.0.2.jar"/>
     <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
-    <copy file="${basedir}/lib/appengine-api-1.0-sdk-1.2.1.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/appengine-api-1.0-sdk-1.2.1.jar"/>
     <copy file="${basedir}/lib/validation-api-1.0.0.GA.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/validation-api-1.0.0.GA.jar"/>
     <copy file="${basedir}/lib/vaadin-shared-7.0.1.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/vaadin-shared-7.0.1.jar"/>
     <copy file="${basedir}/lib/vaadin-shared-deps-1.0.2.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/vaadin-shared-deps-1.0.2.jar"/>
