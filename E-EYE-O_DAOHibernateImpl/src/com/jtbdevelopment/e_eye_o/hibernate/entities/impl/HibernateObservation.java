@@ -44,9 +44,8 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
     }
 
     @Override
-    public Observation setObservationTimestamp(final LocalDateTime observationDate) {
+    public void setObservationTimestamp(final LocalDateTime observationDate) {
         wrapped.setObservationTimestamp(observationDate);
-        return this;
     }
 
     @Override
@@ -56,9 +55,8 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
     }
 
     @Override
-    public Observation setSignificant(final boolean significant) {
+    public void setSignificant(final boolean significant) {
         wrapped.setSignificant(significant);
-        return this;
     }
 
     @Override
@@ -68,9 +66,8 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
     }
 
     @Override
-    public Observation setFollowUpNeeded(final boolean followUpNeeded) {
+    public void setFollowUpNeeded(final boolean followUpNeeded) {
         wrapped.setFollowUpNeeded(followUpNeeded);
-        return this;
     }
 
     @Override
@@ -79,9 +76,8 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
     }
 
     @Override
-    public Observation setFollowUpReminder(final LocalDate followUpReminder) {
+    public void setFollowUpReminder(final LocalDate followUpReminder) {
         wrapped.setFollowUpReminder(followUpReminder);
-        return this;
     }
 
     @Override
@@ -91,9 +87,8 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
     }
 
     @Override
-    public Observation setFollowUpObservation(final Observation followUpObservation) {
+    public void setFollowUpObservation(final Observation followUpObservation) {
         wrapped.setFollowUpObservation(wrap(followUpObservation));
-        return this;
     }
 
     @Override
@@ -103,27 +98,23 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
     }
 
     @Override
-    public Observation setCategories(final Set<? extends ObservationCategory> categories) {
+    public void setCategories(final Set<ObservationCategory> categories) {
         wrapped.setCategories(wrap(categories));
-        return this;
     }
 
     @Override
-    public Observation addCategory(final ObservationCategory observationCategory) {
+    public void addCategory(final ObservationCategory observationCategory) {
         wrapped.addCategory(wrap(observationCategory));
-        return this;
     }
 
     @Override
-    public Observation addCategories(final Collection<? extends ObservationCategory> observationCategories) {
+    public void addCategories(final Collection<ObservationCategory> observationCategories) {
         wrapped.addCategories(wrap(observationCategories));
-        return this;
     }
 
     @Override
-    public Observation removeCategory(final ObservationCategory observationCategory) {
+    public void removeCategory(final ObservationCategory observationCategory) {
         wrapped.removeCategory(observationCategory);
-        return this;
     }
 
     @Override
@@ -133,8 +124,7 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
     }
 
     @Override
-    public Observation setComment(final String comment) {
+    public void setComment(final String comment) {
         wrapped.setComment(comment);
-        return this;
     }
 }

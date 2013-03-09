@@ -59,7 +59,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         testClassList3ForU1 = rwDAO.create(factory.newClassListBuilder(testUser1).withDescription("Test Class List3").build());
         Student s = factory.newStudentBuilder(testUser1).addClassList(testClassList1ForU1).withFirstName("Test").withLastName("Student").build();
         testStudentForU1 = rwDAO.create(s);
-        testObservationForU1 = rwDAO.create(factory.newObservation(testUser1).setComment("Test Observation").setObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("IDEA")).addCategory(testOCsForU1.get("PHYS")));
+        testObservationForU1 = rwDAO.create(factory.newObservationBuilder(testUser1).withComment("Test Observation").withObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("IDEA")).addCategory(testOCsForU1.get("PHYS")).build());
 
         testUser2 = rwDAO.create(factory.newAppUserBuilder().withFirstName("Another").withLastName("Tester").withEmailAddress("another@test.com").build());
 
@@ -223,7 +223,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         final ObservationCategory social = testOCsForU1.get("SOCIAL");
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment = "Test Observation";
-        Observation o = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment).setObservationSubject(testStudentForU1));
+        Observation o = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment).withObservationSubject(testStudentForU1).build());
         assertEquals(comment, o.getComment());
         assertEquals(2, o.getCategories().size());
         assertTrue(o.getCategories().contains(social));
@@ -240,7 +240,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final ObservationCategory lang = testOCsForU1.get("LANG");
         final String comment = "Test Observation";
-        Observation o = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment).setObservationSubject(testStudentForU1));
+        Observation o = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment).withObservationSubject(testStudentForU1).build());
         o.removeCategory(social);
         o.addCategory(lang);
         o.setObservationSubject(testClassList1ForU1);
@@ -260,8 +260,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment1 = "Test Observation 1";
         final String comment2 = "Test Observation 2";
-        Observation o1 = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment1).setObservationSubject(testStudentForU1));
-        Observation o2 = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(kauw)).setComment(comment2).setObservationSubject(testStudentForU1));
+        Observation o1 = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment1).withObservationSubject(testStudentForU1).build());
+        Observation o2 = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment2).withObservationSubject(testStudentForU1).build());
         o1.setFollowUpObservation(o2);
         o2.setFollowUpNeeded(true);
         final LocalDate reminderDate = new LocalDate(2012, 11, 12);
@@ -283,8 +283,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         final ObservationCategory kauw = testOCsForU1.get("KAUW");
         final String comment1 = "Test Observation 1";
         final String comment2 = "Test Observation 2";
-        Observation o1 = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(social, kauw)).setComment(comment1).setObservationSubject(testStudentForU1));
-        Observation o2 = rwDAO.create(factory.newObservation(testUser1).setFollowUpNeeded(false).setObservationTimestamp(new LocalDateTime()).addCategories(Arrays.asList(kauw)).setComment(comment2).setObservationSubject(testStudentForU1));
+        Observation o1 = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment1).withObservationSubject(testStudentForU1).build());
+        Observation o2 = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment2).withObservationSubject(testStudentForU1).build());
         o1.setFollowUpObservation(o2);
         rwDAO.update(Arrays.asList(o1, o2));
 
@@ -302,7 +302,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         ClassList cl = rwDAO.create(factory.newClassListBuilder(updateUser).withDescription("CL").build());
         Student s = rwDAO.create(factory.newStudentBuilder(updateUser).withFirstName("A").withLastName("B").build());
         Photo p = rwDAO.create(factory.newPhotoBuilder(updateUser).withDescription("D").withPhotoFor(s).build());
-        Observation o = rwDAO.create(factory.newObservation(updateUser).setComment("T").setObservationSubject(cl));
+        Observation o = rwDAO.create(factory.newObservationBuilder(updateUser).withComment("T").withObservationSubject(cl).build());
 
         Set<AppUserOwnedObject> firstSet = rwDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, updateUser, firstTS);
         final List<AppUserOwnedObject> initialList = Arrays.asList(oc, cl, s, p, o);
@@ -329,7 +329,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         ClassList cl = rwDAO.create(factory.newClassListBuilder(deleteUserThings).withDescription("CL").build());
         Student s = rwDAO.create(factory.newStudentBuilder(deleteUserThings).withFirstName("A").withLastName("B").build());
         Photo p = rwDAO.create(factory.newPhotoBuilder(deleteUserThings).withDescription("D").withPhotoFor(s).build());
-        Observation o = rwDAO.create(factory.newObservation(deleteUserThings).setComment("T").setObservationSubject(cl));
+        Observation o = rwDAO.create(factory.newObservationBuilder(deleteUserThings).withComment("T").withObservationSubject(cl).build());
 
         DateTime baseTime = new DateTime();
         List<String> ids = new ArrayList<>(Arrays.asList(oc.getId(), cl.getId(), s.getId(), p.getId(), o.getId()));
@@ -363,7 +363,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         student.addClassList(cl);
         Student s2 = rwDAO.create(student);
         Photo p = rwDAO.create(factory.newPhotoBuilder(deleteUser1).withPhotoFor(cl).withDescription("deletePhoto").build());
-        Observation o = rwDAO.create(factory.newObservation(deleteUser1).setObservationSubject(cl).setObservationTimestamp(new LocalDateTime()).addCategories(deleteCategories).setComment("delete"));
+        Observation o = rwDAO.create(factory.newObservationBuilder(deleteUser1).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime()).withCategories(deleteCategories).withComment("delete").build());
         Map<String, Class<? extends IdObject>> idMap = new HashMap<>();
         idMap.put(deleteUser1.getId(), AppUser.class);
         idMap.put(deleteUser2.getId(), AppUser.class);
@@ -413,12 +413,12 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExplicitlyCreatingADeletedObjectListExceptions() {
-        rwDAO.create(Arrays.asList(factory.newDeletedObject(testUser2).setDeletedId("TEST")));
+        rwDAO.create(Arrays.asList(factory.newDeletedObjectBuilder(testUser2).withDeletedId("TEST").build()));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExplicitlyCreatingADeletedObjectExceptions() {
-        rwDAO.create(factory.newDeletedObject(testUser2).setDeletedId("TEST"));
+        rwDAO.create(factory.newDeletedObjectBuilder(testUser2).withDeletedId("TEST").build());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

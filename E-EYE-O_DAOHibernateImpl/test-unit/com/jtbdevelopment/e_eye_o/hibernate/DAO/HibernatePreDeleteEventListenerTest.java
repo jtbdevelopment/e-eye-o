@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.DeletedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.builders.DeletedObjectBuilder;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import org.hibernate.Session;
 import org.hibernate.event.spi.EventSource;
@@ -27,6 +28,7 @@ public class HibernatePreDeleteEventListenerTest {
     private SessionFactoryImpl sfi;
     private HibernatePreDeleteEventListener listener;
     private DeletedObject impl, wrapped;
+    private DeletedObjectBuilder builder;
     private AppUser appUser;
     private Session session;
     private EventSource eventSource;
@@ -42,6 +44,7 @@ public class HibernatePreDeleteEventListenerTest {
         session = context.mock(Session.class);
         listener = new HibernatePreDeleteEventListener(wrapper, factory, null);
         eventSource = context.mock(EventSource.class);
+        builder = context.mock(DeletedObjectBuilder.class);
         context.checking(new Expectations() {{
         }});
     }
@@ -76,9 +79,11 @@ public class HibernatePreDeleteEventListenerTest {
             will(returnValue(appUser));
             one(local).getId();
             will(returnValue(localId));
-            one(factory).newAppUserOwnedObject(DeletedObject.class, appUser);
-            will(returnValue(impl));
-            one(impl).setDeletedId(localId);
+            one(factory).newDeletedObjectBuilder(appUser);
+            will(returnValue(builder));
+            one(builder).withDeletedId(localId);
+            will(returnValue(builder));
+            one(builder).build();
             will(returnValue(impl));
             one(wrapper).wrap(impl);
             will(returnValue(wrapped));

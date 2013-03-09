@@ -49,21 +49,18 @@ public class HibernateStudent extends HibernateAppUserOwnedObject<Student> imple
     }
 
     @Override
-    public Student addClassList(final ClassList classList) {
+    public void addClassList(final ClassList classList) {
         wrapped.addClassList(wrap(classList));
-        return this;
     }
 
     @Override
-    public Student addClassLists(final Collection<ClassList> classLists) {
+    public void addClassLists(final Collection<ClassList> classLists) {
         wrapped.addClassLists(wrap(classLists));
-        return this;
     }
 
     @Override
-    public Student removeClassList(final ClassList classList) {
+    public void removeClassList(final ClassList classList) {
         wrapped.removeClassList(wrap(classList));
-        return this;
     }
 
     @Override

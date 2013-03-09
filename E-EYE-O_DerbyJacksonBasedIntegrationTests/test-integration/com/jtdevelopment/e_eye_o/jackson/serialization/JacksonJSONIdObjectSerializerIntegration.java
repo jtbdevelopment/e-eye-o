@@ -86,11 +86,11 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
         student1For1 = readWriteDAO.create(student1For1);
         student2For1 = factory.newStudentBuilder(appUser1).withLastName("Last2-1").withFirstName("First2-1").addClassList(classList2For1).build();
         student2For1 = readWriteDAO.create(student2For1);
-        o1ForS1 = factory.newObservation(appUser1).addCategory(oc1For1).setObservationSubject(student1For1)
-                .setComment("Comment").setObservationTimestamp(new LocalDateTime(2013, 1, 18, 15, 12));
+        o1ForS1 = factory.newObservationBuilder(appUser1).addCategory(oc1For1).withObservationSubject(student1For1)
+                .withComment("Comment").withObservationTimestamp(new LocalDateTime(2013, 1, 18, 15, 12)).build();
         o1ForS1 = readWriteDAO.create(o1ForS1);
-        o2ForS1 = factory.newObservation(appUser1).addCategory(oc1For1).setObservationSubject(student1For1)
-                .setFollowUpObservation(o1ForS1).setComment("Comment").setObservationTimestamp(new LocalDateTime(2012, 1, 18, 15, 12));
+        o2ForS1 = factory.newObservationBuilder(appUser1).addCategory(oc1For1).withObservationSubject(student1For1)
+                .withFollowUpObservation(o1ForS1).withComment("Comment").withObservationTimestamp(new LocalDateTime(2012, 1, 18, 15, 12)).build();
         o2ForS1 = readWriteDAO.create(o2ForS1);
         photo1for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2011, 11, 11, 11, 11, 11)).withPhotoFor(student1For1).withDescription("Photo1").build();
         photo1for1 = readWriteDAO.create(photo1for1);

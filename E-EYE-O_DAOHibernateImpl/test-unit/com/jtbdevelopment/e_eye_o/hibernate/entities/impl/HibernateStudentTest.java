@@ -97,10 +97,9 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
         final ClassList cl = context.mock(ClassList.class);
         context.checking(new Expectations() {{
             one(implStudent).addClassList(with(any(HibernateClassList.class)));
-            will(returnValue(implStudent));
         }});
 
-        assertSame(hibernateStudent, hibernateStudent.addClassList(cl));
+        hibernateStudent.addClassList(cl);
     }
 
     @Test
@@ -109,10 +108,9 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
         final Set<ClassList> cls = new HashSet<>(Arrays.asList(cl));
         context.checking(new Expectations() {{
             oneOf(implStudent).addClassLists(with(new IsEqualButNotTheSame<>(cls)));
-            will(returnValue(implStudent));
         }});
 
-        assertSame(hibernateStudent, hibernateStudent.addClassLists(cls));
+        hibernateStudent.addClassLists(cls);
     }
 
     @Test
@@ -120,10 +118,9 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
         final ClassList cl = context.mock(ClassList.class);
         context.checking(new Expectations() {{
             one(implStudent).removeClassList(with(any(HibernateClassList.class)));
-            will(returnValue(implStudent));
         }});
 
-        assertSame(hibernateStudent, hibernateStudent.removeClassList(cl));
+        hibernateStudent.removeClassList(cl);
     }
 
     @Test

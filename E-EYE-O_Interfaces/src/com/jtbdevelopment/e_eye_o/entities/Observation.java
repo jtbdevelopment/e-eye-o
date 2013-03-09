@@ -35,39 +35,39 @@ public interface Observation extends AppUserOwnedObject {
     @NotNull(message = OBSERVATION_OBSERVATION_TIMESTAMP_CANNOT_BE_NULL_ERROR)
     LocalDateTime getObservationTimestamp();
 
-    Observation setObservationTimestamp(final LocalDateTime observationDate);
+    void setObservationTimestamp(final LocalDateTime observationDate);
 
     boolean isSignificant();
 
-    Observation setSignificant(final boolean significant);
+    void setSignificant(final boolean significant);
 
     boolean isFollowUpNeeded();
 
-    Observation setFollowUpNeeded(final boolean followUpNeeded);
+    void setFollowUpNeeded(final boolean followUpNeeded);
 
     LocalDate getFollowUpReminder();
 
-    Observation setFollowUpReminder(final LocalDate followUpReminder);
+    void setFollowUpReminder(final LocalDate followUpReminder);
 
     Observation getFollowUpObservation();
 
-    Observation setFollowUpObservation(final Observation followUpObservation);
+    void setFollowUpObservation(final Observation followUpObservation);
 
     @NotNull(message = OBSERVATION_CATEGORIES_CANNOT_BE_NULL_ERROR)
     @NoNullsInCollectionCheck(message = OBSERVATION_CATEGORIES_CANNOT_CONTAIN_NULL_ERROR)
     Set<ObservationCategory> getCategories();
 
-    Observation setCategories(final Set<? extends ObservationCategory> categories);
+    void setCategories(final Set<ObservationCategory> categories);
 
-    Observation addCategory(final ObservationCategory observationCategory);
+    void addCategory(final ObservationCategory observationCategory);
 
-    Observation addCategories(final Collection<? extends ObservationCategory> observationCategories);
+    void addCategories(final Collection<ObservationCategory> observationCategories);
 
-    Observation removeCategory(final ObservationCategory observationCategory);
+    void removeCategory(final ObservationCategory observationCategory);
 
     @NotEmpty(message = OBSERVATION_COMMENT_CANNOT_BE_BLANK_OR_NULL_ERROR)
     @Size(max = MAX_COMMENT_SIZE, message = OBSERVATION_COMMENT_SIZE_ERROR)
     String getComment();
 
-    Observation setComment(final String comment);
+    void setComment(final String comment);
 }

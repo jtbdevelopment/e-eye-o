@@ -21,12 +21,11 @@ public class DeletedObjectImpl extends AppUserOwnedObjectImpl implements Deleted
     }
 
     @Override
-    public DeletedObject setDeletedId(final String deletedId) {
+    public void setDeletedId(final String deletedId) {
         if (StringUtils.hasLength(this.deleteId) && !this.deleteId.equals(deletedId)) {
             throw new IllegalStateException("Cannot change deletedId once set, create a new object");
         }
         this.deleteId = deletedId;
-        return this;
     }
 
     @Override

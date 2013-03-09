@@ -34,11 +34,11 @@ public interface Student extends AppUserOwnedObject {
 
     void setClassLists(final Set<ClassList> classLists);
 
-    Student addClassList(final ClassList classList);
+    void addClassList(final ClassList classList);
 
-    Student addClassLists(final Collection<ClassList> classLists);
+    void addClassLists(final Collection<ClassList> classLists);
 
-    Student removeClassList(final ClassList classList);
+    void removeClassList(final ClassList classList);
 
     @NotEmpty(message = STUDENT_FIRST_NAME_CANNOT_BE_NULL_OR_BLANK_ERROR)
     @Size(max = MAX_NAME_SIZE, message = STUDENT_FIRST_NAME_SIZE_ERROR)

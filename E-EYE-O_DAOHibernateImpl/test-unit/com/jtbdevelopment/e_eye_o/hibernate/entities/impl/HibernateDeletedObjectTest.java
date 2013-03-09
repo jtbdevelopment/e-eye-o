@@ -57,9 +57,8 @@ public class HibernateDeletedObjectTest extends HibernateAbstractIdObjectTest {
     public void testSetDeletedId() throws Exception {
         context.checking(new Expectations() {{
             one(implDeletedObject).setDeletedId(STRING_VALUE);
-            will(returnValue(implDeletedObject));
         }});
-        assertSame(hibernateDeletedObject, hibernateDeletedObject.setDeletedId(STRING_VALUE));
+        hibernateDeletedObject.setDeletedId(STRING_VALUE);
 
     }
 }

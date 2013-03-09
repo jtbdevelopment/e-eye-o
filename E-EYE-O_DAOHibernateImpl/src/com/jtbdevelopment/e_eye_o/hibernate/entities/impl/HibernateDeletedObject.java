@@ -27,8 +27,7 @@ public class HibernateDeletedObject extends HibernateAppUserOwnedObject<DeletedO
     }
 
     @Override
-    public DeletedObject setDeletedId(final String deletedId) {
+    public void setDeletedId(final String deletedId) {
         wrapped.setDeletedId(deletedId);
-        return this;
     }
 }

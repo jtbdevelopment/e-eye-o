@@ -24,5 +24,5 @@ public interface DeletedObject extends AppUserOwnedObject {
     @NotEmpty(message = DELETED_OBJECT_DELETED_ID_CANNOT_BE_BLANK_OR_NULL_ERROR)
     String getDeletedId();
 
-    DeletedObject setDeletedId(final String deletedId);
+    void setDeletedId(final String deletedId);
 }

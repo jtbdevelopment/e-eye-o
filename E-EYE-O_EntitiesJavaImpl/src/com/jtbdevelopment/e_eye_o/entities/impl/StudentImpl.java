@@ -58,21 +58,18 @@ public class StudentImpl extends AppUserOwnedObjectImpl implements Student {
     }
 
     @Override
-    public Student addClassList(final ClassList classList) {
+    public void addClassList(final ClassList classList) {
         classLists.add(classList);
-        return this;
     }
 
     @Override
-    public Student addClassLists(final Collection<ClassList> classLists) {
+    public void addClassLists(final Collection<ClassList> classLists) {
         this.classLists.addAll(classLists);
-        return this;
     }
 
     @Override
-    public Student removeClassList(final ClassList classList) {
+    public void removeClassList(final ClassList classList) {
         classLists.remove(classList);
-        return this;
     }
 
     @Override

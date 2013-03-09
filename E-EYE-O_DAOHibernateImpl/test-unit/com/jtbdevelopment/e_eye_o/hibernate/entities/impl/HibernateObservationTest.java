@@ -84,9 +84,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testSetObservationTimestamp() throws Exception {
         context.checking(new Expectations() {{
             one(implObservation).setObservationTimestamp(LOCALDATETIME_VALUE);
-            will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.setObservationTimestamp(LOCALDATETIME_VALUE));
+        hibernateObservation.setObservationTimestamp(LOCALDATETIME_VALUE);
     }
 
     @Test
@@ -102,9 +101,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testSetSignificant() throws Exception {
         context.checking(new Expectations() {{
             one(implObservation).setSignificant(false);
-            will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.setSignificant(false));
+        hibernateObservation.setSignificant(false);
     }
 
     @Test
@@ -120,9 +118,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testSetNeedsFollowUp() throws Exception {
         context.checking(new Expectations() {{
             one(implObservation).setFollowUpNeeded(true);
-            will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.setFollowUpNeeded(true));
+        hibernateObservation.setFollowUpNeeded(true);
     }
 
     @Test
@@ -138,9 +135,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testSetFollowUpReminder() throws Exception {
         context.checking(new Expectations() {{
             one(implObservation).setFollowUpReminder(LOCALDATE_VALUE);
-            will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.setFollowUpReminder(LOCALDATE_VALUE));
+        hibernateObservation.setFollowUpReminder(LOCALDATE_VALUE);
     }
 
     @Test
@@ -159,10 +155,9 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
         final Observation fu = context.mock(Observation.class, "local");
         context.checking(new Expectations() {{
             one(implObservation).setFollowUpObservation(with(any(HibernateObservation.class)));
-            will(returnValue(implObservation));
         }});
 
-        assertSame(hibernateObservation, hibernateObservation.setFollowUpObservation(fu));
+        hibernateObservation.setFollowUpObservation(fu);
     }
 
     @Test
@@ -180,9 +175,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
         context.checking(new Expectations() {{
             one(implObservation).setCategories(with(new IsEqualButNotTheSame<>(ocs)));
-            will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.setCategories(ocs));
+        hibernateObservation.setCategories(ocs);
     }
 
     @Test
@@ -190,9 +184,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
         final ObservationCategory ocs = context.mock(ObservationCategory.class);
         context.checking(new Expectations() {{
             one(implObservation).addCategory(with(any(HibernateObservationCategory.class)));
-            will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.addCategory(ocs));
+        hibernateObservation.addCategory(ocs);
     }
 
     @Test
@@ -200,9 +193,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
         context.checking(new Expectations() {{
             one(implObservation).addCategories(with(new IsEqualButNotTheSame<>(ocs)));
-            will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.addCategories(ocs));
+        hibernateObservation.addCategories(ocs);
     }
 
     @Test
@@ -210,9 +202,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
         final ObservationCategory ocs = context.mock(ObservationCategory.class);
         context.checking(new Expectations() {{
             one(implObservation).removeCategory(ocs);
-            will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.removeCategory(ocs));
+        hibernateObservation.removeCategory(ocs);
     }
 
     @Test
@@ -228,8 +219,7 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testSetComment() throws Exception {
         context.checking(new Expectations() {{
             one(implObservation).setComment(STRING_VALUE);
-            will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.setComment(STRING_VALUE));
+        hibernateObservation.setComment(STRING_VALUE);
     }
 }

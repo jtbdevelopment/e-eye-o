@@ -49,9 +49,8 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     }
 
     @Override
-    public Observation setObservationTimestamp(final LocalDateTime observationDate) {
+    public void setObservationTimestamp(final LocalDateTime observationDate) {
         this.observationTimestamp = observationDate;
-        return this;
     }
 
     @Override
@@ -60,9 +59,8 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     }
 
     @Override
-    public Observation setSignificant(final boolean significant) {
+    public void setSignificant(final boolean significant) {
         this.significant = significant;
-        return this;
     }
 
     @Override
@@ -71,9 +69,8 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     }
 
     @Override
-    public Observation setFollowUpNeeded(final boolean followUpNeeded) {
+    public void setFollowUpNeeded(final boolean followUpNeeded) {
         this.followUpNeeded = followUpNeeded;
-        return this;
     }
 
     @Override
@@ -82,9 +79,8 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     }
 
     @Override
-    public Observation setFollowUpReminder(final LocalDate followUpReminder) {
+    public void setFollowUpReminder(final LocalDate followUpReminder) {
         this.followUpReminder = followUpReminder;
-        return this;
     }
 
     @Override
@@ -93,9 +89,8 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     }
 
     @Override
-    public Observation setFollowUpObservation(final Observation followUpObservation) {
+    public void setFollowUpObservation(final Observation followUpObservation) {
         this.followUpObservation = followUpObservation;
-        return this;
     }
 
     @Override
@@ -104,28 +99,24 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     }
 
     @Override
-    public Observation setCategories(final Set<? extends ObservationCategory> categories) {
+    public void setCategories(final Set<ObservationCategory> categories) {
         this.categories.clear();
         this.categories.addAll(categories);
-        return this;
     }
 
     @Override
-    public Observation addCategory(final ObservationCategory observationCategory) {
+    public void addCategory(final ObservationCategory observationCategory) {
         categories.add(observationCategory);
-        return this;
     }
 
     @Override
-    public Observation addCategories(final Collection<? extends ObservationCategory> observationCategories) {
+    public void addCategories(final Collection<ObservationCategory> observationCategories) {
         categories.addAll(observationCategories);
-        return this;
     }
 
     @Override
-    public Observation removeCategory(final ObservationCategory observationCategory) {
+    public void removeCategory(final ObservationCategory observationCategory) {
         categories.remove(observationCategory);
-        return this;
     }
 
     @Override
@@ -134,9 +125,8 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     }
 
     @Override
-    public Observation setComment(final String comment) {
+    public void setComment(final String comment) {
         this.comment = comment;
-        return this;
     }
 
     @Override

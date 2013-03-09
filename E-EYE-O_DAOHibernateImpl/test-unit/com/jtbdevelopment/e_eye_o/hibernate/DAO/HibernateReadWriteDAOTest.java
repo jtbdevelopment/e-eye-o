@@ -361,7 +361,6 @@ public class HibernateReadWriteDAOTest {
             one(query1).list();
             will(returnValue(relatedOCObservations));
             one(observationLoaded).removeCategory(loaded);
-            will(returnValue(observationLoaded));
             one(session).update(observationLoaded);
         }});
         createStandardDeleteExpectations(wrapped, loaded, relatedPhotos, relatedObservations);
@@ -411,7 +410,6 @@ public class HibernateReadWriteDAOTest {
             one(query1).list();
             will(returnValue(relatedFollowUpObservations));
             one(observationLoaded).setFollowUpObservation(null);
-            will(returnValue(observationLoaded));
             one(session).update(observationLoaded);
         }});
 

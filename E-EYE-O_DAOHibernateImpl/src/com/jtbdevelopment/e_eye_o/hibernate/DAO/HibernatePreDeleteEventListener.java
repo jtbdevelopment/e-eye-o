@@ -45,7 +45,7 @@ public class HibernatePreDeleteEventListener implements PreDeleteEventListener {
         if ((event.getEntity() instanceof AppUserOwnedObject) &&
                 !(event.getEntity() instanceof DeletedObject)) {
             AppUserOwnedObject entity = (AppUserOwnedObject) event.getEntity();
-            final DeletedObject deletedObject = idObjectFactory.newAppUserOwnedObject(DeletedObject.class, entity.getAppUser()).setDeletedId(entity.getId());
+            final DeletedObject deletedObject = idObjectFactory.newDeletedObjectBuilder(entity.getAppUser()).withDeletedId(entity.getId()).build();
             final DeletedObject wrap = daoIdObjectWrapperFactory.wrap(deletedObject);
             event.getSession().save(wrap);
         }
