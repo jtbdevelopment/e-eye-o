@@ -1,12 +1,9 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.utilities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.builders.AppUserOwnedObjectBuilder;
+import com.jtbdevelopment.e_eye_o.entities.builders.IdObjectBuilder;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Date: 1/1/13
@@ -14,27 +11,6 @@ import java.util.Map;
  */
 @Service
 public class IdObjectImplFactory implements IdObjectFactory {
-    private static Map<Class<? extends IdObject>, Class<? extends IdObject>> interfaceToImplementationMap = new HashMap<Class<? extends IdObject>, Class<? extends IdObject>>() {{
-        put(AppUser.class, AppUserImpl.class);
-        put(Observation.class, ObservationImpl.class);
-        put(ObservationCategory.class, ObservationCategoryImpl.class);
-        put(Student.class, StudentImpl.class);
-        put(Photo.class, PhotoImpl.class);
-        put(ClassList.class, ClassListImpl.class);
-        put(DeletedObject.class, DeletedObjectImpl.class);
-    }};
-
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends IdObject> Class<T> implementationForInterface(final Class<T> interfaceType) {
-        return (Class<T>) interfaceToImplementationMap.get(interfaceType);
-    }
-
-    @Override
-    public Map<Class<? extends IdObject>, Class<? extends IdObject>> implementationsForInterfaces() {
-        return Collections.unmodifiableMap(interfaceToImplementationMap);
-    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -60,6 +36,11 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
+    public <T extends IdObject, B extends IdObjectBuilder<T>> B newIdObjectBuilder(final Class<T> idObjectType) {
+        return null;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> T newAppUserOwnedObject(final Class<T> idObjectType, final AppUser appUser) {
         switch (idObjectType.getSimpleName()) {
@@ -82,6 +63,11 @@ public class IdObjectImplFactory implements IdObjectFactory {
                     throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
                 }
         }
+    }
+
+    @Override
+    public <T extends AppUserOwnedObject, B extends AppUserOwnedObjectBuilder<T>> B newAppUserOwnedObjectBuilder(final Class<T> idObjectType) {
+        return null;
     }
 
     @Override

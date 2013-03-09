@@ -141,7 +141,6 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     public void testSetFirstName() throws Exception {
         context.checking(new Expectations() {{
             one(implStudent).setFirstName(STRING_VALUE);
-            will(returnValue(implStudent));
         }});
 
         hibernateStudent.setFirstName(STRING_VALUE);
@@ -161,7 +160,6 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     public void testSetLastName() throws Exception {
         context.checking(new Expectations() {{
             one(implStudent).setLastName(STRING_VALUE);
-            will(returnValue(implStudent));
         }});
 
         hibernateStudent.setLastName(STRING_VALUE);

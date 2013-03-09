@@ -17,7 +17,7 @@ import java.util.Set;
  * Time: 7:26 PM
  */
 public class ObservationImpl extends AppUserOwnedObjectImpl implements Observation, AppUserOwnedObject {
-    private String comment;
+    private String comment = "";
     private LocalDateTime observationTimestamp = new LocalDateTime();
     private AppUserOwnedObject observationSubject;
     private boolean significant = false;

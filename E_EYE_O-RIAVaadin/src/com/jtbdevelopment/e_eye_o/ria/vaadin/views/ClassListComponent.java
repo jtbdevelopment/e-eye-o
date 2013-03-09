@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.utilities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.HierarchicalContainer;

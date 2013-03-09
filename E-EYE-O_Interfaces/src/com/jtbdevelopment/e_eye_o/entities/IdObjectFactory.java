@@ -1,24 +1,20 @@
-package com.jtbdevelopment.e_eye_o.entities.utilities;
+package com.jtbdevelopment.e_eye_o.entities;
 
-import com.jtbdevelopment.e_eye_o.entities.*;
-import org.springframework.cache.annotation.Cacheable;
-
-import java.util.Map;
+import com.jtbdevelopment.e_eye_o.entities.builders.AppUserOwnedObjectBuilder;
+import com.jtbdevelopment.e_eye_o.entities.builders.IdObjectBuilder;
 
 /**
  * Date: 1/1/13
  * Time: 7:47 PM
  */
 public interface IdObjectFactory {
-    @Cacheable("idObjectInterfaceToImplementation")
-    <T extends IdObject> Class<T> implementationForInterface(Class<T> interfaceType);
-
-    @Cacheable("idObjectInterfacesToImplementations")
-    Map<Class<? extends IdObject>, Class<? extends IdObject>> implementationsForInterfaces();
-
     <T extends IdObject> T newIdObject(Class<T> idObjectType);
 
+    <T extends IdObject, B extends IdObjectBuilder<T>> B newIdObjectBuilder(Class<T> idObjectType);
+
     <T extends AppUserOwnedObject> T newAppUserOwnedObject(Class<T> idObjectType, final AppUser appUser);
+
+    <T extends AppUserOwnedObject, B extends AppUserOwnedObjectBuilder<T>> B newAppUserOwnedObjectBuilder(Class<T> idObjectType);
 
     AppUser newAppUser();
 

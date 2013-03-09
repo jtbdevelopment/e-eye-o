@@ -31,12 +31,6 @@
                 <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
                     <property name="name" value="idObjectInterfaceForImpl"/>
                 </bean>
-                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
-                    <property name="name" value="idObjectInterfaceToImplementation"/>
-                </bean>
-                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
-                    <property name="name" value="idObjectInterfacesToImplementations"/>
-                </bean>
             </set>
         </property>
     </bean>

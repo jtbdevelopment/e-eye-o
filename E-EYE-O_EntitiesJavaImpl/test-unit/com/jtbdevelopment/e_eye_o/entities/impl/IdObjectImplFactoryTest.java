@@ -4,7 +4,10 @@ import com.jtbdevelopment.e_eye_o.entities.*;
 import org.jmock.Mockery;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 import static org.testng.AssertJUnit.*;
 
@@ -16,49 +19,6 @@ public class IdObjectImplFactoryTest {
     private static final Mockery context = new Mockery();
     private static final AppUser appUser = context.mock(AppUser.class);
     private static final IdObjectImplFactory factory = new IdObjectImplFactory();
-
-    @Test
-    public void testInterfaceMap() {
-        Map<Class<? extends IdObject>, Class<? extends IdObject>> map = factory.implementationsForInterfaces();
-        assertEquals(7, map.size());
-        assertEquals(AppUserImpl.class, map.get(AppUser.class));
-        assertEquals(ClassListImpl.class, map.get(ClassList.class));
-        assertEquals(ObservationImpl.class, map.get(Observation.class));
-        assertEquals(ObservationCategoryImpl.class, map.get(ObservationCategory.class));
-        assertEquals(PhotoImpl.class, map.get(Photo.class));
-        assertEquals(StudentImpl.class, map.get(Student.class));
-        assertEquals(DeletedObjectImpl.class, map.get(DeletedObject.class));
-    }
-
-    @Test(expectedExceptions = UnsupportedOperationException.class)
-    public void testInterfaceMapIsUnmodifiable() {
-        Map<Class<? extends IdObject>, Class<? extends IdObject>> map = factory.implementationsForInterfaces();
-        map.clear();
-    }
-
-
-    @Test
-    public void testImplementationForInterface() throws Exception {
-        assertEquals(AppUserImpl.class, factory.implementationForInterface(AppUser.class));
-        assertEquals(ClassListImpl.class, factory.implementationForInterface(ClassList.class));
-        assertEquals(ObservationImpl.class, factory.implementationForInterface(Observation.class));
-        assertEquals(ObservationCategoryImpl.class, factory.implementationForInterface(ObservationCategory.class));
-        assertEquals(PhotoImpl.class, factory.implementationForInterface(Photo.class));
-        assertEquals(StudentImpl.class, factory.implementationForInterface(Student.class));
-        assertEquals(DeletedObjectImpl.class, factory.implementationForInterface(DeletedObject.class));
-    }
-
-
-    @Test
-    public void testNewIdObjectForKnownClasses() throws Exception {
-        assertEquals(AppUserImpl.class, factory.newIdObject(AppUser.class).getClass());
-        assertEquals(ClassListImpl.class, factory.newAppUserOwnedObject(ClassList.class, appUser).getClass());
-        assertEquals(ObservationImpl.class, factory.newAppUserOwnedObject(Observation.class, appUser).getClass());
-        assertEquals(ObservationCategoryImpl.class, factory.newAppUserOwnedObject(ObservationCategory.class, appUser).getClass());
-        assertEquals(PhotoImpl.class, factory.newAppUserOwnedObject(Photo.class, appUser).getClass());
-        assertEquals(StudentImpl.class, factory.newAppUserOwnedObject(Student.class, appUser).getClass());
-        assertEquals(DeletedObjectImpl.class, factory.newAppUserOwnedObject(DeletedObject.class, appUser).getClass());
-    }
 
     @Test
     @SuppressWarnings("unchecked")

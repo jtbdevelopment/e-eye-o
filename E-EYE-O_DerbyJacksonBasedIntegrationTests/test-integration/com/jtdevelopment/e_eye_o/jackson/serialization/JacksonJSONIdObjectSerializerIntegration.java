@@ -2,7 +2,6 @@ package com.jtdevelopment.e_eye_o.jackson.serialization;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.utilities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObjectSerializer;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
