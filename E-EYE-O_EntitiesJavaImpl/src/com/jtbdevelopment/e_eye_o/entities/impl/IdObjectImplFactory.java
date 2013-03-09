@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.builders.AppUserOwnedObjectBuilder;
 import com.jtbdevelopment.e_eye_o.entities.builders.IdObjectBuilder;
+import com.jtbdevelopment.e_eye_o.entities.impl.builders.*;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,37 +38,46 @@ public class IdObjectImplFactory implements IdObjectFactory {
 
     @Override
     public <T extends IdObject, B extends IdObjectBuilder<T>> B newIdObjectBuilder(final Class<T> idObjectType) {
-        return null;
+        T entity = newIdObject(idObjectType);
+        switch (idObjectType.getSimpleName()) {
+            case "AppUser":
+                return (B) new AppUserBuilderImpl((AppUser) entity);
+            case "Observation":
+                return (B) new ObservationBuilderImpl((Observation) entity);
+            case "ObservationCategory":
+                return (B) new ObservationCategoryBuilderImpl((ObservationCategory) entity);
+            case "Student":
+                return (B) new StudentBuilderImpl((Student) entity);
+            case "Photo":
+                return (B) new PhotoBuilderImpl((Photo) entity);
+            case "ClassList":
+                return (B) new ClassListBuilderImpl((ClassList) entity);
+            case "DeletedObject":
+                return (B) new DeletedObjectBuilderImpl((DeletedObject) entity);
+            default:
+                throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
+        }
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> T newAppUserOwnedObject(final Class<T> idObjectType, final AppUser appUser) {
-        switch (idObjectType.getSimpleName()) {
-            case "Observation":
-                return (T) newObservation(appUser);
-            case "ObservationCategory":
-                return (T) newObservationCategory(appUser);
-            case "Student":
-                return (T) newStudent(appUser);
-            case "Photo":
-                return (T) newPhoto(appUser);
-            case "ClassList":
-                return (T) newClassList(appUser);
-            case "DeletedObject":
-                return (T) newDeletedObject(appUser);
-            default:
-                if (IdObject.class.isAssignableFrom(idObjectType)) {
-                    throw new IllegalArgumentException("You cannot use this method to create non-app user owned objects.");
-                } else {
-                    throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
-                }
+        if(!AppUserOwnedObject.class.isAssignableFrom(idObjectType)) {
+            throw new IllegalArgumentException("You cannot use this method to create non-app user owned objects.");
         }
+        T entity = newIdObject(idObjectType);
+        entity.setAppUser(appUser);
+        return entity;
     }
 
     @Override
-    public <T extends AppUserOwnedObject, B extends AppUserOwnedObjectBuilder<T>> B newAppUserOwnedObjectBuilder(final Class<T> idObjectType) {
-        return null;
+    public <T extends AppUserOwnedObject, B extends AppUserOwnedObjectBuilder<T>> B newAppUserOwnedObjectBuilder(final Class<T> idObjectType, final AppUser appUser) {
+        if(!AppUserOwnedObject.class.isAssignableFrom(idObjectType)) {
+            throw new IllegalArgumentException("You cannot use this method to create non-app user owned builder objects.");
+        }
+        B builder = newIdObjectBuilder(idObjectType);
+        builder.withAppUser(appUser);
+        return builder;
     }
 
     @Override
