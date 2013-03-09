@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import org.testng.annotations.Test;
@@ -79,18 +80,24 @@ public class StudentImplTest extends AbstractAppUserOwnedObjectTest<StudentImpl>
         checkRemoveSingleEntityToCollection(ClassListImpl.class, "classList", "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
     }
 
+    private ClassList createClassList(final AppUser user, boolean archived) {
+        ClassList cl = new ClassListImpl(user);
+        cl.setArchived(archived);
+        return cl;
+    }
+
     @Test
     public void testGetActiveAndArchivedClassLists() {
         Set<ClassList> archived = new HashSet<ClassList>() {
             {
-                add((ClassList) new ClassListImpl(USER1).setArchived(true));
-                add((ClassList) new ClassListImpl(USER1).setArchived(true));
-                add((ClassList) new ClassListImpl(USER1).setArchived(true));
+                add(createClassList(USER1, true));
+                add(createClassList(USER1, true));
+                add(createClassList(USER1, true));
             }
         };
         Set<ClassList> active = new HashSet<ClassList>() {
             {
-                add((ClassList) new ClassListImpl(USER1).setArchived(false));
+                add(createClassList(USER1, false));
             }
         };
 

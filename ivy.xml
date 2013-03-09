@@ -57,7 +57,7 @@
         <!-- The core server part of Vaadin -->
         <dependency name="vaadin-server" conf="default->default" rev="7.0.1" org="com.vaadin"/>
         <dependency org="com.liferay.portal" name="portal-service" rev="6.0.2"/>
-        <dependency org="javax.servlet" name="servlet-api" rev="2.4"/>
+        <dependency org="javax.servlet" name="servlet-api" rev="2.5"/>
         <!-- Vaadin themes -->
         <dependency name="vaadin-themes" rev="7.0.1" org="com.vaadin"/>
         <!-- Precompiled DefaultWidgetSet -->

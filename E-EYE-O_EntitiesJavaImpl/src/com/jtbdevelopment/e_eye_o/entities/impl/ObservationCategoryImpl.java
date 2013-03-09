@@ -21,9 +21,8 @@ public class ObservationCategoryImpl extends AppUserOwnedObjectImpl implements O
     }
 
     @Override
-    public ObservationCategory setShortName(final String shortName) {
+    public void setShortName(final String shortName) {
         this.shortName = shortName;
-        return this;
     }
 
     @Override
@@ -32,9 +31,8 @@ public class ObservationCategoryImpl extends AppUserOwnedObjectImpl implements O
     }
 
     @Override
-    public ObservationCategory setDescription(final String description) {
+    public void setDescription(final String description) {
         this.description = description;
-        return this;
     }
 
     @Override

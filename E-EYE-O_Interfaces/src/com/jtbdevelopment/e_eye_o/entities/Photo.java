@@ -19,16 +19,16 @@ public interface Photo extends AppUserOwnedObject {
     @NotNull(message = PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR)
     AppUserOwnedObject getPhotoFor();
 
-    Photo setPhotoFor(final AppUserOwnedObject photoFor);
+    void setPhotoFor(final AppUserOwnedObject photoFor);
 
     @NotNull(message = PHOTO_DESCRIPTION_CANNOT_BE_NULL_ERROR)
     @Size(max = MAX_DESCRIPTION_SIZE, message = PHOTO_DESCRIPTION_SIZE_ERROR)
     String getDescription();
 
-    Photo setDescription(String description);
+    void setDescription(String description);
 
     @NotNull(message = PHOTO_TIMESTAMP_CANNOT_BE_NULL_ERROR)
     LocalDateTime getTimestamp();
 
-    Photo setTimestamp(LocalDateTime timestamp);
+    void setTimestamp(LocalDateTime timestamp);
 }

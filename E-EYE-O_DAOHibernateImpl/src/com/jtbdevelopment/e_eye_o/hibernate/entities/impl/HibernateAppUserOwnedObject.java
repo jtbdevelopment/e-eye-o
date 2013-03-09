@@ -27,10 +27,8 @@ public abstract class HibernateAppUserOwnedObject<T extends AppUserOwnedObject> 
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public T setAppUser(final AppUser appUser) {
+    public void setAppUser(final AppUser appUser) {
         wrapped.setAppUser(wrap(appUser));
-        return (T) this;
     }
 
     @Override
@@ -40,9 +38,7 @@ public abstract class HibernateAppUserOwnedObject<T extends AppUserOwnedObject> 
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public T setArchived(final boolean archived) {
+    public void setArchived(final boolean archived) {
         wrapped.setArchived(archived);
-        return (T) this;
     }
 }

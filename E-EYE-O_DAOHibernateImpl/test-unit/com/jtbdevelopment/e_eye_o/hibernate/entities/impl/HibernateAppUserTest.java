@@ -58,9 +58,8 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     public void testSetFirstName() throws Exception {
         context.checking(new Expectations() {{
             one(implAppUser).setFirstName(STRING_VALUE);
-            will(returnValue(implAppUser));
         }});
-        assertSame(hibernateAppUser, hibernateAppUser.setFirstName(STRING_VALUE));
+        hibernateAppUser.setFirstName(STRING_VALUE);
     }
 
     @Test
@@ -76,9 +75,8 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     public void testSetLastName() throws Exception {
         context.checking(new Expectations() {{
             one(implAppUser).setLastName(STRING_VALUE);
-            will(returnValue(implAppUser));
         }});
-        assertSame(hibernateAppUser, hibernateAppUser.setLastName(STRING_VALUE));
+        hibernateAppUser.setLastName(STRING_VALUE);
     }
 
     @Test
@@ -94,9 +92,8 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     public void testSetEmailAddress() throws Exception {
         context.checking(new Expectations() {{
             one(implAppUser).setEmailAddress(STRING_VALUE);
-            will(returnValue(implAppUser));
         }});
-        assertSame(hibernateAppUser, hibernateAppUser.setEmailAddress(STRING_VALUE));
+        hibernateAppUser.setEmailAddress(STRING_VALUE);
     }
 
     @Test
@@ -112,8 +109,7 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     public void testSetLastLogin() throws Exception {
         context.checking(new Expectations() {{
             one(implAppUser).setLastLogin(DATETIME_VALUE);
-            will(returnValue(implAppUser));
         }});
-        assertSame(hibernateAppUser, hibernateAppUser.setLastLogin(DATETIME_VALUE));
+        hibernateAppUser.setLastLogin(DATETIME_VALUE);
     }
 }

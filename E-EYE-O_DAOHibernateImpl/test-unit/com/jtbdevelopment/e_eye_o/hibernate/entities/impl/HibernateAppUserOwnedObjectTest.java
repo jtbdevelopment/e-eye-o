@@ -54,10 +54,9 @@ public class HibernateAppUserOwnedObjectTest extends HibernateAbstractIdObjectTe
         final AppUser au = context.mock(AppUser.class);
         context.checking(new Expectations() {{
             one(impl).setAppUser(with(any(HibernateAppUser.class)));
-            will(returnValue(impl));
         }});
 
-        assertSame(hibernateLocal, hibernateLocal.setAppUser(au));
+        hibernateLocal.setAppUser(au);
     }
 
     @Test
@@ -73,8 +72,7 @@ public class HibernateAppUserOwnedObjectTest extends HibernateAbstractIdObjectTe
     public void testSetArchived() throws Exception {
         context.checking(new Expectations() {{
             one(impl).setArchived(false);
-            will(returnValue(impl));
         }});
-        assertSame(hibernateLocal, hibernateLocal.setArchived(false));
+        hibernateLocal.setArchived(false);
     }
 }

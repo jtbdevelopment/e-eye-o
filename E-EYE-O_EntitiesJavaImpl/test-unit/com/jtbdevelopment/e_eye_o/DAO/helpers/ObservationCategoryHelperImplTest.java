@@ -33,7 +33,7 @@ public class ObservationCategoryHelperImplTest {
         final Map<String, ObservationCategory> shortMap = new HashMap<>();
         final List<ObservationCategory> initialList = new ArrayList<>();
         for (Map.Entry<String, String> entry : ObservationCategoryHelperImpl.NEW_USER_DEFAULT_CATEGORIES.entrySet()) {
-            final ObservationCategory impl = factory.newObservationCategory(user).setShortName(entry.getKey()).setDescription(entry.getValue());
+            final ObservationCategory impl = factory.newObservationCategoryBuilder(user).withShortName(entry.getKey()).withDescription(entry.getValue()).build();
             impl.setId(entry.getKey());
             initialList.add(impl);
             shortMap.put(entry.getKey(), impl);

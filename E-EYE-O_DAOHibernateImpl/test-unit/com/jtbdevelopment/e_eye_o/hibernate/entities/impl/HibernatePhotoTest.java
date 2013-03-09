@@ -61,9 +61,8 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     public void testSetPhotoFor() throws Exception {
         context.checking(new Expectations() {{
             one(implPhoto).setPhotoFor(with(any(HibernateStudent.class)));
-            will(returnValue(implPhoto));
         }});
-        assertSame(hibernatePhoto, hibernatePhoto.setPhotoFor(implStudent));
+        hibernatePhoto.setPhotoFor(implStudent);
     }
 
     @Test
@@ -79,9 +78,8 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     public void testSetDescription() throws Exception {
         context.checking(new Expectations() {{
             one(implPhoto).setDescription(STRING_VALUE);
-            will(returnValue(implPhoto));
         }});
-        assertSame(hibernatePhoto, hibernatePhoto.setDescription(STRING_VALUE));
+        hibernatePhoto.setDescription(STRING_VALUE);
     }
 
     @Test
@@ -97,8 +95,7 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     public void testSetTimestamp() throws Exception {
         context.checking(new Expectations() {{
             one(implPhoto).setTimestamp(LOCALDATETIME_VALUE);
-            will(returnValue(implPhoto));
         }});
-        assertSame(hibernatePhoto, hibernatePhoto.setTimestamp(LOCALDATETIME_VALUE));
+        hibernatePhoto.setTimestamp(LOCALDATETIME_VALUE);
     }
 }

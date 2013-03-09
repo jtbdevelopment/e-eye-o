@@ -22,9 +22,9 @@ public interface AppUserOwnedObject extends IdObject {
     @NotNull(message = APP_USER_CANNOT_BE_NULL_ERROR)
     AppUser getAppUser();
 
-    <T extends AppUserOwnedObject> T setAppUser(final AppUser appUser);
+    void setAppUser(final AppUser appUser);
 
     boolean isArchived();
 
-    <T extends AppUserOwnedObject> T setArchived(boolean archived);
+    void setArchived(boolean archived);
 }

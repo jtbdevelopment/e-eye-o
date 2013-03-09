@@ -39,7 +39,9 @@ public class AppUserOwnedObjectImplTest extends AbstractAppUserOwnedObjectTest<A
         AppUserImpl userCopy = new AppUserImpl();
         userCopy.setId(USER1.getId());
 
-        assertEquals(userCopy, new LocalEntity(USER1).setAppUser(userCopy).getAppUser());
+        final LocalEntity localEntity = new LocalEntity(USER1);
+        localEntity.setAppUser(userCopy);
+        assertEquals(userCopy, localEntity.getAppUser());
     }
 
     @Test(expectedExceptions = InvalidParameterException.class)

@@ -91,16 +91,16 @@ public class LoginView extends VerticalLayout implements View {
                 String login = loginField.getValue();
                 final String password = passwordField.getValue();
                 try {
-                    authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
-                } catch(AuthenticationException e) {
+                    authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
+                } catch (AuthenticationException e) {
                     Notification.show("Failed to login.", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
                 //  TODO
                 login = login + "@test.com";
                 AppUser user = readOnlyDAO.getUser(login);
-                if(user == null) {
-                    readWriteDAO.create(idObjectFactory.newAppUser().setLastName(login).setFirstName(login).setEmailAddress(login));
+                if (user == null) {
+                    readWriteDAO.create(idObjectFactory.newAppUserBuilder().withLastName(login).withFirstName(login).withEmailAddress(login).build());
                     Notification.show("This is embarassing", Notification.Type.ERROR_MESSAGE);
                     return;
                 }

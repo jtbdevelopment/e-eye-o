@@ -9,7 +9,7 @@ import org.joda.time.LocalDateTime;
  * Date: 11/18/12
  * Time: 12:56 AM
  */
-public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo, AppUserOwnedObject {
+public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
     private String description = "";
     private AppUserOwnedObject photoFor;
     private LocalDateTime timestamp = new LocalDateTime();
@@ -25,9 +25,8 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo, AppUserO
     }
 
     @Override
-    public Photo setPhotoFor(final AppUserOwnedObject photoFor) {
+    public void setPhotoFor(final AppUserOwnedObject photoFor) {
         this.photoFor = photoFor;
-        return this;
     }
 
     @Override
@@ -36,9 +35,8 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo, AppUserO
     }
 
     @Override
-    public Photo setDescription(final String description) {
+    public void setDescription(final String description) {
         this.description = description;
-        return this;
     }
 
     @Override
@@ -47,9 +45,8 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo, AppUserO
     }
 
     @Override
-    public Photo setTimestamp(final LocalDateTime timestamp) {
+    public void setTimestamp(final LocalDateTime timestamp) {
         this.timestamp = timestamp;
-        return this;
     }
 
     @Override

@@ -1,14 +1,13 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 
 /**
  * Date: 11/17/12
  * Time: 2:05 PM
  */
-public class ClassListImpl extends AppUserOwnedObjectImpl implements ClassList, AppUserOwnedObject {
+public class ClassListImpl extends AppUserOwnedObjectImpl implements ClassList {
     private String description = "";
 
     ClassListImpl(final AppUser appUser) {
@@ -21,9 +20,8 @@ public class ClassListImpl extends AppUserOwnedObjectImpl implements ClassList, 
     }
 
     @Override
-    public ClassList setDescription(final String description) {
+    public void setDescription(final String description) {
         this.description = description;
-        return this;
     }
 
 

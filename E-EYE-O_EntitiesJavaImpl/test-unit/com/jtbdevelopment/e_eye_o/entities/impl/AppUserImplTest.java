@@ -60,14 +60,16 @@ public class AppUserImplTest extends AbstractIdObjectTest<AppUserImpl> {
     @Test
     public void testGetSetLastLogin() throws Exception {
         DateTime now = new DateTime();
-        final AppUser appUser = new AppUserImpl().setLastLogin(now);
+        final AppUser appUser = new AppUserImpl();
+        appUser.setLastLogin(now);
         assertEquals(now, appUser.getLastLogin());
         validateNotExpectingError(appUser, AppUser.LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR);
     }
 
     @Test
     public void testSetLastLoginNullExceptions() throws Exception {
-        final AppUser appUser = new AppUserImpl().setLastLogin(null);
+        final AppUser appUser = new AppUserImpl();
+        appUser.setLastLogin(null);
         validateExpectingError(appUser, AppUser.LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR);
     }
 }

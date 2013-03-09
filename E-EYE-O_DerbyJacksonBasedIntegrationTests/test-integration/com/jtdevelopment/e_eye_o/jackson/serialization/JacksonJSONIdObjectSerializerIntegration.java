@@ -67,24 +67,24 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
             return;
         }
 
-        appUser1 = factory.newAppUser().setEmailAddress("jtest@test.com").setFirstName("Testy")
-                .setLastName("Tester").setLastLogin(new DateTime(2012, 12, 12, 12, 12, 13));
+        appUser1 = factory.newAppUserBuilder().withEmailAddress("jtest@test.com").withFirstName("Testy")
+                .withLastName("Tester").withLastLogin(new DateTime(2012, 12, 12, 12, 12, 13)).build();
         appUser1 = readWriteDAO.create(appUser1);
-        appUser2 = factory.newAppUser().setEmailAddress("jtest2@test.com").setFirstName("Testier").setLastName("Tester");
+        appUser2 = factory.newAppUserBuilder().withEmailAddress("jtest2@test.com").withFirstName("Testier").withLastName("Tester").build();
         appUser2 = readWriteDAO.create(appUser2);
-        classList1For1 = factory.newClassList(appUser1).setDescription("CL1-1").setAppUser(appUser1);
+        classList1For1 = factory.newClassListBuilder(appUser1).withDescription("CL1-1").withAppUser(appUser1).build();
         classList1For1 = readWriteDAO.create(classList1For1);
-        classList2For1 = factory.newClassList(appUser1).setDescription("CL1-2").setAppUser(appUser1);
+        classList2For1 = factory.newClassListBuilder(appUser1).withDescription("CL1-2").withAppUser(appUser1).build();
         classList2For1 = readWriteDAO.create(classList2For1);
-        classList1For2 = factory.newClassList(appUser1).setDescription("CL2-1").setAppUser(appUser1);
+        classList1For2 = factory.newClassListBuilder(appUser1).withDescription("CL2-1").withAppUser(appUser1).build();
         classList1For2 = readWriteDAO.create(classList1For2);
-        oc1For1 = factory.newObservationCategory(appUser1).setDescription("Description").setShortName("OC-1");
+        oc1For1 = factory.newObservationCategoryBuilder(appUser1).withDescription("Description").withShortName("OC-1").build();
         oc1For1 = readWriteDAO.create(oc1For1);
-        oc2For1 = factory.newObservationCategory(appUser1).setDescription("Description").setShortName("OC-2");
+        oc2For1 = factory.newObservationCategoryBuilder(appUser1).withDescription("Description").withShortName("OC-2").build();
         oc2For1 = readWriteDAO.create(oc2For1);
         student1For1 = factory.newStudentBuilder(appUser1).withLastName("Last1-1").withFirstName("First1-1").addClassList(classList1For1).withArchiveFlag(true).build();
         student1For1 = readWriteDAO.create(student1For1);
-        student2For1 = factory.newStudentBuilder(appUser1).withLastName("Last2-1").withLastName("First2-1").addClassList(classList2For1).build();
+        student2For1 = factory.newStudentBuilder(appUser1).withLastName("Last2-1").withFirstName("First2-1").addClassList(classList2For1).build();
         student2For1 = readWriteDAO.create(student2For1);
         o1ForS1 = factory.newObservation(appUser1).addCategory(oc1For1).setObservationSubject(student1For1)
                 .setComment("Comment").setObservationTimestamp(new LocalDateTime(2013, 1, 18, 15, 12));
@@ -92,11 +92,11 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
         o2ForS1 = factory.newObservation(appUser1).addCategory(oc1For1).setObservationSubject(student1For1)
                 .setFollowUpObservation(o1ForS1).setComment("Comment").setObservationTimestamp(new LocalDateTime(2012, 1, 18, 15, 12));
         o2ForS1 = readWriteDAO.create(o2ForS1);
-        photo1for1 = factory.newPhoto(appUser1).setTimestamp(new LocalDateTime(2011, 11, 11, 11, 11, 11)).setPhotoFor(student1For1).setDescription("Photo1");
+        photo1for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2011, 11, 11, 11, 11, 11)).withPhotoFor(student1For1).withDescription("Photo1").build();
         photo1for1 = readWriteDAO.create(photo1for1);
-        photo2for1 = factory.newPhoto(appUser1).setTimestamp(new LocalDateTime(2012, 12, 12, 12, 12, 12)).setPhotoFor(o2ForS1).setDescription("Photo2");
+        photo2for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2012, 12, 12, 12, 12, 12)).withPhotoFor(o2ForS1).withDescription("Photo2").build();
         photo2for1 = readWriteDAO.create(photo2for1);
-        photo3for1 = factory.newPhoto(appUser1).setTimestamp(new LocalDateTime(2013, 1, 1, 15, 12, 45)).setPhotoFor(classList1For1).setDescription("Photo3");
+        photo3for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2013, 1, 1, 15, 12, 45)).withPhotoFor(classList1For1).withDescription("Photo3").build();
         photo3for1 = readWriteDAO.create(photo3for1);
         buildObjectToExpectedJSONMap();
     }

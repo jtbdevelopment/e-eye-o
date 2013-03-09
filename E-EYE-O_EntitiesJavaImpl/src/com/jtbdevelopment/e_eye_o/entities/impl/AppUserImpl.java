@@ -14,7 +14,6 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
     private DateTime lastLogin = NEVER_LOGGED_IN;
 
     AppUserImpl() {
-
     }
 
     @Override
@@ -23,9 +22,8 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
     }
 
     @Override
-    public AppUser setFirstName(final String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
-        return this;
     }
 
     @Override
@@ -34,9 +32,8 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
     }
 
     @Override
-    public AppUser setLastName(final String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
-        return this;
     }
 
     @Override
@@ -45,9 +42,8 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
     }
 
     @Override
-    public AppUser setEmailAddress(final String emailAddress) {
+    public void setEmailAddress(final String emailAddress) {
         this.emailAddress = emailAddress;
-        return this;
     }
 
     @Override
@@ -56,9 +52,8 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
     }
 
     @Override
-    public AppUser setLastLogin(final DateTime lastLogin) {
+    public void setLastLogin(final DateTime lastLogin) {
         this.lastLogin = lastLogin;
-        return this;
     }
 
     @Override

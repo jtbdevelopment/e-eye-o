@@ -51,17 +51,17 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         if (testUser1 != null) {
             return;
         }
-        testUser1 = rwDAO.create(factory.newAppUser().setFirstName("Testy").setLastName("Tester").setEmailAddress("test@test.com"));
+        testUser1 = rwDAO.create(factory.newAppUserBuilder().withFirstName("Testy").withLastName("Tester").withEmailAddress("test@test.com").build());
         observationCategoryHelper.createDefaultCategoriesForUser(testUser1);
         testOCsForU1 = observationCategoryHelper.getObservationCategoriesAsMap(testUser1);
-        testClassList1ForU1 = rwDAO.create(factory.newClassList(testUser1).setDescription("Test Class List1"));
-        testClassList2ForU1 = rwDAO.create(factory.newClassList(testUser1).setDescription("Test Class List2"));
-        testClassList3ForU1 = rwDAO.create(factory.newClassList(testUser1).setDescription("Test Class List3"));
+        testClassList1ForU1 = rwDAO.create(factory.newClassListBuilder(testUser1).withDescription("Test Class List1").build());
+        testClassList2ForU1 = rwDAO.create(factory.newClassListBuilder(testUser1).withDescription("Test Class List2").build());
+        testClassList3ForU1 = rwDAO.create(factory.newClassListBuilder(testUser1).withDescription("Test Class List3").build());
         Student s = factory.newStudentBuilder(testUser1).addClassList(testClassList1ForU1).withFirstName("Test").withLastName("Student").build();
         testStudentForU1 = rwDAO.create(s);
         testObservationForU1 = rwDAO.create(factory.newObservation(testUser1).setComment("Test Observation").setObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("IDEA")).addCategory(testOCsForU1.get("PHYS")));
 
-        testUser2 = rwDAO.create(factory.newAppUser().setFirstName("Another").setLastName("Tester").setEmailAddress("another@test.com"));
+        testUser2 = rwDAO.create(factory.newAppUserBuilder().withFirstName("Another").withLastName("Tester").withEmailAddress("another@test.com").build());
 
         logger.info("Created Test Tester with ID " + testUser1.getId());
         logger.info("Created Test Tester2 with ID " + testUser2.getId());
@@ -72,7 +72,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         //  Not testing them all, just a few
         boolean exception = false;
         try {
-            rwDAO.create(factory.newAppUser().setFirstName("").setLastName(null).setEmailAddress("INVALID_EMAIL"));
+            rwDAO.create(factory.newAppUserBuilder().withFirstName("").withLastName(null).withEmailAddress("INVALID_EMAIL").build());
         } catch (ConstraintViolationException e) {
             assertEquals(3, e.getConstraintViolations().size());
             logger.info(e.getMessage());
@@ -94,7 +94,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Test
     public void testDuplicateLoginAppUserFails() {
         try {
-            rwDAO.create(factory.newAppUser().setFirstName("Testy").setLastName("Tester").setEmailAddress("test@test.com"));
+            rwDAO.create(factory.newAppUserBuilder().withFirstName("Testy").withLastName("Tester").withEmailAddress("test@test.com").build());
         } catch (Exception e) {
             //  Expected
             return;
@@ -131,7 +131,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testAddCategory() {
-        ObservationCategory newCategory = rwDAO.create(factory.newObservationCategory(testUser1).setShortName("TESTNEW").setDescription("Test New Category"));
+        ObservationCategory newCategory = rwDAO.create(factory.newObservationCategoryBuilder(testUser1).withShortName("TESTNEW").withDescription("Test New Category").build());
         Set<ObservationCategory> categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser1);
         assertTrue(categories.contains(newCategory));
     }
@@ -139,17 +139,17 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Test
     public void testAddDuplicateCategoryCodeFail() {
         ObservationCategory newTest1, newTest2 = null, newTest3;
-        newTest1 = rwDAO.create(factory.newObservationCategory(testUser1).setShortName("TESTDUPE").setDescription("desc 1"));
+        newTest1 = rwDAO.create(factory.newObservationCategoryBuilder(testUser1).withShortName("TESTDUPE").withDescription("desc 1").build());
 
         boolean exception = false;
         try {
-            newTest2 = rwDAO.create(factory.newObservationCategory(testUser1).setShortName("TESTDUPE").setDescription("desc 2"));
+            newTest2 = rwDAO.create(factory.newObservationCategoryBuilder(testUser1).withShortName("TESTDUPE").withDescription("desc 2").build());
         } catch (Exception e) {
             //  Expected
             exception = true;
         }
         assertTrue(exception);
-        newTest3 = rwDAO.create(factory.newObservationCategory(testUser2).setShortName("TESTDUPE").setDescription("desc 1"));
+        newTest3 = rwDAO.create(factory.newObservationCategoryBuilder(testUser2).withShortName("TESTDUPE").withDescription("desc 1").build());
 
         Set<ObservationCategory> categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser1);
         assertTrue(categories.contains(newTest1));
@@ -161,7 +161,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     //  TODO - actual photo
     @Test
     public void testCreatePhotoForStudent() {
-        Photo photo = rwDAO.create(factory.newPhoto(testUser1).setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testStudentForU1));
+        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testStudentForU1).build());
         Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
@@ -174,7 +174,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     //  TODO - actual photo
     @Test
     public void testCreatePhotoForClassList() {
-        Photo photo = rwDAO.create(factory.newPhoto(testUser1).setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testClassList1ForU1));
+        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testClassList1ForU1).build());
         Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
@@ -187,7 +187,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     //  TODO - actual photo
     @Test
     public void testCreatePhotoForObservation() {
-        Photo photo = rwDAO.create(factory.newPhoto(testUser1).setDescription("Create Test").setTimestamp(new LocalDateTime()).setPhotoFor(testObservationForU1));
+        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testObservationForU1).build());
         Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
@@ -199,13 +199,14 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testUpdateArchivePhoto() {
-        Photo photo = rwDAO.create(factory.newPhoto(testUser1).setDescription("UpdateTest").setTimestamp(new LocalDateTime()).setPhotoFor(testStudentForU1));
+        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("UpdateTest").withTimestamp(new LocalDateTime()).withPhotoFor(testStudentForU1).build());
         Set<Photo> activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         Set<Photo> archivePhotos = rwDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
         assertTrue(activePhotos.contains(photo));
         assertFalse(archivePhotos.contains(photo));
 
-        photo.setDescription("Archived").setArchived(true);
+        photo.setDescription("Archived");
+        photo.setArchived(true);
         DateTime originalTS = photo.getModificationTimestamp();
         photo = rwDAO.update(photo);
         assertTrue(originalTS.isBefore(photo.getModificationTimestamp()));
@@ -294,13 +295,13 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testGetModifiedSince() throws InterruptedException {
-        AppUser updateUser = rwDAO.create(factory.newAppUser().setEmailAddress("updateUser@delete.test").setFirstName("delete").setLastName("delete"));
+        AppUser updateUser = rwDAO.create(factory.newAppUserBuilder().withEmailAddress("updateUser@delete.test").withFirstName("delete").withLastName("delete").build());
         DateTime firstTS = new DateTime();
         Thread.sleep(1);
-        ObservationCategory oc = rwDAO.create(factory.newObservationCategory(updateUser).setShortName("X").setDescription("X"));
-        ClassList cl = rwDAO.create(factory.newClassList(updateUser).setDescription("CL"));
+        ObservationCategory oc = rwDAO.create(factory.newObservationCategoryBuilder(updateUser).withShortName("X").withDescription("X").build());
+        ClassList cl = rwDAO.create(factory.newClassListBuilder(updateUser).withDescription("CL").build());
         Student s = rwDAO.create(factory.newStudentBuilder(updateUser).withFirstName("A").withLastName("B").build());
-        Photo p = rwDAO.create(factory.newPhoto(updateUser).setDescription("D").setPhotoFor(s));
+        Photo p = rwDAO.create(factory.newPhotoBuilder(updateUser).withDescription("D").withPhotoFor(s).build());
         Observation o = rwDAO.create(factory.newObservation(updateUser).setComment("T").setObservationSubject(cl));
 
         Set<AppUserOwnedObject> firstSet = rwDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, updateUser, firstTS);
@@ -323,11 +324,11 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testDeletingObjectsCreatesDeletedObjects() throws InterruptedException {
-        AppUser deleteUserThings = rwDAO.create(factory.newAppUser().setEmailAddress("deleteUserThings@delete.test").setFirstName("delete").setLastName("delete"));
-        ObservationCategory oc = rwDAO.create(factory.newObservationCategory(deleteUserThings).setShortName("X").setDescription("X"));
-        ClassList cl = rwDAO.create(factory.newClassList(deleteUserThings).setDescription("CL"));
+        AppUser deleteUserThings = rwDAO.create(factory.newAppUserBuilder().withEmailAddress("deleteUserThings@delete.test").withFirstName("delete").withLastName("delete").build());
+        ObservationCategory oc = rwDAO.create(factory.newObservationCategoryBuilder(deleteUserThings).withShortName("X").withDescription("X").build());
+        ClassList cl = rwDAO.create(factory.newClassListBuilder(deleteUserThings).withDescription("CL").build());
         Student s = rwDAO.create(factory.newStudentBuilder(deleteUserThings).withFirstName("A").withLastName("B").build());
-        Photo p = rwDAO.create(factory.newPhoto(deleteUserThings).setDescription("D").setPhotoFor(s));
+        Photo p = rwDAO.create(factory.newPhotoBuilder(deleteUserThings).withDescription("D").withPhotoFor(s).build());
         Observation o = rwDAO.create(factory.newObservation(deleteUserThings).setComment("T").setObservationSubject(cl));
 
         DateTime baseTime = new DateTime();
@@ -349,11 +350,11 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testDeletingAUser() {
-        AppUser deleteUser1 = rwDAO.create(factory.newAppUser().setEmailAddress("delete1@delete.test").setFirstName("delete").setLastName("delete"));
-        AppUser deleteUser2 = rwDAO.create(factory.newAppUser().setEmailAddress("delete2@delete.test").setFirstName("delete").setLastName("delete"));
+        AppUser deleteUser1 = rwDAO.create(factory.newAppUserBuilder().withEmailAddress("delete1@delete.test").withFirstName("delete").withLastName("delete").build());
+        AppUser deleteUser2 = rwDAO.create(factory.newAppUserBuilder().withEmailAddress("delete2@delete.test").withFirstName("delete").withLastName("delete").build());
         observationCategoryHelper.createDefaultCategoriesForUser(deleteUser1);
         Set<ObservationCategory> deleteCategories = rwDAO.getEntitiesForUser(ObservationCategory.class, deleteUser1);
-        ClassList cl = rwDAO.create(factory.newClassList(deleteUser1).setDescription("delete"));
+        ClassList cl = rwDAO.create(factory.newClassListBuilder(deleteUser1).withDescription("delete").build());
         Student student = factory.newStudentBuilder(deleteUser1).withFirstName("deleteS1").withLastName("deleteS1").addClassList(cl).build();
         Student s1 = rwDAO.create(student);
         student = factory.newStudent(deleteUser1);
@@ -361,7 +362,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         student.setLastName("deleteS2");
         student.addClassList(cl);
         Student s2 = rwDAO.create(student);
-        Photo p = rwDAO.create(factory.newPhoto(deleteUser1).setPhotoFor(cl).setDescription("deletePhoto"));
+        Photo p = rwDAO.create(factory.newPhotoBuilder(deleteUser1).withPhotoFor(cl).withDescription("deletePhoto").build());
         Observation o = rwDAO.create(factory.newObservation(deleteUser1).setObservationSubject(cl).setObservationTimestamp(new LocalDateTime()).addCategories(deleteCategories).setComment("delete"));
         Map<String, Class<? extends IdObject>> idMap = new HashMap<>();
         idMap.put(deleteUser1.getId(), AppUser.class);
@@ -384,7 +385,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testDeletingUserTwiceOK() {
-        AppUser appUser = rwDAO.create(factory.newAppUser().setFirstName("Double").setLastName("Delete").setEmailAddress("delete@double.com"));
+        AppUser appUser = rwDAO.create(factory.newAppUserBuilder().withFirstName("Double").withLastName("Delete").withEmailAddress("delete@double.com").build());
         String id = appUser.getId();
         rwDAO.deleteUser(appUser);
         rwDAO.deleteUser(appUser);
@@ -422,7 +423,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExplicitlyUpdatingADeletedObjectExceptions() {
-        ClassList cl = rwDAO.create(factory.newClassList(testUser2).setDescription("CLTODELETE1"));
+        ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
         rwDAO.delete(cl);
         Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
         assertFalse(deleted.isEmpty());
@@ -433,7 +434,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExplicitlyUpdatingAsListADeletedObjectExceptions() {
-        ClassList cl = rwDAO.create(factory.newClassList(testUser2).setDescription("CLTODELETE1"));
+        ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
         rwDAO.delete(cl);
         Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
         assertFalse(deleted.isEmpty());
@@ -444,7 +445,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExplicitlyDeletingADeletedObjectExceptions() {
-        ClassList cl = rwDAO.create(factory.newClassList(testUser2).setDescription("CLTODELETE1"));
+        ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
         rwDAO.delete(cl);
         Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
         assertFalse(deleted.isEmpty());
@@ -455,7 +456,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExplicitlyDeletingAsListADeletedObjectExceptions() {
-        ClassList cl = rwDAO.create(factory.newClassList(testUser2).setDescription("CLTODELETE1"));
+        ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
         rwDAO.delete(cl);
         Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
         assertFalse(deleted.isEmpty());

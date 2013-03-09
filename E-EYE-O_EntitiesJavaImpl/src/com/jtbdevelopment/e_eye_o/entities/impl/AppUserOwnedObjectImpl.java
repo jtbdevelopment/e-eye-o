@@ -23,13 +23,11 @@ public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements App
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> T setAppUser(final AppUser appUser) {
+    public void setAppUser(final AppUser appUser) {
         if (this.appUser != null && !this.appUser.equals(appUser)) {
             throw new InvalidParameterException("Cannot reassign appuser after assignment");
         }
         this.appUser = appUser;
-        return (T) this;
     }
 
     @Override
@@ -37,9 +35,7 @@ public abstract class AppUserOwnedObjectImpl extends IdObjectImpl implements App
         return archived;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> T setArchived(boolean archived) {
+    public void setArchived(boolean archived) {
         this.archived = archived;
-        return (T) this;
     }
 }

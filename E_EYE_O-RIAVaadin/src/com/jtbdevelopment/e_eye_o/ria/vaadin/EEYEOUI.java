@@ -41,7 +41,8 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         final User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //  TODO
         AppUser appUser = readWriteDAO.getUser(principal.getUsername() + "@test.com");
-        appUser = readWriteDAO.update(appUser.setLastLogin(new DateTime()));
+        appUser.setLastLogin(new DateTime());
+        appUser = readWriteDAO.update(appUser);
         getSession().setAttribute(AppUser.class, appUser);
 
         setSizeFull();

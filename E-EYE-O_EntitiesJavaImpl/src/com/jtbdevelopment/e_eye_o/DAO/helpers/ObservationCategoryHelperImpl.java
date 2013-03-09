@@ -27,7 +27,7 @@ public class ObservationCategoryHelperImpl implements ObservationCategoryHelper 
     public Set<ObservationCategory> createDefaultCategoriesForUser(final AppUser appUser) {
         List<ObservationCategory> defaults = new ArrayList<>(NEW_USER_DEFAULT_CATEGORIES.size());
         for (Map.Entry<String, String> entry : NEW_USER_DEFAULT_CATEGORIES.entrySet()) {
-            defaults.add(objectFactory.newObservationCategory(appUser).setShortName(entry.getKey()).setDescription(entry.getValue()));
+            defaults.add(objectFactory.newObservationCategoryBuilder(appUser).withShortName(entry.getKey()).withDescription(entry.getValue()).build());
         }
         return new HashSet<>(dao.create(defaults));
     }

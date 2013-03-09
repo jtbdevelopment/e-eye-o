@@ -87,10 +87,9 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
         final Set<ClassList> cl = new HashSet<>(Arrays.asList(context.mock(ClassList.class)));
         context.checking(new Expectations() {{
             oneOf(implStudent).setClassLists(with(new IsEqualButNotTheSame<>(cl)));
-            will(returnValue(implStudent));
         }});
 
-        assertSame(hibernateStudent, hibernateStudent.setClassLists(cl));
+        hibernateStudent.setClassLists(cl);
     }
 
     @Test

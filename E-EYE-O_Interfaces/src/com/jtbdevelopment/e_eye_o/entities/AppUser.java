@@ -28,23 +28,23 @@ public interface AppUser extends IdObject {
     @Size(max = MAX_NAME_SIZE, message = APP_USER_FIRST_NAME_SIZE_ERROR)
     String getFirstName();
 
-    AppUser setFirstName(String firstName);
+    void setFirstName(String firstName);
 
     @NotNull(message = LAST_NAME_CANNOT_BE_NULL_ERROR)
     @Size(max = MAX_NAME_SIZE, message = APP_USER_LAST_NAME_SIZE_ERROR)
     String getLastName();
 
-    AppUser setLastName(String lastName);
+    void setLastName(String lastName);
 
     @NotNull(message = EMAIL_CANNOT_BE_NULL_ERROR)
     @Email(message = EMAIL_MUST_BE_A_VALID_FORMAT_ERROR)
     @Size(max = MAX_EMAIL_SIZE, message = APP_USER_EMAIL_SIZE_ERROR)
     String getEmailAddress();
 
-    AppUser setEmailAddress(String emailAddress);
+    void setEmailAddress(String emailAddress);
 
     @NotNull(message = LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR)
     DateTime getLastLogin();
 
-    AppUser setLastLogin(DateTime lastLogin);
+    void setLastLogin(DateTime lastLogin);
 }

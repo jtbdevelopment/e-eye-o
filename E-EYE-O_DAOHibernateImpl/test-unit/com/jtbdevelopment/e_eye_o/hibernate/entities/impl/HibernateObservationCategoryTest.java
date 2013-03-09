@@ -76,9 +76,8 @@ public class HibernateObservationCategoryTest extends HibernateAbstractIdObjectT
     public void testSetShortName() throws Exception {
         context.checking(new Expectations() {{
             one(implOC).setShortName(STRING_VALUE);
-            will(returnValue(implOC));
         }});
-        assertSame(hibernateOC, hibernateOC.setShortName(STRING_VALUE));
+        hibernateOC.setShortName(STRING_VALUE);
     }
 
     @Test
@@ -94,8 +93,7 @@ public class HibernateObservationCategoryTest extends HibernateAbstractIdObjectT
     public void testSetDescription() throws Exception {
         context.checking(new Expectations() {{
             one(implOC).setDescription(STRING_VALUE);
-            will(returnValue(implOC));
         }});
-        assertSame(hibernateOC, hibernateOC.setDescription(STRING_VALUE));
+        hibernateOC.setDescription(STRING_VALUE);
     }
 }

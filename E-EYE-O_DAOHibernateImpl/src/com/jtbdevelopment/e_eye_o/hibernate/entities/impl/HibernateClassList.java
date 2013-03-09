@@ -27,8 +27,7 @@ public class HibernateClassList extends HibernateAppUserOwnedObject<ClassList> i
     }
 
     @Override
-    public ClassList setDescription(final String description) {
+    public void setDescription(final String description) {
         wrapped.setDescription(description);
-        return this;
     }
 }

@@ -59,9 +59,8 @@ public class HibernateClassListTest extends HibernateAbstractIdObjectTest {
         final String desc = "desc";
         context.checking(new Expectations() {{
             one(implClassList).setDescription(desc);
-            will(returnValue(implClassList));
         }});
 
-        assertSame(hibernateClassList, hibernateClassList.setDescription(desc));
+        hibernateClassList.setDescription(desc);
     }
 }

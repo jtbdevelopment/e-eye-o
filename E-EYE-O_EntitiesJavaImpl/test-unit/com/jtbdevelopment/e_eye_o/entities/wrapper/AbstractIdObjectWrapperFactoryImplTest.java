@@ -31,8 +31,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public AppUser setFirstName(final String firstName) {
-            return null;
+        public void setFirstName(final String firstName) {
         }
 
         @Override
@@ -41,8 +40,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public AppUser setLastName(final String lastName) {
-            return null;
+        public void setLastName(final String lastName) {
         }
 
         @Override
@@ -51,8 +49,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public AppUser setEmailAddress(final String emailAddress) {
-            return null;
+        public void setEmailAddress(final String emailAddress) {
         }
 
         @Override
@@ -61,8 +58,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public AppUser setLastLogin(final DateTime lastLogin) {
-            return null;
+        public void setLastLogin(final DateTime lastLogin) {
         }
 
         @Override

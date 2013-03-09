@@ -19,11 +19,11 @@ public interface ObservationCategory extends AppUserOwnedObject {
     @Size(max = MAX_SHORT_NAME_SIZE, message = OBSERVATION_CATEGORY_SHORT_NAME_SIZE_ERROR)
     String getShortName();
 
-    ObservationCategory setShortName(String shortName);
+    void setShortName(String shortName);
 
     @NotEmpty(message = OBSERVATION_CATEGORY_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL)
     @Size(max = MAX_DESCRIPTION_SIZE, message = OBSERVATION_CATEGORY_DESCRIPTION_SIZE_ERROR)
     String getDescription();
 
-    ObservationCategory setDescription(String description);
+    void setDescription(String description);
 }

@@ -17,6 +17,6 @@ public interface ClassList extends AppUserOwnedObject {
     @Size(max = MAX_DESCRIPTION_SIZE, message = CLASS_LIST_DESCRIPTION_SIZE_ERROR)
     String getDescription();
 
-    ClassList setDescription(final String description);
+    void setDescription(final String description);
 
 }

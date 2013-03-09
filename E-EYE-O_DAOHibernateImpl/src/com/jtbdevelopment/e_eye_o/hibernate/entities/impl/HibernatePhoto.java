@@ -30,9 +30,8 @@ public class HibernatePhoto extends HibernateAppUserOwnedObject<Photo> implement
     }
 
     @Override
-    public Photo setPhotoFor(final AppUserOwnedObject photoFor) {
+    public void setPhotoFor(final AppUserOwnedObject photoFor) {
         wrapped.setPhotoFor(wrap(photoFor));
-        return this;
     }
 
     @Override
@@ -42,9 +41,8 @@ public class HibernatePhoto extends HibernateAppUserOwnedObject<Photo> implement
     }
 
     @Override
-    public Photo setDescription(final String description) {
+    public void setDescription(final String description) {
         wrapped.setDescription(description);
-        return this;
     }
 
     @Override
@@ -54,8 +52,7 @@ public class HibernatePhoto extends HibernateAppUserOwnedObject<Photo> implement
     }
 
     @Override
-    public Photo setTimestamp(final LocalDateTime timestamp) {
+    public void setTimestamp(final LocalDateTime timestamp) {
         wrapped.setTimestamp(timestamp);
-        return this;
     }
 }

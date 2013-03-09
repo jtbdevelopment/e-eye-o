@@ -32,7 +32,7 @@ public interface Student extends AppUserOwnedObject {
     @Transient
     Set<ClassList> getArchivedClassLists();
 
-    Student setClassLists(final Set<ClassList> classLists);
+    void setClassLists(final Set<ClassList> classLists);
 
     Student addClassList(final ClassList classList);
 

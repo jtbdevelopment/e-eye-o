@@ -44,9 +44,8 @@ public class HibernateStudent extends HibernateAppUserOwnedObject<Student> imple
     }
 
     @Override
-    public Student setClassLists(final Set<ClassList> classLists) {
+    public void setClassLists(final Set<ClassList> classLists) {
         wrapped.setClassLists(wrap(classLists));
-        return this;
     }
 
     @Override

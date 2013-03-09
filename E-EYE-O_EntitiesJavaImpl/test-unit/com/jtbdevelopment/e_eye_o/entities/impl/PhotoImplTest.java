@@ -51,14 +51,16 @@ public class PhotoImplTest extends AbstractAppUserOwnedObjectTest<PhotoImpl> {
 
     @Test
     public void testValidationOnNullTimestamp() {
-        Photo photo = new PhotoImpl(USER1).setTimestamp(null);
+        Photo photo = new PhotoImpl(USER1);
+        photo.setTimestamp(null);
         validateExpectingError(photo, Photo.PHOTO_TIMESTAMP_CANNOT_BE_NULL_ERROR);
     }
 
     @Test
     public void testSetGetTimestamp() {
         LocalDateTime now = new LocalDateTime();
-        final Photo photo = new PhotoImpl(USER1).setTimestamp(now);
+        final Photo photo = new PhotoImpl(USER1);
+        photo.setTimestamp(now);
         assertEquals(now, photo.getTimestamp());
         validateNotExpectingError(photo, Photo.PHOTO_TIMESTAMP_CANNOT_BE_NULL_ERROR);
     }

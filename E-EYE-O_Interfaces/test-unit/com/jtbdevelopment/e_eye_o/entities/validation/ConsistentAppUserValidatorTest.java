@@ -48,8 +48,10 @@ public class ConsistentAppUserValidatorTest {
         public static LocalEntity createValidLE(AppUser owner) {
             LocalEntity le = new LocalEntity();
             le.setAppUser(owner);
-            le.item1 = new LocalEntity().setAppUser(owner);
-            le.item2 = new LocalEntity().setAppUser(owner);
+            le.item1 = new LocalEntity();
+            le.item1.setAppUser(owner);
+            le.item2 = new LocalEntity();
+            le.item2.setAppUser(owner);
             le.collection1.add(le.item1);
             le.collection1.add(le.item2);
             le.collection2.add(le.item2);
@@ -97,9 +99,8 @@ public class ConsistentAppUserValidatorTest {
 
         @Override
         @SuppressWarnings("unchecked")
-        public <T extends AppUserOwnedObject> T setAppUser(final AppUser appUser) {
+        public void setAppUser(final AppUser appUser) {
             this.appUser = appUser;
-            return (T) this;
         }
 
         @Override
@@ -109,8 +110,7 @@ public class ConsistentAppUserValidatorTest {
 
         @Override
         @SuppressWarnings("unchecked")
-        public <T extends AppUserOwnedObject> T setArchived(final boolean archived) {
-            return (T) this;
+        public void setArchived(final boolean archived) {
         }
 
         @Override
@@ -177,8 +177,10 @@ public class ConsistentAppUserValidatorTest {
 
     @Test
     public void testSpecificErrorMessageGeneratorOwnedObject() {
-        LocalEntity le = new LocalEntity().setAppUser(USER1);
-        LocalEntity oo = new LocalEntity().setAppUser(USER2);
+        LocalEntity le = new LocalEntity();
+        le.setAppUser(USER1);
+        LocalEntity oo = new LocalEntity();
+        oo.setAppUser(USER2);
         assertEquals("LocalEntity["
                 + le.getId()
                 + "] has a LocalEntity["
@@ -194,7 +196,8 @@ public class ConsistentAppUserValidatorTest {
 
     @Test
     public void testSpecificErrorMessageGeneratorUnownedObject() {
-        LocalEntity le = new LocalEntity().setAppUser(USER1);
+        LocalEntity le = new LocalEntity();
+        le.setAppUser(USER1);
         LocalEntity oo = new LocalEntity();
         assertEquals("LocalEntity["
                 + le.getId()
@@ -210,7 +213,8 @@ public class ConsistentAppUserValidatorTest {
     @Test
     public void testAnUnownedObjectPassesValidationRegardlessOfSubObjects() {
         LocalEntity le = LocalEntity.createValidLE(null);
-        le.item2 = new LocalEntity().setAppUser(USER2);
+        le.item2 = new LocalEntity();
+        le.item2.setAppUser(USER2);
 
         assertTrue(check.isValid(le, null));
     }
@@ -228,7 +232,8 @@ public class ConsistentAppUserValidatorTest {
     @Test
     public void testASimpleAppUserMismatch() {
         final LocalEntity le = LocalEntity.createValidLE(USER1);
-        le.item2 = new LocalEntity().setAppUser(USER2);
+        le.item2 = new LocalEntity();
+        le.item2.setAppUser(USER2);
 
         context.checking(new Expectations() {{
             one(validatorContext).disableDefaultConstraintViolation();
@@ -244,8 +249,10 @@ public class ConsistentAppUserValidatorTest {
     @Test
     public void testASimpleMultipleAppUserMismatch() {
         final LocalEntity le = LocalEntity.createValidLE(USER1);
-        le.item2 = new LocalEntity().setAppUser(USER2);
-        le.item1 = new LocalEntity().setAppUser(USER2);
+        le.item2 = new LocalEntity();
+        le.item2.setAppUser(USER2);
+        le.item1 = new LocalEntity();
+        le.item1.setAppUser(USER2);
 
         context.checking(new Expectations() {{
             one(validatorContext).disableDefaultConstraintViolation();
@@ -263,7 +270,8 @@ public class ConsistentAppUserValidatorTest {
     @Test
     public void testASetContainingMismatch() {
         final LocalEntity le = LocalEntity.createValidLE(USER1);
-        final LocalEntity le3 = new LocalEntity().setAppUser(USER2);
+        final LocalEntity le3 = new LocalEntity();
+        le3.setAppUser(USER2);
         le.collection1.add(le3);
 
         context.checking(new Expectations() {{
@@ -281,7 +289,8 @@ public class ConsistentAppUserValidatorTest {
     public void testAnExceptionHandling() {
         final LocalEntity le = LocalEntity.createValidLE(USER1);
         final AppUser USER3 = context.mock(AppUser.class);
-        final LocalEntity le3 = new LocalEntity().setAppUser(USER3);
+        final LocalEntity le3 = new LocalEntity();
+        le3.setAppUser(USER3);
         le.collection1.add(le3);
         final RuntimeException re = new RuntimeException();
         context.checking(new Expectations() {{

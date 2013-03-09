@@ -29,9 +29,8 @@ public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppU
     }
 
     @Override
-    public AppUser setFirstName(final String firstName) {
+    public void setFirstName(final String firstName) {
         wrapped.setFirstName(firstName);
-        return this;
     }
 
     @Override
@@ -41,9 +40,8 @@ public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppU
     }
 
     @Override
-    public AppUser setLastName(final String lastName) {
+    public void setLastName(final String lastName) {
         wrapped.setLastName(lastName);
-        return this;
     }
 
     @Override
@@ -53,9 +51,8 @@ public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppU
     }
 
     @Override
-    public AppUser setEmailAddress(final String emailAddress) {
+    public void setEmailAddress(final String emailAddress) {
         wrapped.setEmailAddress(emailAddress);
-        return this;
     }
 
     @Override
@@ -66,8 +63,7 @@ public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppU
     }
 
     @Override
-    public AppUser setLastLogin(final DateTime lastLogin) {
+    public void setLastLogin(final DateTime lastLogin) {
         wrapped.setLastLogin(lastLogin);
-        return this;
     }
 }

@@ -52,10 +52,9 @@ public class StudentImpl extends AppUserOwnedObjectImpl implements Student {
     }
 
     @Override
-    public Student setClassLists(final Set<ClassList> classLists) {
+    public void setClassLists(final Set<ClassList> classLists) {
         this.classLists.clear();
         this.classLists.addAll(classLists);
-        return this;
     }
 
     @Override

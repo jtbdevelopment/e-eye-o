@@ -43,9 +43,8 @@ public class HibernateObservationCategory extends HibernateAppUserOwnedObject<Ob
     }
 
     @Override
-    public ObservationCategory setShortName(final String shortName) {
+    public void setShortName(final String shortName) {
         wrapped.setShortName(shortName);
-        return this;
     }
 
     @Override
@@ -55,9 +54,8 @@ public class HibernateObservationCategory extends HibernateAppUserOwnedObject<Ob
     }
 
     @Override
-    public ObservationCategory setDescription(final String description) {
+    public void setDescription(final String description) {
         wrapped.setDescription(description);
-        return this;
     }
 }
 
