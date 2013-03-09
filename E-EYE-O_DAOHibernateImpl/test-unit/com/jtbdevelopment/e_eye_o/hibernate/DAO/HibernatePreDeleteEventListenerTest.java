@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.DeletedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.utilities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import org.hibernate.Session;
 import org.hibernate.event.spi.EventSource;
