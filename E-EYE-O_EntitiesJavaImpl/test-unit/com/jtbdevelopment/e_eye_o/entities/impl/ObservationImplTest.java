@@ -90,8 +90,10 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
 
     @Test
     public void testSetFollowUpObservation() throws Exception {
-        ObservationImpl o1 = new ObservationImpl(USER1).setId("1");
-        ObservationImpl o2 = new ObservationImpl(USER1).setId("2");
+        ObservationImpl o1 = new ObservationImpl(USER1);
+        o1.setId("1");
+        ObservationImpl o2 = new ObservationImpl(USER1);
+        o2.setId("2");
         assertNull(o1.getFollowUpObservation());
         o1.setFollowUpObservation(o2);
         assertEquals(o2, o1.getFollowUpObservation());
@@ -100,7 +102,8 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
 
     @Test
     public void testFollowUpCannotPointToItself() throws Exception {
-        ObservationImpl o = new ObservationImpl(USER1).setId("SELF");
+        ObservationImpl o = new ObservationImpl(USER1);
+        o.setId("SELF");
         assertNull(o.getFollowUpObservation());
         o.setFollowUpObservation(o);
         assertEquals(o, o.getFollowUpObservation());
@@ -109,8 +112,10 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
 
     @Test
     public void testFollowUpAppUserConsistent() throws Exception {
-        ObservationImpl o1 = new ObservationImpl(USER1).setId("1");
-        ObservationImpl o2 = new ObservationImpl(USER2).setId("2");
+        ObservationImpl o1 = new ObservationImpl(USER1);
+        o1.setId("1");
+        ObservationImpl o2 = new ObservationImpl(USER2);
+        o2.setId("2");
         o1.setFollowUpObservation(o2);
         assertEquals(o2, o1.getFollowUpObservation());
         validateExpectingErrors(o1, new String[]{ConsistentAppUserValidator.getGeneralErrorMessage(o1), ConsistentAppUserValidator.getSpecificErrorMessage(o1, o2)});

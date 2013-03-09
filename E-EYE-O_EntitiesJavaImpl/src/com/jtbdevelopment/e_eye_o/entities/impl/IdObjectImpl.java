@@ -38,13 +38,11 @@ public abstract class IdObjectImpl implements IdObject {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T extends IdObject> T setId(final String id) {
+    public void setId(final String id) {
         if (StringUtils.hasLength(this.id) && !this.id.equals(id)) {
             throw new IllegalStateException("Cannot re-assign id after assignment");
         }
         this.id = id;
-        return (T) this;
     }
 
     @Override
@@ -53,10 +51,8 @@ public abstract class IdObjectImpl implements IdObject {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
+    public void setModificationTimestamp(final DateTime modificationTimestamp) {
         this.modificationTimestamp = modificationTimestamp;
-        return (T) this;
     }
 
     @Override

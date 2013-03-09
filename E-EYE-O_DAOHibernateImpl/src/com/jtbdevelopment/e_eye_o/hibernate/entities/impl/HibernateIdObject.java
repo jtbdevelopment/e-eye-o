@@ -101,10 +101,8 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
+    public void setModificationTimestamp(final DateTime modificationTimestamp) {
         wrapped.setModificationTimestamp(modificationTimestamp);
-        return (T) this;
     }
 
     @Override
@@ -113,10 +111,8 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
         return wrapped.getViewableDescription();
     }
 
-    @SuppressWarnings("unchecked")
-    public T setId(final String id) {
+    public void setId(final String id) {
         wrapped.setId(id);
-        return (T) this;
     }
 
     protected static <OO extends IdObject> OO wrap(OO entity) {

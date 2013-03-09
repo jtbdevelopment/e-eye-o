@@ -1,17 +1,17 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.reflection;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
+import javax.annotation.Nullable;
+import java.beans.PropertyDescriptor;
 import java.beans.Transient;
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Date: 1/28/13
@@ -37,65 +37,34 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
     }
 
     @Override
-    public <T extends IdObject> Method getSetMethod(final Class<T> entityType, final String attribute, final Class valueType) {
-        try {
-            return entityType.getMethod("set" + StringUtils.capitalize(attribute), valueType);
-        } catch (NoSuchMethodException e) {
-            if (AppUserOwnedObject.class.isAssignableFrom(valueType)) {
-                try {
-                    return entityType.getMethod("set" + StringUtils.capitalize(attribute), AppUserOwnedObject.class);
-                } catch (NoSuchMethodException e2) {
-                    throw new RuntimeException(e2);
-                }
-            }
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public <T extends IdObject> Method getIsOrGetMethod(final Class<T> entityType, final String attribute) {
-        try {
-            return entityType.getMethod("is" + StringUtils.capitalize(attribute));
-        } catch (NoSuchMethodException e) {
-            //
-        }
-        return getGetMethod(entityType, attribute);
-    }
-
-    protected <T extends IdObject> Method getGetMethod(final Class<T> entityType, final String attribute) {
-        try {
-            return entityType.getMethod("get" + StringUtils.capitalize(attribute));
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public <T extends IdObject> List<Method> getAllGetters(final Class<T> entityType) {
+    public <T extends IdObject> Collection<Method> getAllGetters(final Class<T> entityType) {
 
         List<Method> methods = new LinkedList<>();
-        Class<T> iface = getIdObjectInterfaceForClass(entityType);
-        for (Method method : iface.getMethods()) {
-            if (method.isAnnotationPresent(Transient.class)) {
-                continue;
+        Class iface = getIdObjectInterfaceForClass(entityType);
+        while (iface != null) {
+            for (PropertyDescriptor property : PropertyUtils.getPropertyDescriptors(iface)) {
+                methods.add(property.getReadMethod());
             }
-
-            String methodName = method.getName();
-            if (methodName.startsWith(GET) || methodName.startsWith(IS)) {
-                methods.add(method);
+            final Class<?>[] interfaces = iface.getInterfaces();
+            if (interfaces != null && interfaces.length == 1) {
+                iface = interfaces[0];
+            } else {
+                iface = null;
             }
-
         }
-        return getSortedMethods(methods);
-    }
 
-    private List<Method> getSortedMethods(final List<Method> methods) {
         Collections.sort(methods, new Comparator<Method>() {
             @Override
             public int compare(final Method o1, final Method o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         });
-        return methods;
+
+        return Collections2.filter(methods, new Predicate<Method>() {
+            @Override
+            public boolean apply(@Nullable final Method input) {
+                return input != null && !input.isAnnotationPresent(Transient.class) && !"class".equals(input.getName());
+            }
+        });
     }
 }

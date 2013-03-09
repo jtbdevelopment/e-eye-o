@@ -157,11 +157,10 @@ public class HibernateIdObjectTest {
         final DateTime time = new DateTime();
         context.checking(new Expectations() {{
             one(idObjectImpl).setModificationTimestamp(time);
-            will(returnValue(idObjectImpl));
         }});
 
         final LocalIdObjectWrapper localIdObjectWrapper = new LocalIdObjectWrapper(idObjectImpl);
-        assertSame(localIdObjectWrapper, localIdObjectWrapper.setModificationTimestamp(time));
+        localIdObjectWrapper.setModificationTimestamp(time);
     }
 
     @Test
@@ -185,7 +184,6 @@ public class HibernateIdObjectTest {
         final String id = "123";
         context.checking(new Expectations() {{
             one(idObjectImpl).setId(id);
-            will(returnValue(idObjectImpl));
         }});
         new LocalIdObjectWrapper(idObjectImpl).setId(id);
     }

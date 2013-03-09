@@ -30,7 +30,7 @@ public interface Observation extends AppUserOwnedObject {
     @NotNull(message = OBSERVATION_OBSERVATION_SUBJECT_CANNOT_BE_NULL_ERROR)
     AppUserOwnedObject getObservationSubject();
 
-    Observation setObservationSubject(final AppUserOwnedObject observationSubject);
+    void setObservationSubject(final AppUserOwnedObject observationSubject);
 
     @NotNull(message = OBSERVATION_OBSERVATION_TIMESTAMP_CANNOT_BE_NULL_ERROR)
     LocalDateTime getObservationTimestamp();

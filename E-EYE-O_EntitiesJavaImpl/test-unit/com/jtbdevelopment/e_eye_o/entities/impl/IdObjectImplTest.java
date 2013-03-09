@@ -38,7 +38,8 @@ public class IdObjectImplTest extends AbstractIdObjectTest<IdObjectImplTest.IdOb
     @Test
     public void testModificationTimestampSet() {
         final DateTime dateTime = new DateTime().minusHours(1);
-        IdObjectExtends local = new IdObjectExtends().setModificationTimestamp(dateTime);
+        IdObjectExtends local = new IdObjectExtends();
+        local.setModificationTimestamp(dateTime);
 
         assertEquals(dateTime, local.getModificationTimestamp());
     }

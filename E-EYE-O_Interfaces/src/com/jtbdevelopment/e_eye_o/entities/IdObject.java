@@ -27,12 +27,12 @@ public interface IdObject {
     @NotEmpty(message = ID_OBJECT_ID_MAY_NOT_BE_EMPTY_ERROR)
     String getId();
 
-    <T extends IdObject> T setId(final String id);
+    void setId(final String id);
 
     @NotNull
     DateTime getModificationTimestamp();
 
-    <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp);
+    void setModificationTimestamp(final DateTime modificationTimestamp);
 
     @Transient
     String getViewableDescription();

@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 import com.google.common.base.Strings;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.impl.reflection.IdObjectInterfaceResolverImpl;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.testng.annotations.Test;
 
 import javax.validation.ConstraintViolation;
@@ -11,7 +11,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
@@ -26,7 +25,6 @@ import static org.testng.Assert.assertTrue;
  */
 @Test
 public class AbstractIdObjectTest<T extends IdObject> {
-    protected static final IdObjectInterfaceResolverImpl resolver = new IdObjectInterfaceResolverImpl();
     protected static final String BLANK = "";
     protected static final String GENERALLY_ACCEPTABLE_VALUE = "A Value";
     protected static final String NULL = null;
@@ -67,11 +65,9 @@ public class AbstractIdObjectTest<T extends IdObject> {
 
     private void checkStringSetGetsAndValidate(final String attribute, boolean blanksOK, final String validationError) {
         try {
-            Method setter = getSetMethod(attribute, String.class);
-            Method getter = getIsOrGetMethod(attribute);
-            checkStringSetGetValidateSingleValue(getter, setter, GENERALLY_ACCEPTABLE_VALUE, false, validationError);
-            checkStringSetGetValidateSingleValue(getter, setter, BLANK, !blanksOK, validationError);
-            checkStringSetGetValidateSingleValue(getter, setter, NULL, true, validationError);
+            checkStringSetGetValidateSingleValue(attribute, GENERALLY_ACCEPTABLE_VALUE, false, validationError);
+            checkStringSetGetValidateSingleValue(attribute, BLANK, !blanksOK, validationError);
+            checkStringSetGetValidateSingleValue(attribute, NULL, true, validationError);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -79,18 +75,16 @@ public class AbstractIdObjectTest<T extends IdObject> {
 
     protected void checkStringSizeValidation(final String attribute, final String tooBigValue, String sizeError) {
         try {
-            Method setter = getSetMethod(attribute, String.class);
-            Method getter = getIsOrGetMethod(attribute);
-            checkStringSetGetValidateSingleValue(getter, setter, tooBigValue, true, sizeError);
+            checkStringSetGetValidateSingleValue(attribute, tooBigValue, true, sizeError);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected void checkStringSetGetValidateSingleValue(final Method getter, final Method setter, final String value, final boolean expectingError, final String validationError) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    protected void checkStringSetGetValidateSingleValue(final String attribute, final String value, final boolean expectingError, final String validationError) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         T o = newDefaultInstance();
-        setter.invoke(o, value);
-        assertEquals(value, getter.invoke(o));
+        PropertyUtils.setSimpleProperty(o, attribute, value);
+        assertEquals(value, PropertyUtils.getSimpleProperty(o, attribute));
         if (!expectingError) {
             validateNotExpectingError(o, validationError);
         } else {
@@ -141,24 +135,14 @@ public class AbstractIdObjectTest<T extends IdObject> {
 
     protected void checkBooleanDefaultAndSetGet(final String attribute, final boolean defaultValue) {
         try {
-            Method setter = getSetMethod(attribute, boolean.class);
-            Method getter = getIsOrGetMethod(attribute);
             T o = newDefaultInstance();
-            assertEquals(defaultValue, getter.invoke(o));
-            setter.invoke(o, !defaultValue);
-            assertEquals(!defaultValue, getter.invoke(o));
-            setter.invoke(o, defaultValue);
-            assertEquals(defaultValue, getter.invoke(o));
+            assertEquals(defaultValue, PropertyUtils.getSimpleProperty(o, attribute));
+            PropertyUtils.setSimpleProperty(o, attribute, !defaultValue);
+            assertEquals(!defaultValue, PropertyUtils.getSimpleProperty(o, attribute));
+            PropertyUtils.setSimpleProperty(o, attribute, defaultValue);
+            assertEquals(defaultValue, PropertyUtils.getSimpleProperty(o, attribute));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    protected Method getIsOrGetMethod(final String attribute) throws NoSuchMethodException {
-        return resolver.getIsOrGetMethod(entityUnderTest, attribute);
-    }
-
-    protected Method getSetMethod(final String attribute, final Class paramType) throws NoSuchMethodException {
-        return resolver.getSetMethod(entityUnderTest, attribute, paramType);
     }
 }

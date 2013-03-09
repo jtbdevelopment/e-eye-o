@@ -33,6 +33,7 @@
     <orderEntry type="library" exported="" name="org.apache.derby:derby:10.9.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="org.testng:testng:6.8" level="project" />
     <orderEntry type="library" scope="TEST" name="org.springframework:spring-test:3.2.0.RELEASE" level="project" />
+    <orderEntry type="library" name="commons-beanutils-1.8.3" level="project" />
   </component>
 </module>
 

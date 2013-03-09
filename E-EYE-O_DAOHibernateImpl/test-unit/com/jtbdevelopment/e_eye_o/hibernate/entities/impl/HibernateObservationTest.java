@@ -66,9 +66,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
         final ClassList cl = context.mock(ClassList.class);
         context.checking(new Expectations() {{
             one(implObservation).setObservationSubject(with(any(HibernateClassList.class)));
-            will(returnValue(implObservation));
         }});
-        assertSame(hibernateObservation, hibernateObservation.setObservationSubject(cl));
+        hibernateObservation.setObservationSubject(cl);
     }
 
     @Test

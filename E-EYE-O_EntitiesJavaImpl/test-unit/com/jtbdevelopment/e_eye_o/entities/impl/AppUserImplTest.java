@@ -4,8 +4,6 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
-import java.lang.reflect.Method;
-
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -40,11 +38,10 @@ public class AppUserImplTest extends AbstractIdObjectTest<AppUserImpl> {
 
     @Test
     public void testSetEmailAddress() throws Exception {
-        Method setter = getSetMethod("emailAddress", String.class);
-        Method getter = getIsOrGetMethod("emailAddress");
-        checkStringSetGetValidateSingleValue(getter, setter, VALID_EMAIL, false, AppUser.EMAIL_MUST_BE_A_VALID_FORMAT_ERROR);
-        checkStringSetGetValidateSingleValue(getter, setter, NULL, true, AppUser.EMAIL_CANNOT_BE_NULL_ERROR);
-        checkStringSetGetValidateSingleValue(getter, setter, INVALID_EMAIL, true, AppUser.EMAIL_MUST_BE_A_VALID_FORMAT_ERROR);
+        final String emailAddress = "emailAddress";
+        checkStringSetGetValidateSingleValue(emailAddress, VALID_EMAIL, false, AppUser.EMAIL_MUST_BE_A_VALID_FORMAT_ERROR);
+        checkStringSetGetValidateSingleValue(emailAddress, NULL, true, AppUser.EMAIL_CANNOT_BE_NULL_ERROR);
+        checkStringSetGetValidateSingleValue(emailAddress, INVALID_EMAIL, true, AppUser.EMAIL_MUST_BE_A_VALID_FORMAT_ERROR);
     }
 
     @Test

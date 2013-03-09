@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.entities.validation;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.joda.time.DateTime;
@@ -120,9 +119,8 @@ public class ConsistentAppUserValidatorTest {
 
         @Override
         @SuppressWarnings("unchecked")
-        public <T extends IdObject> T setId(final String id) {
+        public void setId(final String id) {
             this.id = id;
-            return (T) this;
         }
 
         @Override
@@ -131,8 +129,7 @@ public class ConsistentAppUserValidatorTest {
         }
 
         @Override
-        public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
-            return null;
+        public void setModificationTimestamp(final DateTime modificationTimestamp) {
         }
 
         @Override

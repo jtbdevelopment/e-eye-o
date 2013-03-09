@@ -385,7 +385,6 @@ public class HibernateReadWriteDAOTest {
             one(query1).list();
             will(returnValue(relatedStudents));
             one(studentLoaded).removeClassList(loaded);
-            will(returnValue(studentLoaded));
             one(session).update(studentLoaded);
         }});
         createStandardDeleteExpectations(wrapped, loaded, relatedPhotos, relatedObservations);

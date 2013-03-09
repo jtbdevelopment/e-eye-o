@@ -7,10 +7,9 @@ import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImpl;
 import org.testng.annotations.Test;
 
 import java.beans.Transient;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -151,36 +150,6 @@ public class IdObjectInterfaceResolverImplTest {
     }
 
     @Test
-    public void testCanGetARegularGetter() throws InvocationTargetException, IllegalAccessException {
-        LocalOneImpl oneImpl = new LocalOneImpl();
-        oneImpl.intValue = Integer.MAX_VALUE;
-        Method method = resolver.getIsOrGetMethod(oneImpl.getClass(), "intValue");
-        assertEquals(oneImpl.intValue, method.invoke(oneImpl));
-    }
-
-    @Test
-    public void testCanGetARegularGetterAlreadyCapitalized() throws InvocationTargetException, IllegalAccessException {
-        LocalOneImpl oneImpl = new LocalOneImpl();
-        oneImpl.intValue = Integer.MIN_VALUE;
-        Method method = resolver.getIsOrGetMethod(oneImpl.getClass(), "IntValue");
-        assertEquals(oneImpl.intValue, method.invoke(oneImpl));
-    }
-
-    @Test(expectedExceptions = RuntimeException.class)
-    public void testGettingNonExistentGetterThrowsException() {
-        LocalOneImpl oneImpl = new LocalOneImpl();
-        resolver.getIsOrGetMethod(oneImpl.getClass(), "BadGetter");
-    }
-
-    @Test
-    public void testGettingIsGetterWorks() throws InvocationTargetException, IllegalAccessException {
-        LocalOneImpl oneImpl = new LocalOneImpl();
-        oneImpl.boolValue = !oneImpl.boolValue;
-        Method method = resolver.getIsOrGetMethod(oneImpl.getClass(), "booleanValue");
-        assertEquals(oneImpl.boolValue, method.invoke(oneImpl));
-    }
-
-    @Test
     public void testGettingAllGetters() {
         Set<String> expected = new HashSet<String>() {{
             add("getModificationTimestamp");
@@ -191,7 +160,7 @@ public class IdObjectInterfaceResolverImplTest {
             add("getObjectValue");
             add("getId");
         }};
-        List<Method> getters = resolver.getAllGetters(LocalOneImpl.class);
+        Collection<Method> getters = resolver.getAllGetters(LocalOneImpl.class);
         Set<String> returned = new HashSet<>();
         for (Method getter : getters) {
             returned.add(getter.getName());
@@ -199,57 +168,5 @@ public class IdObjectInterfaceResolverImplTest {
         assertEquals(expected, returned);
     }
 
-    @Test
-    public void tesGettingSetterNonObject() throws InvocationTargetException, IllegalAccessException {
-        boolean value = true;
-        LocalOneImpl oneImpl = new LocalOneImpl();
-        Method method = resolver.getSetMethod(oneImpl.getClass(), "booleanValue", boolean.class);
-        method.invoke(oneImpl, value);
-        assertEquals(value, oneImpl.boolValue);
-    }
-
-    @Test
-    public void tesGettingSetterObject() throws InvocationTargetException, IllegalAccessException {
-        Object value = Integer.parseInt("5");
-        LocalOneImpl oneImpl = new LocalOneImpl();
-        Method method = resolver.getSetMethod(oneImpl.getClass(), "objectValue", Object.class);
-        method.invoke(oneImpl, value);
-        assertSame(value, oneImpl.objectValue);
-    }
-
-    @Test
-    public void testGettingAppUserOwnedObjectViaSubclass() throws InvocationTargetException, IllegalAccessException {
-        LocalThreeImpl value = new LocalThreeImpl();
-        LocalOneImpl oneImpl = new LocalOneImpl();
-        Method method = resolver.getSetMethod(oneImpl.getClass(), "appUserOwnedObject", LocalThree.class);
-        method.invoke(oneImpl, value);
-        assertSame(value, oneImpl.appUserOwnedObject);
-    }
-
-    @Test(expectedExceptions = RuntimeException.class)
-    public void testGettingBadAppUserOwnedObjectViaSubclass() throws InvocationTargetException, IllegalAccessException {
-        LocalThreeImpl value = new LocalThreeImpl();
-        LocalOneImpl oneImpl = new LocalOneImpl();
-        Method method = resolver.getSetMethod(oneImpl.getClass(), "noAppUserOwnedObject", LocalThree.class);
-        method.invoke(oneImpl, value);
-        assertSame(value, oneImpl.appUserOwnedObject);
-    }
-
-    @Test
-    public void tesGettingSetterCollection() throws InvocationTargetException, IllegalAccessException {
-        Set<String> value = new HashSet<String>() {{
-            add("test1");
-            add("test2");
-        }};
-        LocalOneImpl oneImpl = new LocalOneImpl();
-        Method method = resolver.getSetMethod(oneImpl.getClass(), "stringValues", Set.class);
-        method.invoke(oneImpl, value);
-        assertSame(value, oneImpl.stringValues);
-    }
-
-    @Test(expectedExceptions = RuntimeException.class)
-    public void tesGettingSetterBadParamType() throws InvocationTargetException, IllegalAccessException {
-        resolver.getSetMethod(LocalOneImpl.class, "booleanValue", int.class);
-    }
 }
 

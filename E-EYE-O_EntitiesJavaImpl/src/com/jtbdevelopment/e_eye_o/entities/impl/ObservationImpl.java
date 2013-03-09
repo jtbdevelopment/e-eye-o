@@ -38,9 +38,8 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     }
 
     @Override
-    public Observation setObservationSubject(final AppUserOwnedObject observationSubject) {
+    public void setObservationSubject(final AppUserOwnedObject observationSubject) {
         this.observationSubject = observationSubject;
-        return this;
     }
 
     @Override

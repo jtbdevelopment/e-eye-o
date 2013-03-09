@@ -67,8 +67,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public <T extends IdObject> T setId(final String id) {
-            return null;
+        public void setId(final String id) {
         }
 
         @Override
@@ -77,8 +76,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
-            return null;
+        public void setModificationTimestamp(final DateTime modificationTimestamp) {
         }
 
         @Override
@@ -113,8 +111,8 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public <T extends IdObject> T setId(final String id) {
-            return wrapped.setId(id);
+        public void setId(final String id) {
+            wrapped.setId(id);
         }
 
         @Override
@@ -123,8 +121,8 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
-            return wrapped.setModificationTimestamp(modificationTimestamp);
+        public void setModificationTimestamp(final DateTime modificationTimestamp) {
+            wrapped.setModificationTimestamp(modificationTimestamp);
         }
 
         @Override
@@ -181,8 +179,8 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public <T extends IdObject> T setId(final String id) {
-            return wrapped.setId(id);
+        public void setId(final String id) {
+            wrapped.setId(id);
         }
 
         @Override
@@ -191,8 +189,8 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public <T extends IdObject> T setModificationTimestamp(final DateTime modificationTimestamp) {
-            return wrapped.setModificationTimestamp(modificationTimestamp);
+        public void setModificationTimestamp(final DateTime modificationTimestamp) {
+            wrapped.setModificationTimestamp(modificationTimestamp);
         }
 
         @Override

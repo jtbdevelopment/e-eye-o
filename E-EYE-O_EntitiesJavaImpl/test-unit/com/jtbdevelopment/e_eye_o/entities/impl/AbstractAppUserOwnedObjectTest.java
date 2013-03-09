@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.validation.ConsistentAppUserValidator;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Constructor;
@@ -21,8 +22,16 @@ import static org.testng.Assert.*;
  */
 public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extends AbstractIdObjectTest<T> {
 
-    protected static final AppUser USER1 = new AppUserImpl().setId("USER1");
-    protected static final AppUser USER2 = new AppUserImpl().setId("USER2");
+    protected static final AppUser USER1;
+    protected static final AppUser USER2;
+
+    static {
+        USER1 = new AppUserImpl();
+        USER1.setId("USER1");
+        USER2 = new AppUserImpl();
+        USER2.setId("USER2");
+    }
+
     public static final String ADD = "add";
     public static final String REMOVE = "remove";
     public static final String IMPL = "Impl";
@@ -78,24 +87,21 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
                                                                      final String nullValueError
     ) {
         try {
-            Method setter = getSetMethod(collectionName, Set.class);
-            Method getter = getIsOrGetMethod(collectionName);
-
             T entity = newDefaultInstance();
             entity.setAppUser(USER1);
-            Set<C> resultSet = (Set<C>) getter.invoke(entity);
+            Set<C> resultSet = (Set<C>) PropertyUtils.getSimpleProperty(entity, collectionName);
             assertTrue(resultSet.isEmpty());
 
             Set<C> newSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
-            setter.invoke(entity, newSet);
-            resultSet = (Set<C>) getter.invoke(entity);
+            PropertyUtils.setProperty(entity, collectionName, newSet);
+            resultSet = (Set<C>) PropertyUtils.getSimpleProperty(entity, collectionName);
             assertTrue(resultSet.containsAll(newSet));
             assertTrue(newSet.containsAll(resultSet));
             validateNotExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity)});
 
             newSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
-            setter.invoke(entity, newSet);
-            resultSet = (Set<C>) getter.invoke(entity);
+            PropertyUtils.setProperty(entity, collectionName, newSet);
+            resultSet = (Set<C>) PropertyUtils.getSimpleProperty(entity, collectionName);
             assertTrue(resultSet.containsAll(newSet));
             assertTrue(newSet.containsAll(resultSet));
             validateNotExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity)});
@@ -109,20 +115,18 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
                                                                                    final String collectionName,
                                                                                    final String nullValueError) {
         try {
-            Method setter = getSetMethod(collectionName, Set.class);
             Method adder = getAddMethod(collectionName, Collection.class);
-            Method getter = getIsOrGetMethod(collectionName);
 
             T entity = newDefaultInstance();
             entity.setAppUser(USER1);
-            Set<C> resultSet = (Set<C>) getter.invoke(entity);
+            Set<C> resultSet = (Set<C>) PropertyUtils.getSimpleProperty(entity, collectionName);
             assertTrue(resultSet.isEmpty());
             Set<C> firstSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
-            setter.invoke(entity, firstSet);
+            PropertyUtils.setSimpleProperty(entity, collectionName, firstSet);
 
             Set<C> secondSet = getSetOfFor(collectionEntity, USER1, random.nextInt(5));
             adder.invoke(entity, secondSet);
-            resultSet = (Set<C>) getter.invoke(entity);
+            resultSet = (Set<C>) PropertyUtils.getSimpleProperty(entity, collectionName);
             assertEquals(firstSet.size() + secondSet.size(), resultSet.size());
             assertTrue(resultSet.containsAll(firstSet));
             assertTrue(resultSet.containsAll(secondSet));
@@ -139,14 +143,13 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
                                                                                    final String nullValueError) {
         try {
             Method adder = getAddMethod(singleName, collectionEntity);
-            Method getter = getIsOrGetMethod(collectionName);
 
             T entity = newDefaultInstance();
             entity.setAppUser(USER1);
 
             C ownedObject = getSingleOfFor(collectionEntity, USER1);
             adder.invoke(entity, ownedObject);
-            Set<C> resultSet = (Set<C>) getter.invoke(entity);
+            Set<C> resultSet = (Set<C>) PropertyUtils.getSimpleProperty(entity, collectionName);
             assertEquals(1, resultSet.size());
             assertTrue(resultSet.contains(ownedObject));
             validateNotExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity)});
@@ -163,7 +166,6 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
         try {
             Method adder = getAddMethod(singleName, collectionEntity);
             Method remover = getRemoveMethod(singleName, collectionEntity);
-            Method getter = getIsOrGetMethod(collectionName);
 
             T entity = newDefaultInstance();
             entity.setAppUser(USER1);
@@ -172,13 +174,13 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
             C ownedObject2 = getSingleOfFor(collectionEntity, USER1);
             adder.invoke(entity, ownedObject1);
             adder.invoke(entity, ownedObject2);
-            Set<C> resultSet = (Set<C>) getter.invoke(entity);
+            Set<C> resultSet = (Set<C>) PropertyUtils.getSimpleProperty(entity, collectionName);
             assertEquals(2, resultSet.size());
             assertTrue(resultSet.contains(ownedObject1));
             assertTrue(resultSet.contains(ownedObject2));
 
             remover.invoke(entity, ownedObject1);
-            resultSet = (Set<C>) getter.invoke(entity);
+            resultSet = (Set<C>) PropertyUtils.getSimpleProperty(entity, collectionName);
             assertEquals(1, resultSet.size());
             assertTrue(resultSet.contains(ownedObject2));
             validateNotExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity)});
@@ -201,8 +203,7 @@ public class AbstractAppUserOwnedObjectTest<T extends AppUserOwnedObject> extend
 
             newSet.add(null);
 
-            Method setter = getSetMethod(collectionName, Set.class);
-            setter.invoke(entity, newSet);
+            PropertyUtils.setSimpleProperty(entity, collectionName, newSet);
             validateExpectingErrors(entity, new String[]{nullValueError, ConsistentAppUserValidator.getGeneralErrorMessage(entity), ConsistentAppUserValidator.getSpecificErrorMessage(entity, misMatchObject)});
 
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {

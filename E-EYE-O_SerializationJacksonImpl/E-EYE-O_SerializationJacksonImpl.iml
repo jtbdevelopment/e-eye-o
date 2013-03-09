@@ -18,6 +18,7 @@
     <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
     <orderEntry type="library" exported="" name="org.springframework:spring-context:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="org.jmock:jmock:2.5.1" level="project" />
+    <orderEntry type="library" name="commons-beanutils-1.8.3" level="project" />
   </component>
 </module>
 
