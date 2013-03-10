@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Reindeer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -32,7 +31,6 @@ public class ToDoView extends VerticalLayout implements View {
         setSizeFull();
 
         addComponent(toDoComponent);
-        setStyleName(Reindeer.LAYOUT_BLUE);
     }
 
     @Override

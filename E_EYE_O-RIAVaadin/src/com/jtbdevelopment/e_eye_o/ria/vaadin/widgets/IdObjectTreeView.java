@@ -94,6 +94,9 @@ public class IdObjectTreeView extends CustomComponent {
             @Override
             public void valueChange(final Property.ValueChangeEvent event) {
                 Object itemId = tree.getValue();
+                if (itemId == null) {
+                    return;
+                }
                 Item item = tree.getItem(itemId);
                 TreeSelectionChanged publishEvent = new TreeSelectionChanged();
                 publishEvent.setEntityId((String) item.getItemProperty(IdObjectTreeContainer.ENTITY_ID).getValue());

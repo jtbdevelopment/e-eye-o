@@ -8,7 +8,6 @@
     <global-method-security secured-annotations="enabled"/>
 
     <http auto-config="true">
-        <intercept-url pattern="/E-EYE-O/UIDL/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/E-EYE-O/Login/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/VAADIN/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/**" access="ROLE_USER, ROLE_ADMIN"/>

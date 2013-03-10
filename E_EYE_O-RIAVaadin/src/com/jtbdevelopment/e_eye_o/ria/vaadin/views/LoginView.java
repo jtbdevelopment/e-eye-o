@@ -9,7 +9,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Reindeer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -120,8 +119,6 @@ public class LoginView extends VerticalLayout implements View {
         horizontalLayout.addComponent(registerLink);
         Link forgotPasswordLink = new Link("Forgot Password?", new ExternalResource("#!" + ToDoView.VIEW_NAME));
         horizontalLayout.addComponent(forgotPasswordLink);
-
-        setStyleName(Reindeer.LAYOUT_BLUE);
     }
 
     @Override
