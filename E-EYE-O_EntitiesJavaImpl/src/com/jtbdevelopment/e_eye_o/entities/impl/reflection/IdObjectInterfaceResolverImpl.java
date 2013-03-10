@@ -1,13 +1,10 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.reflection;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
 import java.beans.PropertyDescriptor;
 import java.beans.Transient;
 import java.lang.reflect.Method;
@@ -37,34 +34,31 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
     }
 
     @Override
-    public <T extends IdObject> Collection<Method> getAllGetters(final Class<T> entityType) {
-
-        List<Method> methods = new LinkedList<>();
-        Class iface = getIdObjectInterfaceForClass(entityType);
-        while (iface != null) {
-            for (PropertyDescriptor property : PropertyUtils.getPropertyDescriptors(iface)) {
-                methods.add(property.getReadMethod());
+    public <T extends IdObject> Collection<Map.Entry<String, Class>> getAllGetters(final Class<T> entityType) {
+        Map<String, Class> properties = new HashMap<>(20);
+        Class idObjectInterface = getIdObjectInterfaceForClass(entityType);
+        while (idObjectInterface != null) {
+            for (PropertyDescriptor property : PropertyUtils.getPropertyDescriptors(idObjectInterface)) {
+                Method read = property.getReadMethod();
+                if (read != null && !"class".equals(read.getName()) && !read.isAnnotationPresent(Transient.class)) {
+                    properties.put(property.getName(), property.getPropertyType());
+                }
             }
-            final Class<?>[] interfaces = iface.getInterfaces();
+            final Class<?>[] interfaces = idObjectInterface.getInterfaces();
             if (interfaces != null && interfaces.length == 1) {
-                iface = interfaces[0];
+                idObjectInterface = interfaces[0];
             } else {
-                iface = null;
+                idObjectInterface = null;
             }
         }
 
-        Collections.sort(methods, new Comparator<Method>() {
+        List<Map.Entry<String, Class>> properyList = new LinkedList<>(properties.entrySet());
+        Collections.sort(properyList, new Comparator<Map.Entry<String, Class>>() {
             @Override
-            public int compare(final Method o1, final Method o2) {
-                return o1.getName().compareTo(o2.getName());
+            public int compare(final Map.Entry<String, Class> o1, final Map.Entry<String, Class> o2) {
+                return o1.getKey().compareTo(o2.getKey());
             }
         });
-
-        return Collections2.filter(methods, new Predicate<Method>() {
-            @Override
-            public boolean apply(@Nullable final Method input) {
-                return input != null && !input.isAnnotationPresent(Transient.class) && !"class".equals(input.getName());
-            }
-        });
+        return properyList;
     }
 }

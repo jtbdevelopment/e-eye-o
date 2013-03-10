@@ -4,13 +4,11 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.impl.AppUserOwnedObjectImpl;
 import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImpl;
+import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import java.beans.Transient;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertSame;
@@ -149,23 +147,51 @@ public class IdObjectInterfaceResolverImplTest {
         assertSame(LocalThree.class, resolver.getIdObjectInterfaceForClass(LocalThreeImpl.class));
     }
 
+    private static class MyEntry implements Map.Entry<String, Class> {
+        private String key;
+        private Class value;
+
+        public MyEntry(final String key, final Class value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public Class getValue() {
+            return value;
+        }
+
+        @Override
+        public Class setValue(final Class value) {
+            Class oldValue = value;
+            this.value = value;
+            return oldValue;
+        }
+    }
+
     @Test
     public void testGettingAllGetters() {
-        Set<String> expected = new HashSet<String>() {{
-            add("getModificationTimestamp");
-            add("getAppUserOwnedObject");
-            add("isBooleanValue");
-            add("getStringValues");
-            add("getIntValue");
-            add("getObjectValue");
-            add("getId");
+        List<Map.Entry<String, Class>> expected = new LinkedList<Map.Entry<String, Class>>() {{
+            add(new MyEntry("appUserOwnedObject", AppUserOwnedObject.class));
+            add(new MyEntry("booleanValue", boolean.class));
+            add(new MyEntry("id", String.class));
+            add(new MyEntry("intValue", int.class));
+            add(new MyEntry("modificationTimestamp", DateTime.class));
+            add(new MyEntry("objectValue", Object.class));
+            add(new MyEntry("stringValues", Set.class));
         }};
-        Collection<Method> getters = resolver.getAllGetters(LocalOneImpl.class);
-        Set<String> returned = new HashSet<>();
-        for (Method getter : getters) {
-            returned.add(getter.getName());
+        Collection<Map.Entry<String, Class>> getters = resolver.getAllGetters(LocalOneImpl.class);
+        List<Map.Entry<String, Class>> returned = new LinkedList<>(getters);
+        assertEquals(expected.size(), returned.size());
+        for (int i = 0; i < returned.size(); ++i) {
+            assertEquals(expected.get(i).getKey(), returned.get(i).getKey());
+            assertEquals(expected.get(i).getValue(), returned.get(i).getValue());
         }
-        assertEquals(expected, returned);
     }
 
 }

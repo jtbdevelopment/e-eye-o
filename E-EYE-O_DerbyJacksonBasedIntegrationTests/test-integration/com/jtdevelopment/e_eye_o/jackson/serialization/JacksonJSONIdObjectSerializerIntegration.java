@@ -163,10 +163,10 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"description\" : \"CL1-1\"," + newline +
                     "  \"id\" : \"" + classList1For1.getId() + "\"," + newline +
-                    "  \"modificationTimestamp\" : " + classList1For1.getModificationTimestamp().getMillis() + "," + newline +
-                    "  \"archived\" : false" + newline +
+                    "  \"modificationTimestamp\" : " + classList1For1.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(classList2For1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ClassList\"," + newline +
@@ -174,10 +174,10 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"description\" : \"CL1-2\"," + newline +
                     "  \"id\" : \"" + classList2For1.getId() + "\"," + newline +
-                    "  \"modificationTimestamp\" : " + classList2For1.getModificationTimestamp().getMillis() + "," + newline +
-                    "  \"archived\" : false" + newline +
+                    "  \"modificationTimestamp\" : " + classList2For1.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(classList1For2, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ClassList\"," + newline +
@@ -185,10 +185,10 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"description\" : \"CL2-1\"," + newline +
                     "  \"id\" : \"" + classList1For2.getId() + "\"," + newline +
-                    "  \"modificationTimestamp\" : " + classList1For2.getModificationTimestamp().getMillis() + "," + newline +
-                    "  \"archived\" : false" + newline +
+                    "  \"modificationTimestamp\" : " + classList1For2.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(oc1For1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ObservationCategory\"," + newline +
@@ -196,11 +196,11 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"description\" : \"Description\"," + newline +
                     "  \"id\" : \"" + oc1For1.getId() + "\"," + newline +
                     "  \"modificationTimestamp\" : " + oc1For1.getModificationTimestamp().getMillis() + "," + newline +
-                    "  \"shortName\" : \"OC-1\"," + newline +
-                    "  \"archived\" : false" + newline +
+                    "  \"shortName\" : \"OC-1\"" + newline +
                     "}");
             put(oc2For1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ObservationCategory\"," + newline +
@@ -208,11 +208,11 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"description\" : \"Description\"," + newline +
                     "  \"id\" : \"" + oc2For1.getId() + "\"," + newline +
                     "  \"modificationTimestamp\" : " + oc2For1.getModificationTimestamp().getMillis() + "," + newline +
-                    "  \"shortName\" : \"OC-2\"," + newline +
-                    "  \"archived\" : false" + newline +
+                    "  \"shortName\" : \"OC-2\"" + newline +
                     "}");
             put(student1For1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Student\"," + newline +
@@ -220,6 +220,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : true," + newline +
                     "  \"classLists\" : [ {" + newline +
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ClassList\"," + newline +
                     "    \"id\" : \"" + classList1For1.getId() + "\"" + newline +
@@ -227,8 +228,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "  \"firstName\" : \"First1-1\"," + newline +
                     "  \"id\" : \"" + student1For1.getId() + "\"," + newline +
                     "  \"lastName\" : \"Last1-1\"," + newline +
-                    "  \"modificationTimestamp\" : " + student1For1.getModificationTimestamp().getMillis() + "," + newline +
-                    "  \"archived\" : true" + newline +
+                    "  \"modificationTimestamp\" : " + student1For1.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(student2For1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Student\"," + newline +
@@ -236,6 +236,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"classLists\" : [ {" + newline +
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ClassList\"," + newline +
                     "    \"id\" : \"" + classList2For1.getId() + "\"" + newline +
@@ -243,8 +244,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "  \"firstName\" : \"First2-1\"," + newline +
                     "  \"id\" : \"" + student2For1.getId() + "\"," + newline +
                     "  \"lastName\" : \"Last2-1\"," + newline +
-                    "  \"modificationTimestamp\" : " + student2For1.getModificationTimestamp().getMillis() + "," + newline +
-                    "  \"archived\" : false" + newline +
+                    "  \"modificationTimestamp\" : " + student2For1.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(o1ForS1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Observation\"," + newline +
@@ -252,11 +252,13 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"categories\" : [ {" + newline +
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ObservationCategory\"," + newline +
                     "    \"id\" : \"" + oc1For1.getId() + "\"" + newline +
                     "  } ]," + newline +
                     "  \"comment\" : \"Comment\"," + newline +
+                    "  \"followUpNeeded\" : false," + newline +
                     "  \"followUpObservation\" : {" + newline +
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Observation\"," + newline +
                     "    \"id\" : null" + newline +
@@ -269,8 +271,6 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"id\" : \"" + student1For1.getId() + "\"" + newline +
                     "  }," + newline +
                     "  \"observationTimestamp\" : [ 2013, 1, 18, 15, 12, 0, 0 ]," + newline +
-                    "  \"archived\" : false," + newline +
-                    "  \"followUpNeeded\" : false," + newline +
                     "  \"significant\" : false" + newline +
                     "}");
             put(o2ForS1, "{" + newline +
@@ -279,11 +279,13 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"categories\" : [ {" + newline +
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ObservationCategory\"," + newline +
                     "    \"id\" : \"" + oc1For1.getId() + "\"" + newline +
                     "  } ]," + newline +
                     "  \"comment\" : \"Comment\"," + newline +
+                    "  \"followUpNeeded\" : false," + newline +
                     "  \"followUpObservation\" : {" + newline +
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Observation\"," + newline +
                     "    \"id\" : \"" + o1ForS1.getId() + "\"" + newline +
@@ -296,8 +298,6 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"id\" : \"" + student1For1.getId() + "\"" + newline +
                     "  }," + newline +
                     "  \"observationTimestamp\" : [ 2012, 1, 18, 15, 12, 0, 0 ]," + newline +
-                    "  \"archived\" : false," + newline +
-                    "  \"followUpNeeded\" : false," + newline +
                     "  \"significant\" : false" + newline +
                     "}");
             put(photo1for1, "{" + newline +
@@ -306,6 +306,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"description\" : \"Photo1\"," + newline +
                     "  \"id\" : \"" + photo1for1.getId() + "\"," + newline +
                     "  \"modificationTimestamp\" : " + photo1for1.getModificationTimestamp().getMillis() + "," + newline +
@@ -313,8 +314,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Student\"," + newline +
                     "    \"id\" : \"" + student1For1.getId() + "\"" + newline +
                     "  }," + newline +
-                    "  \"timestamp\" : [ 2011, 11, 11, 11, 11, 11, 0 ]," + newline +
-                    "  \"archived\" : false" + newline +
+                    "  \"timestamp\" : [ 2011, 11, 11, 11, 11, 11, 0 ]" + newline +
                     "}");
             put(photo2for1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Photo\"," + newline +
@@ -322,6 +322,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"description\" : \"Photo2\"," + newline +
                     "  \"id\" : \"" + photo2for1.getId() + "\"," + newline +
                     "  \"modificationTimestamp\" : " + photo2for1.getModificationTimestamp().getMillis() + "," + newline +
@@ -329,8 +330,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Observation\"," + newline +
                     "    \"id\" : \"" + o2ForS1.getId() + "\"" + newline +
                     "  }," + newline +
-                    "  \"timestamp\" : [ 2012, 12, 12, 12, 12, 12, 0 ]," + newline +
-                    "  \"archived\" : false" + newline +
+                    "  \"timestamp\" : [ 2012, 12, 12, 12, 12, 12, 0 ]" + newline +
                     "}");
             put(photo3for1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Photo\"," + newline +
@@ -338,6 +338,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.AppUser\"," + newline +
                     "    \"id\" : \"" + appUser1.getId() + "\"" + newline +
                     "  }," + newline +
+                    "  \"archived\" : false," + newline +
                     "  \"description\" : \"Photo3\"," + newline +
                     "  \"id\" : \"" + photo3for1.getId() + "\"," + newline +
                     "  \"modificationTimestamp\" : " + photo3for1.getModificationTimestamp().getMillis() + "," + newline +
@@ -345,8 +346,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.ClassList\"," + newline +
                     "    \"id\" : \"" + classList1For1.getId() + "\"" + newline +
                     "  }," + newline +
-                    "  \"timestamp\" : [ 2013, 1, 1, 15, 12, 45, 0 ]," + newline +
-                    "  \"archived\" : false" + newline +
+                    "  \"timestamp\" : [ 2013, 1, 1, 15, 12, 45, 0 ]" + newline +
                     "}");
         }};
     }

@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin;
 
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.LoginView;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.ToDoView;
-import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 @Theme(Reindeer.THEME_NAME)
 @SuppressWarnings("unused")
-@PreserveOnRefresh
 public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
     @Autowired
     private LoginView loginView;

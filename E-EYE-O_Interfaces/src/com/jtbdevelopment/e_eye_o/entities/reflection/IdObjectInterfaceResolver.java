@@ -3,8 +3,8 @@ package com.jtbdevelopment.e_eye_o.entities.reflection;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import org.springframework.cache.annotation.Cacheable;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Date: 1/28/13
@@ -23,5 +23,5 @@ public interface IdObjectInterfaceResolver {
      * Returns sorted list of getters
      */
     @Cacheable("idObjectGetMethods")
-    <T extends IdObject> Collection<Method> getAllGetters(final Class<T> entityType);
+    <T extends IdObject> Collection<Map.Entry<String, Class>> getAllGetters(final Class<T> entityType);
 }
