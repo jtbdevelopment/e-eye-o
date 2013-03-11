@@ -1,15 +1,17 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.MainPageComposite;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TitleBarComposite;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.WorkAreaComposite;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.events.LogoutEvent;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Runo;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -23,7 +25,7 @@ import org.springframework.stereotype.Component;
  */
 @Component(value = "eeyeoUI")
 @Scope("prototype")
-@Theme(Runo.THEME_NAME)
+@Theme("eeyeo")
 @SuppressWarnings("unused")
 @PreserveOnRefresh
 public class EEYEOUI extends EEYEOErrorHandlingUI {
@@ -33,20 +35,19 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
     @Autowired
     private IdObjectFactory idObjectFactory;
 
-    //@Autowired
-    //private TitleBarComposite titleBarComposite;
+    private final EventBus eventBus;
 
-    //@Autowired
-    //private WorkAreaComposite workAreaComposite;
+    public EEYEOUI() {
+        eventBus = new EventBus();
+    }
 
     @Override
     protected void init(final VaadinRequest request) {
         super.init(request);
+        eventBus.register(this);
         final User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //  TODO
         AppUser appUser = readWriteDAO.getUser(principal.getUsername() + "@test.com");
-        appUser.setLastLogin(new DateTime());
-        appUser = readWriteDAO.update(appUser);
         getSession().setAttribute(AppUser.class, appUser);
 
         setSizeFull();
@@ -57,10 +58,16 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         setContent(outer);
 
         outer.addComponent(new TitleBarComposite(appUser));
-        final WorkAreaComposite c = new WorkAreaComposite(readWriteDAO, idObjectFactory, appUser);
+        final MainPageComposite c = new MainPageComposite(readWriteDAO, idObjectFactory, eventBus);
         outer.addComponent(c);
         outer.setExpandRatio(c, 1.0f);
+    }
 
-        getSession().setAttribute(AppUser.class, appUser);
+    @Subscribe
+    public void logoutEventHandler(final LogoutEvent event) {
+        AppUser appUser = getSession().getAttribute(AppUser.class);
+        appUser.setLastLogin(new DateTime());
+        readWriteDAO.update(appUser);
+        getPage().setLocation("/j_spring_security_logout");
     }
 }

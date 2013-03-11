@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="filteringtable-0.7.1.v7">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/filteringtable-0.7.1.v7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/filteringtable-0.7.1.v7.jar!/" />
+    </SOURCES>
+  </library>
+</component>

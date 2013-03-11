@@ -1,0 +1,42 @@
+@import "../runo/runo.scss";
+
+//@import "../base/base.scss";
+
+@mixin eeyeo {
+  @include runo;
+//@include base;
+
+  .v-ui {
+    background: #b0c4de;
+  }
+
+  .v-label-sidetabs {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0px;
+    padding: 10px;
+    color: black;
+    float: left;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+  }
+
+  .v-label-blank-sidetabs {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0px;
+    padding: 10px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+  }
+
+  .v-label-selected-sidetabs {
+    background: #00008b;
+    color: #fff;
+  }
+
+  .v-label-sidetabs:hover {
+    background: #0000cd;
+    color: #fff;
+  }
+}

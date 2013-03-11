@@ -5,7 +5,6 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.views.ToDoView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component(value = "eeyeoLoginUI")
 @Scope("prototype")
-@Theme(Runo.THEME_NAME)
+@Theme("eeyeo")
 @SuppressWarnings("unused")
 public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
     @Autowired

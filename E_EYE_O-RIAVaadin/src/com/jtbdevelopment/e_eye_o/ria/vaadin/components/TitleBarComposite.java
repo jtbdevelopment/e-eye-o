@@ -1,10 +1,10 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.vaadin.server.ExternalResource;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Runo;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 
 /**
  * Date: 3/5/13
@@ -32,6 +32,8 @@ public class TitleBarComposite extends CustomComponent {
         // the main layout and components will be created here
         mainLayout = new HorizontalLayout();
         mainLayout.setSizeFull();
+        mainLayout.setMargin(true);
+        mainLayout.setSpacing(true);
 
         Label welcomeLabel = new Label("Welcome " + appUser.getViewableDescription());
         welcomeLabel.setWidth(null);
@@ -44,18 +46,6 @@ public class TitleBarComposite extends CustomComponent {
         mainLayout.addComponent(appLabel);
         mainLayout.setComponentAlignment(appLabel, Alignment.MIDDLE_CENTER);
         mainLayout.setExpandRatio(appLabel, 0.5f);
-
-        Button settingsButton = new Button("Settings");
-        settingsButton.setStyleName(Runo.BUTTON_LINK);
-        settingsButton.setIcon(new ThemeResource("../runo/icons/16/settings.png"));
-        mainLayout.addComponent(settingsButton);
-        mainLayout.setComponentAlignment(settingsButton, Alignment.MIDDLE_CENTER);
-        mainLayout.setExpandRatio(settingsButton, 0.2f);
-
-        Link logout = new Link("Logout", new ExternalResource("/j_spring_security_logout"));
-        mainLayout.addComponent(logout);
-        mainLayout.setComponentAlignment(logout, Alignment.MIDDLE_RIGHT);
-
     }
 
 }
