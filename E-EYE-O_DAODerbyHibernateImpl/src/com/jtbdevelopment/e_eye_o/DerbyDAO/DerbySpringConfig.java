@@ -16,7 +16,7 @@ import java.util.Properties;
 @Configuration
 @ImportResource(value = "classpath*:spring-context.xml")
 public class DerbySpringConfig {
-    public final static String DEFAULT_DATABASE = "EEYEODB";
+    public final static String DEFAULT_DATABASE = "C:/DEV/e-eye-o/EEYEODB";
     public final static String DATABASE_NAME = "derbyDatabaseName";
     public final static String CREATE_FLAG = "derbyCreateDatabase";
     public final static String DEFAULT_CREATE = "create";

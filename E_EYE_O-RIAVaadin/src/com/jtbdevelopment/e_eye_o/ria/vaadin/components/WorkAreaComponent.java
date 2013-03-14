@@ -62,7 +62,7 @@ public class WorkAreaComponent extends CustomComponent {
             mainLayout.removeComponent((Component) childComponent);
         }
         if (SideTabComponent.IdObjectSideTabs.Students.equals(event.getEntityType())) {
-            mainLayout.addComponent(new StudentsWorkArea(readWriteDAO, idObjectFactory, getSession().getAttribute(AppUser.class)));
+            mainLayout.addComponent(new StudentsWorkArea(readWriteDAO, idObjectFactory, eventBus, getSession().getAttribute(AppUser.class)));
         }
     }
 }

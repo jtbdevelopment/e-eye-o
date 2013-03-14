@@ -100,7 +100,7 @@ public class LoginView extends VerticalLayout implements View {
                 AppUser user = readOnlyDAO.getUser(login);
                 if (user == null) {
                     readWriteDAO.create(idObjectFactory.newAppUserBuilder().withLastName(login).withFirstName(login).withEmailAddress(login).build());
-                    Notification.show("This is embarassing", Notification.Type.ERROR_MESSAGE);
+                    Notification.show("This is embarrassing", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
                 SecurityContextHolder.getContext().setAuthentication(authentication);
