@@ -5,8 +5,6 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
-import javafx.util.converter.BigDecimalStringConverter;
-import javafx.util.converter.BigIntegerStringConverter;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,11 +100,7 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
     }
 
     private void handleFloat(final JsonParser parser, final IdObject returnObject, final Class fieldType, final String fieldName) throws IllegalAccessException, InvocationTargetException, IOException, NoSuchMethodException {
-        if (BigDecimal.class.isAssignableFrom(fieldType)) {
-            assignValue(returnObject, fieldName, new BigDecimalStringConverter().fromString(parser.getValueAsString()));
-        } else {
-            assignValue(returnObject, fieldName, parser.getValueAsDouble());
-        }
+        assignValue(returnObject, fieldName, parser.getValueAsDouble());
     }
 
     private void handleBoolean(final JsonParser parser, final IdObject returnObject, final String fieldName) throws IllegalAccessException, InvocationTargetException, IOException, NoSuchMethodException {
@@ -116,8 +110,6 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
     private void handleInteger(final JsonParser parser, final IdObject returnObject, final Class fieldType, final String fieldName) throws IllegalAccessException, InvocationTargetException, IOException, NoSuchMethodException {
         if (DateTime.class.isAssignableFrom(fieldType)) {
             assignValue(returnObject, fieldName, new DateTime(parser.getValueAsLong()));
-        } else if (BigInteger.class.isAssignableFrom(fieldType)) {
-            assignValue(returnObject, fieldName, new BigIntegerStringConverter().fromString(parser.getValueAsString()));
         } else {
             if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)) {
                 assignValue(returnObject, fieldName, parser.getValueAsLong());
