@@ -9,6 +9,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -79,6 +80,8 @@ public class LoginView extends VerticalLayout implements View {
         form.setComponentAlignment(passwordField, Alignment.TOP_CENTER);
 
         Button loginButton = new Button("Login");
+        loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        loginButton.addStyleName(Runo.BUTTON_DEFAULT);
         form.addComponent(loginButton);
         form.setComponentAlignment(loginButton, Alignment.TOP_CENTER);
         loginButton.addStyleName("primary");
@@ -123,6 +126,6 @@ public class LoginView extends VerticalLayout implements View {
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent event) {
-
+        getUI().setFocusedComponent(loginField);
     }
 }
