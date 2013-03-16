@@ -11,6 +11,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.events.LogoutEvent;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.VerticalLayout;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +55,14 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
 
         VerticalLayout outer = new VerticalLayout();
         outer.setSizeFull();
-        outer.setMargin(true);
-        setContent(outer);
+        outer.setMargin(new MarginInfo(true, true, true, false));
 
         outer.addComponent(new TitleBarComposite(appUser));
         final MainPageComposite c = new MainPageComposite(readWriteDAO, idObjectFactory, eventBus);
         outer.addComponent(c);
         outer.setExpandRatio(c, 1.0f);
+
+        setContent(outer);
     }
 
     @Subscribe

@@ -9,6 +9,7 @@ import com.vaadin.ui.Label;
 public class BlankSideTab extends Label {
 
     public BlankSideTab() {
-        addStyleName("blank-sidetab");
+        super(".");
+        addStyleName("blank-sidetabs");
     }
 }

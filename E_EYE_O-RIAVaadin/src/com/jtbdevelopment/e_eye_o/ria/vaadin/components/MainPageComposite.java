@@ -41,11 +41,11 @@ public class MainPageComposite extends CustomComponent {
         setSizeFull();
         // the main layout and components will be created here
         mainLayout = new HorizontalSplitPanel();
-        mainLayout.setSplitPosition(8);
+        mainLayout.setSplitPosition(7);
         mainLayout.setSizeFull();
         mainLayout.setStyleName(Runo.SPLITPANEL_SMALL);
 
-        mainLayout.setFirstComponent(new SideTabComponent(readWriteDAO, idObjectFactory, eventBus));
+        mainLayout.setFirstComponent(new SideTabComponent(eventBus));
         mainLayout.setSecondComponent(new WorkAreaComponent(eventBus, readWriteDAO, idObjectFactory));
     }
 }
