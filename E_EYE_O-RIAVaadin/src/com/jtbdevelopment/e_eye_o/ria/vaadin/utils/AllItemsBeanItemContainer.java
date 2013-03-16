@@ -8,6 +8,9 @@ import java.util.Collection;
 /**
  * Date: 3/16/13
  * Time: 4:56 PM
+ * <p/>
+ * Because the built in container only lets you access the viewable size (after filters applied)
+ * Not useful if you want to base size decisions on potential items.
  */
 public class AllItemsBeanItemContainer<T extends IdObject> extends BeanItemContainer<T> {
 
