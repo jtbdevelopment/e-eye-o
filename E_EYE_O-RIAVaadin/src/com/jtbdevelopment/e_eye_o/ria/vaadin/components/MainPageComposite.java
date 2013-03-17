@@ -4,22 +4,13 @@ import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalSplitPanel;
-import com.vaadin.ui.themes.Runo;
+import com.vaadin.ui.HorizontalLayout;
 
 /**
  * Date: 3/6/13
  * Time: 12:13 AM
  */
 public class MainPageComposite extends CustomComponent {
-
-    private HorizontalSplitPanel mainLayout;
-
-    private ReadWriteDAO readWriteDAO;
-
-    private IdObjectFactory idObjectFactory;
-
-    private final EventBus eventBus;
 
     /**
      * The constructor should first build the main layout, set the
@@ -29,23 +20,19 @@ public class MainPageComposite extends CustomComponent {
      * visual editor.
      */
     public MainPageComposite(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
-        eventBus.register(this);
-        this.readWriteDAO = readWriteDAO;
-        this.idObjectFactory = idObjectFactory;
-        this.eventBus = eventBus;
-        buildMainLayout();
+        setSizeFull();
+
+        // the main layout and components will be created here
+        HorizontalLayout mainLayout = new HorizontalLayout();
+        mainLayout.setSizeFull();
+
+        final SideTabComponent sideTab = new SideTabComponent(eventBus);
+        mainLayout.addComponent(sideTab);
+        final WorkAreaComponent workArea = new WorkAreaComponent(readWriteDAO, idObjectFactory, eventBus);
+        mainLayout.addComponent(workArea);
+        mainLayout.setExpandRatio(sideTab, 1);
+        mainLayout.setExpandRatio(workArea, 12);
         setCompositionRoot(mainLayout);
     }
 
-    private void buildMainLayout() {
-        setSizeFull();
-        // the main layout and components will be created here
-        mainLayout = new HorizontalSplitPanel();
-        mainLayout.setSplitPosition(7);
-        mainLayout.setSizeFull();
-        mainLayout.setStyleName(Runo.SPLITPANEL_SMALL);
-
-        mainLayout.setFirstComponent(new SideTabComponent(eventBus));
-        mainLayout.setSecondComponent(new WorkAreaComponent(eventBus, readWriteDAO, idObjectFactory));
-    }
 }

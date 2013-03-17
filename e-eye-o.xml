@@ -158,6 +158,14 @@
     <pathelement location="${basedir}/lib/commons-beanutils-1.8.3.jar"/>
   </path>
   
+  <path id="library.confirmdialog-2.0.4.classpath">
+    <pathelement location="${basedir}/lib/confirmdialog-2.0.4.jar"/>
+  </path>
+  
+  <path id="library.filteringtable-0.7.1.v7.classpath">
+    <pathelement location="${basedir}/lib/filteringtable-0.7.1.v7.jar"/>
+  </path>
+  
   <path id="library.joda-time:joda-time:2.1.classpath">
     <pathelement location="${basedir}/lib/joda-time-2.1.jar"/>
   </path>
@@ -1247,6 +1255,7 @@
     <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
     <path refid="e-eye-o_restjsonjersey.runtime.module.classpath"/>
     <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
+    <path refid="library.com.google.guava:guava:13.0.classpath"/>
   </path>
   
   
@@ -1349,6 +1358,8 @@
     <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
     <path refid="library.com.vaadin:vaadin-server:7.0.1.classpath"/>
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
+    <path refid="library.filteringtable-0.7.1.v7.classpath"/>
+    <path refid="library.confirmdialog-2.0.4.classpath"/>
   </path>
   
   <path id="e_eye_o-riavaadin.runtime.production.module.classpath">
@@ -1362,6 +1373,8 @@
     <path refid="e-eye-o_entitiesjavaimpl.runtime.production.module.classpath"/>
     <path refid="e-eye-o_daoderbyhibernateimpl.runtime.production.module.classpath"/>
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
+    <path refid="library.filteringtable-0.7.1.v7.classpath"/>
+    <path refid="library.confirmdialog-2.0.4.classpath"/>
   </path>
   
   <path id="e_eye_o-riavaadin.module.classpath">
@@ -1382,6 +1395,8 @@
     <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
     <path refid="library.com.vaadin:vaadin-server:7.0.1.classpath"/>
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
+    <path refid="library.filteringtable-0.7.1.v7.classpath"/>
+    <path refid="library.confirmdialog-2.0.4.classpath"/>
   </path>
   
   <path id="e_eye_o-riavaadin.runtime.module.classpath">
@@ -1397,6 +1412,8 @@
     <path refid="e-eye-o_entitiesjavaimpl.runtime.module.classpath"/>
     <path refid="e-eye-o_daoderbyhibernateimpl.runtime.module.classpath"/>
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
+    <path refid="library.filteringtable-0.7.1.v7.classpath"/>
+    <path refid="library.confirmdialog-2.0.4.classpath"/>
   </path>
   
   
@@ -1613,6 +1630,11 @@
     <copy file="${basedir}/lib/usertype.spi-3.0.0.GA.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/usertype.spi-3.0.0.GA.jar"/>
     <copy file="${basedir}/lib/spring-vaadin-integration-1.6.6.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/spring-vaadin-integration-1.6.6.jar"/>
     <copy file="${basedir}/lib/commons-beanutils-1.8.3.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/commons-beanutils-1.8.3.jar"/>
+    <copy file="${basedir}/lib/filteringtable-0.7.1.v7.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/filteringtable-0.7.1.v7.jar"/>
+    <copy file="${basedir}/lib/confirmdialog-2.0.4.jar" tofile="${artifact.output.e_eye_o-riavaadin:war_exploded}/WEB-INF/lib/confirmdialog-2.0.4.jar"/>
+    <copy todir="${artifact.output.e_eye_o-riavaadin:war_exploded}">
+      <fileset dir="${basedir}/E_EYE_O-RIAVaadin/resources"/>
+    </copy>
   </target>
   
   <target name="build.all.artifacts" depends="artifact.e-eye-o_daoderbyimpl:ejb_exploded, artifact.e-eye-o_data:ejb_exploded, artifact.e-eye-o_hibernatedaoimpl:ejb_exploded, artifact.e-eye-o_interfaces, artifact.e_eye_o-riavaadin:war_exploded" description="Build all artifacts">

@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.utils;
 
 import com.vaadin.data.util.converter.Converter;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import java.util.Locale;
 
@@ -12,6 +13,7 @@ import java.util.Locale;
 public class DateTimeConverter implements Converter<String, DateTime> {
     private static final String DEFAULT_FORMAT = "YYYY-MM-dd HH:mm";
 
+    //  TODO - support non-default formats
     private final String format;
 
     public DateTimeConverter() {
@@ -20,12 +22,12 @@ public class DateTimeConverter implements Converter<String, DateTime> {
 
     @Override
     public DateTime convertToModel(final String value, final Locale locale) throws ConversionException {
-        return null;
+        return value == null ? null : DateTime.parse(value, DateTimeFormat.forPattern(format));
     }
 
     @Override
     public String convertToPresentation(final DateTime value, final Locale locale) throws ConversionException {
-        return value.toString(format);
+        return value == null ? null : value.toString(format);
     }
 
     @Override

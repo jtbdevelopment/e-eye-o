@@ -17,6 +17,7 @@ import com.vaadin.ui.Label;
  * Time: 12:13 AM
  */
 public class SideTabComponent extends CustomComponent {
+    //  TODO - move this?
     public enum IdObjectSideTabs {
         Students("Students", Student.class),
         Observations("Observations", Observation.class),
@@ -62,7 +63,8 @@ public class SideTabComponent extends CustomComponent {
 
     private void buildMainLayout() {
         mainLayout = new CssLayout();
-        mainLayout.setSizeFull();
+        mainLayout.setHeight(null);
+        mainLayout.setWidth(IdObjectSideTabs.Observations.getCaption().length(), Unit.EM);
 
         for (IdObjectSideTabs entityType : IdObjectSideTabs.values()) {
             mainLayout.addComponent(new IdObjectRelatedSideTab(entityType, eventBus));

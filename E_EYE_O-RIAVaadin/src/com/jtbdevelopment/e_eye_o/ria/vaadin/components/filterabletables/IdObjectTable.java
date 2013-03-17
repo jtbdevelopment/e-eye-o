@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -14,62 +14,90 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.widgets.AppUserOwnedActionGenerated
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.*;
 import org.jsoup.helper.StringUtil;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Date: 3/16/13
  * Time: 7:11 PM
  */
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends CustomComponent {
-    private static final String ALL = "All";
-    private static final String ACTIVE_ONLY = "Active Only";
-    private static final String ARCHIVED_ONLY = "Archived Only";
+    public static class HeaderInfo {
+        private final String property;
+        private final String description;
+        private final Table.Align align;
+
+        public HeaderInfo(final String property, final String description, final Table.Align align) {
+            this.description = description;
+            this.property = property;
+            this.align = align;
+        }
+    }
+
+    protected static final String ALL = "All";
+    protected static final String ACTIVE_ONLY = "Active Only";
+    protected static final String ARCHIVED_ONLY = "Archived Only";
 
     private final Class<T> entityType;
-    private final Table entityTable = new Table();
-    private final EventBus eventBus;
-    private final AllItemsBeanItemContainer<T> entities;
+    protected final Table entityTable = new Table();
+    protected final EventBus eventBus;
+    protected final AllItemsBeanItemContainer<T> entities;
+    protected final ReadWriteDAO readWriteDAO;
+    protected final AppUser appUser;
+    protected final IdObjectFactory idObjectFactory;
     private final TextField searchFor = new TextField();
     private Container.Filter currentFilter;
 
     // TODO make preference
     private int maxSize = 10;
 
-    abstract void showEntityEditor(final T entity);
+    protected abstract List<HeaderInfo> getHeaderInfo();
 
-    abstract void handleClickEvent(final ItemClickEvent event, final T entity);
+    protected abstract void showEntityEditor(final T entity);
 
-    abstract Container.Filter generateFilter(final String searchFor);
+    protected abstract void handleClickEvent(final ItemClickEvent event, final T entity);
 
     public IdObjectTable(final Class<T> entityType, final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final AppUser appUser, final AllItemsBeanItemContainer<T> entities) {
         this.entityType = entityType;
         this.eventBus = eventBus;
         this.entities = entities;
+        this.readWriteDAO = readWriteDAO;
+        this.appUser = appUser;
+        this.idObjectFactory = idObjectFactory;
 
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
 
-        mainLayout.addComponent(buildActionRow(entityType, idObjectFactory, appUser, entities));
+        mainLayout.addComponent(buildActionRow());
 
         entityTable.setContainerDataSource(entities);
+        addGeneratedColumns();
+
         entityTable.setSortEnabled(true);
         entityTable.setSelectable(true);
-        entityTable.setPageLength(getTableRows());
         entityTable.setSizeFull();
         entityTable.setNullSelectionAllowed(false);
-        entityTable.addGeneratedColumn("actions", new AppUserOwnedActionGeneratedColumn<>(readWriteDAO, eventBus, entities));
-        entityTable.setVisibleColumns(new String[]{"firstName", "lastName", "modificationTimestamp", "archived", "actions"});
-        entityTable.setColumnHeaders(new String[]{"First Name", "Last Name", "Last Update", "Archived?", "Actions"});
-        //  TODO - make preference
-        entityTable.setSortContainerPropertyId("firstName");
-        entityTable.setColumnAlignments(Table.Align.LEFT, Table.Align.LEFT, Table.Align.CENTER, Table.Align.CENTER, Table.Align.RIGHT);
-        entityTable.setConverter("archived", new BooleanToYesNoConverter());
-        entityTable.setConverter("modificationTimestamp", new DateTimeConverter());
+
+        List<String> properties = new LinkedList<>();
+        List<String> headers = new LinkedList<>();
+        List<Table.Align> aligns = new LinkedList<>();
+        for (HeaderInfo header : getHeaderInfo()) {
+            properties.add(header.property);
+            headers.add(header.description);
+            aligns.add(header.align);
+        }
+        entityTable.setVisibleColumns(properties.toArray(new String[properties.size()]));
+        entityTable.setColumnHeaders(headers.toArray(new String[headers.size()]));
+        entityTable.setSortContainerPropertyId(getDefaultSort(properties));
+        entityTable.setColumnAlignments(aligns.toArray(new Table.Align[aligns.size()]));
+        addColumnConverters();
 
         entityTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
@@ -89,26 +117,52 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                 }
             }
         });
+        refreshSizeAndSort();
         mainLayout.addComponent(entityTable);
 
         eventBus.register(this);
         setCompositionRoot(mainLayout);
     }
 
-    private HorizontalLayout buildActionRow(final Class<T> entityType, final IdObjectFactory idObjectFactory, final AppUser appUser, final AllItemsBeanItemContainer<T> entities) {
+    protected Container.Filter generateFilter(final String searchFor) {
+        return new SimpleStringFilter("viewableDescription", searchFor, true, false);
+    }
+
+    protected String getDefaultSort(final List<String> properties) {
+        //  TODO - make preference
+        return properties.get(0);
+    }
+
+    protected void addColumnConverters() {
+        entityTable.setConverter("archived", new BooleanToYesNoConverter());
+        entityTable.setConverter("modificationTimestamp", new DateTimeConverter());
+    }
+
+    protected void addGeneratedColumns() {
+        entityTable.addGeneratedColumn("actions", new AppUserOwnedActionGeneratedColumn<>(readWriteDAO, eventBus, entities));
+    }
+
+    @SuppressWarnings("unused")
+    protected void addCustomFilters(final HorizontalLayout filterSection) {
+        //  None by default
+    }
+
+    private HorizontalLayout buildActionRow() {
         HorizontalLayout actionRow = new HorizontalLayout();
-        HorizontalLayout buttonSection = buildActionButtons(entityType, idObjectFactory, appUser);
+        HorizontalLayout buttonSection = buildActionButtons();
         actionRow.addComponent(buttonSection);
         actionRow.setComponentAlignment(buttonSection, Alignment.BOTTOM_LEFT);
 
-        HorizontalLayout filterSection = buildFilterOptions(entities);
+        HorizontalLayout filterSection = buildFilterOptions();
         actionRow.addComponent(filterSection);
         actionRow.setComponentAlignment(filterSection, Alignment.BOTTOM_RIGHT);
         actionRow.setWidth(100, Unit.PERCENTAGE);
+        actionRow.setExpandRatio(buttonSection, 1);
+        actionRow.setExpandRatio(filterSection, 3);
         return actionRow;
     }
 
-    private HorizontalLayout buildFilterOptions(final AllItemsBeanItemContainer<T> entities) {
+    private HorizontalLayout buildFilterOptions() {
         HorizontalLayout filterSection = new HorizontalLayout();
         filterSection.setWidth(null);
         filterSection.setSpacing(true);
@@ -150,7 +204,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                         entities.addContainerFilter("archived", "false", false, true);
                         break;
                     case ARCHIVED_ONLY:
-                        entities.addContainerFilter("archived", "true", false, false);
+                        entities.addContainerFilter("archived", "true", false, true);
                         break;
                 }
             }
@@ -160,17 +214,19 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         filterSection.addComponent(showWhich);
         filterSection.setComponentAlignment(showWhich, Alignment.BOTTOM_LEFT);
 
+        addCustomFilters(filterSection);
+
         Label showSizeLabel = new Label("How Many?");
         filterSection.addComponent(showSizeLabel);
         filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
-        final ComboBox showSize = new ComboBox("", Arrays.asList(1, 5, 10, 25, 50));
+        final NativeSelect showSize = new NativeSelect("", Arrays.asList(1, 5, 10, 25, 50));
         showSize.setImmediate(true);
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(final Property.ValueChangeEvent event) {
                 maxSize = ((Integer) showSize.getValue());
-                entityTable.setPageLength(getTableRows());
+                entityTable.setPageLength(calculateTableRows());
             }
         });
         showSize.setValue(maxSize);
@@ -180,7 +236,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         return filterSection;
     }
 
-    private HorizontalLayout buildActionButtons(final Class<T> entityType, final IdObjectFactory idObjectFactory, final AppUser appUser) {
+    private HorizontalLayout buildActionButtons() {
         //  Buttons
         HorizontalLayout buttonSection = new HorizontalLayout();
         buttonSection.setWidth(null);
@@ -198,8 +254,13 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         return buttonSection;
     }
 
-    private int getTableRows() {
+    private int calculateTableRows() {
         return Math.min(maxSize, entities.getUnfilteredSize());
+    }
+
+    public void refreshSizeAndSort() {
+        entityTable.setPageLength(calculateTableRows());
+        entityTable.sort();
     }
 
     @Override
@@ -226,8 +287,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
             if (!IdObjectChanged.ChangeType.DELETED.equals(msg.getChangeType())) {
                 entities.addBean(entity);
             }
-            entityTable.sort();
-            entityTable.setPageLength(getTableRows());
+            refreshSizeAndSort();
         }
     }
 
