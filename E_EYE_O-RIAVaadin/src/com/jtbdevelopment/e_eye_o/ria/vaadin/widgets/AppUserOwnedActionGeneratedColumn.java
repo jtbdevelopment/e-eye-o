@@ -5,7 +5,10 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Table;
 import org.vaadin.dialogs.ConfirmDialog;
 
 /**
@@ -18,19 +21,17 @@ public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> imp
 
     private final ReadWriteDAO readWriteDAO;
     private final EventBus eventBus;
-    private final UI ui;
     private final AllItemsBeanItemContainer<T> entities;
 
-    public AppUserOwnedActionGeneratedColumn(final UI ui, final ReadWriteDAO readWriteDAO, final EventBus eventBus, final AllItemsBeanItemContainer<T> entities) {
+    public AppUserOwnedActionGeneratedColumn(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final AllItemsBeanItemContainer<T> entities) {
         this.readWriteDAO = readWriteDAO;
         this.eventBus = eventBus;
-        this.ui = ui;
         this.entities = entities;
     }
 
     @Override
     public Object generateCell(final Table source, final Object itemId, final Object columnId) {
-        GridLayout layout = new GridLayout(2, 1);
+        final GridLayout layout = new GridLayout(2, 1);
         final T entity = entities.getItem(itemId).getBean();
         final Button archiveAction = new Button("ERROR");
         if (entity.isArchived()) {
@@ -60,7 +61,7 @@ public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> imp
         deleteButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
-                ConfirmDialog.show(ui, "Delete " + entity.getViewableDescription(), new ConfirmDialog.Listener() {
+                ConfirmDialog.show(layout.getUI(), "Delete " + entity.getViewableDescription(), new ConfirmDialog.Listener() {
                     @Override
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
