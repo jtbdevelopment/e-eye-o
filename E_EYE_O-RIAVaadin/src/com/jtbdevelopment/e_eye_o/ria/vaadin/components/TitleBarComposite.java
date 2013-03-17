@@ -12,8 +12,6 @@ import com.vaadin.ui.Label;
  */
 public class TitleBarComposite extends CustomComponent {
 
-    private HorizontalLayout mainLayout;
-
     /**
      * The constructor should first build the main layout, set the
      * composition root and then do any custom initialization.
@@ -22,15 +20,10 @@ public class TitleBarComposite extends CustomComponent {
      * visual editor.
      */
     public TitleBarComposite(final AppUser appUser) {
-        buildMainLayout(appUser);
-        setCompositionRoot(mainLayout);
-    }
-
-    private void buildMainLayout(final AppUser appUser) {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(null);
         // the main layout and components will be created here
-        mainLayout = new HorizontalLayout();
+        HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.setSizeFull();
         mainLayout.setMargin(true);
         mainLayout.setSpacing(true);
@@ -46,6 +39,6 @@ public class TitleBarComposite extends CustomComponent {
         mainLayout.addComponent(appLabel);
         mainLayout.setComponentAlignment(appLabel, Alignment.MIDDLE_CENTER);
         mainLayout.setExpandRatio(appLabel, 0.5f);
+        setCompositionRoot(mainLayout);
     }
-
 }

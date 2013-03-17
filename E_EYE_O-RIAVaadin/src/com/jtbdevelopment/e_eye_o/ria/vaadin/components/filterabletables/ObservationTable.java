@@ -36,7 +36,7 @@ public abstract class ObservationTable extends IdObjectTable<Observation> {
         super(Observation.class, readWriteDAO, idObjectFactory, eventBus, appUser, entities);
     }
 
-    private static final List<HeaderInfo> headers;
+    protected static final List<HeaderInfo> headers;
 
     static {
         headers = Arrays.asList(
@@ -45,17 +45,16 @@ public abstract class ObservationTable extends IdObjectTable<Observation> {
                 new HeaderInfo("significant", "Significant", Table.Align.CENTER),
                 new HeaderInfo("followUpNeeded", "Follow Up?", Table.Align.CENTER),
                 new HeaderInfo("followUpReminder", "Reminder?", Table.Align.CENTER),
-                new HeaderInfo("showFollowUp", "Follow Up", Table.Align.CENTER),
+                new HeaderInfo("showFollowUp", "Follow Up", Table.Align.CENTER),              //  Generated
                 new HeaderInfo("categories", "Categories", Table.Align.LEFT),
                 new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("actions", "Actions", Table.Align.RIGHT)
+                new HeaderInfo("actions", "Actions", Table.Align.RIGHT)                       //  Generated
         );
     }
 
     @Override
     protected List<HeaderInfo> getHeaderInfo() {
-        //  TODO - option to show observation subject
         return headers;
     }
 

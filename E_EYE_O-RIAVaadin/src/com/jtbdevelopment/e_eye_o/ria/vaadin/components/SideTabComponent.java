@@ -19,6 +19,7 @@ import com.vaadin.ui.Label;
 public class SideTabComponent extends CustomComponent {
     //  TODO - move this?
     public enum IdObjectSideTabs {
+        //  TODO - make descriptions part of classes?
         Students("Students", Student.class),
         Observations("Observations", Observation.class),
         Classes("Classes", ClassList.class),
@@ -42,11 +43,6 @@ public class SideTabComponent extends CustomComponent {
         }
     }
 
-    private CssLayout mainLayout;
-
-
-    private final EventBus eventBus;
-
     /**
      * The constructor should first build the main layout, set the
      * composition root and then do any custom initialization.
@@ -55,14 +51,7 @@ public class SideTabComponent extends CustomComponent {
      * visual editor.
      */
     public SideTabComponent(final EventBus eventBus) {
-        eventBus.register(this);
-        this.eventBus = eventBus;
-        buildMainLayout();
-        setCompositionRoot(mainLayout);
-    }
-
-    private void buildMainLayout() {
-        mainLayout = new CssLayout();
+        CssLayout mainLayout = new CssLayout();
         mainLayout.setHeight(null);
         mainLayout.setWidth(IdObjectSideTabs.Observations.getCaption().length(), Unit.EM);
 
@@ -92,5 +81,6 @@ public class SideTabComponent extends CustomComponent {
 
             }
         });
+        setCompositionRoot(mainLayout);
     }
 }

@@ -5,7 +5,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.Student;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.StudentEditorDialog;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.StudentEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
 import com.vaadin.ui.Table;
 
@@ -30,7 +30,7 @@ public abstract class StudentTable extends IdObjectTable<Student> {
                 new HeaderInfo("lastName", "Last Name", Table.Align.LEFT),
                 new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("actions", "Actions", Table.Align.RIGHT)
+                new HeaderInfo("actions", "Actions", Table.Align.RIGHT)    // Generated
         );
     }
 
@@ -41,6 +41,6 @@ public abstract class StudentTable extends IdObjectTable<Student> {
 
     @Override
     protected void showEntityEditor(final Student entity) {
-        getUI().addWindow(new StudentEditorDialog(readWriteDAO, eventBus, entity));
+        getUI().addWindow(new StudentEditorDialogWindow(readWriteDAO, eventBus, entity));
     }
 }
