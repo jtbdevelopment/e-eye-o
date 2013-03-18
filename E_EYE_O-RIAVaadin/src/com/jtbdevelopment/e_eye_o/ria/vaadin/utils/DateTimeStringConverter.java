@@ -10,13 +10,13 @@ import java.util.Locale;
  * Date: 3/16/13
  * Time: 6:30 PM
  */
-public class DateTimeConverter implements Converter<String, DateTime> {
+public class DateTimeStringConverter implements Converter<String, DateTime> {
     private static final String DEFAULT_FORMAT = "YYYY-MM-dd HH:mm";
 
     //  TODO - support non-default formats
     private final String format;
 
-    public DateTimeConverter() {
+    public DateTimeStringConverter() {
         format = DEFAULT_FORMAT;
     }
 

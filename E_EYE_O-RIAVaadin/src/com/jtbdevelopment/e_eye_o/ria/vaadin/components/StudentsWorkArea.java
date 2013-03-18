@@ -6,11 +6,9 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.Student;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.StudentTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
-import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 
@@ -19,8 +17,8 @@ import com.vaadin.ui.VerticalLayout;
  * Time: 4:40 PM
  */
 public class StudentsWorkArea extends CustomComponent {
-    private IdObjectTable<Student> studentTable;
-    private IdObjectTable<Observation> observationTable;
+    private StudentTable studentTable;
+    private ObservationTable observationTable;
 
     /**
      * The constructor should first build the main layout, set the
@@ -37,9 +35,10 @@ public class StudentsWorkArea extends CustomComponent {
 
         studentTable = new StudentTable(readWriteDAO, idObjectFactory, eventBus, appUser, students) {
             @Override
-            protected void handleClickEvent(final ItemClickEvent event, final Student entity) {
+            protected void handleClickEvent(final Student entity) {
                 observationsForStudent.removeAllItems();
                 observationsForStudent.addAll(readWriteDAO.getAllObservationsForEntity(entity));
+                observationTable.setDefaultObservationSubject(entity);
                 observationTable.refreshSizeAndSort();
             }
         };
@@ -47,7 +46,7 @@ public class StudentsWorkArea extends CustomComponent {
 
         observationTable = new ObservationTable(readWriteDAO, idObjectFactory, eventBus, appUser, observationsForStudent) {
             @Override
-            protected void handleClickEvent(final ItemClickEvent event, final Observation entity) {
+            protected void handleClickEvent(final Observation entity) {
                 //  TODO
             }
         };

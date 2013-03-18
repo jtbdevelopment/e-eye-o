@@ -9,7 +9,7 @@ import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.BooleanToYesNoConverter;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.DateTimeConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.widgets.AppUserOwnedActionGeneratedColumn;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
@@ -62,7 +62,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
     protected abstract void showEntityEditor(final T entity);
 
-    protected abstract void handleClickEvent(final ItemClickEvent event, final T entity);
+    protected abstract void handleClickEvent(final T entity);
 
     public IdObjectTable(final Class<T> entityType, final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final AppUser appUser, final AllItemsBeanItemContainer<T> entities) {
         this.entityType = entityType;
@@ -78,7 +78,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         mainLayout.addComponent(buildActionRow());
 
         entityTable.setContainerDataSource(entities);
-        addGeneratedColumns();
+        addGeneratedColumns(true);
 
         entityTable.setSortEnabled(true);
         entityTable.setSelectable(true);
@@ -111,7 +111,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                     Notification.show("Not sure what this is - " + (item == null ? "null" : item.toString()));
                     return;
                 }
-                handleClickEvent(event, entity);
+                handleClickEvent(entity);
                 if (event.isDoubleClick()) {
                     showEntityEditor(entity);
                 }
@@ -135,11 +135,11 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
     protected void addColumnConverters() {
         entityTable.setConverter("archived", new BooleanToYesNoConverter());
-        entityTable.setConverter("modificationTimestamp", new DateTimeConverter());
+        entityTable.setConverter("modificationTimestamp", new DateTimeStringConverter());
     }
 
-    protected void addGeneratedColumns() {
-        entityTable.addGeneratedColumn("actions", new AppUserOwnedActionGeneratedColumn<>(readWriteDAO, eventBus, entities));
+    protected void addGeneratedColumns(final boolean horizontal) {
+        entityTable.addGeneratedColumn("actions", new AppUserOwnedActionGeneratedColumn<>(readWriteDAO, eventBus, entities, horizontal));
     }
 
     @SuppressWarnings("unused")
@@ -192,6 +192,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         Label showWhichLabel = new Label("Show:");
         filterSection.addComponent(showWhichLabel);
         filterSection.setComponentAlignment(showWhichLabel, Alignment.BOTTOM_LEFT);
+        //  TODO - maybe checkboxes for options instead?
         final OptionGroup showWhich = new OptionGroup("", Arrays.asList(ALL, ACTIVE_ONLY, ARCHIVED_ONLY));
         showWhich.addStyleName("horizontal");
         showWhich.setImmediate(true);

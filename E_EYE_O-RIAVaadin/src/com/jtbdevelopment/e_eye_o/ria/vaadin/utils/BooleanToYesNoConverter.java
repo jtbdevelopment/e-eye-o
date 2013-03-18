@@ -8,6 +8,7 @@ import java.util.Locale;
  * Date: 3/16/13
  * Time: 6:33 PM
  */
+//  TODO - determine which of these converters should be singletons
 public class BooleanToYesNoConverter implements Converter<String, Boolean> {
 
     private static final String YES = "Yes";

@@ -65,6 +65,12 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         setContent(outer);
     }
 
+    @Override
+    public void close() {
+        logoutEventHandler(null);
+        super.close();
+    }
+
     @Subscribe
     public void logoutEventHandler(final LogoutEvent event) {
         AppUser appUser = getSession().getAttribute(AppUser.class);

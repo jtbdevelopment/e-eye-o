@@ -61,6 +61,8 @@ public class SideTabComponent extends CustomComponent {
         mainLayout.addComponent(new BlankSideTab());
         mainLayout.addComponent(new SideTab("Settings", null, null));
         mainLayout.addComponent(new BlankSideTab());
+        mainLayout.addComponent(new SideTab("Help", null, null));
+        mainLayout.addComponent(new BlankSideTab());
         mainLayout.addComponent(new SideTab("Logout", eventBus, new LogoutEvent()));
         mainLayout.addComponent(new BlankSideTab());
 

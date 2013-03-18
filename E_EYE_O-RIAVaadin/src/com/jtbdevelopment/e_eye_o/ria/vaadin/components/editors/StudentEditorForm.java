@@ -5,7 +5,6 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.ui.*;
 
 /**
@@ -14,7 +13,7 @@ import com.vaadin.ui.*;
  */
 public class StudentEditorForm extends IdObjectEditorForm<Student> {
 
-    private TextField firstName = new TextField();
+    private TextField firstName;
 
     /**
      * The constructor should first build the main layout, set the
@@ -24,7 +23,7 @@ public class StudentEditorForm extends IdObjectEditorForm<Student> {
      * visual editor.
      */
     public StudentEditorForm(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final Student student) {
-        super(Student.class, eventBus, readWriteDAO, student);
+        super(Student.class, readWriteDAO, eventBus, student);
     }
 
     @Override
@@ -36,19 +35,15 @@ public class StudentEditorForm extends IdObjectEditorForm<Student> {
         //  TODO - lot of duplication here with tables
         HorizontalLayout editorRow = new HorizontalLayout();
         editorRow.setSpacing(true);
-        editorRow.addComponent(new Label("First Name:"));
 
+        editorRow.addComponent(new Label("First Name:"));
         firstName = new TextField();
         beanFieldGroup.bind(firstName, "firstName");
-        firstName.addValidator(new BeanValidator(Student.class, "firstName"));
-        firstName.setImmediate(true);
         editorRow.addComponent(firstName);
 
         editorRow.addComponent(new Label("Last Name:"));
         final TextField lastName = new TextField();
         beanFieldGroup.bind(lastName, "lastName");
-        lastName.addValidator(new BeanValidator(Student.class, "lastName"));
-        lastName.setImmediate(true);
         editorRow.addComponent(lastName);
 
         editorRow.addComponent(new Label("Classes:"));
@@ -61,7 +56,6 @@ public class StudentEditorForm extends IdObjectEditorForm<Student> {
 
         final TwinColSelect classes = new TwinColSelect();
         classes.setRows(3);
-        classes.setWidth(40, Unit.EM);
         classes.setContainerDataSource(potentialClasses);
         classes.setItemCaptionPropertyId("description");
         beanFieldGroup.bind(classes, "classLists");

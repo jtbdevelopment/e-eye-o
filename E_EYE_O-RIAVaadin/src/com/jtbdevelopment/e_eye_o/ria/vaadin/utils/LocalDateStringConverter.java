@@ -10,13 +10,13 @@ import java.util.Locale;
  * Date: 3/17/13
  * Time: 3:16 PM
  */
-public class LocalDateConverter implements Converter<String, LocalDate> {
+public class LocalDateStringConverter implements Converter<String, LocalDate> {
     private static final String DEFAULT_FORMAT = "YYYY-MM-dd";
 
     //  TODO - support non-default formats
     private final String format;
 
-    public LocalDateConverter() {
+    public LocalDateStringConverter() {
         format = DEFAULT_FORMAT;
     }
 
