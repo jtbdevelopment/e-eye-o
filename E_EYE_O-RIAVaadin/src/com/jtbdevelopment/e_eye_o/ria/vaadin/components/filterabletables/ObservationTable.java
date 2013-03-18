@@ -31,9 +31,6 @@ import java.util.*;
  * Time: 2:02 PM
  */
 public abstract class ObservationTable extends IdObjectTable<Observation> {
-    private static final String SIGNIFICANT_ONLY = "Significant";
-    private static final String FOLLOWUP_ONLY = "Follow Up";
-
     private AppUserOwnedObject defaultObservationSubject;
 
     public ObservationTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final AppUser appUser, final AllItemsBeanItemContainer<Observation> entities) {
@@ -79,6 +76,7 @@ public abstract class ObservationTable extends IdObjectTable<Observation> {
     protected Container.Filter generateFilter(final String searchFor) {
         return new Or(
                 new SimpleStringFilter("comment", searchFor, true, false),
+                //  TODO - search on categories doesn't work as it searches actual object toString representation
                 new SimpleStringFilter("categories", searchFor, true, false)
         );
     }
@@ -229,44 +227,37 @@ public abstract class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addCustomFilters(final HorizontalLayout filterSection) {
         super.addCustomFilters(filterSection);
-
-        final OptionGroup significant = new OptionGroup("", Arrays.asList(ALL, SIGNIFICANT_ONLY));
-        significant.addStyleName("horizontal");
-        significant.setImmediate(true);
-        significant.addValueChangeListener(new Property.ValueChangeListener() {
+        final CheckBox significantOnly = new CheckBox("Significant Only?");
+        significantOnly.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
-            public void valueChange(final Property.ValueChangeEvent event) {
-                entities.removeContainerFilters("significant");
-                switch ((String) significant.getValue()) {
-                    case SIGNIFICANT_ONLY:
-                        entities.addContainerFilter("significant", "true", false, true);
-                        break;
+            public void valueChange(Property.ValueChangeEvent event) {
+                if (significantOnly.getValue()) {
+                    entities.addContainerFilter("significant", "true", false, true);
+                } else {
+                    entities.removeContainerFilters("significant");
                 }
             }
         });
         //  TODO - make preference
-        significant.setValue(ALL);
-        filterSection.addComponent(significant);
-        filterSection.setComponentAlignment(significant, Alignment.BOTTOM_LEFT);
+        significantOnly.setValue(false);
+        filterSection.addComponent(significantOnly);
+        filterSection.setComponentAlignment(significantOnly, Alignment.BOTTOM_LEFT);
 
-        final OptionGroup followup = new OptionGroup("", Arrays.asList(ALL, FOLLOWUP_ONLY));
-        followup.addStyleName("horizontal");
-        followup.setImmediate(true);
-        followup.addValueChangeListener(new Property.ValueChangeListener() {
+        final CheckBox followUpOnly = new CheckBox("Follow Up Only?");
+        followUpOnly.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
-            public void valueChange(final Property.ValueChangeEvent event) {
-                entities.removeContainerFilters("followUpNeeded");
-                switch ((String) followup.getValue()) {
-                    case FOLLOWUP_ONLY:
-                        entities.addContainerFilter("followUpNeeded", "true", false, true);
-                        break;
+            public void valueChange(Property.ValueChangeEvent event) {
+                if (followUpOnly.getValue()) {
+                    entities.addContainerFilter("followUpNeeded", "true", false, true);
+                } else {
+                    entities.removeContainerFilters("followUpNeeded");
                 }
             }
         });
         //  TODO - make preference
-        followup.setValue(ALL);
-        filterSection.addComponent(followup);
-        filterSection.setComponentAlignment(followup, Alignment.BOTTOM_LEFT);
+        followUpOnly.setValue(false);
+        filterSection.addComponent(followUpOnly);
+        filterSection.setComponentAlignment(followUpOnly, Alignment.BOTTOM_LEFT);
     }
 
     public void setDefaultObservationSubject(final AppUserOwnedObject defaultObservationSubject) {

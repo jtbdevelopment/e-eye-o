@@ -36,11 +36,8 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
     @Autowired
     private IdObjectFactory idObjectFactory;
 
-    private final EventBus eventBus;
-
-    public EEYEOUI() {
-        eventBus = new EventBus();
-    }
+    //  TODO - autowire?
+    private final EventBus eventBus = new EventBus();
 
     @Override
     protected void init(final VaadinRequest request) {

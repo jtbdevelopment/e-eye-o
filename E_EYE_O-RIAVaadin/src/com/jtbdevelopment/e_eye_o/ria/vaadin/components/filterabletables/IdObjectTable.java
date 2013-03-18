@@ -41,10 +41,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         }
     }
 
-    protected static final String ALL = "All";
-    protected static final String ACTIVE_ONLY = "Active Only";
-    protected static final String ARCHIVED_ONLY = "Archived Only";
-
     private final Class<T> entityType;
     protected final Table entityTable = new Table();
     protected final EventBus eventBus;
@@ -192,28 +188,30 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         Label showWhichLabel = new Label("Show:");
         filterSection.addComponent(showWhichLabel);
         filterSection.setComponentAlignment(showWhichLabel, Alignment.BOTTOM_LEFT);
-        //  TODO - maybe checkboxes for options instead?
-        final OptionGroup showWhich = new OptionGroup("", Arrays.asList(ALL, ACTIVE_ONLY, ARCHIVED_ONLY));
-        showWhich.addStyleName("horizontal");
-        showWhich.setImmediate(true);
-        showWhich.addValueChangeListener(new Property.ValueChangeListener() {
+
+        final CheckBox activeCB = new CheckBox("Active");
+        final CheckBox archivedCB = new CheckBox("Archived");
+        activeCB.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
-            public void valueChange(final Property.ValueChangeEvent event) {
-                entities.removeContainerFilters("archived");
-                switch ((String) showWhich.getValue()) {
-                    case ACTIVE_ONLY:
-                        entities.addContainerFilter("archived", "false", false, true);
-                        break;
-                    case ARCHIVED_ONLY:
-                        entities.addContainerFilter("archived", "true", false, true);
-                        break;
-                }
+            public void valueChange(Property.ValueChangeEvent event) {
+                setActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
             }
         });
-        //  TODO - make preference
-        showWhich.setValue(ACTIVE_ONLY);
-        filterSection.addComponent(showWhich);
-        filterSection.setComponentAlignment(showWhich, Alignment.BOTTOM_LEFT);
+        archivedCB.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                setActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
+            }
+        });
+        //  TODO - configurable
+        activeCB.setValue(Boolean.TRUE);
+        //  TODO - configurable
+        archivedCB.setValue(Boolean.FALSE);
+        filterSection.addComponent(activeCB);
+        filterSection.addComponent(archivedCB);
+        filterSection.setComponentAlignment(activeCB, Alignment.BOTTOM_RIGHT);
+        filterSection.setComponentAlignment(archivedCB, Alignment.BOTTOM_RIGHT);
+
 
         addCustomFilters(filterSection);
 
@@ -235,6 +233,18 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         filterSection.addComponent(showSize);
         filterSection.setComponentAlignment(showSize, Alignment.BOTTOM_LEFT);
         return filterSection;
+    }
+
+    private void setActiveArchiveFilters(final boolean active, final boolean archived) {
+        entities.removeContainerFilters("archived");
+        if (active && archived) {
+            return;
+        }
+        if (active) {
+            entities.addContainerFilter("archived", "false", false, true);
+        } else {
+            entities.addContainerFilter("archived", "true", false, true);
+        }
     }
 
     private HorizontalLayout buildActionButtons() {
