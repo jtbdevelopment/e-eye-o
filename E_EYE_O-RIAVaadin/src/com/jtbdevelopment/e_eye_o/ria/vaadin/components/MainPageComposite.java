@@ -30,8 +30,7 @@ public class MainPageComposite extends CustomComponent {
         mainLayout.addComponent(sideTab);
         final WorkAreaComponent workArea = new WorkAreaComponent(readWriteDAO, idObjectFactory, eventBus);
         mainLayout.addComponent(workArea);
-        mainLayout.setExpandRatio(sideTab, 1);
-        mainLayout.setExpandRatio(workArea, 12);
+        mainLayout.setExpandRatio(workArea, 1);
         setCompositionRoot(mainLayout);
     }
 

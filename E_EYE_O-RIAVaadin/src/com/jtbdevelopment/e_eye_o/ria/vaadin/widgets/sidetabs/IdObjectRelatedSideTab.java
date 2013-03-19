@@ -11,7 +11,6 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.events.IdObjectRelatedSideTabClicke
 public class IdObjectRelatedSideTab extends SideTab {
     public IdObjectRelatedSideTab(SideTabComponent.IdObjectSideTabs sideTab, final EventBus eventBus) {
         super(sideTab.getCaption(), eventBus, new IdObjectRelatedSideTabClicked(sideTab));
-
     }
 
 }

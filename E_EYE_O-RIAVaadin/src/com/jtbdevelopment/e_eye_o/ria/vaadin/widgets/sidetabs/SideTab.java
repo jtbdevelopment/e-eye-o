@@ -14,6 +14,7 @@ public class SideTab extends Label {
     public SideTab(final String caption, final EventBus eventBus, final Object messageToPublish) {
         super(caption);
         addStyleName("sidetabs");
+//        setWidth(null);
         this.eventBus = eventBus;
         this.event = messageToPublish;
     }

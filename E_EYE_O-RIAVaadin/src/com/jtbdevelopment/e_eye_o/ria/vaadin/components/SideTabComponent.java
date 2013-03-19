@@ -52,8 +52,9 @@ public class SideTabComponent extends CustomComponent {
      */
     public SideTabComponent(final EventBus eventBus) {
         CssLayout mainLayout = new CssLayout();
+        mainLayout.setSizeUndefined();
         mainLayout.setHeight(null);
-        mainLayout.setWidth(IdObjectSideTabs.Observations.getCaption().length(), Unit.EM);
+        mainLayout.setWidth(getSideTabWidthValue(), getSideTabWidthUnits());
 
         for (IdObjectSideTabs entityType : IdObjectSideTabs.values()) {
             mainLayout.addComponent(new IdObjectRelatedSideTab(entityType, eventBus));
@@ -84,5 +85,14 @@ public class SideTabComponent extends CustomComponent {
             }
         });
         setCompositionRoot(mainLayout);
+        setWidth(getSideTabWidthValue(), getSideTabWidthUnits());
+    }
+
+    private Unit getSideTabWidthUnits() {
+        return Unit.EM;
+    }
+
+    private float getSideTabWidthValue() {
+        return (float) (IdObjectSideTabs.Observations.getCaption().length() - 3.5);
     }
 }

@@ -54,6 +54,7 @@ public class WorkAreaComponent extends CustomComponent {
         mainLayout.setMargin(new MarginInfo(false, true, true, true));
         mainLayout.setSpacing(true);
         mainLayout.setSizeFull();
+        setSizeFull();
     }
 
     @Subscribe
