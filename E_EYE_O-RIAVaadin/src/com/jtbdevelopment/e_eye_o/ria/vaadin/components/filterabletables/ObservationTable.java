@@ -82,6 +82,11 @@ public abstract class ObservationTable extends IdObjectTable<Observation> {
     }
 
     @Override
+    protected boolean getDefaultSortAscending() {
+        return false;
+    }
+
+    @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
         entityTable.setConverter("significant", new BooleanToYesNoConverter());

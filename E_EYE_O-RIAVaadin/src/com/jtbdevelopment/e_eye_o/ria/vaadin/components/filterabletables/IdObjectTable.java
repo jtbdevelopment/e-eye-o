@@ -91,7 +91,8 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         }
         entityTable.setVisibleColumns(properties.toArray(new String[properties.size()]));
         entityTable.setColumnHeaders(headers.toArray(new String[headers.size()]));
-        entityTable.setSortContainerPropertyId(getDefaultSort(properties));
+        entityTable.setSortContainerPropertyId(getDefaultSortField(properties));
+        entityTable.setSortAscending(getDefaultSortAscending());
         entityTable.setColumnAlignments(aligns.toArray(new Table.Align[aligns.size()]));
         addColumnConverters();
 
@@ -124,9 +125,13 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         return new SimpleStringFilter("viewableDescription", searchFor, true, false);
     }
 
-    protected String getDefaultSort(final List<String> properties) {
+    protected String getDefaultSortField(final List<String> properties) {
         //  TODO - make preference
         return properties.get(0);
+    }
+
+    protected boolean getDefaultSortAscending() {
+        return true;
     }
 
     protected void addColumnConverters() {
