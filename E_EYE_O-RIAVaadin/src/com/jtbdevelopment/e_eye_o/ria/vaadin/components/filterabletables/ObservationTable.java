@@ -153,8 +153,9 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 Label comment = new Label(entity.getComment());
                 Panel panel = new Panel(comment);
                 panel.addStyleName(Runo.PANEL_LIGHT);
-                panel.setHeight(5, Unit.EM);
-                panel.setWidth(30, Unit.EM);
+                panel.setHeight(2, Unit.EM);
+                panel.setWidth(20, Unit.EM);
+                panel.setDescription(entity.getComment());
                 panel.addClickListener(new MouseEvents.ClickListener() {
                     @Override
                     public void click(final MouseEvents.ClickEvent event) {

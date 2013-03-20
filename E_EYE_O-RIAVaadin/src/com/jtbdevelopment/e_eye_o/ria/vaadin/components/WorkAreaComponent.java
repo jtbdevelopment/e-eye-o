@@ -3,11 +3,10 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.events.IdObjectRelatedSideTabClicked;
-import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -24,9 +23,7 @@ public class WorkAreaComponent extends CustomComponent implements ApplicationCon
 
     private ApplicationContext applicationContext;
 
-    //  TODO - might need to put this in a panel for scroll bar
-
-    private final VerticalLayout mainLayout;
+    private final Panel mainLayout;
 
     /**
      * The constructor should first build the main layout, set the
@@ -38,9 +35,10 @@ public class WorkAreaComponent extends CustomComponent implements ApplicationCon
     @Autowired
     public WorkAreaComponent(final EventBus eventBus) {
         eventBus.register(this);
-        mainLayout = new VerticalLayout();
-        mainLayout.setMargin(new MarginInfo(false, true, true, true));
-        mainLayout.setSpacing(true);
+        mainLayout = new Panel();
+//        mainLayout.setMargin(new MarginInfo(false, true, true, true));
+//        mainLayout.setSpacing(true);
+        mainLayout.addStyleName(Runo.PANEL_LIGHT);
         mainLayout.setSizeFull();
         setSizeFull();
         setCompositionRoot(mainLayout);
@@ -50,12 +48,14 @@ public class WorkAreaComponent extends CustomComponent implements ApplicationCon
     @SuppressWarnings("unused")
     public void changeDataArea(final IdObjectRelatedSideTabClicked event) {
         Notification.show("Switching to " + event.getEntityType().getCaption());
-        for (final Object childComponent : mainLayout) {
-            mainLayout.removeComponent((Component) childComponent);
-        }
+        mainLayout.setContent(null);
+//        for (final Object childComponent : mainLayout) {
+//            mainLayout.removeComponent((Component) childComponent);
+        //       }
         switch (event.getEntityType()) {
             case Students:
-                mainLayout.addComponent(applicationContext.getBean(StudentsWorkArea.class));
+//                mainLayout.addComponent(applicationContext.getBean(StudentsWorkArea.class));
+                mainLayout.setContent(applicationContext.getBean(StudentsWorkArea.class));
                 break;
             default:
                 //  TODO - log or notify
