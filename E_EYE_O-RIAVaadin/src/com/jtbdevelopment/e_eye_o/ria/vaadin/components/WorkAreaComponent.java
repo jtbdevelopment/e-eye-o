@@ -36,8 +36,6 @@ public class WorkAreaComponent extends CustomComponent implements ApplicationCon
     public WorkAreaComponent(final EventBus eventBus) {
         eventBus.register(this);
         mainLayout = new Panel();
-//        mainLayout.setMargin(new MarginInfo(false, true, true, true));
-//        mainLayout.setSpacing(true);
         mainLayout.addStyleName(Runo.PANEL_LIGHT);
         mainLayout.setSizeFull();
         setSizeFull();
@@ -49,12 +47,8 @@ public class WorkAreaComponent extends CustomComponent implements ApplicationCon
     public void changeDataArea(final IdObjectRelatedSideTabClicked event) {
         Notification.show("Switching to " + event.getEntityType().getCaption());
         mainLayout.setContent(null);
-//        for (final Object childComponent : mainLayout) {
-//            mainLayout.removeComponent((Component) childComponent);
-        //       }
         switch (event.getEntityType()) {
             case Students:
-//                mainLayout.addComponent(applicationContext.getBean(StudentsWorkArea.class));
                 mainLayout.setContent(applicationContext.getBean(StudentsWorkArea.class));
                 break;
             default:
