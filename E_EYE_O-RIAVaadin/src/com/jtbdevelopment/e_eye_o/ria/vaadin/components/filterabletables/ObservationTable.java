@@ -9,7 +9,6 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.events.IdObjectChanged;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.BooleanToYesNoConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.LocalDateStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.LocalDateTimeStringConverter;
@@ -21,6 +20,8 @@ import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import javax.annotation.Nullable;
@@ -30,11 +31,14 @@ import java.util.*;
  * Date: 3/17/13
  * Time: 2:02 PM
  */
-public abstract class ObservationTable extends IdObjectTable<Observation> {
+@org.springframework.stereotype.Component
+@Scope("prototype")
+public class ObservationTable extends IdObjectTable<Observation> {
     private AppUserOwnedObject defaultObservationSubject;
 
-    public ObservationTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final AppUser appUser, final AllItemsBeanItemContainer<Observation> entities) {
-        super(Observation.class, readWriteDAO, idObjectFactory, eventBus, appUser, entities);
+    @Autowired
+    public ObservationTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
+        super(Observation.class, readWriteDAO, idObjectFactory, eventBus);
     }
 
     protected static final List<HeaderInfo> headers;
@@ -154,7 +158,9 @@ public abstract class ObservationTable extends IdObjectTable<Observation> {
                 panel.addClickListener(new MouseEvents.ClickListener() {
                     @Override
                     public void click(final MouseEvents.ClickEvent event) {
-                        handleClickEvent(entity);
+                        if (clickedOnListener != null) {
+                            clickedOnListener.handleClickEvent(entity);
+                        }
                         entityTable.setValue(entity);
                         if (event.isDoubleClick()) {
                             showEntityEditor(entity);
@@ -263,6 +269,16 @@ public abstract class ObservationTable extends IdObjectTable<Observation> {
         followUpOnly.setValue(false);
         filterSection.addComponent(followUpOnly);
         filterSection.setComponentAlignment(followUpOnly, Alignment.BOTTOM_LEFT);
+    }
+
+    @Override
+    public void setTableDriver(final IdObject tableDriver) {
+        super.setTableDriver(tableDriver);
+        if (tableDriver instanceof AppUserOwnedObject) {
+            entities.addAll(readWriteDAO.getAllObservationsForEntity((AppUserOwnedObject) tableDriver));
+            setDefaultObservationSubject((AppUserOwnedObject) tableDriver);
+            refreshSizeAndSort();
+        }
     }
 
     public void setDefaultObservationSubject(final AppUserOwnedObject defaultObservationSubject) {

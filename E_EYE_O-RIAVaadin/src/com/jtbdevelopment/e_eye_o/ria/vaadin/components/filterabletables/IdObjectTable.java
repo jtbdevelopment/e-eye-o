@@ -5,6 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
@@ -41,12 +42,21 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         }
     }
 
+    public interface ClickedOnListener<T> {
+        void handleClickEvent(final T entity);
+    }
+
+    protected ClickedOnListener<T> clickedOnListener;
+
+    protected IdObject tableDriver;
+
     private final Class<T> entityType;
     protected final Table entityTable = new Table();
     protected final EventBus eventBus;
+
     protected final AllItemsBeanItemContainer<T> entities;
     protected final ReadWriteDAO readWriteDAO;
-    protected final AppUser appUser;
+    protected AppUser appUser;
     protected final IdObjectFactory idObjectFactory;
     private final TextField searchFor = new TextField();
     private Container.Filter currentFilter;
@@ -58,14 +68,11 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
     protected abstract void showEntityEditor(final T entity);
 
-    protected abstract void handleClickEvent(final T entity);
-
-    public IdObjectTable(final Class<T> entityType, final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final AppUser appUser, final AllItemsBeanItemContainer<T> entities) {
+    public IdObjectTable(final Class<T> entityType, final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
         this.entityType = entityType;
         this.eventBus = eventBus;
-        this.entities = entities;
+        this.entities = new AllItemsBeanItemContainer<>(entityType);
         this.readWriteDAO = readWriteDAO;
-        this.appUser = appUser;
         this.idObjectFactory = idObjectFactory;
 
         VerticalLayout mainLayout = new VerticalLayout();
@@ -108,7 +115,9 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                     Notification.show("Not sure what this is - " + (item == null ? "null" : item.toString()));
                     return;
                 }
-                handleClickEvent(entity);
+                if (clickedOnListener != null) {
+                    clickedOnListener.handleClickEvent(entity);
+                }
                 if (event.isDoubleClick()) {
                     showEntityEditor(entity);
                 }
@@ -282,6 +291,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     @Override
     public void attach() {
         super.attach();
+        appUser = getSession().getAttribute(AppUser.class);
         eventBus.register(this);
     }
 
@@ -307,7 +317,24 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         }
     }
 
+    public void setTableDriver(final IdObject tableDriver) {
+        this.tableDriver = tableDriver;
+        entities.removeAllItems();
+        if (tableDriver instanceof AppUser) {
+            if (!tableDriver.equals(appUser)) {
+                //  TODO - log notify exception
+            } else {
+                entities.addAll(readWriteDAO.getEntitiesForUser(entityType, appUser));
+                refreshSizeAndSort();
+            }
+        }
+    }
+
     public TextField getSearchFor() {
         return searchFor;
+    }
+
+    public void setClickedOnListener(ClickedOnListener<T> clickedOnListener) {
+        this.clickedOnListener = clickedOnListener;
     }
 }

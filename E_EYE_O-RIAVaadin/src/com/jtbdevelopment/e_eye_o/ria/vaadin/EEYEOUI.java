@@ -4,7 +4,6 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.MainPageComposite;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TitleBarComposite;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.events.LogoutEvent;
@@ -34,10 +33,13 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
     private ReadWriteDAO readWriteDAO;
 
     @Autowired
-    private IdObjectFactory idObjectFactory;
+    private EventBus eventBus;
 
-    //  TODO - autowire?
-    private final EventBus eventBus = new EventBus();
+    @Autowired
+    private MainPageComposite mainPageComposite;
+
+    @Autowired
+    private TitleBarComposite titleBarComposite;
 
     @Override
     protected void init(final VaadinRequest request) {
@@ -54,10 +56,10 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         outer.setSizeFull();
         outer.setMargin(new MarginInfo(true, true, true, false));
 
-        outer.addComponent(new TitleBarComposite(appUser));
-        final MainPageComposite c = new MainPageComposite(readWriteDAO, idObjectFactory, eventBus);
-        outer.addComponent(c);
-        outer.setExpandRatio(c, 1.0f);
+        titleBarComposite.setAppUser(appUser);
+        outer.addComponent(titleBarComposite);
+        outer.addComponent(mainPageComposite);
+        outer.setExpandRatio(mainPageComposite, 1.0f);
 
         setContent(outer);
     }

@@ -2,12 +2,15 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.ClassList;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.StudentEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
 import com.vaadin.ui.Table;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,9 +19,12 @@ import java.util.List;
  * Date: 3/17/13
  * Time: 1:58 PM
  */
-public abstract class StudentTable extends IdObjectTable<Student> {
-    public StudentTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final AppUser appUser, final AllItemsBeanItemContainer<Student> entities) {
-        super(Student.class, readWriteDAO, idObjectFactory, eventBus, appUser, entities);
+@Component
+@Scope("prototype")
+public class StudentTable extends IdObjectTable<Student> {
+    @Autowired
+    public StudentTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
+        super(Student.class, readWriteDAO, idObjectFactory, eventBus);
     }
 
     private static final List<HeaderInfo> headers;
@@ -42,5 +48,14 @@ public abstract class StudentTable extends IdObjectTable<Student> {
     @Override
     protected void showEntityEditor(final Student entity) {
         getUI().addWindow(new StudentEditorDialogWindow(readWriteDAO, eventBus, entity));
+    }
+
+    @Override
+    public void setTableDriver(final IdObject tableDriver) {
+        super.setTableDriver(tableDriver);
+        if (tableDriver instanceof ClassList) {
+            readWriteDAO.getAllStudentsForClassList((ClassList) tableDriver);
+            refreshSizeAndSort();
+        }
     }
 }
