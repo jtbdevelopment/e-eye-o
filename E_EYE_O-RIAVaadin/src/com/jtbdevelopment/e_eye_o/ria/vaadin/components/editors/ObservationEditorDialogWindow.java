@@ -1,23 +1,19 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
-import com.google.common.eventbus.EventBus;
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
-import com.vaadin.ui.Window;
-import com.vaadin.ui.themes.Runo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 /**
  * Date: 3/16/13
  * Time: 6:36 PM
  */
-public class ObservationEditorDialogWindow extends Window {
-    public ObservationEditorDialogWindow(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final Observation observation) {
-        setSizeUndefined();
-        setModal(true);
-        addStyleName(Runo.WINDOW_DIALOG);
-        setWidth(90, Unit.EM);
-        setHeight(25, Unit.EM);
-        setContent(new ObservationEditorForm(readWriteDAO, eventBus, observation));
+@org.springframework.stereotype.Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Observation> {
+    @Autowired
+    public ObservationEditorDialogWindow(final ObservationEditorForm observationEditorForm) {
+        super(90, 25, observationEditorForm);
     }
-
 }

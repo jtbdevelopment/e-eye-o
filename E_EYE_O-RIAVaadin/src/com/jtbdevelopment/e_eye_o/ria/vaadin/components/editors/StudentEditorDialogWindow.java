@@ -1,23 +1,20 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
-import com.google.common.eventbus.EventBus;
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.Student;
-import com.vaadin.ui.Window;
-import com.vaadin.ui.themes.Runo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 /**
  * Date: 3/16/13
  * Time: 6:36 PM
  */
-public class StudentEditorDialogWindow extends Window {
-    public StudentEditorDialogWindow(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final Student student) {
-        setSizeUndefined();
-        setModal(true);
-        addStyleName(Runo.WINDOW_DIALOG);
-        setWidth(80, Unit.EM);
-        setHeight(15, Unit.EM);
-        setContent(new StudentEditorForm(readWriteDAO, eventBus, student));
+@org.springframework.stereotype.Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class StudentEditorDialogWindow extends IdObjectEditorDialogWindow<Student> {
+    @Autowired
+    public StudentEditorDialogWindow(final StudentEditorForm studentEditorForm) {
+        super(80, 15, studentEditorForm);
     }
 
 }

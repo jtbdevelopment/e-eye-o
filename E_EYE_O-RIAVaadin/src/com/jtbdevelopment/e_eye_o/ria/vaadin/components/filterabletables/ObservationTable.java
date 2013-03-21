@@ -38,6 +38,9 @@ public class ObservationTable extends IdObjectTable<Observation> {
     private AppUserOwnedObject defaultObservationSubject;
 
     @Autowired
+    private ObservationEditorDialogWindow observationEditorDialogWindow;
+
+    @Autowired
     public ObservationTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
         super(Observation.class, readWriteDAO, idObjectFactory, eventBus);
     }
@@ -74,7 +77,8 @@ public class ObservationTable extends IdObjectTable<Observation> {
             }
             entity.setObservationSubject(defaultObservationSubject);
         }
-        getUI().addWindow(new ObservationEditorDialogWindow(readWriteDAO, eventBus, entity));
+        getUI().addWindow(observationEditorDialogWindow);
+        observationEditorDialogWindow.setEntity(entity);
     }
 
     @Override

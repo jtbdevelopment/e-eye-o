@@ -24,6 +24,9 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class StudentTable extends IdObjectTable<Student> {
     @Autowired
+    private StudentEditorDialogWindow studentEditorDialogWindow;
+
+    @Autowired
     public StudentTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
         super(Student.class, readWriteDAO, idObjectFactory, eventBus);
     }
@@ -48,7 +51,8 @@ public class StudentTable extends IdObjectTable<Student> {
 
     @Override
     protected void showEntityEditor(final Student entity) {
-        getUI().addWindow(new StudentEditorDialogWindow(readWriteDAO, eventBus, entity));
+        getUI().addWindow(studentEditorDialogWindow);
+        studentEditorDialogWindow.setEntity(entity);
     }
 
     @Override

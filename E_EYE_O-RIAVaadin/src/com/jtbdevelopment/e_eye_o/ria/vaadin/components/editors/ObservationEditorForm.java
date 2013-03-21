@@ -9,16 +9,41 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.LocalDateTimeDateConverter;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 /**
  * Date: 3/17/13
  * Time: 6:39 PM
  */
+@org.springframework.stereotype.Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
     private TextArea commentField;
+    private BeanItemContainer<ObservationCategory> potentialCategories;
 
-    public ObservationEditorForm(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final Observation entity) {
-        super(Observation.class, readWriteDAO, eventBus, entity);
+    @Autowired
+    public ObservationEditorForm(final ReadWriteDAO readWriteDAO, final EventBus eventBus) {
+        super(Observation.class, readWriteDAO, eventBus);
+    }
+
+    @Override
+    public void setEntity(Observation entity) {
+        super.setEntity(entity);
+        boolean hasArchived = false;
+        Observation observation = entityBeanFieldGroup.getItemDataSource().getBean();
+        potentialCategories.removeAllItems();
+        for (ObservationCategory category : observation.getCategories()) {
+            if (category.isArchived()) {
+                hasArchived = true;
+            }
+        }
+        if (hasArchived) {
+            potentialCategories.addAll(readWriteDAO.getEntitiesForUser(ObservationCategory.class, observation.getAppUser()));
+        } else {
+            potentialCategories.addAll(readWriteDAO.getActiveEntitiesForUser(ObservationCategory.class, observation.getAppUser()));
+        }
     }
 
     @Override
@@ -36,28 +61,17 @@ public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
         commentField.setRows(4);
         commentField.setWidth(40, Unit.EM);
         //  TODO - need to disable/re-enable enter key capture on Default button for text area.
-        beanFieldGroup.bind(commentField, "comment");
+        entityBeanFieldGroup.bind(commentField, "comment");
         firstRow.addComponent(commentField);
+
         firstRow.addComponent(new Label("Categories:"));
-        boolean hasArchived = false;
-        int longestCategory = 0;
-        for (ObservationCategory category : entity.getCategories()) {
-            if (category.isArchived()) {
-                hasArchived = true;
-            }
-            longestCategory = Math.max(longestCategory, category.getShortName().length());
-        }
-        BeanItemContainer<ObservationCategory> potentialCategories = new BeanItemContainer<>(ObservationCategory.class);
-        if (hasArchived) {
-            potentialCategories.addAll(readWriteDAO.getEntitiesForUser(ObservationCategory.class, entity.getAppUser()));
-        } else {
-            potentialCategories.addAll(readWriteDAO.getActiveEntitiesForUser(ObservationCategory.class, entity.getAppUser()));
-        }
+        potentialCategories = new BeanItemContainer<>(ObservationCategory.class);
         TwinColSelect categories = new TwinColSelect();
         categories.setRows(4);
-        categories.setContainerDataSource(potentialCategories);
+        categories.setImmediate(true);
         categories.setItemCaptionPropertyId("shortName");
-        beanFieldGroup.bind(categories, "categories");
+        categories.setContainerDataSource(potentialCategories);
+        entityBeanFieldGroup.bind(categories, "categories");
         firstRow.addComponent(categories);
 
         outerLayout.addComponent(firstRow);
@@ -68,26 +82,26 @@ public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
 
         secondRow.addComponent(new Label("Significant?"));
         CheckBox significant = new CheckBox();
-        beanFieldGroup.bind(significant, "significant");
+        entityBeanFieldGroup.bind(significant, "significant");
         secondRow.addComponent(significant);
 
         secondRow.addComponent(new Label("Follow Up?"));
         CheckBox followUp = new CheckBox();
-        beanFieldGroup.bind(followUp, "followUpNeeded");
+        entityBeanFieldGroup.bind(followUp, "followUpNeeded");
         secondRow.addComponent(followUp);
 
         secondRow.addComponent(new Label("Reminder?"));
         DateField followUpReminder = new DateField();
         followUpReminder.setConverter(new LocalDateDateConverter());
         followUpReminder.setResolution(Resolution.DAY);
-        beanFieldGroup.bind(followUpReminder, "followUpReminder");
+        entityBeanFieldGroup.bind(followUpReminder, "followUpReminder");
         secondRow.addComponent(followUpReminder);
 
         secondRow.addComponent(new Label("Observation Time"));
         DateField observationTimestamp = new DateField();
         observationTimestamp.setResolution(Resolution.MINUTE);
         observationTimestamp.setConverter(new LocalDateTimeDateConverter());
-        beanFieldGroup.bind(observationTimestamp, "observationTimestamp");
+        entityBeanFieldGroup.bind(observationTimestamp, "observationTimestamp");
         secondRow.addComponent(observationTimestamp);
 
         outerLayout.addComponent(secondRow);
