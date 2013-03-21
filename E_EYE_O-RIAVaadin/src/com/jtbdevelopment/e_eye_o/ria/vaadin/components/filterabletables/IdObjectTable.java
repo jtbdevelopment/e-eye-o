@@ -223,8 +223,8 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         archivedCB.setValue(Boolean.FALSE);
         filterSection.addComponent(activeCB);
         filterSection.addComponent(archivedCB);
-        filterSection.setComponentAlignment(activeCB, Alignment.BOTTOM_RIGHT);
-        filterSection.setComponentAlignment(archivedCB, Alignment.BOTTOM_RIGHT);
+        filterSection.setComponentAlignment(activeCB, Alignment.BOTTOM_LEFT);
+        filterSection.setComponentAlignment(archivedCB, Alignment.BOTTOM_LEFT);
 
 
         addCustomFilters(filterSection);
