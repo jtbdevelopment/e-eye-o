@@ -21,6 +21,7 @@ import com.vaadin.event.MouseEvents;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.vaadin.dialogs.ConfirmDialog;
 
@@ -32,7 +33,7 @@ import java.util.*;
  * Time: 2:02 PM
  */
 @org.springframework.stereotype.Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationTable extends IdObjectTable<Observation> {
     private AppUserOwnedObject defaultObservationSubject;
 
@@ -155,6 +156,8 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 panel.addStyleName(Runo.PANEL_LIGHT);
                 panel.setHeight(2, Unit.EM);
                 panel.setWidth(20, Unit.EM);
+
+                //  TODO - html format?  turn new lines into <br>?
                 panel.setDescription(entity.getComment());
                 panel.addClickListener(new MouseEvents.ClickListener() {
                     @Override

@@ -9,6 +9,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Scope;
@@ -18,7 +19,7 @@ import org.springframework.context.annotation.Scope;
  * Time: 4:19 PM
  */
 @org.springframework.stereotype.Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class WorkAreaComponent extends CustomComponent implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;

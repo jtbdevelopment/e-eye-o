@@ -14,6 +14,7 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.VerticalLayout;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Component;
  * Time: 11:30 AM
  */
 @Component(value = "eeyeoUI")
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Theme("eeyeo")
 @SuppressWarnings("unused")
 @PreserveOnRefresh

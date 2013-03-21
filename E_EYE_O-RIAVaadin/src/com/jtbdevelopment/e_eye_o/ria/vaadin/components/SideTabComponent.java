@@ -12,6 +12,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 /**
@@ -19,7 +20,7 @@ import org.springframework.context.annotation.Scope;
  * Time: 12:13 AM
  */
 @org.springframework.stereotype.Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SideTabComponent extends CustomComponent {
     //  TODO - move this?
     public enum IdObjectSideTabs {

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.xpoft.vaadin.VaadinView;
 
 import javax.annotation.PostConstruct;
 
@@ -17,7 +16,6 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@VaadinView(ToDoView.VIEW_NAME)
 public class ToDoView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "ToDo";
 
