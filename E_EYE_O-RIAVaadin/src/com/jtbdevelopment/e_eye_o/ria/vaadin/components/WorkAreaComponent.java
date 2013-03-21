@@ -52,6 +52,9 @@ public class WorkAreaComponent extends CustomComponent implements ApplicationCon
             case Students:
                 mainLayout.setContent(applicationContext.getBean(StudentsWorkArea.class));
                 break;
+            case Classes:
+                mainLayout.setContent(applicationContext.getBean(ClassListsWorkArea.class));
+                break;
             default:
                 //  TODO - log or notify
         }

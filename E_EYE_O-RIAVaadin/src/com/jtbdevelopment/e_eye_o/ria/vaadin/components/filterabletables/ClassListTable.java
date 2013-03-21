@@ -5,8 +5,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
-import com.jtbdevelopment.e_eye_o.entities.Student;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.StudentEditorDialogWindow;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ClassListEditorDialogWindow;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -22,13 +21,13 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class StudentTable extends IdObjectTable<Student> {
+public class ClassListTable extends IdObjectTable<ClassList> {
     @Autowired
-    private StudentEditorDialogWindow studentEditorDialogWindow;
+    private ClassListEditorDialogWindow classListEditorDialogWindow;
 
     @Autowired
-    public StudentTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
-        super(Student.class, readWriteDAO, idObjectFactory, eventBus);
+    public ClassListTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
+        super(ClassList.class, readWriteDAO, idObjectFactory, eventBus);
     }
 
     private static final List<HeaderInfo> headers;
@@ -36,8 +35,7 @@ public class StudentTable extends IdObjectTable<Student> {
     static {
         //  TODO - add last observation date
         headers = Arrays.asList(
-                new HeaderInfo("firstName", "First Name", Table.Align.LEFT),
-                new HeaderInfo("lastName", "Last Name", Table.Align.LEFT),
+                new HeaderInfo("description", "Description", Table.Align.LEFT),
                 new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
                 new HeaderInfo("actions", "Actions", Table.Align.RIGHT)    // Generated
@@ -50,17 +48,18 @@ public class StudentTable extends IdObjectTable<Student> {
     }
 
     @Override
-    protected void showEntityEditor(final Student entity) {
-        getUI().addWindow(studentEditorDialogWindow);
-        studentEditorDialogWindow.setEntity(entity);
+    protected void showEntityEditor(final ClassList entity) {
+        getUI().addWindow(classListEditorDialogWindow);
+        classListEditorDialogWindow.setEntity(entity);
     }
 
     @Override
     public void setTableDriver(final IdObject tableDriver) {
         super.setTableDriver(tableDriver);
-        if (tableDriver instanceof ClassList) {
-            entities.addAll(readWriteDAO.getAllStudentsForClassList((ClassList) tableDriver));
-            refreshSizeAndSort();
-        }
+        //  TODO - anything?
+//        if (tableDriver instanceof ClassList) {
+//            readWriteDAO.getAllStudentsForClassList((ClassList) tableDriver);
+//            refreshSizeAndSort();
+//        }
     }
 }
