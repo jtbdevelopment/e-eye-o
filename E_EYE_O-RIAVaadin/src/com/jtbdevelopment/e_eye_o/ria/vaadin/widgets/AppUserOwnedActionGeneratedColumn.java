@@ -77,9 +77,13 @@ public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> imp
                     @Override
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
-                            //  TODO - make delete return set of everything deleted so all can be published
-                            readWriteDAO.delete(entity);
-                            eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.DELETED, entity));
+                            ReadWriteDAO.ChainedUpdateSet<AppUserOwnedObject> daoResults = readWriteDAO.delete(entity);
+                            for (AppUserOwnedObject modified : daoResults.getModifiedItems()) {
+                                eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, modified));
+                            }
+                            for (AppUserOwnedObject deleted : daoResults.getDeletedItems()) {
+                                eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.DELETED, deleted));
+                            }
                         }
                     }
                 });
