@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Scope;
  */
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ClassListEditorForms extends IdObjectEditorForm<ClassList> {
+public class ClassListEditorForm extends IdObjectEditorForm<ClassList> {
 
     private TextField description;
 
@@ -29,7 +29,7 @@ public class ClassListEditorForms extends IdObjectEditorForm<ClassList> {
      * visual editor.
      */
     @Autowired
-    public ClassListEditorForms(final ReadWriteDAO readWriteDAO, final EventBus eventBus) {
+    public ClassListEditorForm(final ReadWriteDAO readWriteDAO, final EventBus eventBus) {
         super(ClassList.class, readWriteDAO, eventBus);
     }
 
