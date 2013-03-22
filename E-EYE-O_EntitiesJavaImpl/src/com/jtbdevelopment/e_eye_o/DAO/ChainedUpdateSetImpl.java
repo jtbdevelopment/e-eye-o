@@ -12,8 +12,10 @@ public class ChainedUpdateSetImpl<T> implements ReadWriteDAO.ChainedUpdateSet<T>
     private final Set<T> modifiedItems = new HashSet<>();
 
     public ChainedUpdateSetImpl(final Set<T> modifiedItems, final Set<T> deletedItems) {
-        this.deletedItems.addAll(deletedItems);
-        this.modifiedItems.addAll(modifiedItems);
+        if (deletedItems != null)
+            this.deletedItems.addAll(deletedItems);
+        if (modifiedItems != null)
+            this.modifiedItems.addAll(modifiedItems);
     }
 
     public ChainedUpdateSetImpl(final Iterable<ReadWriteDAO.ChainedUpdateSet<T>> sets) {

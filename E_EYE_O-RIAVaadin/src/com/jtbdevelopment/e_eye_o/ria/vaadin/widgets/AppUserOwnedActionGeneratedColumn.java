@@ -56,12 +56,8 @@ public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> imp
                 final String caption = event.getButton().getCaption();
                 switch (caption) {
                     case ARCHIVE:
-                        //  TODO - implement
-                        Notification.show("TO DO:  Archive " + entity.getViewableDescription());
-                        break;
                     case ACTIVATE:
-                        //  TODO - implement
-                        Notification.show("TO DO:  Unarchive " + entity.getViewableDescription());
+                        publishUpdatedDAOObjects(readWriteDAO.changeArchiveStatus(entity));
                         break;
                     default:
                         Notification.show("Something went wrong - button label = " + caption, Notification.Type.ERROR_MESSAGE);
@@ -77,13 +73,7 @@ public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> imp
                     @Override
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
-                            ReadWriteDAO.ChainedUpdateSet<AppUserOwnedObject> daoResults = readWriteDAO.delete(entity);
-                            for (AppUserOwnedObject modified : daoResults.getModifiedItems()) {
-                                eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, modified));
-                            }
-                            for (AppUserOwnedObject deleted : daoResults.getDeletedItems()) {
-                                eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.DELETED, deleted));
-                            }
+                            publishUpdatedDAOObjects(readWriteDAO.delete(entity));
                         }
                     }
                 });
@@ -101,5 +91,14 @@ public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> imp
         }
         layout.setComponentAlignment(deleteButton, Alignment.MIDDLE_CENTER);
         return layout;
+    }
+
+    private void publishUpdatedDAOObjects(final ReadWriteDAO.ChainedUpdateSet<AppUserOwnedObject> daoResults) {
+        for (AppUserOwnedObject modified : daoResults.getModifiedItems()) {
+            eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, modified));
+        }
+        for (AppUserOwnedObject deleted : daoResults.getDeletedItems()) {
+            eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.DELETED, deleted));
+        }
     }
 }

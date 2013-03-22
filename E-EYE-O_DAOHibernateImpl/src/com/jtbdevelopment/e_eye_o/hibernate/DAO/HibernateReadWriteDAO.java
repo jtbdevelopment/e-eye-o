@@ -73,6 +73,56 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         return wrappedEntities;
     }
 
+    @Override
+    public <T extends AppUserOwnedObject> ChainedUpdateSet<AppUserOwnedObject> changeArchiveStatus(final T entity) {
+        boolean initialArchivedState = entity.isArchived();
+        boolean newArchivedState = !initialArchivedState;
+
+        Session currentSession = sessionFactory.getCurrentSession();
+
+        T wrapped = wrapperFactory.wrap(entity);
+        wrapped = (T) get(wrapped.getClass(), wrapped.getId());
+        if (wrapped == null) {
+            return new ChainedUpdateSetImpl<AppUserOwnedObject>(Collections.EMPTY_SET, Collections.EMPTY_SET);  //  Already deleted?
+        }
+        Set<AppUserOwnedObject> modifiedObjects = new HashSet<>();
+        if (entity instanceof ClassList) {
+            for (Student student : getAllStudentsForClassList((ClassList) entity)) {
+                if (student.isArchived() == initialArchivedState) {
+                    if (!newArchivedState || student.getActiveClassLists().size() == 1) {
+                        modifiedObjects.addAll(changeArchiveStatus(student).getModifiedItems());
+                    }
+                }
+            }
+        }
+
+        for (Photo photo : getAllPhotosForEntity(entity)) {
+            if (photo.isArchived() == initialArchivedState) {
+                modifiedObjects.addAll(changeArchiveStatus(photo).getModifiedItems());
+            }
+        }
+
+        for (Observation observation : getAllObservationsForEntity(entity)) {
+            if (observation.isArchived() == initialArchivedState) {
+                modifiedObjects.addAll(changeArchiveStatus(observation).getModifiedItems());
+            }
+        }
+
+        wrapped.setArchived(newArchivedState);
+        currentSession.update(wrapped);
+        modifiedObjects.add(wrapped);
+        return new ChainedUpdateSetImpl<>(modifiedObjects, null);
+    }
+
+    @Override
+    public <T extends AppUserOwnedObject> Map<T, ChainedUpdateSet<AppUserOwnedObject>> changeArchiveStatus(final Collection<T> entities) {
+        Map<T, ChainedUpdateSet<AppUserOwnedObject>> resultMap = new HashMap<>();
+        for (T entity : entities) {
+            resultMap.put(entity, changeArchiveStatus(entity));
+        }
+        return resultMap;
+    }
+
     //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")
