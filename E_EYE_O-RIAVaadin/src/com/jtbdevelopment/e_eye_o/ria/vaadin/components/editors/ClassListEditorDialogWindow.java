@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ClassListEditorDialogWindow extends IdObjectEditorDialogWindow<ClassList> {
     @Autowired
-    public ClassListEditorDialogWindow(final ClassListEditorForm classListEditorForm) {
+    public ClassListEditorDialogWindow(final ClassListEditorForms classListEditorForm) {
         super(80, 15, classListEditorForm);
     }
 
