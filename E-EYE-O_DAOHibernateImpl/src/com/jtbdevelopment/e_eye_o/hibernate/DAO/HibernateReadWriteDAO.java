@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
+import com.jtbdevelopment.e_eye_o.DAO.ChainedUpdateSetImpl;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
@@ -11,8 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Date: 11/19/12
@@ -76,34 +76,42 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")
-    public void deleteUser(final AppUser appUser) {
+    public ChainedUpdateSet<AppUserOwnedObject> deleteUser(final AppUser appUser) {
         Session currentSession = sessionFactory.getCurrentSession();
 
         AppUser wrapped = wrapperFactory.wrap(appUser);
         wrapped = get(AppUser.class, wrapped.getId());
         if (wrapped == null) {
-            return;  //  Already deleted?
+            return new ChainedUpdateSetImpl<AppUserOwnedObject>(Collections.EMPTY_SET, Collections.EMPTY_SET);  //  Already deleted?
         }
 
-        delete(getEntitiesForUser(HibernateAppUserOwnedObject.class, wrapped));
+        Map<HibernateAppUserOwnedObject, ChainedUpdateSet<AppUserOwnedObject>> returnSet
+                = delete(getEntitiesForUser(HibernateAppUserOwnedObject.class, wrapped));
         for (DeletedObject deletedObject : getEntitiesForUser(DeletedObject.class, wrapped)) {
             currentSession.delete(deletedObject);
         }
 
         currentSession.delete(wrapped);
+        //  TODO - tess
+        return new ChainedUpdateSetImpl<>(returnSet.values());
     }
 
     @Override
-    public void deleteUsers(final Collection<AppUser> users) {
+    public Map<AppUser, ChainedUpdateSet<AppUserOwnedObject>> deleteUsers(final Collection<AppUser> users) {
+        Map<AppUser, ChainedUpdateSet<AppUserOwnedObject>> results = new HashMap<>();
         for (AppUser user : users) {
-            deleteUser(user);
+            results.put(user, deleteUser(user));
         }
+        //  TODO - tests
+        return results;
     }
 
     //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> void delete(final T entity) {
+    public <T extends AppUserOwnedObject> ChainedUpdateSet<AppUserOwnedObject> delete(final T entity) {
+        Set<AppUserOwnedObject> updatedItems = new HashSet<>();
+        Set<AppUserOwnedObject> deletedItems = new HashSet<>();
         if (entity instanceof DeletedObject) {
             throw new IllegalArgumentException("You can not manually delete DeletedObjects.  These are only cleaned up by deleting user.");
         }
@@ -113,7 +121,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         wrapped = (T) get(wrapped.getClass(), wrapped.getId());
         if (wrapped == null) {
             //  Already deleted
-            return;
+            return new ChainedUpdateSetImpl<>(updatedItems, deletedItems);
         }
 
         if (wrapped instanceof ObservationCategory) {
@@ -136,20 +144,28 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
         final List<Photo> allPhotosForEntity = getAllPhotosForEntity(wrapped);
         for (Photo p : allPhotosForEntity) {
+            deletedItems.add(p);
             currentSession.delete(p);
         }
         for (Observation o : getAllObservationsForEntity(wrapped)) {
+            deletedItems.add(o);
             currentSession.delete(o);
         }
 
+        deletedItems.add(wrapped);
         currentSession.delete(wrapped);
         currentSession.flush();   //  Force any delete object generations inside this session
+        //  TODO - unit test adjustments for deletedItems verification
+        return new ChainedUpdateSetImpl<>(updatedItems, deletedItems);
     }
 
     @Override
-    public <T extends AppUserOwnedObject> void delete(final Collection<T> entities) {
-        for (AppUserOwnedObject entity : entities) {
-            delete(entity);
+    public <T extends AppUserOwnedObject> Map<T, ChainedUpdateSet<AppUserOwnedObject>> delete(final Collection<T> entities) {
+        Map<T, ChainedUpdateSet<AppUserOwnedObject>> deletedItems = new HashMap<>();
+        for (T entity : entities) {
+            deletedItems.put(entity, delete(entity));
         }
+        //  TODO - verify
+        return deletedItems;
     }
 }
