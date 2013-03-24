@@ -19,6 +19,7 @@ public interface IdObject {
     public final static String CANNOT_BE_NULL_ERROR = " cannot be null.";
     public final static String CANNOT_CONTAIN_NULL_ERROR = " cannot contain null.";
     public final static String DESCRIPTION_SIZE_ERROR = " must be " + MAX_DESCRIPTION_SIZE + " characters or less.";
+    public final static String SHORT_NAME_SIZE_ERROR = " must be " + MAX_SHORT_NAME_SIZE + " characters or less.";
     public final static String NAME_SIZE_ERROR = " must be " + MAX_NAME_SIZE + " characters or less.";
     public final static String CANNOT_BE_BLANK_OR_NULL_ERROR = " cannot be blank or null.";
 
