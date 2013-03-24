@@ -23,12 +23,12 @@ public class LocalDateTimeStringConverter implements Converter<String, LocalDate
 
     @Override
     public LocalDateTime convertToModel(final String value, final Locale locale) throws ConversionException {
-        return value == null ? null : LocalDateTime.parse(value, DateTimeFormat.forPattern(format));
+        return value == null ? null : LocalDateTime.parse(value, DateTimeFormat.forPattern(format).withLocale(locale));
     }
 
     @Override
     public String convertToPresentation(final LocalDateTime value, final Locale locale) throws ConversionException {
-        return value == null ? null : value.toString(format);
+        return value == null ? null : value.toString(format, locale);
     }
 
     @Override
