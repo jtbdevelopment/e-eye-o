@@ -3,6 +3,15 @@
 //  TODO variable the colors
 
 $background: #b0c4de;
+$color: black;
+$tableHeaderBackground: black;
+$tableColor: white;
+$tableRowBackground: white;
+$tableRowForeground: black;
+$tableRowBackgroundAlternate: white;
+$tableRowForegroundAlternate: black;
+$tableRowBackgroundSelected: yellow;
+$tableRowForegroundSelected: black;
 
 @mixin eeyeo {
   @include runo;
