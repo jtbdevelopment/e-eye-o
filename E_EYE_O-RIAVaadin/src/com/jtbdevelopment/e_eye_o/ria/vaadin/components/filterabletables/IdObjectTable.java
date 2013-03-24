@@ -18,6 +18,7 @@ import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.Runo;
 import org.jsoup.helper.StringUtil;
 
 import java.util.Arrays;
@@ -80,6 +81,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         mainLayout.addComponent(buildActionRow());
 
         entityTable.setContainerDataSource(entities);
+        entityTable.addStyleName(Runo.TABLE_SMALL);
         addGeneratedColumns(true);
 
         entityTable.setSortEnabled(true);
