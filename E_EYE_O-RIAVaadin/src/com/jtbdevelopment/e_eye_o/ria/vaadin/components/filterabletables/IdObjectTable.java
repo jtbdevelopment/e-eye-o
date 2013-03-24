@@ -29,6 +29,7 @@ import java.util.List;
  * Date: 3/16/13
  * Time: 7:11 PM
  */
+//  TODO - figure out how to get rid of excess spacing at top of action row
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends CustomComponent {
     public static class HeaderInfo {
         private final String property;

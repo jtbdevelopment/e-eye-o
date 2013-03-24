@@ -188,7 +188,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
                     breakLink.addClickListener(new Button.ClickListener() {
                         @Override
                         public void buttonClick(final Button.ClickEvent event) {
-                            ConfirmDialog.show(getUI(), "Change " + entity.getFollowUpObservation().getViewableDescription() + " to not be a follow-up for this observation?", new ConfirmDialog.Listener() {
+                            ConfirmDialog.show(getUI(), "Change " + entity.getFollowUpObservation().getSummaryDescription() + " to not be a follow-up for this observation?", new ConfirmDialog.Listener() {
                                 @Override
                                 public void onClose(final ConfirmDialog dialog) {
                                     if (dialog.isConfirmed()) {

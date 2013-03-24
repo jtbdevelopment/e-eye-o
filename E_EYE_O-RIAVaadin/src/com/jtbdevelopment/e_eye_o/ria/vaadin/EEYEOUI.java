@@ -4,15 +4,14 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.MainPageComposite;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TitleBarComposite;
-import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Runo;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -58,7 +57,6 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         outer.setSizeFull();
         outer.setMargin(new MarginInfo(true, true, true, false));
 
-        titleBarComposite.setAppUser(appUser);
         outer.addComponent(titleBarComposite);
         outer.addComponent(mainPageComposite);
         outer.setExpandRatio(mainPageComposite, 1.0f);
@@ -75,7 +73,7 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
     @Subscribe
     public void logoutEventHandler(final LogoutEvent event) {
         AppUser appUser = getSession().getAttribute(AppUser.class);
-        appUser.setLastLogin(new DateTime());
+        appUser.setLastLogout(new DateTime());
         readWriteDAO.update(appUser);
         getPage().setLocation("/j_spring_security_logout");
     }

@@ -107,8 +107,8 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
 
     @Override
     @Transient
-    public String getViewableDescription() {
-        return wrapped.getViewableDescription();
+    public String getSummaryDescription() {
+        return wrapped.getSummaryDescription();
     }
 
     public void setId(final String id) {

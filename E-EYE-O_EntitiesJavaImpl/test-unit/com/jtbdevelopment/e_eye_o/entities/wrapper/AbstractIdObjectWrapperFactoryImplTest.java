@@ -53,12 +53,12 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public DateTime getLastLogin() {
+        public DateTime getLastLogout() {
             return null;
         }
 
         @Override
-        public void setLastLogin(final DateTime lastLogin) {
+        public void setLastLogout(final DateTime lastLogout) {
         }
 
         @Override
@@ -80,7 +80,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public String getViewableDescription() {
+        public String getSummaryDescription() {
             return null;
         }
     }
@@ -126,8 +126,8 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public String getViewableDescription() {
-            return wrapped.getViewableDescription();
+        public String getSummaryDescription() {
+            return wrapped.getSummaryDescription();
         }
 
 
@@ -194,8 +194,8 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
-        public String getViewableDescription() {
-            return wrapped.getViewableDescription();
+        public String getSummaryDescription() {
+            return wrapped.getSummaryDescription();
         }
     }
 

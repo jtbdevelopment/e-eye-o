@@ -99,17 +99,17 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetLastLogin() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).getLastLogin();
+            one(implAppUser).getLastLogout();
             will(returnValue(DATETIME_VALUE));
         }});
-        assertEquals(DATETIME_VALUE, hibernateAppUser.getLastLogin());
+        assertEquals(DATETIME_VALUE, hibernateAppUser.getLastLogout());
     }
 
     @Test
     public void testSetLastLogin() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).setLastLogin(DATETIME_VALUE);
+            one(implAppUser).setLastLogout(DATETIME_VALUE);
         }});
-        hibernateAppUser.setLastLogin(DATETIME_VALUE);
+        hibernateAppUser.setLastLogout(DATETIME_VALUE);
     }
 }

@@ -36,7 +36,7 @@ public class ObservationCategoryImpl extends AppUserOwnedObjectImpl implements O
     }
 
     @Override
-    public String getViewableDescription() {
+    public String getSummaryDescription() {
         return description.trim();
     }
 }

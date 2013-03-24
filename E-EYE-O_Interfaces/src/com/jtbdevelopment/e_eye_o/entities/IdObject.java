@@ -35,5 +35,5 @@ public interface IdObject {
     void setModificationTimestamp(final DateTime modificationTimestamp);
 
     @Transient
-    String getViewableDescription();
+    String getSummaryDescription();
 }

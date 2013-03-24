@@ -60,7 +60,7 @@ public class ObservationWithSubjectTable extends ObservationTable {
 
             @Override
             public String convertToPresentation(final AppUserOwnedObject value, final Locale locale) throws ConversionException {
-                return value == null ? null : value.getViewableDescription();
+                return value == null ? null : value.getSummaryDescription();
             }
 
             @Override

@@ -58,12 +58,12 @@ public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppU
     @Override
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(nullable = false)
-    public DateTime getLastLogin() {
-        return wrapped.getLastLogin();
+    public DateTime getLastLogout() {
+        return wrapped.getLastLogout();
     }
 
     @Override
-    public void setLastLogin(final DateTime lastLogin) {
-        wrapped.setLastLogin(lastLogin);
+    public void setLastLogout(final DateTime lastLogout) {
+        wrapped.setLastLogout(lastLogout);
     }
 }

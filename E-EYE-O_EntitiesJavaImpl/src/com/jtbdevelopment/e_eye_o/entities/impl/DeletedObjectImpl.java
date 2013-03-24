@@ -29,7 +29,7 @@ public class DeletedObjectImpl extends AppUserOwnedObjectImpl implements Deleted
     }
 
     @Override
-    public String getViewableDescription() {
+    public String getSummaryDescription() {
         return deleteId;
     }
 }

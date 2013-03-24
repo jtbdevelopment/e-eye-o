@@ -50,7 +50,7 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
     }
 
     @Override
-    public String getViewableDescription() {
+    public String getSummaryDescription() {
         return (description + " " + timestamp.toString("MMM dd")).trim();
     }
 }

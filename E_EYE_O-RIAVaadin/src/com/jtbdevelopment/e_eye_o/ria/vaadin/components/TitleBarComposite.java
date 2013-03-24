@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class TitleBarComposite extends CustomComponent {
 
     private final Label welcomeLabel;
+    private final Label lastLogout;
 
     @Autowired
     public TitleBarComposite(final Logo logo) {
@@ -39,11 +40,23 @@ public class TitleBarComposite extends CustomComponent {
         mainLayout.addComponent(logo);
         mainLayout.addComponent(logo);
         mainLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
-        mainLayout.setExpandRatio(logo, 0.5f);
+        mainLayout.setExpandRatio(logo, 0.75f);
+
+        lastLogout = new Label();
+        lastLogout.setWidth(null);
+        mainLayout.addComponent(lastLogout);
         setCompositionRoot(mainLayout);
     }
 
-    public void setAppUser(final AppUser appUser) {
-        welcomeLabel.setValue("Welcome " + appUser.getViewableDescription());
+    @Override
+    public void attach() {
+        super.attach();
+        AppUser appUser = getUI().getSession().getAttribute(AppUser.class);
+        if (appUser.getLastLogout().equals(AppUser.NEVER_LOGGED_IN)) {
+            welcomeLabel.setValue("Welcome " + appUser.getSummaryDescription());
+        } else {
+            welcomeLabel.setValue("Welcome back " + appUser.getSummaryDescription());
+        }
+        lastLogout.setValue("Last Session: " + appUser.getLastLogout().toString("YYYY-MM-dd HH:mm", getUI().getLocale()));
     }
 }

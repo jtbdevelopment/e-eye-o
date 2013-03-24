@@ -26,7 +26,7 @@ public class ClassListImpl extends AppUserOwnedObjectImpl implements ClassList {
 
 
     @Override
-    public String getViewableDescription() {
+    public String getSummaryDescription() {
         return description.trim();
     }
 }

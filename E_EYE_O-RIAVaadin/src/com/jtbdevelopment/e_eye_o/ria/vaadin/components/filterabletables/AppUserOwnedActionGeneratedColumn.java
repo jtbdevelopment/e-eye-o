@@ -69,7 +69,7 @@ public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> imp
         deleteButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
-                ConfirmDialog.show(layout.getUI(), "Delete " + entity.getViewableDescription(), new ConfirmDialog.Listener() {
+                ConfirmDialog.show(layout.getUI(), "Delete " + entity.getSummaryDescription(), new ConfirmDialog.Listener() {
                     @Override
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {

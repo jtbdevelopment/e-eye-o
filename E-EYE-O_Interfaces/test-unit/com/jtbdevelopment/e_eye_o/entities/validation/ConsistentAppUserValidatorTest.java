@@ -133,7 +133,7 @@ public class ConsistentAppUserValidatorTest {
         }
 
         @Override
-        public String getViewableDescription() {
+        public String getSummaryDescription() {
             return id;
         }
     }

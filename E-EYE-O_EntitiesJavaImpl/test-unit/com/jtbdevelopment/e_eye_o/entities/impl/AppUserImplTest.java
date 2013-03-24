@@ -51,22 +51,22 @@ public class AppUserImplTest extends AbstractIdObjectTest<AppUserImpl> {
 
     @Test
     public void testGetLastLoginDefaultsToNeverValue() {
-        assertEquals(AppUser.NEVER_LOGGED_IN, new AppUserImpl().getLastLogin());
+        assertEquals(AppUser.NEVER_LOGGED_IN, new AppUserImpl().getLastLogout());
     }
 
     @Test
     public void testGetSetLastLogin() throws Exception {
         DateTime now = new DateTime();
         final AppUser appUser = new AppUserImpl();
-        appUser.setLastLogin(now);
-        assertEquals(now, appUser.getLastLogin());
+        appUser.setLastLogout(now);
+        assertEquals(now, appUser.getLastLogout());
         validateNotExpectingError(appUser, AppUser.LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR);
     }
 
     @Test
     public void testSetLastLoginNullExceptions() throws Exception {
         final AppUser appUser = new AppUserImpl();
-        appUser.setLastLogin(null);
+        appUser.setLastLogout(null);
         validateExpectingError(appUser, AppUser.LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR);
     }
 }

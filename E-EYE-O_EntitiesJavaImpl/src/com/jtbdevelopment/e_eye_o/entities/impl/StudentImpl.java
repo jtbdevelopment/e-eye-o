@@ -93,7 +93,7 @@ public class StudentImpl extends AppUserOwnedObjectImpl implements Student {
     }
 
     @Override
-    public String getViewableDescription() {
+    public String getSummaryDescription() {
         return (firstName + " " + lastName).trim();
     }
 }
