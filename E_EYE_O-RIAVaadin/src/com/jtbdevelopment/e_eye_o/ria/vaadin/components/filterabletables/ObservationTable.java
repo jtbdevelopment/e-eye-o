@@ -162,7 +162,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 panel.setWidth(20, Unit.EM);
 
                 //  TODO - html format?  turn new lines into <br>?
-                panel.setDescription(entity.getComment());
+                panel.setDescription(entity.getComment().replace("\n", "<br/>"));
                 panel.addClickListener(new MouseEvents.ClickListener() {
                     @Override
                     public void click(final MouseEvents.ClickEvent event) {
