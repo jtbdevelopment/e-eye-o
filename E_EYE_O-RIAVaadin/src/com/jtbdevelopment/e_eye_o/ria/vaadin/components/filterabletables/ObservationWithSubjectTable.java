@@ -49,6 +49,11 @@ public class ObservationWithSubjectTable extends ObservationTable {
     }
 
     @Override
+    protected String getDefaultSortField(List<String> properties) {
+        return "observationTimestamp";
+    }
+
+    @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
         entityTable.setConverter("observationSubject", new Converter<String, AppUserOwnedObject>() {
