@@ -3,9 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectRelatedSideTabClicked;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.ClassListsWorkArea;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.ObservationsWorkArea;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.StudentsWorkArea;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.*;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
@@ -53,6 +51,12 @@ public class WorkAreaComponent extends CustomComponent implements ApplicationCon
                 break;
             case Observations:
                 mainLayout.setContent(applicationContext.getBean(ObservationsWorkArea.class));
+                break;
+            case Categories:
+                mainLayout.setContent(applicationContext.getBean(ObservationCategoriesWorkArea.class));
+                break;
+            case Photos:
+                mainLayout.setContent(applicationContext.getBean(PhotosWorkArea.class));
                 break;
             default:
                 //  TODO - log or notify

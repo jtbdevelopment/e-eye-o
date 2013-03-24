@@ -1,10 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.Observation;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationWithSubjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum.PhotoAlbum;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
@@ -19,23 +15,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ObservationsWorkArea extends CustomComponent {
-    private ObservationTable observationTable;
+public class PhotosWorkArea extends CustomComponent {
 
     @Autowired
-    public ObservationsWorkArea(final ObservationWithSubjectTable observationTable, final PhotoAlbum photoAlbum) {
+    public PhotosWorkArea(final PhotoAlbum photoAlbum) {
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
         mainLayout.setSpacing(true);
-
-        this.observationTable = observationTable;
-        observationTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Observation>() {
-            @Override
-            public void handleClickEvent(final Observation entity) {
-                //  TODO change photos
-            }
-        });
-        mainLayout.addComponent(observationTable);
 
         mainLayout.addComponent(photoAlbum);
 
@@ -46,8 +32,10 @@ public class ObservationsWorkArea extends CustomComponent {
     public void attach() {
         super.attach();
         final AppUser appUser = getSession().getAttribute(AppUser.class);
-        observationTable.setTableDriver(appUser);
-        getUI().setFocusedComponent(observationTable.getSearchFor());
+
+        //  TODO
+//        observationTable.setTableDriver(appUser);
+//        getUI().setFocusedComponent(observationTable.getSearchFor());
     }
 
     @Override

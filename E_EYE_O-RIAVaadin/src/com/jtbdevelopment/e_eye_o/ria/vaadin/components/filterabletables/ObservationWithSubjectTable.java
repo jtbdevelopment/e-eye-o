@@ -4,11 +4,17 @@ import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.vaadin.data.Container;
 import com.vaadin.data.util.converter.Converter;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,8 +22,8 @@ import java.util.Locale;
  * Date: 3/17/13
  * Time: 4:45 PM
  */
-//@Component
-//@Scope("prototype")
+@Component
+@Scope("prototype")
 public class ObservationWithSubjectTable extends ObservationTable {
     @Autowired
     public ObservationWithSubjectTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
@@ -27,13 +33,19 @@ public class ObservationWithSubjectTable extends ObservationTable {
     private static final List<HeaderInfo> headersWithSubject;
 
     static {
-        headersWithSubject = Arrays.asList(new HeaderInfo("observationSubject", "Subject", Table.Align.LEFT));
+        headersWithSubject = new LinkedList<>(Arrays.asList(new HeaderInfo("observationSubject", "Subject", Table.Align.LEFT)));
         headersWithSubject.addAll(headers);
     }
 
     @Override
     protected List<HeaderInfo> getHeaderInfo() {
         return headersWithSubject;
+    }
+
+    @Override
+    protected Container.Filter generateFilter(String searchFor) {
+        //  TODO - this doesn't actually work due to the property search of objects
+        return new Or(super.generateFilter(searchFor), new SimpleStringFilter("observationSubject", searchFor, true, false));
     }
 
     @Override

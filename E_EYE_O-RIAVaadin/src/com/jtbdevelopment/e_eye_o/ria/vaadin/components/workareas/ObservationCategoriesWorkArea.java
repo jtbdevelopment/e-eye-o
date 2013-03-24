@@ -2,10 +2,10 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
+import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationCategoryTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationWithSubjectTable;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum.PhotoAlbum;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +19,31 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ObservationsWorkArea extends CustomComponent {
-    private ObservationTable observationTable;
+public class ObservationCategoriesWorkArea extends CustomComponent {
+    private ObservationCategoryTable observationCategoryTable;
 
     @Autowired
-    public ObservationsWorkArea(final ObservationWithSubjectTable observationTable, final PhotoAlbum photoAlbum) {
+    public ObservationCategoriesWorkArea(final ObservationCategoryTable observationCategoryTable, final ObservationWithSubjectTable observationTable) {
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
         mainLayout.setSpacing(true);
 
-        this.observationTable = observationTable;
+        this.observationCategoryTable = observationCategoryTable;
+        observationCategoryTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<ObservationCategory>() {
+            @Override
+            public void handleClickEvent(final ObservationCategory entity) {
+                observationTable.setTableDriver(entity);
+            }
+        });
+        mainLayout.addComponent(observationCategoryTable);
+
         observationTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Observation>() {
             @Override
             public void handleClickEvent(final Observation entity) {
-                //  TODO change photos
+                //  TODO if even needed
             }
         });
         mainLayout.addComponent(observationTable);
-
-        mainLayout.addComponent(photoAlbum);
 
         setCompositionRoot(mainLayout);
     }
@@ -46,8 +52,8 @@ public class ObservationsWorkArea extends CustomComponent {
     public void attach() {
         super.attach();
         final AppUser appUser = getSession().getAttribute(AppUser.class);
-        observationTable.setTableDriver(appUser);
-        getUI().setFocusedComponent(observationTable.getSearchFor());
+        observationCategoryTable.setTableDriver(appUser);
+        getUI().setFocusedComponent(observationCategoryTable.getSearchFor());
     }
 
     @Override

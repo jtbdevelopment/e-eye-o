@@ -7,8 +7,8 @@ import com.google.gwt.thirdparty.guava.common.base.Function;
 import com.google.gwt.thirdparty.guava.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.BooleanToYesNoConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.LocalDateStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.LocalDateTimeStringConverter;
@@ -283,8 +283,12 @@ public class ObservationTable extends IdObjectTable<Observation> {
     public void setTableDriver(final IdObject tableDriver) {
         super.setTableDriver(tableDriver);
         if (tableDriver instanceof AppUserOwnedObject) {
-            entities.addAll(readWriteDAO.getAllObservationsForEntity((AppUserOwnedObject) tableDriver));
-            setDefaultObservationSubject((AppUserOwnedObject) tableDriver);
+            if (tableDriver instanceof ObservationCategory) {
+                entities.addAll(readWriteDAO.getAllObservationsForObservationCategory((ObservationCategory) tableDriver));
+            } else {
+                entities.addAll(readWriteDAO.getAllObservationsForEntity((AppUserOwnedObject) tableDriver));
+                setDefaultObservationSubject((AppUserOwnedObject) tableDriver);
+            }
             refreshSizeAndSort();
         }
     }
