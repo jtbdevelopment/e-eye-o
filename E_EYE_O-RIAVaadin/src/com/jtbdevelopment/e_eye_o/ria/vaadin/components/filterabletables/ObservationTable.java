@@ -17,7 +17,6 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.event.MouseEvents;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,27 +154,17 @@ public class ObservationTable extends IdObjectTable<Observation> {
             @Override
             public Object generateCell(final Table source, final Object itemId, final Object columnId) {
                 final Observation entity = entities.getItem(itemId).getBean();
-                Label comment = new Label(entity.getComment());
-                Panel panel = new Panel(comment);
-                panel.addStyleName(Runo.PANEL_LIGHT);
-                panel.setHeight(2, Unit.EM);
-                panel.setWidth(20, Unit.EM);
+                String shortenedComment = entity.getComment().replace("\n", "");
+                if (shortenedComment.length() > 40) {
+                    shortenedComment = shortenedComment.substring(0, 37) + "...";
+                }
+                Label comment = new Label(shortenedComment);
+                comment.setWidth(20, Unit.EM);
+                comment.setHeight(2, Unit.EM);
 
                 //  TODO - html format?  turn new lines into <br>?
-                panel.setDescription(entity.getComment().replace("\n", "<br/>"));
-                panel.addClickListener(new MouseEvents.ClickListener() {
-                    @Override
-                    public void click(final MouseEvents.ClickEvent event) {
-                        if (clickedOnListener != null) {
-                            clickedOnListener.handleClickEvent(entity);
-                        }
-                        entityTable.setValue(entity);
-                        if (event.isDoubleClick()) {
-                            showEntityEditor(entity);
-                        }
-                    }
-                });
-                return panel;
+                comment.setDescription(entity.getComment().replace("\n", "<br/>"));
+                return comment;
             }
         });
         entityTable.addGeneratedColumn("showFollowUp", new Table.ColumnGenerator() {
