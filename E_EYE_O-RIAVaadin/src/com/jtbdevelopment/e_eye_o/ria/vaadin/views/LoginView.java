@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -51,6 +52,9 @@ public class LoginView extends VerticalLayout implements View {
     @Autowired
     private IdObjectFactory idObjectFactory;
 
+    @Autowired
+    private Logo logo;
+
     @PostConstruct
     public void PostConstruct() {
         setSpacing(true);
@@ -61,12 +65,14 @@ public class LoginView extends VerticalLayout implements View {
         VerticalLayout verticalLayout = new VerticalLayout();
         addComponent(verticalLayout);
         setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
-        Label title = new Label("Welcome to E-EYE-O");
+        Label title = new Label("Welcome to");
         title.setWidth(null);
         title.setHeight(null);
         title.addStyleName("bold");
         verticalLayout.addComponent(title);
         verticalLayout.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
+        verticalLayout.addComponent(logo);
+        verticalLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
 
         FormLayout form = new FormLayout();
         form.setWidth(null);
