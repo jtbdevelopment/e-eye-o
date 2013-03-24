@@ -1,14 +1,11 @@
 @import "../runo/runo.scss";
 
-//@import "../base/base.scss";
-
 //  TODO variable the colors
 
 $background: #b0c4de;
 
 @mixin eeyeo {
   @include runo;
-//@include base;
 
   .v-ui {
     background: $background;

@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.events.IdObjectRelatedSideTabClicked;
+import com.jtbdevelopment.e_eye_o.ria.events.IdObjectRelatedSideTabClicked;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;

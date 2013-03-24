@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.events;
+package com.jtbdevelopment.e_eye_o.ria.events;
 
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.SideTabComponent;
 

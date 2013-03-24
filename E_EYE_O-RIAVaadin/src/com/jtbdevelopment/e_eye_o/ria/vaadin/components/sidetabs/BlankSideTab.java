@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.widgets.sidetabs;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.components.sidetabs;
 
 import com.vaadin.ui.Label;
 

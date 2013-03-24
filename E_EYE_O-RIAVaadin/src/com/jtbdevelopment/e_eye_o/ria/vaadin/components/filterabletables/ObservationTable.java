@@ -8,7 +8,7 @@ import com.google.gwt.thirdparty.guava.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.events.IdObjectChanged;
+import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.BooleanToYesNoConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.LocalDateStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.LocalDateTimeStringConverter;

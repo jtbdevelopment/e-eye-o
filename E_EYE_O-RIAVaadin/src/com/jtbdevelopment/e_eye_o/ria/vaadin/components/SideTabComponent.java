@@ -2,10 +2,10 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.events.LogoutEvent;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.widgets.sidetabs.BlankSideTab;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.widgets.sidetabs.IdObjectRelatedSideTab;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.widgets.sidetabs.SideTab;
+import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.sidetabs.BlankSideTab;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.sidetabs.IdObjectRelatedSideTab;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.sidetabs.SideTab;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;

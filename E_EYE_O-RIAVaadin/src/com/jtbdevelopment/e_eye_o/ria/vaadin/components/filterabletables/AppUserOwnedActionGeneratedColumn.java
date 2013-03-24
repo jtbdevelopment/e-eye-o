@@ -1,9 +1,9 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.widgets;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.events.IdObjectChanged;
+import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
