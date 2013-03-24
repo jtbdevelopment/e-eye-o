@@ -88,6 +88,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         entityTable.setSortEnabled(true);
         entityTable.setSelectable(true);
         entityTable.setSizeFull();
+        entityTable.setImmediate(true);
         entityTable.setNullSelectionAllowed(false);
 
         List<String> properties = new LinkedList<>();
@@ -105,22 +106,18 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         entityTable.setColumnAlignments(aligns.toArray(new Table.Align[aligns.size()]));
         addColumnConverters();
 
+        entityTable.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                handleValueChange(entityTable.getValue());
+            }
+        });
         entityTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             @SuppressWarnings("unchecked")
             public void itemClick(final ItemClickEvent event) {
-                Object item = event.getItem();
-                T entity;
-                if (item instanceof BeanItem) {
-                    entity = ((BeanItem<T>) item).getBean();
-                } else {
-                    Notification.show("Not sure what this is - " + (item == null ? "null" : item.toString()));
-                    return;
-                }
-                if (clickedOnListener != null) {
-                    clickedOnListener.handleClickEvent(entity);
-                }
-                if (event.isDoubleClick()) {
+                T entity = handleValueChange(event.getItem());
+                if (event.isDoubleClick() && entity != null) {
                     showEntityEditor(entity);
                 }
             }
@@ -130,6 +127,22 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
         eventBus.register(this);
         setCompositionRoot(mainLayout);
+    }
+
+    private T handleValueChange(final Object item) {
+        T entity;
+        if (item instanceof BeanItem) {
+            entity = ((BeanItem<T>) item).getBean();
+        } else if (entityType.isAssignableFrom(item.getClass())) {
+            entity = (T) item;
+        } else {
+            Notification.show("Not sure what this is - " + (item == null ? "null" : item.toString()));
+            return null;
+        }
+        if (clickedOnListener != null) {
+            clickedOnListener.handleClickEvent(entity);
+        }
+        return entity;
     }
 
     protected Container.Filter generateFilter(final String searchFor) {
