@@ -4,16 +4,15 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectRelatedSideTabClicked;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.*;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.themes.Runo;
-import org.springframework.beans.BeansException;
+import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Scope;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Date: 3/10/13
@@ -21,50 +20,71 @@ import org.springframework.context.annotation.Scope;
  */
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class WorkAreaComponent extends CustomComponent implements ApplicationContextAware {
+public class WorkAreaComponent extends CustomComponent {
 
-    private ApplicationContext applicationContext;
+    private final VerticalLayout verticalLayout;
 
-    private final Panel mainLayout;
+    @Autowired
+    private StudentsWorkArea studentsWorkArea;
+    @Autowired
+    private ClassListsWorkArea classListsWorkArea;
+    @Autowired
+    private ObservationsWorkArea observationsWorkArea;
+    @Autowired
+    private PhotosWorkArea photosWorkArea;
+    @Autowired
+    private ObservationCategoriesWorkArea observationCategoriesWorkArea;
+
 
     @Autowired
     public WorkAreaComponent(final EventBus eventBus) {
         eventBus.register(this);
-        mainLayout = new Panel();
-        mainLayout.addStyleName(Runo.PANEL_LIGHT);
-        mainLayout.setSizeFull();
+        verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeFull();
         setSizeFull();
-        setCompositionRoot(mainLayout);
+        setCompositionRoot(verticalLayout);
+
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        verticalLayout.addComponent(studentsWorkArea);
+        verticalLayout.addComponent(classListsWorkArea);
+        verticalLayout.addComponent(observationCategoriesWorkArea);
+        verticalLayout.addComponent(observationsWorkArea);
+        verticalLayout.addComponent(photosWorkArea);
+        photosWorkArea.setVisible(false);
+        studentsWorkArea.setVisible(false);
+        classListsWorkArea.setVisible(false);
+        observationCategoriesWorkArea.setVisible(false);
+        observationsWorkArea.setVisible(false);
     }
 
     @Subscribe
     @SuppressWarnings("unused")
     public void changeDataArea(final IdObjectRelatedSideTabClicked event) {
         Notification.show("Switching to " + event.getEntityType().getCaption());
-        mainLayout.setContent(null);
+        for (Component child : verticalLayout) {
+            child.setVisible(false);
+        }
         switch (event.getEntityType()) {
             case Students:
-                mainLayout.setContent(applicationContext.getBean(StudentsWorkArea.class));
+                studentsWorkArea.setVisible(true);
                 break;
             case Classes:
-                mainLayout.setContent(applicationContext.getBean(ClassListsWorkArea.class));
+                classListsWorkArea.setVisible(true);
                 break;
             case Observations:
-                mainLayout.setContent(applicationContext.getBean(ObservationsWorkArea.class));
+                observationsWorkArea.setVisible(true);
                 break;
             case Categories:
-                mainLayout.setContent(applicationContext.getBean(ObservationCategoriesWorkArea.class));
+                observationCategoriesWorkArea.setVisible(true);
                 break;
             case Photos:
-                mainLayout.setContent(applicationContext.getBean(PhotosWorkArea.class));
+                photosWorkArea.setVisible(true);
                 break;
             default:
                 //  TODO - log or notify
         }
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 }
