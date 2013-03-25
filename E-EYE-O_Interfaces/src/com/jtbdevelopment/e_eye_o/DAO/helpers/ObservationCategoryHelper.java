@@ -15,12 +15,13 @@ import java.util.Set;
  */
 public interface ObservationCategoryHelper {
     public static final Map<String, String> NEW_USER_DEFAULT_CATEGORIES = new HashMap<String, String>() {{
-        put("SOCIAL", "Social Skills");
-        put("MATH", "Mathematics");
-        put("LANG", "Language");
-        put("KAUW", "Knowledge & Understanding of the World");
-        put("PHYS", "Physical");
-        put("IDEA", "Creative");
+        put("PSE", "Personal, Social & Emotional");
+        put("MD", "Mathematics");
+        put("CLL", "Communication, Language & Literacy");
+        put("KUW", "Knowledge & Understanding of the World");
+        put("PD", "Physical");
+        put("CD", "Creative");
+        put("RD", "Religious");
     }};
 
     /**
