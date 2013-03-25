@@ -59,7 +59,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         testClassList3ForU1 = rwDAO.create(factory.newClassListBuilder(testUser1).withDescription("Test Class List3").build());
         Student s = factory.newStudentBuilder(testUser1).addClassList(testClassList1ForU1).withFirstName("Test").withLastName("Student").build();
         testStudentForU1 = rwDAO.create(s);
-        testObservationForU1 = rwDAO.create(factory.newObservationBuilder(testUser1).withComment("Test Observation").withObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("IDEA")).addCategory(testOCsForU1.get("PHYS")).build());
+        testObservationForU1 = rwDAO.create(factory.newObservationBuilder(testUser1).withComment("Test Observation").withObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("CD")).addCategory(testOCsForU1.get("PD")).build());
 
         testUser2 = rwDAO.create(factory.newAppUserBuilder().withFirstName("Another").withLastName("Tester").withEmailAddress("another@test.com").build());
 
@@ -220,8 +220,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testCreateObservationForStudent() {
-        final ObservationCategory social = testOCsForU1.get("SOCIAL");
-        final ObservationCategory kauw = testOCsForU1.get("KAUW");
+        final ObservationCategory social = testOCsForU1.get("PSE");
+        final ObservationCategory kauw = testOCsForU1.get("KUW");
         final String comment = "Test Observation";
         Observation o = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment).withObservationSubject(testStudentForU1).build());
         assertEquals(comment, o.getComment());
@@ -236,9 +236,9 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testModifyObservation() {
-        final ObservationCategory social = testOCsForU1.get("SOCIAL");
-        final ObservationCategory kauw = testOCsForU1.get("KAUW");
-        final ObservationCategory lang = testOCsForU1.get("LANG");
+        final ObservationCategory social = testOCsForU1.get("PSE");
+        final ObservationCategory kauw = testOCsForU1.get("KUW");
+        final ObservationCategory lang = testOCsForU1.get("CLL");
         final String comment = "Test Observation";
         Observation o = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment).withObservationSubject(testStudentForU1).build());
         o.removeCategory(social);
@@ -256,8 +256,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testLinksObservations() {
-        final ObservationCategory social = testOCsForU1.get("SOCIAL");
-        final ObservationCategory kauw = testOCsForU1.get("KAUW");
+        final ObservationCategory social = testOCsForU1.get("PSE");
+        final ObservationCategory kauw = testOCsForU1.get("KUW");
         final String comment1 = "Test Observation 1";
         final String comment2 = "Test Observation 2";
         Observation o1 = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment1).withObservationSubject(testStudentForU1).build());
@@ -279,8 +279,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testDeleteLinkedObservations() {
-        final ObservationCategory social = testOCsForU1.get("SOCIAL");
-        final ObservationCategory kauw = testOCsForU1.get("KAUW");
+        final ObservationCategory social = testOCsForU1.get("CLL");
+        final ObservationCategory kauw = testOCsForU1.get("KUW");
         final String comment1 = "Test Observation 1";
         final String comment2 = "Test Observation 2";
         Observation o1 = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment1).withObservationSubject(testStudentForU1).build());

@@ -43,7 +43,7 @@ public class AppUserBuilderImplTest extends IdObjectBuilderImplTest {
     public void testWithLastLogin() throws Exception {
         final DateTime value = new DateTime();
         assertEquals(AppUser.NEVER_LOGGED_IN, impl.getLastLogout());
-        assertSame(builder, builder.withLastLogin(value));
+        assertSame(builder, builder.withLastLogout(value));
         assertEquals(impl.getLastLogout(), value);
     }
 }

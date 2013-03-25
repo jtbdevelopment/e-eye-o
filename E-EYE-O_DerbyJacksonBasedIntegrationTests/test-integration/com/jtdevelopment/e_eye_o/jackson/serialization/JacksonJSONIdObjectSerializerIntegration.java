@@ -68,7 +68,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
         }
 
         appUser1 = factory.newAppUserBuilder().withEmailAddress("jtest@test.com").withFirstName("Testy")
-                .withLastName("Tester").withLastLogin(new DateTime(2012, 12, 12, 12, 12, 13)).build();
+                .withLastName("Tester").withLastLogout(new DateTime(2012, 12, 12, 12, 12, 13)).build();
         appUser1 = readWriteDAO.create(appUser1);
         appUser2 = factory.newAppUserBuilder().withEmailAddress("jtest2@test.com").withFirstName("Testier").withLastName("Tester").build();
         appUser2 = readWriteDAO.create(appUser2);
@@ -144,7 +144,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "  \"emailAddress\" : \"jtest@test.com\"," + newline +
                     "  \"firstName\" : \"Testy\"," + newline +
                     "  \"id\" : \"" + appUser1.getId() + "\"," + newline +
-                    "  \"lastLogin\" : 1355332333000," + newline +
+                    "  \"lastLogout\" : 1355332333000," + newline +
                     "  \"lastName\" : \"Tester\"," + newline +
                     "  \"modificationTimestamp\" : " + appUser1.getModificationTimestamp().getMillis() + newline +
                     "}");
@@ -153,7 +153,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "  \"emailAddress\" : \"jtest2@test.com\"," + newline +
                     "  \"firstName\" : \"Testier\"," + newline +
                     "  \"id\" : \"" + appUser2.getId() + "\"," + newline +
-                    "  \"lastLogin\" : 946702800000," + newline +
+                    "  \"lastLogout\" : 946702800000," + newline +
                     "  \"lastName\" : \"Tester\"," + newline +
                     "  \"modificationTimestamp\" : " + appUser2.getModificationTimestamp().getMillis() + newline +
                     "}");

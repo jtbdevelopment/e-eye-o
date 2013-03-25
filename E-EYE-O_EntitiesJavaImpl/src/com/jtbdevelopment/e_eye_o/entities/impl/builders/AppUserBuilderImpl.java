@@ -32,7 +32,7 @@ public class AppUserBuilderImpl extends IdObjectBuilderImpl<AppUser> implements 
     }
 
     @Override
-    public AppUserBuilder withLastLogin(final DateTime lastLogin) {
+    public AppUserBuilder withLastLogout(final DateTime lastLogin) {
         entity.setLastLogout(lastLogin);
         return this;
     }
