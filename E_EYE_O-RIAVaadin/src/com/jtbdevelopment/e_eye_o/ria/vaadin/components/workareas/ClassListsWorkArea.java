@@ -10,6 +10,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum.PhotoAlbum;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -48,6 +49,7 @@ public class ClassListsWorkArea extends CustomComponent {
         TabSheet tabSheet = new TabSheet();
         tabSheet.addTab(studentTable).setCaption("Students");
         tabSheet.addTab(photoAlbum).setCaption("Photos");
+        tabSheet.addStyleName(Runo.TABSHEET_SMALL);
         mainLayout.addComponent(tabSheet);
 
         setCompositionRoot(mainLayout);
