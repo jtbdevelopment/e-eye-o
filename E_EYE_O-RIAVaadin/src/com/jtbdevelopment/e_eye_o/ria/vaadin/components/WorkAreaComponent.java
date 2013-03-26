@@ -54,7 +54,7 @@ public class WorkAreaComponent extends CustomComponent {
         verticalLayout.addComponent(observationsWorkArea);
         verticalLayout.addComponent(photosWorkArea);
         photosWorkArea.setVisible(false);
-        studentsWorkArea.setVisible(false);
+        studentsWorkArea.setVisible(true);
         classListsWorkArea.setVisible(false);
         observationCategoriesWorkArea.setVisible(false);
         observationsWorkArea.setVisible(false);
