@@ -1,14 +1,19 @@
 @import "../runo/runo.scss";
+@import "logo/logo.scss";
+@import "sidetabs/sidetabs.scss";
+@import "optiongroup/optiongroup.scss";
+@import "table/table.scss";
+@import "tabsheet/tabsheet.scss";
 
 //  TODO variable the colors
 
 //  Three Antique Dresses color palette from color schemer gallery
 $cream: #f2e3b9;
-$mediumbrown: #e0a674;
-$darkbrown: #c5734b;
-$forestgreen: #ccc380;
-$greengray: #bec790;
-$browngray: #c9a283;
+$mediumBrown: #e0a674;
+$darkBrown: #c5734b;
+$forestGreen: #ccc380;
+$greenGray: #bec790;
+$brownGray: #c9a283;
 
 $background: $cream;
 $color: black;
@@ -18,67 +23,19 @@ $tableRowBackground: white;
 $tableRowForeground: black;
 $tableRowBackgroundAlternate: white;
 $tableRowForegroundAlternate: black;
-$tableRowBackgroundSelected: $darkbrown;
+$tableRowBackgroundSelected: $darkBrown;
 $tableRowForegroundSelected: black;
 
 @mixin eeyeo {
   @include runo;
+  @include eeyeo-logo;
+  @include eeyeo-sidetabs;
+  @include eeyeo-optiongroup;
+  @include eeyeo-table;
+  @include eeyeo-tabsheet;
 
   .v-ui {
     background: $background;
-  }
-
-  .v-label-sidetabs {
-    font-size: 14px;
-    font-weight: bold;
-    margin: 0px;
-    padding: 10px;
-    border-top: 1px solid #101010;
-    color: #222222;
-    float: left;
-    text-shadow: $browngray 0 2px 2px;
-  }
-
-  .v-label-blank-sidetabs {
-    font-size: 14px;
-    font-weight: bold;
-    margin: 0px;
-    padding: 10px;
-    float: left;
-    border-top: 1px solid #101010;
-    color: $background;
-  }
-
-  .v-label-selected-sidetabs {
-    background-image: linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -o-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -moz-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -webkit-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -ms-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.2, rgb(224, 166, 116)), color-stop(0.64, rgb(242, 227, 185)), color-stop(0.81, rgb(197, 116, 75)));
-    color: white;
-    text-shadow: black 0 2px 2px;
-  }
-
-  .v-label-sidetabs:hover {
-    color: white;
-    text-shadow: $darkbrown 0 2px 2px;
-  }
-
-/* Lay the options horizontally */
-  .v-select-optiongroup-horizontal .v-select-option {
-    display: inline-block;
-  }
-
-/* Avoid wrapping if the layout is too tight */
-  .v-select-optiongroup-horizontal {
-    white-space: nowrap;
-  }
-
-/* Some extra spacing is needed */
-  .v-select-optiongroup-horizontal .v-select-option.v-radiobutton {
-    padding-right: 10px;
   }
 
   .v-filterselect-input {
@@ -89,149 +46,4 @@ $tableRowForegroundSelected: black;
     text-align: right;
   }
 
-  .logo {
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    font-weight: bold;
-    font-size: 20px;
-  }
-
-  .logo-first-e {
-    -webkit-transform: rotate(-30deg);
-    -moz-transform: rotate(-30deg);
-    -o-transform: rotate(-30deg);
-    color: red;
-  }
-
-  .logo-first-dash {
-    color: orange;
-  }
-
-  .logo-second-e {
-    -webkit-transform: rotate(170deg) scale(0.9);
-    -moz-transform: rotate(170deg) scale(0.9);
-    -o-transform: rotate(170deg) scale(0.9);
-    color: yellow;
-  }
-
-  .logo-first-y {
-    -webkit-transform: rotate(-180deg) scale(1.2);
-    -moz-transform: rotate(-180deg) scale(1.2);
-    -o-transform: rotate(-180deg) scale(1.2);
-    color: green;
-  }
-
-  .logo-third-e {
-    -webkit-transform: rotate(-70deg) scale(0.9);
-    -moz-transform: rotate(-70deg) scale(0.9);
-    -o-transform: rotate(-70deg) scale(0.9);
-    color: blue;
-  }
-
-  .logo-second-dash {
-    color: indigo;
-  }
-
-  .logo-third-e {
-    -webkit-transform: rotate(40deg);
-    -moz-transform: rotate(40deg);
-    -o-transform: rotate(40deg);
-    color: #ee82ee;
-  }
-
-  .v-table tr.v-selected {
-    background-color: $forestgreen;
-    color: black;
-    font-style: italic;
-  }
-
-  .v-table-caption-container {
-    color: white;
-    text-shadow: black 0 1px 1px;
-  }
-  .v-table-header-wrap {
-    background-image: linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(197, 116, 75) 72%);
-    background-image: -o-linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(197, 116, 75) 72%);
-    background-image: -moz-linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(197, 116, 75) 72%);
-    background-image: -webkit-linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(197, 116, 75) 72%);
-    background-image: -ms-linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(197, 116, 75) 72%);
-
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.44, rgb(224, 166, 116)), color-stop(0.72, rgb(197, 116, 75)));
-  }
-
-  .v-table-row-odd {
-    //background-color: $lighterblue;
-  }
-
-//.v-table-row-odd, .v-table-body-noselection .v-table-row-odd:hover {
-//background-color: $lighterblue;
-//}
-
-//.v-table-row, .v-table-body-noselection .v-table-row:hover {
-//background-color: $lighterblue;
-//}
-
-  .v-tabsheet-tabs-light .v-tabsheet-tabitem {
-    background-image: inherit;
-  }
-
-  .v-tabsheet-tabs-light .v-tabsheet-tabitem .v-caption {
-    background-image: inherit;
-    color: #222222;
-    text-shadow: $browngray 0 2px 2px;
-  }
-
-  .v-tabsheet-tabs-light .v-tabsheet-tabitemcell-first .v-caption {
-    background-image: none;
-    padding-left: 16px;
-    color: #222222;
-    text-shadow: $browngray 0 2px 2px;
-  }
-
-  .v-tabsheet-tabs-light .v-tabsheet-tabitem .v-caption:hover {
-    color: white;
-    text-shadow: $darkbrown 0 2px 2px;
-  }
-
-  .v-tabsheet-tabs-light .v-tabsheet-tabitemcell-first .v-caption:hover {
-    color: white;
-    text-shadow: $darkbrown 0 2px 2px;
-  }
-
-  .v-tabsheet-tabs-light .v-tabsheet-tabitem-selected {
-    background-image: linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -o-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -moz-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -webkit-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -ms-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.2, rgb(224, 166, 116)), color-stop(0.64, rgb(242, 227, 185)), color-stop(0.81, rgb(197, 116, 75)));
-    color: white;
-    text-shadow: black 0 2px 2px;
-    border-top-right-radius: 6px;
-  }
-
-  .v-tabsheet-tabs-light .v-tabsheet-tabitem-selected .v-caption {
-    color: white;
-    text-shadow: black 0 2px 2px;
-  }
-
-  .v-tabsheet-tabs-light .v-tabsheet-tabitemcell-first .v-tabsheet-tabitem-selected .v-caption {
-    background-image: linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -o-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -moz-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -webkit-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-    background-image: -ms-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
-
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.2, rgb(224, 166, 116)), color-stop(0.64, rgb(242, 227, 185)), color-stop(0.81, rgb(197, 116, 75)));
-    color: white;
-    text-shadow: black 0 2px 2px;
-    padding-left: 16px;
-    border-top-left-radius: 6px;
-    -moz-border-radius-topleft: 6px;
-    -webkit-border-top-right-radius: 6px;
-  }
-
-  .v-tabsheet-tabs-light .v-tabsheet-spacertd div {
-    background-image: none;
-  }
 }

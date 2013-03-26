@@ -1,0 +1,51 @@
+@mixin eeyeo-logo {
+  .logo {
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .logo-first-e {
+    -webkit-transform: rotate(-30deg);
+    -moz-transform: rotate(-30deg);
+    -o-transform: rotate(-30deg);
+    color: red;
+  }
+
+  .logo-first-dash {
+    color: orange;
+  }
+
+  .logo-second-e {
+    -webkit-transform: rotate(170deg) scale(0.9);
+    -moz-transform: rotate(170deg) scale(0.9);
+    -o-transform: rotate(170deg) scale(0.9);
+    color: #c6cb0d;
+  }
+
+  .logo-first-y {
+    -webkit-transform: rotate(-180deg) scale(1.2);
+    -moz-transform: rotate(-180deg) scale(1.2);
+    -o-transform: rotate(-180deg) scale(1.2);
+    color: green;
+  }
+
+  .logo-third-e {
+    -webkit-transform: rotate(-70deg) scale(0.9);
+    -moz-transform: rotate(-70deg) scale(0.9);
+    -o-transform: rotate(-70deg) scale(0.9);
+    color: blue;
+  }
+
+  .logo-second-dash {
+    color: indigo;
+  }
+
+  .logo-third-e {
+    -webkit-transform: rotate(40deg);
+    -moz-transform: rotate(40deg);
+    -o-transform: rotate(40deg);
+    color: #ee82ee;
+  }
+
+}

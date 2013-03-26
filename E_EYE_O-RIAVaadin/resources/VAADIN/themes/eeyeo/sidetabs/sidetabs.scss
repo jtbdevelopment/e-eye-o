@@ -1,0 +1,39 @@
+@mixin eeyeo-sidetabs {
+  .v-label-sidetabs {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0px;
+    padding: 10px;
+    border-top: 1px solid #101010;
+    color: #222222;
+    float: left;
+    text-shadow: $brownGray 0 2px 2px;
+  }
+
+  .v-label-blank-sidetabs {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0px;
+    padding: 10px;
+    float: left;
+    border-top: 1px solid #101010;
+    color: $background;
+  }
+
+  .v-label-selected-sidetabs {
+    background-image: linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
+    background-image: -o-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
+    background-image: -moz-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
+    background-image: -webkit-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
+    background-image: -ms-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
+
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.2, rgb(224, 166, 116)), color-stop(0.64, rgb(242, 227, 185)), color-stop(0.81, rgb(197, 116, 75)));
+    color: white;
+    text-shadow: black 0 2px 2px;
+  }
+
+  .v-label-sidetabs:hover {
+    color: white;
+    text-shadow: $darkBrown 0 2px 2px;
+  }
+}
