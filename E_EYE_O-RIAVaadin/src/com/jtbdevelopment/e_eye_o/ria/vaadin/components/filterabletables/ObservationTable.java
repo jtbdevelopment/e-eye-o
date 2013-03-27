@@ -49,15 +49,15 @@ public class ObservationTable extends IdObjectTable<Observation> {
     static {
         headers = Arrays.asList(
                 new HeaderInfo("observationTimestamp", "Time", Table.Align.LEFT),
-                new HeaderInfo("commentPanel", "Comment", Table.Align.LEFT),  // Generated
-                new HeaderInfo("categories", "Categories", Table.Align.LEFT),
+                new HeaderInfo("commentLabel", "Comment", Table.Align.LEFT, true),  // Generated
+                new HeaderInfo("categories", "Categories", Table.Align.LEFT, true),
                 new HeaderInfo("significant", "Significant", Table.Align.CENTER),
                 new HeaderInfo("followUpNeeded", "Follow Up?", Table.Align.CENTER),
                 new HeaderInfo("followUpReminder", "Reminder?", Table.Align.CENTER),
-                new HeaderInfo("showFollowUp", "Follow Up", Table.Align.CENTER),              //  Generated
+                new HeaderInfo("showFollowUp", "Follow Up", Table.Align.CENTER, true),              //  Generated
                 new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("actions", "Actions", Table.Align.RIGHT)                       //  Generated
+                new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)                       //  Generated
         );
     }
 
@@ -150,7 +150,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addGeneratedColumns(final boolean horizontal) {
         super.addGeneratedColumns(false);  //  Ignore
-        entityTable.addGeneratedColumn("commentPanel", new Table.ColumnGenerator() {
+        entityTable.addGeneratedColumn("commentLabel", new Table.ColumnGenerator() {
             @Override
             public Object generateCell(final Table source, final Object itemId, final Object columnId) {
                 final Observation entity = entities.getItem(itemId).getBean();

@@ -33,7 +33,7 @@ public class ObservationWithSubjectTable extends ObservationTable {
     private static final List<HeaderInfo> headersWithSubject;
 
     static {
-        headersWithSubject = new LinkedList<>(Arrays.asList(new HeaderInfo("observationSubject", "Subject", Table.Align.LEFT)));
+        headersWithSubject = new LinkedList<>(Arrays.asList(new HeaderInfo("observationSubject", "Subject", Table.Align.LEFT, true)));
         headersWithSubject.addAll(headers);
     }
 

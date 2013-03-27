@@ -39,7 +39,7 @@ public class ObservationCategoryTable extends IdObjectTable<ObservationCategory>
                 new HeaderInfo("description", "Description", Table.Align.LEFT),
                 new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("actions", "Actions", Table.Align.RIGHT)    // Generated
+                new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)    // Generated
         );
     }
 

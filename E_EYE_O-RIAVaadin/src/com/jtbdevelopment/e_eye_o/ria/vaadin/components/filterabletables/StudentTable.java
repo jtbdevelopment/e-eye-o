@@ -40,7 +40,7 @@ public class StudentTable extends IdObjectTable<Student> {
                 new HeaderInfo("lastName", "Last Name", Table.Align.LEFT),
                 new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("actions", "Actions", Table.Align.RIGHT)    // Generated
+                new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)    // Generated
         );
     }
 
