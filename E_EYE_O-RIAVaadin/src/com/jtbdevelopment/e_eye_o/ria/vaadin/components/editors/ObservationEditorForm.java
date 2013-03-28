@@ -2,11 +2,11 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.entities.Observation;
-import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
+import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateDateConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Scope;
 public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
     private TextArea commentField;
     private BeanItemContainer<ObservationCategory> potentialCategories;
+    private BeanItemContainer<AppUserOwnedObject> potentialSubjects;
 
     @Autowired
     public ObservationEditorForm(final ReadWriteDAO readWriteDAO, final EventBus eventBus) {
@@ -29,11 +30,11 @@ public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
     }
 
     @Override
-    public void setEntity(Observation entity) {
+    public void setEntity(final Observation entity) {
         super.setEntity(entity);
-        boolean hasArchived = false;
         Observation observation = entityBeanFieldGroup.getItemDataSource().getBean();
         potentialCategories.removeAllItems();
+        boolean hasArchived = false;
         for (ObservationCategory category : observation.getCategories()) {
             if (category.isArchived()) {
                 hasArchived = true;
@@ -45,27 +46,41 @@ public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
         } else {
             potentialCategories.addAll(readWriteDAO.getActiveEntitiesForUser(ObservationCategory.class, observation.getAppUser()));
         }
+
+        potentialSubjects.removeAllItems();
+        boolean showArchivedSubjects = observation.getObservationSubject().isArchived();
+        if (showArchivedSubjects) {
+            potentialSubjects.addAll(readWriteDAO.getEntitiesForUser(ClassList.class, observation.getAppUser()));
+            potentialSubjects.addAll(readWriteDAO.getEntitiesForUser(Student.class, observation.getAppUser()));
+        } else {
+            potentialSubjects.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, observation.getAppUser()));
+            potentialSubjects.addAll(readWriteDAO.getActiveEntitiesForUser(Student.class, observation.getAppUser()));
+        }
     }
 
     @Override
     protected Layout buildEditorLayout() {
-        //  TODO - observationSubject, followUpObservation
+        //  TODO - followUpObservation
         VerticalLayout outerLayout = new VerticalLayout();
         outerLayout.setSpacing(true);
         outerLayout.setSizeUndefined();
 
-        HorizontalLayout firstRow = new HorizontalLayout();
-        firstRow.setSpacing(true);
+        HorizontalLayout row;
 
-        firstRow.addComponent(new Label("Comment:"));
+        //
+
+        row = new HorizontalLayout();
+        row.setSpacing(true);
+
+        row.addComponent(new Label("Comment:"));
         commentField = new TextArea();
         commentField.setRows(4);
         commentField.setWidth(40, Unit.EM);
         //  TODO - need to disable/re-enable enter key capture on Default button for text area.
         entityBeanFieldGroup.bind(commentField, "comment");
-        firstRow.addComponent(commentField);
+        row.addComponent(commentField);
 
-        firstRow.addComponent(new Label("Categories:"));
+        row.addComponent(new Label("Categories:"));
         potentialCategories = new BeanItemContainer<>(ObservationCategory.class);
         TwinColSelect categories = new TwinColSelect();
         categories.setRows(4);
@@ -73,40 +88,54 @@ public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
         categories.setItemCaptionPropertyId("shortName");
         categories.setContainerDataSource(potentialCategories);
         entityBeanFieldGroup.bind(categories, "categories");
-        firstRow.addComponent(categories);
+        row.addComponent(categories);
 
-        outerLayout.addComponent(firstRow);
-        outerLayout.setComponentAlignment(firstRow, Alignment.MIDDLE_CENTER);
+        outerLayout.addComponent(row);
+        outerLayout.setComponentAlignment(row, Alignment.MIDDLE_CENTER);
 
-        HorizontalLayout secondRow = new HorizontalLayout();
-        secondRow.setSpacing(true);
+        //
 
-        secondRow.addComponent(new Label("Significant?"));
+        row = new HorizontalLayout();
+        row.setSpacing(true);
+
+        row.addComponent(new Label("Observation for:"));
+        ComboBox observationFor = new ComboBox();
+        observationFor.setFilteringMode(FilteringMode.CONTAINS);
+        observationFor.setNewItemsAllowed(false);
+        observationFor.setTextInputAllowed(true);
+        observationFor.setImmediate(true);
+        potentialSubjects = new BeanItemContainer<>(AppUserOwnedObject.class);
+        observationFor.setContainerDataSource(potentialSubjects);
+        observationFor.setItemCaptionPropertyId("summaryDescription");
+        entityBeanFieldGroup.bind(observationFor, "observationSubject");
+        row.addComponent(observationFor);
+
+        row.addComponent(new Label("Significant?"));
         CheckBox significant = new CheckBox();
         entityBeanFieldGroup.bind(significant, "significant");
-        secondRow.addComponent(significant);
+        row.addComponent(significant);
 
-        secondRow.addComponent(new Label("Follow Up?"));
+        row.addComponent(new Label("Follow Up?"));
         CheckBox followUp = new CheckBox();
         entityBeanFieldGroup.bind(followUp, "followUpNeeded");
-        secondRow.addComponent(followUp);
+        row.addComponent(followUp);
 
-        secondRow.addComponent(new Label("Reminder?"));
+        row.addComponent(new Label("Reminder?"));
         DateField followUpReminder = new DateField();
         followUpReminder.setConverter(new LocalDateDateConverter());
         followUpReminder.setResolution(Resolution.DAY);
         entityBeanFieldGroup.bind(followUpReminder, "followUpReminder");
-        secondRow.addComponent(followUpReminder);
+        row.addComponent(followUpReminder);
 
-        secondRow.addComponent(new Label("Observation Time"));
+        row.addComponent(new Label("Observation Time"));
         DateField observationTimestamp = new DateField();
         observationTimestamp.setResolution(Resolution.MINUTE);
         observationTimestamp.setConverter(new LocalDateTimeDateConverter());
         entityBeanFieldGroup.bind(observationTimestamp, "observationTimestamp");
-        secondRow.addComponent(observationTimestamp);
+        row.addComponent(observationTimestamp);
 
-        outerLayout.addComponent(secondRow);
-        outerLayout.setComponentAlignment(secondRow, Alignment.MIDDLE_CENTER);
+        outerLayout.addComponent(row);
+        outerLayout.setComponentAlignment(row, Alignment.MIDDLE_CENTER);
 
         return outerLayout;
     }

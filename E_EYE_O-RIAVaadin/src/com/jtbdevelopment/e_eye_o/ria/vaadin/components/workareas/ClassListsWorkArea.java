@@ -5,6 +5,7 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ClassListTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.StudentTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum.PhotoAlbum;
 import com.vaadin.ui.CustomComponent;
@@ -26,7 +27,7 @@ public class ClassListsWorkArea extends CustomComponent {
     private ClassListTable classListTable;
 
     @Autowired
-    public ClassListsWorkArea(final ClassListTable classListTable, final StudentTable studentTable, final PhotoAlbum photoAlbum) {
+    public ClassListsWorkArea(final ClassListTable classListTable, final StudentTable studentTable, final ObservationTable observationTable, final PhotoAlbum photoAlbum) {
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
         mainLayout.setSpacing(true);
@@ -36,6 +37,7 @@ public class ClassListsWorkArea extends CustomComponent {
             @Override
             public void handleClickEvent(final ClassList entity) {
                 studentTable.setTableDriver(entity);
+                observationTable.setTableDriver(entity);
             }
         });
         mainLayout.addComponent(classListTable);
@@ -48,6 +50,7 @@ public class ClassListsWorkArea extends CustomComponent {
         });
         TabSheet tabSheet = new TabSheet();
         tabSheet.addTab(studentTable).setCaption("Students");
+        tabSheet.addTab(observationTable).setCaption("Observations");
         tabSheet.addTab(photoAlbum).setCaption("Photos");
         tabSheet.addStyleName(Runo.TABSHEET_SMALL);
         mainLayout.addComponent(tabSheet);
