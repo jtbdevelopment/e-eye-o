@@ -72,6 +72,7 @@ public class LoginView extends VerticalLayout implements View {
         verticalLayout.addComponent(title);
         verticalLayout.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
         verticalLayout.addComponent(logo);
+        logo.addStyleName("big-logo");
         verticalLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
 
         FormLayout form = new FormLayout();

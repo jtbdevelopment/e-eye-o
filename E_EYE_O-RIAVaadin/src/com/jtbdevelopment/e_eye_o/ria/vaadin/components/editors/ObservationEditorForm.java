@@ -48,7 +48,7 @@ public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
         }
 
         potentialSubjects.removeAllItems();
-        boolean showArchivedSubjects = observation.getObservationSubject().isArchived();
+        boolean showArchivedSubjects = observation.getObservationSubject() != null && observation.getObservationSubject().isArchived();
         if (showArchivedSubjects) {
             potentialSubjects.addAll(readWriteDAO.getEntitiesForUser(ClassList.class, observation.getAppUser()));
             potentialSubjects.addAll(readWriteDAO.getEntitiesForUser(Student.class, observation.getAppUser()));

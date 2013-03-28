@@ -73,11 +73,6 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void showEntityEditor(final Observation entity) {
         if (entity.getObservationSubject() == null) {
-            if (defaultObservationSubject == null) {
-                // TODO - implement a picker here or on dialog.
-                Notification.show("Need to pick something to observe first", Notification.Type.HUMANIZED_MESSAGE);
-                return;
-            }
             entity.setObservationSubject(defaultObservationSubject);
         }
         getUI().addWindow(observationEditorDialogWindow);

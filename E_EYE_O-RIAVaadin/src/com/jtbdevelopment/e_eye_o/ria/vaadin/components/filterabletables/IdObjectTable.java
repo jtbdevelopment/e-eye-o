@@ -309,6 +309,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                     currentFilter = generateFilter(searchValue);
                     entities.addContainerFilter(currentFilter);
                 }
+                refreshSizeAndSort();
             }
         });
         filterSection.addComponent(searchFor);
@@ -396,7 +397,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     }
 
     private int calculateTableRows() {
-        return Math.min(maxSize, entities.getUnfilteredSize());
+        return Math.min(maxSize, entities.size());
     }
 
     public void refreshSizeAndSort() {

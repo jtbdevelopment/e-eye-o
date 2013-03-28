@@ -38,10 +38,6 @@ public class AllItemsBeanItemContainer<T extends IdObject> extends BeanItemConta
         return allProperties;
     }
 
-    public int getUnfilteredSize() {
-        return getAllItemIds().size();
-    }
-
     @Override
     public void setItemSorter(final ItemSorter itemSorter) {
         super.setItemSorter(itemSorter);
