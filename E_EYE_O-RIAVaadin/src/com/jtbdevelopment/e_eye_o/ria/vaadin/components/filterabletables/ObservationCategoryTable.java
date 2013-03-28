@@ -6,6 +6,7 @@ import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationCategoryEditorDialogWindow;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -26,8 +27,8 @@ public class ObservationCategoryTable extends IdObjectTable<ObservationCategory>
     private ObservationCategoryEditorDialogWindow observationCategoryEditorDialogWindow;
 
     @Autowired
-    public ObservationCategoryTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
-        super(ObservationCategory.class, readWriteDAO, idObjectFactory, eventBus);
+    public ObservationCategoryTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final ConverterCollection converterCollection) {
+        super(ObservationCategory.class, readWriteDAO, idObjectFactory, eventBus, converterCollection);
     }
 
     private static final List<HeaderInfo> headers;

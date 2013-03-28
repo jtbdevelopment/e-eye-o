@@ -6,6 +6,7 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ClassListEditorDialogWindow;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -26,8 +27,8 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     private ClassListEditorDialogWindow classListEditorDialogWindow;
 
     @Autowired
-    public ClassListTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
-        super(ClassList.class, readWriteDAO, idObjectFactory, eventBus);
+    public ClassListTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final ConverterCollection converterCollection) {
+        super(ClassList.class, readWriteDAO, idObjectFactory, eventBus, converterCollection);
     }
 
     private static final List<HeaderInfo> headers;

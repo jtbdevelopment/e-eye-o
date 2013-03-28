@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;

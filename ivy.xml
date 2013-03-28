@@ -64,6 +64,7 @@
         <dependency name="vaadin-themes" rev="7.0.1" org="com.vaadin"/>
         <!-- Precompiled DefaultWidgetSet -->
         <dependency name="vaadin-client-compiled" rev="7.0.1" org="com.vaadin"/>
+        <dependency name="spring-vaadin-integration" rev="1.6.6" org="ru.xpoft.vaadin"/>
         <dependency name="confirmdialog" rev="2.0.4" org="org.vaadin.addon"/>
     </dependencies>
 </ivy-module>

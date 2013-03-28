@@ -1,8 +1,9 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.utils;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters;
 
 import com.vaadin.data.util.converter.Converter;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
+import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
@@ -10,6 +11,7 @@ import java.util.Locale;
  * Date: 3/17/13
  * Time: 3:16 PM
  */
+@Component
 public class LocalDateStringConverter implements Converter<String, LocalDate> {
     private static final String DEFAULT_FORMAT = "YYYY-MM-dd";
 

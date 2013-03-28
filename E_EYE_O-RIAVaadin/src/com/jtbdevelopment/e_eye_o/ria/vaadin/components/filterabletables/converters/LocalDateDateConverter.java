@@ -1,7 +1,8 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.utils;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters;
 
 import com.vaadin.data.util.converter.Converter;
 import org.joda.time.LocalDate;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Locale;
@@ -10,6 +11,7 @@ import java.util.Locale;
  * Date: 3/17/13
  * Time: 8:06 PM
  */
+@Component
 public class LocalDateDateConverter implements Converter<Date, LocalDate> {
     @Override
     public LocalDate convertToModel(final Date value, final Locale locale) throws ConversionException {

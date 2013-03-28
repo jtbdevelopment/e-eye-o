@@ -7,6 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.StudentEditorDialogWindow;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -27,8 +28,8 @@ public class StudentTable extends IdObjectTable<Student> {
     private StudentEditorDialogWindow studentEditorDialogWindow;
 
     @Autowired
-    public StudentTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
-        super(Student.class, readWriteDAO, idObjectFactory, eventBus);
+    public StudentTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final ConverterCollection converterCollection) {
+        super(Student.class, readWriteDAO, idObjectFactory, eventBus, converterCollection);
     }
 
     private static final List<HeaderInfo> headers;

@@ -8,9 +8,9 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.AppUserOwnedActionGeneratedColumn;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.BooleanToYesNoConverter;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.DateTimeStringConverter;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
@@ -34,6 +34,7 @@ import java.util.Locale;
  */
 //  TODO - figure out how to get rid of excess spacing at top of action row
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends CustomComponent {
+    //  TODO - this should just drive off of annotations it would seem off of interface
     public static class HeaderInfo {
         private final String property;
         private final String description;
@@ -67,6 +68,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     protected final Table entityTable = new Table();
     protected final EventBus eventBus;
 
+    protected final ConverterCollection converterCollection;
     protected final AllItemsBeanItemContainer<T> entities;
     protected final ReadWriteDAO readWriteDAO;
     protected AppUser appUser;
@@ -81,7 +83,8 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
     protected abstract void showEntityEditor(final T entity);
 
-    public IdObjectTable(final Class<T> entityType, final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
+    public IdObjectTable(final Class<T> entityType, final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory,
+                         final EventBus eventBus, final ConverterCollection converterCollection) {
         this.entityType = entityType;
         this.eventBus = eventBus;
         List<String> generatedProperties = new LinkedList<>();
@@ -93,6 +96,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         this.entities = new AllItemsBeanItemContainer<>(entityType, generatedProperties);
         this.readWriteDAO = readWriteDAO;
         this.idObjectFactory = idObjectFactory;
+        this.converterCollection = converterCollection;
 
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
@@ -238,8 +242,8 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     }
 
     protected void addColumnConverters() {
-        entityTable.setConverter("archived", new BooleanToYesNoConverter());
-        entityTable.setConverter("modificationTimestamp", new DateTimeStringConverter());
+        entityTable.setConverter("archived", converterCollection.getBooleanToYesNoConverter());
+        entityTable.setConverter("modificationTimestamp", converterCollection.getDateTimeStringConverter());
     }
 
     protected void addGeneratedColumns(final boolean horizontal) {

@@ -1,20 +1,16 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
 import com.google.common.eventbus.EventBus;
-import com.google.gwt.thirdparty.guava.common.base.Function;
-import com.google.gwt.thirdparty.guava.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.BooleanToYesNoConverter;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.LocalDateStringConverter;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.LocalDateTimeStringConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateStringConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.StringObservationCategorySetConverter;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
-import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.*;
@@ -24,8 +20,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.vaadin.dialogs.ConfirmDialog;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Date: 3/17/13
@@ -40,8 +36,8 @@ public class ObservationTable extends IdObjectTable<Observation> {
     private ObservationEditorDialogWindow observationEditorDialogWindow;
 
     @Autowired
-    public ObservationTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
-        super(Observation.class, readWriteDAO, idObjectFactory, eventBus);
+    public ObservationTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final ConverterCollection converterCollection) {
+        super(Observation.class, readWriteDAO, idObjectFactory, eventBus, converterCollection);
     }
 
     protected static final List<HeaderInfo> headers;
@@ -97,54 +93,11 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
-        entityTable.setConverter("significant", new BooleanToYesNoConverter());
-        entityTable.setConverter("followUpNeeded", new BooleanToYesNoConverter());
+        entityTable.setConverter("significant", converterCollection.getBooleanToYesNoConverter());
+        entityTable.setConverter("followUpNeeded", converterCollection.getBooleanToYesNoConverter());
         entityTable.setConverter("followUpReminder", new LocalDateStringConverter());
         entityTable.setConverter("observationTimestamp", new LocalDateTimeStringConverter());
-        entityTable.setConverter("categories", new Converter<String, Set>() {
-            @Override
-            public Set<ObservationCategory> convertToModel(final String value, final Locale locale) throws ConversionException {
-                Set<ObservationCategory> results = new HashSet<>();
-
-                //  TODO - need injection working here - have ObservationCategoryHelper for just this purpose
-                Set<ObservationCategory> loaded = readWriteDAO.getEntitiesForUser(ObservationCategory.class, appUser);
-                Map<String, ObservationCategory> map = new HashMap<>();
-                for (ObservationCategory category : loaded) {
-                    map.put(category.getShortName(), category);
-                }
-                for (String shortCode : Splitter.on(",").trimResults().omitEmptyStrings().split(value)) {
-                    ObservationCategory category = map.get(shortCode);
-                    if (category != null) {
-                        results.add(category);
-                    } else {
-                        //  TODO - notify/log
-                    }
-                }
-                return results;
-            }
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public String convertToPresentation(final Set value, final Locale locale) throws ConversionException {
-                Set<ObservationCategory> ocs = (Set<ObservationCategory>) value;
-                return Joiner.on(", ").skipNulls().join(Collections2.transform(ocs, new Function<ObservationCategory, String>() {
-                    @Override
-                    public String apply(@Nullable final ObservationCategory observationCategory) {
-                        return observationCategory == null ? null : observationCategory.getShortName();
-                    }
-                }));
-            }
-
-            @Override
-            public Class<Set> getModelType() {
-                return Set.class;
-            }
-
-            @Override
-            public Class<String> getPresentationType() {
-                return String.class;
-            }
-        });
+        entityTable.setConverter("categories", new StringObservationCategorySetConverter());
     }
 
     @Override
@@ -285,4 +238,5 @@ public class ObservationTable extends IdObjectTable<Observation> {
     public void setDefaultObservationSubject(final AppUserOwnedObject defaultObservationSubject) {
         this.defaultObservationSubject = defaultObservationSubject;
     }
+
 }

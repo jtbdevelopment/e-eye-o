@@ -2,10 +2,10 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.StringAppUserOwnedObjectConverter;
 import com.vaadin.data.Container;
-import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.Table;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Date: 3/17/13
@@ -25,9 +24,10 @@ import java.util.Locale;
 @Component
 @Scope("prototype")
 public class ObservationWithSubjectTable extends ObservationTable {
+
     @Autowired
-    public ObservationWithSubjectTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus) {
-        super(readWriteDAO, idObjectFactory, eventBus);
+    public ObservationWithSubjectTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final ConverterCollection converterCollection) {
+        super(readWriteDAO, idObjectFactory, eventBus, converterCollection);
     }
 
     private static final List<HeaderInfo> headersWithSubject;
@@ -56,28 +56,8 @@ public class ObservationWithSubjectTable extends ObservationTable {
     @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
-        entityTable.setConverter("observationSubject", new Converter<String, AppUserOwnedObject>() {
-            @Override
-            public AppUserOwnedObject convertToModel(final String value, final Locale locale) throws ConversionException {
-                //  TODO
-                return null;
-            }
-
-            @Override
-            public String convertToPresentation(final AppUserOwnedObject value, final Locale locale) throws ConversionException {
-                return value == null ? null : value.getSummaryDescription();
-            }
-
-            @Override
-            public Class<AppUserOwnedObject> getModelType() {
-                return AppUserOwnedObject.class;
-            }
-
-            @Override
-            public Class<String> getPresentationType() {
-                return String.class;
-            }
-        });
+        //  TODO
+        entityTable.setConverter("observationSubject", new StringAppUserOwnedObjectConverter());
     }
 
 

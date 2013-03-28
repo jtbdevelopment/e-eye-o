@@ -1,6 +1,7 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.utils;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters;
 
 import com.vaadin.data.util.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
@@ -8,7 +9,7 @@ import java.util.Locale;
  * Date: 3/16/13
  * Time: 6:33 PM
  */
-//  TODO - determine which of these converters should be singletons
+@Component
 public class BooleanToYesNoConverter implements Converter<String, Boolean> {
 
     private static final String YES = "Yes";
@@ -16,7 +17,7 @@ public class BooleanToYesNoConverter implements Converter<String, Boolean> {
 
     @Override
     public Boolean convertToModel(final String value, final Locale locale) throws ConversionException {
-        return null;
+        return YES.equalsIgnoreCase(value) ? Boolean.TRUE : Boolean.FALSE;
     }
 
     @Override
