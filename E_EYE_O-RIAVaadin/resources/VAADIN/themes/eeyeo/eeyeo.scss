@@ -6,8 +6,6 @@
 @import "tabsheet/tabsheet.scss";
 @import "notification/notification.scss";
 
-//  TODO variable the colors
-
 //  Three Antique Dresses color palette from color schemer gallery
 $cream: #f2e3b9;
 $mediumBrown: #e0a674;
@@ -16,7 +14,6 @@ $forestGreen: #ccc380;
 $greenGray: #bec790;
 $brownGray: #c9a283;
 
-$background: $cream;
 $color: black;
 $tableHeaderBackground: black;
 $tableHeaderForeground: white;
@@ -37,7 +34,7 @@ $tableRowForegroundSelected: black;
   @include eeyeo-notification;
 
   .v-ui {
-    background: $background;
+    background: $cream;
   }
 
   .v-filterselect-input {

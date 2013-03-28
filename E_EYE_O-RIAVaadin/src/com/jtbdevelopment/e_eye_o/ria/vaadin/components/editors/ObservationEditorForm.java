@@ -37,6 +37,7 @@ public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
         for (ObservationCategory category : observation.getCategories()) {
             if (category.isArchived()) {
                 hasArchived = true;
+                break;
             }
         }
         if (hasArchived) {
