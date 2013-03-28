@@ -23,7 +23,6 @@ public class StudentTable extends IdObjectTable<Student> {
     @Autowired
     private StudentEditorDialogWindow studentEditorDialogWindow;
 
-    @Autowired
     public StudentTable() {
         super(Student.class);
     }

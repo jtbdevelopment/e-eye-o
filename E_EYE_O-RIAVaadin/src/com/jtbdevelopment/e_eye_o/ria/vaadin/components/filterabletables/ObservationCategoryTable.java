@@ -21,7 +21,6 @@ public class ObservationCategoryTable extends IdObjectTable<ObservationCategory>
     @Autowired
     private ObservationCategoryEditorDialogWindow observationCategoryEditorDialogWindow;
 
-    @Autowired
     public ObservationCategoryTable() {
         super(ObservationCategory.class);
     }

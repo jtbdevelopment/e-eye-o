@@ -246,7 +246,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     }
 
     protected Container.Filter generateFilter(final String searchFor) {
-        return new SimpleStringFilter("viewableDescription", searchFor, true, false);
+        return new SimpleStringFilter("summaryDescription", searchFor, true, false);
     }
 
     protected String getDefaultSortField(final List<String> properties) {

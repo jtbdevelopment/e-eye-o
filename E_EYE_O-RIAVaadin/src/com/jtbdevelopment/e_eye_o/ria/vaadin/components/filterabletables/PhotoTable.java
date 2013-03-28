@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.vaadin.ui.Table;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,6 @@ public class PhotoTable extends IdObjectTable<Photo> {
 //    @Autowired
 //    private ClassListEditorDialogWindow classListEditorDialogWindow;
 
-    @Autowired
     public PhotoTable() {
         super(Photo.class);
     }

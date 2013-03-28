@@ -21,7 +21,6 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     @Autowired
     private ClassListEditorDialogWindow classListEditorDialogWindow;
 
-    @Autowired
     public ClassListTable() {
         super(ClassList.class);
     }

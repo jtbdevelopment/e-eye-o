@@ -44,7 +44,6 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Autowired
     private StringObservationCategorySetConverter stringObservationCategorySetConverter;
 
-    @Autowired
     public ObservationTable() {
         super(Observation.class);
     }
