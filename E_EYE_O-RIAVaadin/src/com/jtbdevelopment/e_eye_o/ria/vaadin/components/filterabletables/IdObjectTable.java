@@ -8,7 +8,8 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.BooleanToYesNoConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.AppUserOwnedActionGeneratedColumn;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
 import com.vaadin.data.Container;
@@ -22,7 +23,9 @@ import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.jsoup.helper.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,19 +63,32 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         void handleClickEvent(final T entity);
     }
 
+    @Autowired
+    protected IdObjectFactory idObjectFactory;
+
+    @Autowired
+    protected EventBus eventBus;
+
+    @Autowired
+    protected ReadWriteDAO readWriteDAO;
+
+    @Autowired
+    protected BooleanToYesNoConverter booleanToYesNoConverter;
+
+    @Autowired
+    protected DateTimeStringConverter dateTimeStringConverter;
+
     protected ClickedOnListener<T> clickedOnListener;
 
     protected IdObject tableDriver;
 
     private final Class<T> entityType;
-    protected final Table entityTable = new Table();
-    protected final EventBus eventBus;
 
-    protected final ConverterCollection converterCollection;
-    protected final AllItemsBeanItemContainer<T> entities;
-    protected final ReadWriteDAO readWriteDAO;
+    protected final Table entityTable = new Table();
+
+    protected AllItemsBeanItemContainer<T> entities;
     protected AppUser appUser;
-    protected final IdObjectFactory idObjectFactory;
+
     private final TextField searchFor = new TextField();
     private Container.Filter currentFilter;
 
@@ -83,26 +99,39 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
     protected abstract void showEntityEditor(final T entity);
 
-    public IdObjectTable(final Class<T> entityType, final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory,
-                         final EventBus eventBus, final ConverterCollection converterCollection) {
+
+    public IdObjectTable(final Class<T> entityType) {
         this.entityType = entityType;
-        this.eventBus = eventBus;
+    }
+
+    @PostConstruct
+    private void initialize() {
+        List<String> properties = new LinkedList<>();
+        List<String> headers = new LinkedList<>();
+        List<Table.Align> aligns = new LinkedList<>();
         List<String> generatedProperties = new LinkedList<>();
         for (HeaderInfo headerInfo : getHeaderInfo()) {
             if (headerInfo.generated) {
                 generatedProperties.add(headerInfo.property);
             }
+            properties.add(headerInfo.property);
+            headers.add(headerInfo.description);
+            aligns.add(headerInfo.align);
         }
         this.entities = new AllItemsBeanItemContainer<>(entityType, generatedProperties);
-        this.readWriteDAO = readWriteDAO;
-        this.idObjectFactory = idObjectFactory;
-        this.converterCollection = converterCollection;
-
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
 
         mainLayout.addComponent(buildActionRow());
 
+        buildEntityTable(properties, headers, aligns);
+        mainLayout.addComponent(entityTable);
+
+        eventBus.register(this);
+        setCompositionRoot(mainLayout);
+    }
+
+    private void buildEntityTable(List<String> properties, List<String> headers, List<Table.Align> aligns) {
         entityTable.setContainerDataSource(entities);
         entityTable.addStyleName(Runo.TABLE_SMALL);
         addGeneratedColumns(true);
@@ -113,14 +142,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         entityTable.setImmediate(true);
         entityTable.setNullSelectionAllowed(false);
 
-        List<String> properties = new LinkedList<>();
-        List<String> headers = new LinkedList<>();
-        List<Table.Align> aligns = new LinkedList<>();
-        for (HeaderInfo header : getHeaderInfo()) {
-            properties.add(header.property);
-            headers.add(header.description);
-            aligns.add(header.align);
-        }
         entityTable.setVisibleColumns(properties.toArray(new String[properties.size()]));
         entityTable.setColumnHeaders(headers.toArray(new String[headers.size()]));
         entityTable.setSortContainerPropertyId(getDefaultSortField(properties));
@@ -206,10 +227,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
             }
         });
         refreshSizeAndSort();
-        mainLayout.addComponent(entityTable);
-
-        eventBus.register(this);
-        setCompositionRoot(mainLayout);
     }
 
     private T handleValueChange(final Object item) {
@@ -242,8 +259,8 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     }
 
     protected void addColumnConverters() {
-        entityTable.setConverter("archived", converterCollection.getBooleanToYesNoConverter());
-        entityTable.setConverter("modificationTimestamp", converterCollection.getDateTimeStringConverter());
+        entityTable.setConverter("archived", booleanToYesNoConverter);
+        entityTable.setConverter("modificationTimestamp", dateTimeStringConverter);
     }
 
     protected void addGeneratedColumns(final boolean horizontal) {

@@ -1,15 +1,10 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
-import com.google.common.eventbus.EventBus;
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.StringAppUserOwnedObjectConverter;
 import com.vaadin.data.Container;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.Table;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -24,11 +19,6 @@ import java.util.List;
 @Component
 @Scope("prototype")
 public class ObservationWithSubjectTable extends ObservationTable {
-
-    @Autowired
-    public ObservationWithSubjectTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final ConverterCollection converterCollection) {
-        super(readWriteDAO, idObjectFactory, eventBus, converterCollection);
-    }
 
     private static final List<HeaderInfo> headersWithSubject;
 

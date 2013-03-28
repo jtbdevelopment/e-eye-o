@@ -1,12 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
-import com.google.common.eventbus.EventBus;
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ClassListEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -27,8 +22,8 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     private ClassListEditorDialogWindow classListEditorDialogWindow;
 
     @Autowired
-    public ClassListTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final ConverterCollection converterCollection) {
-        super(ClassList.class, readWriteDAO, idObjectFactory, eventBus, converterCollection);
+    public ClassListTable() {
+        super(ClassList.class);
     }
 
     private static final List<HeaderInfo> headers;
@@ -52,15 +47,5 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     protected void showEntityEditor(final ClassList entity) {
         getUI().addWindow(classListEditorDialogWindow);
         classListEditorDialogWindow.setEntity(entity);
-    }
-
-    @Override
-    public void setTableDriver(final IdObject tableDriver) {
-        super.setTableDriver(tableDriver);
-        //  TODO - anything?
-//        if (tableDriver instanceof ClassList) {
-//            readWriteDAO.getAllStudentsForClassList((ClassList) tableDriver);
-//            refreshSizeAndSort();
-//        }
     }
 }

@@ -1,11 +1,11 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
-import com.google.common.eventbus.EventBus;
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.Observation;
+import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.StringObservationCategorySetConverter;
@@ -36,8 +36,17 @@ public class ObservationTable extends IdObjectTable<Observation> {
     private ObservationEditorDialogWindow observationEditorDialogWindow;
 
     @Autowired
-    public ObservationTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final ConverterCollection converterCollection) {
-        super(Observation.class, readWriteDAO, idObjectFactory, eventBus, converterCollection);
+    private LocalDateStringConverter localDateStringConverter;
+
+    @Autowired
+    private LocalDateTimeStringConverter localDateTimeStringConverter;
+
+    @Autowired
+    private StringObservationCategorySetConverter stringObservationCategorySetConverter;
+
+    @Autowired
+    public ObservationTable() {
+        super(Observation.class);
     }
 
     protected static final List<HeaderInfo> headers;
@@ -93,11 +102,11 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
-        entityTable.setConverter("significant", converterCollection.getBooleanToYesNoConverter());
-        entityTable.setConverter("followUpNeeded", converterCollection.getBooleanToYesNoConverter());
-        entityTable.setConverter("followUpReminder", new LocalDateStringConverter());
-        entityTable.setConverter("observationTimestamp", new LocalDateTimeStringConverter());
-        entityTable.setConverter("categories", new StringObservationCategorySetConverter());
+        entityTable.setConverter("significant", booleanToYesNoConverter);
+        entityTable.setConverter("followUpNeeded", booleanToYesNoConverter);
+        entityTable.setConverter("followUpReminder", localDateStringConverter);
+        entityTable.setConverter("observationTimestamp", localDateTimeStringConverter);
+        entityTable.setConverter("categories", stringObservationCategorySetConverter);
     }
 
     @Override

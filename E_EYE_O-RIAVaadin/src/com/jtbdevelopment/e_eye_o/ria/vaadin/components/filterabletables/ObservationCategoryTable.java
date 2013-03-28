@@ -1,12 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
-import com.google.common.eventbus.EventBus;
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationCategoryEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ConverterCollection;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -27,8 +22,8 @@ public class ObservationCategoryTable extends IdObjectTable<ObservationCategory>
     private ObservationCategoryEditorDialogWindow observationCategoryEditorDialogWindow;
 
     @Autowired
-    public ObservationCategoryTable(final ReadWriteDAO readWriteDAO, final IdObjectFactory idObjectFactory, final EventBus eventBus, final ConverterCollection converterCollection) {
-        super(ObservationCategory.class, readWriteDAO, idObjectFactory, eventBus, converterCollection);
+    public ObservationCategoryTable() {
+        super(ObservationCategory.class);
     }
 
     private static final List<HeaderInfo> headers;
@@ -53,10 +48,5 @@ public class ObservationCategoryTable extends IdObjectTable<ObservationCategory>
     protected void showEntityEditor(final ObservationCategory entity) {
         getUI().addWindow(observationCategoryEditorDialogWindow);
         observationCategoryEditorDialogWindow.setEntity(entity);
-    }
-
-    @Override
-    public void setTableDriver(final IdObject tableDriver) {
-        super.setTableDriver(tableDriver);
     }
 }
