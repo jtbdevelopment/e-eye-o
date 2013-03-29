@@ -384,7 +384,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         buttonSection.setWidth(null);
         buttonSection.setSpacing(true);
 
-        //  TODO - doesn't work for classlist
+        //  TODO - doesn't work for classlist  or observation category
         Button newEntityButton = new Button("New " + entityType.getSimpleName());
         newEntityButton.addClickListener(new Button.ClickListener() {
             @Override

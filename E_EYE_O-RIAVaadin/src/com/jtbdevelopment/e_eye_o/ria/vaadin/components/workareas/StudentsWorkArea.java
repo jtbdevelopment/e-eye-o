@@ -1,7 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
@@ -36,12 +35,6 @@ public class StudentsWorkArea extends CustomComponent {
         });
         mainLayout.addComponent(studentTable);
 
-        observationTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Observation>() {
-            @Override
-            public void handleClickEvent(Observation entity) {
-                //  TODO if even needed
-            }
-        });
         mainLayout.addComponent(observationTable);
 
         setCompositionRoot(mainLayout);
