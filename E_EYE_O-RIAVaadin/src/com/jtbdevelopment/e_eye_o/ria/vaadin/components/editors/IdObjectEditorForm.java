@@ -123,6 +123,7 @@ public abstract class IdObjectEditorForm<T extends AppUserOwnedObject> extends C
     public void setEntity(final T entity) {
         getEnclosingWindow().setCaption(entity.getSummaryDescription());
         removeAllValidators(this);
+        mainLayout.setComponentError(null);
         entityBeanFieldGroup.setItemDataSource(entity);
     }
 

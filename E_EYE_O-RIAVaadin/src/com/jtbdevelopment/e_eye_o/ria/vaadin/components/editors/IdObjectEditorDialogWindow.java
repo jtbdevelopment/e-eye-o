@@ -24,5 +24,6 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
 
     public void setEntity(final T entity) {
         editorForm.setEntity(entity);
+        setComponentError(null);
     }
 }

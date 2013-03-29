@@ -3,10 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.BooleanToYesNoConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
@@ -36,6 +33,7 @@ import java.util.Locale;
  * Time: 7:11 PM
  */
 //  TODO - figure out how to get rid of excess spacing at top of action row
+//  TODO - this class is too big
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends CustomComponent {
     //  TODO - this should just drive off of annotations it would seem off of interface
     public static class HeaderInfo {
@@ -428,7 +426,26 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                 entities.removeItem(idForBean);
             }
             if (!IdObjectChanged.ChangeType.DELETED.equals(msg.getChangeType())) {
-                entities.addBean(entity);
+                boolean relatedToTableDriver = false;
+                if (tableDriver instanceof AppUser) {
+                    relatedToTableDriver = tableDriver.equals(entity.getAppUser());
+                } else {
+                    if(tableDriver instanceof ClassList && entity instanceof Student ) {
+                        relatedToTableDriver = ((Student) entity).getClassLists().contains(tableDriver);
+                    }
+                    if((tableDriver instanceof ClassList || tableDriver instanceof Student) && entity instanceof Observation ) {
+                        relatedToTableDriver = ((Observation) entity).getObservationSubject().equals(tableDriver);
+                    }
+                    if((tableDriver instanceof ClassList || tableDriver instanceof Observation) && entity instanceof Photo ) {
+                        relatedToTableDriver = ((Photo) entity).getPhotoFor().equals(tableDriver);
+                    }
+                    if(tableDriver instanceof ObservationCategory && entity instanceof Observation) {
+                        relatedToTableDriver = ((Observation) entity).getCategories().contains(tableDriver);
+                    }
+                }
+                if (relatedToTableDriver) {
+                    entities.addBean(entity);
+                }
             }
             refreshSizeAndSort();
         }
