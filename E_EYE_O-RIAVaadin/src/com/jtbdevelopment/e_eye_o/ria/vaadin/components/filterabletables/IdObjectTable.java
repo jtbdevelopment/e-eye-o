@@ -134,7 +134,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     private void buildEntityTable(List<String> properties, List<String> headers, List<Table.Align> aligns) {
         entityTable.setContainerDataSource(entities);
         entityTable.addStyleName(Runo.TABLE_SMALL);
-        addGeneratedColumns(true);
+        addGeneratedColumns();
 
         entityTable.setSortEnabled(true);
         entityTable.setSelectable(true);
@@ -264,8 +264,8 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         entityTable.setConverter("modificationTimestamp", dateTimeStringConverter);
     }
 
-    protected void addGeneratedColumns(final boolean horizontal) {
-        entityTable.addGeneratedColumn("actions", new AppUserOwnedActionGeneratedColumn<>(readWriteDAO, eventBus, entities, horizontal));
+    protected void addGeneratedColumns() {
+        entityTable.addGeneratedColumn("actions", new AppUserOwnedActionGeneratedColumn<>(readWriteDAO, eventBus, entities));
     }
 
     @SuppressWarnings("unused")

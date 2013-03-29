@@ -35,7 +35,6 @@ public class WorkAreaComponent extends CustomComponent {
     @Autowired
     private ObservationCategoriesWorkArea observationCategoriesWorkArea;
 
-
     @Autowired
     public WorkAreaComponent(final EventBus eventBus) {
         eventBus.register(this);
