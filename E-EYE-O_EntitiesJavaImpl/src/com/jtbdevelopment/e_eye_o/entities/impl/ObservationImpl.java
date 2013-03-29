@@ -130,7 +130,7 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
 
     @Override
     public String getSummaryDescription() {
-        return (observationSubject != null ? observationSubject.getSummaryDescription() : "?"
+        return ((observationSubject != null ? observationSubject.getSummaryDescription() : "?")
                 + " "
                 + observationTimestamp.toString("MMM dd")).trim();
     }
