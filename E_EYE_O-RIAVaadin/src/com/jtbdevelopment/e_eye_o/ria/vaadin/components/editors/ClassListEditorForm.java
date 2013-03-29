@@ -1,13 +1,10 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
-import com.google.common.eventbus.EventBus;
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.TextField;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -19,11 +16,10 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ClassListEditorForm extends IdObjectEditorForm<ClassList> {
 
-    private TextField description;
+    private final TextField description = new TextField();
 
-    @Autowired
-    public ClassListEditorForm(final ReadWriteDAO readWriteDAO, final EventBus eventBus) {
-        super(ClassList.class, readWriteDAO, eventBus);
+    public ClassListEditorForm() {
+        super(ClassList.class);
     }
 
     @Override
@@ -37,7 +33,6 @@ public class ClassListEditorForm extends IdObjectEditorForm<ClassList> {
         editorRow.setSpacing(true);
 
         editorRow.addComponent(new Label("Description:"));
-        description = new TextField();
         entityBeanFieldGroup.bind(description, "description");
         editorRow.addComponent(description);
 

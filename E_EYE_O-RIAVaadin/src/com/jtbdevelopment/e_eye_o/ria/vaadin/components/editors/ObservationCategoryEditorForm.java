@@ -16,11 +16,10 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationCategoryEditorForm extends IdObjectEditorForm<ObservationCategory> {
 
-    private TextField shortName;
+    private final TextField shortName = new TextField();
 
-    @Autowired
-    public ObservationCategoryEditorForm(final ReadWriteDAO readWriteDAO, final EventBus eventBus) {
-        super(ObservationCategory.class, readWriteDAO, eventBus);
+    public ObservationCategoryEditorForm() {
+        super(ObservationCategory.class);
     }
 
     @Override
@@ -39,7 +38,6 @@ public class ObservationCategoryEditorForm extends IdObjectEditorForm<Observatio
         editorRow.setSpacing(true);
 
         editorRow.addComponent(new Label("Short Name:"));
-        shortName = new TextField();
         shortName.setWidth(10, Unit.EM);
         entityBeanFieldGroup.bind(shortName, "shortName");
         editorRow.addComponent(shortName);

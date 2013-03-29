@@ -19,12 +19,11 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class StudentEditorForm extends IdObjectEditorForm<Student> {
 
-    private TextField firstName;
-    private BeanItemContainer<ClassList> potentialClasses;
+    private final TextField firstName = new TextField();
+    private final BeanItemContainer<ClassList> potentialClasses = new BeanItemContainer<>(ClassList.class);
 
-    @Autowired
-    public StudentEditorForm(final ReadWriteDAO readWriteDAO, final EventBus eventBus) {
-        super(Student.class, readWriteDAO, eventBus);
+    public StudentEditorForm() {
+        super(Student.class);
     }
 
     @Override
@@ -50,7 +49,6 @@ public class StudentEditorForm extends IdObjectEditorForm<Student> {
         editorRow.setSpacing(true);
 
         editorRow.addComponent(new Label("First Name:"));
-        firstName = new TextField();
         entityBeanFieldGroup.bind(firstName, "firstName");
         editorRow.addComponent(firstName);
 
@@ -61,7 +59,6 @@ public class StudentEditorForm extends IdObjectEditorForm<Student> {
 
         editorRow.addComponent(new Label("Classes:"));
 
-        potentialClasses = new AllItemsBeanItemContainer<>(ClassList.class);
         TwinColSelect classes = new TwinColSelect();
         classes.setRows(3);
         classes.setContainerDataSource(potentialClasses);

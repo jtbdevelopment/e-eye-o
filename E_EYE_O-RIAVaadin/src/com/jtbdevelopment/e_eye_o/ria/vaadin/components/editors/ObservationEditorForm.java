@@ -20,13 +20,12 @@ import org.springframework.context.annotation.Scope;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
-    private TextArea commentField;
-    private BeanItemContainer<ObservationCategory> potentialCategories;
-    private BeanItemContainer<AppUserOwnedObject> potentialSubjects;
+    private final TextArea commentField = new TextArea();
+    private final BeanItemContainer<ObservationCategory> potentialCategories = new BeanItemContainer<>(ObservationCategory.class);
+    private final BeanItemContainer<AppUserOwnedObject> potentialSubjects = new BeanItemContainer<>(AppUserOwnedObject.class);
 
-    @Autowired
-    public ObservationEditorForm(final ReadWriteDAO readWriteDAO, final EventBus eventBus) {
-        super(Observation.class, readWriteDAO, eventBus);
+    public ObservationEditorForm() {
+        super(Observation.class);
     }
 
     @Override
@@ -73,7 +72,6 @@ public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
         row.setSpacing(true);
 
         row.addComponent(new Label("Comment:"));
-        commentField = new TextArea();
         commentField.setRows(4);
         commentField.setWidth(40, Unit.EM);
         //  TODO - need to disable/re-enable enter key capture on Default button for text area.
@@ -81,7 +79,6 @@ public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
         row.addComponent(commentField);
 
         row.addComponent(new Label("Categories:"));
-        potentialCategories = new BeanItemContainer<>(ObservationCategory.class);
         TwinColSelect categories = new TwinColSelect();
         categories.setRows(4);
         categories.setImmediate(true);
@@ -104,7 +101,6 @@ public class ObservationEditorForm extends IdObjectEditorForm<Observation> {
         observationFor.setNewItemsAllowed(false);
         observationFor.setTextInputAllowed(true);
         observationFor.setImmediate(true);
-        potentialSubjects = new BeanItemContainer<>(AppUserOwnedObject.class);
         observationFor.setContainerDataSource(potentialSubjects);
         observationFor.setItemCaptionPropertyId("summaryDescription");
         entityBeanFieldGroup.bind(observationFor, "observationSubject");
