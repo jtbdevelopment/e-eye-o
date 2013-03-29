@@ -61,25 +61,30 @@ public class LoginView extends VerticalLayout implements View {
         setMargin(true);
         setSizeFull();
 
-
-        VerticalLayout verticalLayout = new VerticalLayout();
-        addComponent(verticalLayout);
-        setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
+        //  Title Area
+        VerticalLayout titleSection = new VerticalLayout();
+        addComponent(titleSection);
+        setComponentAlignment(titleSection, Alignment.MIDDLE_CENTER);
         Label title = new Label("Welcome to");
         title.setWidth(null);
         title.setHeight(null);
         title.addStyleName("bold");
-        verticalLayout.addComponent(title);
-        verticalLayout.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
-        verticalLayout.addComponent(logo);
+        titleSection.addComponent(title);
+        titleSection.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
         logo.addStyleName("big-logo");
-        verticalLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
+        titleSection.addComponent(logo);
+        titleSection.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
+
+        //  User/Password/Button Area
+        VerticalLayout loginSection = new VerticalLayout();
+        addComponent(loginSection);
+        setComponentAlignment(loginSection, Alignment.BOTTOM_CENTER);
 
         FormLayout form = new FormLayout();
         form.setWidth(null);
         form.setHeight(null);
-        verticalLayout.addComponent(form);
-        verticalLayout.setComponentAlignment(form, Alignment.MIDDLE_CENTER);
+        loginSection.addComponent(form);
+        loginSection.setComponentAlignment(form, Alignment.MIDDLE_CENTER);
 
         form.addComponent(loginField);
         form.setComponentAlignment(loginField, Alignment.TOP_CENTER);
@@ -121,14 +126,19 @@ public class LoginView extends VerticalLayout implements View {
             }
         });
 
+        //  User/Password/Button Area
+        VerticalLayout helpSection = new VerticalLayout();
+        addComponent(helpSection);
+        setComponentAlignment(helpSection, Alignment.TOP_CENTER);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setSpacing(true);
-        verticalLayout.addComponent(horizontalLayout);
-        verticalLayout.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);
         Link registerLink = new Link("Register for Account", new ExternalResource("#!" + ToDoView.VIEW_NAME));
         horizontalLayout.addComponent(registerLink);
         Link forgotPasswordLink = new Link("Forgot Password?", new ExternalResource("#!" + ToDoView.VIEW_NAME));
         horizontalLayout.addComponent(forgotPasswordLink);
+
+        helpSection.addComponent(horizontalLayout);
+        helpSection.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);
     }
 
     @Override

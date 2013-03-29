@@ -32,7 +32,6 @@ import java.util.Locale;
  * Date: 3/16/13
  * Time: 7:11 PM
  */
-//  TODO - figure out how to get rid of excess spacing at top of action row
 //  TODO - this class is too big
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends CustomComponent {
     //  TODO - this should just drive off of annotations it would seem off of interface
@@ -124,6 +123,9 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
         buildEntityTable(properties, headers, aligns);
         mainLayout.addComponent(entityTable);
+        CssLayout spacer = new CssLayout();
+        spacer.addStyleName("table-spacer-row");
+        mainLayout.addComponent(spacer);  //  Spacer at footer useful in work areas
 
         eventBus.register(this);
         setCompositionRoot(mainLayout);
@@ -139,6 +141,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         entityTable.setSizeFull();
         entityTable.setImmediate(true);
         entityTable.setNullSelectionAllowed(false);
+        entityTable.setMultiSelect(false);
 
         entityTable.setVisibleColumns(properties.toArray(new String[properties.size()]));
         entityTable.setColumnHeaders(headers.toArray(new String[headers.size()]));
@@ -347,7 +350,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         filterSection.addComponent(showSizeLabel);
         filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
-        final NativeSelect showSize = new NativeSelect("", Arrays.asList(1, 5, 10, 25, 50));
+        final NativeSelect showSize = new NativeSelect(null, Arrays.asList(1, 5, 10, 25, 50));
         showSize.setImmediate(true);
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
@@ -430,16 +433,16 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                 if (tableDriver instanceof AppUser) {
                     relatedToTableDriver = tableDriver.equals(entity.getAppUser());
                 } else {
-                    if(tableDriver instanceof ClassList && entity instanceof Student ) {
+                    if (tableDriver instanceof ClassList && entity instanceof Student) {
                         relatedToTableDriver = ((Student) entity).getClassLists().contains(tableDriver);
                     }
-                    if((tableDriver instanceof ClassList || tableDriver instanceof Student) && entity instanceof Observation ) {
+                    if ((tableDriver instanceof ClassList || tableDriver instanceof Student) && entity instanceof Observation) {
                         relatedToTableDriver = ((Observation) entity).getObservationSubject().equals(tableDriver);
                     }
-                    if((tableDriver instanceof ClassList || tableDriver instanceof Observation) && entity instanceof Photo ) {
+                    if ((tableDriver instanceof ClassList || tableDriver instanceof Observation) && entity instanceof Photo) {
                         relatedToTableDriver = ((Photo) entity).getPhotoFor().equals(tableDriver);
                     }
-                    if(tableDriver instanceof ObservationCategory && entity instanceof Observation) {
+                    if (tableDriver instanceof ObservationCategory && entity instanceof Observation) {
                         relatedToTableDriver = ((Observation) entity).getCategories().contains(tableDriver);
                     }
                 }

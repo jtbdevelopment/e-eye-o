@@ -23,13 +23,15 @@ public class Logo extends CustomComponent {
         Label letter;
         for (int i = 0; i < letters.length; ++i) {
             letter = new Label(letters[i]);
-            letter.addStyleName("logo");
+            letter.addStyleName("logo-character");
             letter.addStyleName("logo-" + styles[i]);
             letter.setSizeUndefined();
             horizontalLayout.addComponent(letter);
             horizontalLayout.setComponentAlignment(letter, Alignment.MIDDLE_CENTER);
         }
 
+        horizontalLayout.addStyleName("logo");
+        horizontalLayout.setSizeUndefined();
         setCompositionRoot(horizontalLayout);
         setSizeUndefined();
     }

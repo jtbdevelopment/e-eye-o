@@ -45,6 +45,7 @@ public class TitleBarComposite extends CustomComponent {
         lastLogout = new Label();
         lastLogout.setWidth(null);
         mainLayout.addComponent(lastLogout);
+        mainLayout.addStyleName("titlebar");
         setCompositionRoot(mainLayout);
     }
 
