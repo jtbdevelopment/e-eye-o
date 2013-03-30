@@ -8,6 +8,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.convert
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.StringObservationCategorySetConverter;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.*;
@@ -19,6 +20,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Date: 3/17/13
@@ -50,8 +52,8 @@ public class ObservationTable extends IdObjectTable<Observation> {
     static {
         headers = Arrays.asList(
                 new HeaderInfo("observationTimestamp", "Time", Table.Align.LEFT),
-                new HeaderInfo("commentLabel", "Comment", Table.Align.LEFT, true),  // Generated
-                new HeaderInfo("categories", "Categories", Table.Align.LEFT, true),
+                new HeaderInfo("comment", "Comment", Table.Align.LEFT),
+                new HeaderInfo("categories", "Categories", Table.Align.LEFT),
                 new HeaderInfo("significant", "Significant", Table.Align.CENTER),
                 new HeaderInfo("followUpNeeded", "Follow Up?", Table.Align.CENTER),
                 new HeaderInfo("followUpReminder", "Reminder?", Table.Align.CENTER),
@@ -98,33 +100,53 @@ public class ObservationTable extends IdObjectTable<Observation> {
         entityTable.setConverter("followUpReminder", localDateStringConverter);
         entityTable.setConverter("observationTimestamp", localDateTimeStringConverter);
         entityTable.setConverter("categories", stringObservationCategorySetConverter);
+        //  TODO
+        entityTable.setConverter("comment", new Converter<String, String>() {
+            @Override
+            public String convertToModel(final String value, final Locale locale) throws ConversionException {
+                return null;
+            }
+
+            @Override
+            public String convertToPresentation(final String value, final Locale locale) throws ConversionException {
+                String shortenedComment = value.replace("\n", "<br>");
+                if (shortenedComment.length() > 50) {
+                    shortenedComment = shortenedComment.substring(0, 47) + "...";
+                }
+                return shortenedComment;
+            }
+
+            @Override
+            public Class<String> getModelType() {
+                return String.class;
+            }
+
+            @Override
+            public Class<String> getPresentationType() {
+                return String.class;
+            }
+        });
     }
 
     @Override
-    protected void addGeneratedColumns(final boolean horizontal) {
-        super.addGeneratedColumns(false);  //  Ignore
-        entityTable.addGeneratedColumn("commentLabel", new Table.ColumnGenerator() {
+    protected void addGeneratedColumns() {
+        super.addGeneratedColumns();
+        entityTable.setItemDescriptionGenerator(new AbstractSelect.ItemDescriptionGenerator() {
             @Override
-            public Object generateCell(final Table source, final Object itemId, final Object columnId) {
-                final Observation entity = entities.getItem(itemId).getBean();
-                String shortenedComment = entity.getComment().replace("\n", "");
-                if (shortenedComment.length() > 40) {
-                    shortenedComment = shortenedComment.substring(0, 37) + "...";
+            public String generateDescription(final Component source, final Object itemId, final Object propertyId) {
+                if (itemId != null && propertyId != null && propertyId.equals("comment")) {
+                    final Observation entity = entities.getItem(itemId).getBean();
+                    return entity.getComment().replace("\n", "<br/>");
                 }
-                Label comment = new Label(shortenedComment);
-                comment.setWidth(20, Unit.EM);
-                comment.setHeight(2, Unit.EM);
-
-                //  TODO - html format?  turn new lines into <br>?
-                comment.setDescription(entity.getComment().replace("\n", "<br/>"));
-                return comment;
+                return null;
             }
         });
         entityTable.addGeneratedColumn("showFollowUp", new Table.ColumnGenerator() {
             @Override
             public Object generateCell(final Table source, final Object itemId, final Object columnId) {
                 final Observation entity = entities.getItem(itemId).getBean();
-                GridLayout layout = new GridLayout(1, 2);
+                GridLayout layout = new GridLayout(2, 1);
+                layout.setSizeUndefined();
                 if (entity.getFollowUpObservation() != null) {
                     Button showFollowUpButton = new Button("See Follow Up");
                     showFollowUpButton.addStyleName(Runo.BUTTON_SMALL);
@@ -154,7 +176,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
                             });
                         }
                     });
-                    layout.addComponent(breakLink, 0, 1);
+                    layout.addComponent(breakLink, 1, 0);
                 } else {
                     Button addFollowUp = new Button("New");
                     addFollowUp.setDescription("This starts a new observation.");
@@ -178,11 +200,20 @@ public class ObservationTable extends IdObjectTable<Observation> {
                             //  TODO - show observations for entity and let them pick one to link and set follow up to false and reminder to null.
                         }
                     });
-                    layout.addComponent(linkFollowUp, 0, 1);
+                    layout.addComponent(linkFollowUp, 1, 0);
                 }
                 return layout;
             }
         });
+
+        //  TODO - this better
+        entityTable.setColumnExpandRatio("observationTimestamp", 0.10f);
+        entityTable.setColumnExpandRatio("categories", 0.10f);
+        entityTable.setColumnExpandRatio("modificationTimestamp", 0.10f);
+        entityTable.setColumnExpandRatio("comment", 0.4f);
+        entityTable.setColumnExpandRatio("archived", 0.10f);
+        entityTable.setColumnExpandRatio("significant", 0.10f);
+        entityTable.setColumnExpandRatio("followUpReminder", 0.10f);
     }
 
     @Override

@@ -3,10 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.BooleanToYesNoConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
@@ -35,7 +32,7 @@ import java.util.Locale;
  * Date: 3/16/13
  * Time: 7:11 PM
  */
-//  TODO - figure out how to get rid of excess spacing at top of action row
+//  TODO - this class is too big
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends CustomComponent {
     //  TODO - this should just drive off of annotations it would seem off of interface
     public static class HeaderInfo {
@@ -126,6 +123,9 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
         buildEntityTable(properties, headers, aligns);
         mainLayout.addComponent(entityTable);
+        CssLayout spacer = new CssLayout();
+        spacer.addStyleName("table-spacer-row");
+        mainLayout.addComponent(spacer);  //  Spacer at footer useful in work areas
 
         eventBus.register(this);
         setCompositionRoot(mainLayout);
@@ -134,13 +134,14 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     private void buildEntityTable(List<String> properties, List<String> headers, List<Table.Align> aligns) {
         entityTable.setContainerDataSource(entities);
         entityTable.addStyleName(Runo.TABLE_SMALL);
-        addGeneratedColumns(true);
+        addGeneratedColumns();
 
         entityTable.setSortEnabled(true);
         entityTable.setSelectable(true);
         entityTable.setSizeFull();
         entityTable.setImmediate(true);
         entityTable.setNullSelectionAllowed(false);
+        entityTable.setMultiSelect(false);
 
         entityTable.setVisibleColumns(properties.toArray(new String[properties.size()]));
         entityTable.setColumnHeaders(headers.toArray(new String[headers.size()]));
@@ -263,8 +264,8 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         entityTable.setConverter("modificationTimestamp", dateTimeStringConverter);
     }
 
-    protected void addGeneratedColumns(final boolean horizontal) {
-        entityTable.addGeneratedColumn("actions", new AppUserOwnedActionGeneratedColumn<>(readWriteDAO, eventBus, entities, horizontal));
+    protected void addGeneratedColumns() {
+        entityTable.addGeneratedColumn("actions", new AppUserOwnedActionGeneratedColumn<>(readWriteDAO, eventBus, entities));
     }
 
     @SuppressWarnings("unused")
@@ -349,7 +350,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         filterSection.addComponent(showSizeLabel);
         filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
-        final NativeSelect showSize = new NativeSelect("", Arrays.asList(1, 5, 10, 25, 50));
+        final NativeSelect showSize = new NativeSelect(null, Arrays.asList(1, 5, 10, 25, 50));
         showSize.setImmediate(true);
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
@@ -383,7 +384,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         buttonSection.setWidth(null);
         buttonSection.setSpacing(true);
 
-        //  TODO - doesn't work for classlist
+        //  TODO - doesn't work for classlist  or observation category
         Button newEntityButton = new Button("New " + entityType.getSimpleName());
         newEntityButton.addClickListener(new Button.ClickListener() {
             @Override
@@ -428,7 +429,26 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                 entities.removeItem(idForBean);
             }
             if (!IdObjectChanged.ChangeType.DELETED.equals(msg.getChangeType())) {
-                entities.addBean(entity);
+                boolean relatedToTableDriver = false;
+                if (tableDriver instanceof AppUser) {
+                    relatedToTableDriver = tableDriver.equals(entity.getAppUser());
+                } else {
+                    if (tableDriver instanceof ClassList && entity instanceof Student) {
+                        relatedToTableDriver = ((Student) entity).getClassLists().contains(tableDriver);
+                    }
+                    if ((tableDriver instanceof ClassList || tableDriver instanceof Student) && entity instanceof Observation) {
+                        relatedToTableDriver = ((Observation) entity).getObservationSubject().equals(tableDriver);
+                    }
+                    if ((tableDriver instanceof ClassList || tableDriver instanceof Observation) && entity instanceof Photo) {
+                        relatedToTableDriver = ((Photo) entity).getPhotoFor().equals(tableDriver);
+                    }
+                    if (tableDriver instanceof ObservationCategory && entity instanceof Observation) {
+                        relatedToTableDriver = ((Observation) entity).getCategories().contains(tableDriver);
+                    }
+                }
+                if (relatedToTableDriver) {
+                    entities.addBean(entity);
+                }
             }
             refreshSizeAndSort();
         }

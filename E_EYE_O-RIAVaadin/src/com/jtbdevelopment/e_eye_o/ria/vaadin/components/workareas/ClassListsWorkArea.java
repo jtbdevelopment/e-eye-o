@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ClassListTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
@@ -42,12 +41,6 @@ public class ClassListsWorkArea extends CustomComponent {
         });
         mainLayout.addComponent(classListTable);
 
-        studentTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Student>() {
-            @Override
-            public void handleClickEvent(final Student entity) {
-                //  TODO if even needed
-            }
-        });
         TabSheet tabSheet = new TabSheet();
         tabSheet.addTab(studentTable).setCaption("Students");
         tabSheet.addTab(observationTable).setCaption("Observations");

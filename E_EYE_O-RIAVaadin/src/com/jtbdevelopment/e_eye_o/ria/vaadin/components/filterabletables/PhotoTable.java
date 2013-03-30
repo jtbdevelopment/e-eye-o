@@ -27,7 +27,6 @@ public class PhotoTable extends IdObjectTable<Photo> {
     private static final List<HeaderInfo> headers;
 
     static {
-        //  TODO - add last observation date
         headers = Arrays.asList(
                 new HeaderInfo("description", "Description", Table.Align.LEFT),
                 new HeaderInfo("archived", "Archived?", Table.Align.CENTER),

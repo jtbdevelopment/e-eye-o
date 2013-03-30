@@ -20,28 +20,17 @@ public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> imp
     private final ReadWriteDAO readWriteDAO;
     private final EventBus eventBus;
     private final AllItemsBeanItemContainer<T> entities;
-    private boolean horizontal;
 
     public AppUserOwnedActionGeneratedColumn(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final AllItemsBeanItemContainer<T> entities) {
         this.readWriteDAO = readWriteDAO;
         this.eventBus = eventBus;
         this.entities = entities;
-        this.horizontal = true;
-    }
-
-    public AppUserOwnedActionGeneratedColumn(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final AllItemsBeanItemContainer<T> entities, final boolean horizontal) {
-        this(readWriteDAO, eventBus, entities);
-        this.horizontal = horizontal;
     }
 
     @Override
     public Object generateCell(final Table source, final Object itemId, final Object columnId) {
         final GridLayout layout;
-        if (horizontal) {
-            layout = new GridLayout(2, 1);
-        } else {
-            layout = new GridLayout(1, 2);
-        }
+        layout = new GridLayout(2, 1);
         final T entity = entities.getItem(itemId).getBean();
         final Button archiveAction = new Button("ERROR");
         archiveAction.setDescription("Archiving anything does not delete it, just drops it off your lists by default.  You can always get to them and you can always re-activate them.  Archiving something will archive related items.");
@@ -83,12 +72,7 @@ public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> imp
         deleteButton.addStyleName(Runo.BUTTON_SMALL);
         layout.addComponent(archiveAction, 0, 0);
         layout.setComponentAlignment(archiveAction, Alignment.MIDDLE_CENTER);
-        if (horizontal) {
-            layout.addComponent(deleteButton, 1, 0);
-        } else {
-            layout.addComponent(deleteButton, 0, 1);
-
-        }
+        layout.addComponent(deleteButton, 1, 0);
         layout.setComponentAlignment(deleteButton, Alignment.MIDDLE_CENTER);
         return layout;
     }

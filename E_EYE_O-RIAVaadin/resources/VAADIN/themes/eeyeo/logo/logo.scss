@@ -1,14 +1,16 @@
 @mixin eeyeo-logo {
-  .logo {
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    font-weight: bold;
-    font-size: 20px;
-  }
-
   .big-logo {
     -webkit-transform: scale(3.2);
     -moz-transform: scale(3.2);
     -o-transform: scale(3.2);
+    padding: 3px;
+  }
+
+  .logo-character {
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    padding: 2px;
   }
 
   .logo-first-e {

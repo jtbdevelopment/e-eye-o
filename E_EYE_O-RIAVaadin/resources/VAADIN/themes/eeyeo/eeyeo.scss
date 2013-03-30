@@ -5,6 +5,7 @@
 @import "table/table.scss";
 @import "tabsheet/tabsheet.scss";
 @import "notification/notification.scss";
+@import "titlebar/titlebar.scss";
 
 //  Three Antique Dresses color palette from color schemer gallery
 $cream: #f2e3b9;
@@ -32,6 +33,7 @@ $tableRowForegroundSelected: black;
   @include eeyeo-table;
   @include eeyeo-tabsheet;
   @include eeyeo-notification;
+  @include eeyeo-titlebar;
 
   .v-ui {
     background: $cream;
@@ -70,5 +72,9 @@ $tableRowForegroundSelected: black;
     color: black;
     //font-weight: normal;
     text-shadow: $forestGreen 0 2px 2px;
+  }
+
+  .table-spacer-row {
+    height: 15px;
   }
 }
