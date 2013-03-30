@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ClassListEditorDialogWindow;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -21,6 +22,9 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     @Autowired
     private ClassListEditorDialogWindow classListEditorDialogWindow;
 
+    @Autowired
+    private LocalDateTimeStringConverter localDateTimeStringConverter;
+
     public ClassListTable() {
         super(ClassList.class);
     }
@@ -31,6 +35,7 @@ public class ClassListTable extends IdObjectTable<ClassList> {
         //  TODO - add last observation date
         headers = Arrays.asList(
                 new HeaderInfo("description", "Description", Table.Align.LEFT),
+                new HeaderInfo("lastObservationTimestamp", "Last Observation", Table.Align.CENTER),
                 new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
                 new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)    // Generated
@@ -46,5 +51,11 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     protected void showEntityEditor(final ClassList entity) {
         getUI().addWindow(classListEditorDialogWindow);
         classListEditorDialogWindow.setEntity(entity);
+    }
+
+    @Override
+    protected void addColumnConverters() {
+        super.addColumnConverters();
+        entityTable.setConverter("lastObservationTimestamp", localDateTimeStringConverter);
     }
 }

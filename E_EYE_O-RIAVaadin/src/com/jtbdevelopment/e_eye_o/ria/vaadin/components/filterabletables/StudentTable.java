@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.StudentEditorDialogWindow;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -23,6 +24,9 @@ public class StudentTable extends IdObjectTable<Student> {
     @Autowired
     private StudentEditorDialogWindow studentEditorDialogWindow;
 
+    @Autowired
+    private LocalDateTimeStringConverter localDateTimeStringConverter;
+
     public StudentTable() {
         super(Student.class);
     }
@@ -34,6 +38,7 @@ public class StudentTable extends IdObjectTable<Student> {
         headers = Arrays.asList(
                 new HeaderInfo("firstName", "First Name", Table.Align.LEFT),
                 new HeaderInfo("lastName", "Last Name", Table.Align.LEFT),
+                new HeaderInfo("lastObservationTimestamp", "Last Observation", Table.Align.CENTER),
                 new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
                 new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)    // Generated
@@ -52,11 +57,27 @@ public class StudentTable extends IdObjectTable<Student> {
     }
 
     @Override
+    protected String getDefaultSortField(final List<String> properties) {
+        return "lastObservationTimestamp";
+    }
+
+    @Override
+    protected boolean getDefaultSortAscending() {
+        return super.getDefaultSortAscending();
+    }
+
+    @Override
     public void setTableDriver(final IdObject tableDriver) {
         super.setTableDriver(tableDriver);
         if (tableDriver instanceof ClassList) {
             entities.addAll(readWriteDAO.getAllStudentsForClassList((ClassList) tableDriver));
             refreshSizeAndSort();
         }
+    }
+
+    @Override
+    protected void addColumnConverters() {
+        super.addColumnConverters();
+        entityTable.setConverter("lastObservationTimestamp", localDateTimeStringConverter);
     }
 }
