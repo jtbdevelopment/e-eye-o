@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateDateConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.shared.ui.datefield.Resolution;
@@ -109,15 +110,25 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         row.addComponent(significant);
 
         row.addComponent(new Label("Follow Up?"));
-        CheckBox followUp = new CheckBox();
+        final CheckBox followUp = new CheckBox();
+        followUp.setImmediate(true);
         entityBeanFieldGroup.bind(followUp, "followUpNeeded");
         row.addComponent(followUp);
 
         row.addComponent(new Label("Reminder?"));
-        DateField followUpReminder = new DateField();
+        final DateField followUpReminder = new DateField();
         followUpReminder.setConverter(new LocalDateDateConverter());
         followUpReminder.setResolution(Resolution.DAY);
         entityBeanFieldGroup.bind(followUpReminder, "followUpReminder");
+        followUpReminder.setImmediate(true);
+        followUpReminder.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                if (followUpReminder.getValue() != null) {
+                    followUp.setValue(true);
+                }
+            }
+        });
         row.addComponent(followUpReminder);
 
         row.addComponent(new Label("Observation Time"));
