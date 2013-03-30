@@ -51,13 +51,6 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         AppUser appUser = readWriteDAO.getUser(principal.getUsername() + "@test.com");
         getSession().setAttribute(AppUser.class, appUser);
 
-        //  TODO - clean up after fixing other dev comp
-        /*
-for(Observable observable : readWriteDAO.getEntitiesForUser(Observable.class, appUser)) {
-    observable.setLastObservationTimestamp(readWriteDAO.getLastObservationTimestampForEntity(observable));
-    readWriteDAO.update(observable);
-}
-*/
         setSizeFull();
 
         VerticalLayout outer = new VerticalLayout();
