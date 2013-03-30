@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
 import org.hibernate.Query;
@@ -9,6 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.metadata.ClassMetadata;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.joda.time.LocalDateTime;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -29,7 +31,7 @@ public class HibernateReadWriteDAOTest {
     private DAOIdObjectWrapperFactory daoIdObjectWrapperFactory;
     private HibernateReadWriteDAO dao;
     private ClassMetadata metadata, deletedMetaData;
-    private Query query1, query2;
+    private Query query1, query2, query3;
 
     private ClassList classListImpl, classListWrapped, classListLoaded;
     private Observation observationImpl, observationWrapped, observationLoaded;
@@ -42,6 +44,10 @@ public class HibernateReadWriteDAOTest {
     private List<IdObject> impl = new ArrayList<>();
     private List<IdObject> loaded = new ArrayList<>();
 
+    private static final LocalDateTime now = new LocalDateTime();
+    private static final LocalDateTime past = now.minusHours(1);
+    private static final LocalDateTime future = now.plusHours(1);
+
     @BeforeMethod
     public void setUp() throws Exception {
         context = new Mockery();
@@ -49,6 +55,7 @@ public class HibernateReadWriteDAOTest {
         session = context.mock(Session.class);
         query1 = context.mock(Query.class, "Q1");
         query2 = context.mock(Query.class, "Q2");
+        query3 = context.mock(Query.class, "Q3");
         daoIdObjectWrapperFactory = context.mock(DAOIdObjectWrapperFactory.class);
         classListImpl = context.mock(ClassList.class, "CLI");
         classListLoaded = context.mock(ClassList.class, "CLL");
@@ -157,6 +164,27 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(TN));
             allowing(deletedMetaData).getEntityName();
             will(returnValue(DN));
+            allowing(observationImpl).getObservationSubject();
+            will(returnValue(studentImpl));
+            allowing(observationWrapped).getObservationSubject();
+            will(returnValue(studentWrapped));
+            allowing(observationLoaded).getObservationSubject();
+            will(returnValue(studentLoaded));
+            allowing(observationImpl).getObservationTimestamp();
+            will(returnValue(now));
+            allowing(observationWrapped).getObservationTimestamp();
+            will(returnValue(now));
+            allowing(observationLoaded).getObservationTimestamp();
+            will(returnValue(now));
+            allowing(studentImpl).getLastObservationTimestamp();
+            will(returnValue(past));
+            allowing(studentWrapped).getLastObservationTimestamp();
+            will(returnValue(past));
+            allowing(studentLoaded).getLastObservationTimestamp();
+            will(returnValue(past));
+            allowing(studentLoaded).setLastObservationTimestamp(now);
+            allowing(studentImpl).setLastObservationTimestamp(now);
+            allowing(studentWrapped).setLastObservationTimestamp(now);
         }});
 
         dao = new HibernateReadWriteDAO(sessionFactory, daoIdObjectWrapperFactory);
@@ -172,6 +200,7 @@ public class HibernateReadWriteDAOTest {
             one(session).save(photoWrapped);
             one(session).save(appUserWrapped);
             one(session).save(deletedWrapped);
+            one(session).update(studentWrapped);
         }});
 
         for (IdObject i : impl) {
@@ -191,6 +220,7 @@ public class HibernateReadWriteDAOTest {
             one(session).save(photoWrapped);
             one(session).save(appUserWrapped);
             one(session).save(deletedWrapped);
+            one(session).update(studentWrapped);
         }});
 
         for (IdObject i : wrapped) {
@@ -239,6 +269,13 @@ public class HibernateReadWriteDAOTest {
             one(session).update(observationWrapped);
             one(session).update(photoWrapped);
             one(session).update(appUserWrapped);
+            one(session).createQuery("select max(observationTimestamp) from Observation where observationSubject = :observationSubject");
+            will(returnValue(query3));
+            one(query3).setParameter("observationSubject", studentWrapped);
+            will(returnValue(query3));
+            one(query3).uniqueResult();
+            will(returnValue(now));
+            one(session).update(studentWrapped);
         }});
 
         for (IdObject i : impl) {
@@ -257,6 +294,13 @@ public class HibernateReadWriteDAOTest {
             one(session).update(observationWrapped);
             one(session).update(photoWrapped);
             one(session).update(appUserWrapped);
+            one(session).createQuery("select max(observationTimestamp) from Observation where observationSubject = :observationSubject");
+            will(returnValue(query3));
+            one(query3).setParameter("observationSubject", studentWrapped);
+            will(returnValue(query3));
+            one(query3).uniqueResult();
+            will(returnValue(now));
+            one(session).update(studentWrapped);
         }});
 
         for (IdObject i : wrapped) {
@@ -410,6 +454,7 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(relatedFollowUpObservations));
             one(observationLoaded).setFollowUpObservation(null);
             one(session).update(observationLoaded);
+            one(session).update(studentWrapped);
         }});
 
         createStandardDeleteExpectations(wrapped, loaded, relatedPhotos, relatedObservations);
@@ -533,15 +578,23 @@ public class HibernateReadWriteDAOTest {
             for (Photo p : relatedPhotos) {
                 one(session).delete(p);
             }
-            one(session).createQuery("from Observation where observationSubject = :observationSubject");
-            will(returnValue(query1));
-            one(query1).setParameter("observationSubject", loaded);
-            will(returnValue(query1));
-            one(query1).list();
-            will(returnValue(relatedObservations));
-            for (Observation o : relatedObservations) {
-                one(session).delete(o);
+            if (loaded instanceof Observable) {
+                one(session).createQuery("from Observation where observationSubject = :observationSubject");
+                will(returnValue(query1));
+                one(query1).setParameter("observationSubject", loaded);
+                will(returnValue(query1));
+                one(query1).list();
+                will(returnValue(relatedObservations));
+                for (Observation o : relatedObservations) {
+                    one(session).delete(o);
+                }
             }
+            one(session).createQuery("select max(observationTimestamp) from Observation where observationSubject = :observationSubject");
+            will(returnValue(query3));
+            one(query3).setParameter("observationSubject", studentLoaded);
+            will(returnValue(query3));
+            one(query3).uniqueResult();
+            will(returnValue(now));
             one(session).delete(loaded);
             one(session).flush();
         }});
