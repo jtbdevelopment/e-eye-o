@@ -231,7 +231,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "  \"firstName\" : \"First1-1\"," + newline +
                     "  \"id\" : \"" + student1For1.getId() + "\"," + newline +
                     "  \"lastName\" : \"Last1-1\"," + newline +
-                    "  \"lastObservationTimestamp\" : [ 2000, 1, 1, 0, 0, 0, 0 ]," + newline +
+                    "  \"lastObservationTimestamp\" : [ 2013, 1, 18, 15, 12, 0, 0 ]," + newline +
                     "  \"modificationTimestamp\" : " + student1For1.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(student2For1, "{" + newline +
