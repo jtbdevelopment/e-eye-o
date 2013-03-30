@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.impl.AppUserOwnedObjectImpl;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
@@ -196,7 +197,7 @@ public class HibernateReadOnlyDAOTest {
     @Test
     public void testGetObservationsForEntity() throws Exception {
         final List<Observation> result = Collections.unmodifiableList(Arrays.asList(context.mock(Observation.class)));
-        final AppUserOwnedObject oc = context.mock(AppUserOwnedObject.class);
+        final Observable oc = context.mock(Observable.class);
         context.checking(new Expectations() {{
             allowing(session).createQuery("from Observation where observationSubject = :observationSubject");
             will(returnValue(query));

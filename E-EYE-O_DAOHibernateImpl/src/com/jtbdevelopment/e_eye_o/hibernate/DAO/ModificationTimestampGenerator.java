@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Date: 2/13/13
  * Time: 12:34 AM
  */
-public class HibernateTimestampInterceptor extends EmptyInterceptor {
+public class ModificationTimestampGenerator extends EmptyInterceptor {
 
     private static final String MODIFICATION_TIMESTAMP = "modificationTimestamp";
 

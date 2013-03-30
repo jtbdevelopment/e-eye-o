@@ -21,13 +21,13 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @SuppressWarnings("unused")
-public class HibernatePreDeleteEventListener implements PreDeleteEventListener {
+public class DeletedItemsGenerator implements PreDeleteEventListener {
     private final DAOIdObjectWrapperFactory daoIdObjectWrapperFactory;
     private final IdObjectFactory idObjectFactory;
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public HibernatePreDeleteEventListener(final DAOIdObjectWrapperFactory daoIdObjectWrapperFactory, final IdObjectFactory idObjectFactory, final SessionFactory sessionFactory) {
+    public DeletedItemsGenerator(final DAOIdObjectWrapperFactory daoIdObjectWrapperFactory, final IdObjectFactory idObjectFactory, final SessionFactory sessionFactory) {
         this.daoIdObjectWrapperFactory = daoIdObjectWrapperFactory;
         this.idObjectFactory = idObjectFactory;
         this.sessionFactory = sessionFactory;

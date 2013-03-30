@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import org.joda.time.LocalDate;
@@ -19,7 +19,7 @@ import java.util.Set;
 public class ObservationImpl extends AppUserOwnedObjectImpl implements Observation {
     private String comment = "";
     private LocalDateTime observationTimestamp = new LocalDateTime();
-    private AppUserOwnedObject observationSubject;
+    private Observable observationSubject;
     private boolean significant = false;
 
     private Set<ObservationCategory> categories = new HashSet<>();
@@ -33,12 +33,12 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     }
 
     @Override
-    public AppUserOwnedObject getObservationSubject() {
+    public Observable getObservationSubject() {
         return observationSubject;
     }
 
     @Override
-    public void setObservationSubject(final AppUserOwnedObject observationSubject) {
+    public void setObservationSubject(final Observable observationSubject) {
         this.observationSubject = observationSubject;
     }
 

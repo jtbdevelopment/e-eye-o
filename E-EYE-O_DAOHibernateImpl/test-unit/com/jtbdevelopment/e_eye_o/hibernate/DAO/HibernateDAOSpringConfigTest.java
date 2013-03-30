@@ -30,7 +30,7 @@ public class HibernateDAOSpringConfigTest {
 
     @Test
     public void testTimestampIntercepter() {
-        assertTrue(config.timestampInterceptor() instanceof HibernateTimestampInterceptor);
+        assertTrue(config.timestampInterceptor() instanceof ModificationTimestampGenerator);
     }
 
     @Test

@@ -10,7 +10,7 @@ import javax.persistence.Entity;
  * Time: 2:05 PM
  */
 @Entity(name = "ClassList")
-public class HibernateClassList extends HibernateAppUserOwnedObject<ClassList> implements ClassList {
+public class HibernateClassList extends HibernateObservable<ClassList> implements ClassList {
     @SuppressWarnings("unused")    // Hibernate
     protected HibernateClassList() {
     }

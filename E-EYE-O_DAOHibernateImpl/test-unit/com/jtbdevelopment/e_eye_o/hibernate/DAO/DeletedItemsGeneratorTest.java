@@ -21,12 +21,12 @@ import static org.testng.AssertJUnit.assertFalse;
  * Date: 2/17/13
  * Time: 9:45 PM
  */
-public class HibernatePreDeleteEventListenerTest {
+public class DeletedItemsGeneratorTest {
     private Mockery context;
     private DAOIdObjectWrapperFactory wrapper;
     private IdObjectFactory factory;
     private SessionFactoryImpl sfi;
-    private HibernatePreDeleteEventListener listener;
+    private DeletedItemsGenerator listener;
     private DeletedObject impl, wrapped;
     private DeletedObjectBuilder builder;
     private AppUser appUser;
@@ -42,7 +42,7 @@ public class HibernatePreDeleteEventListenerTest {
         wrapped = context.mock(DeletedObject.class, "W");
         appUser = context.mock(AppUser.class);
         session = context.mock(Session.class);
-        listener = new HibernatePreDeleteEventListener(wrapper, factory, null);
+        listener = new DeletedItemsGenerator(wrapper, factory, null);
         eventSource = context.mock(EventSource.class);
         builder = context.mock(DeletedObjectBuilder.class);
         context.checking(new Expectations() {{

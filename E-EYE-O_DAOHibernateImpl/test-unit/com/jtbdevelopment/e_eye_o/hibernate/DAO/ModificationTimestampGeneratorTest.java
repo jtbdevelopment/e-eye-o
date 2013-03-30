@@ -14,9 +14,9 @@ import static org.testng.AssertJUnit.*;
  * Date: 2/13/13
  * Time: 12:43 AM
  */
-public class HibernateTimestampInterceptorTest {
+public class ModificationTimestampGeneratorTest {
     private IdObject idObject;
-    private final HibernateTimestampInterceptor interceptor = new HibernateTimestampInterceptor();
+    private final ModificationTimestampGenerator interceptor = new ModificationTimestampGenerator();
 
     @BeforeMethod
     public void setup() {

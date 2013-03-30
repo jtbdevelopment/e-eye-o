@@ -313,6 +313,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Thread.sleep(1);
         p.setDescription("P2");
         s.addClassList(cl);
+        o = rwDAO.create(factory.newObservationBuilder(updateUser).withComment("c").withObservationSubject(cl).withObservationTimestamp(new LocalDateTime()).build());
         p = rwDAO.update(p);
         s = rwDAO.update(s);
         final List<AppUserOwnedObject> secondList = Arrays.asList(s, p);

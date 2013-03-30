@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.builders;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.entities.builders.ObservationBuilder;
@@ -19,7 +19,7 @@ public class ObservationBuilderImpl extends AppUserOwnedObjectBuilderImpl<Observ
     }
 
     @Override
-    public ObservationBuilder withObservationSubject(final AppUserOwnedObject observationSubject) {
+    public ObservationBuilder withObservationSubject(final Observable observationSubject) {
         entity.setObservationSubject(observationSubject);
         return this;
     }

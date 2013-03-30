@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.DAO;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Set;
@@ -41,7 +42,9 @@ public interface ReadOnlyDAO {
 
     public List<Photo> getAllPhotosForEntity(final AppUserOwnedObject ownedObject);
 
-    public List<Observation> getAllObservationsForEntity(final AppUserOwnedObject ownedObject);
+    public LocalDateTime getLastObservationTimestampForEntity(final Observable observable);
+
+    public List<Observation> getAllObservationsForEntity(final Observable observable);
 
     public List<Observation> getAllObservationsForObservationCategory(final ObservationCategory observationCategory);
 

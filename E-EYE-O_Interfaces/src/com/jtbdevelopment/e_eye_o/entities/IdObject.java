@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 import java.beans.Transient;
@@ -11,6 +12,8 @@ import java.beans.Transient;
  * Time: 3:09 PM
  */
 public interface IdObject {
+    //  Standard defaults
+    public final static LocalDateTime UNINITIALISED_LOCAL_DATE_TIME = new LocalDateTime(2000, 1, 1, 0, 0, 0);
     //  Standard sizes
     public final static int MAX_SHORT_NAME_SIZE = 10;
     public final static int MAX_DESCRIPTION_SIZE = 50;

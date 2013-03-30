@@ -7,7 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
  * Date: 11/17/12
  * Time: 2:05 PM
  */
-public class ClassListImpl extends AppUserOwnedObjectImpl implements ClassList {
+public class ClassListImpl extends ObservableImpl implements ClassList {
     private String description = "";
 
     ClassListImpl(final AppUser appUser) {

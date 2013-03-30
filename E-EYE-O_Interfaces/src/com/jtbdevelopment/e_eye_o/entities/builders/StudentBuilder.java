@@ -9,7 +9,7 @@ import java.util.Set;
  * Date: 3/9/13
  * Time: 11:20 AM
  */
-public interface StudentBuilder extends AppUserOwnedObjectBuilder<Student> {
+public interface StudentBuilder extends ObservableBuilder<Student> {
     StudentBuilder withFirstName(final String firstName);
 
     StudentBuilder withLastName(final String lastName);

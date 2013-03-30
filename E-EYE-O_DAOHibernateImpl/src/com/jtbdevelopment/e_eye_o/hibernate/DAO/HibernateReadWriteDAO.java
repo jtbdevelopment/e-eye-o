@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 import com.jtbdevelopment.e_eye_o.DAO.ChainedUpdateSetImpl;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
 import org.hibernate.Session;
@@ -102,9 +103,11 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             }
         }
 
-        for (Observation observation : getAllObservationsForEntity(entity)) {
-            if (observation.isArchived() == initialArchivedState) {
-                modifiedObjects.addAll(changeArchiveStatus(observation).getModifiedItems());
+        if (entity instanceof Observable) {
+            for (Observation observation : getAllObservationsForEntity((Observable) entity)) {
+                if (observation.isArchived() == initialArchivedState) {
+                    modifiedObjects.addAll(changeArchiveStatus(observation).getModifiedItems());
+                }
             }
         }
 
@@ -197,9 +200,11 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             deletedItems.add(p);
             currentSession.delete(p);
         }
-        for (Observation o : getAllObservationsForEntity(wrapped)) {
-            deletedItems.add(o);
-            currentSession.delete(o);
+        if (wrapped instanceof Observable) {
+            for (Observation o : getAllObservationsForEntity((Observable) wrapped)) {
+                deletedItems.add(o);
+                currentSession.delete(o);
+            }
         }
 
         deletedItems.add(wrapped);

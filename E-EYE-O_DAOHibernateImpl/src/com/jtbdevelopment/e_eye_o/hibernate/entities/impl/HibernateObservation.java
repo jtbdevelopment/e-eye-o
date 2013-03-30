@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import org.joda.time.LocalDate;
@@ -26,13 +26,13 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
     }
 
     @Override
-    @ManyToOne(targetEntity = HibernateAppUserOwnedObject.class, optional = false)
-    public AppUserOwnedObject getObservationSubject() {
+    @ManyToOne(targetEntity = HibernateObservable.class, optional = false)
+    public Observable getObservationSubject() {
         return wrapped.getObservationSubject();
     }
 
     @Override
-    public void setObservationSubject(final AppUserOwnedObject observationSubject) {
+    public void setObservationSubject(final Observable observationSubject) {
         wrapped.setObservationSubject(observationSubject);
     }
 

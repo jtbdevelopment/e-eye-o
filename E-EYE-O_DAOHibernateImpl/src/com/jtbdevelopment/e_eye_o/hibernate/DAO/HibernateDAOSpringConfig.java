@@ -40,7 +40,7 @@ public class HibernateDAOSpringConfig {
 
     @Bean
     public Interceptor timestampInterceptor() {
-        return new HibernateTimestampInterceptor();
+        return new ModificationTimestampGenerator();
     }
 
     @Bean

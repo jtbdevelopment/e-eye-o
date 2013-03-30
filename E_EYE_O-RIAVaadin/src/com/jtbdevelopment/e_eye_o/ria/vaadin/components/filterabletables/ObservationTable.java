@@ -1,9 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.Observation;
-import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
+import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateStringConverter;
@@ -30,7 +27,7 @@ import java.util.List;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationTable extends IdObjectTable<Observation> {
-    private AppUserOwnedObject defaultObservationSubject;
+    private Observable defaultObservationSubject;
 
     @Autowired
     private ObservationEditorDialogWindow observationEditorDialogWindow;
@@ -230,15 +227,15 @@ public class ObservationTable extends IdObjectTable<Observation> {
         if (tableDriver instanceof AppUserOwnedObject) {
             if (tableDriver instanceof ObservationCategory) {
                 entities.addAll(readWriteDAO.getAllObservationsForObservationCategory((ObservationCategory) tableDriver));
-            } else {
-                entities.addAll(readWriteDAO.getAllObservationsForEntity((AppUserOwnedObject) tableDriver));
-                setDefaultObservationSubject((AppUserOwnedObject) tableDriver);
+            } else if (tableDriver instanceof Observable) {
+                entities.addAll(readWriteDAO.getAllObservationsForEntity((Observable) tableDriver));
+                setDefaultObservationSubject((Observable) tableDriver);
             }
             refreshSizeAndSort();
         }
     }
 
-    public void setDefaultObservationSubject(final AppUserOwnedObject defaultObservationSubject) {
+    public void setDefaultObservationSubject(final Observable defaultObservationSubject) {
         this.defaultObservationSubject = defaultObservationSubject;
     }
 

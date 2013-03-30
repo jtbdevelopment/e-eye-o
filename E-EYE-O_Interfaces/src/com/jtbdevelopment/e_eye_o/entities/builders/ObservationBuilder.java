@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.builders;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import org.joda.time.LocalDate;
@@ -13,7 +13,7 @@ import java.util.Set;
  * Time: 11:23 AM
  */
 public interface ObservationBuilder extends AppUserOwnedObjectBuilder<Observation> {
-    ObservationBuilder withObservationSubject(final AppUserOwnedObject observationSubject);
+    ObservationBuilder withObservationSubject(final Observable observationSubject);
 
     ObservationBuilder withObservationTimestamp(final LocalDateTime observationDate);
 

@@ -13,7 +13,7 @@ import java.util.Set;
  * Date: 11/25/12
  * Time: 3:14 PM
  */
-public interface Student extends AppUserOwnedObject {
+public interface Student extends Observable {
 
     public static final String STUDENT_CLASS_LISTS_CANNOT_BE_NULL = "Student.classLists" + CANNOT_BE_NULL_ERROR;
     public static final String STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL = "Student.classLists" + CANNOT_CONTAIN_NULL_ERROR;

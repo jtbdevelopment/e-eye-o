@@ -10,7 +10,7 @@ import java.util.Set;
  * Date: 3/9/13
  * Time: 12:16 PM
  */
-public class StudentBuilderImpl extends AppUserOwnedObjectBuilderImpl<Student> implements StudentBuilder {
+public class StudentBuilderImpl extends ObservableBulderImpl<Student> implements StudentBuilder {
     public StudentBuilderImpl(final Student entity) {
         super(entity);
     }

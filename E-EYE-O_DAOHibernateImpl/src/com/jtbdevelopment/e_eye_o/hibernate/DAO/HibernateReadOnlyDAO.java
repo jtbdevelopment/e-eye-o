@@ -5,11 +5,13 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateIdObject;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +55,11 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     public AppUser getUser(final String emailAddress) {
         final Query query = sessionFactory.getCurrentSession().createQuery("from AppUser where emailAddress = :emailAddress");
         query.setParameter("emailAddress", emailAddress);
-        List<AppUser> users =  (List<AppUser>) query.list();
-        if(users.isEmpty()) {
+        List<AppUser> users = (List<AppUser>) query.list();
+        if (users.isEmpty()) {
             return null;
         }
-        if(users.size() > 1) {
+        if (users.size() > 1) {
             throw new IllegalStateException("Duplicate users with same emailAddress - not possible");
         }
         return users.get(0);
@@ -129,10 +131,18 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     }
 
     @Override
+    public LocalDateTime getLastObservationTimestampForEntity(final Observable observable) {
+        Query query = sessionFactory.getCurrentSession().createQuery("select max(observationTimestamp) from Observation where observationSubject = :observationSubject");
+        query.setParameter("observationSubject", observable);
+        LocalDateTime result = (LocalDateTime) query.uniqueResult();
+        return result == null ? Observable.NEVER_OBSERVED : result;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
-    public List<Observation> getAllObservationsForEntity(final AppUserOwnedObject ownedObject) {
+    public List<Observation> getAllObservationsForEntity(final Observable observable) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Observation where observationSubject = :observationSubject");
-        query.setParameter("observationSubject", ownedObject);
+        query.setParameter("observationSubject", observable);
         return (List<Observation>) query.list();
     }
 
