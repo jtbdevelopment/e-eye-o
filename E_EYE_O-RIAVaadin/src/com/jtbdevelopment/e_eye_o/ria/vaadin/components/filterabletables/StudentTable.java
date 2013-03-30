@@ -57,16 +57,6 @@ public class StudentTable extends IdObjectTable<Student> {
     }
 
     @Override
-    protected String getDefaultSortField(final List<String> properties) {
-        return "lastObservationTimestamp";
-    }
-
-    @Override
-    protected boolean getDefaultSortAscending() {
-        return super.getDefaultSortAscending();
-    }
-
-    @Override
     public void setTableDriver(final IdObject tableDriver) {
         super.setTableDriver(tableDriver);
         if (tableDriver instanceof ClassList) {

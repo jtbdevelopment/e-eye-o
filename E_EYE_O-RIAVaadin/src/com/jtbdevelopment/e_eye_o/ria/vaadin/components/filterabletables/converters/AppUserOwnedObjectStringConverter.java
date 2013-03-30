@@ -13,7 +13,7 @@ import java.util.Locale;
  * Time: 12:07 AM
  */
 @Component
-public class StringAppUserOwnedObjectConverter implements Converter<String, AppUserOwnedObject> {
+public class AppUserOwnedObjectStringConverter implements Converter<String, AppUserOwnedObject> {
     @Autowired
     private ReadOnlyDAO readOnlyDAO;
 

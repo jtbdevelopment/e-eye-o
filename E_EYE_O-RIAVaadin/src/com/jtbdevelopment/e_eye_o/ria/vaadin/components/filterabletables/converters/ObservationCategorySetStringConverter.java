@@ -24,7 +24,7 @@ import java.util.Set;
  * Time: 12:13 AM
  */
 @Component
-public class StringObservationCategorySetConverter implements Converter<String, Set> {
+public class ObservationCategorySetStringConverter implements Converter<String, Set> {
     @Autowired
     private ReadOnlyDAO readOnlyDAO;
 

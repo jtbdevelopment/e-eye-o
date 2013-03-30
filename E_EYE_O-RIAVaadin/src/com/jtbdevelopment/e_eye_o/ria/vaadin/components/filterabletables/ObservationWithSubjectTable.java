@@ -1,10 +1,11 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.StringAppUserOwnedObjectConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.AppUserOwnedObjectStringConverter;
 import com.vaadin.data.Container;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.Table;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,9 @@ import java.util.List;
 @Component
 @Scope("prototype")
 public class ObservationWithSubjectTable extends ObservationTable {
+
+    @Autowired
+    AppUserOwnedObjectStringConverter appUserOwnedObjectStringConverter;
 
     private static final List<HeaderInfo> headersWithSubject;
 
@@ -47,7 +51,7 @@ public class ObservationWithSubjectTable extends ObservationTable {
     protected void addColumnConverters() {
         super.addColumnConverters();
         //  TODO
-        entityTable.setConverter("observationSubject", new StringAppUserOwnedObjectConverter());
+        entityTable.setConverter("observationSubject", appUserOwnedObjectStringConverter);
     }
 
 

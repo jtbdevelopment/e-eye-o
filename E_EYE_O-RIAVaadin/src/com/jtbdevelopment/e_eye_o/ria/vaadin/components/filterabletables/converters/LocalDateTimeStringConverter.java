@@ -16,6 +16,7 @@ public class LocalDateTimeStringConverter implements Converter<String, LocalDate
     private static final String DEFAULT_FORMAT = "YYYY-MM-dd HH:mm";
 
     //  TODO - support non-default formats
+    //  TODO - uninitialized string
     private final String format;
 
     public LocalDateTimeStringConverter() {

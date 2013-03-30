@@ -5,7 +5,7 @@ import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.StringObservationCategorySetConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ObservationCategorySetStringConverter;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.Converter;
@@ -41,7 +41,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
     private LocalDateTimeStringConverter localDateTimeStringConverter;
 
     @Autowired
-    private StringObservationCategorySetConverter stringObservationCategorySetConverter;
+    private ObservationCategorySetStringConverter observationCategorySetStringConverter;
 
     public ObservationTable() {
         super(Observation.class);
@@ -99,7 +99,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
         entityTable.setConverter("followUpNeeded", booleanToYesNoConverter);
         entityTable.setConverter("followUpReminder", localDateStringConverter);
         entityTable.setConverter("observationTimestamp", localDateTimeStringConverter);
-        entityTable.setConverter("categories", stringObservationCategorySetConverter);
+        entityTable.setConverter("categories", observationCategorySetStringConverter);
         //  TODO
         entityTable.setConverter("comment", new Converter<String, String>() {
             @Override
