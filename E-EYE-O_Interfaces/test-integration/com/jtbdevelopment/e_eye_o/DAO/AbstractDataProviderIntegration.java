@@ -23,6 +23,7 @@ import static org.testng.Assert.*;
  * <p/>
  * Suite of tests that can be run against any data source provider.
  */
+//  TODO - add tests for observables and adding/inserting/deleting observations on them
 @Test(groups = {"integration"})
 public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpringContextTests {
     private static Logger logger = LoggerFactory.getLogger(AbstractDataProviderIntegration.class);
@@ -303,6 +304,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Student s = rwDAO.create(factory.newStudentBuilder(updateUser).withFirstName("A").withLastName("B").build());
         Photo p = rwDAO.create(factory.newPhotoBuilder(updateUser).withDescription("D").withPhotoFor(s).build());
         Observation o = rwDAO.create(factory.newObservationBuilder(updateUser).withComment("T").withObservationSubject(cl).build());
+        cl = rwDAO.get(ClassList.class, cl.getId());  //  Observation made it dirty need to re-read for compare to work
 
         Set<AppUserOwnedObject> firstSet = rwDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, updateUser, firstTS);
         final List<AppUserOwnedObject> initialList = Arrays.asList(oc, cl, s, p, o);
@@ -313,7 +315,6 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Thread.sleep(1);
         p.setDescription("P2");
         s.addClassList(cl);
-        o = rwDAO.create(factory.newObservationBuilder(updateUser).withComment("c").withObservationSubject(cl).withObservationTimestamp(new LocalDateTime()).build());
         p = rwDAO.update(p);
         s = rwDAO.update(s);
         final List<AppUserOwnedObject> secondList = Arrays.asList(s, p);

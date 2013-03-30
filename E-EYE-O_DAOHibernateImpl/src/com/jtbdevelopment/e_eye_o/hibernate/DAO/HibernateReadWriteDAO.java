@@ -8,6 +8,7 @@ import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -35,6 +36,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
         final T wrapped = wrapperFactory.wrap(entity);
         sessionFactory.getCurrentSession().save(wrapped);
+        dealWithNewObservations(wrapped);
         return wrapped;
     }
 
@@ -58,6 +60,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
         final T wrapped = wrapperFactory.wrap(entity);
         sessionFactory.getCurrentSession().update(wrapped);
+        dealWithObservationUpdatesOrDeletes(wrapped);
         return wrapped;
     }
 
@@ -181,18 +184,25 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             for (Observation observation : getAllObservationsForObservationCategory((ObservationCategory) wrapped)) {
                 observation.removeCategory((ObservationCategory) wrapped);
                 currentSession.update(observation);
+                updatedItems.add(observation);
             }
         }
         if (wrapped instanceof ClassList) {
             for (Student student : getAllStudentsForClassList((ClassList) wrapped)) {
                 student.removeClassList((ClassList) wrapped);
                 currentSession.update(student);
+                updatedItems.add(student);
             }
         }
         if (wrapped instanceof Observation) {
             for (Observation observation : getAllObservationsForFollowup((Observation) wrapped)) {
                 observation.setFollowUpObservation(null);
                 currentSession.update(observation);
+                updatedItems.add(observation);
+                Observable observable = dealWithObservationUpdatesOrDeletes(observation);
+                if (observable != null) {
+                    updatedItems.add(observable);
+                }
             }
         }
         final List<Photo> allPhotosForEntity = getAllPhotosForEntity(wrapped);
@@ -210,7 +220,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         deletedItems.add(wrapped);
         currentSession.delete(wrapped);
         currentSession.flush();   //  Force any delete object generations inside this session
-        //  TODO - unit test adjustments for deletedItems verification
+        //  TODO - unit test adjustments for updated/deletedItems verification
         return new ChainedUpdateSetImpl<>(updatedItems, deletedItems);
     }
 
@@ -222,5 +232,33 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
         //  TODO - verify
         return deletedItems;
+    }
+
+    private Observable dealWithNewObservations(final IdObject idObject) {
+        if (idObject instanceof Observation) {
+            Observation observation = (Observation) idObject;
+            Observable observable = get(Observable.class, observation.getObservationSubject().getId());
+            if (observation.getObservationTimestamp().compareTo(observable.getLastObservationTime()) > 0) {
+                observable.setLastObservationTime(observation.getObservationTimestamp());
+                update(observable);
+                return observable;
+            }
+        }
+        return null;
+    }
+
+    private Observable dealWithObservationUpdatesOrDeletes(final IdObject idObject) {
+        if (idObject instanceof Observation) {
+            Observation observation = (Observation) idObject;
+            sessionFactory.getCurrentSession().flush();
+            Observable observable = get(Observable.class, observation.getObservationSubject().getId());
+            LocalDateTime lastObservationTime = getLastObservationTimestampForEntity(observable);
+            if (lastObservationTime.compareTo(observable.getLastObservationTime()) != 0) {
+                observable.setLastObservationTime(observation.getObservationTimestamp());
+                update(observable);
+                return observable;
+            }
+        }
+        return null;
     }
 }
