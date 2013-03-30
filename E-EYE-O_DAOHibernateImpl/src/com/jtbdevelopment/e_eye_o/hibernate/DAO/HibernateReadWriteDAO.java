@@ -251,11 +251,11 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     private Observable dealWithObservationUpdatesOrDeletes(final IdObject idObject) {
         if (idObject instanceof Observation) {
             Observation observation = (Observation) idObject;
-            Observable observable = get(Observable.class, observation.getObservationSubject().getId());
+            Observable observable = observation.getObservationSubject();
             LocalDateTime lastObservationTimestamp = getLastObservationTimestampForEntity(observable);
             if (lastObservationTimestamp.compareTo(observable.getLastObservationTimestamp()) != 0) {
                 observable.setLastObservationTimestamp(lastObservationTimestamp);
-                sessionFactory.getCurrentSession().update(observable);
+                update(observable);
                 return observable;
             }
         }
