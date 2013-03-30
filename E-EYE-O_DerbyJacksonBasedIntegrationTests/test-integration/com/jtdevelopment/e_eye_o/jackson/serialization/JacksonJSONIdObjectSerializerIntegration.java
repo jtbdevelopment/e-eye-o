@@ -72,9 +72,9 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
         appUser1 = readWriteDAO.create(appUser1);
         appUser2 = factory.newAppUserBuilder().withEmailAddress("jtest2@test.com").withFirstName("Testier").withLastName("Tester").build();
         appUser2 = readWriteDAO.create(appUser2);
-        classList1For1 = factory.newClassListBuilder(appUser1).withDescription("CL1-1").withAppUser(appUser1).build();
+        classList1For1 = factory.newClassListBuilder(appUser1).withDescription("CL1-1").withLastObservationTimestamp(new LocalDateTime(2013, 3, 30, 13, 5, 0)).withAppUser(appUser1).build();
         classList1For1 = readWriteDAO.create(classList1For1);
-        classList2For1 = factory.newClassListBuilder(appUser1).withDescription("CL1-2").withAppUser(appUser1).build();
+        classList2For1 = factory.newClassListBuilder(appUser1).withDescription("CL1-2").withLastObservationTimestamp(new LocalDateTime(2012, 11, 3, 15, 0, 0)).withAppUser(appUser1).build();
         classList2For1 = readWriteDAO.create(classList2For1);
         classList1For2 = factory.newClassListBuilder(appUser1).withDescription("CL2-1").withAppUser(appUser1).build();
         classList1For2 = readWriteDAO.create(classList1For2);
@@ -166,6 +166,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "  \"archived\" : false," + newline +
                     "  \"description\" : \"CL1-1\"," + newline +
                     "  \"id\" : \"" + classList1For1.getId() + "\"," + newline +
+                    "  \"lastObservationTimestamp\" : [ 2013, 3, 30, 13, 5, 0, 0 ]," + newline +
                     "  \"modificationTimestamp\" : " + classList1For1.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(classList2For1, "{" + newline +
@@ -177,6 +178,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "  \"archived\" : false," + newline +
                     "  \"description\" : \"CL1-2\"," + newline +
                     "  \"id\" : \"" + classList2For1.getId() + "\"," + newline +
+                    "  \"lastObservationTimestamp\" : [ 2012, 11, 3, 15, 0, 0, 0 ]," + newline +
                     "  \"modificationTimestamp\" : " + classList2For1.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(classList1For2, "{" + newline +
@@ -188,6 +190,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "  \"archived\" : false," + newline +
                     "  \"description\" : \"CL2-1\"," + newline +
                     "  \"id\" : \"" + classList1For2.getId() + "\"," + newline +
+                    "  \"lastObservationTimestamp\" : [ 2000, 1, 1, 0, 0, 0, 0 ]," + newline +
                     "  \"modificationTimestamp\" : " + classList1For2.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(oc1For1, "{" + newline +
@@ -228,6 +231,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "  \"firstName\" : \"First1-1\"," + newline +
                     "  \"id\" : \"" + student1For1.getId() + "\"," + newline +
                     "  \"lastName\" : \"Last1-1\"," + newline +
+                    "  \"lastObservationTimestamp\" : [ 2000, 1, 1, 0, 0, 0, 0 ]," + newline +
                     "  \"modificationTimestamp\" : " + student1For1.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(student2For1, "{" + newline +
@@ -244,6 +248,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "  \"firstName\" : \"First2-1\"," + newline +
                     "  \"id\" : \"" + student2For1.getId() + "\"," + newline +
                     "  \"lastName\" : \"Last2-1\"," + newline +
+                    "  \"lastObservationTimestamp\" : [ 2000, 1, 1, 0, 0, 0, 0 ]," + newline +
                     "  \"modificationTimestamp\" : " + student2For1.getModificationTimestamp().getMillis() + newline +
                     "}");
             put(o1ForS1, "{" + newline +

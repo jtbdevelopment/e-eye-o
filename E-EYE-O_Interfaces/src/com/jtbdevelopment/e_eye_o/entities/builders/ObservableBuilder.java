@@ -8,5 +8,5 @@ import org.joda.time.LocalDateTime;
  * Time: 7:07 PM
  */
 public interface ObservableBuilder<T extends Observable> extends AppUserOwnedObjectBuilder<T> {
-    ObservableBuilder<T> withLastObservationTime(final LocalDateTime lastObservationTime);
+    ObservableBuilder<T> withLastObservationTimestamp(final LocalDateTime lastObservationTimestamp);
 }

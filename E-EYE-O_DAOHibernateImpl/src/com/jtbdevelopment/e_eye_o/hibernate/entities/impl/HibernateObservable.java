@@ -10,6 +10,7 @@ import javax.persistence.Entity;
  * Date: 3/29/13
  * Time: 7:11 PM
  */
+//  TODO - tests
 @Entity(name = "Observable")
 public abstract class HibernateObservable<T extends Observable> extends HibernateAppUserOwnedObject<T> implements Observable {
     protected HibernateObservable() {
@@ -21,12 +22,12 @@ public abstract class HibernateObservable<T extends Observable> extends Hibernat
 
     @Override
     @Column(nullable = false)
-    public LocalDateTime getLastObservationTime() {
-        return wrapped.getLastObservationTime();
+    public LocalDateTime getLastObservationTimestamp() {
+        return wrapped.getLastObservationTimestamp();
     }
 
     @Override
-    public void setLastObservationTime(LocalDateTime lastObservationTime) {
-        wrapped.setLastObservationTime(lastObservationTime);
+    public void setLastObservationTimestamp(final LocalDateTime lastObservationTimestamp) {
+        wrapped.setLastObservationTimestamp(lastObservationTimestamp);
     }
 }

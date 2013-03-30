@@ -9,13 +9,13 @@ import org.joda.time.LocalDateTime;
  * Time: 7:06 PM
  */
 public abstract class ObservableBulderImpl<T extends Observable> extends AppUserOwnedObjectBuilderImpl<T> implements ObservableBuilder<T> {
-    protected ObservableBulderImpl(T entity) {
+    protected ObservableBulderImpl(final T entity) {
         super(entity);
     }
 
     @Override
-    public ObservableBuilder<T> withLastObservationTime(LocalDateTime lastObservationTime) {
-        entity.setLastObservationTime(lastObservationTime);
+    public ObservableBuilder<T> withLastObservationTimestamp(final LocalDateTime lastObservationTimestamp) {
+        entity.setLastObservationTimestamp(lastObservationTimestamp);
         return this;
     }
 }

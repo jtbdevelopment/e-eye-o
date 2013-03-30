@@ -238,8 +238,8 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (idObject instanceof Observation) {
             Observation observation = (Observation) idObject;
             Observable observable = get(Observable.class, observation.getObservationSubject().getId());
-            if (observation.getObservationTimestamp().compareTo(observable.getLastObservationTime()) > 0) {
-                observable.setLastObservationTime(observation.getObservationTimestamp());
+            if (observation.getObservationTimestamp().compareTo(observable.getLastObservationTimestamp()) > 0) {
+                observable.setLastObservationTimestamp(observation.getObservationTimestamp());
                 update(observable);
                 return observable;
             }
@@ -247,14 +247,15 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         return null;
     }
 
+    //  TODO - not efficient, but easy to code
     private Observable dealWithObservationUpdatesOrDeletes(final IdObject idObject) {
         if (idObject instanceof Observation) {
             Observation observation = (Observation) idObject;
             sessionFactory.getCurrentSession().flush();
             Observable observable = get(Observable.class, observation.getObservationSubject().getId());
-            LocalDateTime lastObservationTime = getLastObservationTimestampForEntity(observable);
-            if (lastObservationTime.compareTo(observable.getLastObservationTime()) != 0) {
-                observable.setLastObservationTime(observation.getObservationTimestamp());
+            LocalDateTime lastObservationTimestamp = getLastObservationTimestampForEntity(observable);
+            if (lastObservationTimestamp.compareTo(observable.getLastObservationTimestamp()) != 0) {
+                observable.setLastObservationTimestamp(observation.getObservationTimestamp());
                 update(observable);
                 return observable;
             }

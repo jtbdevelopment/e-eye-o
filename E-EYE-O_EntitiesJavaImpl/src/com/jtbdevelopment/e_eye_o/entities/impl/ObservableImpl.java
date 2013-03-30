@@ -8,9 +8,10 @@ import org.joda.time.LocalDateTime;
  * Date: 3/29/13
  * Time: 6:49 PM
  */
+//  TODO tests
 public abstract class ObservableImpl extends AppUserOwnedObjectImpl implements Observable {
 
-    private LocalDateTime lastObservationTime = Observable.NEVER_OBSERVED;
+    private LocalDateTime lastObservationTimestamp = Observable.NEVER_OBSERVED;
 
     protected ObservableImpl(AppUser appUser) {
         super(appUser);
@@ -24,12 +25,12 @@ public abstract class ObservableImpl extends AppUserOwnedObjectImpl implements O
      * @return last observation time
      */
     @Override
-    public LocalDateTime getLastObservationTime() {
-        return lastObservationTime;
+    public LocalDateTime getLastObservationTimestamp() {
+        return lastObservationTimestamp;
     }
 
     @Override
-    public void setLastObservationTime(final LocalDateTime lastObservationTime) {
-        this.lastObservationTime = lastObservationTime;
+    public void setLastObservationTimestamp(final LocalDateTime lastObservationTimestamp) {
+        this.lastObservationTimestamp = lastObservationTimestamp;
     }
 }
