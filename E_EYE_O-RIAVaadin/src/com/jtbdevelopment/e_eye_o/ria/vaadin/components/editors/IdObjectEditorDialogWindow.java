@@ -3,6 +3,8 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
+import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -90,6 +92,11 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
                         changeType = IdObjectChanged.ChangeType.MODIFIED;
                     }
                     eventBus.post(new IdObjectChanged<>(changeType, entity));
+                    //  TODO - move this
+                    if (entity instanceof Observation) {
+                        final Observable observationSubject = readWriteDAO.get(Observable.class, ((Observation) entity).getObservationSubject().getId());
+                        eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, observationSubject));
+                    }
                     closeWindow();
                 } catch (FieldGroup.CommitException e) {
                     throw new RuntimeException(e);
