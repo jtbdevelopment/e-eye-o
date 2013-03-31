@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
  * Date: 3/3/13
  * Time: 11:30 AM
  */
+//  TODO - add some about info
+//  TODO - add description of acronym
 @Component(value = "eeyeoLoginUI")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Theme("eeyeo")

@@ -374,6 +374,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         } else {
             entities.addContainerFilter("archived", "true", false, true);
         }
+        refreshSizeAndSort();
     }
 
     private HorizontalLayout buildActionButtons() {

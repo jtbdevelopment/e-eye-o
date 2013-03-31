@@ -140,6 +140,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 } else {
                     entities.removeContainerFilters("significant");
                 }
+                refreshSizeAndSort();
             }
         });
         //  TODO - make preference
@@ -156,6 +157,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 } else {
                     entities.removeContainerFilters("followUpNeeded");
                 }
+                refreshSizeAndSort();
             }
         });
         //  TODO - make preference
