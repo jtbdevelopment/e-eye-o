@@ -99,8 +99,7 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
 
     @Override
     public void setCategories(final Set<ObservationCategory> categories) {
-        this.categories.clear();
-        this.categories.addAll(categories);
+        this.categories = new HashSet<>(categories);
     }
 
     @Override

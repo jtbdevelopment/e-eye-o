@@ -53,8 +53,7 @@ public class StudentImpl extends ObservableImpl implements Student {
 
     @Override
     public void setClassLists(final Set<ClassList> classLists) {
-        this.classLists.clear();
-        this.classLists.addAll(classLists);
+        this.classLists = new HashSet<>(classLists);
     }
 
     @Override

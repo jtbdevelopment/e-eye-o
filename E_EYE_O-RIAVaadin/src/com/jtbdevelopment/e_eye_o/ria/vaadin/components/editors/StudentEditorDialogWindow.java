@@ -27,15 +27,14 @@ public class StudentEditorDialogWindow extends IdObjectEditorDialogWindow<Studen
     }
 
     @Override
-    public void setEntity(Student entity) {
-        super.setEntity(entity);
-        Student student = entityBeanFieldGroup.getItemDataSource().getBean();
+    public void setEntity(final Student student) {
         potentialClasses.removeAllItems();
         if (student.getArchivedClassLists().size() > 0) {
             potentialClasses.addAll(readWriteDAO.getEntitiesForUser(ClassList.class, student.getAppUser()));
         } else {
             potentialClasses.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, student.getAppUser()));
         }
+        super.setEntity(student);
     }
 
     @Override

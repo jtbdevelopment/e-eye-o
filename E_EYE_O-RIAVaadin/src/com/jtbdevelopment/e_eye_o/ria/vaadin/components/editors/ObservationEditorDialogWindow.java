@@ -38,9 +38,7 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
     }
 
     @Override
-    public void setEntity(final Observation entity) {
-        super.setEntity(entity);
-        Observation observation = entityBeanFieldGroup.getItemDataSource().getBean();
+    public void setEntity(final Observation observation) {
         potentialCategories.removeAllItems();
         boolean hasArchived = false;
         for (ObservationCategory category : observation.getCategories()) {
@@ -69,23 +67,24 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         boolean hasSubject = observation.getObservationSubject() != null;
         if (hasSubject) {
             if (showArchivedObservations) {
-                potentialFollowUpsFor.addAll(readWriteDAO.getAllObservationsForEntity(entity.getObservationSubject()));
+                potentialFollowUpsFor.addAll(readWriteDAO.getAllObservationsForEntity(observation.getObservationSubject()));
             } else {
                 //  TODO - shows archived
-                potentialFollowUpsFor.addAll(readWriteDAO.getAllObservationsForEntity(entity.getObservationSubject()));
+                potentialFollowUpsFor.addAll(readWriteDAO.getAllObservationsForEntity(observation.getObservationSubject()));
             }
         } else {
             if (showArchivedObservations) {
-                potentialFollowUpsFor.addAll(readWriteDAO.getEntitiesForUser(Observation.class, entity.getAppUser()));
+                potentialFollowUpsFor.addAll(readWriteDAO.getEntitiesForUser(Observation.class, observation.getAppUser()));
             } else {
-                potentialFollowUpsFor.addAll(readWriteDAO.getActiveEntitiesForUser(Observation.class, entity.getAppUser()));
+                potentialFollowUpsFor.addAll(readWriteDAO.getActiveEntitiesForUser(Observation.class, observation.getAppUser()));
             }
         }
         potentialFollowUpsFor.sort(
                 new String[]{"observationSubject.summaryDescription", "followUpNeeded", "observationTimestamp"},  //  TODO - check if first one works
                 new boolean[]{true, true, false}  // TODO - check if middle one is correct
         );
-        initialFollowUpFor = entity.getFollowUpForObservation();
+        initialFollowUpFor = observation.getFollowUpForObservation();
+        super.setEntity(observation);
     }
 
     public void setFollowUpFor(final Observation initialObservation) {
