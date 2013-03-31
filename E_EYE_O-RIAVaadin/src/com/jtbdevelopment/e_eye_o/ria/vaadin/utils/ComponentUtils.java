@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.utils;
 
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HasComponents;
@@ -8,13 +9,13 @@ import com.vaadin.ui.HasComponents;
  * Date: 3/30/13
  * Time: 8:59 PM
  */
-public class FieldUtils {
-    private static interface Callback {
-        public void doWork(final AbstractField component);
+public class ComponentUtils {
+    private static interface Callback<T extends AbstractComponent> {
+        public void doWork(final T component);
     }
 
     public static void removeAllValidators(final Component component) {
-        processAllComponents(component, new Callback() {
+        processAllComponents(component, AbstractField.class, new Callback<AbstractField>() {
             @Override
             public void doWork(final AbstractField component) {
                 component.removeAllValidators();
@@ -23,21 +24,21 @@ public class FieldUtils {
     }
 
     public static void setImmediateForAll(final Component component, final boolean immediate) {
-        processAllComponents(component, new Callback() {
+        processAllComponents(component, AbstractComponent.class, new Callback<AbstractComponent>() {
             @Override
-            public void doWork(final AbstractField component) {
+            public void doWork(final AbstractComponent component) {
                 component.setImmediate(immediate);
             }
         });
     }
 
-    private static void processAllComponents(final Component topComponent, final Callback callback) {
-        if (topComponent instanceof AbstractField) {
-            callback.doWork((AbstractField) topComponent);
+    private static <T extends AbstractComponent> void processAllComponents(final Component topComponent, final Class<T> componentTypes, final Callback<T> callback) {
+        if (componentTypes.isAssignableFrom(topComponent.getClass())) {
+            callback.doWork((T) topComponent);
         }
         if (topComponent instanceof HasComponents) {
             for (Component childComponent : ((HasComponents) topComponent)) {
-                processAllComponents(childComponent, callback);
+                processAllComponents(childComponent, componentTypes, callback);
             }
         }
     }

@@ -9,7 +9,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.convert
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtons;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.FieldUtils;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
@@ -129,7 +129,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
         eventBus.register(this);
         setCompositionRoot(mainLayout);
-        FieldUtils.setImmediateForAll(this, true);
+        ComponentUtils.setImmediateForAll(this, true);
     }
 
     private void buildEntityTable(List<String> properties, List<String> headers, List<Table.Align> aligns) {

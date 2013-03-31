@@ -129,6 +129,21 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         return resultMap;
     }
 
+    @Override
+    public Observation linkFollowUpObservation(final Observation initialObservation, final Observation followUpObservation) {
+        initialObservation.setFollowUpNeeded(false);
+        initialObservation.setFollowUpReminder(null);
+        initialObservation.setFollowUpObservation(update(followUpObservation));  //  May not need update but just in case
+        update(initialObservation);
+        return initialObservation.getFollowUpObservation();
+    }
+
+    @Override
+    public Observation createAndLinkFollowUpObservation(final Observation initialObservation, final Observation followUpObservation) {
+        Observation createdFollowUp = create(followUpObservation);
+        return linkFollowUpObservation(initialObservation, createdFollowUp);
+    }
+
     //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")

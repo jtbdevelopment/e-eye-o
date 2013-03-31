@@ -1,9 +1,14 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
-import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
+import com.jtbdevelopment.e_eye_o.entities.Observation;
+import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
+import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateDateConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
 import com.vaadin.data.Property;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.shared.ui.datefield.Resolution;
@@ -18,12 +23,29 @@ import org.springframework.context.annotation.Scope;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Observation> {
+    private Observation linkToThisObservation = null;
     private final TextArea commentField = new TextArea();
+    private final CheckBox isFollowUp = new CheckBox();
+    private final Label followFor = new Label();
+    private Button removeFollowUp;
     private final BeanItemContainer<ObservationCategory> potentialCategories = new BeanItemContainer<>(ObservationCategory.class);
     private final BeanItemContainer<AppUserOwnedObject> potentialSubjects = new BeanItemContainer<>(AppUserOwnedObject.class);
 
     public ObservationEditorDialogWindow() {
         super(Observation.class, 90, 25);
+    }
+
+    public void setLinkToThisObservation(final Observation linkToThisObservation) {
+        this.linkToThisObservation = linkToThisObservation;
+        if (linkToThisObservation == null) {
+            isFollowUp.setValue(false);
+            followFor.setValue("");
+            removeFollowUp.setEnabled(false);
+        } else {
+            isFollowUp.setValue(true);
+            followFor.setValue(linkToThisObservation.getSummaryDescription());
+            removeFollowUp.setEnabled(true);
+        }
     }
 
     @Override
@@ -47,11 +69,9 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         potentialSubjects.removeAllItems();
         boolean showArchivedSubjects = observation.getObservationSubject() != null && observation.getObservationSubject().isArchived();
         if (showArchivedSubjects) {
-            potentialSubjects.addAll(readWriteDAO.getEntitiesForUser(ClassList.class, observation.getAppUser()));
-            potentialSubjects.addAll(readWriteDAO.getEntitiesForUser(Student.class, observation.getAppUser()));
+            potentialSubjects.addAll(readWriteDAO.getEntitiesForUser(Observable.class, observation.getAppUser()));
         } else {
-            potentialSubjects.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, observation.getAppUser()));
-            potentialSubjects.addAll(readWriteDAO.getActiveEntitiesForUser(Student.class, observation.getAppUser()));
+            potentialSubjects.addAll(readWriteDAO.getActiveEntitiesForUser(Observable.class, observation.getAppUser()));
         }
     }
 
@@ -101,6 +121,32 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         observationFor.setItemCaptionPropertyId("summaryDescription");
         entityBeanFieldGroup.bind(observationFor, "observationSubject");
         row.addComponent(observationFor);
+        row.addComponent(new Label("Is This A Followup?"));
+        isFollowUp.setValue(false);
+        row.addComponent(isFollowUp);
+        row.addComponent(followFor);
+        removeFollowUp = new Button("Not A Follow Up");
+        removeFollowUp.setEnabled(false);
+        removeFollowUp.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(final Button.ClickEvent event) {
+                setLinkToThisObservation(null);
+            }
+        });
+        row.addComponent(removeFollowUp);
+        Button addFollowUp = new Button("Link As Follow Up");
+        addFollowUp.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(final Button.ClickEvent event) {
+                Notification.show("TODO:  Observation picker", Notification.Type.HUMANIZED_MESSAGE);
+            }
+        });
+        row.addComponent(addFollowUp);
+        outerLayout.addComponent(row);
+        outerLayout.setComponentAlignment(row, Alignment.MIDDLE_CENTER);
+
+        //
+        row = new HorizontalLayout();
 
         row.addComponent(new Label("Significant?"));
         CheckBox significant = new CheckBox();
@@ -143,5 +189,37 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
     @Override
     protected Focusable getInitialFocusComponent() {
         return commentField;
+    }
+
+    @Override
+    protected Observation save() throws FieldGroup.CommitException {
+        Observation entity = super.save();
+        if (entity != null) {
+            Observable observationSubject = readWriteDAO.get(Observable.class, entity.getObservationSubject().getId());
+            eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, observationSubject));
+        }
+        if (linkToThisObservation != null) {
+            Observation originalObservation = readWriteDAO.get(Observation.class, linkToThisObservation.getId());
+            eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, originalObservation));
+        }
+        return entity;
+    }
+
+    @Override
+    protected Observation writeUpdateObjectToDAO(final Observation entity) {
+        if (linkToThisObservation == null) {
+            return super.writeUpdateObjectToDAO(entity);
+        } else {
+            return readWriteDAO.linkFollowUpObservation(linkToThisObservation, entity);
+        }
+    }
+
+    @Override
+    protected Observation writeNewObjectToDAO(final Observation entity) {
+        if (linkToThisObservation != null) {
+            return super.writeNewObjectToDAO(entity);
+        } else {
+            return readWriteDAO.createAndLinkFollowUpObservation(linkToThisObservation, entity);
+        }
     }
 }

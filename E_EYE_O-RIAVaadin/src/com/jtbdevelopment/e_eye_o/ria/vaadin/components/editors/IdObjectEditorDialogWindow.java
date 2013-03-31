@@ -3,10 +3,8 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.Observable;
-import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.FieldUtils;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
@@ -21,6 +19,8 @@ import javax.annotation.PostConstruct;
  * Date: 3/20/13
  * Time: 8:13 PM
  */
+//  TODO - be nice to recompute the caption at top as we go
+//  TODO - properly size all the editor dialogs
 public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> extends Window {
     @Autowired
     protected EventBus eventBus;
@@ -52,7 +52,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
     @PostConstruct
     public void init() {
         buildMainLayout();
-        FieldUtils.setImmediateForAll(this, true);
+        ComponentUtils.setImmediateForAll(this, true);
     }
 
     protected void buildMainLayout() {
@@ -79,26 +79,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 try {
-                    entityBeanFieldGroup.commit();
-                    T entity = entityBeanFieldGroup.getItemDataSource().getBean();
-                    if (entity == null) {
-                        return;
-                    }
-                    IdObjectChanged.ChangeType changeType;
-                    if (StringUtil.isBlank(entity.getId())) {
-                        entity = readWriteDAO.create(entityBeanFieldGroup.getItemDataSource().getBean());
-                        changeType = IdObjectChanged.ChangeType.ADDED;
-                    } else {
-                        entity = readWriteDAO.update(entityBeanFieldGroup.getItemDataSource().getBean());
-                        changeType = IdObjectChanged.ChangeType.MODIFIED;
-                    }
-                    eventBus.post(new IdObjectChanged<>(changeType, entity));
-                    //  TODO - move this
-                    if (entity instanceof Observation) {
-                        final Observable observationSubject = readWriteDAO.get(Observable.class, ((Observation) entity).getObservationSubject().getId());
-                        eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, observationSubject));
-                    }
-                    closeWindow();
+                    save();
                 } catch (FieldGroup.CommitException e) {
                     throw new RuntimeException(e);
                 }
@@ -127,6 +108,33 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
         return buttons;
     }
 
+    protected T save() throws FieldGroup.CommitException {
+        entityBeanFieldGroup.commit();
+        T entity = entityBeanFieldGroup.getItemDataSource().getBean();
+        if (entity == null) {
+            return null;
+        }
+        IdObjectChanged.ChangeType changeType;
+        if (StringUtil.isBlank(entity.getId())) {
+            entity = writeNewObjectToDAO(entity);
+            changeType = IdObjectChanged.ChangeType.ADDED;
+        } else {
+            entity = writeUpdateObjectToDAO(entity);
+            changeType = IdObjectChanged.ChangeType.MODIFIED;
+        }
+        eventBus.post(new IdObjectChanged<>(changeType, entity));
+        closeWindow();
+        return entity;
+    }
+
+    protected T writeUpdateObjectToDAO(final T entity) {
+        return readWriteDAO.update(entity);
+    }
+
+    protected T writeNewObjectToDAO(final T entity) {
+        return readWriteDAO.create(entity);
+    }
+
     private void closeWindow() {
         entityBeanFieldGroup.discard();
         getUI().removeWindow(this);
@@ -140,29 +148,8 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
 
     public void setEntity(final T entity) {
         setCaption(entity.getSummaryDescription());
-        FieldUtils.removeAllValidators(this);
+        ComponentUtils.removeAllValidators(this);
         mainLayout.setComponentError(null);
         entityBeanFieldGroup.setItemDataSource(entity);
-    }
-
-    //  Vaadin doesn't remove previous validators so they stack up
-    protected void removeAllValidators(final Component component) {
-        if (component instanceof AbstractField) {
-            ((AbstractField) component).removeAllValidators();
-        }
-        if (component instanceof HasComponents) {
-            for (Component child : (HasComponents) component) {
-                removeAllValidators(child);
-            }
-        }
-    }
-
-    protected void setAllImmediate(final Component component) {
-        if (component instanceof AbstractField) {
-            ((AbstractField) component).setImmediate(true);
-        }
-        if (component instanceof HasComponents) {
-
-        }
     }
 }
