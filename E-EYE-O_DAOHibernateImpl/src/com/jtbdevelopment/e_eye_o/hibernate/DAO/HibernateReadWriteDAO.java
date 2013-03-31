@@ -133,9 +133,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     public Observation linkFollowUpObservation(final Observation initialObservation, final Observation followUpObservation) {
         initialObservation.setFollowUpNeeded(false);
         initialObservation.setFollowUpReminder(null);
-        initialObservation.setFollowUpObservation(update(followUpObservation));  //  May not need update but just in case
-        update(initialObservation);
-        return initialObservation.getFollowUpObservation();
+        followUpObservation.setFollowUpForObservation(update(initialObservation));
+        update(followUpObservation);
+        return followUpObservation;
     }
 
     @Override
@@ -210,8 +210,8 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             }
         }
         if (wrapped instanceof Observation) {
-            for (Observation observation : getAllObservationsForFollowup((Observation) wrapped)) {
-                observation.setFollowUpObservation(null);
+            for (Observation observation : getAllObservationFollowups((Observation) wrapped)) {
+                observation.setFollowUpForObservation(null);
                 currentSession.update(observation);
                 updatedItems.add(observation);
             }

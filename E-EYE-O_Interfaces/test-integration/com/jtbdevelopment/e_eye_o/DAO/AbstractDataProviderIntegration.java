@@ -230,7 +230,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         assertTrue(o.getCategories().contains(social));
         assertTrue(o.getCategories().contains(kauw));
         assertFalse(o.isFollowUpNeeded());
-        assertNull(o.getFollowUpObservation());
+        assertNull(o.getFollowUpForObservation());
         assertNull(o.getFollowUpReminder());
         assertEquals(testStudentForU1, o.getObservationSubject());
     }
@@ -263,16 +263,16 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         final String comment2 = "Test Observation 2";
         Observation o1 = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment1).withObservationSubject(testStudentForU1).build());
         Observation o2 = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment2).withObservationSubject(testStudentForU1).build());
-        o1.setFollowUpObservation(o2);
         o2.setFollowUpNeeded(true);
+        o2.setFollowUpForObservation(o1);
         final LocalDate reminderDate = new LocalDate(2012, 11, 12);
         o2.setFollowUpReminder(reminderDate);
         o2.addCategories(testOCsForU1.values());
         rwDAO.update(Arrays.asList(o1, o2));
         o1 = rwDAO.get(Observation.class, o1.getId());
         o2 = rwDAO.get(Observation.class, o2.getId());
-        assertEquals(o1.getFollowUpObservation(), o2);
-        assertNull(o2.getFollowUpObservation());
+        assertEquals(o2.getFollowUpForObservation(), o1);
+        assertNull(o1.getFollowUpForObservation());
         assertTrue(o2.isFollowUpNeeded());
         assertFalse(o1.isFollowUpNeeded());
         assertEquals(o2.getFollowUpReminder(), reminderDate);
@@ -286,12 +286,12 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         final String comment2 = "Test Observation 2";
         Observation o1 = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment1).withObservationSubject(testStudentForU1).build());
         Observation o2 = rwDAO.create(factory.newObservationBuilder(testUser1).withFollowUpNeeded(false).withObservationTimestamp(new LocalDateTime()).addCategory(social).addCategory(kauw).withComment(comment2).withObservationSubject(testStudentForU1).build());
-        o1.setFollowUpObservation(o2);
+        o2.setFollowUpForObservation(o1);
         rwDAO.update(Arrays.asList(o1, o2));
 
-        rwDAO.delete(o2);
-        o1 = rwDAO.get(Observation.class, o1.getId());
-        assertNull(o1.getFollowUpObservation());
+        rwDAO.delete(o1);
+        o2 = rwDAO.get(Observation.class, o2.getId());
+        assertNull(o2.getFollowUpForObservation());
     }
 
     @Test

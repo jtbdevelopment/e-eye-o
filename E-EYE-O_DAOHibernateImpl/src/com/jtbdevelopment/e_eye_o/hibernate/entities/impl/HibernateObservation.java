@@ -81,13 +81,13 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
 
     @Override
     @OneToOne(targetEntity = HibernateObservation.class)
-    public Observation getFollowUpObservation() {
-        return wrapped.getFollowUpObservation();
+    public Observation getFollowUpForObservation() {
+        return wrapped.getFollowUpForObservation();
     }
 
     @Override
-    public void setFollowUpObservation(final Observation followUpObservation) {
-        wrapped.setFollowUpObservation(wrap(followUpObservation));
+    public void setFollowUpForObservation(final Observation followUpForObservation) {
+        wrapped.setFollowUpForObservation(wrap(followUpForObservation));
     }
 
     @Override

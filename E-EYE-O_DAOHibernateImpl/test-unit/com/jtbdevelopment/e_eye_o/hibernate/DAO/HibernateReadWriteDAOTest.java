@@ -446,13 +446,13 @@ public class HibernateReadWriteDAOTest {
         final List<Observation> relatedObservations = Arrays.asList(observationLoaded);
 
         context.checking(new Expectations() {{
-            one(session).createQuery("from Observation as O where followUpObservation = :followUpObservation");
+            one(session).createQuery("from Observation as O where followUpForObservation = :initialObservation");
             will(returnValue(query1));
-            one(query1).setParameter("followUpObservation", loaded);
+            one(query1).setParameter("initialObservation", loaded);
             will(returnValue(query1));
             one(query1).list();
             will(returnValue(relatedFollowUpObservations));
-            one(observationLoaded).setFollowUpObservation(null);
+            one(observationLoaded).setFollowUpForObservation(null);
             one(session).update(observationLoaded);
             one(session).update(studentWrapped);
         }});

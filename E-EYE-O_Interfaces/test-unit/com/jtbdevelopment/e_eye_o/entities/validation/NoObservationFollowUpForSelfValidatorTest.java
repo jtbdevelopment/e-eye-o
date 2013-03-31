@@ -15,12 +15,12 @@ import static org.testng.AssertJUnit.assertTrue;
  * Date: 12/29/12
  * Time: 4:48 PM
  */
-public class ObservationFollowUpValidatorTest {
+public class NoObservationFollowUpForSelfValidatorTest {
     private Mockery context;
     private ConstraintValidatorContext validatorContext;
     private Observation o1;
     private Observation o2;
-    final private ObservationFollowUpValidator check = new ObservationFollowUpValidator();
+    final private NoObservationFollowUpForSelfValidator check = new NoObservationFollowUpForSelfValidator();
 
     @BeforeMethod
     public void beforeTest() {
@@ -35,7 +35,7 @@ public class ObservationFollowUpValidatorTest {
         context.checking(new Expectations() {{
             allowing(o1).getId();
             will(returnValue("1"));
-            allowing(o1).getFollowUpObservation();
+            allowing(o1).getFollowUpForObservation();
             will(returnValue(null));
         }});
         assertTrue(check.isValid(o1, validatorContext));
@@ -46,7 +46,7 @@ public class ObservationFollowUpValidatorTest {
         context.checking(new Expectations() {{
             allowing(o1).getId();
             will(returnValue(null));
-            allowing(o1).getFollowUpObservation();
+            allowing(o1).getFollowUpForObservation();
             will(returnValue(o2));
             one(o2).getId();
             will(returnValue("2"));
@@ -60,7 +60,7 @@ public class ObservationFollowUpValidatorTest {
         context.checking(new Expectations() {{
             allowing(o1).getId();
             will(returnValue("1"));
-            allowing(o1).getFollowUpObservation();
+            allowing(o1).getFollowUpForObservation();
             will(returnValue(o2));
             one(o2).getId();
             will(returnValue("2"));
@@ -73,7 +73,7 @@ public class ObservationFollowUpValidatorTest {
         context.checking(new Expectations() {{
             allowing(o1).getId();
             will(returnValue("1"));
-            allowing(o1).getFollowUpObservation();
+            allowing(o1).getFollowUpForObservation();
             will(returnValue(o2));
             one(o2).getId();
             will(returnValue("1"));

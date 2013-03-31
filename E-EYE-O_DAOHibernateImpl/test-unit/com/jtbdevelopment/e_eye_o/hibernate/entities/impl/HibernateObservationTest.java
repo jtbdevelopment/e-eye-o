@@ -139,24 +139,24 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     }
 
     @Test
-    public void testGetFollowUpObservation() throws Exception {
+    public void testGetFollowUpForObservation() throws Exception {
         final HibernateObservation fu = new HibernateObservation();
         context.checking(new Expectations() {{
-            one(implObservation).getFollowUpObservation();
+            one(implObservation).getFollowUpForObservation();
             will(returnValue(fu));
         }});
 
-        assertSame(fu, hibernateObservation.getFollowUpObservation());
+        assertSame(fu, hibernateObservation.getFollowUpForObservation());
     }
 
     @Test
-    public void testSetFollowUpObservation() throws Exception {
+    public void testSetFollowUpForObservation() throws Exception {
         final Observation fu = context.mock(Observation.class, "local");
         context.checking(new Expectations() {{
-            one(implObservation).setFollowUpObservation(with(any(HibernateObservation.class)));
+            one(implObservation).setFollowUpForObservation(with(any(HibernateObservation.class)));
         }});
 
-        hibernateObservation.setFollowUpObservation(fu);
+        hibernateObservation.setFollowUpForObservation(fu);
     }
 
     @Test

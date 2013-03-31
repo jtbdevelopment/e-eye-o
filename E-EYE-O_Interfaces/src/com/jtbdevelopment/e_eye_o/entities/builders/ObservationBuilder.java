@@ -23,7 +23,7 @@ public interface ObservationBuilder extends AppUserOwnedObjectBuilder<Observatio
 
     ObservationBuilder withFollowUpReminder(final LocalDate followUpReminder);
 
-    ObservationBuilder withFollowUpObservation(final Observation followUpObservation);
+    ObservationBuilder withFollowUpForObservation(final Observation followUpForObservation);
 
     ObservationBuilder addCategory(final ObservationCategory observationCategory);
 

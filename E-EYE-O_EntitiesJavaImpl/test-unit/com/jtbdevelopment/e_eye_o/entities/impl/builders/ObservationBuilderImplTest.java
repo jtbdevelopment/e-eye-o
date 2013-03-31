@@ -20,7 +20,7 @@ import static org.testng.AssertJUnit.*;
 public class ObservationBuilderImplTest extends AppUserOwnedObjectBuilderImplTest {
     private final Observation impl = factory.newObservation(null);
     private final Observation fu = factory.newObservation(null);
-    private final ObservationCategory c1 =factory.newObservationCategory(null);
+    private final ObservationCategory c1 = factory.newObservationCategory(null);
     private final ObservationCategory c2 = factory.newObservationCategory(null);
     private final ClassList cl = factory.newClassList(null);
     private final ObservationBuilderImpl builder = new ObservationBuilderImpl(impl);
@@ -64,16 +64,16 @@ public class ObservationBuilderImplTest extends AppUserOwnedObjectBuilderImplTes
 
     @Test
     public void testWithFollowUpObservation() throws Exception {
-        assertNull(impl.getFollowUpObservation());
-        assertSame(builder, builder.withFollowUpObservation(fu));
-        assertSame(fu, impl.getFollowUpObservation());
+        assertNull(impl.getFollowUpForObservation());
+        assertSame(builder, builder.withFollowUpForObservation(fu));
+        assertSame(fu, impl.getFollowUpForObservation());
     }
 
     @Test
     public void testAddCategory() throws Exception {
         synchronized (impl) {
             impl.setCategories(Collections.EMPTY_SET);
-            assertSame(builder, builder.addCategory(c1  ));
+            assertSame(builder, builder.addCategory(c1));
             assertEquals(1, impl.getCategories().size());
             assertTrue(impl.getCategories().contains(c1));
         }

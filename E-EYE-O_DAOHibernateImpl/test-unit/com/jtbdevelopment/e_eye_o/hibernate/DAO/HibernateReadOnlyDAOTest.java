@@ -213,13 +213,13 @@ public class HibernateReadOnlyDAOTest {
         final List<Observation> result = Collections.unmodifiableList(Arrays.asList(context.mock(Observation.class)));
         final Observation o = context.mock(Observation.class, "2");
         context.checking(new Expectations() {{
-            allowing(session).createQuery("from Observation as O where followUpObservation = :followUpObservation");
+            allowing(session).createQuery("from Observation as O where followUpForObservation = :initialObservation");
             will(returnValue(query));
-            allowing(query).setParameter("followUpObservation", o);
+            allowing(query).setParameter("initialObservation", o);
             allowing(query).list();
             will(returnValue(result));
         }});
-        assertSame(result, dao.getAllObservationsForFollowup(o));
+        assertSame(result, dao.getAllObservationFollowups(o));
     }
 
     @Test

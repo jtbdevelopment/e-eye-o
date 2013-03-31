@@ -13,9 +13,9 @@ import java.lang.annotation.Target;
  */
 @Target(value = {ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ObservationFollowUpValidator.class)
-public @interface ObservationFollowUpCheck {
-    String message() default "{com.jtbdevelopment.e_eye_o.entities.validation.observationfollowupcheck}";
+@Constraint(validatedBy = ObservationFollowUpSubjectValidator.class)
+public @interface ObservationFollowUpSubjectCheck {
+    String message() default "{com.jtbdevelopment.e_eye_o.entities.validation.observationfollowupsubjectcheck}";
 
     Class<?>[] groups() default {};
 

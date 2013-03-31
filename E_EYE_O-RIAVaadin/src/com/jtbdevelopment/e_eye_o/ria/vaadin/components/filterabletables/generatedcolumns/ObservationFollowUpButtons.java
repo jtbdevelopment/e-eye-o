@@ -3,12 +3,10 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.genera
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
-import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Runo;
-import org.vaadin.dialogs.ConfirmDialog;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Table;
 
 /**
  * Date: 3/31/13
@@ -35,6 +33,7 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
         final Observation entity = entities.getItem(itemId).getBean();
         GridLayout layout = new GridLayout(2, 1);
         layout.setSizeUndefined();
+        /*
         if (entity.getFollowUpObservation() != null) {
             Button showFollowUpButton = new Button("See Follow Up");
             showFollowUpButton.addStyleName(Runo.BUTTON_SMALL);
@@ -90,6 +89,7 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
             });
             layout.addComponent(linkFollowUp, 1, 0);
         }
+        */
         return layout;
     }
 }

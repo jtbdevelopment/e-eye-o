@@ -26,7 +26,7 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
 
     private boolean followUpNeeded = false;
     private LocalDate followUpReminder;
-    private Observation followUpObservation;
+    private Observation followUpForObservation;
 
     ObservationImpl(final AppUser appUser) {
         super(appUser);
@@ -83,13 +83,13 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     }
 
     @Override
-    public Observation getFollowUpObservation() {
-        return followUpObservation;
+    public Observation getFollowUpForObservation() {
+        return followUpForObservation;
     }
 
     @Override
-    public void setFollowUpObservation(final Observation followUpObservation) {
-        this.followUpObservation = followUpObservation;
+    public void setFollowUpForObservation(final Observation followUpForObservation) {
+        this.followUpForObservation = followUpForObservation;
     }
 
     @Override

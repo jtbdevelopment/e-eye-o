@@ -49,8 +49,8 @@ public class ObservationBuilderImpl extends AppUserOwnedObjectBuilderImpl<Observ
     }
 
     @Override
-    public ObservationBuilder withFollowUpObservation(final Observation followUpObservation) {
-        entity.setFollowUpObservation(followUpObservation);
+    public ObservationBuilder withFollowUpForObservation(final Observation followUpForObservation) {
+        entity.setFollowUpForObservation(followUpForObservation);
         return this;
     }
 
