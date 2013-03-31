@@ -5,6 +5,7 @@
              xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!--  TODO - probably should be a separate security project -->
     <global-method-security secured-annotations="enabled"/>
 
     <http auto-config="true">
@@ -14,6 +15,7 @@
         <form-login login-page="/E-EYE-O/Login" default-target-url="/E-EYE-O/" always-use-default-target="true"/>
     </http>
 
+    <!-- TODO - real authentication -->
     <authentication-manager alias="authenticationManager">
         <authentication-provider>
             <user-service>
