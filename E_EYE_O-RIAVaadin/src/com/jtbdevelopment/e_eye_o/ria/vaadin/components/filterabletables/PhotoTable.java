@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.IdObjectEditorDialogWindow;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -41,9 +42,10 @@ public class PhotoTable extends IdObjectTable<Photo> {
     }
 
     @Override
-    public void showEntityEditor(final Photo entity) {
+    public IdObjectEditorDialogWindow<Photo> showEntityEditor(final Photo entity) {
 //        getUI().addWindow(classListEditorDialogWindow);
 //        classListEditorDialogWindow.setEntity(entity);
+        return null;
     }
 
     @Override

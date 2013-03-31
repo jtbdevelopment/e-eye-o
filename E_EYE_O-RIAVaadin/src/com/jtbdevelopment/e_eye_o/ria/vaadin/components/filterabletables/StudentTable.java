@@ -50,9 +50,10 @@ public class StudentTable extends IdObjectTable<Student> {
     }
 
     @Override
-    public void showEntityEditor(final Student entity) {
+    public StudentEditorDialogWindow showEntityEditor(final Student entity) {
         getUI().addWindow(studentEditorDialogWindow);
         studentEditorDialogWindow.setEntity(entity);
+        return studentEditorDialogWindow;
     }
 
     @Override

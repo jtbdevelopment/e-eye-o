@@ -88,6 +88,14 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         initialFollowUpFor = entity.getFollowUpForObservation();
     }
 
+    public void setFollowUpFor(final Observation initialObservation) {
+        Observation observation = entityBeanFieldGroup.getItemDataSource().getBean();
+        observation.setFollowUpForObservation(initialObservation);
+        observation.setCategories(initialObservation.getCategories());
+        setEntity(observation);
+    }
+
+
     @Override
     protected Layout buildEditorLayout() {
         VerticalLayout outerLayout = new VerticalLayout();

@@ -71,12 +71,13 @@ public class ObservationTable extends IdObjectTable<Observation> {
     }
 
     @Override
-    public void showEntityEditor(final Observation entity) {
+    public ObservationEditorDialogWindow showEntityEditor(final Observation entity) {
         if (entity.getObservationSubject() == null) {
             entity.setObservationSubject(defaultObservationSubject);
         }
         getUI().addWindow(observationEditorDialogWindow);
         observationEditorDialogWindow.setEntity(entity);
+        return observationEditorDialogWindow;
     }
 
     @Override
@@ -116,7 +117,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addGeneratedColumns() {
         super.addGeneratedColumns();
-        entityTable.addGeneratedColumn("showFollowUp", new ObservationFollowUpButtons(readWriteDAO, eventBus, this, entities));
+        entityTable.addGeneratedColumn("showFollowUp", new ObservationFollowUpButtons(idObjectFactory, readWriteDAO, eventBus, this, entities));
 
         //  TODO - do his better
         entityTable.setColumnExpandRatio("observationTimestamp", 0.10f);

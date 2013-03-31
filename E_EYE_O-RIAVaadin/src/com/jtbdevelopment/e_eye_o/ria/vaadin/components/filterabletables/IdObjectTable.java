@@ -5,6 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.IdObjectEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.BooleanToYesNoConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtons;
@@ -95,7 +96,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
     protected abstract List<HeaderInfo> getHeaderInfo();
 
-    public abstract void showEntityEditor(final T entity);
+    public abstract IdObjectEditorDialogWindow<T> showEntityEditor(final T entity);
 
 
     public IdObjectTable(final Class<T> entityType) {
