@@ -79,7 +79,6 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         row.addComponent(new Label("Categories:"));
         TwinColSelect categories = new TwinColSelect();
         categories.setRows(4);
-        categories.setImmediate(true);
         categories.setItemCaptionPropertyId("shortName");
         categories.setContainerDataSource(potentialCategories);
         entityBeanFieldGroup.bind(categories, "categories");
@@ -98,7 +97,6 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         observationFor.setFilteringMode(FilteringMode.CONTAINS);
         observationFor.setNewItemsAllowed(false);
         observationFor.setTextInputAllowed(true);
-        observationFor.setImmediate(true);
         observationFor.setContainerDataSource(potentialSubjects);
         observationFor.setItemCaptionPropertyId("summaryDescription");
         entityBeanFieldGroup.bind(observationFor, "observationSubject");
@@ -111,7 +109,6 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
 
         row.addComponent(new Label("Follow Up?"));
         final CheckBox followUp = new CheckBox();
-        followUp.setImmediate(true);
         entityBeanFieldGroup.bind(followUp, "followUpNeeded");
         row.addComponent(followUp);
 
@@ -120,7 +117,6 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         followUpReminder.setConverter(new LocalDateDateConverter());
         followUpReminder.setResolution(Resolution.DAY);
         entityBeanFieldGroup.bind(followUpReminder, "followUpReminder");
-        followUpReminder.setImmediate(true);
         followUpReminder.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {

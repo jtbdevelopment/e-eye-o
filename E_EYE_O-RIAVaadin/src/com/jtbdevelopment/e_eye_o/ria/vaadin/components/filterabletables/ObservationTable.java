@@ -59,8 +59,8 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 new HeaderInfo("followUpNeeded", "Follow Up?", Table.Align.CENTER),
                 new HeaderInfo("followUpReminder", "Reminder?", Table.Align.CENTER),
                 new HeaderInfo("showFollowUp", "Follow Up", Table.Align.CENTER, true),              //  Generated
-                new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
+                new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)                       //  Generated
         );
     }

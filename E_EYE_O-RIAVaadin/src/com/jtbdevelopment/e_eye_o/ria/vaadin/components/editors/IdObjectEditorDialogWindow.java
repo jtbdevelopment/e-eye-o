@@ -6,6 +6,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.FieldUtils;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
@@ -51,13 +52,13 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
     @PostConstruct
     public void init() {
         buildMainLayout();
+        FieldUtils.setImmediateForAll(this, true);
     }
 
     protected void buildMainLayout() {
         // the main layout and components will be created here
         mainLayout.setMargin(true);
         mainLayout.setSpacing(true);
-        mainLayout.setImmediate(true);
 
         Layout editorRow = buildEditorLayout();
         mainLayout.addComponent(editorRow);
@@ -139,13 +140,13 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
 
     public void setEntity(final T entity) {
         setCaption(entity.getSummaryDescription());
-        removeAllValidators(this);
+        FieldUtils.removeAllValidators(this);
         mainLayout.setComponentError(null);
         entityBeanFieldGroup.setItemDataSource(entity);
     }
 
     //  Vaadin doesn't remove previous validators so they stack up
-    protected void removeAllValidators(Component component) {
+    protected void removeAllValidators(final Component component) {
         if (component instanceof AbstractField) {
             ((AbstractField) component).removeAllValidators();
         }
@@ -153,6 +154,15 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
             for (Component child : (HasComponents) component) {
                 removeAllValidators(child);
             }
+        }
+    }
+
+    protected void setAllImmediate(final Component component) {
+        if (component instanceof AbstractField) {
+            ((AbstractField) component).setImmediate(true);
+        }
+        if (component instanceof HasComponents) {
+
         }
     }
 }

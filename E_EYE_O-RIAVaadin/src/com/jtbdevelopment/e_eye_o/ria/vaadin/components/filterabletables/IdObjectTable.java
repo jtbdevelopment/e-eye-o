@@ -9,6 +9,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.convert
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.AppUserOwnedActionGeneratedColumn;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.FieldUtils;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
@@ -117,7 +118,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         }
         this.entities = new AllItemsBeanItemContainer<>(entityType, generatedProperties);
         VerticalLayout mainLayout = new VerticalLayout();
-        mainLayout.setImmediate(true);
 
         mainLayout.addComponent(buildActionRow());
 
@@ -129,6 +129,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
         eventBus.register(this);
         setCompositionRoot(mainLayout);
+        FieldUtils.setImmediateForAll(this, true);
     }
 
     private void buildEntityTable(List<String> properties, List<String> headers, List<Table.Align> aligns) {
@@ -139,7 +140,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         entityTable.setSortEnabled(true);
         entityTable.setSelectable(true);
         entityTable.setSizeFull();
-        entityTable.setImmediate(true);
         entityTable.setNullSelectionAllowed(false);
         entityTable.setMultiSelect(false);
 
@@ -297,7 +297,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         filterSection.addComponent(searchForLabel);
         filterSection.setComponentAlignment(searchForLabel, Alignment.BOTTOM_LEFT);
         searchFor.setWidth(12, Unit.EM);
-        searchFor.setImmediate(true);
         searchFor.addTextChangeListener(new FieldEvents.TextChangeListener() {
             @Override
             public void textChange(final FieldEvents.TextChangeEvent event) {
@@ -351,7 +350,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
         final NativeSelect showSize = new NativeSelect(null, Arrays.asList(1, 5, 10, 25, 50));
-        showSize.setImmediate(true);
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(final Property.ValueChangeEvent event) {

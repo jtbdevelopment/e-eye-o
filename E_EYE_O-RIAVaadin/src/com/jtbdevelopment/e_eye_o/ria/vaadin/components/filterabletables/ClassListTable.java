@@ -35,8 +35,8 @@ public class ClassListTable extends IdObjectTable<ClassList> {
         headers = Arrays.asList(
                 new HeaderInfo("description", "Description", Table.Align.LEFT),
                 new HeaderInfo("lastObservationTimestamp", "Last Observation", Table.Align.CENTER),
-                new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
+                new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)    // Generated
         );
     }
