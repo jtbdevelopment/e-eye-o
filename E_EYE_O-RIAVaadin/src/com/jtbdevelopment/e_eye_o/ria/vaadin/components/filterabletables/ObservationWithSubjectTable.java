@@ -1,9 +1,9 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.AppUserOwnedObjectStringConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.filters.ObservationSubjectFilter;
 import com.vaadin.data.Container;
 import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -38,8 +38,8 @@ public class ObservationWithSubjectTable extends ObservationTable {
 
     @Override
     protected Container.Filter generateFilter(String searchFor) {
-        //  TODO - this doesn't actually work due to the property search of objects
-        return new Or(super.generateFilter(searchFor), new SimpleStringFilter("observationSubject", searchFor, true, false));
+        return new Or(super.generateFilter(searchFor),
+                new ObservationSubjectFilter(searchFor));
     }
 
     @Override

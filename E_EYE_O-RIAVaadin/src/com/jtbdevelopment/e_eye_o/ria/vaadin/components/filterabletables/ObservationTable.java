@@ -6,6 +6,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEdito
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ObservationCategorySetStringConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.filters.ObservationCategoryFilter;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.Converter;
@@ -82,8 +83,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
     protected Container.Filter generateFilter(final String searchFor) {
         return new Or(
                 new SimpleStringFilter("comment", searchFor, true, false),
-                //  TODO - search on categories doesn't work as it searches actual object toString representation
-                new SimpleStringFilter("categories", searchFor, true, false)
+                new ObservationCategoryFilter(searchFor)
         );
     }
 

@@ -34,7 +34,6 @@ public class StudentTable extends IdObjectTable<Student> {
     private static final List<HeaderInfo> headers;
 
     static {
-        //  TODO - add last observation date
         headers = Arrays.asList(
                 new HeaderInfo("firstName", "First Name", Table.Align.LEFT),
                 new HeaderInfo("lastName", "Last Name", Table.Align.LEFT),

@@ -28,7 +28,6 @@ public class ObservationCategoryTable extends IdObjectTable<ObservationCategory>
     private static final List<HeaderInfo> headers;
 
     static {
-        //  TODO - add last observation date
         headers = Arrays.asList(
                 new HeaderInfo("shortName", "Short Name", Table.Align.LEFT),
                 new HeaderInfo("description", "Description", Table.Align.LEFT),

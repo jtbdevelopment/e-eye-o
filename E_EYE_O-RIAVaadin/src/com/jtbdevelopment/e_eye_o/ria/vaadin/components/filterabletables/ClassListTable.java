@@ -32,7 +32,6 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     private static final List<HeaderInfo> headers;
 
     static {
-        //  TODO - add last observation date
         headers = Arrays.asList(
                 new HeaderInfo("description", "Description", Table.Align.LEFT),
                 new HeaderInfo("lastObservationTimestamp", "Last Observation", Table.Align.CENTER),
