@@ -4,7 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.StudentEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LastObservationTimestampStringConverter;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -25,7 +25,7 @@ public class StudentTable extends IdObjectTable<Student> {
     private StudentEditorDialogWindow studentEditorDialogWindow;
 
     @Autowired
-    private LocalDateTimeStringConverter localDateTimeStringConverter;
+    private LastObservationTimestampStringConverter lastObservationTimestampStringConverter;
 
     public StudentTable() {
         super(Student.class);
@@ -67,6 +67,6 @@ public class StudentTable extends IdObjectTable<Student> {
     @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
-        entityTable.setConverter("lastObservationTimestamp", localDateTimeStringConverter);
+        entityTable.setConverter("lastObservationTimestamp", lastObservationTimestampStringConverter);
     }
 }

@@ -18,6 +18,9 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TitleBarComposite extends CustomComponent {
 
+    //  TODO - nice looking
+    //  TODO - reminder notifications
+
     private final Label welcomeLabel;
     private final Label lastLogout;
 

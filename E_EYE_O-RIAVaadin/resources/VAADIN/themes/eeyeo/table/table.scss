@@ -1,4 +1,5 @@
 @mixin eeyeo-table {
+//  TODO - table sort and table header hover
   .v-table tr.v-selected {
     background-color: $forestGreen;
     color: black;

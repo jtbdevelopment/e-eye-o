@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ClassListEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LastObservationTimestampStringConverter;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -23,7 +23,7 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     private ClassListEditorDialogWindow classListEditorDialogWindow;
 
     @Autowired
-    private LocalDateTimeStringConverter localDateTimeStringConverter;
+    private LastObservationTimestampStringConverter lastObservationTimestampStringConverter;
 
     public ClassListTable() {
         super(ClassList.class);
@@ -55,6 +55,6 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
-        entityTable.setConverter("lastObservationTimestamp", localDateTimeStringConverter);
+        entityTable.setConverter("lastObservationTimestamp", lastObservationTimestampStringConverter);
     }
 }
