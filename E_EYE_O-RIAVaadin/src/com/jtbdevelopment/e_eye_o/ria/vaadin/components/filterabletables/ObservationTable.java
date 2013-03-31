@@ -1,27 +1,24 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ObservationCategorySetStringConverter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ShortenedCommentConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.filters.ObservationCategoryFilter;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ObservationFollowUpButtons;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
-import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Date: 3/17/13
@@ -43,6 +40,9 @@ public class ObservationTable extends IdObjectTable<Observation> {
 
     @Autowired
     private ObservationCategorySetStringConverter observationCategorySetStringConverter;
+
+    @Autowired
+    private ShortenedCommentConverter shortenedCommentConverter;
 
     public ObservationTable() {
         super(Observation.class);
@@ -71,7 +71,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
     }
 
     @Override
-    protected void showEntityEditor(final Observation entity) {
+    public void showEntityEditor(final Observation entity) {
         if (entity.getObservationSubject() == null) {
             entity.setObservationSubject(defaultObservationSubject);
         }
@@ -100,37 +100,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
         entityTable.setConverter("followUpReminder", localDateStringConverter);
         entityTable.setConverter("observationTimestamp", localDateTimeStringConverter);
         entityTable.setConverter("categories", observationCategorySetStringConverter);
-        //  TODO
-        entityTable.setConverter("comment", new Converter<String, String>() {
-            @Override
-            public String convertToModel(final String value, final Locale locale) throws ConversionException {
-                return null;
-            }
-
-            @Override
-            public String convertToPresentation(final String value, final Locale locale) throws ConversionException {
-                String shortenedComment = value.replace("\n", "<br>");
-                if (shortenedComment.length() > 50) {
-                    shortenedComment = shortenedComment.substring(0, 47) + "...";
-                }
-                return shortenedComment;
-            }
-
-            @Override
-            public Class<String> getModelType() {
-                return String.class;
-            }
-
-            @Override
-            public Class<String> getPresentationType() {
-                return String.class;
-            }
-        });
-    }
-
-    @Override
-    protected void addGeneratedColumns() {
-        super.addGeneratedColumns();
+        entityTable.setConverter("comment", shortenedCommentConverter);
         entityTable.setItemDescriptionGenerator(new AbstractSelect.ItemDescriptionGenerator() {
             @Override
             public String generateDescription(final Component source, final Object itemId, final Object propertyId) {
@@ -141,72 +111,14 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 return null;
             }
         });
-        entityTable.addGeneratedColumn("showFollowUp", new Table.ColumnGenerator() {
-            @Override
-            public Object generateCell(final Table source, final Object itemId, final Object columnId) {
-                final Observation entity = entities.getItem(itemId).getBean();
-                GridLayout layout = new GridLayout(2, 1);
-                layout.setSizeUndefined();
-                if (entity.getFollowUpObservation() != null) {
-                    Button showFollowUpButton = new Button("See Follow Up");
-                    showFollowUpButton.addStyleName(Runo.BUTTON_SMALL);
-                    showFollowUpButton.addClickListener(new Button.ClickListener() {
-                        @Override
-                        public void buttonClick(final Button.ClickEvent event) {
-                            showEntityEditor(entity);
-                        }
-                    });
-                    layout.addComponent(showFollowUpButton, 0, 0);
-                    Button breakLink = new Button("Break Link");
-                    breakLink.addStyleName(Runo.BUTTON_SMALL);
-                    breakLink.setDescription("This will NOT delete the follow up observation, just break the link between the two observations and reset the follow-up flag for this observation.");
-                    breakLink.addClickListener(new Button.ClickListener() {
-                        @Override
-                        public void buttonClick(final Button.ClickEvent event) {
-                            ConfirmDialog.show(getUI(), "Change " + entity.getFollowUpObservation().getSummaryDescription() + " to not be a follow-up for this observation?", new ConfirmDialog.Listener() {
-                                @Override
-                                public void onClose(final ConfirmDialog dialog) {
-                                    if (dialog.isConfirmed()) {
-                                        entity.setFollowUpNeeded(true);
-                                        entity.setFollowUpObservation(null);
-                                        Observation updatedEntity = readWriteDAO.update(entity);
-                                        eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, updatedEntity));
-                                    }
-                                }
-                            });
-                        }
-                    });
-                    layout.addComponent(breakLink, 1, 0);
-                } else {
-                    Button addFollowUp = new Button("New");
-                    addFollowUp.setDescription("This starts a new observation.");
-                    addFollowUp.addStyleName(Runo.BUTTON_SMALL);
-                    addFollowUp.addClickListener(new Button.ClickListener() {
-                        @Override
-                        public void buttonClick(final Button.ClickEvent event) {
-                            Notification.show("TODO:  add new observation and link", Notification.Type.HUMANIZED_MESSAGE);
-//                            showEntityEditor(idObjectFactory.newObservation(appUser));
-                            //  TODO - link created observation to this observation and set follow up to false and reminder to null.
-                        }
-                    });
-                    layout.addComponent(addFollowUp, 0, 0);
-                    Button linkFollowUp = new Button("Link");
-                    linkFollowUp.setDescription("This lets you pick an existing observation as the follow-up.");
-                    linkFollowUp.addStyleName(Runo.BUTTON_SMALL);
-                    linkFollowUp.addClickListener(new Button.ClickListener() {
-                        @Override
-                        public void buttonClick(final Button.ClickEvent event) {
-                            Notification.show("TODO:  link existing observation", Notification.Type.HUMANIZED_MESSAGE);
-                            //  TODO - show observations for entity and let them pick one to link and set follow up to false and reminder to null.
-                        }
-                    });
-                    layout.addComponent(linkFollowUp, 1, 0);
-                }
-                return layout;
-            }
-        });
+    }
 
-        //  TODO - this better
+    @Override
+    protected void addGeneratedColumns() {
+        super.addGeneratedColumns();
+        entityTable.addGeneratedColumn("showFollowUp", new ObservationFollowUpButtons(readWriteDAO, eventBus, this, entities));
+
+        //  TODO - do his better
         entityTable.setColumnExpandRatio("observationTimestamp", 0.10f);
         entityTable.setColumnExpandRatio("categories", 0.10f);
         entityTable.setColumnExpandRatio("modificationTimestamp", 0.10f);

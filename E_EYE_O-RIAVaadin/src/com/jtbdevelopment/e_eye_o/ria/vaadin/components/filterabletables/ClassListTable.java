@@ -47,7 +47,7 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     }
 
     @Override
-    protected void showEntityEditor(final ClassList entity) {
+    public void showEntityEditor(final ClassList entity) {
         getUI().addWindow(classListEditorDialogWindow);
         classListEditorDialogWindow.setEntity(entity);
     }

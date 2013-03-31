@@ -41,7 +41,7 @@ public class PhotoTable extends IdObjectTable<Photo> {
     }
 
     @Override
-    protected void showEntityEditor(final Photo entity) {
+    public void showEntityEditor(final Photo entity) {
 //        getUI().addWindow(classListEditorDialogWindow);
 //        classListEditorDialogWindow.setEntity(entity);
     }

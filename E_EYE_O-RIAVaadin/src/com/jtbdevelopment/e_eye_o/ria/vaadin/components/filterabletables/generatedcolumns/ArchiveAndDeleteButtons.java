@@ -13,7 +13,7 @@ import org.vaadin.dialogs.ConfirmDialog;
  * Date: 3/16/13
  * Time: 6:42 PM
  */
-public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> implements Table.ColumnGenerator {
+public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> implements Table.ColumnGenerator {
     private static final String ACTIVATE = "Activate";
     private static final String ARCHIVE = "Archive";
 
@@ -21,7 +21,7 @@ public class AppUserOwnedActionGeneratedColumn<T extends AppUserOwnedObject> imp
     private final EventBus eventBus;
     private final AllItemsBeanItemContainer<T> entities;
 
-    public AppUserOwnedActionGeneratedColumn(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final AllItemsBeanItemContainer<T> entities) {
+    public ArchiveAndDeleteButtons(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final AllItemsBeanItemContainer<T> entities) {
         this.readWriteDAO = readWriteDAO;
         this.eventBus = eventBus;
         this.entities = entities;

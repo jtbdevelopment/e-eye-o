@@ -7,7 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.BooleanToYesNoConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.AppUserOwnedActionGeneratedColumn;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtons;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.FieldUtils;
 import com.vaadin.data.Container;
@@ -95,7 +95,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
     protected abstract List<HeaderInfo> getHeaderInfo();
 
-    protected abstract void showEntityEditor(final T entity);
+    public abstract void showEntityEditor(final T entity);
 
 
     public IdObjectTable(final Class<T> entityType) {
@@ -265,7 +265,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     }
 
     protected void addGeneratedColumns() {
-        entityTable.addGeneratedColumn("actions", new AppUserOwnedActionGeneratedColumn<>(readWriteDAO, eventBus, entities));
+        entityTable.addGeneratedColumn("actions", new ArchiveAndDeleteButtons<>(readWriteDAO, eventBus, entities));
     }
 
     @SuppressWarnings("unused")

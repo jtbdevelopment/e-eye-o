@@ -43,7 +43,7 @@ public class ObservationCategoryTable extends IdObjectTable<ObservationCategory>
     }
 
     @Override
-    protected void showEntityEditor(final ObservationCategory entity) {
+    public void showEntityEditor(final ObservationCategory entity) {
         getUI().addWindow(observationCategoryEditorDialogWindow);
         observationCategoryEditorDialogWindow.setEntity(entity);
     }

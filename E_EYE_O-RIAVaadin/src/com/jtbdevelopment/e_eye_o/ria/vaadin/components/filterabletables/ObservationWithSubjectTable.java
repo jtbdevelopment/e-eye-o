@@ -38,8 +38,10 @@ public class ObservationWithSubjectTable extends ObservationTable {
 
     @Override
     protected Container.Filter generateFilter(String searchFor) {
-        return new Or(super.generateFilter(searchFor),
-                new ObservationSubjectFilter(searchFor));
+        return new Or(
+                super.generateFilter(searchFor),
+                new ObservationSubjectFilter(searchFor)
+        );
     }
 
     @Override
@@ -50,7 +52,6 @@ public class ObservationWithSubjectTable extends ObservationTable {
     @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
-        //  TODO
         entityTable.setConverter("observationSubject", appUserOwnedObjectStringConverter);
     }
 
