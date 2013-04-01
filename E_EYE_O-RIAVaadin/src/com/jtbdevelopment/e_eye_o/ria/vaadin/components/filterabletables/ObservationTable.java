@@ -24,6 +24,7 @@ import java.util.List;
  * Date: 3/17/13
  * Time: 2:02 PM
  */
+//  TODO - add date range filter
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationTable extends IdObjectTable<Observation> {
@@ -132,7 +133,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addCustomFilters(final HorizontalLayout filterSection) {
         super.addCustomFilters(filterSection);
-        final CheckBox significantOnly = new CheckBox("Significant Only?");
+        final CheckBox significantOnly = new CheckBox("Significant Only");
         significantOnly.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
@@ -149,7 +150,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
         filterSection.addComponent(significantOnly);
         filterSection.setComponentAlignment(significantOnly, Alignment.BOTTOM_LEFT);
 
-        final CheckBox followUpOnly = new CheckBox("Follow Up Only?");
+        final CheckBox followUpOnly = new CheckBox("Follow Up Only");
         followUpOnly.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {

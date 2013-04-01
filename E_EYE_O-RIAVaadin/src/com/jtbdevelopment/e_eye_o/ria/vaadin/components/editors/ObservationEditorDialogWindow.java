@@ -1,5 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
@@ -16,6 +18,7 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -65,20 +68,29 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         potentialFollowUpsFor.removeAllItems();
         boolean showArchivedObservations = observation.isArchived() || (observation.getFollowUpForObservation() != null && observation.getFollowUpForObservation().isArchived());
         boolean hasSubject = observation.getObservationSubject() != null;
+        Collection<Observation> potential;
         if (hasSubject) {
             if (showArchivedObservations) {
-                potentialFollowUpsFor.addAll(readWriteDAO.getAllObservationsForEntity(observation.getObservationSubject()));
+                potential = readWriteDAO.getAllObservationsForEntity(observation.getObservationSubject());
             } else {
                 //  TODO - shows archived
-                potentialFollowUpsFor.addAll(readWriteDAO.getAllObservationsForEntity(observation.getObservationSubject()));
+                potential = readWriteDAO.getAllObservationsForEntity(observation.getObservationSubject());
             }
         } else {
             if (showArchivedObservations) {
-                potentialFollowUpsFor.addAll(readWriteDAO.getEntitiesForUser(Observation.class, observation.getAppUser()));
+                potential = readWriteDAO.getEntitiesForUser(Observation.class, observation.getAppUser());
             } else {
-                potentialFollowUpsFor.addAll(readWriteDAO.getActiveEntitiesForUser(Observation.class, observation.getAppUser()));
+                potential = readWriteDAO.getActiveEntitiesForUser(Observation.class, observation.getAppUser());
             }
         }
+
+        potentialFollowUpsFor.addAll(Collections2.filter(potential, new Predicate<Observation>() {
+            //  TODO- also filter on matching categories
+            @Override
+            public boolean apply(@Nullable final Observation input) {
+                return input != null && !input.equals(observation) && input.getObservationTimestamp().compareTo(observation.getObservationTimestamp()) <= 0;
+            }
+        }));
         potentialFollowUpsFor.sort(
                 new String[]{"observationSubject.summaryDescription", "followUpNeeded", "observationTimestamp"},  //  TODO - check if first one works
                 new boolean[]{true, true, false}  // TODO - check if middle one is correct
