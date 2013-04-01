@@ -25,6 +25,7 @@ import java.util.List;
  * Time: 2:02 PM
  */
 //  TODO - add date range filter
+//  TODO - show that it is a followup
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationTable extends IdObjectTable<Observation> {
