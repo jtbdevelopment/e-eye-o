@@ -367,13 +367,12 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
     private void setActiveArchiveFilters(final boolean active, final boolean archived) {
         entities.removeContainerFilters("archived");
-        if (active && archived) {
-            return;
-        }
-        if (active) {
-            entities.addContainerFilter("archived", "false", false, true);
-        } else {
-            entities.addContainerFilter("archived", "true", false, true);
+        if (!(active && archived)) {
+            if (active) {
+                entities.addContainerFilter("archived", "false", false, true);
+            } else {
+                entities.addContainerFilter("archived", "true", false, true);
+            }
         }
         refreshSizeAndSort();
     }

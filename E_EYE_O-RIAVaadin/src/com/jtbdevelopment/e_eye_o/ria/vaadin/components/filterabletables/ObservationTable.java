@@ -56,9 +56,9 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 new HeaderInfo("comment", "Comment", Table.Align.LEFT),
                 new HeaderInfo("categories", "Categories", Table.Align.LEFT),
                 new HeaderInfo("significant", "Significant", Table.Align.CENTER),
-                new HeaderInfo("followUpNeeded", "Follow Up?", Table.Align.CENTER),
+                new HeaderInfo("followUpNeeded", "Needs Follow Up?", Table.Align.CENTER),
                 new HeaderInfo("followUpReminder", "Reminder?", Table.Align.CENTER),
-                new HeaderInfo("showFollowUp", "Follow Up", Table.Align.CENTER, true),              //  Generated
+                new HeaderInfo("showFollowUp", "Follow Ups", Table.Align.CENTER, true),              //  Generated
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
                 new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
                 new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)                       //  Generated
@@ -121,9 +121,9 @@ public class ObservationTable extends IdObjectTable<Observation> {
 
         //  TODO - do his better
         entityTable.setColumnExpandRatio("observationTimestamp", 0.10f);
-        entityTable.setColumnExpandRatio("categories", 0.10f);
+        entityTable.setColumnExpandRatio("categories", 0.15f);
         entityTable.setColumnExpandRatio("modificationTimestamp", 0.10f);
-        entityTable.setColumnExpandRatio("comment", 0.4f);
+        entityTable.setColumnExpandRatio("comment", 0.35f);
         entityTable.setColumnExpandRatio("archived", 0.10f);
         entityTable.setColumnExpandRatio("significant", 0.10f);
         entityTable.setColumnExpandRatio("followUpReminder", 0.10f);

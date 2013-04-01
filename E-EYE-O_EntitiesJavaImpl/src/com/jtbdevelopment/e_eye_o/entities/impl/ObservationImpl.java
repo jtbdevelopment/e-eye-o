@@ -1,5 +1,8 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
@@ -7,6 +10,7 @@ import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -129,8 +133,18 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
 
     @Override
     public String getSummaryDescription() {
-        return ((observationSubject != null ? observationSubject.getSummaryDescription() : "?")
-                + " "
-                + observationTimestamp.toString("MMM dd")).trim();
+        return ("For "
+                + (observationSubject != null ? observationSubject.getSummaryDescription() : "?")
+                + " on "
+                + observationTimestamp.toString("YYY-MM-dd")
+                + " on "
+                + Joiner.on(", ").skipNulls().join(Collections2.transform(categories, new Function<ObservationCategory, String>() {
+            @Nullable
+            @Override
+            public String apply(@Nullable final ObservationCategory input) {
+                return input != null ? input.getShortName() : null;
+            }
+        }))
+        ).trim();
     }
 }
