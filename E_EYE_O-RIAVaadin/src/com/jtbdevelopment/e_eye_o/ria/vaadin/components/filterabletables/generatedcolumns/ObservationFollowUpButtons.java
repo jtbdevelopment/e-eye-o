@@ -88,8 +88,9 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
                     public void onOK(final Observation pickedObservation) {
                         Observation updatedFollowup = readWriteDAO.linkFollowUpObservation(entity, pickedObservation);
                         Observable observable = readWriteDAO.get(Observable.class, updatedFollowup.getObservationSubject().getId());
+                        Observation updatedInitialObservation = readWriteDAO.get(Observation.class, updatedFollowup.getFollowUpForObservation().getId());
                         eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, updatedFollowup));
-                        eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, updatedFollowup.getFollowUpForObservation()));
+                        eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, updatedInitialObservation));
                         eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, observable));
                     }
                 });

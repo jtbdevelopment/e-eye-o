@@ -121,23 +121,27 @@ public class ObservationTable extends IdObjectTable<Observation> {
     protected void addGeneratedColumns() {
         super.addGeneratedColumns();
         //  TODO - diff icons
-        final ThemeResource cancel = new ThemeResource("../runo/icons/32/cancel.png");
-        final ThemeResource ok = new ThemeResource("../runo/icons/32/ok.png");
+        final ThemeResource cancel = new ThemeResource("../runo/icons/16/cancel.png");
+        final ThemeResource ok = new ThemeResource("../runo/icons/16/ok.png");
         entityTable.addGeneratedColumn("followUpNeeded", new Table.ColumnGenerator() {
             @Override
             public Object generateCell(Table source, Object itemId, Object columnId) {
                 Observation observation = entities.getItem(itemId).getBean();
-                GridLayout grid = new GridLayout(2, 1);
+                GridLayout grid = new GridLayout(3, 1);
                 if (observation.getFollowUpForObservation() == null) {
                     grid.addComponent(new Embedded(null, cancel));
                 } else {
                     grid.addComponent(new Embedded(null, ok));
                 }
+                grid.addComponent(new Label("/"));
                 if (!observation.isFollowUpNeeded()) {
                     grid.addComponent(new Embedded(null, cancel));
                 } else {
                     grid.addComponent(new Embedded(null, ok));
                 }
+                grid.setSizeUndefined();
+                grid.setSpacing(false);
+                grid.setMargin(false);
                 return grid;
             }
         });
