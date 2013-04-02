@@ -101,7 +101,7 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
 
 
         if (!allObservationFollowups.isEmpty()) {
-            Button showFollowUpButton = new Button((allObservationFollowups.size() > 1 ? "See Follow Ups" : "See Follow Up") + " (" + allObservationFollowups.size() + ")");
+            Button showFollowUpButton = new Button("See (" + allObservationFollowups.size() + ")");
             showFollowUpButton.addStyleName(Runo.BUTTON_SMALL);
             showFollowUpButton.addClickListener(new Button.ClickListener() {
                 @Override

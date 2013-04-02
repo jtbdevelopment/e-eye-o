@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -34,14 +35,13 @@ public class StudentTable extends IdObjectTable<Student> {
     private static final List<HeaderInfo> headers;
 
     static {
-        headers = Arrays.asList(
-                new HeaderInfo("firstName", "First Name", Table.Align.LEFT),
-                new HeaderInfo("lastName", "Last Name", Table.Align.LEFT),
-                new HeaderInfo("lastObservationTimestamp", "Last Observation", Table.Align.CENTER),
-                new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
-                new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)    // Generated
-        );
+        headers = new LinkedList<>(
+                Arrays.asList(
+                        new HeaderInfo("firstName", "First Name", Table.Align.LEFT),
+                        new HeaderInfo("lastName", "Last Name", Table.Align.LEFT),
+                        new HeaderInfo("lastObservationTimestamp", "Last Observation", Table.Align.CENTER)  //  TODO - move to ObservableTable?
+                ));
+        headers.addAll(IdObjectTable.headers);
     }
 
     @Override

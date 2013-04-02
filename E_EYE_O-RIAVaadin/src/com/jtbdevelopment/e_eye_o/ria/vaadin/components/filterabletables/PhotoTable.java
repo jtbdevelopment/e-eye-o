@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -28,12 +29,11 @@ public class PhotoTable extends IdObjectTable<Photo> {
     private static final List<HeaderInfo> headers;
 
     static {
-        headers = Arrays.asList(
-                new HeaderInfo("description", "Description", Table.Align.LEFT),
-                new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
-                new HeaderInfo("actions", "Actions", Table.Align.RIGHT)    // Generated
-        );
+        headers = new LinkedList<>(
+                Arrays.asList(
+                        new HeaderInfo("description", "Description", Table.Align.LEFT)
+                ));
+        headers.addAll(IdObjectTable.headers);
     }
 
     @Override

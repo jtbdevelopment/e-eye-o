@@ -19,6 +19,7 @@ import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.jsoup.helper.StringUtil;
@@ -60,6 +61,20 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
     public interface ClickedOnListener<T> {
         void handleClickEvent(final T entity);
+    }
+
+    //  TODO - diff icons
+    protected static final ThemeResource NOT_X = new ThemeResource("../runo/icons/16/cancel.png");
+    protected static final ThemeResource IS_X = new ThemeResource("../runo/icons/16/ok.png");
+
+    protected static final List<HeaderInfo> headers;
+
+    static {
+        headers = Arrays.asList(
+                new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
+                new HeaderInfo("archived", "Active?", Table.Align.CENTER, true),
+                new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)
+        );
     }
 
     @Autowired
@@ -261,12 +276,18 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     }
 
     protected void addColumnConverters() {
-        entityTable.setConverter("archived", booleanToYesNoConverter);
         entityTable.setConverter("modificationTimestamp", dateTimeStringConverter);
     }
 
     protected void addGeneratedColumns() {
         entityTable.addGeneratedColumn("actions", new ArchiveAndDeleteButtons<>(readWriteDAO, eventBus, entities));
+        entityTable.addGeneratedColumn("archived", new Table.ColumnGenerator() {
+            @Override
+            public Object generateCell(Table source, Object itemId, Object columnId) {
+                T entity = entities.getItem(itemId).getBean();
+                return new Embedded(null, entity.isArchived() ? NOT_X : IS_X);
+            }
+        });
     }
 
     @SuppressWarnings("unused")

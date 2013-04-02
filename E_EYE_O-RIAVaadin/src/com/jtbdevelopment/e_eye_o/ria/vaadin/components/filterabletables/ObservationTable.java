@@ -12,13 +12,13 @@ import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -54,18 +54,17 @@ public class ObservationTable extends IdObjectTable<Observation> {
     protected static final List<HeaderInfo> headers;
 
     static {
-        headers = Arrays.asList(
-                new HeaderInfo("observationTimestamp", "Time", Table.Align.LEFT),
-                new HeaderInfo("comment", "Comment", Table.Align.LEFT),
-                new HeaderInfo("categories", "Categories", Table.Align.LEFT),
-                new HeaderInfo("significant", "Significant", Table.Align.CENTER),
-                new HeaderInfo("followUpNeeded", "Is/Needs Follow Up?", Table.Align.CENTER, true),
-                new HeaderInfo("followUpReminder", "Reminder?", Table.Align.CENTER),
-                new HeaderInfo("showFollowUp", "Follow Ups", Table.Align.CENTER, true),              //  Generated
-                new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("archived", "Archived?", Table.Align.CENTER),
-                new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)                       //  Generated
-        );
+        headers = new LinkedList<>(
+                Arrays.asList(
+                        new HeaderInfo("observationTimestamp", "Time", Table.Align.LEFT),
+                        new HeaderInfo("comment", "Comment", Table.Align.LEFT),
+                        new HeaderInfo("categories", "Categories", Table.Align.LEFT),
+                        new HeaderInfo("significant", "Significant?", Table.Align.CENTER, true),
+                        new HeaderInfo("followUpNeeded", "Is/Needs Follow Up?", Table.Align.CENTER, true),
+                        new HeaderInfo("followUpReminder", "Reminder?", Table.Align.CENTER),
+                        new HeaderInfo("showFollowUp", "Follow Ups", Table.Align.CENTER, true)
+                ));
+        headers.addAll(IdObjectTable.headers);
     }
 
     @Override
@@ -99,8 +98,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
-        entityTable.setConverter("significant", booleanToYesNoConverter);
-//        entityTable.setConverter("followUpNeeded", booleanToYesNoConverter);
+//        entityTable.setConverter("significant", booleanToYesNoConverter);
         entityTable.setConverter("followUpReminder", localDateStringConverter);
         entityTable.setConverter("observationTimestamp", localDateTimeStringConverter);
         entityTable.setConverter("categories", observationCategorySetStringConverter);
@@ -120,24 +118,28 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addGeneratedColumns() {
         super.addGeneratedColumns();
-        //  TODO - diff icons
-        final ThemeResource cancel = new ThemeResource("../runo/icons/16/cancel.png");
-        final ThemeResource ok = new ThemeResource("../runo/icons/16/ok.png");
+        entityTable.addGeneratedColumn("significant", new Table.ColumnGenerator() {
+            @Override
+            public Object generateCell(Table source, Object itemId, Object columnId) {
+                Observation observation = entities.getItem(itemId).getBean();
+                return observation.isSignificant() ? new Embedded(null, IS_X) : null;
+            }
+        });
         entityTable.addGeneratedColumn("followUpNeeded", new Table.ColumnGenerator() {
             @Override
             public Object generateCell(Table source, Object itemId, Object columnId) {
                 Observation observation = entities.getItem(itemId).getBean();
                 GridLayout grid = new GridLayout(3, 1);
                 if (observation.getFollowUpForObservation() == null) {
-                    grid.addComponent(new Embedded(null, cancel));
+                    grid.addComponent(new Embedded(null, NOT_X));
                 } else {
-                    grid.addComponent(new Embedded(null, ok));
+                    grid.addComponent(new Embedded(null, IS_X));
                 }
                 grid.addComponent(new Label("/"));
                 if (!observation.isFollowUpNeeded()) {
-                    grid.addComponent(new Embedded(null, cancel));
+                    grid.addComponent(new Embedded(null, NOT_X));
                 } else {
-                    grid.addComponent(new Embedded(null, ok));
+                    grid.addComponent(new Embedded(null, IS_X));
                 }
                 grid.setSizeUndefined();
                 grid.setSpacing(false);

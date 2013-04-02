@@ -24,16 +24,16 @@ public class ObservationWithSubjectTable extends ObservationTable {
     @Autowired
     AppUserOwnedObjectStringConverter appUserOwnedObjectStringConverter;
 
-    private static final List<HeaderInfo> headersWithSubject;
+    private static final List<HeaderInfo> headers;
 
     static {
-        headersWithSubject = new LinkedList<>(Arrays.asList(new HeaderInfo("observationSubject", "Subject", Table.Align.LEFT, true)));
-        headersWithSubject.addAll(headers);
+        headers = new LinkedList<>(Arrays.asList(new HeaderInfo("observationSubject", "Subject", Table.Align.LEFT, true)));
+        headers.addAll(ObservationTable.headers);
     }
 
     @Override
     protected List<HeaderInfo> getHeaderInfo() {
-        return headersWithSubject;
+        return headers;
     }
 
     @Override
