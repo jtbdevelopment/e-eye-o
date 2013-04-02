@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Sets;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
@@ -88,7 +89,10 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
             //  TODO- also filter on matching categories
             @Override
             public boolean apply(@Nullable final Observation input) {
-                return input != null && !input.equals(observation) && input.getObservationTimestamp().compareTo(observation.getObservationTimestamp()) <= 0;
+                return input != null
+                        && !input.equals(observation)
+                        && input.getObservationTimestamp().compareTo(observation.getObservationTimestamp()) <= 0
+                        && !Sets.intersection(input.getCategories(), observation.getCategories()).isEmpty();
             }
         }));
         potentialFollowUpsFor.sort(

@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.genera
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
@@ -70,10 +71,18 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
                         new Predicate<Observation>() {
                             @Override
                             public boolean apply(@Nullable final Observation input) {
-                                return input != null && input.getFollowUpForObservation() == null && !input.equals(entity) && input.getObservationTimestamp().compareTo(entity.getObservationTimestamp()) > 0;
+                                return input != null
+                                        && input.getFollowUpForObservation() == null
+                                        && !input.equals(entity)
+                                        && input.getObservationTimestamp().compareTo(entity.getObservationTimestamp()) > 0
+                                        && !Sets.intersection(input.getCategories(), entity.getCategories()).isEmpty();
                             }
                         }
                 );
+                if (allObservationFollowups.isEmpty()) {
+                    Notification.show("Nothing available to link to.");
+                    return;
+                }
                 ObservationPicker picker = new ObservationPicker(allObservationFollowups, new OKCallback() {
                     @Override
                     public void onOK(final Observation pickedObservation) {
@@ -128,8 +137,11 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
             setHeight(30, Unit.EM);
             VerticalLayout mainLayout = new VerticalLayout();
             mainLayout.setSizeFull();
+            //  TODO - pick up double click?
             final ListSelect select = new ListSelect();
             select.setMultiSelect(false);
+            select.setNullSelectionAllowed(false);
+            select.setRows(5);
             BeanItemContainer<Observation> observations = new BeanItemContainer<>(Observation.class, pickSet);
             select.setContainerDataSource(observations);
             select.setItemCaptionPropertyId("summaryDescription");

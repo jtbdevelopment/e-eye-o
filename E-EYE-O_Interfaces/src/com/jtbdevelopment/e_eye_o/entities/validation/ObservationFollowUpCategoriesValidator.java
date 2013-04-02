@@ -1,11 +1,10 @@
 package com.jtbdevelopment.e_eye_o.entities.validation;
 
+import com.google.common.collect.Sets;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
-import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Set;
 
 /**
  * Date: 3/31/13
@@ -19,17 +18,9 @@ public class ObservationFollowUpCategoriesValidator implements ConstraintValidat
 
     @Override
     public boolean isValid(final Observation observation, final ConstraintValidatorContext constraintValidatorContext) {
-        if (observation == null ||
-                observation.getFollowUpForObservation() == null ||
-                observation.getFollowUpForObservation().getCategories().isEmpty())
-            return true;
-
-        Set<ObservationCategory> thisCategories = observation.getCategories();
-        for (ObservationCategory category : observation.getFollowUpForObservation().getCategories()) {
-            if (thisCategories.contains(category)) {
-                return true;
-            }
-        }
-        return false;
+        return observation == null
+                || observation.getFollowUpForObservation() == null
+                || observation.getFollowUpForObservation().getCategories().isEmpty()
+                || Sets.intersection(observation.getCategories(), observation.getFollowUpForObservation().getCategories()).size() > 0;
     }
 }

@@ -133,11 +133,10 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
 
     @Override
     public String getSummaryDescription() {
-        return ("For "
-                + (observationSubject != null ? observationSubject.getSummaryDescription() : "?")
+        return ((observationSubject != null ? observationSubject.getSummaryDescription() : "?")
                 + " on "
                 + observationTimestamp.toString("YYY-MM-dd")
-                + " on "
+                + " for "
                 + Joiner.on(", ").skipNulls().join(Collections2.transform(categories, new Function<ObservationCategory, String>() {
             @Nullable
             @Override

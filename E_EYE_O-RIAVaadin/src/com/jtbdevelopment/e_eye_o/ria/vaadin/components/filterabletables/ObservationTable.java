@@ -12,6 +12,7 @@ import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -58,7 +59,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 new HeaderInfo("comment", "Comment", Table.Align.LEFT),
                 new HeaderInfo("categories", "Categories", Table.Align.LEFT),
                 new HeaderInfo("significant", "Significant", Table.Align.CENTER),
-                new HeaderInfo("followUpNeeded", "Needs Follow Up?", Table.Align.CENTER),
+                new HeaderInfo("followUpNeeded", "Is/Needs Follow Up?", Table.Align.CENTER, true),
                 new HeaderInfo("followUpReminder", "Reminder?", Table.Align.CENTER),
                 new HeaderInfo("showFollowUp", "Follow Ups", Table.Align.CENTER, true),              //  Generated
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
@@ -99,7 +100,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
     protected void addColumnConverters() {
         super.addColumnConverters();
         entityTable.setConverter("significant", booleanToYesNoConverter);
-        entityTable.setConverter("followUpNeeded", booleanToYesNoConverter);
+//        entityTable.setConverter("followUpNeeded", booleanToYesNoConverter);
         entityTable.setConverter("followUpReminder", localDateStringConverter);
         entityTable.setConverter("observationTimestamp", localDateTimeStringConverter);
         entityTable.setConverter("categories", observationCategorySetStringConverter);
@@ -119,6 +120,27 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addGeneratedColumns() {
         super.addGeneratedColumns();
+        //  TODO - diff icons
+        final ThemeResource cancel = new ThemeResource("../runo/icons/32/cancel.png");
+        final ThemeResource ok = new ThemeResource("../runo/icons/32/ok.png");
+        entityTable.addGeneratedColumn("followUpNeeded", new Table.ColumnGenerator() {
+            @Override
+            public Object generateCell(Table source, Object itemId, Object columnId) {
+                Observation observation = entities.getItem(itemId).getBean();
+                GridLayout grid = new GridLayout(2, 1);
+                if (observation.getFollowUpForObservation() == null) {
+                    grid.addComponent(new Embedded(null, cancel));
+                } else {
+                    grid.addComponent(new Embedded(null, ok));
+                }
+                if (!observation.isFollowUpNeeded()) {
+                    grid.addComponent(new Embedded(null, cancel));
+                } else {
+                    grid.addComponent(new Embedded(null, ok));
+                }
+                return grid;
+            }
+        });
         entityTable.addGeneratedColumn("showFollowUp", new ObservationFollowUpButtons(idObjectFactory, readWriteDAO, eventBus, this, entities));
 
         //  TODO - do his better
