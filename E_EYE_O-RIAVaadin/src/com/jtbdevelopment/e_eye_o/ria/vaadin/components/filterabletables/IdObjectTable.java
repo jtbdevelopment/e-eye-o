@@ -71,7 +71,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
     static {
         headers = Arrays.asList(
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("archived", "Active?", Table.Align.CENTER, true),
+                new HeaderInfo("archived", "Active", Table.Align.CENTER, true),
                 new HeaderInfo("actions", "Actions", Table.Align.RIGHT)
         );
     }

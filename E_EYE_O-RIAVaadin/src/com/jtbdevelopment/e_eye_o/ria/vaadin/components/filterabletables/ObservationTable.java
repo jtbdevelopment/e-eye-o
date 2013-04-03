@@ -151,10 +151,10 @@ public class ObservationTable extends IdObjectTable<Observation> {
         //  TODO - do his better
         entityTable.setColumnExpandRatio("observationTimestamp", 0.10f);
         entityTable.setColumnExpandRatio("categories", 0.15f);
-        entityTable.setColumnExpandRatio("modificationTimestamp", 0.10f);
-        entityTable.setColumnExpandRatio("comment", 0.35f);
-        entityTable.setColumnExpandRatio("archived", 0.10f);
-        entityTable.setColumnExpandRatio("significant", 0.10f);
+        entityTable.setColumnExpandRatio("modificationTimestamp", 0.15f);
+        entityTable.setColumnExpandRatio("comment", 0.4f);
+        entityTable.setColumnExpandRatio("archived", 0.05f);
+        entityTable.setColumnExpandRatio("significant", 0.05f);
         entityTable.setColumnExpandRatio("followUpReminder", 0.10f);
     }
 

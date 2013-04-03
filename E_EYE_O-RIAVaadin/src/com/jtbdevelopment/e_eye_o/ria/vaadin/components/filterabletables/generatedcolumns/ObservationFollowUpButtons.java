@@ -12,6 +12,8 @@ import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.MouseEvents;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 
@@ -34,6 +36,12 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
 
     private final IdObjectFactory idObjectFactory;
 
+    //  TODO - diff icons
+    private static final ThemeResource NEW_NOTE = new ThemeResource("../runo/icons/16/document-add.png");
+    private static final ThemeResource LINK_EXISTING = new ThemeResource("../runo/icons/16/folder-add.png");
+    private static final ThemeResource EDIT_EXISTING = new ThemeResource("../runo/icons/16/note.png");
+
+
     public ObservationFollowUpButtons(final IdObjectFactory idObjectFactory, final ReadWriteDAO readWriteDAO, final EventBus eventBus, final ObservationTable observationTable, final BeanItemContainer<Observation> entities) {
         this.observationTable = observationTable;
         this.eventBus = eventBus;
@@ -47,23 +55,21 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
         final Observation entity = entities.getItem(itemId).getBean();
         GridLayout layout = new GridLayout(3, 1);
         layout.setSizeUndefined();
+        layout.setSpacing(true);
         final List<Observation> allObservationFollowups = readWriteDAO.getAllObservationFollowups(entity);
-        Button addFollowUp = new Button("New");
-        addFollowUp.setDescription("This starts a new observation.");
-        addFollowUp.addStyleName(Runo.BUTTON_SMALL);
-        addFollowUp.addClickListener(new Button.ClickListener() {
+        Embedded addNew = new Embedded(null, NEW_NOTE);
+        addNew.addClickListener(new MouseEvents.ClickListener() {
             @Override
-            public void buttonClick(final Button.ClickEvent event) {
+            public void click(MouseEvents.ClickEvent event) {
                 observationTable.showEntityEditor(idObjectFactory.newObservation(entity.getAppUser())).setFollowUpFor(entity);
             }
         });
-        layout.addComponent(addFollowUp, 0, 0);
-        Button linkFollowUp = new Button("Link");
-        linkFollowUp.setDescription("This lets you pick an existing observation as the follow-up.");
-        linkFollowUp.addStyleName(Runo.BUTTON_SMALL);
-        linkFollowUp.addClickListener(new Button.ClickListener() {
+        addNew.setDescription("This starts a new observation as a follow-up.");
+        layout.addComponent(addNew, 0, 0);
+        Embedded linkExisting = new Embedded(null, LINK_EXISTING);
+        linkExisting.addClickListener(new MouseEvents.ClickListener() {
             @Override
-            public void buttonClick(final Button.ClickEvent event) {
+            public void click(MouseEvents.ClickEvent event) {
                 //  Might have changed since initial check
                 final Collection<Observation> allObservationFollowups = Collections2.filter(
                         readWriteDAO.getAllObservationsForEntity(entity.getObservationSubject()),
@@ -97,15 +103,13 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
                 UI.getCurrent().addWindow(picker);
             }
         });
-        layout.addComponent(linkFollowUp, 1, 0);
-
-
+        linkExisting.setDescription("This lets you link an existing observation as a follow-up.");
+        layout.addComponent(linkExisting, 1, 0);
         if (!allObservationFollowups.isEmpty()) {
-            Button showFollowUpButton = new Button("See (" + allObservationFollowups.size() + ")");
-            showFollowUpButton.addStyleName(Runo.BUTTON_SMALL);
-            showFollowUpButton.addClickListener(new Button.ClickListener() {
+            Embedded editExisting = new Embedded(null, EDIT_EXISTING);
+            editExisting.addClickListener(new MouseEvents.ClickListener() {
                 @Override
-                public void buttonClick(final Button.ClickEvent event) {
+                public void click(MouseEvents.ClickEvent event) {
                     //  Might have changed since initial check
                     final List<Observation> allObservationFollowups = readWriteDAO.getAllObservationFollowups(entity);
                     if (allObservationFollowups.size() == 1) {
@@ -121,7 +125,8 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
                     }
                 }
             });
-            layout.addComponent(showFollowUpButton, 2, 0);
+            editExisting.setDescription("This lets you view/edit an existing follow-up.");
+            layout.addComponent(editExisting, 2, 0);
         }
         return layout;
     }
