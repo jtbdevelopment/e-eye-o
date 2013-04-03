@@ -14,6 +14,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 
@@ -106,6 +107,7 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
         linkExisting.setDescription("This lets you link an existing observation as a follow-up.");
         layout.addComponent(linkExisting, 1, 0);
         if (!allObservationFollowups.isEmpty()) {
+            HorizontalLayout hl = new HorizontalLayout();
             Embedded editExisting = new Embedded(null, EDIT_EXISTING);
             editExisting.addClickListener(new MouseEvents.ClickListener() {
                 @Override
@@ -126,7 +128,11 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
                 }
             });
             editExisting.setDescription("This lets you view/edit an existing follow-up.");
-            layout.addComponent(editExisting, 2, 0);
+            hl.addComponent(editExisting);
+            hl.addComponent(new Label("[" + allObservationFollowups.size() + "]"));
+            hl.setMargin(new MarginInfo(false, true, false, false));
+            hl.setSpacing(false);
+            layout.addComponent(hl, 2, 0);
         }
         return layout;
     }
