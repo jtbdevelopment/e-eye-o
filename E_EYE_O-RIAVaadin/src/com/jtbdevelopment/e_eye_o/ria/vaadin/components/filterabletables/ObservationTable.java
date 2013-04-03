@@ -58,11 +58,11 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 Arrays.asList(
                         new HeaderInfo("observationTimestamp", "Time", Table.Align.LEFT),
                         new HeaderInfo("comment", "Comment", Table.Align.LEFT),
-                        new HeaderInfo("categories", "Categories", Table.Align.LEFT),
-                        new HeaderInfo("significant", "Significant?", Table.Align.CENTER, true),
-                        new HeaderInfo("followUpNeeded", "Is/Needs Follow Up?", Table.Align.CENTER, true),
+                        new HeaderInfo("categories", "Categories", Table.Align.LEFT, true),
+                        new HeaderInfo("significant", "Sig?", Table.Align.CENTER, true),
+                        new HeaderInfo("followUpNeeded", "Is/Needs FU?", Table.Align.CENTER, true),
                         new HeaderInfo("followUpReminder", "Reminder?", Table.Align.CENTER),
-                        new HeaderInfo("showFollowUp", "Follow Ups", Table.Align.CENTER, true)
+                        new HeaderInfo("showFollowUp", "Follow Ups", Table.Align.CENTER)
                 ));
         headers.addAll(IdObjectTable.headers);
     }
@@ -98,7 +98,6 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
-//        entityTable.setConverter("significant", booleanToYesNoConverter);
         entityTable.setConverter("followUpReminder", localDateStringConverter);
         entityTable.setConverter("observationTimestamp", localDateTimeStringConverter);
         entityTable.setConverter("categories", observationCategorySetStringConverter);

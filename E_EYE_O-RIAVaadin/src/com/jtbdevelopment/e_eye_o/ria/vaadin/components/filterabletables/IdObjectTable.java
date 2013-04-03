@@ -6,7 +6,6 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.IdObjectEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.BooleanToYesNoConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtons;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
@@ -42,20 +41,20 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         private final String property;
         private final String description;
         private final Table.Align align;
-        private final boolean generated;
+        private final boolean forceGeneratedSort;
 
         public HeaderInfo(final String property, final String description, final Table.Align align) {
             this.description = description;
             this.property = property;
             this.align = align;
-            this.generated = false;
+            this.forceGeneratedSort = false;
         }
 
-        public HeaderInfo(final String property, final String description, final Table.Align align, final boolean generated) {
+        public HeaderInfo(final String property, final String description, final Table.Align align, final boolean forceGeneratedSort) {
             this.description = description;
             this.property = property;
             this.align = align;
-            this.generated = generated;
+            this.forceGeneratedSort = forceGeneratedSort;
         }
     }
 
@@ -73,7 +72,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         headers = Arrays.asList(
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
                 new HeaderInfo("archived", "Active?", Table.Align.CENTER, true),
-                new HeaderInfo("actions", "Actions", Table.Align.RIGHT, true)
+                new HeaderInfo("actions", "Actions", Table.Align.RIGHT)
         );
     }
 
@@ -85,9 +84,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
 
     @Autowired
     protected ReadWriteDAO readWriteDAO;
-
-    @Autowired
-    protected BooleanToYesNoConverter booleanToYesNoConverter;
 
     @Autowired
     protected DateTimeStringConverter dateTimeStringConverter;
@@ -125,7 +121,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         List<Table.Align> aligns = new LinkedList<>();
         List<String> generatedProperties = new LinkedList<>();
         for (HeaderInfo headerInfo : getHeaderInfo()) {
-            if (headerInfo.generated) {
+            if (headerInfo.forceGeneratedSort) {
                 generatedProperties.add(headerInfo.property);
             }
             properties.add(headerInfo.property);
@@ -211,38 +207,47 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                         String value1 = converters[i].convertToPresentation(object1, locale);
                         String value2 = converters[i].convertToPresentation(object2, locale);
                         if (value1 != null) {
-                            int compare = value1.compareTo(value2);
-                            if (compare != 0) {
-                                return compare * (ascending[i] ? 1 : -1);
+                            if (value2 != null) {
+                                int compare = value1.compareTo(value2);
+                                if (compare != 0) {
+                                    return compare * (ascending[i] ? 1 : -1);
+                                }
+                            } else {
+                                return ascending[i] ? 1 : -1;
                             }
                         }
-                    } else if (generators[i] != null) {
+                    }
+                    Object object1 = null, object2 = null;
+                    if (generators[i] != null) {
                         T entity1 = entities.getItem(itemId1).getBean();
                         T entity2 = entities.getItem(itemId2).getBean();
-                        Object object1 = generators[i].generateCell(entityTable, entity1, propertyIds[i]);
-                        Object object2 = generators[i].generateCell(entityTable, entity2, propertyIds[i]);
-                        if (object1 instanceof Comparable && object2 instanceof Comparable) {
-                            int compare = ((Comparable) object1).compareTo(object2);
-                            if (compare != 0) {
-                                return compare * (ascending[i] ? 1 : -1);
-                            }
-                        }
-                        //  TODO - log / notify
-                    } else {
-                        Object object1 = entityTable.getContainerProperty(itemId1, propertyIds[i]).getValue();
-                        Object object2 = entityTable.getContainerProperty(itemId2, propertyIds[i]).getValue();
-                        if (object1 instanceof Comparable && object2 instanceof Comparable) {
-                            int compare = ((Comparable) object1).compareTo(object2);
-                            if (compare != 0) {
-                                return compare * (ascending[i] ? 1 : -1);
-                            }
-                        }
-                        //  TODO - log / notify
+                        object1 = generators[i].generateCell(entityTable, entity1, propertyIds[i]);
+                        object2 = generators[i].generateCell(entityTable, entity2, propertyIds[i]);
                     }
+                    if ((object1 == null && object2 == null) ||
+                            (!(object1 instanceof Comparable) && !(object2 instanceof Comparable))) {
+                        object1 = entityTable.getContainerProperty(itemId1, propertyIds[i]).getValue();
+                        object2 = entityTable.getContainerProperty(itemId2, propertyIds[i]).getValue();
+                    }
+                    if (object1 instanceof Comparable) {
+                        if (object2 instanceof Comparable) {
+                            int compare = ((Comparable) object1).compareTo(object2);
+                            if (compare != 0) {
+                                return compare * (ascending[i] ? 1 : -1);
+                            } else {
+                                return ascending[i] ? 1 : -1;
+
+                            }
+                        }
+                    }
+                    return entities.getItem(itemId1).getBean().getId().compareTo(entities.getItem(itemId2).getBean().getId());
                 }
                 return 0;
             }
-        });
+        }
+
+        );
+
         refreshSizeAndSort();
     }
 
