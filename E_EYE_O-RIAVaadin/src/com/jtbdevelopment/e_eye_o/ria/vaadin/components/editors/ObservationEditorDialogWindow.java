@@ -91,8 +91,17 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
             public boolean apply(@Nullable final Observation input) {
                 return input != null
                         && !input.equals(observation)
-                        && input.getObservationTimestamp().compareTo(observation.getObservationTimestamp()) <= 0
-                        && !Sets.intersection(input.getCategories(), observation.getCategories()).isEmpty();
+                        &&
+                        (
+                                (
+                                        input.getObservationTimestamp().compareTo(observation.getObservationTimestamp()) <= 0
+                                                && !Sets.intersection(input.getCategories(), observation.getCategories()).isEmpty()
+                                ) ||
+                                        (
+                                                observation.getFollowUpForObservation() != null &&
+                                                        observation.getFollowUpForObservation().equals(input)
+                                        )
+                        );
             }
         }));
         potentialFollowUpsFor.sort(

@@ -74,15 +74,23 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
                 //  Might have changed since initial check
                 final Collection<Observation> allObservationFollowups = Collections2.filter(
                         readWriteDAO.getAllObservationsForEntity(entity.getObservationSubject()),
-                        //  TODO- also filter on matching categories
                         new Predicate<Observation>() {
                             @Override
                             public boolean apply(@Nullable final Observation input) {
                                 return input != null
                                         && input.getFollowUpForObservation() == null
                                         && !input.equals(entity)
-                                        && input.getObservationTimestamp().compareTo(entity.getObservationTimestamp()) > 0
-                                        && !Sets.intersection(input.getCategories(), entity.getCategories()).isEmpty();
+                                        &&
+                                        ((
+                                                input.getObservationTimestamp().compareTo(entity.getObservationTimestamp()) > 0
+                                                        && !Sets.intersection(input.getCategories(), entity.getCategories()).isEmpty()
+                                        ) ||
+                                                (
+                                                        input.getFollowUpForObservation() != null &&
+                                                                input.getFollowUpForObservation().equals(entity)
+                                                )
+
+                                        );
                             }
                         }
                 );
@@ -128,8 +136,8 @@ public class ObservationFollowUpButtons implements Table.ColumnGenerator {
                 }
             });
             editExisting.setDescription("This lets you view/edit an existing follow-up.");
+            hl.addComponent(new Label("(" + allObservationFollowups.size() + ")"));
             hl.addComponent(editExisting);
-            hl.addComponent(new Label("[" + allObservationFollowups.size() + "]"));
             hl.setMargin(new MarginInfo(false, true, false, false));
             hl.setSpacing(false);
             layout.addComponent(hl, 2, 0);

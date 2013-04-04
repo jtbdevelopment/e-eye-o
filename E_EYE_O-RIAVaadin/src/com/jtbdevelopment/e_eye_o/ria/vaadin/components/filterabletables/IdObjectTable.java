@@ -174,6 +174,8 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
             public void itemClick(final ItemClickEvent event) {
                 T entity = handleValueChange(event.getItem());
                 if (event.isDoubleClick() && entity != null) {
+                    //  Get latest from dao in case stale
+                    entity = readWriteDAO.get(entityType, entity.getId());
                     showEntityEditor(entity);
                 }
             }
