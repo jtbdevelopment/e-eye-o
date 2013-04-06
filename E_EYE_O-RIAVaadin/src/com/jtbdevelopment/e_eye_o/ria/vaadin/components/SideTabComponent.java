@@ -28,7 +28,6 @@ public class SideTabComponent extends CustomComponent {
 
     //  TODO - move this?
     public enum IdObjectSideTabs {
-        //  TODO - make descriptions part of classes?
         Students(Student.class),
         Observations(Observation.class),
         Photos(Photo.class),
@@ -40,10 +39,6 @@ public class SideTabComponent extends CustomComponent {
         }
 
         private final Class<? extends AppUserOwnedObject> entityType;
-
-        public Class<? extends AppUserOwnedObject> getEntityType() {
-            return entityType;
-        }
 
         public String getCaption() {
             return entityType.getAnnotation(PreferredDescription.class).plural();
@@ -67,6 +62,8 @@ public class SideTabComponent extends CustomComponent {
             }
             mainLayout.addComponent(sideTab);
         }
+        mainLayout.addComponent(new BlankSideTab());
+        mainLayout.addComponent(new SideTab("Reports", null, null));
         mainLayout.addComponent(new BlankSideTab());
         mainLayout.addComponent(new SideTab("Settings", null, null));
         mainLayout.addComponent(new BlankSideTab());
