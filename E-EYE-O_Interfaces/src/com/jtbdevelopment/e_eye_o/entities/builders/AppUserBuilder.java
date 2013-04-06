@@ -17,4 +17,10 @@ public interface AppUserBuilder extends IdObjectBuilder<AppUser> {
     AppUserBuilder withPassword(final String password);
 
     AppUserBuilder withLastLogout(final DateTime lastLogin);
+
+    AppUserBuilder withActivated(final boolean activated);
+
+    AppUserBuilder withActive(final boolean active);
+
+    AppUserBuilder withAdmin(final boolean admin);
 }

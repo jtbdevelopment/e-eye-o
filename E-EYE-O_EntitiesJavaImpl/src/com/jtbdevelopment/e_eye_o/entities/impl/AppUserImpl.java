@@ -12,6 +12,9 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
     private String lastName = "";
     private String emailAddress = "";
     private String password = "";
+    private boolean active = true;
+    private boolean admin = false;
+    private boolean activated = false;
     private DateTime lastLogout = NEVER_LOGGED_IN;
 
     AppUserImpl() {
@@ -62,11 +65,43 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
         return (firstName + " " + lastName).trim();
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public void setPassword(final String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean isActivated() {
+        return activated;
+    }
+
+    @Override
+    public void setActivated(final boolean activated) {
+        this.activated = activated;
+    }
+
+    @Override
+    public boolean isActive() {
+        return active;
+    }
+
+    @Override
+    public void setActive(final boolean active) {
+        this.active = active;
+    }
+
+    @Override
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    @Override
+    public void setAdmin(final boolean admin) {
+        this.admin = admin;
     }
 }

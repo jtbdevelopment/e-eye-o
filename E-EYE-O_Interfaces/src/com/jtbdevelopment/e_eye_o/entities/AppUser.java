@@ -28,6 +28,9 @@ public interface AppUser extends IdObject {
     public final static String APP_USER_LAST_NAME_SIZE_ERROR = "AppUser.lastName" + NAME_SIZE_ERROR;
     public final static String APP_PASSWORD_SIZE_ERROR = "AppUser.password" + NAME_SIZE_ERROR;
     public final static String APP_PASSWORD_CANNOT_BE_NULL_ERROR = "AppUser.password" + CANNOT_BE_BLANK_OR_NULL_ERROR;
+    public final static String ACTIVATED_CANNOT_BE_NULL_ERROR = "AppUser.activated" + CANNOT_BE_NULL_ERROR;
+    public final static String ACTIVE_CANNOT_BE_NULL_ERROR = "AppUser.active" + CANNOT_BE_NULL_ERROR;
+    public final static String ADMIN_CANNOT_BE_NULL_ERROR = "AppUser.admin" + CANNOT_BE_NULL_ERROR;
 
     @NotEmpty(message = FIRST_NAME_CANNOT_BE_BLANK_OR_NULL_ERROR)
     @Size(max = MAX_NAME_SIZE, message = APP_USER_FIRST_NAME_SIZE_ERROR)
@@ -58,4 +61,21 @@ public interface AppUser extends IdObject {
     DateTime getLastLogout();
 
     void setLastLogout(final DateTime lastLogout);
+
+    @NotNull(message = ACTIVATED_CANNOT_BE_NULL_ERROR)
+    boolean isActivated();
+
+    void setActivated(final boolean activated);
+
+    @NotNull(message = ACTIVE_CANNOT_BE_NULL_ERROR)
+    boolean isActive();
+
+    void setActive(final boolean active);
+
+    @NotNull(message = ADMIN_CANNOT_BE_NULL_ERROR)
+    boolean isAdmin();
+
+    void setAdmin(final boolean admin);
+
 }
+

@@ -136,7 +136,7 @@ public class LoginView extends VerticalLayout implements View {
                 AppUser user = readOnlyDAO.getUser(email);
                 if (user == null) {
                     //  TODO - move
-                    user = readWriteDAO.create(idObjectFactory.newAppUserBuilder().withPassword(hashPassword).withEmailAddress(email).withFirstName(login).withLastName(login).build());
+                    user = readWriteDAO.create(idObjectFactory.newAppUserBuilder().withPassword(hashPassword).withEmailAddress(email).withFirstName(login).withLastName(login).withActivated(true).withActive(true).build());
                     observationCategoryHelper.createDefaultCategoriesForUser(user);
                     Map<String, ObservationCategory> map = observationCategoryHelper.getObservationCategoriesAsMap(user);
                     ClassList cl = readWriteDAO.create(idObjectFactory.newClassListBuilder(user).withDescription("Example Class").build());

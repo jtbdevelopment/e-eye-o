@@ -5,8 +5,8 @@ import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * Date: 4/5/13
@@ -22,7 +22,12 @@ class AppUserDetailsImpl implements AppUserUserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        LinkedList<GrantedAuthority> roles = new LinkedList<>();
+        roles.add(new SimpleGrantedAuthority("ROLE_USER"));
+        if (appUser.isAdmin()) {
+            roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        return roles;
     }
 
     @Override
@@ -37,22 +42,22 @@ class AppUserDetailsImpl implements AppUserUserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return appUser.isActive();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return appUser.isActivated();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return appUser.isActivated();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return appUser.isActive();
     }
 
     public AppUser getAppUser() {

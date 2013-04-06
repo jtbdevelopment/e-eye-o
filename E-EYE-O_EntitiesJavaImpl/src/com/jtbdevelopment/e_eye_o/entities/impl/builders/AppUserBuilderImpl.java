@@ -42,4 +42,22 @@ public class AppUserBuilderImpl extends IdObjectBuilderImpl<AppUser> implements 
         entity.setLastLogout(lastLogin);
         return this;
     }
+
+    @Override
+    public AppUserBuilder withActivated(final boolean activated) {
+        entity.setActivated(activated);
+        return this;
+    }
+
+    @Override
+    public AppUserBuilder withActive(final boolean active) {
+        entity.setActive(active);
+        return this;
+    }
+
+    @Override
+    public AppUserBuilder withAdmin(final boolean admin) {
+        entity.setAdmin(admin);
+        return this;
+    }
 }

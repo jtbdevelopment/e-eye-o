@@ -77,4 +77,37 @@ public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppU
     public void setLastLogout(final DateTime lastLogout) {
         wrapped.setLastLogout(lastLogout);
     }
+
+    @Override
+    @Column(nullable = false)
+    public boolean isActivated() {
+        return wrapped.isActivated();
+    }
+
+    @Override
+    public void setActivated(final boolean activated) {
+        wrapped.setActivated(activated);
+    }
+
+    @Override
+    @Column(nullable = false)
+    public boolean isActive() {
+        return wrapped.isActive();
+    }
+
+    @Override
+    public void setActive(final boolean active) {
+        wrapped.setActive(active);
+    }
+
+    @Override
+    @Column(nullable = false)
+    public boolean isAdmin() {
+        return wrapped.isAdmin();
+    }
+
+    @Override
+    public void setAdmin(final boolean admin) {
+        wrapped.setAdmin(admin);
+    }
 }

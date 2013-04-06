@@ -72,6 +72,36 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
+        public boolean isActivated() {
+            return false;
+        }
+
+        @Override
+        public void setActivated(final boolean activated) {
+
+        }
+
+        @Override
+        public boolean isActive() {
+            return false;
+        }
+
+        @Override
+        public void setActive(final boolean active) {
+
+        }
+
+        @Override
+        public boolean isAdmin() {
+            return false;
+        }
+
+        @Override
+        public void setAdmin(final boolean admin) {
+
+        }
+
+        @Override
         public String getId() {
             return null;
         }
