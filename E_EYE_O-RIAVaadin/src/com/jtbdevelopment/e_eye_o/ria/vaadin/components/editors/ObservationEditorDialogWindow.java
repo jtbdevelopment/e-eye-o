@@ -86,7 +86,6 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         }
 
         potentialFollowUpsFor.addAll(Collections2.filter(potential, new Predicate<Observation>() {
-            //  TODO- also filter on matching categories
             @Override
             public boolean apply(@Nullable final Observation input) {
                 return input != null
