@@ -14,6 +14,7 @@ import java.util.Date;
  * Date: 4/6/13
  * Time: 12:45 AM
  */
+//  TODO -  docs indicate something should auto-delete expired token in DB
 @Transactional(propagation = Propagation.REQUIRED)
 public class HibernatePersistentTokenRepository implements PersistentTokenRepository {
     @Autowired
