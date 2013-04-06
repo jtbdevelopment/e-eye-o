@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.MainPageComposite;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TitleBarComposite;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 /**
@@ -47,10 +47,13 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
     protected void init(final VaadinRequest request) {
         super.init(request);
         eventBus.register(this);
-        final User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //  TODO
-        AppUser appUser = readWriteDAO.getUser(principal.getUsername() + "@test.com");
-        getSession().setAttribute(AppUser.class, appUser);
+        final Object principalAsObject = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principalAsObject instanceof AppUserUserDetails) {
+            AppUser appUser = ((AppUserUserDetails) principalAsObject).getAppUser();
+            getSession().setAttribute(AppUser.class, appUser);
+        } else {
+            throw new RuntimeException("Invalid Principal Object");
+        }
 
         setSizeFull();
 

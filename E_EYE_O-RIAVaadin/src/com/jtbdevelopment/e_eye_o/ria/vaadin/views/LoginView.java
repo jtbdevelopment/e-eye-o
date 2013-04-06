@@ -2,8 +2,8 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
+import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
@@ -11,6 +11,8 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -19,9 +21,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Date: 2/24/13
@@ -41,6 +46,9 @@ public class LoginView extends VerticalLayout implements View {
     private final PasswordField passwordField = new PasswordField("Password");
 
     @Autowired
+    ObservationCategoryHelper observationCategoryHelper;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -51,6 +59,9 @@ public class LoginView extends VerticalLayout implements View {
 
     @Autowired
     private IdObjectFactory idObjectFactory;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private Logo logo;
@@ -104,15 +115,33 @@ public class LoginView extends VerticalLayout implements View {
                 Authentication authentication;
                 String login = loginField.getValue();
                 final String password = passwordField.getValue();
+                final String hashPassword = passwordEncoder.encode(password);
+                //  TODO
+                final String email = login + "@test.com";
+                AppUser user = readOnlyDAO.getUser(email);
+                if (user == null) {
+                    user = readWriteDAO.create(idObjectFactory.newAppUserBuilder().withPassword(hashPassword).withEmailAddress(email).withFirstName(login).withLastName(login).build());
+                    observationCategoryHelper.createDefaultCategoriesForUser(user);
+                    Map<String, ObservationCategory> map = observationCategoryHelper.getObservationCategoriesAsMap(user);
+                    ClassList cl = readWriteDAO.create(idObjectFactory.newClassListBuilder(user).withDescription("Example Class").build());
+                    Student s1 = readWriteDAO.create(idObjectFactory.newStudentBuilder(user).withFirstName("Student").withLastName("A").addClassList(cl).build());
+                    Student s2 = readWriteDAO.create(idObjectFactory.newStudentBuilder(user).withFirstName("Student").withLastName("B").addClassList(cl).build());
+                    final Iterator<Map.Entry<String, ObservationCategory>> entryIterator = map.entrySet().iterator();
+                    ObservationCategory c1 = entryIterator.next().getValue();
+                    ObservationCategory c2 = entryIterator.next().getValue();
+                    Observation o1 = readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationTimestamp(new LocalDateTime().minusDays(7)).withObservationSubject(s1).withComment("Observation 1").addCategory(c1).build());
+                    Observation o2 = readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationTimestamp(new LocalDateTime().minusDays(3)).withObservationSubject(s1).withComment("Observation 2 as Followup to 1").addCategory(c1).addCategory(c2).build());
+                    readWriteDAO.linkFollowUpObservation(o1, o2);
+                    Observation o3 = readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withFollowUpNeeded(true).withFollowUpReminder(new LocalDate().plusDays(1)).withComment("Observation 3").build());
+                }
                 try {
-                    authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
+                    authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
                 } catch (AuthenticationException e) {
                     Notification.show("Failed to login.", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
                 //  TODO
-                login = login + "@test.com";
-                AppUser user = readOnlyDAO.getUser(login);
+                user = readOnlyDAO.getUser(email);
                 if (user == null) {
                     readWriteDAO.create(idObjectFactory.newAppUserBuilder().withLastName(login).withFirstName(login).withEmailAddress(login).build());
                     Notification.show("This is embarrassing", Notification.Type.ERROR_MESSAGE);

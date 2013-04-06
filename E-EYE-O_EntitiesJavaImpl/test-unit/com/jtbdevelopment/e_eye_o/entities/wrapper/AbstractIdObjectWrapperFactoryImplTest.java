@@ -53,6 +53,16 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         @Override
+        public String getPassword() {
+            return null;
+        }
+
+        @Override
+        public void setPassword(final String password) {
+
+        }
+
+        @Override
         public DateTime getLastLogout() {
             return null;
         }

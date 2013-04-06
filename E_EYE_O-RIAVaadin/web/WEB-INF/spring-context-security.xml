@@ -15,15 +15,17 @@
         <form-login login-page="/E-EYE-O/Login" default-target-url="/E-EYE-O/" always-use-default-target="true"/>
     </http>
 
-    <!-- TODO - real authentication -->
+    <!-- TODO - secret -->
+    <!-- TODO - remember me -->
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+
+    <beans:bean id="userDetailsService"
+                class="com.jtbdevelopment.e_eye_o.hibernate.security.HibernateUserDetailsService"/>
     <authentication-manager alias="authenticationManager">
-        <authentication-provider>
-            <user-service>
-                <user name="c" authorities="ROLE_USER" password="c"/>
-                <user name="x" authorities="ROLE_ADMIN" password="x"/>
-                <user name="admin" authorities="ROLE_ADMIN, ROLE_USER" password="admin"/>
-            </user-service>
+        <authentication-provider user-service-ref="userDetailsService">
+            <password-encoder ref="passwordEncoder"/>
         </authentication-provider>
+
     </authentication-manager>
 
 </beans:beans>

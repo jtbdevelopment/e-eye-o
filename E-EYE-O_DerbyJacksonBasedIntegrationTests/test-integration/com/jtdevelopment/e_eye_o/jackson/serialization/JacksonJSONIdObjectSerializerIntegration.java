@@ -67,10 +67,10 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
             return;
         }
 
-        appUser1 = factory.newAppUserBuilder().withEmailAddress("jtest@test.com").withFirstName("Testy")
+        appUser1 = factory.newAppUserBuilder().withEmailAddress("jtest@test.com").withFirstName("Testy").withPassword("pass")
                 .withLastName("Tester").withLastLogout(new DateTime(2012, 12, 12, 12, 12, 13)).build();
         appUser1 = readWriteDAO.create(appUser1);
-        appUser2 = factory.newAppUserBuilder().withEmailAddress("jtest2@test.com").withFirstName("Testier").withLastName("Tester").build();
+        appUser2 = factory.newAppUserBuilder().withEmailAddress("jtest2@test.com").withFirstName("Testier").withLastName("Tester").withPassword("pass").build();
         appUser2 = readWriteDAO.create(appUser2);
         classList1For1 = factory.newClassListBuilder(appUser1).withDescription("CL1-1").withLastObservationTimestamp(new LocalDateTime(2013, 3, 30, 13, 5, 0)).withAppUser(appUser1).build();
         classList1For1 = readWriteDAO.create(classList1For1);

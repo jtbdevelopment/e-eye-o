@@ -52,7 +52,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         if (testUser1 != null) {
             return;
         }
-        testUser1 = rwDAO.create(factory.newAppUserBuilder().withFirstName("Testy").withLastName("Tester").withEmailAddress("test@test.com").build());
+        testUser1 = rwDAO.create(factory.newAppUserBuilder().withFirstName("Testy").withLastName("Tester").withEmailAddress("test@test.com").withPassword("pass").build());
         observationCategoryHelper.createDefaultCategoriesForUser(testUser1);
         testOCsForU1 = observationCategoryHelper.getObservationCategoriesAsMap(testUser1);
         testClassList1ForU1 = rwDAO.create(factory.newClassListBuilder(testUser1).withDescription("Test Class List1").build());
@@ -62,7 +62,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         testStudentForU1 = rwDAO.create(s);
         testObservationForU1 = rwDAO.create(factory.newObservationBuilder(testUser1).withComment("Test Observation").withObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("CD")).addCategory(testOCsForU1.get("PD")).build());
 
-        testUser2 = rwDAO.create(factory.newAppUserBuilder().withFirstName("Another").withLastName("Tester").withEmailAddress("another@test.com").build());
+        testUser2 = rwDAO.create(factory.newAppUserBuilder().withFirstName("Another").withLastName("Tester").withPassword("pass").withEmailAddress("another@test.com").build());
 
         logger.info("Created Test Tester with ID " + testUser1.getId());
         logger.info("Created Test Tester2 with ID " + testUser2.getId());
@@ -73,7 +73,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         //  Not testing them all, just a few
         boolean exception = false;
         try {
-            rwDAO.create(factory.newAppUserBuilder().withFirstName("").withLastName(null).withEmailAddress("INVALID_EMAIL").build());
+            rwDAO.create(factory.newAppUserBuilder().withFirstName("").withLastName(null).withPassword("pass").withEmailAddress("INVALID_EMAIL").build());
         } catch (ConstraintViolationException e) {
             assertEquals(3, e.getConstraintViolations().size());
             logger.info(e.getMessage());
@@ -95,7 +95,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Test
     public void testDuplicateLoginAppUserFails() {
         try {
-            rwDAO.create(factory.newAppUserBuilder().withFirstName("Testy").withLastName("Tester").withEmailAddress("test@test.com").build());
+            rwDAO.create(factory.newAppUserBuilder().withFirstName("Testy").withLastName("Tester").withPassword("pass").withEmailAddress("test@test.com").build());
         } catch (Exception e) {
             //  Expected
             return;
@@ -296,7 +296,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testGetModifiedSince() throws InterruptedException {
-        AppUser updateUser = rwDAO.create(factory.newAppUserBuilder().withEmailAddress("updateUser@delete.test").withFirstName("delete").withLastName("delete").build());
+        AppUser updateUser = rwDAO.create(factory.newAppUserBuilder().withPassword("pass").withEmailAddress("updateUser@delete.test").withFirstName("delete").withLastName("delete").build());
         DateTime firstTS = new DateTime();
         Thread.sleep(1);
         ObservationCategory oc = rwDAO.create(factory.newObservationCategoryBuilder(updateUser).withShortName("X").withDescription("X").build());
@@ -326,7 +326,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testDeletingObjectsCreatesDeletedObjects() throws InterruptedException {
-        AppUser deleteUserThings = rwDAO.create(factory.newAppUserBuilder().withEmailAddress("deleteUserThings@delete.test").withFirstName("delete").withLastName("delete").build());
+        AppUser deleteUserThings = rwDAO.create(factory.newAppUserBuilder().withPassword("pass").withEmailAddress("deleteUserThings@delete.test").withFirstName("delete").withLastName("delete").build());
         ObservationCategory oc = rwDAO.create(factory.newObservationCategoryBuilder(deleteUserThings).withShortName("X").withDescription("X").build());
         ClassList cl = rwDAO.create(factory.newClassListBuilder(deleteUserThings).withDescription("CL").build());
         Student s = rwDAO.create(factory.newStudentBuilder(deleteUserThings).withFirstName("A").withLastName("B").build());
@@ -352,8 +352,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testDeletingAUser() {
-        AppUser deleteUser1 = rwDAO.create(factory.newAppUserBuilder().withEmailAddress("delete1@delete.test").withFirstName("delete").withLastName("delete").build());
-        AppUser deleteUser2 = rwDAO.create(factory.newAppUserBuilder().withEmailAddress("delete2@delete.test").withFirstName("delete").withLastName("delete").build());
+        AppUser deleteUser1 = rwDAO.create(factory.newAppUserBuilder().withPassword("pass").withEmailAddress("delete1@delete.test").withFirstName("delete").withLastName("delete").build());
+        AppUser deleteUser2 = rwDAO.create(factory.newAppUserBuilder().withPassword("pass").withEmailAddress("delete2@delete.test").withFirstName("delete").withLastName("delete").build());
         observationCategoryHelper.createDefaultCategoriesForUser(deleteUser1);
         Set<ObservationCategory> deleteCategories = rwDAO.getEntitiesForUser(ObservationCategory.class, deleteUser1);
         ClassList cl = rwDAO.create(factory.newClassListBuilder(deleteUser1).withDescription("delete").build());
@@ -387,7 +387,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testDeletingUserTwiceOK() {
-        AppUser appUser = rwDAO.create(factory.newAppUserBuilder().withFirstName("Double").withLastName("Delete").withEmailAddress("delete@double.com").build());
+        AppUser appUser = rwDAO.create(factory.newAppUserBuilder().withPassword("pass").withFirstName("Double").withLastName("Delete").withEmailAddress("delete@double.com").build());
         String id = appUser.getId();
         rwDAO.deleteUser(appUser);
         rwDAO.deleteUser(appUser);

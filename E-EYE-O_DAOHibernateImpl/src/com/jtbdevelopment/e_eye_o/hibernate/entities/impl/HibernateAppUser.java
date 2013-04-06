@@ -56,6 +56,17 @@ public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppU
     }
 
     @Override
+    @Column(nullable = false, length = MAX_PASSWORD_SIZE)
+    public String getPassword() {
+        return wrapped.getPassword();
+    }
+
+    @Override
+    public void setPassword(final String password) {
+        wrapped.setPassword(password);
+    }
+
+    @Override
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(nullable = false)
     public DateTime getLastLogout() {

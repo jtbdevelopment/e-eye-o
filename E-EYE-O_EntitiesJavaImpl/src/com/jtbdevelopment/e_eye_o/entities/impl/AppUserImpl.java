@@ -11,6 +11,7 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
     private String firstName = "";
     private String lastName = "";
     private String emailAddress = "";
+    private String password = "";
     private DateTime lastLogout = NEVER_LOGGED_IN;
 
     AppUserImpl() {
@@ -59,5 +60,13 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
     @Override
     public String getSummaryDescription() {
         return (firstName + " " + lastName).trim();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
     }
 }

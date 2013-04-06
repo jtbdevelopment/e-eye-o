@@ -40,7 +40,7 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
         while (idObjectInterface != null) {
             for (PropertyDescriptor property : PropertyUtils.getPropertyDescriptors(idObjectInterface)) {
                 Method read = property.getReadMethod();
-                if (read != null && !"class".equals(read.getName()) && !read.isAnnotationPresent(Transient.class)) {
+                if (read != null && !"class".equals(read.getName()) && !read.isAnnotationPresent(Transient.class) && !"getPassword".equals(read.getName())) {
                     properties.put(property.getName(), property.getPropertyType());
                 }
             }
