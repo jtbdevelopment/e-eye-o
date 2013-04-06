@@ -135,7 +135,7 @@ public class LoginView extends VerticalLayout implements View {
                 }
                 AppUser user = readOnlyDAO.getUser(email);
                 if (user == null) {
-                    //  TODO
+                    //  TODO - move
                     user = readWriteDAO.create(idObjectFactory.newAppUserBuilder().withPassword(hashPassword).withEmailAddress(email).withFirstName(login).withLastName(login).build());
                     observationCategoryHelper.createDefaultCategoriesForUser(user);
                     Map<String, ObservationCategory> map = observationCategoryHelper.getObservationCategoriesAsMap(user);
@@ -148,7 +148,8 @@ public class LoginView extends VerticalLayout implements View {
                     Observation o1 = readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationTimestamp(new LocalDateTime().minusDays(7)).withObservationSubject(s1).withComment("Observation 1").addCategory(c1).build());
                     Observation o2 = readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationTimestamp(new LocalDateTime().minusDays(3)).withObservationSubject(s1).withComment("Observation 2 as Followup to 1").addCategory(c1).addCategory(c2).build());
                     readWriteDAO.linkFollowUpObservation(o1, o2);
-                    Observation o3 = readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withFollowUpNeeded(true).withFollowUpReminder(new LocalDate().plusDays(1)).withComment("Observation 3").build());
+                    readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withFollowUpNeeded(true).withFollowUpReminder(new LocalDate().plusDays(1)).withComment("Observation 3").build());
+                    readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime().minusDays(1)).addCategory(c2).withComment("You can put general class observations too.").build());
                 }
                 try {
                     authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -199,12 +200,10 @@ public class LoginView extends VerticalLayout implements View {
 
     private static class FakeRememberMeFlag extends HttpServletRequestWrapper {
         private final String rememberMeParameter;
-        private final VaadinServletRequest vaadinServletRequest;
 
         private FakeRememberMeFlag(final String rememberMeParameter, final VaadinServletRequest vaadinServletRequest) {
             super(vaadinServletRequest);
             this.rememberMeParameter = rememberMeParameter;
-            this.vaadinServletRequest = vaadinServletRequest;
         }
 
 
