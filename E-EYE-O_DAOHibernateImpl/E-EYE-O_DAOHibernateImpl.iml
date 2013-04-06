@@ -36,6 +36,7 @@
     <orderEntry type="library" exported="" scope="RUNTIME" name="org.jadira.usertype:usertype.core:3.0.0.GA" level="project" />
     <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
     <orderEntry type="module" module-name="E-EYE-O_EntitiesJavaImpl" exported="" />
+    <orderEntry type="library" name="org.springframework.security:spring-security-web:3.1.3.RELEASE" level="project" />
   </component>
 </module>
 

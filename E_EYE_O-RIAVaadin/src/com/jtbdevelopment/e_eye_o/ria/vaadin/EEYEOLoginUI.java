@@ -31,6 +31,7 @@ public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
     protected void init(final VaadinRequest request) {
         super.init(request);
 
+        getSession().setAttribute(VaadinRequest.class, request);
         setSizeFull();
 
         Navigator navigator = new Navigator(this, this);

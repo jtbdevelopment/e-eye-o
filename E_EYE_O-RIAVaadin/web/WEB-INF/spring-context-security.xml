@@ -13,15 +13,37 @@
         <intercept-url pattern="/VAADIN/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/**" access="ROLE_USER, ROLE_ADMIN"/>
         <form-login login-page="/E-EYE-O/Login" default-target-url="/E-EYE-O/" always-use-default-target="true"/>
+        <remember-me services-ref="rememberMeServices" key="EEYEO"/>
     </http>
 
     <!-- TODO - secret -->
-    <!-- TODO - remember me -->
-    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
-
+    <!-- TODO - remove hibernate direct refs  -->
     <beans:bean id="userDetailsService"
                 class="com.jtbdevelopment.e_eye_o.hibernate.security.HibernateUserDetailsService"/>
+
+    <beans:bean id="persistentTokenRepository"
+                class="com.jtbdevelopment.e_eye_o.hibernate.security.HibernatePersistentTokenRepository"/>
+    <beans:bean id="rememberMeServices"
+                class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
+        <beans:property name="userDetailsService" ref="userDetailsService"/>
+        <beans:property name="tokenRepository" ref="persistentTokenRepository"/>
+        <beans:property name="key" value="EEYEO"/>
+    </beans:bean>
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+
+    <beans:bean id="rememberMeAuthenticationProvider"
+                class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+        <beans:property name="key" value="EEYEO"/>
+    </beans:bean>
+
+    <beans:bean id="rememberMeFilter"
+                class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="rememberMeServices" ref="rememberMeServices"/>
+    </beans:bean>
+
     <authentication-manager alias="authenticationManager">
+        <authentication-provider ref="rememberMeAuthenticationProvider"/>
         <authentication-provider user-service-ref="userDetailsService">
             <password-encoder ref="passwordEncoder"/>
         </authentication-provider>

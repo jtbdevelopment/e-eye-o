@@ -8,7 +8,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.ExternalResource;
+import com.vaadin.server.*;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.joda.time.LocalDate;
@@ -22,9 +22,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -62,6 +64,9 @@ public class LoginView extends VerticalLayout implements View {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private PersistentTokenBasedRememberMeServices rememberMeServices;
 
     @Autowired
     private Logo logo;
@@ -102,6 +107,11 @@ public class LoginView extends VerticalLayout implements View {
         form.addComponent(passwordField);
         form.setComponentAlignment(passwordField, Alignment.TOP_CENTER);
 
+        final CheckBox rememberMe = new CheckBox("Remember Me");
+        rememberMe.setValue(Boolean.TRUE);
+        form.addComponent(rememberMe);
+        form.setComponentAlignment(rememberMe, Alignment.TOP_CENTER);
+
         Button loginButton = new Button("Login");
         loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         loginButton.addStyleName(Runo.BUTTON_DEFAULT);
@@ -117,9 +127,15 @@ public class LoginView extends VerticalLayout implements View {
                 final String password = passwordField.getValue();
                 final String hashPassword = passwordEncoder.encode(password);
                 //  TODO
-                final String email = login + "@test.com";
+                final String email;
+                if (login.contains("@")) {
+                    email = login;
+                } else {
+                    email = login + "@test.com";
+                }
                 AppUser user = readOnlyDAO.getUser(email);
                 if (user == null) {
+                    //  TODO
                     user = readWriteDAO.create(idObjectFactory.newAppUserBuilder().withPassword(hashPassword).withEmailAddress(email).withFirstName(login).withLastName(login).build());
                     observationCategoryHelper.createDefaultCategoriesForUser(user);
                     Map<String, ObservationCategory> map = observationCategoryHelper.getObservationCategoriesAsMap(user);
@@ -136,6 +152,12 @@ public class LoginView extends VerticalLayout implements View {
                 }
                 try {
                     authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+                    if (rememberMe.getValue()) {
+                        final VaadinRequest currentRequest = VaadinService.getCurrentRequest();
+                        final VaadinResponse currentResponse = VaadinService.getCurrentResponse();
+                        final String key = rememberMeServices.getParameter();
+                        rememberMeServices.loginSuccess(new FakeRememberMeFlag(key, (VaadinServletRequest) currentRequest), (VaadinServletResponse) currentResponse, authentication);
+                    }
                 } catch (AuthenticationException e) {
                     Notification.show("Failed to login.", Notification.Type.ERROR_MESSAGE);
                     return;
@@ -173,5 +195,24 @@ public class LoginView extends VerticalLayout implements View {
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent event) {
         getUI().setFocusedComponent(loginField);
+    }
+
+    private static class FakeRememberMeFlag extends HttpServletRequestWrapper {
+        private final String rememberMeParameter;
+        private final VaadinServletRequest vaadinServletRequest;
+
+        private FakeRememberMeFlag(final String rememberMeParameter, final VaadinServletRequest vaadinServletRequest) {
+            super(vaadinServletRequest);
+            this.rememberMeParameter = rememberMeParameter;
+            this.vaadinServletRequest = vaadinServletRequest;
+        }
+
+
+        @Override
+        public String getParameter(final String name) {
+            if (rememberMeParameter.equals(name))
+                return "1";
+            return super.getParameter(name);
+        }
     }
 }
