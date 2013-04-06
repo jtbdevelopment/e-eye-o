@@ -155,7 +155,7 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         row = new HorizontalLayout();
         row.setSpacing(true);
 
-        row.addComponent(new Label("Observation for:"));
+        row.addComponent(new Label("Observation For:"));
         ComboBox observationFor = new ComboBox();
         observationFor.setFilteringMode(FilteringMode.CONTAINS);
         observationFor.setNewItemsAllowed(false);

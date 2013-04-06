@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.ClassList;
+import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ClassListTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
@@ -42,9 +42,9 @@ public class ClassListsWorkArea extends CustomComponent {
         mainLayout.addComponent(classListTable);
 
         TabSheet tabSheet = new TabSheet();
-        tabSheet.addTab(studentTable).setCaption("Students");
-        tabSheet.addTab(observationTable).setCaption("Observations");
-        tabSheet.addTab(photoAlbum).setCaption("Photos");
+        tabSheet.addTab(studentTable).setCaption(Student.class.getAnnotation(PreferredDescription.class).plural());
+        tabSheet.addTab(observationTable).setCaption(Observation.class.getAnnotation(PreferredDescription.class).plural());
+        tabSheet.addTab(photoAlbum).setCaption(Photo.class.getAnnotation(PreferredDescription.class).plural());
         tabSheet.addStyleName(Runo.TABSHEET_SMALL);
         mainLayout.addComponent(tabSheet);
 

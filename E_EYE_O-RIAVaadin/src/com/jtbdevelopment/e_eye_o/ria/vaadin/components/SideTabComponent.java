@@ -31,9 +31,9 @@ public class SideTabComponent extends CustomComponent {
         //  TODO - make descriptions part of classes?
         Students(Student.class),
         Observations(Observation.class),
+        Photos(Photo.class),
         Classes(ClassList.class),
-        Categories(ObservationCategory.class),
-        Photos(Photo.class);
+        Categories(ObservationCategory.class);
 
         IdObjectSideTabs(final Class<? extends AppUserOwnedObject> entityType) {
             this.entityType = entityType;
