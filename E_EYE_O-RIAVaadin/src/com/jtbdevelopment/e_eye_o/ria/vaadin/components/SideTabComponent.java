@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.sidetabs.BlankSideTab;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.sidetabs.IdObjectRelatedSideTab;
@@ -28,26 +29,24 @@ public class SideTabComponent extends CustomComponent {
     //  TODO - move this?
     public enum IdObjectSideTabs {
         //  TODO - make descriptions part of classes?
-        Students("Students", Student.class),
-        Observations("Observations", Observation.class),
-        Classes("Classes", ClassList.class),
-        Categories("Categories", ObservationCategory.class),
-        Photos("Photos", Photo.class);
+        Students(Student.class),
+        Observations(Observation.class),
+        Classes(ClassList.class),
+        Categories(ObservationCategory.class),
+        Photos(Photo.class);
 
-        IdObjectSideTabs(final String caption, final Class<? extends AppUserOwnedObject> entityType) {
+        IdObjectSideTabs(final Class<? extends AppUserOwnedObject> entityType) {
             this.entityType = entityType;
-            this.caption = caption;
         }
 
         private final Class<? extends AppUserOwnedObject> entityType;
-        private final String caption;
 
         public Class<? extends AppUserOwnedObject> getEntityType() {
             return entityType;
         }
 
         public String getCaption() {
-            return caption;
+            return entityType.getAnnotation(PreferredDescription.class).plural();
         }
     }
 

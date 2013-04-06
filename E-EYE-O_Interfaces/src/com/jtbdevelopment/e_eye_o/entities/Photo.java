@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import org.joda.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:18 PM
  */
+@PreferredDescription(singular = "Photo", plural = "Photos")
 public interface Photo extends AppUserOwnedObject {
 
     public static final String PHOTO_TIMESTAMP_CANNOT_BE_NULL_ERROR = "Photo.timestamp" + CANNOT_BE_NULL_ERROR;

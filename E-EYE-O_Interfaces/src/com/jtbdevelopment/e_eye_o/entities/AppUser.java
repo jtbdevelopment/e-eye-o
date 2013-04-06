@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:12 PM
  */
+@PreferredDescription(singular = "User", plural = "Users")
 public interface AppUser extends IdObject {
     public final static DateTime NEVER_LOGGED_IN = UNINITIALISED_LOCAL_DATE_TIME.toDateTime();
 

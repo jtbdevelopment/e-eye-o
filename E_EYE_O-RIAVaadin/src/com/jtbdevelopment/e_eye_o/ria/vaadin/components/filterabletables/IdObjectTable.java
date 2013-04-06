@@ -4,6 +4,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.IdObjectEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
@@ -73,6 +75,9 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                 new HeaderInfo("actions", "Actions", Table.Align.RIGHT)
         );
     }
+
+    @Autowired
+    protected IdObjectInterfaceResolver interfaceResolver;
 
     @Autowired
     protected IdObjectFactory idObjectFactory;
@@ -341,8 +346,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
         buttonSection.setWidth(null);
         buttonSection.setSpacing(true);
 
-        //  TODO - doesn't work for classlist  or observation category
-        Button newEntityButton = new Button("New " + entityType.getSimpleName());
+        Button newEntityButton = new Button("New " + interfaceResolver.getIdObjectInterfaceForClass(entityType).getAnnotation(PreferredDescription.class).singular());
         newEntityButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {

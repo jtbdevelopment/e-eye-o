@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import com.jtbdevelopment.e_eye_o.entities.validation.NoNullsInCollectionCheck;
 import com.jtbdevelopment.e_eye_o.entities.validation.NoObservationFollowUpForSelfCheck;
 import com.jtbdevelopment.e_eye_o.entities.validation.ObservationFollowUpCategoriesCheck;
@@ -20,6 +21,7 @@ import java.util.Set;
 @NoObservationFollowUpForSelfCheck(message = Observation.OBSERVATION_FOLLOW_UP_OBSERVATION_SELF_REFERENCE_ERROR)
 @ObservationFollowUpSubjectCheck(message = Observation.OBSERVATION_FOLLOW_UP_SUBJECT_ERROR)     //  TODO - test
 @ObservationFollowUpCategoriesCheck(message = Observation.OBSERVATION_FOLLOW_UP_CATEGORIES_ERROR)  // TODO - test
+@PreferredDescription(singular = "Observation", plural = "Observations")
 public interface Observation extends AppUserOwnedObject {
 
     public final static String OBSERVATION_FOLLOW_UP_OBSERVATION_SELF_REFERENCE_ERROR = "Observation.followUpForObservation cannot refer to itself.";

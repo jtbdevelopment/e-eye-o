@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import com.jtbdevelopment.e_eye_o.entities.validation.NoNullsInCollectionCheck;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -13,6 +14,7 @@ import java.util.Set;
  * Date: 11/25/12
  * Time: 3:14 PM
  */
+@PreferredDescription(singular = "Student", plural = "Students")
 public interface Student extends Observable {
 
     public static final String STUDENT_CLASS_LISTS_CANNOT_BE_NULL = "Student.classLists" + CANNOT_BE_NULL_ERROR;
