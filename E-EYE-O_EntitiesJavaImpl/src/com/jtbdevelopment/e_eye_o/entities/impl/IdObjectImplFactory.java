@@ -30,6 +30,8 @@ public class IdObjectImplFactory implements IdObjectFactory {
                 return (T) newClassList(null);
             case "DeletedObject":
                 return (T) newDeletedObject(null);
+            case "TwoPhaseActivity":
+                return (T) newTwoPhaseActivity(null);
             default:
                 throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
         }
@@ -53,6 +55,8 @@ public class IdObjectImplFactory implements IdObjectFactory {
                 return (B) newClassListBuilder(null);
             case "DeletedObject":
                 return (B) newDeletedObjectBuilder(null);
+            case "TwoPhaseActivity":
+                return (B) newTwoPhaseActivityBuilder(null);
             default:
                 throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
         }
@@ -61,7 +65,7 @@ public class IdObjectImplFactory implements IdObjectFactory {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> T newAppUserOwnedObject(final Class<T> idObjectType, final AppUser appUser) {
-        if(!AppUserOwnedObject.class.isAssignableFrom(idObjectType)) {
+        if (!AppUserOwnedObject.class.isAssignableFrom(idObjectType)) {
             throw new IllegalArgumentException("You cannot use this method to create non-app user owned objects.");
         }
         T entity = newIdObject(idObjectType);
@@ -71,7 +75,7 @@ public class IdObjectImplFactory implements IdObjectFactory {
 
     @Override
     public <T extends AppUserOwnedObject, B extends AppUserOwnedObjectBuilder<T>> B newAppUserOwnedObjectBuilder(final Class<T> idObjectType, final AppUser appUser) {
-        if(!AppUserOwnedObject.class.isAssignableFrom(idObjectType)) {
+        if (!AppUserOwnedObject.class.isAssignableFrom(idObjectType)) {
             throw new IllegalArgumentException("You cannot use this method to create non-app user owned builder objects.");
         }
         B builder = newIdObjectBuilder(idObjectType);
@@ -147,5 +151,15 @@ public class IdObjectImplFactory implements IdObjectFactory {
     @Override
     public DeletedObjectBuilder newDeletedObjectBuilder(final AppUser appUser) {
         return new DeletedObjectBuilderImpl(newDeletedObject(appUser));
+    }
+
+    @Override
+    public TwoPhaseActivity newTwoPhaseActivity(final AppUser appUser) {
+        return new TwoPhaseActivityImpl(appUser);
+    }
+
+    @Override
+    public TwoPhaseActivityBuilder newTwoPhaseActivityBuilder(final AppUser appUser) {
+        return new TwoPhaseActivityBuilderImpl(newTwoPhaseActivity(appUser));
     }
 }

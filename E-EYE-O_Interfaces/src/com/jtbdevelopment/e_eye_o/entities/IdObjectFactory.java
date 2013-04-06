@@ -42,4 +42,8 @@ public interface IdObjectFactory {
     DeletedObject newDeletedObject(final AppUser appUser);
 
     DeletedObjectBuilder newDeletedObjectBuilder(final AppUser appUser);
+
+    TwoPhaseActivity newTwoPhaseActivity(final AppUser appUser);
+
+    TwoPhaseActivityBuilder newTwoPhaseActivityBuilder(final AppUser appUser);
 }

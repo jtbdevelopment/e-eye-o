@@ -34,7 +34,7 @@
         <!--beans:property name="tokenValiditySeconds" value="0"/-->  <!--  TODO -->
         <beans:property name="userDetailsService" ref="userDetailsService"/>
         <beans:property name="tokenRepository" ref="persistentTokenRepository"/>
-        <beans:property name="useSecureCookie" value="true"/>
+        <!--beans:property name="useSecureCookie" value="true"/-->  <!--  TODO -->
         <beans:property name="key" value="EEYEO"/>
     </beans:bean>
 

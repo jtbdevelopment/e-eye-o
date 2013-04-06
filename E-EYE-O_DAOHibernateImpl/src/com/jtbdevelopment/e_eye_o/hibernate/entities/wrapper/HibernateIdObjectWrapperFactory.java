@@ -22,6 +22,7 @@ public class HibernateIdObjectWrapperFactory extends AbstractIdObjectWrapperFact
         addMapping(ClassList.class, HibernateClassList.class);
         addMapping(DeletedObject.class, HibernateDeletedObject.class);
         addMapping(Observable.class, HibernateObservable.class);
+        addMapping(TwoPhaseActivity.class, HibernateTwoPhaseActivity.class);
         addMapping(AppUserOwnedObject.class, HibernateAppUserOwnedObject.class);
 
         HibernateIdObject.setImplFactory(implFactory);

@@ -46,6 +46,8 @@ public class HibernateAbstractIdObjectTest {
             will(returnValue(Observable.class));
             allowing(interfaceResolver).getIdObjectInterfaceForClass(with(new IsInstanceOf(AppUserOwnedObject.class)));
             will(returnValue(AppUserOwnedObject.class));
+            allowing(interfaceResolver).getIdObjectInterfaceForClass(with(new IsInstanceOf(TwoPhaseActivity.class)));
+            will(returnValue(TwoPhaseActivity.class));
         }});
         daoFactory = new HibernateIdObjectWrapperFactory(implFactory, interfaceResolver);
     }
