@@ -1,6 +1,5 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
 
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
@@ -16,7 +15,6 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -37,13 +35,7 @@ public class RegistrationView extends VerticalLayout implements View {
     private IdObjectFactory idObjectFactory;
 
     @Autowired
-    private ReadWriteDAO readWriteDAO;
-
-    @Autowired
     private UserHelper userHelper;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void setUp() {
