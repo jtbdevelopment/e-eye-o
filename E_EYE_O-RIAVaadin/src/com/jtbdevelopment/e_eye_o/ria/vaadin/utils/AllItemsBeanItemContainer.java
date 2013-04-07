@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.utils;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.ItemSorter;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -18,11 +17,6 @@ import java.util.List;
 public class AllItemsBeanItemContainer<T extends IdObject> extends BeanItemContainer<T> {
     private final Collection<String> additionalSortableProperties;
 
-    public AllItemsBeanItemContainer(final Class<? super T> type) throws IllegalArgumentException {
-        super(type);
-        this.additionalSortableProperties = null;
-    }
-
     public AllItemsBeanItemContainer(final Class<? super T> type, final Collection<String> additionalSortableProperties) throws IllegalArgumentException {
         super(type);
         this.additionalSortableProperties = additionalSortableProperties;
@@ -36,10 +30,5 @@ public class AllItemsBeanItemContainer<T extends IdObject> extends BeanItemConta
             allProperties.addAll(additionalSortableProperties);
         }
         return allProperties;
-    }
-
-    @Override
-    public void setItemSorter(final ItemSorter itemSorter) {
-        super.setItemSorter(itemSorter);
     }
 }
