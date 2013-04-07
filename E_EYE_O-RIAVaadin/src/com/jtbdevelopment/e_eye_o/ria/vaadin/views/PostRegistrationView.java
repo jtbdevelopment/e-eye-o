@@ -4,7 +4,9 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Link;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -35,6 +37,7 @@ public class PostRegistrationView extends VerticalLayout implements View {
 
         dummy = new Label("");
 
+
         addComponent(action);
         addComponent(dummy);
     }
@@ -45,5 +48,7 @@ public class PostRegistrationView extends VerticalLayout implements View {
         final AppUser appUser = twoPhaseActivity.getAppUser();
         action.setValue("Welcome aboard " + appUser.getFirstName() + "!  An email has been sent to " + appUser.getEmailAddress() + " to verify it.  Please follow the instructions to activate your account.");
         dummy.setValue(twoPhaseActivity.getSummaryDescription());
+        Link link = new Link("Click", new ExternalResource("#!" + AccountConfirmationView.VIEW_NAME + "/" + twoPhaseActivity.getId()));
+        addComponent(link);
     }
 }

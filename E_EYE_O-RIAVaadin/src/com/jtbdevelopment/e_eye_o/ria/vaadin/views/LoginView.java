@@ -130,6 +130,7 @@ public class LoginView extends VerticalLayout implements View {
                         rememberMeServices.loginSuccess(new FakeRememberMeFlag(key, (VaadinServletRequest) currentRequest), (VaadinServletResponse) currentResponse, authentication);
                     }
                 } catch (AuthenticationException e) {
+                    //  TODO - capture login ok but account inactive/unconfirmed
                     Notification.show("Failed to login.", Notification.Type.ERROR_MESSAGE);
                     return;
                 }

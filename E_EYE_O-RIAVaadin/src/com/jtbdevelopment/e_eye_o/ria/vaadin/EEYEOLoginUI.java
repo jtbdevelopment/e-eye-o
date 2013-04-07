@@ -35,6 +35,9 @@ public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
     @Autowired
     private PostRegistrationView postRegistrationView;
 
+    @Autowired
+    private AccountConfirmationView accountConfirmationView;
+
     @Override
     protected void init(final VaadinRequest request) {
         super.init(request);
@@ -48,6 +51,7 @@ public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
         navigator.addView(RegistrationView.VIEW_NAME, registrationView);
         navigator.addView(LegalView.VIEW_NAME, legalView);
         navigator.addView(PostRegistrationView.VIEW_NAME, postRegistrationView);
+        navigator.addView(AccountConfirmationView.VIEW_NAME, accountConfirmationView);
         getSession().setAttribute(Navigator.class, navigator);
 
         navigator.navigateTo(LoginView.VIEW_NAME);
