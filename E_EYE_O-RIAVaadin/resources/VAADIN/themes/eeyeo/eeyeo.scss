@@ -17,14 +17,33 @@ $forestGreen: #ccc380;
 $greenGray: #bec790;
 $brownGray: #c9a283;
 
+//  TODO - delete if unused
+#
+
 $color: black;
+#
+
 $tableHeaderBackground: black;
+#
+
 $tableHeaderForeground: white;
+#
+
 $tableRowBackground: white;
+#
+
 $tableRowForeground: black;
+#
+
 $tableRowBackgroundAlternate: white;
+#
+
 $tableRowForegroundAlternate: black;
+#
+
 $tableRowBackgroundSelected: $darkBrown;
+#
+
 $tableRowForegroundSelected: black;
 
 @mixin eeyeo {
@@ -72,7 +91,6 @@ $tableRowForegroundSelected: black;
 
     background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.12, rgb(242, 227, 185)), color-stop(0.55, rgb(197, 116, 75)));
     color: black;
-    //font-weight: normal;
     text-shadow: $forestGreen 0 2px 2px;
   }
 
