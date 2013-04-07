@@ -1,11 +1,12 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.NewUserHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.navigator.Navigator;
@@ -39,7 +40,7 @@ public class RegistrationView extends VerticalLayout implements View {
     private ReadWriteDAO readWriteDAO;
 
     @Autowired
-    private NewUserHelper newUserHelper;
+    private UserHelper userHelper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -90,6 +91,7 @@ public class RegistrationView extends VerticalLayout implements View {
                     Notification.show("Passwords don't match.  Please try again.", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
+                //  TODO - verify email doesn't exist already.
                 try {
                     beanFieldGroup.commit();
                 } catch (FieldGroup.CommitException e) {
@@ -97,11 +99,12 @@ public class RegistrationView extends VerticalLayout implements View {
                 }
 
                 AppUser user = beanFieldGroup.getItemDataSource().getBean();
-                TwoPhaseActivity twoPhaseActivity = newUserHelper.setUpNewUser(user);
+                TwoPhaseActivity twoPhaseActivity = userHelper.setUpNewUser(user);
                 getSession().setAttribute(TwoPhaseActivity.class, twoPhaseActivity);
                 getSession().getAttribute(Navigator.class).navigateTo(PostRegistrationView.VIEW_NAME);
             }
         });
+        ComponentUtils.setImmediateForAll(this, true);
     }
 
     @Override

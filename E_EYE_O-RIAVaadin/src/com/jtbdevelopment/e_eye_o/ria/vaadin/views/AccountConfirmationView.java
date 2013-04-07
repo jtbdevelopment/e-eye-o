@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
 
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 
 /**
  * Date: 4/7/13
@@ -27,7 +27,10 @@ public class AccountConfirmationView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "ConfirmAccount";
 
     @Autowired
-    private ReadWriteDAO readWriteDAO;
+    private ReadOnlyDAO readOnlyDAO;
+
+    @Autowired
+    private UserHelper userHelper;
 
     private Button newEmailButton;
     private Label messageText;
@@ -37,7 +40,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
     public void setUp() {
         setSizeFull();
         setMargin(true);
-        setSpacing(true);
+        setSpacing(false);
 
         Label title = new Label("Account Confirmation");
         title.setSizeUndefined();
@@ -76,7 +79,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
             return;
         }
 
-        TwoPhaseActivity activity = readWriteDAO.get(TwoPhaseActivity.class, id);
+        TwoPhaseActivity activity = readOnlyDAO.get(TwoPhaseActivity.class, id);
         if (activity == null) {
             messageText.setValue("This is embarrassing.  We can't find your open account activation.");
             //  TODO - more instructions on what to do next
@@ -99,9 +102,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
             return;
         }
 
-        activity.setArchived(true);
-        activity.getAppUser().setActivated(true);
-        readWriteDAO.update(Arrays.asList(activity.getAppUser(), activity));
+        userHelper.activateUser(activity);
 
         messageText.setValue("Congratulations.  " + activity.getAppUser().getEmailAddress() + " has been activated.  Try logging in now.");
         link.setEnabled(true);

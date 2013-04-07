@@ -97,7 +97,7 @@ public class LoginView extends VerticalLayout implements View {
         form.setComponentAlignment(passwordField, Alignment.TOP_CENTER);
 
         final CheckBox rememberMe = new CheckBox("Remember Me");
-        rememberMe.setValue(Boolean.TRUE);
+        rememberMe.setValue(Boolean.FALSE);
         form.addComponent(rememberMe);
         form.setComponentAlignment(rememberMe, Alignment.TOP_CENTER);
 

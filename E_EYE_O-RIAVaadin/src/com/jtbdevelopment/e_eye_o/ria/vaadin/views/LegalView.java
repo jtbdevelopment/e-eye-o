@@ -31,7 +31,7 @@ public class LegalView extends VerticalLayout implements View {
     public void setup() {
         setSizeFull();
         setMargin(true);
-        setSpacing(true);
+        setSpacing(false);
 
         addComponent(logo);
         setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
@@ -59,6 +59,7 @@ public class LegalView extends VerticalLayout implements View {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 DateTime agreementTime = new DateTime();
+                //  TODO - store this somewhere
                 getSession().setAttribute(AGREEMENT_TIME, agreementTime);
                 getSession().getAttribute(Navigator.class).navigateTo(RegistrationView.VIEW_NAME);
             }

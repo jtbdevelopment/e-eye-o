@@ -48,6 +48,7 @@ public class PostRegistrationView extends VerticalLayout implements View {
         final AppUser appUser = twoPhaseActivity.getAppUser();
         action.setValue("Welcome aboard " + appUser.getFirstName() + "!  An email has been sent to " + appUser.getEmailAddress() + " to verify it.  Please follow the instructions to activate your account.");
         dummy.setValue(twoPhaseActivity.getSummaryDescription());
+        //  TODO - get rid of me
         Link link = new Link("Click", new ExternalResource("#!" + AccountConfirmationView.VIEW_NAME + "/" + twoPhaseActivity.getId()));
         addComponent(link);
     }

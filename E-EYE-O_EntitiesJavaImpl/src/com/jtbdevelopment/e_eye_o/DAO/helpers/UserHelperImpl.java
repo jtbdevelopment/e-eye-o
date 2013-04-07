@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -17,7 +18,8 @@ import java.util.Map;
  * Time: 6:26 PM
  */
 @Component
-public class NewUserHelperImpl implements NewUserHelper {
+@SuppressWarnings("unused")
+public class UserHelperImpl implements UserHelper {
     @Autowired
     private ReadWriteDAO readWriteDAO;
 
@@ -32,10 +34,33 @@ public class NewUserHelperImpl implements NewUserHelper {
 
     @Override
     public TwoPhaseActivity setUpNewUser(final AppUser appUser) {
-        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        securePassword(appUser, appUser.getPassword());
         AppUser savedUser = readWriteDAO.create(appUser);
         createSamplesForUser(savedUser);
         return readWriteDAO.create(idObjectFactory.newTwoPhaseActivityBuilder(savedUser).withActivityType(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION).withExpirationTime(new DateTime().plusDays(1)).build());
+    }
+
+    private void securePassword(final AppUser appUser, final String clearCasePassword) {
+        appUser.setPassword(passwordEncoder.encode(clearCasePassword));
+    }
+
+    @Override
+    public void activateUser(final TwoPhaseActivity twoPhaseActivity) {
+        twoPhaseActivity.setArchived(true);
+        final AppUser appUser = twoPhaseActivity.getAppUser();
+        appUser.setActivated(true);
+        appUser.setActive(true);
+        readWriteDAO.update(Arrays.asList(appUser, twoPhaseActivity));
+    }
+
+    @Override
+    public void resetPassword(final TwoPhaseActivity twoPhaseActivity, final String newPassword) {
+        twoPhaseActivity.setArchived(true);
+        final AppUser appUser = twoPhaseActivity.getAppUser();
+        appUser.setActivated(true);
+        appUser.setActive(true);
+        securePassword(appUser, newPassword);
+        readWriteDAO.update(Arrays.asList(appUser, twoPhaseActivity));
     }
 
     private void createSamplesForUser(final AppUser savedUser) {
