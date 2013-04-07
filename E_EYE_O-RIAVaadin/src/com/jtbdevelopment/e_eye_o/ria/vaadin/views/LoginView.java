@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.NewUserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
@@ -20,7 +19,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Component;
 
@@ -57,13 +55,7 @@ public class LoginView extends VerticalLayout implements View {
     private IdObjectFactory idObjectFactory;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private PersistentTokenBasedRememberMeServices rememberMeServices;
-
-    @Autowired
-    private NewUserHelper newUserHelper;
 
     @Autowired
     private Logo logo;
@@ -122,7 +114,6 @@ public class LoginView extends VerticalLayout implements View {
                 Authentication authentication;
                 String login = loginField.getValue();
                 final String password = passwordField.getValue();
-                final String hashPassword = passwordEncoder.encode(password);
                 //  TODO - get rid of
                 final String email;
                 if (login.contains("@")) {
