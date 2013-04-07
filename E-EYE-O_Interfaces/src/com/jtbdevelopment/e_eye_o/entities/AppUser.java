@@ -20,7 +20,7 @@ public interface AppUser extends IdObject {
     public final static int MAX_PASSWORD_SIZE = 200;
     public final static String LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR = "AppUser.login" + CANNOT_BE_NULL_ERROR;
     public final static String EMAIL_MUST_BE_A_VALID_FORMAT_ERROR = "AppUser.email must be a valid email format.";
-    public final static String EMAIL_CANNOT_BE_NULL_ERROR = "AppUser.email" + CANNOT_BE_NULL_ERROR;
+    public final static String EMAIL_CANNOT_BE_NULL_ERROR = "AppUser.email" + CANNOT_BE_BLANK_OR_NULL_ERROR;
     public final static String LAST_NAME_CANNOT_BE_NULL_ERROR = "AppUser.lastName" + CANNOT_BE_NULL_ERROR + ".";
     public final static String FIRST_NAME_CANNOT_BE_BLANK_OR_NULL_ERROR = "AppUser.firstName" + CANNOT_BE_BLANK_OR_NULL_ERROR;
     public final static String APP_USER_EMAIL_SIZE_ERROR = "AppUser.email cannot be longer than " + MAX_EMAIL_SIZE + " characters.";
@@ -44,7 +44,7 @@ public interface AppUser extends IdObject {
 
     void setLastName(final String lastName);
 
-    @NotNull(message = EMAIL_CANNOT_BE_NULL_ERROR)
+    @NotEmpty(message = EMAIL_CANNOT_BE_NULL_ERROR)
     @Email(message = EMAIL_MUST_BE_A_VALID_FORMAT_ERROR)
     @Size(max = MAX_EMAIL_SIZE, message = APP_USER_EMAIL_SIZE_ERROR)
     String getEmailAddress();

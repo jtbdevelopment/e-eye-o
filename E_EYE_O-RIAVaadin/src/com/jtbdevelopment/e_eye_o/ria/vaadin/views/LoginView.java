@@ -2,8 +2,9 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
-import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.NewUserHelper;
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
@@ -11,8 +12,6 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.*;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -27,8 +26,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Date: 2/24/13
@@ -48,9 +45,6 @@ public class LoginView extends VerticalLayout implements View {
     private final PasswordField passwordField = new PasswordField("Password");
 
     @Autowired
-    ObservationCategoryHelper observationCategoryHelper;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -67,6 +61,9 @@ public class LoginView extends VerticalLayout implements View {
 
     @Autowired
     private PersistentTokenBasedRememberMeServices rememberMeServices;
+
+    @Autowired
+    private NewUserHelper newUserHelper;
 
     @Autowired
     private Logo logo;
@@ -126,30 +123,12 @@ public class LoginView extends VerticalLayout implements View {
                 String login = loginField.getValue();
                 final String password = passwordField.getValue();
                 final String hashPassword = passwordEncoder.encode(password);
-                //  TODO
+                //  TODO - get rid of
                 final String email;
                 if (login.contains("@")) {
                     email = login;
                 } else {
                     email = login + "@test.com";
-                }
-                AppUser user = readOnlyDAO.getUser(email);
-                if (user == null) {
-                    //  TODO - move
-                    user = readWriteDAO.create(idObjectFactory.newAppUserBuilder().withPassword(hashPassword).withEmailAddress(email).withFirstName(login).withLastName(login).withActivated(true).withActive(true).build());
-                    observationCategoryHelper.createDefaultCategoriesForUser(user);
-                    Map<String, ObservationCategory> map = observationCategoryHelper.getObservationCategoriesAsMap(user);
-                    ClassList cl = readWriteDAO.create(idObjectFactory.newClassListBuilder(user).withDescription("Example Class").build());
-                    Student s1 = readWriteDAO.create(idObjectFactory.newStudentBuilder(user).withFirstName("Student").withLastName("A").addClassList(cl).build());
-                    Student s2 = readWriteDAO.create(idObjectFactory.newStudentBuilder(user).withFirstName("Student").withLastName("B").addClassList(cl).build());
-                    final Iterator<Map.Entry<String, ObservationCategory>> entryIterator = map.entrySet().iterator();
-                    ObservationCategory c1 = entryIterator.next().getValue();
-                    ObservationCategory c2 = entryIterator.next().getValue();
-                    Observation o1 = readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationTimestamp(new LocalDateTime().minusDays(7)).withObservationSubject(s1).withComment("Observation 1").addCategory(c1).build());
-                    Observation o2 = readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationTimestamp(new LocalDateTime().minusDays(3)).withObservationSubject(s1).withComment("Observation 2 as Followup to 1").addCategory(c1).addCategory(c2).build());
-                    readWriteDAO.linkFollowUpObservation(o1, o2);
-                    readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withFollowUpNeeded(true).withFollowUpReminder(new LocalDate().plusDays(1)).withComment("Observation 3").build());
-                    readWriteDAO.create(idObjectFactory.newObservationBuilder(user).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime().minusDays(1)).addCategory(c2).withComment("You can put general class observations too.").build());
                 }
                 try {
                     authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -164,7 +143,7 @@ public class LoginView extends VerticalLayout implements View {
                     return;
                 }
                 //  TODO
-                user = readOnlyDAO.getUser(email);
+                AppUser user = readOnlyDAO.getUser(email);
                 if (user == null) {
                     readWriteDAO.create(idObjectFactory.newAppUserBuilder().withLastName(login).withFirstName(login).withEmailAddress(login).build());
                     Notification.show("This is embarrassing", Notification.Type.ERROR_MESSAGE);
@@ -184,7 +163,7 @@ public class LoginView extends VerticalLayout implements View {
         setComponentAlignment(helpSection, Alignment.TOP_CENTER);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setSpacing(true);
-        Link registerLink = new Link("Register for Account", new ExternalResource("#!" + ToDoView.VIEW_NAME));
+        Link registerLink = new Link("Register for Account", new ExternalResource("#!" + LegalView.VIEW_NAME));
         horizontalLayout.addComponent(registerLink);
         Link forgotPasswordLink = new Link("Forgot Password?", new ExternalResource("#!" + ToDoView.VIEW_NAME));
         horizontalLayout.addComponent(forgotPasswordLink);

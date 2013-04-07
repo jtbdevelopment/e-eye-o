@@ -1,7 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin;
 
-import com.jtbdevelopment.e_eye_o.ria.vaadin.views.LoginView;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.views.ToDoView;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
@@ -27,6 +26,15 @@ public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
     @Autowired
     private ToDoView toDoView;
 
+    @Autowired
+    private LegalView legalView;
+
+    @Autowired
+    private RegistrationView registrationView;
+
+    @Autowired
+    private PostRegistrationView postRegistrationView;
+
     @Override
     protected void init(final VaadinRequest request) {
         super.init(request);
@@ -37,7 +45,13 @@ public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
         Navigator navigator = new Navigator(this, this);
         navigator.addView(LoginView.VIEW_NAME, loginView);
         navigator.addView(ToDoView.VIEW_NAME, toDoView);
+        navigator.addView(RegistrationView.VIEW_NAME, registrationView);
+        navigator.addView(LegalView.VIEW_NAME, legalView);
+        navigator.addView(PostRegistrationView.VIEW_NAME, postRegistrationView);
+        getSession().setAttribute(Navigator.class, navigator);
+
         navigator.navigateTo(LoginView.VIEW_NAME);
+
     }
 
 }

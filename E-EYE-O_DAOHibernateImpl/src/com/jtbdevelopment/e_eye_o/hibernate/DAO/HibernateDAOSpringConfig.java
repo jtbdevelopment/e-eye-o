@@ -33,7 +33,7 @@ public class HibernateDAOSpringConfig {
         properties.setProperty("hibernate.dialect", hibernateDialect);
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "false");
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");  //  TODO - change this to validate
+        properties.setProperty("hibernate.hbm2ddl.auto", "create");  //  TODO - change this to validate
         properties.putAll(hibernateOverrideProperties);
         return properties;
     }

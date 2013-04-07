@@ -47,6 +47,9 @@ public class HibernatePersistentTokenRepository implements PersistentTokenReposi
     @Override
     public PersistentRememberMeToken getTokenForSeries(final String seriesId) {
         HibernatePersistentToken hToken = getHibernatePersistentToken(seriesId);
+        if (hToken == null) {
+            return null;
+        }
         return new PersistentRememberMeToken(hToken.getUsername(), hToken.getSeries(), hToken.getToken(), hToken.getTimestamp());
     }
 

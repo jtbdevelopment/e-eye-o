@@ -12,7 +12,15 @@ import javax.persistence.Entity;
  * Time: 2:49 PM
  */
 @Entity(name = "TwoPhaseActivity")
+@SuppressWarnings("unused")
 public class HibernateTwoPhaseActivity extends HibernateAppUserOwnedObject<TwoPhaseActivity> implements TwoPhaseActivity {
+
+    public HibernateTwoPhaseActivity() {
+    }
+
+    public HibernateTwoPhaseActivity(final TwoPhaseActivity twoPhaseActivity) {
+        super(twoPhaseActivity);
+    }
 
     @Override
     @Column(nullable = false)

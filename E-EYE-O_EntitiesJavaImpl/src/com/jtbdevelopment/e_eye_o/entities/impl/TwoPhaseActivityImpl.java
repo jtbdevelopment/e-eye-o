@@ -36,4 +36,17 @@ public class TwoPhaseActivityImpl extends AppUserOwnedObjectImpl implements TwoP
         this.expirationTime = expirationTime;
     }
 
+    @Override
+    public String getSummaryDescription() {
+        return "Id="
+                + getId()
+                + " For="
+                + getAppUser().getSummaryDescription()
+                + " Type="
+                + getActivityType().toString()
+                + " Expiration="
+                + getExpirationTime().toString("YYYY-MM-dd HH:mm:ss")
+                + " Archived="
+                + isArchived();
+    }
 }
