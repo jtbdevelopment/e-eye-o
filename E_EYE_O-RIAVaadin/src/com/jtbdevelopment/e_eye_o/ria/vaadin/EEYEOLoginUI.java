@@ -1,6 +1,14 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin;
 
-import com.jtbdevelopment.e_eye_o.ria.vaadin.views.*;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.LoginView;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.ToDoView;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.PasswordReset;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.PostResetRequest;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.ResetRequest;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration.AccountConfirmationView;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration.LegalView;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration.PostRegistrationView;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration.RegistrationView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
@@ -38,6 +46,15 @@ public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
     @Autowired
     private AccountConfirmationView accountConfirmationView;
 
+    @Autowired
+    private ResetRequest resetRequest;
+
+    @Autowired
+    private PostResetRequest postResetRequest;
+
+    @Autowired
+    private PasswordReset passwordReset;
+
     @Override
     protected void init(final VaadinRequest request) {
         super.init(request);
@@ -52,6 +69,9 @@ public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
         navigator.addView(LegalView.VIEW_NAME, legalView);
         navigator.addView(PostRegistrationView.VIEW_NAME, postRegistrationView);
         navigator.addView(AccountConfirmationView.VIEW_NAME, accountConfirmationView);
+        navigator.addView(PostResetRequest.VIEW_NAME, postResetRequest);
+        navigator.addView(ResetRequest.VIEW_NAME, resetRequest);
+        navigator.addView(PasswordReset.VIEW_NAME, passwordReset);
         getSession().setAttribute(Navigator.class, navigator);
 
         navigator.navigateTo(LoginView.VIEW_NAME);

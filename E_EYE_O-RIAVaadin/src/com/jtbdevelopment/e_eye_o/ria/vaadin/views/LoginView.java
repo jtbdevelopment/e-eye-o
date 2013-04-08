@@ -5,6 +5,8 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.ResetRequest;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration.LegalView;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -157,7 +159,7 @@ public class LoginView extends VerticalLayout implements View {
         horizontalLayout.setSpacing(true);
         Link registerLink = new Link("Register for Account", new ExternalResource("#!" + LegalView.VIEW_NAME));
         horizontalLayout.addComponent(registerLink);
-        Link forgotPasswordLink = new Link("Forgot Password?", new ExternalResource("#!" + ToDoView.VIEW_NAME));
+        Link forgotPasswordLink = new Link("Forgot Password?", new ExternalResource("#!" + ResetRequest.VIEW_NAME));
         horizontalLayout.addComponent(forgotPasswordLink);
 
         helpSection.addComponent(horizontalLayout);

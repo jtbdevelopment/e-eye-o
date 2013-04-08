@@ -13,5 +13,7 @@ public interface UserHelper {
 
     void activateUser(final TwoPhaseActivity twoPhaseActivity);
 
-    void resetPassword(TwoPhaseActivity twoPhaseActivity, String newPassword);
+    TwoPhaseActivity requestResetPassword(final AppUser appUser);
+
+    void resetPassword(final TwoPhaseActivity twoPhaseActivity, final String newPassword);
 }

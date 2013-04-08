@@ -54,6 +54,13 @@ public class UserHelperImpl implements UserHelper {
     }
 
     @Override
+    public TwoPhaseActivity requestResetPassword(AppUser appUser) {
+        TwoPhaseActivity requestReset = idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.PASSWORD_RESET).withExpirationTime(new DateTime().plusDays(1)).build();
+        requestReset = readWriteDAO.create(requestReset);
+        return requestReset;
+    }
+
+    @Override
     public void resetPassword(final TwoPhaseActivity twoPhaseActivity, final String newPassword) {
         twoPhaseActivity.setArchived(true);
         final AppUser appUser = twoPhaseActivity.getAppUser();

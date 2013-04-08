@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;

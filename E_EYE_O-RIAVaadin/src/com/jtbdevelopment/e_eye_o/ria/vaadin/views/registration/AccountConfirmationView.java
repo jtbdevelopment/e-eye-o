@@ -1,8 +1,9 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.LoginView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -40,7 +41,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
     public void setUp() {
         setSizeFull();
         setMargin(true);
-        setSpacing(false);
+        setSpacing(true);
 
         Label title = new Label("Account Confirmation");
         title.setSizeUndefined();
@@ -82,6 +83,12 @@ public class AccountConfirmationView extends VerticalLayout implements View {
         TwoPhaseActivity activity = readOnlyDAO.get(TwoPhaseActivity.class, id);
         if (activity == null) {
             messageText.setValue("This is embarrassing.  We can't find your open account activation.");
+            //  TODO - more instructions on what to do next
+            return;
+        }
+
+        if (!TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION.equals(activity.getActivityType())) {
+            messageText.setValue("This is embarrassing.  We can't find an open account activation.");
             //  TODO - more instructions on what to do next
             return;
         }

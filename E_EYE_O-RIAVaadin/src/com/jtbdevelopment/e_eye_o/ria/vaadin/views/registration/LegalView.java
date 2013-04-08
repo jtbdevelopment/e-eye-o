@@ -1,6 +1,7 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.LoginView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -31,7 +32,7 @@ public class LegalView extends VerticalLayout implements View {
     public void setup() {
         setSizeFull();
         setMargin(true);
-        setSpacing(false);
+        setSpacing(true);
 
         addComponent(logo);
         setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
