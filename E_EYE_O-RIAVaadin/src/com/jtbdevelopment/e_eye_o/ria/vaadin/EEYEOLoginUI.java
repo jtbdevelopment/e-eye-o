@@ -1,7 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin;
 
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.LoginView;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.views.ToDoView;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.PasswordReset;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.PostResetRequest;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.ResetRequest;
@@ -30,9 +29,6 @@ import org.springframework.stereotype.Component;
 public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
     @Autowired
     private LoginView loginView;
-
-    @Autowired
-    private ToDoView toDoView;
 
     @Autowired
     private LegalView legalView;
@@ -64,7 +60,6 @@ public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
 
         Navigator navigator = new Navigator(this, this);
         navigator.addView(LoginView.VIEW_NAME, loginView);
-        navigator.addView(ToDoView.VIEW_NAME, toDoView);
         navigator.addView(RegistrationView.VIEW_NAME, registrationView);
         navigator.addView(LegalView.VIEW_NAME, legalView);
         navigator.addView(PostRegistrationView.VIEW_NAME, postRegistrationView);
