@@ -17,35 +17,6 @@ $forestGreen: #ccc380;
 $greenGray: #bec790;
 $brownGray: #c9a283;
 
-//  TODO - delete if unused
-#
-
-$color: black;
-#
-
-$tableHeaderBackground: black;
-#
-
-$tableHeaderForeground: white;
-#
-
-$tableRowBackground: white;
-#
-
-$tableRowForeground: black;
-#
-
-$tableRowBackgroundAlternate: white;
-#
-
-$tableRowForegroundAlternate: black;
-#
-
-$tableRowBackgroundSelected: $darkBrown;
-#
-
-$tableRowForegroundSelected: black;
-
 @mixin eeyeo {
   @include runo;
   @include eeyeo-logo;

@@ -1,5 +1,4 @@
 @mixin eeyeo-table {
-//  TODO - table sort image color and table header hover
   .v-table tr.v-selected {
     background-color: $forestGreen;
     color: black;
@@ -19,5 +18,17 @@
     background-image: -ms-linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(197, 116, 75) 72%);
 
     background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.44, rgb(224, 166, 116)), color-stop(0.72, rgb(197, 116, 75)));
+  }
+
+  .v-table-header-cell:hover,
+  .v-table-header-cell-asc:hover,
+  .v-table-header-cell-desc:hover {
+    background-image: linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(242, 227, 185) 72%);
+    background-image: -o-linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(242, 227, 185) 72%);
+    background-image: -moz-linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(242, 227, 185) 72%);
+    background-image: -webkit-linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(242, 227, 185) 72%);
+    background-image: -ms-linear-gradient(bottom, rgb(224, 166, 116) 44%, rgb(242, 227, 185) 72%);
+
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.44, rgb(224, 166, 116)), color-stop(0.72, rgb(242, 227, 185)));
   }
 }

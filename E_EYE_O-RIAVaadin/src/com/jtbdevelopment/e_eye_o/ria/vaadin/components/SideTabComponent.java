@@ -25,6 +25,10 @@ import org.springframework.context.annotation.Scope;
 public class SideTabComponent extends CustomComponent {
 
     public static final String SELECTED_SIDETABS = "selected-sidetabs";
+    public static final String LOGOUT = "Logout";
+    public static final String HELP = "Help";
+    public static final String SETTINGS = "Settings";
+    public static final String REPORTS = "Reports";
 
     //  TODO - move this?
     public enum IdObjectSideTabs {
@@ -63,13 +67,13 @@ public class SideTabComponent extends CustomComponent {
             mainLayout.addComponent(sideTab);
         }
         mainLayout.addComponent(new BlankSideTab());
-        mainLayout.addComponent(new SideTab("Reports", null, null));
+        mainLayout.addComponent(new SideTab(REPORTS, null, null));
         mainLayout.addComponent(new BlankSideTab());
-        mainLayout.addComponent(new SideTab("Settings", null, null));
+        mainLayout.addComponent(new SideTab(SETTINGS, null, null));
         mainLayout.addComponent(new BlankSideTab());
-        mainLayout.addComponent(new SideTab("Help", null, null));
+        mainLayout.addComponent(new SideTab(HELP, null, null));
         mainLayout.addComponent(new BlankSideTab());
-        mainLayout.addComponent(new SideTab("Logout", eventBus, new LogoutEvent()));
+        mainLayout.addComponent(new SideTab(LOGOUT, eventBus, new LogoutEvent()));
 
         mainLayout.addLayoutClickListener(new LayoutEvents.LayoutClickListener() {
             @Override
