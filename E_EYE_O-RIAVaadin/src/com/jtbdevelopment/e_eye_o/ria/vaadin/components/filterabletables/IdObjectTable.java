@@ -183,11 +183,12 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends Custom
                 }
             }
         });
-        entities.setItemSorter(new CompositeItemSorter<T>(entityTable, entities));
+        entities.setItemSorter(new CompositeItemSorter<>(entityTable, entities));
 
         refreshSizeAndSort();
     }
 
+    @SuppressWarnings("unchecked")
     private T handleValueChange(final Object item) {
         T entity;
         if (item instanceof BeanItem) {
