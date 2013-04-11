@@ -1,9 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters;
 
-import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.vaadin.data.util.converter.Converter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
@@ -14,9 +12,6 @@ import java.util.Locale;
  */
 @Component
 public class AppUserOwnedObjectStringConverter implements Converter<String, AppUserOwnedObject> {
-    @Autowired
-    private ReadOnlyDAO readOnlyDAO;
-
     @Override
     public AppUserOwnedObject convertToModel(final String value, final Locale locale) throws ConversionException {
         //  TODO

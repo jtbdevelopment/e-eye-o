@@ -18,8 +18,6 @@ import org.vaadin.dialogs.ConfirmDialog;
  * Time: 6:42 PM
  */
 public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> implements Table.ColumnGenerator {
-    private static final String ACTIVATE = "Activate";
-    private static final String ARCHIVE = "Archive";
     //  TODO - diff icons
     private static final ThemeResource ARCHIVE_ICON = new ThemeResource("../runo/icons/16/lock.png");
     private static final ThemeResource ACTIVATE_ICON = new ThemeResource("../runo/icons/16/user.png");
