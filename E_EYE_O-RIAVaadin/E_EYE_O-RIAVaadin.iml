@@ -35,8 +35,8 @@
     <orderEntry type="module" module-name="E-EYE-O_EntitiesJavaImpl" scope="RUNTIME" />
     <orderEntry type="module" module-name="E-EYE-O_DAODerbyHibernateImpl" scope="RUNTIME" />
     <orderEntry type="library" exported="" name="confirmdialog-2.0.4" level="project" />
-    <orderEntry type="library" name="spring-vaadin-integration-1.6.6" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="sass-stdlib" level="application" />
+    <orderEntry type="library" exported="" name="spring-vaadin-integration-1.6.6" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="sass-stdlib" level="application" />
   </component>
 </module>
 

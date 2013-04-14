@@ -14,4 +14,8 @@ public interface PhotoBuilder extends AppUserOwnedObjectBuilder<Photo> {
     PhotoBuilder withDescription(final String description);
 
     PhotoBuilder withTimestamp(final LocalDateTime timestamp);
+
+    PhotoBuilder withMimeType(final String mimeType);
+
+    PhotoBuilder withImageData(final byte[] imageData);
 }

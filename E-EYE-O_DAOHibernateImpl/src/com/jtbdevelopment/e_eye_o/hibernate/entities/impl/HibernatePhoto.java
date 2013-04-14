@@ -6,6 +6,7 @@ import org.joda.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 /**
@@ -54,5 +55,27 @@ public class HibernatePhoto extends HibernateAppUserOwnedObject<Photo> implement
     @Override
     public void setTimestamp(final LocalDateTime timestamp) {
         wrapped.setTimestamp(timestamp);
+    }
+
+    @Override
+    @Column
+    public String getMimeType() {
+        return wrapped.getMimeType();
+    }
+
+    @Override
+    public void setMimeType(final String mimeType) {
+        wrapped.setMimeType(mimeType);
+    }
+
+    @Override
+    @Lob
+    public byte[] getImageData() {
+        return wrapped.getImageData();
+    }
+
+    @Override
+    public void setImageData(final byte[] imageBytes) {
+        wrapped.setImageData(imageBytes);
     }
 }

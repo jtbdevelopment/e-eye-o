@@ -13,7 +13,9 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
     private String description = "";
     private AppUserOwnedObject photoFor;
     private LocalDateTime timestamp = new LocalDateTime();
-    //  TODO - actual photo
+    private String mimeType;
+    private byte[] imageData;
+
 
     PhotoImpl(final AppUser appUser) {
         super(appUser);
@@ -52,5 +54,21 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
     @Override
     public String getSummaryDescription() {
         return (description + " " + timestamp.toString("MMM dd")).trim();
+    }
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 }

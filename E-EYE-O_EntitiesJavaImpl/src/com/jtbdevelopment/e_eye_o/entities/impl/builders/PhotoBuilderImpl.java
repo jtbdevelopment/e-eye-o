@@ -31,4 +31,16 @@ public class PhotoBuilderImpl extends AppUserOwnedObjectBuilderImpl<Photo> imple
         entity.setTimestamp(timestamp);
         return this;
     }
+
+    @Override
+    public PhotoBuilder withMimeType(final String mimeType) {
+        entity.setMimeType(mimeType);
+        return this;
+    }
+
+    @Override
+    public PhotoBuilder withImageData(final byte[] imageData) {
+        entity.setImageData(imageData);
+        return this;
+    }
 }

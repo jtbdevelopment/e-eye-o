@@ -67,7 +67,7 @@ public class PhotoImplTest extends AbstractAppUserOwnedObjectTest<PhotoImpl> {
 
     @Test
     public void testSetGetDescription() {
-        checkStringSetGetsAndValidateNullsAsError("description", Photo.PHOTO_DESCRIPTION_CANNOT_BE_NULL_ERROR);
+        checkStringSetGetsAndValidateNullsAndBlanksAsError("description", Photo.PHOTO_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL_ERROR);
     }
 
     @Test

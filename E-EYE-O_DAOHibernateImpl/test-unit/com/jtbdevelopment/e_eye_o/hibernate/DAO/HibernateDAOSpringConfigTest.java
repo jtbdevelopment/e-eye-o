@@ -42,7 +42,7 @@ public class HibernateDAOSpringConfigTest {
         assertEquals(mydialect, props.get("hibernate.dialect"));
         assertEquals("true", props.getProperty("hibernate.show_sql"));
         assertEquals("false", props.getProperty("hibernate.format_sql"));
-        assertEquals("update", props.getProperty("hibernate.hbm2ddl.auto"));
+        assertEquals("create", props.getProperty("hibernate.hbm2ddl.auto"));
 
     }
 

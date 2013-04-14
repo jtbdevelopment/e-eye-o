@@ -26,6 +26,9 @@ import static org.testng.AssertJUnit.assertEquals;
 @Test(groups = {"integration"})
 public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpringContextTests {
     private final static String newline = System.getProperty("line.separator");
+    private static final String PNG = "image/png";
+    //  TODO - some real data
+    private static final byte[] someByes = new byte[]{0, 1, 0, 1};
 
     @Autowired
     private JacksonJSONIdObjectSerializer serializer;
@@ -92,11 +95,11 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
         o2ForS1 = factory.newObservationBuilder(appUser1).addCategory(oc1For1).withObservationSubject(student1For1)
                 .withFollowUpForObservation(o1ForS1).withComment("Comment").withObservationTimestamp(new LocalDateTime(2012, 1, 18, 15, 12)).build();
         o2ForS1 = readWriteDAO.create(o2ForS1);
-        photo1for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2011, 11, 11, 11, 11, 11)).withPhotoFor(student1For1).withDescription("Photo1").build();
+        photo1for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2011, 11, 11, 11, 11, 11)).withPhotoFor(student1For1).withDescription("Photo1").withMimeType(PNG).withImageData(someByes).build();
         photo1for1 = readWriteDAO.create(photo1for1);
-        photo2for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2012, 12, 12, 12, 12, 12)).withPhotoFor(o2ForS1).withDescription("Photo2").build();
+        photo2for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2012, 12, 12, 12, 12, 12)).withPhotoFor(o2ForS1).withDescription("Photo2").withMimeType(PNG).withImageData(someByes).build();
         photo2for1 = readWriteDAO.create(photo2for1);
-        photo3for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2013, 1, 1, 15, 12, 45)).withPhotoFor(classList1For1).withDescription("Photo3").build();
+        photo3for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2013, 1, 1, 15, 12, 45)).withPhotoFor(classList1For1).withDescription("Photo3").withMimeType(PNG).withImageData(someByes).build();
         photo3for1 = readWriteDAO.create(photo3for1);
         buildObjectToExpectedJSONMap();
     }
