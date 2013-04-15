@@ -38,6 +38,8 @@
 
         <dependency org="com.google.guava" name="guava" rev="13.0"/>
 
+        <dependency org="org.imgscalr" name="imgscalr-lib" rev="4.2"/>
+
         <dependency org="commons-beanutils" name="commons-beanutils" rev="1.8.3"/>
 
         <dependency org="org.jmock" name="jmock" rev="2.5.1"/>

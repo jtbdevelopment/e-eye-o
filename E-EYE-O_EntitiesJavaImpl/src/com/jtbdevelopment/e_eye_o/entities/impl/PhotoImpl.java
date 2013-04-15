@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
+import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelperImpl;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
@@ -15,6 +16,7 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
     private LocalDateTime timestamp = new LocalDateTime();
     private String mimeType;
     private byte[] imageData;
+    private byte[] thumbnailImageData;
 
 
     PhotoImpl(final AppUser appUser) {
@@ -62,6 +64,7 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
 
     public void setImageData(byte[] imageData) {
         this.imageData = imageData;
+        this.thumbnailImageData = PhotoHelperImpl.createThumbnailImage(this);
     }
 
     public String getMimeType() {
@@ -70,5 +73,9 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
 
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
+    }
+
+    public byte[] getThumbnailImageData() {
+        return thumbnailImageData;
     }
 }

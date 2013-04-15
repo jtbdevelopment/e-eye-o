@@ -16,6 +16,11 @@
         <remember-me services-ref="rememberMeServices" key="EEYEO"/>
     </http>
 
+    <!-- TODO - secret -->
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+        <!--beans:constructor-arg name="secret" value=""/-->
+    </beans:bean>
+
     <!-- TODO - remove hibernate direct refs  -->
     <beans:bean id="userDetailsService"
                 class="com.jtbdevelopment.e_eye_o.hibernate.security.HibernateUserDetailsService"/>

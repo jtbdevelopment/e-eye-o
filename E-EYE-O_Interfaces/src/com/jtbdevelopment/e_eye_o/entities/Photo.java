@@ -14,12 +14,15 @@ import javax.validation.constraints.Size;
 @PreferredDescription(singular = "Photo", plural = "Photos")
 public interface Photo extends AppUserOwnedObject {
 
+    public static final int THUMBNAIL_SIZE = 50;
+
     public static final String PHOTO_TIMESTAMP_CANNOT_BE_NULL_ERROR = "Photo.timestamp" + CANNOT_BE_NULL_ERROR;
     public static final String PHOTO_DESCRIPTION_SIZE_ERROR = "Photo.description" + DESCRIPTION_SIZE_ERROR;
     public static final String PHOTO_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL_ERROR = "Photo.description" + CANNOT_BE_BLANK_OR_NULL_ERROR;
     public static final String PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR = "Photo.photoFor" + CANNOT_BE_NULL_ERROR;
     public static final String PHOTO_MIME_TYPE_CANNOT_BE_BLANK_OR_NULL = "Photo.mimeType" + CANNOT_BE_BLANK_OR_NULL_ERROR;
-    public static final String PHotO_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL = "Photo.imageData" + CANNOT_BE_BLANK_OR_NULL_ERROR;
+    public static final String PHOTO_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL = "Photo.imageData" + CANNOT_BE_BLANK_OR_NULL_ERROR;
+    public static final String PHOTO_THUMBNAIL_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL = "Photo.thumbnail" + CANNOT_BE_BLANK_OR_NULL_ERROR;
 
     @NotNull(message = PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR)
     AppUserOwnedObject getPhotoFor();
@@ -43,8 +46,11 @@ public interface Photo extends AppUserOwnedObject {
     void setMimeType(final String mimeType);
 
     //  TODO - max size
-    @NotEmpty(message = PHotO_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL)
+    @NotEmpty(message = PHOTO_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL)
     byte[] getImageData();
 
     void setImageData(final byte[] imageBytes);
+
+    @NotEmpty(message = PHOTO_THUMBNAIL_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL)
+    byte[] getThumbnailImageData();
 }

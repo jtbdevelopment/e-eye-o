@@ -12,7 +12,12 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.imageio.ImageIO;
 import javax.validation.ConstraintViolationException;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 import static org.testng.Assert.*;
@@ -27,7 +32,20 @@ import static org.testng.Assert.*;
 @Test(groups = {"integration"})
 public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpringContextTests {
     private static final String PNG = "image/png";
-    private static final byte[] someBytes = new byte[]{0, 1, 0, 1};
+    private static byte[] someBytes = new byte[]{0, 1, 0, 1};
+
+    static {
+        try {
+            InputStream resourceAsStream = AbstractDataProviderIntegration.class.getResourceAsStream("/simple.png");
+            BufferedImage image = ImageIO.read(resourceAsStream);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", os);
+            someBytes = os.toByteArray();
+        } catch (IOException e) {
+            someBytes = null;
+        }
+    }
+
     private static Logger logger = LoggerFactory.getLogger(AbstractDataProviderIntegration.class);
 
     @Autowired
