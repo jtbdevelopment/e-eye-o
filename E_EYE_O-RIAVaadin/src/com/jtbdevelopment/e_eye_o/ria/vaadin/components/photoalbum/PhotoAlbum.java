@@ -5,7 +5,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.PhotoImageResource;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.PhotoEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.PhotoThumbnailResource;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.ui.*;
@@ -22,8 +22,11 @@ import java.util.Collection;
  */
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//  TODO - pretty much everything
+//  TODO - listen to updates
 public class PhotoAlbum extends CustomComponent {
+
+    @Autowired
+    private PhotoEditorDialogWindow photoEditorDialogWindow;
 
     @Autowired
     private ReadOnlyDAO readOnlyDAO;
@@ -54,21 +57,9 @@ public class PhotoAlbum extends CustomComponent {
                         clicked = ((CssLayout) clicked).getComponent(0);
                     }
                     if (clicked instanceof Embedded) {
-                        Window window = new Window();
-                        Panel panel = new Panel();
-                        panel.setSizeFull();
-                        Embedded bigPhoto = new Embedded();
                         Embedded embedded = (Embedded) clicked;
-                        bigPhoto.setSource(new PhotoImageResource(((PhotoThumbnailResource) embedded.getSource()).getPhoto()));
-                        bigPhoto.setAlternateText(embedded.getAlternateText());
-                        bigPhoto.setSizeUndefined();
-                        panel.setContent(bigPhoto);
-                        window.setContent(panel);
-                        window.setModal(false);
-                        window.addStyleName(Runo.WINDOW_DIALOG);
-                        window.setSizeFull();
-                        window.setCaption(bigPhoto.getAlternateText());
-                        getUI().addWindow(window);
+                        getUI().addWindow(photoEditorDialogWindow);
+                        photoEditorDialogWindow.setEntity(((PhotoThumbnailResource) embedded.getSource()).getPhoto());
                     }
                 }
             }

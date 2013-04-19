@@ -21,6 +21,7 @@ import javax.annotation.PostConstruct;
  */
 //  TODO - be nice to recompute the caption at top as we go
 //  TODO - properly size all the editor dialogs
+//  TODO - add delete button/workflow
 public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> extends Window {
     @Autowired
     protected EventBus eventBus;
@@ -39,14 +40,19 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
     protected abstract Focusable getInitialFocusComponent();
 
     public IdObjectEditorDialogWindow(final Class<T> entityType, final int width, final int height) {
+        this(entityType, width, Unit.EM, height, Unit.EM);
+    }
+
+    public IdObjectEditorDialogWindow(final Class<T> entityType, final int width, final Unit widthUnit, final int height, final Unit heightUnit) {
         this.entityBeanFieldGroup = new BeanFieldGroup<>(entityType);
         this.entityType = entityType;
         setSizeUndefined();
         setModal(true);
         addStyleName(Runo.WINDOW_DIALOG);
-        setWidth(width, Unit.EM);
-        setHeight(height, Unit.EM);
+        setWidth(width, widthUnit);
+        setHeight(height, heightUnit);
         setContent(mainLayout);
+
     }
 
     @PostConstruct
