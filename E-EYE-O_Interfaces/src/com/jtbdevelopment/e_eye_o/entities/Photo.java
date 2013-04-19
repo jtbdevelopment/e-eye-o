@@ -14,7 +14,8 @@ import javax.validation.constraints.Size;
 @PreferredDescription(singular = "Photo", plural = "Photos")
 public interface Photo extends AppUserOwnedObject {
 
-    public static final int THUMBNAIL_SIZE = 50;
+    public static final int THUMBNAIL_SIZE = 75;
+    public static final int STANDARD_SIZE = 1024;
 
     public static final String PHOTO_TIMESTAMP_CANNOT_BE_NULL_ERROR = "Photo.timestamp" + CANNOT_BE_NULL_ERROR;
     public static final String PHOTO_DESCRIPTION_SIZE_ERROR = "Photo.description" + DESCRIPTION_SIZE_ERROR;

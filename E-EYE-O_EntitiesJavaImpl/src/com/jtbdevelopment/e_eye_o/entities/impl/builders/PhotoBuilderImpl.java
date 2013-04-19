@@ -41,8 +41,7 @@ public class PhotoBuilderImpl extends AppUserOwnedObjectBuilderImpl<Photo> imple
 
     @Override
     public PhotoBuilder withImageData(final byte[] imageData) {
-        entity.setImageData(imageData);
-        entity.setThumbnailImageData(PhotoHelperImpl.createThumbnailImage(entity));
+        PhotoHelperImpl.setPhotoImage(entity, imageData);
         return this;
     }
 }

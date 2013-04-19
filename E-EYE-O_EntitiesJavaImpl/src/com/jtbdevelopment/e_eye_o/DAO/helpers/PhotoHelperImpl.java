@@ -15,11 +15,25 @@ import java.io.IOException;
  */
 //  TODO - inject
 public class PhotoHelperImpl {
-    public static byte[] createThumbnailImage(final Photo photo) {
+    public static void setPhotoImage(final Photo photo, final byte[] imageData) {
+        photo.setImageData(imageData);
+        updateThumbnailImage(photo);
+        standardizePrimaryImage(photo);
+    }
+
+    private static void standardizePrimaryImage(final Photo photo) {
+        photo.setImageData(resizePhoto(photo, Photo.STANDARD_SIZE));
+    }
+
+    private static void updateThumbnailImage(final Photo photo) {
+        photo.setThumbnailImageData(resizePhoto(photo, Photo.THUMBNAIL_SIZE));
+    }
+
+    private static byte[] resizePhoto(final Photo photo, final int resizeTo) {
         BufferedImage image = null, resized = null;
         try {
             image = ImageIO.read(new ByteArrayInputStream(photo.getImageData()));
-            resized = Scalr.resize(image, Photo.THUMBNAIL_SIZE);
+            resized = Scalr.resize(image, resizeTo);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(resized, "jpg", os);
             image.flush();

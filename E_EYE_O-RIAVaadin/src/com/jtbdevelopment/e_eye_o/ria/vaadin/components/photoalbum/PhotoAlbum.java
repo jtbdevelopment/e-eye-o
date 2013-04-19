@@ -82,6 +82,7 @@ public class PhotoAlbum extends CustomComponent {
             photoLayout.removeComponent(photoLayout.getComponent(0));
         }
         //  TODO - archived/active filters
+        //  TODO - show all for a student?
         Collection<Photo> photos;
         if (driver instanceof AppUser) {
             photos = readOnlyDAO.getActiveEntitiesForUser(Photo.class, (AppUser) driver);
