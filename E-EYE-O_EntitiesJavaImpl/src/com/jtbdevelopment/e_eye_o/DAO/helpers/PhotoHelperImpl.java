@@ -20,9 +20,9 @@ public class PhotoHelperImpl {
         try {
             image = ImageIO.read(new ByteArrayInputStream(photo.getImageData()));
             resized = Scalr.resize(image, Photo.THUMBNAIL_SIZE);
-            image.flush();
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(resized, "png", os);
+            ImageIO.write(resized, "jpg", os);
+            image.flush();
             resized.flush();
             return os.toByteArray();
         } catch (IOException e) {
@@ -33,7 +33,6 @@ public class PhotoHelperImpl {
                 resized.flush();
             }
             throw new RuntimeException("Error creating thumbnail.", e);
-
         }
     }
 }

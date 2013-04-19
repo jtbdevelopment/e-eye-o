@@ -37,6 +37,7 @@ public class ClassListsWorkArea extends CustomComponent {
             public void handleClickEvent(final ClassList entity) {
                 studentTable.setTableDriver(entity);
                 observationTable.setTableDriver(entity);
+                photoAlbum.setAlbumDriver(entity);
             }
         });
         mainLayout.addComponent(classListTable);

@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.builders;
 
+import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelperImpl;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.builders.PhotoBuilder;
@@ -41,6 +42,7 @@ public class PhotoBuilderImpl extends AppUserOwnedObjectBuilderImpl<Photo> imple
     @Override
     public PhotoBuilder withImageData(final byte[] imageData) {
         entity.setImageData(imageData);
+        entity.setThumbnailImageData(PhotoHelperImpl.createThumbnailImage(entity));
         return this;
     }
 }

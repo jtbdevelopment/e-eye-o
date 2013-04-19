@@ -1,6 +1,5 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
-import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelperImpl;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
@@ -64,7 +63,6 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
 
     public void setImageData(byte[] imageData) {
         this.imageData = imageData;
-        this.thumbnailImageData = PhotoHelperImpl.createThumbnailImage(this);
     }
 
     public String getMimeType() {
@@ -77,5 +75,9 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
 
     public byte[] getThumbnailImageData() {
         return thumbnailImageData;
+    }
+
+    public void setThumbnailImageData(byte[] thumbnailImageData) {
+        this.thumbnailImageData = thumbnailImageData;
     }
 }

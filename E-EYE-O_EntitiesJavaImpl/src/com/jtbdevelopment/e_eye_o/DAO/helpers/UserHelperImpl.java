@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
@@ -84,5 +89,34 @@ public class UserHelperImpl implements UserHelper {
         readWriteDAO.linkFollowUpObservation(o1, o2);
         readWriteDAO.create(idObjectFactory.newObservationBuilder(savedUser).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withFollowUpNeeded(true).withFollowUpReminder(new LocalDate().plusDays(1)).withComment("Observation 3").build());
         readWriteDAO.create(idObjectFactory.newObservationBuilder(savedUser).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime().minusDays(1)).addCategory(c2).withComment("You can put general class observations too.").build());
+
+        int counter = 0;
+        //  TODO - real sample photos
+        for (String string : Arrays.asList(
+                "dummyphotos/3-MostParts.JPG",
+                "dummyphotos/4-MastAndBoom.JPG",
+                "dummyphotos/5-Drying.JPG",
+                "dummyphotos/6-Finished.jpg",
+                "dummyphotos/7-TensionControls.jpg"
+        )) {
+            try {
+                BufferedImage image = ImageIO.read(new File("c:/dev/e-eye-o/E_EYE_O-RIAVaadin/resources/VAADIN/themes/eeyeo/" + string));
+                final ByteArrayOutputStream tnOS = new ByteArrayOutputStream();
+                final ByteArrayOutputStream imOS = new ByteArrayOutputStream();
+                ImageIO.write(image, "jpg", imOS);
+                image.flush();
+                Photo photo = idObjectFactory.newPhotoBuilder(savedUser).withDescription(string).withImageData(imOS.toByteArray()).withMimeType("image/jpeg").withTimestamp(new LocalDateTime()).build();
+                if (counter % 2 == 0) {
+                    photo.setPhotoFor(o1);
+                } else {
+                    photo.setPhotoFor(cl);
+                }
+                readWriteDAO.create(photo);
+
+                ++counter;
+            } catch (IOException e) {
+                //
+            }
+        }
     }
 }

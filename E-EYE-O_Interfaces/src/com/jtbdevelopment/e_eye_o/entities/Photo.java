@@ -53,4 +53,6 @@ public interface Photo extends AppUserOwnedObject {
 
     @NotEmpty(message = PHOTO_THUMBNAIL_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL)
     byte[] getThumbnailImageData();
+
+    void setThumbnailImageData(final byte[] thumbnailBytes);
 }

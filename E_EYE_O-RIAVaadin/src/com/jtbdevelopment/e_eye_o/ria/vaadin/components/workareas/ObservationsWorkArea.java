@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationsWorkArea extends CustomComponent {
-    private ObservationTable observationTable;
+    private final ObservationTable observationTable;
 
     @Autowired
     public ObservationsWorkArea(final ObservationWithSubjectTable observationTable, final PhotoAlbum photoAlbum) {
@@ -32,7 +32,7 @@ public class ObservationsWorkArea extends CustomComponent {
         observationTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Observation>() {
             @Override
             public void handleClickEvent(final Observation entity) {
-                //  TODO change photos
+                photoAlbum.setAlbumDriver(entity);
             }
         });
         mainLayout.addComponent(observationTable);

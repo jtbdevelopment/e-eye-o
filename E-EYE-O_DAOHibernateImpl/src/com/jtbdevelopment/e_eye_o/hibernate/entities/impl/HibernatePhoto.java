@@ -85,8 +85,8 @@ public class HibernatePhoto extends HibernateAppUserOwnedObject<Photo> implement
         return wrapped.getThumbnailImageData();
     }
 
-    @SuppressWarnings("unused")
+    @Override
     public void setThumbnailImageData(final byte[] thumbnailImageData) {
-        //  Ignore
+        wrapped.setThumbnailImageData(thumbnailImageData);
     }
 }

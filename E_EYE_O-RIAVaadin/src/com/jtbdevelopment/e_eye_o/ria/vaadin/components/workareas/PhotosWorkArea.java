@@ -16,9 +16,11 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PhotosWorkArea extends CustomComponent {
+    private final PhotoAlbum photoAlbum;
 
     @Autowired
     public PhotosWorkArea(final PhotoAlbum photoAlbum) {
+        this.photoAlbum = photoAlbum;
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
         mainLayout.setSpacing(true);
@@ -33,9 +35,7 @@ public class PhotosWorkArea extends CustomComponent {
         super.attach();
         final AppUser appUser = getSession().getAttribute(AppUser.class);
 
-        //  TODO
-//        observationTable.setTableDriver(appUser);
-//        getUI().setFocusedComponent(observationTable.getSearchFor());
+        photoAlbum.setAlbumDriver(appUser);
     }
 
     @Override
