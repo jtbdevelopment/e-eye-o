@@ -156,14 +156,6 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Observation> getAllObservationFollowups(final Observation initialObservation) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from Observation as O where followUpForObservation = :initialObservation");
-        query.setParameter("initialObservation", initialObservation);
-        return (List<Observation>) query.list();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
     public List<Student> getAllStudentsForClassList(final ClassList classList) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Student as S where :classList member of S.classLists");
         query.setParameter("classList", classList);

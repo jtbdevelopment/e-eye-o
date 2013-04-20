@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.DAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.Observation;
 
 import java.util.Collection;
 import java.util.Map;
@@ -34,24 +33,6 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
     <T extends AppUserOwnedObject> ChainedUpdateSet<AppUserOwnedObject> changeArchiveStatus(final T entity);
 
     <T extends AppUserOwnedObject> Map<T, ChainedUpdateSet<AppUserOwnedObject>> changeArchiveStatus(final Collection<T> entities);
-
-    /**
-     * Link two existing observations
-     *
-     * @param initialObservation  as described
-     * @param followUpObservation as described
-     * @return updated followup observation
-     */
-    Observation linkFollowUpObservation(final Observation initialObservation, final Observation followUpObservation);
-
-    /**
-     * Create new observation and link to existing observation
-     *
-     * @param initialObservation  as described
-     * @param followUpObservation as described
-     * @return updated followup observation
-     */
-    Observation createAndLinkFollowUpObservation(final Observation initialObservation, final Observation followUpObservation);
 
     /**
      * Similar to delete, will return all app user owned objects that were deleted as part of this.

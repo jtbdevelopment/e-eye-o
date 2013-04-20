@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -85,9 +84,8 @@ public class UserHelperImpl implements UserHelper {
         ObservationCategory c1 = entryIterator.next().getValue();
         ObservationCategory c2 = entryIterator.next().getValue();
         Observation o1 = readWriteDAO.create(idObjectFactory.newObservationBuilder(savedUser).withObservationTimestamp(new LocalDateTime().minusDays(7)).withObservationSubject(s1).withComment("Observation 1").addCategory(c1).build());
-        Observation o2 = readWriteDAO.create(idObjectFactory.newObservationBuilder(savedUser).withObservationTimestamp(new LocalDateTime().minusDays(3)).withObservationSubject(s1).withComment("Observation 2 as Followup to 1").addCategory(c1).addCategory(c2).build());
-        readWriteDAO.linkFollowUpObservation(o1, o2);
-        readWriteDAO.create(idObjectFactory.newObservationBuilder(savedUser).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withFollowUpNeeded(true).withFollowUpReminder(new LocalDate().plusDays(1)).withComment("Observation 3").build());
+        Observation o2 = readWriteDAO.create(idObjectFactory.newObservationBuilder(savedUser).withObservationTimestamp(new LocalDateTime().minusDays(3)).withObservationSubject(s1).withComment("Observation 2").addCategory(c1).addCategory(c2).build());
+        readWriteDAO.create(idObjectFactory.newObservationBuilder(savedUser).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withComment("Observation 3").build());
         readWriteDAO.create(idObjectFactory.newObservationBuilder(savedUser).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime().minusDays(1)).addCategory(c2).withComment("You can put general class observations too.").build());
 
         int counter = 0;
@@ -105,7 +103,7 @@ public class UserHelperImpl implements UserHelper {
                 ImageIO.write(image, "jpg", imOS);
                 imOS.close();
                 image.flush();
-                Photo photo = idObjectFactory.newPhotoBuilder(savedUser).withDescription(string).withImageData(imOS.toByteArray()).withMimeType("image/jpeg").withTimestamp(new LocalDateTime()).build();
+                Photo photo = idObjectFactory.newPhotoBuilder(savedUser).withDescription(string).withMimeType("image/jpeg").withImageData(imOS.toByteArray()).withTimestamp(new LocalDateTime()).build();
                 if (counter % 2 == 0) {
                     photo.setPhotoFor(o1);
                 } else {

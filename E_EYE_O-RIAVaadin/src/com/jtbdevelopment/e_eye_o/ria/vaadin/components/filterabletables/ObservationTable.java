@@ -2,12 +2,10 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ObservationCategorySetStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ShortenedCommentConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.filters.ObservationCategoryFilter;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ObservationFollowUpButtons;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.filter.Or;
@@ -36,9 +34,6 @@ public class ObservationTable extends IdObjectTable<Observation> {
     private ObservationEditorDialogWindow observationEditorDialogWindow;
 
     @Autowired
-    private LocalDateStringConverter localDateStringConverter;
-
-    @Autowired
     private LocalDateTimeStringConverter localDateTimeStringConverter;
 
     @Autowired
@@ -59,10 +54,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
                         new HeaderInfo("observationTimestamp", "Time", Table.Align.LEFT),
                         new HeaderInfo("comment", "Comment", Table.Align.LEFT),
                         new HeaderInfo("categories", "Categories", Table.Align.LEFT, true),
-                        new HeaderInfo("significant", "Sig?", Table.Align.CENTER, true),
-                        new HeaderInfo("followUpNeeded", "Is/Needs FU?", Table.Align.CENTER, true),
-                        new HeaderInfo("followUpReminder", "Reminder?", Table.Align.CENTER),
-                        new HeaderInfo("showFollowUp", "Follow Ups", Table.Align.CENTER)
+                        new HeaderInfo("significant", "Sig?", Table.Align.CENTER, true)
                 ));
         headers.addAll(IdObjectTable.headers);
     }
@@ -98,7 +90,6 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
-        entityTable.setConverter("followUpReminder", localDateStringConverter);
         entityTable.setConverter("observationTimestamp", localDateTimeStringConverter);
         entityTable.setConverter("categories", observationCategorySetStringConverter);
         entityTable.setConverter("comment", shortenedCommentConverter);
@@ -124,39 +115,14 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 return observation.isSignificant() ? new Embedded(null, IS_X) : null;
             }
         });
-        entityTable.addGeneratedColumn("followUpNeeded", new Table.ColumnGenerator() {
-            @Override
-            public Object generateCell(Table source, Object itemId, Object columnId) {
-                Observation observation = entities.getItem(itemId).getBean();
-                GridLayout grid = new GridLayout(3, 1);
-                if (observation.getFollowUpForObservation() == null) {
-                    grid.addComponent(new Embedded(null, NOT_X));
-                } else {
-                    grid.addComponent(new Embedded(null, IS_X));
-                }
-                grid.addComponent(new Label("/"));
-                if (!observation.isFollowUpNeeded()) {
-                    grid.addComponent(new Embedded(null, NOT_X));
-                } else {
-                    grid.addComponent(new Embedded(null, IS_X));
-                }
-                grid.setSizeUndefined();
-                grid.setSpacing(false);
-                grid.setMargin(false);
-                return grid;
-            }
-        });
-        entityTable.addGeneratedColumn("showFollowUp", new ObservationFollowUpButtons(idObjectFactory, readWriteDAO, eventBus, this, entities));
 
         //  TODO - do his better
         entityTable.setColumnExpandRatio("observationTimestamp", 0.15f);
-        entityTable.setColumnExpandRatio("categories", 0.10f);
-        entityTable.setColumnExpandRatio("modificationTimestamp", 0.12f);
-        entityTable.setColumnExpandRatio("comment", 0.38f);
-        entityTable.setColumnExpandRatio("archived", 0.02f);
-        entityTable.setColumnExpandRatio("significant", 0.03f);
-        entityTable.setColumnExpandRatio("followUpReminder", 0.08f);
-        entityTable.setColumnExpandRatio("showFollowUp", 0.10f);
+        entityTable.setColumnExpandRatio("categories", 0.15f);
+        entityTable.setColumnExpandRatio("modificationTimestamp", 0.15f);
+        entityTable.setColumnExpandRatio("comment", 0.45f);
+        entityTable.setColumnExpandRatio("archived", 0.05f);
+        entityTable.setColumnExpandRatio("significant", 0.05f);
     }
 
     @Override
@@ -178,23 +144,6 @@ public class ObservationTable extends IdObjectTable<Observation> {
         significantOnly.setValue(false);
         filterSection.addComponent(significantOnly);
         filterSection.setComponentAlignment(significantOnly, Alignment.BOTTOM_LEFT);
-
-        final CheckBox followUpOnly = new CheckBox("Follow Up Only");
-        followUpOnly.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                if (followUpOnly.getValue()) {
-                    entities.addContainerFilter("followUpNeeded", "true", false, true);
-                } else {
-                    entities.removeContainerFilters("followUpNeeded");
-                }
-                refreshSizeAndSort();
-            }
-        });
-        //  TODO - make preference
-        followUpOnly.setValue(false);
-        filterSection.addComponent(followUpOnly);
-        filterSection.setComponentAlignment(followUpOnly, Alignment.BOTTOM_LEFT);
     }
 
     @Override

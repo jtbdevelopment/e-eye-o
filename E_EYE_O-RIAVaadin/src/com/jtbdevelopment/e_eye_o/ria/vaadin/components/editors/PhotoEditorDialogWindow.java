@@ -52,9 +52,14 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
         details.setMargin(true);
         details.setSpacing(true);
 
+        Upload upload = new Upload();
+        upload.setButtonCaption("Pick photo");
+        details.addComponent(upload);
+
         details.addComponent(new Label("Description:"));
         description = new TextArea();
         description.setRows(2);
+        description.setWidth(50, Unit.EM);
         entityBeanFieldGroup.bind(description, "description");
         details.addComponent(description);
 
@@ -77,8 +82,6 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
         mimeType.setReadOnly(true);
         details.addComponent(mimeType);
 
-        Upload upload = new Upload();
-        upload.setButtonCaption("Pick photo");
         upload.addSucceededListener(new Upload.SucceededListener() {
             @Override
             public void uploadSucceeded(Upload.SucceededEvent event) {
@@ -92,6 +95,7 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
         upload.setReceiver(new Upload.Receiver() {
             @Override
             public OutputStream receiveUpload(String filename, String mimeType) {
+                //  TODO - validate mime type
                 uploadedStream = new ByteArrayOutputStream();
                 if (!StringUtils.hasLength(description.getValue())) {
                     description.setValue(filename);
@@ -100,7 +104,6 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
                 return uploadedStream;
             }
         });
-        details.addComponent(upload);
 
         photoPanel = new Panel();
         bigPhoto.setSizeUndefined();

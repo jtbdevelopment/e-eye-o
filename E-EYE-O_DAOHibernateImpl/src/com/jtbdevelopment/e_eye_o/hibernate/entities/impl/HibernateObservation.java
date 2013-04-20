@@ -3,10 +3,12 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import java.util.Collection;
 import java.util.Set;
 
@@ -56,38 +58,6 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
     @Override
     public void setSignificant(final boolean significant) {
         wrapped.setSignificant(significant);
-    }
-
-    @Override
-    @Column(nullable = false)
-    public boolean isFollowUpNeeded() {
-        return wrapped.isFollowUpNeeded();
-    }
-
-    @Override
-    public void setFollowUpNeeded(final boolean followUpNeeded) {
-        wrapped.setFollowUpNeeded(followUpNeeded);
-    }
-
-    @Override
-    public LocalDate getFollowUpReminder() {
-        return wrapped.getFollowUpReminder();
-    }
-
-    @Override
-    public void setFollowUpReminder(final LocalDate followUpReminder) {
-        wrapped.setFollowUpReminder(followUpReminder);
-    }
-
-    @Override
-    @OneToOne(targetEntity = HibernateObservation.class)
-    public Observation getFollowUpForObservation() {
-        return wrapped.getFollowUpForObservation();
-    }
-
-    @Override
-    public void setFollowUpForObservation(final Observation followUpForObservation) {
-        wrapped.setFollowUpForObservation(wrap(followUpForObservation));
     }
 
     @Override

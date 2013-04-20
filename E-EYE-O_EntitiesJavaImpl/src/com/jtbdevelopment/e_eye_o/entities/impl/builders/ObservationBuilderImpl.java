@@ -4,7 +4,6 @@ import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.entities.builders.ObservationBuilder;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.util.Set;
@@ -33,24 +32,6 @@ public class ObservationBuilderImpl extends AppUserOwnedObjectBuilderImpl<Observ
     @Override
     public ObservationBuilder withSignificant(final boolean significant) {
         entity.setSignificant(significant);
-        return this;
-    }
-
-    @Override
-    public ObservationBuilder withFollowUpNeeded(final boolean followUpNeeded) {
-        entity.setFollowUpNeeded(followUpNeeded);
-        return this;
-    }
-
-    @Override
-    public ObservationBuilder withFollowUpReminder(final LocalDate followUpReminder) {
-        entity.setFollowUpReminder(followUpReminder);
-        return this;
-    }
-
-    @Override
-    public ObservationBuilder withFollowUpForObservation(final Observation followUpForObservation) {
-        entity.setFollowUpForObservation(followUpForObservation);
         return this;
     }
 

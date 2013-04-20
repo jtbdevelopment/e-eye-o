@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import org.imgscalr.Scalr;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -38,7 +39,11 @@ public class PhotoHelperImpl implements PhotoHelper {
             resized = Scalr.resize(image, resizeTo);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-            String type = ImageIO.getImageWritersByMIMEType(photo.getMimeType()).next().getOriginatingProvider().getFormatNames()[0];
+            final String mimeType = photo.getMimeType();
+            if (!StringUtils.hasLength(mimeType)) {
+                throw new RuntimeException("Set mime type before image data");
+            }
+            String type = ImageIO.getImageWritersByMIMEType(mimeType).next().getOriginatingProvider().getFormatNames()[0];
             ImageIO.write(resized, type, os);
             os.close();
             image.flush();

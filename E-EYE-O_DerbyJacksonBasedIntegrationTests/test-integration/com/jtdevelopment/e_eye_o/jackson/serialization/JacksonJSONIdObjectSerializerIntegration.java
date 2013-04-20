@@ -111,7 +111,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                 .withComment("Comment").withObservationTimestamp(new LocalDateTime(2013, 1, 18, 15, 12)).build();
         o1ForS1 = readWriteDAO.create(o1ForS1);
         o2ForS1 = factory.newObservationBuilder(appUser1).addCategory(oc1For1).withObservationSubject(student1For1)
-                .withFollowUpForObservation(o1ForS1).withComment("Comment").withObservationTimestamp(new LocalDateTime(2012, 1, 18, 15, 12)).build();
+                .withComment("Comment").withObservationTimestamp(new LocalDateTime(2012, 1, 18, 15, 12)).build();
         o2ForS1 = readWriteDAO.create(o2ForS1);
         photo1for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2011, 11, 11, 11, 11, 11)).withPhotoFor(student1For1).withDescription("Photo1").withMimeType(PNG).withImageData(someBytes).build();
         photo1for1 = readWriteDAO.create(photo1for1);
@@ -290,12 +290,6 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"id\" : \"" + oc1For1.getId() + "\"" + newline +
                     "  } ]," + newline +
                     "  \"comment\" : \"Comment\"," + newline +
-                    "  \"followUpForObservation\" : {" + newline +
-                    "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Observation\"," + newline +
-                    "    \"id\" : null" + newline +
-                    "  }," + newline +
-                    "  \"followUpNeeded\" : false," + newline +
-                    "  \"followUpReminder\" : null," + newline +
                     "  \"id\" : \"" + o1ForS1.getId() + "\"," + newline +
                     "  \"modificationTimestamp\" : " + o1ForS1.getModificationTimestamp().getMillis() + "," + newline +
                     "  \"observationSubject\" : {" + newline +
@@ -317,12 +311,6 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"id\" : \"" + oc1For1.getId() + "\"" + newline +
                     "  } ]," + newline +
                     "  \"comment\" : \"Comment\"," + newline +
-                    "  \"followUpForObservation\" : {" + newline +
-                    "    \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Observation\"," + newline +
-                    "    \"id\" : \"" + o1ForS1.getId() + "\"" + newline +
-                    "  }," + newline +
-                    "  \"followUpNeeded\" : false," + newline +
-                    "  \"followUpReminder\" : null," + newline +
                     "  \"id\" : \"" + o2ForS1.getId() + "\"," + newline +
                     "  \"modificationTimestamp\" : " + o2ForS1.getModificationTimestamp().getMillis() + "," + newline +
                     "  \"observationSubject\" : {" + newline +

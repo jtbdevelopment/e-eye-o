@@ -7,7 +7,6 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import javax.annotation.Nullable;
@@ -27,10 +26,6 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     private boolean significant = false;
 
     private Set<ObservationCategory> categories = new HashSet<>();
-
-    private boolean followUpNeeded = false;
-    private LocalDate followUpReminder;
-    private Observation followUpForObservation;
 
     ObservationImpl(final AppUser appUser) {
         super(appUser);
@@ -64,36 +59,6 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     @Override
     public void setSignificant(final boolean significant) {
         this.significant = significant;
-    }
-
-    @Override
-    public boolean isFollowUpNeeded() {
-        return followUpNeeded;
-    }
-
-    @Override
-    public void setFollowUpNeeded(final boolean followUpNeeded) {
-        this.followUpNeeded = followUpNeeded;
-    }
-
-    @Override
-    public LocalDate getFollowUpReminder() {
-        return followUpReminder;
-    }
-
-    @Override
-    public void setFollowUpReminder(final LocalDate followUpReminder) {
-        this.followUpReminder = followUpReminder;
-    }
-
-    @Override
-    public Observation getFollowUpForObservation() {
-        return followUpForObservation;
-    }
-
-    @Override
-    public void setFollowUpForObservation(final Observation followUpForObservation) {
-        this.followUpForObservation = followUpForObservation;
     }
 
     @Override

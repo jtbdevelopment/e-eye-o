@@ -46,7 +46,6 @@ public class HibernateReadWriteDAOTest {
 
     private static final LocalDateTime now = new LocalDateTime();
     private static final LocalDateTime past = now.minusHours(1);
-    private static final LocalDateTime future = now.plusHours(1);
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -441,21 +440,8 @@ public class HibernateReadWriteDAOTest {
         final Observation impl = observationImpl;
         final Observation wrapped = observationWrapped;
         final Observation loaded = observationLoaded;
-        final List<Observation> relatedFollowUpObservations = Arrays.asList(observationLoaded);
         final List<Photo> relatedPhotos = Arrays.asList(photoLoaded);
         final List<Observation> relatedObservations = Arrays.asList(observationLoaded);
-
-        context.checking(new Expectations() {{
-            one(session).createQuery("from Observation as O where followUpForObservation = :initialObservation");
-            will(returnValue(query1));
-            one(query1).setParameter("initialObservation", loaded);
-            will(returnValue(query1));
-            one(query1).list();
-            will(returnValue(relatedFollowUpObservations));
-            one(observationLoaded).setFollowUpForObservation(null);
-            one(session).update(observationLoaded);
-            one(session).update(studentWrapped);
-        }});
 
         createStandardDeleteExpectations(wrapped, loaded, relatedPhotos, relatedObservations);
 

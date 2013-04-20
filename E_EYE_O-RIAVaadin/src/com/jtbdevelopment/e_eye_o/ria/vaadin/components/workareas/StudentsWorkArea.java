@@ -1,10 +1,12 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.StudentTable;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum.PhotoAlbum;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class StudentsWorkArea extends CustomComponent {
     private StudentTable studentTable;
 
     @Autowired
-    public StudentsWorkArea(final StudentTable studentTable, final ObservationTable observationTable) {
+    public StudentsWorkArea(final StudentTable studentTable, final ObservationTable observationTable, final PhotoAlbum photoAlbum) {
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
 
@@ -36,6 +38,14 @@ public class StudentsWorkArea extends CustomComponent {
         mainLayout.addComponent(studentTable);
 
         mainLayout.addComponent(observationTable);
+        observationTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Observation>() {
+            @Override
+            public void handleClickEvent(final Observation entity) {
+                photoAlbum.setAlbumDriver(entity);
+            }
+        });
+
+        mainLayout.addComponent(photoAlbum);
 
         setCompositionRoot(mainLayout);
     }

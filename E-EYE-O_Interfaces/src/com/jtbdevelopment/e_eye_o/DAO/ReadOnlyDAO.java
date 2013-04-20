@@ -48,8 +48,6 @@ public interface ReadOnlyDAO {
 
     public List<Observation> getAllObservationsForObservationCategory(final ObservationCategory observationCategory);
 
-    public List<Observation> getAllObservationFollowups(final Observation initialObservation);
-
     public List<Student> getAllStudentsForClassList(final ClassList classList);
 }
 

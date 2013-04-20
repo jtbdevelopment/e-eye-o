@@ -105,61 +105,6 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     }
 
     @Test
-    public void testGetNeedsFollowUp() throws Exception {
-        context.checking(new Expectations() {{
-            one(implObservation).isFollowUpNeeded();
-            will(returnValue(false));
-        }});
-        assertEquals(false, hibernateObservation.isFollowUpNeeded());
-    }
-
-    @Test
-    public void testSetNeedsFollowUp() throws Exception {
-        context.checking(new Expectations() {{
-            one(implObservation).setFollowUpNeeded(true);
-        }});
-        hibernateObservation.setFollowUpNeeded(true);
-    }
-
-    @Test
-    public void testGetFollowUpReminder() throws Exception {
-        context.checking(new Expectations() {{
-            one(implObservation).getFollowUpReminder();
-            will(returnValue(LOCALDATE_VALUE));
-        }});
-        assertEquals(LOCALDATE_VALUE, hibernateObservation.getFollowUpReminder());
-    }
-
-    @Test
-    public void testSetFollowUpReminder() throws Exception {
-        context.checking(new Expectations() {{
-            one(implObservation).setFollowUpReminder(LOCALDATE_VALUE);
-        }});
-        hibernateObservation.setFollowUpReminder(LOCALDATE_VALUE);
-    }
-
-    @Test
-    public void testGetFollowUpForObservation() throws Exception {
-        final HibernateObservation fu = new HibernateObservation();
-        context.checking(new Expectations() {{
-            one(implObservation).getFollowUpForObservation();
-            will(returnValue(fu));
-        }});
-
-        assertSame(fu, hibernateObservation.getFollowUpForObservation());
-    }
-
-    @Test
-    public void testSetFollowUpForObservation() throws Exception {
-        final Observation fu = context.mock(Observation.class, "local");
-        context.checking(new Expectations() {{
-            one(implObservation).setFollowUpForObservation(with(any(HibernateObservation.class)));
-        }});
-
-        hibernateObservation.setFollowUpForObservation(fu);
-    }
-
-    @Test
     public void testGetCategories() throws Exception {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
         context.checking(new Expectations() {{

@@ -129,26 +129,6 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         return resultMap;
     }
 
-    @Override
-    public Observation linkFollowUpObservation(final Observation initialObservation, final Observation followUpObservation) {
-        final Observation updatedInitialObservation = updateInitialObservation(initialObservation);
-        followUpObservation.setFollowUpForObservation(updatedInitialObservation);
-        return update(followUpObservation);
-    }
-
-    @Override
-    public Observation createAndLinkFollowUpObservation(final Observation initialObservation, final Observation followUpObservation) {
-        Observation updatedInitialObservation = updateInitialObservation(initialObservation);
-        followUpObservation.setFollowUpForObservation(updatedInitialObservation);
-        return create(followUpObservation);
-    }
-
-    private Observation updateInitialObservation(final Observation initialObservation) {
-        initialObservation.setFollowUpNeeded(false);
-        initialObservation.setFollowUpReminder(null);
-        return update(initialObservation);
-    }
-
     //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")
@@ -212,13 +192,6 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 student.removeClassList((ClassList) wrapped);
                 currentSession.update(student);
                 updatedItems.add(student);
-            }
-        }
-        if (wrapped instanceof Observation) {
-            for (Observation observation : getAllObservationFollowups((Observation) wrapped)) {
-                observation.setFollowUpForObservation(null);
-                currentSession.update(observation);
-                updatedItems.add(observation);
             }
         }
         final List<Photo> allPhotosForEntity = getAllPhotosForEntity(wrapped);

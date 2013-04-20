@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.entities.impl.builders;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.testng.annotations.Test;
 
@@ -19,7 +18,6 @@ import static org.testng.AssertJUnit.*;
  */
 public class ObservationBuilderImplTest extends AppUserOwnedObjectBuilderImplTest {
     private final Observation impl = factory.newObservation(null);
-    private final Observation fu = factory.newObservation(null);
     private final ObservationCategory c1 = factory.newObservationCategory(null);
     private final ObservationCategory c2 = factory.newObservationCategory(null);
     private final ClassList cl = factory.newClassList(null);
@@ -45,28 +43,6 @@ public class ObservationBuilderImplTest extends AppUserOwnedObjectBuilderImplTes
         impl.setSignificant(false);
         assertSame(builder, builder.withSignificant(true));
         assertTrue(impl.isSignificant());
-    }
-
-    @Test
-    public void testWithFollowUpNeeded() throws Exception {
-        impl.setFollowUpNeeded(false);
-        assertSame(builder, builder.withFollowUpNeeded(true));
-        assertTrue(impl.isFollowUpNeeded());
-    }
-
-    @Test
-    public void testWithFollowUpReminder() throws Exception {
-        LocalDate date = new LocalDate();
-        assertNull(impl.getFollowUpReminder());
-        assertSame(builder, builder.withFollowUpReminder(date));
-        assertEquals(date, impl.getFollowUpReminder());
-    }
-
-    @Test
-    public void testWithFollowUpObservation() throws Exception {
-        assertNull(impl.getFollowUpForObservation());
-        assertSame(builder, builder.withFollowUpForObservation(fu));
-        assertSame(fu, impl.getFollowUpForObservation());
     }
 
     @Test

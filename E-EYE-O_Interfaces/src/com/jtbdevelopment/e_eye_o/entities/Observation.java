@@ -2,11 +2,7 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import com.jtbdevelopment.e_eye_o.entities.validation.NoNullsInCollectionCheck;
-import com.jtbdevelopment.e_eye_o.entities.validation.NoObservationFollowUpForSelfCheck;
-import com.jtbdevelopment.e_eye_o.entities.validation.ObservationFollowUpCategoriesCheck;
-import com.jtbdevelopment.e_eye_o.entities.validation.ObservationFollowUpSubjectCheck;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
@@ -18,15 +14,9 @@ import java.util.Set;
  * Date: 11/25/12
  * Time: 3:15 PM
  */
-@NoObservationFollowUpForSelfCheck(message = Observation.OBSERVATION_FOLLOW_UP_OBSERVATION_SELF_REFERENCE_ERROR)
-@ObservationFollowUpSubjectCheck(message = Observation.OBSERVATION_FOLLOW_UP_SUBJECT_ERROR)     //  TODO - test
-@ObservationFollowUpCategoriesCheck(message = Observation.OBSERVATION_FOLLOW_UP_CATEGORIES_ERROR)  // TODO - test
 @PreferredDescription(singular = "Observation", plural = "Observations")
 public interface Observation extends AppUserOwnedObject {
 
-    public final static String OBSERVATION_FOLLOW_UP_OBSERVATION_SELF_REFERENCE_ERROR = "Observation.followUpForObservation cannot refer to itself.";
-    public final static String OBSERVATION_FOLLOW_UP_SUBJECT_ERROR = "Observations must be on same subject.";
-    public final static String OBSERVATION_FOLLOW_UP_CATEGORIES_ERROR = "Observations must share at least one category.";
     public final static String OBSERVATION_COMMENT_CANNOT_BE_BLANK_OR_NULL_ERROR = "Observation.comment" + CANNOT_BE_BLANK_OR_NULL_ERROR;
     public final static String OBSERVATION_CATEGORIES_CANNOT_CONTAIN_NULL_ERROR = "Observation.categories" + CANNOT_CONTAIN_NULL_ERROR;
     public final static String OBSERVATION_CATEGORIES_CANNOT_BE_NULL_ERROR = "Observation.categories" + CANNOT_BE_NULL_ERROR;
@@ -48,18 +38,6 @@ public interface Observation extends AppUserOwnedObject {
     boolean isSignificant();
 
     void setSignificant(final boolean significant);
-
-    boolean isFollowUpNeeded();
-
-    void setFollowUpNeeded(final boolean followUpNeeded);
-
-    LocalDate getFollowUpReminder();
-
-    void setFollowUpReminder(final LocalDate followUpReminder);
-
-    Observation getFollowUpForObservation();
-
-    void setFollowUpForObservation(final Observation followUpForObservation);
 
     @NotNull(message = OBSERVATION_CATEGORIES_CANNOT_BE_NULL_ERROR)
     @NoNullsInCollectionCheck(message = OBSERVATION_CATEGORIES_CANNOT_CONTAIN_NULL_ERROR)

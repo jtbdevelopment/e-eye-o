@@ -2,8 +2,6 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 
 import com.google.common.base.Strings;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
-import com.jtbdevelopment.e_eye_o.entities.validation.ConsistentAppUserValidator;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.testng.annotations.Test;
 
@@ -72,53 +70,6 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
     @Test
     public void testSetSignificant() throws Exception {
         checkBooleanDefaultAndSetGet("significant", false);
-    }
-
-    @Test
-    public void testSetNeedsFollowUp() throws Exception {
-        checkBooleanDefaultAndSetGet("followUpNeeded", false);
-    }
-
-    @Test
-    public void testSetFollowUpReminder() throws Exception {
-        ObservationImpl o = new ObservationImpl(USER1);
-        assertNull(o.getFollowUpReminder());
-        LocalDate reminder = new LocalDate(2012, 4, 1);
-        o.setFollowUpReminder(reminder);
-        assertEquals(reminder, o.getFollowUpReminder());
-    }
-
-    @Test
-    public void testSetFollowUpObservation() throws Exception {
-        ObservationImpl o1 = new ObservationImpl(USER1);
-        o1.setId("1");
-        ObservationImpl o2 = new ObservationImpl(USER1);
-        o2.setId("2");
-        assertNull(o1.getFollowUpForObservation());
-        o1.setFollowUpForObservation(o2);
-        assertEquals(o2, o1.getFollowUpForObservation());
-        validateNotExpectingErrors(o1, new String[]{ConsistentAppUserValidator.getGeneralErrorMessage(o1), ConsistentAppUserValidator.getSpecificErrorMessage(o1, o2)});
-    }
-
-    @Test
-    public void testFollowUpCannotPointToItself() throws Exception {
-        ObservationImpl o = new ObservationImpl(USER1);
-        o.setId("SELF");
-        assertNull(o.getFollowUpForObservation());
-        o.setFollowUpForObservation(o);
-        assertEquals(o, o.getFollowUpForObservation());
-        validateExpectingErrors(o, new String[]{Observation.OBSERVATION_FOLLOW_UP_OBSERVATION_SELF_REFERENCE_ERROR});
-    }
-
-    @Test
-    public void testFollowUpAppUserConsistent() throws Exception {
-        ObservationImpl o1 = new ObservationImpl(USER1);
-        o1.setId("1");
-        ObservationImpl o2 = new ObservationImpl(USER2);
-        o2.setId("2");
-        o1.setFollowUpForObservation(o2);
-        assertEquals(o2, o1.getFollowUpForObservation());
-        validateExpectingErrors(o1, new String[]{ConsistentAppUserValidator.getGeneralErrorMessage(o1), ConsistentAppUserValidator.getSpecificErrorMessage(o1, o2)});
     }
 
     @Test
