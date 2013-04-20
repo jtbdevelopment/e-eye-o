@@ -14,7 +14,7 @@ import static org.testng.AssertJUnit.*;
 public class PhotoBuilderImplTest extends AppUserOwnedObjectBuilderImplTest {
     private final Photo photo = factory.newPhoto(null);
     private final ClassList classList = factory.newClassList(null);
-    private final PhotoBuilderImpl builder = new PhotoBuilderImpl(photo);
+    private final PhotoBuilderImpl builder = new PhotoBuilderImpl(null, photo);
 
     @Test
     public void testWithPhotoFor() throws Exception {

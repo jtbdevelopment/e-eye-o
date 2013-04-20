@@ -7,5 +7,5 @@ import com.jtbdevelopment.e_eye_o.entities.Photo;
  * Time: 8:25 PM
  */
 public interface PhotoHelper {
-    byte[] createThumbnailImage(final Photo photo);
+    void setPhotoImages(final Photo photo, final byte[] imageData);
 }

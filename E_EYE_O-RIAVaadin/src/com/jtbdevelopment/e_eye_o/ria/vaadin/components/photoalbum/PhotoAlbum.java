@@ -1,10 +1,11 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.Photo;
+import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
+import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.PhotoEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.PhotoThumbnailResource;
 import com.vaadin.event.LayoutEvents;
@@ -22,8 +23,13 @@ import java.util.Collection;
  */
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//  TODO - listen to updates
+//  TODO - more overlap with idobjectable than expected - refactor?
+//  TODO - how to delete a photo?
 public class PhotoAlbum extends CustomComponent {
+    private AppUserOwnedObject defaultPhotoFor;
+
+    @Autowired
+    private EventBus eventBus;
 
     @Autowired
     private PhotoEditorDialogWindow photoEditorDialogWindow;
@@ -31,10 +37,34 @@ public class PhotoAlbum extends CustomComponent {
     @Autowired
     private ReadOnlyDAO readOnlyDAO;
 
+    @Autowired
+    private IdObjectFactory idObjectFactory;
+
     private final CssLayout photoLayout;
 
+    private IdObject driver;
 
     public PhotoAlbum() {
+        VerticalLayout overall = new VerticalLayout();
+        overall.setSizeFull();
+
+        HorizontalLayout actions = new HorizontalLayout();
+        actions.setWidth(100, Unit.PERCENTAGE);
+        overall.addComponent(actions);
+
+        Button addPhoto = new Button("New " + Photo.class.getAnnotation(PreferredDescription.class).singular());
+        addPhoto.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                Photo newPhoto = idObjectFactory.newPhoto(getUI().getSession().getAttribute(AppUser.class));
+                if (defaultPhotoFor != null) {
+                    newPhoto.setPhotoFor(defaultPhotoFor);
+                }
+                photoEditorDialogWindow.setEntity(newPhoto);
+                getUI().addWindow(photoEditorDialogWindow);
+            }
+        });
+        actions.addComponent(addPhoto);
         photoLayout = new CssLayout();
         photoLayout.setSizeFull();
 
@@ -64,8 +94,15 @@ public class PhotoAlbum extends CustomComponent {
                 }
             }
         });
-        setCompositionRoot(photoLayout);
+        overall.addComponent(photoLayout);
+        setCompositionRoot(overall);
         setSizeFull();
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        eventBus.register(this);
     }
 
     public void setAlbumDriver(final IdObject driver) {
@@ -79,6 +116,7 @@ public class PhotoAlbum extends CustomComponent {
             photos = readOnlyDAO.getActiveEntitiesForUser(Photo.class, (AppUser) driver);
         } else if (driver instanceof AppUserOwnedObject) {
             photos = readOnlyDAO.getAllPhotosForEntity((AppUserOwnedObject) driver);
+            setDefaultPhotoFor((AppUserOwnedObject) driver);
         } else {
             //  TODO - log/notify
             return;
@@ -110,5 +148,19 @@ public class PhotoAlbum extends CustomComponent {
 
             photoLayout.addComponent(select);
         }
+        this.driver = driver;
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void handleIdObjectChanged(final IdObjectChanged msg) {
+        if (msg.getEntity() instanceof Photo) {
+            //  TODO - better
+            setAlbumDriver(driver);
+        }
+    }
+
+    public void setDefaultPhotoFor(AppUserOwnedObject defaultPhotoFor) {
+        this.defaultPhotoFor = defaultPhotoFor;
     }
 }

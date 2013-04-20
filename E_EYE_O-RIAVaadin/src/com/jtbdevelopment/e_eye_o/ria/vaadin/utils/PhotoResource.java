@@ -19,7 +19,15 @@ public abstract class PhotoResource implements ConnectorResource {
 
     @Override
     public DownloadStream getStream() {
-        return new DownloadStream(new ByteArrayInputStream(getData()), getMIMEType(), getFilename());
+        return new DownloadStream(new ByteArrayInputStream(getNonNullData()), getMIMEType(), getFilename());
+    }
+
+    private byte[] getNonNullData() {
+        byte[] data = getData();
+        if (data == null) {
+            data = new byte[0];
+        }
+        return data;
     }
 
     abstract protected byte[] getData();

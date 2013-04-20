@@ -40,6 +40,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
             BufferedImage image = ImageIO.read(resourceAsStream);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(image, "png", os);
+            os.close();
             someBytes = os.toByteArray();
         } catch (IOException e) {
             someBytes = null;

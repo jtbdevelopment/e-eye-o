@@ -101,9 +101,9 @@ public class UserHelperImpl implements UserHelper {
         )) {
             try {
                 BufferedImage image = ImageIO.read(new File("c:/dev/e-eye-o/E_EYE_O-RIAVaadin/resources/VAADIN/themes/eeyeo/" + string));
-                final ByteArrayOutputStream tnOS = new ByteArrayOutputStream();
                 final ByteArrayOutputStream imOS = new ByteArrayOutputStream();
                 ImageIO.write(image, "jpg", imOS);
+                imOS.close();
                 image.flush();
                 Photo photo = idObjectFactory.newPhotoBuilder(savedUser).withDescription(string).withImageData(imOS.toByteArray()).withMimeType("image/jpeg").withTimestamp(new LocalDateTime()).build();
                 if (counter % 2 == 0) {

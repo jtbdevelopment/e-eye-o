@@ -13,7 +13,7 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
     private String description = "";
     private AppUserOwnedObject photoFor;
     private LocalDateTime timestamp = new LocalDateTime();
-    private String mimeType;
+    private String mimeType = "";
     private byte[] imageData;
     private byte[] thumbnailImageData;
 

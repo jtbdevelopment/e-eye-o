@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.builders;
 
-import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelperImpl;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.builders.PhotoBuilder;
@@ -11,8 +11,11 @@ import org.joda.time.LocalDateTime;
  * Time: 12:10 PM
  */
 public class PhotoBuilderImpl extends AppUserOwnedObjectBuilderImpl<Photo> implements PhotoBuilder {
-    public PhotoBuilderImpl(final Photo entity) {
+    private final PhotoHelper photoHelper;
+
+    public PhotoBuilderImpl(final PhotoHelper photoHelper, final Photo entity) {
         super(entity);
+        this.photoHelper = photoHelper;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class PhotoBuilderImpl extends AppUserOwnedObjectBuilderImpl<Photo> imple
 
     @Override
     public PhotoBuilder withImageData(final byte[] imageData) {
-        PhotoHelperImpl.setPhotoImage(entity, imageData);
+        photoHelper.setPhotoImages(entity, imageData);
         return this;
     }
 }

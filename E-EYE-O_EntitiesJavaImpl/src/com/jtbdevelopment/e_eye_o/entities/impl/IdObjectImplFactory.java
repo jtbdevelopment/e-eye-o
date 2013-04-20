@@ -1,8 +1,10 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
+import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.builders.*;
 import com.jtbdevelopment.e_eye_o.entities.impl.builders.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class IdObjectImplFactory implements IdObjectFactory {
+    @Autowired
+    private PhotoHelper photoHelper;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -130,7 +134,7 @@ public class IdObjectImplFactory implements IdObjectFactory {
 
     @Override
     public PhotoBuilder newPhotoBuilder(final AppUser appUser) {
-        return new PhotoBuilderImpl(newPhoto(appUser));
+        return new PhotoBuilderImpl(photoHelper, newPhoto(appUser));
     }
 
     @Override
