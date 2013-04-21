@@ -18,7 +18,8 @@ public class ClassListEditorDialogWindow extends IdObjectEditorDialogWindow<Clas
     private final TextField description = new TextField();
 
     public ClassListEditorDialogWindow() {
-        super(ClassList.class, 80, 15);
+        //  height seems to be ignored as less than some minimum it wants
+        super(ClassList.class, 50, 2);
     }
 
     @Override
@@ -34,6 +35,7 @@ public class ClassListEditorDialogWindow extends IdObjectEditorDialogWindow<Clas
 
         editorRow.addComponent(new Label("Description:"));
         entityBeanFieldGroup.bind(description, "description");
+        description.setWidth(40, Unit.EM);
         editorRow.addComponent(description);
 
         return editorRow;

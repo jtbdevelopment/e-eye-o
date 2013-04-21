@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Scope;
  * Date: 3/16/13
  * Time: 6:36 PM
  */
-//  TODO - entity level checks (observation self reference etc) don't validate nicely...
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Observation> {
@@ -27,7 +26,7 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
     private final BeanItemContainer<AppUserOwnedObject> potentialSubjects = new BeanItemContainer<>(AppUserOwnedObject.class);
 
     public ObservationEditorDialogWindow() {
-        super(Observation.class, 90, 25);
+        super(Observation.class, 78, 21);
     }
 
     @Override
@@ -71,7 +70,7 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         row.setSpacing(true);
 
         row.addComponent(new Label("Comment:"));
-        commentField.setRows(4);
+        commentField.setRows(9);
         commentField.setWidth(40, Unit.EM);
         //  TODO - need to disable/re-enable enter key capture on Default button for text area.
         entityBeanFieldGroup.bind(commentField, "comment");
@@ -79,7 +78,7 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
 
         row.addComponent(new Label("Categories:"));
         TwinColSelect categories = new TwinColSelect();
-        categories.setRows(4);
+        categories.setRows(7);
         categories.setItemCaptionPropertyId("shortName");
         categories.setContainerDataSource(potentialCategories);
         entityBeanFieldGroup.bind(categories, "categories");

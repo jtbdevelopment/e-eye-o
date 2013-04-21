@@ -18,7 +18,7 @@ public class StudentEditorDialogWindow extends IdObjectEditorDialogWindow<Studen
     private final BeanItemContainer<ClassList> potentialClasses = new BeanItemContainer<>(ClassList.class);
 
     public StudentEditorDialogWindow() {
-        super(Student.class, 80, 15);
+        super(Student.class, 50, 14.25f);
     }
 
     @Override
@@ -43,23 +43,38 @@ public class StudentEditorDialogWindow extends IdObjectEditorDialogWindow<Studen
         HorizontalLayout editorRow = new HorizontalLayout();
         editorRow.setSpacing(true);
 
-        editorRow.addComponent(new Label("First Name:"));
-        entityBeanFieldGroup.bind(firstName, "firstName");
-        editorRow.addComponent(firstName);
+        VerticalLayout nameLayout = new VerticalLayout();
+        nameLayout.setSpacing(true);
 
-        editorRow.addComponent(new Label("Last Name:"));
+        HorizontalLayout nameRow = new HorizontalLayout();
+        nameRow.setSpacing(true);
+        nameRow.addComponent(new Label("First Name:"));
+        entityBeanFieldGroup.bind(firstName, "firstName");
+        firstName.setTabIndex(1);
+        nameRow.addComponent(firstName);
+        nameLayout.addComponent(nameRow);
+
+        nameRow = new HorizontalLayout();
+        nameRow.setSpacing(true);
+        nameRow.addComponent(new Label("Last Name:"));
         final TextField lastName = new TextField();
         entityBeanFieldGroup.bind(lastName, "lastName");
-        editorRow.addComponent(lastName);
+        nameRow.addComponent(lastName);
+        lastName.setTabIndex(2);
+        nameLayout.addComponent(nameRow);
+
+        editorRow.addComponent(nameLayout);
 
         editorRow.addComponent(new Label("Classes:"));
 
         TwinColSelect classes = new TwinColSelect();
         classes.setRows(3);
+        classes.setTabIndex(3);
         classes.setContainerDataSource(potentialClasses);
         classes.setItemCaptionPropertyId("description");
         entityBeanFieldGroup.bind(classes, "classLists");
         editorRow.addComponent(classes);
+
         return editorRow;
     }
 }

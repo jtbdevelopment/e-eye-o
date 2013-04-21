@@ -20,7 +20,6 @@ import javax.annotation.PostConstruct;
  * Time: 8:13 PM
  */
 //  TODO - be nice to recompute the caption at top as we go
-//  TODO - properly size all the editor dialogs
 //  TODO - add delete button/workflow
 public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> extends Window {
     @Autowired
@@ -39,11 +38,11 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
 
     protected abstract Focusable getInitialFocusComponent();
 
-    public IdObjectEditorDialogWindow(final Class<T> entityType, final int width, final int height) {
+    public IdObjectEditorDialogWindow(final Class<T> entityType, final float width, final float height) {
         this(entityType, width, Unit.EM, height, Unit.EM);
     }
 
-    public IdObjectEditorDialogWindow(final Class<T> entityType, final int width, final Unit widthUnit, final int height, final Unit heightUnit) {
+    public IdObjectEditorDialogWindow(final Class<T> entityType, final float width, final Unit widthUnit, final float height, final Unit heightUnit) {
         this.entityBeanFieldGroup = new BeanFieldGroup<>(entityType);
         this.entityType = entityType;
         setSizeUndefined();

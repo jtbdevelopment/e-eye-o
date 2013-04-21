@@ -1,7 +1,10 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.vaadin.ui.*;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
+import com.vaadin.ui.TextField;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -15,7 +18,8 @@ public class ObservationCategoryEditorDialogWindow extends IdObjectEditorDialogW
     private final TextField shortName = new TextField();
 
     public ObservationCategoryEditorDialogWindow() {
-        super(ObservationCategory.class, 80, 15);
+        //  height seems to be ignored as less than some minimum it wants
+        super(ObservationCategory.class, 50, 2);
     }
 
     @Override
@@ -30,14 +34,13 @@ public class ObservationCategoryEditorDialogWindow extends IdObjectEditorDialogW
         editorRow.setSpacing(true);
 
         editorRow.addComponent(new Label("Short Name:"));
-        shortName.setWidth(10, Unit.EM);
+        shortName.setWidth(5, Unit.EM);
         entityBeanFieldGroup.bind(shortName, "shortName");
         editorRow.addComponent(shortName);
 
         editorRow.addComponent(new Label("Description:"));
-        final TextArea longDescription = new TextArea();
-        longDescription.setRows(3);
-        longDescription.setWidth(20, Unit.EM);
+        final TextField longDescription = new TextField();
+        longDescription.setWidth(30, Unit.EM);
         entityBeanFieldGroup.bind(longDescription, "description");
         editorRow.addComponent(longDescription);
 

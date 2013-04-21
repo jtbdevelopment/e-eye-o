@@ -34,7 +34,7 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
     private Embedded bigPhoto = new Embedded();
     private BeanItemContainer<AppUserOwnedObject> potentialPhotoFors = new BeanItemContainer<>(AppUserOwnedObject.class);
     private Label mimeType;
-    private TextArea description;
+    private TextField description = new TextField();
     private Panel photoPanel;
 
     public PhotoEditorDialogWindow() {
@@ -52,14 +52,8 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
         details.setMargin(true);
         details.setSpacing(true);
 
-        Upload upload = new Upload();
-        upload.setButtonCaption("Pick photo");
-        details.addComponent(upload);
-
         details.addComponent(new Label("Description:"));
-        description = new TextArea();
-        description.setRows(2);
-        description.setWidth(50, Unit.EM);
+        description.setWidth(30, Unit.EM);
         entityBeanFieldGroup.bind(description, "description");
         details.addComponent(description);
 
@@ -81,6 +75,21 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
         mimeType = new Label();
         mimeType.setReadOnly(true);
         details.addComponent(mimeType);
+
+        HorizontalLayout photoRow = new HorizontalLayout();
+        photoRow.setSpacing(true);
+        Upload upload = new Upload();
+        upload.setButtonCaption("Pick...");
+        photoRow.addComponent(upload);
+
+        photoPanel = new Panel();
+        bigPhoto.setSizeUndefined();
+        photoPanel.setContent(bigPhoto);
+        photoPanel.addStyleName(Runo.PANEL_LIGHT);
+        photoPanel.setSizeUndefined();
+        photoRow.addComponent(photoPanel);
+        verticalLayout.addComponent(photoRow);
+        verticalLayout.setComponentAlignment(photoRow, Alignment.MIDDLE_CENTER);
 
         upload.addSucceededListener(new Upload.SucceededListener() {
             @Override
@@ -105,13 +114,6 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
             }
         });
 
-        photoPanel = new Panel();
-        bigPhoto.setSizeUndefined();
-        photoPanel.setContent(bigPhoto);
-        photoPanel.addStyleName(Runo.PANEL_LIGHT);
-        photoPanel.setSizeUndefined();
-        verticalLayout.addComponent(photoPanel);
-        verticalLayout.setComponentAlignment(photoPanel, Alignment.MIDDLE_CENTER);
         ComponentUtils.setImmediateForAll(verticalLayout, true);
         return verticalLayout;
     }
