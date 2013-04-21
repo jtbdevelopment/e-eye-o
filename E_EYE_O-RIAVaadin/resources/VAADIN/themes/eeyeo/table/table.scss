@@ -1,4 +1,7 @@
 @mixin eeyeo-table {
+  .v-table-table {
+    font-size: 16px;
+  }
   .v-table tr.v-selected {
     background-color: $forestGreen;
     color: black;

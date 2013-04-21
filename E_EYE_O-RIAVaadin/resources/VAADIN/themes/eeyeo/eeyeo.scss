@@ -33,6 +33,11 @@ $brownGray: #c9a283;
     background: $cream;
   }
 
+//  TODO - trying to make dialog font bigger - this isn't working
+  .v-app {
+    font-size: 22px;
+  }
+
   div.photo {
     display: inline-block;
   }

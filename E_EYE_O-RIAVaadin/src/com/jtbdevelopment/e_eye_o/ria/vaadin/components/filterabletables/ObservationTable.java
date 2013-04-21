@@ -54,7 +54,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
                         new HeaderInfo("observationTimestamp", "Time", Table.Align.LEFT),
                         new HeaderInfo("comment", "Comment", Table.Align.LEFT),
                         new HeaderInfo("categories", "Categories", Table.Align.LEFT, true),
-                        new HeaderInfo("significant", "Sig?", Table.Align.CENTER, true)
+                        new HeaderInfo("significant", "Significant?", Table.Align.CENTER, true)
                 ));
         headers.addAll(IdObjectTable.headers);
     }
@@ -117,10 +117,10 @@ public class ObservationTable extends IdObjectTable<Observation> {
         });
 
         //  TODO - do his better
-        entityTable.setColumnExpandRatio("observationTimestamp", 0.15f);
-        entityTable.setColumnExpandRatio("categories", 0.15f);
-        entityTable.setColumnExpandRatio("modificationTimestamp", 0.15f);
-        entityTable.setColumnExpandRatio("comment", 0.45f);
+        entityTable.setColumnExpandRatio("observationTimestamp", 0.10f);
+        entityTable.setColumnExpandRatio("categories", 0.10f);
+        entityTable.setColumnExpandRatio("modificationTimestamp", 0.10f);
+        entityTable.setColumnExpandRatio("comment", 0.60f);
         entityTable.setColumnExpandRatio("archived", 0.05f);
         entityTable.setColumnExpandRatio("significant", 0.05f);
     }

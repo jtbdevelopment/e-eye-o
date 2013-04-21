@@ -20,8 +20,8 @@ public class ShortenedCommentConverter implements Converter<String, String> {
     @Override
     public String convertToPresentation(final String value, final Locale locale) throws ConversionException {
         String shortenedComment = value;
-        if (shortenedComment.length() > 60) {
-            shortenedComment = shortenedComment.substring(0, 57) + "...";
+        if (shortenedComment.length() > 70) {
+            shortenedComment = shortenedComment.substring(0, 67) + "...";
         }
         return shortenedComment;
     }
