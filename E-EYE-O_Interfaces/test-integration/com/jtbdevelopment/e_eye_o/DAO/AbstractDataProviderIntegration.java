@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.DAO;
 
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
+import com.jtbdevelopment.e_eye_o.TestingPhotoHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -11,12 +12,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import javax.imageio.ImageIO;
 import javax.validation.ConstraintViolationException;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 import static org.testng.Assert.*;
@@ -30,22 +26,6 @@ import static org.testng.Assert.*;
 //  TODO - add tests for observables and adding/inserting/deleting observations on them
 @Test(groups = {"integration"})
 public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpringContextTests {
-    private static final String PNG = "image/png";
-    private static byte[] someBytes = new byte[]{0, 1, 0, 1};
-
-    static {
-        try {
-            InputStream resourceAsStream = AbstractDataProviderIntegration.class.getResourceAsStream("/simple.png");
-            BufferedImage image = ImageIO.read(resourceAsStream);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", os);
-            os.close();
-            someBytes = os.toByteArray();
-        } catch (IOException e) {
-            someBytes = null;
-        }
-    }
-
     private static Logger logger = LoggerFactory.getLogger(AbstractDataProviderIntegration.class);
 
     @Autowired
@@ -182,7 +162,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     //  TODO - actual photo
     @Test
     public void testCreatePhotoForStudent() {
-        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testStudentForU1).withMimeType(PNG).withImageData(someBytes).build());
+        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testStudentForU1).withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build());
         Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
@@ -195,7 +175,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     //  TODO - actual photo
     @Test
     public void testCreatePhotoForClassList() {
-        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testClassList1ForU1).withMimeType(PNG).withImageData(someBytes).build());
+        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testClassList1ForU1).withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build());
         Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
@@ -208,7 +188,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     //  TODO - actual photo
     @Test
     public void testCreatePhotoForObservation() {
-        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withMimeType(PNG).withImageData(someBytes).withTimestamp(new LocalDateTime()).withPhotoFor(testObservationForU1).build());
+        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).withTimestamp(new LocalDateTime()).withPhotoFor(testObservationForU1).build());
         Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
@@ -220,7 +200,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testUpdateArchivePhoto() {
-        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("UpdateTest").withTimestamp(new LocalDateTime()).withPhotoFor(testStudentForU1).withMimeType(PNG).withImageData(someBytes).build());
+        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("UpdateTest").withTimestamp(new LocalDateTime()).withPhotoFor(testStudentForU1).withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build());
         Set<Photo> activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         Set<Photo> archivePhotos = rwDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
         assertTrue(activePhotos.contains(photo));
@@ -280,7 +260,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         ObservationCategory oc = rwDAO.create(factory.newObservationCategoryBuilder(updateUser).withShortName("X").withDescription("X").build());
         ClassList cl = rwDAO.create(factory.newClassListBuilder(updateUser).withDescription("CL").build());
         Student s = rwDAO.create(factory.newStudentBuilder(updateUser).withFirstName("A").withLastName("B").build());
-        Photo p = rwDAO.create(factory.newPhotoBuilder(updateUser).withDescription("D").withMimeType(PNG).withImageData(someBytes).withPhotoFor(s).build());
+        Photo p = rwDAO.create(factory.newPhotoBuilder(updateUser).withDescription("D").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).withPhotoFor(s).build());
         Observation o = rwDAO.create(factory.newObservationBuilder(updateUser).withComment("T").withObservationSubject(cl).build());
         cl = rwDAO.get(ClassList.class, cl.getId());  //  Observation made it dirty need to re-read for compare to work
 
@@ -308,7 +288,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         ObservationCategory oc = rwDAO.create(factory.newObservationCategoryBuilder(deleteUserThings).withShortName("X").withDescription("X").build());
         ClassList cl = rwDAO.create(factory.newClassListBuilder(deleteUserThings).withDescription("CL").build());
         Student s = rwDAO.create(factory.newStudentBuilder(deleteUserThings).withFirstName("A").withLastName("B").build());
-        Photo p = rwDAO.create(factory.newPhotoBuilder(deleteUserThings).withDescription("D").withMimeType(PNG).withImageData(someBytes).withPhotoFor(s).build());
+        Photo p = rwDAO.create(factory.newPhotoBuilder(deleteUserThings).withDescription("D").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).withPhotoFor(s).build());
         Observation o = rwDAO.create(factory.newObservationBuilder(deleteUserThings).withComment("T").withObservationSubject(cl).build());
 
         DateTime baseTime = new DateTime();
@@ -342,7 +322,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         student.setLastName("deleteS2");
         student.addClassList(cl);
         Student s2 = rwDAO.create(student);
-        Photo p = rwDAO.create(factory.newPhotoBuilder(deleteUser1).withPhotoFor(cl).withDescription("deletePhoto").withMimeType(PNG).withImageData(someBytes).build());
+        Photo p = rwDAO.create(factory.newPhotoBuilder(deleteUser1).withPhotoFor(cl).withDescription("deletePhoto").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build());
         Observation o = rwDAO.create(factory.newObservationBuilder(deleteUser1).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime()).withCategories(deleteCategories).withComment("delete").build());
         Map<String, Class<? extends IdObject>> idMap = new HashMap<>();
         idMap.put(deleteUser1.getId(), AppUser.class);

@@ -1,6 +1,7 @@
 package com.jtdevelopment.e_eye_o.jackson.serialization;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.TestingPhotoHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObjectSerializer;
 import org.joda.time.DateTime;
@@ -11,11 +12,6 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,22 +27,6 @@ import static org.testng.AssertJUnit.assertEquals;
 @Test(groups = {"integration"})
 public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpringContextTests {
     private final static String newline = System.getProperty("line.separator");
-    private static final String PNG = "image/png";
-    //  TODO - some real data
-    private static byte[] someBytes;
-
-    static {
-        try {
-            InputStream resourceAsStream = JacksonJSONIdObjectSerializerIntegration.class.getResourceAsStream("/simple.png");
-            BufferedImage image = ImageIO.read(resourceAsStream);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", os);
-            os.close();
-            someBytes = os.toByteArray();
-        } catch (IOException e) {
-            someBytes = null;
-        }
-    }
 
     @Autowired
     private JacksonJSONIdObjectSerializer serializer;
@@ -113,11 +93,11 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
         o2ForS1 = factory.newObservationBuilder(appUser1).addCategory(oc1For1).withObservationSubject(student1For1)
                 .withComment("Comment").withObservationTimestamp(new LocalDateTime(2012, 1, 18, 15, 12)).build();
         o2ForS1 = readWriteDAO.create(o2ForS1);
-        photo1for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2011, 11, 11, 11, 11, 11)).withPhotoFor(student1For1).withDescription("Photo1").withMimeType(PNG).withImageData(someBytes).build();
+        photo1for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2011, 11, 11, 11, 11, 11)).withPhotoFor(student1For1).withDescription("Photo1").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build();
         photo1for1 = readWriteDAO.create(photo1for1);
-        photo2for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2012, 12, 12, 12, 12, 12)).withPhotoFor(o2ForS1).withDescription("Photo2").withMimeType(PNG).withImageData(someBytes).build();
+        photo2for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2012, 12, 12, 12, 12, 12)).withPhotoFor(o2ForS1).withDescription("Photo2").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build();
         photo2for1 = readWriteDAO.create(photo2for1);
-        photo3for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2013, 1, 1, 15, 12, 45)).withPhotoFor(classList1For1).withDescription("Photo3").withMimeType(PNG).withImageData(someBytes).build();
+        photo3for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2013, 1, 1, 15, 12, 45)).withPhotoFor(classList1For1).withDescription("Photo3").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build();
         photo3for1 = readWriteDAO.create(photo3for1);
         buildObjectToExpectedJSONMap();
     }
