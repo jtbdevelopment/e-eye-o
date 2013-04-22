@@ -8,4 +8,6 @@ import com.jtbdevelopment.e_eye_o.entities.Photo;
  */
 public interface PhotoHelper {
     void setPhotoImages(final Photo photo, final byte[] imageData);
+
+    boolean isMimeTypeSupported(final String mimeType);
 }

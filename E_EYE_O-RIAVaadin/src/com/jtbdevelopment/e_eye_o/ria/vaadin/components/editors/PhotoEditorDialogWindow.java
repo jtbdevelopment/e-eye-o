@@ -78,7 +78,7 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
 
         HorizontalLayout photoRow = new HorizontalLayout();
         photoRow.setSpacing(true);
-        Upload upload = new Upload();
+        final Upload upload = new Upload();
         upload.setButtonCaption("Pick...");
         photoRow.addComponent(upload);
 
@@ -104,7 +104,11 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
         upload.setReceiver(new Upload.Receiver() {
             @Override
             public OutputStream receiveUpload(String filename, String mimeType) {
-                //  TODO - validate mime type
+                if (!photoHelper.isMimeTypeSupported(mimeType)) {
+                    Notification.show("Sorry - this file type is not supported.", Notification.Type.ERROR_MESSAGE);
+                    return null;
+                }
+                upload.setComponentError(null);
                 uploadedStream = new ByteArrayOutputStream();
                 if (!StringUtils.hasLength(description.getValue())) {
                     description.setValue(filename);

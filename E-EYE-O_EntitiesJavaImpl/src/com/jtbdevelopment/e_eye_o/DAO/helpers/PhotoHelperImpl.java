@@ -2,14 +2,18 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers;
 
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import org.imgscalr.Scalr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Date: 4/14/13
@@ -18,10 +22,31 @@ import java.io.IOException;
 @Component
 @SuppressWarnings("unused")
 public class PhotoHelperImpl implements PhotoHelper {
+    private final static Logger logger = LoggerFactory.getLogger(PhotoHelperImpl.class);
+
     public void setPhotoImages(final Photo photo, final byte[] imageData) {
         photo.setImageData(imageData);
         updateThumbnailImage(photo);
         standardizePrimaryImage(photo);
+    }
+
+    @Override
+    public boolean isMimeTypeSupported(final String mimeType) {
+        if (!StringUtils.hasLength(mimeType)) {
+            logger.error("mimeType is null or blank " + mimeType);
+            return false;
+        }
+
+        if (!mimeType.startsWith("image/")) {
+            logger.error("Only image mime types are supported.  Not " + mimeType);
+            return false;
+        }
+        Iterator<ImageWriter> writers = getImageWritersByMIMEType(mimeType);
+        if (!writers.hasNext()) {
+            logger.warn("No image support for mimeType = " + mimeType);
+            return false;
+        }
+        return true;
     }
 
     private void standardizePrimaryImage(final Photo photo) {
@@ -35,15 +60,16 @@ public class PhotoHelperImpl implements PhotoHelper {
     private byte[] resizePhoto(final Photo photo, final int resizeTo) {
         BufferedImage image = null, resized = null;
         try {
+            final String mimeType = photo.getMimeType();
+            if (!isMimeTypeSupported(mimeType)) {
+                throw new RuntimeException("Error with mimeType on photo" + mimeType);
+            }
+
             image = ImageIO.read(new ByteArrayInputStream(photo.getImageData()));
             resized = Scalr.resize(image, resizeTo);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-            final String mimeType = photo.getMimeType();
-            if (!StringUtils.hasLength(mimeType)) {
-                throw new RuntimeException("Set mime type before image data");
-            }
-            String type = ImageIO.getImageWritersByMIMEType(mimeType).next().getOriginatingProvider().getFormatNames()[0];
+            String type = getImageWritersByMIMEType(mimeType).next().getOriginatingProvider().getFormatNames()[0];
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(resized, type, os);
             os.close();
             image.flush();
@@ -58,5 +84,9 @@ public class PhotoHelperImpl implements PhotoHelper {
             }
             throw new RuntimeException("Error creating thumbnail.", e);
         }
+    }
+
+    private Iterator<ImageWriter> getImageWritersByMIMEType(String mimeType) {
+        return ImageIO.getImageWritersByMIMEType(mimeType);
     }
 }
