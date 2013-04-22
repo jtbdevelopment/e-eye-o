@@ -25,6 +25,7 @@ import java.util.Collection;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 //  TODO - more overlap with idobjectable than expected - refactor?
 //  TODO - how to delete a photo?
+//  TODO - paginatation/search
 //  TODO - some sort of ordering
 public class PhotoAlbum extends CustomComponent {
     private AppUserOwnedObject defaultPhotoFor;

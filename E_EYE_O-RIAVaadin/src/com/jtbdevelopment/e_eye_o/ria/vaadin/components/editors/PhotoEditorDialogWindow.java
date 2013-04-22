@@ -98,6 +98,7 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
                 photo.setMimeType(PhotoEditorDialogWindow.this.mimeType.getValue());
                 photoHelper.setPhotoImages(photo, uploadedStream.toByteArray());
                 photo.setDescription(description.getValue());
+                photo.setPhotoFor((AppUserOwnedObject) photoFor.getValue());
                 setEntity(photo);
             }
         });
@@ -147,5 +148,6 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
             potentialPhotoFors.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, entity.getAppUser()));
         }
         super.setEntity(entity);
+        getUI().setFocusedComponent(getInitialFocusComponent());
     }
 }
