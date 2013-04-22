@@ -5,6 +5,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
+import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
@@ -86,7 +87,11 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
                 try {
                     save();
                 } catch (FieldGroup.CommitException e) {
-                    throw new RuntimeException(e);
+                    if (e.getCause() instanceof Validator.InvalidValueException) {
+                        Notification.show("Please check that all entries are correct.", Notification.Type.WARNING_MESSAGE);
+                    } else {
+                        Notification.show("There was a problem trying to save this.  Refresh, check and try again please.", Notification.Type.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -148,6 +153,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
     @Override
     public void attach() {
         super.attach();
+        ComponentUtils.clearAllErrors(this);
         getUI().setFocusedComponent(getInitialFocusComponent());
     }
 

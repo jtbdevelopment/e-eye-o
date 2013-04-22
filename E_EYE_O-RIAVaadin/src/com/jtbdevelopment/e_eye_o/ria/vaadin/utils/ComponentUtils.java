@@ -32,6 +32,15 @@ public class ComponentUtils {
         });
     }
 
+    public static void clearAllErrors(final Component component) {
+        processAllComponents(component, AbstractComponent.class, new Callback<AbstractComponent>() {
+            @Override
+            public void doWork(AbstractComponent component) {
+                component.setComponentError(null);
+            }
+        });
+    }
+
     private static <T extends AbstractComponent> void processAllComponents(final Component topComponent, final Class<T> componentTypes, final Callback<T> callback) {
         if (componentTypes.isAssignableFrom(topComponent.getClass())) {
             callback.doWork((T) topComponent);

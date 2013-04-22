@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectRelatedSideTabClicked;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.*;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Notification;
@@ -63,6 +64,7 @@ public class WorkAreaComponent extends CustomComponent {
     @SuppressWarnings("unused")
     public void changeDataArea(final IdObjectRelatedSideTabClicked event) {
         Notification.show("Switching to " + event.getEntityType().getCaption());
+        ComponentUtils.clearAllErrors(verticalLayout);
         for (Component child : verticalLayout) {
             child.setVisible(false);
         }
