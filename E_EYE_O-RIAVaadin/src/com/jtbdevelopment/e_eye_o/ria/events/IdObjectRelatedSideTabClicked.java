@@ -1,19 +1,19 @@
 package com.jtbdevelopment.e_eye_o.ria.events;
 
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.SideTabComponent;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TabComponent;
 
 /**
  * Date: 3/10/13
  * Time: 3:58 PM
  */
 public class IdObjectRelatedSideTabClicked {
-    private final SideTabComponent.IdObjectSideTabs entityType;
+    private final TabComponent.IdObjectTabs entityType;
 
-    public IdObjectRelatedSideTabClicked(final SideTabComponent.IdObjectSideTabs entityType) {
+    public IdObjectRelatedSideTabClicked(final TabComponent.IdObjectTabs entityType) {
         this.entityType = entityType;
     }
 
-    public SideTabComponent.IdObjectSideTabs getEntityType() {
+    public TabComponent.IdObjectTabs getEntityType() {
         return entityType;
     }
 }

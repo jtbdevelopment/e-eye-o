@@ -1,6 +1,6 @@
 @import "../runo/runo.scss";
 @import "logo/logo.scss";
-@import "sidetabs/sidetabs.scss";
+@import "tabs/tabs";
 @import "optiongroup/optiongroup.scss";
 @import "table/table.scss";
 @import "tabsheet/tabsheet.scss";
@@ -20,7 +20,7 @@ $brownGray: #c9a283;
 @mixin eeyeo {
   @include runo;
   @include eeyeo-logo;
-  @include eeyeo-sidetabs;
+  @include eeyeo-tabs;
   @include eeyeo-optiongroup;
   @include eeyeo-table;
   @include eeyeo-tabsheet;

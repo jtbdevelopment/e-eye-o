@@ -7,14 +7,14 @@ import com.vaadin.ui.Label;
  * Date: 3/10/13
  * Time: 3:34 PM
  */
-public class SideTab extends Label {
+public class Tab extends Label {
     private final EventBus eventBus;
     private final Object event;
 
-    public SideTab(final String caption, final EventBus eventBus, final Object messageToPublish) {
+    public Tab(final String caption, final EventBus eventBus, final Object messageToPublish) {
         super(caption);
-        addStyleName("sidetabs");
-//        setWidth(null);
+        addStyleName("tabs");
+        setWidth(null);
         this.eventBus = eventBus;
         this.event = messageToPublish;
     }

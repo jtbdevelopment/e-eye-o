@@ -19,35 +19,29 @@ import org.springframework.stereotype.Component;
 public class TitleBarComposite extends CustomComponent {
 
     //  TODO - nice looking
-    //  TODO - reminder notifications
 
     private final Label welcomeLabel;
-    private final Label lastLogout;
 
     @Autowired
-    public TitleBarComposite(final Logo logo) {
+    public TitleBarComposite(final Logo logo, final TabComponent tabComponent) {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(null);
-        // the main layout and components will be created here
         HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.setSizeFull();
-        mainLayout.setMargin(true);
-        mainLayout.setSpacing(true);
+
+        mainLayout.addComponent(logo);
+        mainLayout.addComponent(logo);
+        mainLayout.setComponentAlignment(logo, Alignment.MIDDLE_LEFT);
+
+        mainLayout.addComponent(tabComponent);
+        mainLayout.setComponentAlignment(tabComponent, Alignment.MIDDLE_CENTER);
+        mainLayout.setExpandRatio(tabComponent, 1.0f);
 
         welcomeLabel = new Label("Welcome");
         welcomeLabel.setWidth(null);
         mainLayout.addComponent(welcomeLabel);
-        mainLayout.setComponentAlignment(welcomeLabel, Alignment.MIDDLE_LEFT);
-        mainLayout.setExpandRatio(welcomeLabel, 0.2f);
+        mainLayout.setComponentAlignment(welcomeLabel, Alignment.MIDDLE_RIGHT);
 
-        mainLayout.addComponent(logo);
-        mainLayout.addComponent(logo);
-        mainLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
-        mainLayout.setExpandRatio(logo, 0.75f);
-
-        lastLogout = new Label();
-        lastLogout.setWidth(null);
-        mainLayout.addComponent(lastLogout);
         mainLayout.addStyleName("titlebar");
         setCompositionRoot(mainLayout);
     }
@@ -56,11 +50,6 @@ public class TitleBarComposite extends CustomComponent {
     public void attach() {
         super.attach();
         AppUser appUser = getUI().getSession().getAttribute(AppUser.class);
-        if (appUser.getLastLogout().equals(AppUser.NEVER_LOGGED_IN)) {
-            welcomeLabel.setValue("Welcome " + appUser.getSummaryDescription());
-        } else {
-            welcomeLabel.setValue("Welcome back " + appUser.getSummaryDescription());
-        }
-        lastLogout.setValue("Last Session: " + appUser.getLastLogout().toString("YYYY-MM-dd HH:mm", getUI().getLocale()));
+        welcomeLabel.setValue("Welcome " + appUser.getFirstName());
     }
 }

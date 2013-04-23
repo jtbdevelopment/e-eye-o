@@ -6,8 +6,8 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.MainPageComposite;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TitleBarComposite;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.WorkAreaComponent;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
@@ -39,7 +39,7 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
     private EventBus eventBus;
 
     @Autowired
-    private MainPageComposite mainPageComposite;
+    private WorkAreaComponent workAreaComponent;
 
     @Autowired
     private TitleBarComposite titleBarComposite;
@@ -63,8 +63,8 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         outer.setMargin(new MarginInfo(true, true, true, false));
 
         outer.addComponent(titleBarComposite);
-        outer.addComponent(mainPageComposite);
-        outer.setExpandRatio(mainPageComposite, 1.0f);
+        outer.addComponent(workAreaComponent);
+        outer.setExpandRatio(workAreaComponent, 1.0f);
 
         setContent(outer);
     }

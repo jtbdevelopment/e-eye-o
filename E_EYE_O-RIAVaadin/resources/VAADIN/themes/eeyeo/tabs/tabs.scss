@@ -1,26 +1,14 @@
-@mixin eeyeo-sidetabs {
-  .v-label-sidetabs {
+@mixin eeyeo-tabs {
+  .v-label-tabs {
     font-size: 14px;
     font-weight: bold;
     margin: 0px;
-    padding: 10px;
-    border-bottom: 1px solid #101010;
+    padding: 5px;
     color: #222222;
-    float: left;
     text-shadow: $brownGray 0 2px 2px;
   }
 
-  .v-label-blank-sidetabs {
-    font-size: 14px;
-    font-weight: bold;
-    margin: 0px;
-    padding: 10px;
-    float: left;
-    border-bottom: 1px solid #101010;
-    color: $cream;
-  }
-
-  .v-label-selected-sidetabs {
+  .v-label-selected-tabs {
     background-image: linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
     background-image: -o-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
     background-image: -moz-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
@@ -32,7 +20,7 @@
     text-shadow: black 0 2px 2px;
   }
 
-  .v-label-sidetabs:hover {
+  .v-label-tabs:hover {
     color: white;
     text-shadow: $darkBrown 0 2px 2px;
   }
