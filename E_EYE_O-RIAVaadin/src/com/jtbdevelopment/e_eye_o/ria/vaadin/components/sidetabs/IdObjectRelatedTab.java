@@ -12,5 +12,4 @@ public class IdObjectRelatedTab extends Tab {
     public IdObjectRelatedTab(TabComponent.IdObjectTabs sideTab, final EventBus eventBus) {
         super(sideTab.getCaption(), eventBus, new IdObjectRelatedSideTabClicked(sideTab));
     }
-
 }
