@@ -46,11 +46,13 @@ public class TabComponent extends CustomComponent {
     }
 
     private Label currentSelected;
+    private final Label welcomeLabel;
 
     @Autowired
     public TabComponent(final EventBus eventBus) {
         HorizontalLayout outerLayout = new HorizontalLayout();
         outerLayout.setWidth(100, Unit.PERCENTAGE);
+
         CssLayout mainLayout = new CssLayout();
         mainLayout.setSizeUndefined();
 
@@ -63,27 +65,46 @@ public class TabComponent extends CustomComponent {
             mainLayout.addComponent(sideTab);
         }
         mainLayout.addComponent(new Tab(REPORTS, null, null));
-        mainLayout.addComponent(new Tab(SETTINGS, null, null));
-        mainLayout.addComponent(new Tab(HELP, null, null));
-        mainLayout.addComponent(new Tab(LOGOUT, eventBus, new LogoutEvent()));
 
-        mainLayout.addLayoutClickListener(new LayoutEvents.LayoutClickListener() {
-            @Override
-            public void layoutClick(final LayoutEvents.LayoutClickEvent event) {
-                Component clicked = event.getChildComponent();
-                if (clicked instanceof Tab) {
-                    ((Tab) clicked).onClicked();
-                    if (currentSelected != null) {
-                        currentSelected.removeStyleName(SELECTED_TABS);
-                    }
-                    clicked.addStyleName(SELECTED_TABS);
-                    currentSelected = (Label) clicked;
-                }
+        CssLayout sideLayout = new CssLayout();
+        sideLayout.setSizeUndefined();
+        welcomeLabel = new Tab("Welcome", null, null);  //  TODO - settings
+        welcomeLabel.setDescription("Change settings.");
+        sideLayout.addComponent(welcomeLabel);
+        sideLayout.addComponent(new Tab(LOGOUT, eventBus, new LogoutEvent()));
+        sideLayout.addComponent(new Tab(HELP, null, null));  // TODO - help
 
-            }
-        });
+        ClickListener clickListener = new ClickListener();
+        mainLayout.addLayoutClickListener(clickListener);
+        sideLayout.addLayoutClickListener(clickListener);
         outerLayout.addComponent(mainLayout);
         outerLayout.setComponentAlignment(mainLayout, Alignment.MIDDLE_CENTER);
+        outerLayout.setExpandRatio(mainLayout, 1);
+        outerLayout.addComponent(sideLayout);
+        outerLayout.setComponentAlignment(sideLayout, Alignment.MIDDLE_RIGHT);
         setCompositionRoot(outerLayout);
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        AppUser appUser = getUI().getSession().getAttribute(AppUser.class);
+        welcomeLabel.setValue("Welcome " + appUser.getFirstName() + ".");
+    }
+
+    private class ClickListener implements LayoutEvents.LayoutClickListener {
+        @Override
+        public void layoutClick(final com.vaadin.event.LayoutEvents.LayoutClickEvent event) {
+            Component clicked = event.getChildComponent();
+            if (clicked instanceof Tab) {
+                ((Tab) clicked).onClicked();
+                if (currentSelected != null) {
+                    currentSelected.removeStyleName(SELECTED_TABS);
+                }
+                clicked.addStyleName(SELECTED_TABS);
+                currentSelected = (Label) clicked;
+            }
+
+        }
     }
 }
