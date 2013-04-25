@@ -147,8 +147,8 @@ public class ObservationTable extends IdObjectTable<Observation> {
     }
 
     @Override
-    public void setTableDriver(final IdObject tableDriver) {
-        super.setTableDriver(tableDriver);
+    public void setDisplayDriver(final IdObject tableDriver) {
+        super.setDisplayDriver(tableDriver);
         if (tableDriver instanceof AppUserOwnedObject) {
             if (tableDriver instanceof ObservationCategory) {
                 entities.addAll(readWriteDAO.getAllObservationsForObservationCategory((ObservationCategory) tableDriver));

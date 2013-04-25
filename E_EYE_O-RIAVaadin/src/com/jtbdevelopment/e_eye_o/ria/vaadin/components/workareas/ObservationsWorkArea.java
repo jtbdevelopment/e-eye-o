@@ -46,7 +46,7 @@ public class ObservationsWorkArea extends CustomComponent {
     public void attach() {
         super.attach();
         final AppUser appUser = getSession().getAttribute(AppUser.class);
-        observationTable.setTableDriver(appUser);
+        observationTable.setDisplayDriver(appUser);
         getUI().setFocusedComponent(observationTable.getSearchFor());
     }
 

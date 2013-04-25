@@ -35,8 +35,8 @@ public class ClassListsWorkArea extends CustomComponent {
         classListTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<ClassList>() {
             @Override
             public void handleClickEvent(final ClassList entity) {
-                studentTable.setTableDriver(entity);
-                observationTable.setTableDriver(entity);
+                studentTable.setDisplayDriver(entity);
+                observationTable.setDisplayDriver(entity);
                 photoAlbum.setAlbumDriver(entity);
             }
         });
@@ -56,7 +56,7 @@ public class ClassListsWorkArea extends CustomComponent {
     public void attach() {
         super.attach();
         final AppUser appUser = getSession().getAttribute(AppUser.class);
-        classListTable.setTableDriver(appUser);
+        classListTable.setDisplayDriver(appUser);
         getUI().setFocusedComponent(classListTable.getSearchFor());
     }
 

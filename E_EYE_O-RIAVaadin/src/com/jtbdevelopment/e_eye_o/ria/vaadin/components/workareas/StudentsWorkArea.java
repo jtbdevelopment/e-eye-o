@@ -32,7 +32,7 @@ public class StudentsWorkArea extends CustomComponent {
         studentTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Student>() {
             @Override
             public void handleClickEvent(Student entity) {
-                observationTable.setTableDriver(entity);
+                observationTable.setDisplayDriver(entity);
             }
         });
         mainLayout.addComponent(studentTable);
@@ -54,7 +54,7 @@ public class StudentsWorkArea extends CustomComponent {
     public void attach() {
         super.attach();
         final AppUser appUser = getSession().getAttribute(AppUser.class);
-        studentTable.setTableDriver(appUser);
+        studentTable.setDisplayDriver(appUser);
         getUI().setFocusedComponent(studentTable.getSearchFor());
     }
 

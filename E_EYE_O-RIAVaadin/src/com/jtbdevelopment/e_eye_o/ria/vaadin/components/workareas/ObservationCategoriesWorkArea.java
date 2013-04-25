@@ -32,7 +32,7 @@ public class ObservationCategoriesWorkArea extends CustomComponent {
         observationCategoryTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<ObservationCategory>() {
             @Override
             public void handleClickEvent(final ObservationCategory entity) {
-                observationTable.setTableDriver(entity);
+                observationTable.setDisplayDriver(entity);
             }
         });
         mainLayout.addComponent(observationCategoryTable);
@@ -52,7 +52,7 @@ public class ObservationCategoriesWorkArea extends CustomComponent {
     public void attach() {
         super.attach();
         final AppUser appUser = getSession().getAttribute(AppUser.class);
-        observationCategoryTable.setTableDriver(appUser);
+        observationCategoryTable.setDisplayDriver(appUser);
         getUI().setFocusedComponent(observationCategoryTable.getSearchFor());
     }
 

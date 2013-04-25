@@ -57,8 +57,8 @@ public class StudentTable extends IdObjectTable<Student> {
     }
 
     @Override
-    public void setTableDriver(final IdObject tableDriver) {
-        super.setTableDriver(tableDriver);
+    public void setDisplayDriver(final IdObject tableDriver) {
+        super.setDisplayDriver(tableDriver);
         if (tableDriver instanceof ClassList) {
             entities.addAll(readWriteDAO.getAllStudentsForClassList((ClassList) tableDriver));
             refreshSizeAndSort();
