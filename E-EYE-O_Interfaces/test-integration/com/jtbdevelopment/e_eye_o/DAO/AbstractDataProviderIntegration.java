@@ -159,7 +159,6 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         assertTrue(categories.contains(newTest3));
     }
 
-    //  TODO - actual photo
     @Test
     public void testCreatePhotoForStudent() {
         Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testStudentForU1).withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build());
@@ -172,7 +171,6 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         }
     }
 
-    //  TODO - actual photo
     @Test
     public void testCreatePhotoForClassList() {
         Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testClassList1ForU1).withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build());
@@ -185,7 +183,6 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         }
     }
 
-    //  TODO - actual photo
     @Test
     public void testCreatePhotoForObservation() {
         Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).withTimestamp(new LocalDateTime()).withPhotoFor(testObservationForU1).build());
