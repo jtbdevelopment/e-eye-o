@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
  * Date: 3/3/13
  * Time: 11:30 AM
  */
-//  TODO - generally clear out errors and error icons over time
 //  TODO - verify icons from http://bashooka.com/freebie/25-free-icons-for-e-commerce-stores/ are genuinely free
 @Component(value = "eeyeoUI")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
