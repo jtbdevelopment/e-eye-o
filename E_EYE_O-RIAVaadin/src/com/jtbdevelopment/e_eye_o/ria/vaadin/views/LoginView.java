@@ -114,8 +114,7 @@ public class LoginView extends VerticalLayout implements View {
                         rememberMeServices.loginSuccess(new FakeRememberMeFlag(key, (VaadinServletRequest) currentRequest), (VaadinServletResponse) currentResponse, authentication);
                     }
                 } catch (AuthenticationException e) {
-                    //  TODO - capture login ok but account inactive/unconfirmed
-                    Notification.show("Failed to login.", Notification.Type.ERROR_MESSAGE);
+                    Notification.show("Failed to login.  Username or password does not match an active account.", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
                 AppUser user = readOnlyDAO.getUser(login);
