@@ -6,12 +6,15 @@ import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationCategoryTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationWithSubjectTable;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum.PhotoAlbum;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Date: 3/10/13
@@ -20,15 +23,21 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationCategoriesWorkArea extends CustomComponent {
+    @Autowired
     private ObservationCategoryTable observationCategoryTable;
 
     @Autowired
-    public ObservationCategoriesWorkArea(final ObservationCategoryTable observationCategoryTable, final ObservationWithSubjectTable observationTable) {
+    private ObservationWithSubjectTable observationTable;
+
+    @Autowired
+    private PhotoAlbum photoAlbum;
+
+    @PostConstruct
+    public void postConstruct() {
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
         mainLayout.setSpacing(true);
 
-        this.observationCategoryTable = observationCategoryTable;
         observationCategoryTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<ObservationCategory>() {
             @Override
             public void handleClickEvent(final ObservationCategory entity) {
@@ -40,10 +49,11 @@ public class ObservationCategoriesWorkArea extends CustomComponent {
         observationTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Observation>() {
             @Override
             public void handleClickEvent(final Observation entity) {
-                //  TODO if even needed
+                photoAlbum.setDisplayDriver(entity);
             }
         });
         mainLayout.addComponent(observationTable);
+        mainLayout.addComponent(photoAlbum);
 
         setCompositionRoot(mainLayout);
     }
@@ -54,10 +64,5 @@ public class ObservationCategoriesWorkArea extends CustomComponent {
         final AppUser appUser = getSession().getAttribute(AppUser.class);
         observationCategoryTable.setDisplayDriver(appUser);
         getUI().setFocusedComponent(observationCategoryTable.getSearchFor());
-    }
-
-    @Override
-    public void detach() {
-        super.detach();
     }
 }

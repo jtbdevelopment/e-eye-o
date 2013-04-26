@@ -2,19 +2,21 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ClassListTable;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.StudentTable;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum.PhotoAlbum;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Date: 3/10/13
@@ -23,30 +25,45 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ClassListsWorkArea extends CustomComponent {
-    private ClassListTable classListTable;
-
     @Autowired
-    public ClassListsWorkArea(final ClassListTable classListTable, final StudentTable studentTable, final ObservationTable observationTable, final PhotoAlbum photoAlbum) {
+    private ClassListTable classListTable;
+    @Autowired
+    private StudentTable studentTable;
+    @Autowired
+    private ObservationTable observationTable;
+    @Autowired
+    @Qualifier("observationTable")
+    private ObservationTable observationsForStudentTable;
+    @Autowired
+    private PhotoAlbum photoAlbum;
+    @Autowired
+    private PhotoAlbum photosForObservations;
+    @Autowired
+    private PhotoAlbum photosForStudentsObservations;
+
+    @PostConstruct
+    public void postConstruct() {
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
         mainLayout.setSpacing(true);
 
-        this.classListTable = classListTable;
         classListTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<ClassList>() {
             @Override
             public void handleClickEvent(final ClassList entity) {
                 studentTable.setDisplayDriver(entity);
                 observationTable.setDisplayDriver(entity);
-                photoAlbum.setAlbumDriver(entity);
+                photoAlbum.setDisplayDriver(entity);
             }
         });
         mainLayout.addComponent(classListTable);
 
         TabSheet tabSheet = new TabSheet();
-        tabSheet.addTab(studentTable).setCaption(Student.class.getAnnotation(PreferredDescription.class).plural());
-        tabSheet.addTab(observationTable).setCaption(Observation.class.getAnnotation(PreferredDescription.class).plural());
-        tabSheet.addTab(photoAlbum).setCaption(Photo.class.getAnnotation(PreferredDescription.class).plural());
         tabSheet.addStyleName(Runo.TABSHEET_SMALL);
+        tabSheet.addTab(createTabLayout(Arrays.asList(studentTable, observationsForStudentTable, photosForStudentsObservations)))
+                .setCaption(Student.class.getAnnotation(PreferredDescription.class).plural());
+        tabSheet.addTab(createTabLayout(Arrays.asList(observationTable, photosForObservations)))
+                .setCaption(Observation.class.getAnnotation(PreferredDescription.class).plural());
+        tabSheet.addTab(photoAlbum).setCaption(Photo.class.getAnnotation(PreferredDescription.class).plural());
         mainLayout.addComponent(tabSheet);
 
         setCompositionRoot(mainLayout);
@@ -60,8 +77,22 @@ public class ClassListsWorkArea extends CustomComponent {
         getUI().setFocusedComponent(classListTable.getSearchFor());
     }
 
-    @Override
-    public void detach() {
-        super.detach();
+    protected VerticalLayout createTabLayout(final List<? extends IdObjectFilterableDisplay<? extends AppUserOwnedObject>> displays) {
+        IdObjectFilterableDisplay previous = null;
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeFull();
+        for (final IdObjectFilterableDisplay display : displays) {
+            verticalLayout.addComponent(display);
+            if (previous != null) {
+                previous.setClickedOnListener(new IdObjectFilterableDisplay.ClickedOnListener<AppUserOwnedObject>() {
+                    @Override
+                    public void handleClickEvent(final AppUserOwnedObject entity) {
+                        display.setDisplayDriver(entity);
+                    }
+                });
+            }
+            previous = display;
+        }
+        return verticalLayout;
     }
 }

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Date: 3/10/13
  * Time: 4:40 PM
@@ -16,11 +18,11 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PhotosWorkArea extends CustomComponent {
-    private final PhotoAlbum photoAlbum;
-
     @Autowired
-    public PhotosWorkArea(final PhotoAlbum photoAlbum) {
-        this.photoAlbum = photoAlbum;
+    private PhotoAlbum photoAlbum;
+
+    @PostConstruct
+    public void postConstruct() {
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
         mainLayout.setSpacing(true);
@@ -34,12 +36,6 @@ public class PhotosWorkArea extends CustomComponent {
     public void attach() {
         super.attach();
         final AppUser appUser = getSession().getAttribute(AppUser.class);
-
-        photoAlbum.setAlbumDriver(appUser);
-    }
-
-    @Override
-    public void detach() {
-        super.detach();
+        photoAlbum.setDisplayDriver(appUser);
     }
 }

@@ -21,14 +21,20 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class StudentsWorkArea extends CustomComponent {
+    @Autowired
     private StudentTable studentTable;
 
     @Autowired
-    public StudentsWorkArea(final StudentTable studentTable, final ObservationTable observationTable, final PhotoAlbum photoAlbum) {
+    private ObservationTable observationTable;
+
+    @Autowired
+    private PhotoAlbum photoAlbum;
+
+    @Autowired
+    public void postConstruct() {
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
 
-        this.studentTable = studentTable;
         studentTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Student>() {
             @Override
             public void handleClickEvent(Student entity) {
@@ -41,7 +47,7 @@ public class StudentsWorkArea extends CustomComponent {
         observationTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Observation>() {
             @Override
             public void handleClickEvent(final Observation entity) {
-                photoAlbum.setAlbumDriver(entity);
+                photoAlbum.setDisplayDriver(entity);
             }
         });
 
@@ -56,10 +62,5 @@ public class StudentsWorkArea extends CustomComponent {
         final AppUser appUser = getSession().getAttribute(AppUser.class);
         studentTable.setDisplayDriver(appUser);
         getUI().setFocusedComponent(studentTable.getSearchFor());
-    }
-
-    @Override
-    public void detach() {
-        super.detach();
     }
 }

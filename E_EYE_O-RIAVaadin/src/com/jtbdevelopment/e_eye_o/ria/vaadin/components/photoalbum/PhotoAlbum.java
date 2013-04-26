@@ -1,13 +1,15 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum;
 
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
-import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.IdObjectEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.PhotoEditorDialogWindow;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectFilterableDisplay;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.PhotoThumbnailResource;
+import com.vaadin.data.Container;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
@@ -15,59 +17,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import java.util.Collection;
-
 /**
  * Date: 3/23/13
  * Time: 8:17 PM
  */
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//  TODO - more overlap with idobjectable than expected - refactor?
 //  TODO - how to delete a photo?
-//  TODO - paginatation/search
+//  TODO - paginatation
 //  TODO - some sort of ordering
-public class PhotoAlbum extends CustomComponent {
+//  TODO - archive/unarchive
+//  TODO - text filter should go deeper into photo for summary desc perhaps
+public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
     private AppUserOwnedObject defaultPhotoFor;
-
-    @Autowired
-    private EventBus eventBus;
 
     @Autowired
     private PhotoEditorDialogWindow photoEditorDialogWindow;
 
-    @Autowired
-    private ReadOnlyDAO readOnlyDAO;
-
-    @Autowired
-    private IdObjectFactory idObjectFactory;
-
-    private final CssLayout photoLayout;
-
-    private IdObject driver;
+    private final CssLayout photoLayout = new CssLayout();
 
     public PhotoAlbum() {
-        VerticalLayout overall = new VerticalLayout();
-        overall.setSizeFull();
+        super(Photo.class);
+    }
 
-        HorizontalLayout actions = new HorizontalLayout();
-        actions.setWidth(100, Unit.PERCENTAGE);
-        overall.addComponent(actions);
-
-        Button addPhoto = new Button("New " + Photo.class.getAnnotation(PreferredDescription.class).singular());
-        addPhoto.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                Photo newPhoto = idObjectFactory.newPhoto(getUI().getSession().getAttribute(AppUser.class));
-                if (defaultPhotoFor != null) {
-                    newPhoto.setPhotoFor(defaultPhotoFor);
-                }
-                photoEditorDialogWindow.setEntity(newPhoto);
-                getUI().addWindow(photoEditorDialogWindow);
-            }
-        });
-        actions.addComponent(addPhoto);
-        photoLayout = new CssLayout();
+    @Override
+    protected Component buildMainDisplay() {
         photoLayout.setSizeFull();
 
         photoLayout.setImmediate(true);
@@ -96,34 +70,52 @@ public class PhotoAlbum extends CustomComponent {
                 }
             }
         });
-        overall.addComponent(photoLayout);
-        setCompositionRoot(overall);
-        setSizeFull();
+        entities.addItemSetChangeListener(new Container.ItemSetChangeListener() {
+            @Override
+            public void containerItemSetChange(Container.ItemSetChangeEvent event) {
+                refreshPhotos();
+            }
+        });
+        return photoLayout;
+
     }
 
     @Override
-    public void attach() {
-        super.attach();
-        eventBus.register(this);
+    public IdObjectEditorDialogWindow<Photo> showEntityEditor(final Photo entity) {
+        if (entity.getPhotoFor() == null) {
+            entity.setPhotoFor(defaultPhotoFor);
+        }
+        photoEditorDialogWindow.setEntity(entity);
+        getUI().addWindow(photoEditorDialogWindow);
+        return photoEditorDialogWindow;
     }
 
-    public void setAlbumDriver(final IdObject driver) {
+    @Override
+    protected void refreshSize() {
+        //  TODO
+    }
+
+    @Override
+    protected void refreshSort() {
+        //  TODO
+    }
+
+    @Override
+    public void setDisplayDriver(final IdObject driver) {
+        super.setDisplayDriver(driver);
+        //  TODO - show all for a student?
+        if (driver instanceof AppUserOwnedObject) {
+            entities.addAll(readWriteDAO.getAllPhotosForEntity((AppUserOwnedObject) driver));
+            setDefaultPhotoFor((AppUserOwnedObject) driver);
+        }
+        refreshPhotos();
+    }
+
+    private void refreshPhotos() {
         while (photoLayout.getComponentCount() > 0) {
             photoLayout.removeComponent(photoLayout.getComponent(0));
         }
-        //  TODO - archived/active filters
-        //  TODO - show all for a student?
-        Collection<Photo> photos;
-        if (driver instanceof AppUser) {
-            photos = readOnlyDAO.getActiveEntitiesForUser(Photo.class, (AppUser) driver);
-        } else if (driver instanceof AppUserOwnedObject) {
-            photos = readOnlyDAO.getAllPhotosForEntity((AppUserOwnedObject) driver);
-            setDefaultPhotoFor((AppUserOwnedObject) driver);
-        } else {
-            //  TODO - log/notify
-            return;
-        }
-        for (Photo p : photos) {
+        for (Photo p : entities.getItemIds()) {
             final Embedded photo = new Embedded(null, new PhotoThumbnailResource(p));
             photo.setAlternateText(p.getDescription());  // TODO - maybe filename?
             photo.setSizeUndefined();
@@ -150,7 +142,6 @@ public class PhotoAlbum extends CustomComponent {
 
             photoLayout.addComponent(select);
         }
-        this.driver = driver;
     }
 
     @Subscribe
@@ -158,7 +149,7 @@ public class PhotoAlbum extends CustomComponent {
     public void handleIdObjectChanged(final IdObjectChanged msg) {
         if (msg.getEntity() instanceof Photo) {
             //  TODO - better
-            setAlbumDriver(driver);
+            setDisplayDriver(displayDriver);
         }
     }
 

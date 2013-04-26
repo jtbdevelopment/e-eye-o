@@ -148,6 +148,5 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
             potentialPhotoFors.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, entity.getAppUser()));
         }
         super.setEntity(entity);
-        getUI().setFocusedComponent(getInitialFocusComponent());
     }
 }
