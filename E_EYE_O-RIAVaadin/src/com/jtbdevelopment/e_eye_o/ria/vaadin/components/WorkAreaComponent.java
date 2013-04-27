@@ -5,10 +5,8 @@ import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectRelatedSideTabClicked;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -23,7 +21,8 @@ import javax.annotation.PostConstruct;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class WorkAreaComponent extends CustomComponent {
 
-    private final VerticalLayout verticalLayout;
+    private final Panel panel = new Panel();
+    private final VerticalLayout verticalLayout = new VerticalLayout();
 
     @Autowired
     private StudentsWorkArea studentsWorkArea;
@@ -37,14 +36,7 @@ public class WorkAreaComponent extends CustomComponent {
     private ObservationCategoriesWorkArea observationCategoriesWorkArea;
 
     @Autowired
-    public WorkAreaComponent(final EventBus eventBus) {
-        eventBus.register(this);
-        verticalLayout = new VerticalLayout();
-        verticalLayout.setSizeFull();
-        setSizeFull();
-        setCompositionRoot(verticalLayout);
-
-    }
+    private EventBus eventBus;
 
     @PostConstruct
     public void postConstruct() {
@@ -58,6 +50,11 @@ public class WorkAreaComponent extends CustomComponent {
         classListsWorkArea.setVisible(false);
         observationCategoriesWorkArea.setVisible(false);
         observationsWorkArea.setVisible(false);
+        verticalLayout.setSizeFull();
+        panel.setSizeFull();
+        panel.setContent(verticalLayout);
+        panel.addStyleName(Runo.PANEL_LIGHT);
+        setCompositionRoot(panel);
     }
 
     @Subscribe
@@ -87,5 +84,17 @@ public class WorkAreaComponent extends CustomComponent {
             default:
                 //  TODO - log or notify
         }
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        eventBus.register(this);
+    }
+
+    @Override
+    public void detach() {
+        eventBus.unregister(this);
+        super.detach();
     }
 }

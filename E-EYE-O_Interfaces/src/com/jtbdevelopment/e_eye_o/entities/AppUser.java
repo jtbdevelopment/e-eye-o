@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.DisplayTableDefaults;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Size;
  * Time: 3:12 PM
  */
 @PreferredDescription(singular = "User", plural = "Users")
+@DisplayTableDefaults(defaultDisplaySize = 50, defaultSortAscending = true, defaultSortField = "login")
 public interface AppUser extends IdObject {
     public final static DateTime NEVER_LOGGED_IN = UNINITIALISED_LOCAL_DATE_TIME.toDateTime();
 

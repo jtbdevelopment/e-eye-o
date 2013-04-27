@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.DisplayTableDefaults;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDateTime;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Size;
  * Time: 3:18 PM
  */
 @PreferredDescription(singular = "Photo", plural = "Photos")
+@DisplayTableDefaults(defaultDisplaySize = 10, defaultSortField = "timestamp", defaultSortAscending = true)
 public interface Photo extends AppUserOwnedObject {
 
     public static final int THUMBNAIL_SIZE = 150;

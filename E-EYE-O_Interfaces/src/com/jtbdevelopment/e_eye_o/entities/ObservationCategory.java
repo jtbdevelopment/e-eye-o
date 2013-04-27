@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.DisplayTableDefaults;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.Size;
  * Time: 3:18 PM
  */
 @PreferredDescription(singular = "Category", plural = "Categories")
+@DisplayTableDefaults(defaultDisplaySize = 10, defaultSortField = "shortName", defaultSortAscending = true)
 public interface ObservationCategory extends AppUserOwnedObject {
 
     public final static String OBSERVATION_CATEGORY_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL = "ObservationCategory.description" + CANNOT_BE_BLANK_OR_NULL_ERROR;

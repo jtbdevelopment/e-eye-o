@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.DisplayTableDefaults;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.Size;
  * Time: 3:15 PM
  */
 @PreferredDescription(singular = "Class", plural = "Classes")
+@DisplayTableDefaults(defaultDisplaySize = 5, defaultSortField = "description", defaultSortAscending = true)
 public interface ClassList extends Observable {
 
     public final static String CLASS_LIST_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL_ERROR = "ClassList.description" + CANNOT_BE_BLANK_OR_NULL_ERROR;

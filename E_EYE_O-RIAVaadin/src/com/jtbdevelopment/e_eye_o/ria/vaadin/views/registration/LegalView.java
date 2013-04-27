@@ -44,6 +44,7 @@ public class LegalView extends VerticalLayout implements View {
         legalLayout.setSizeFull();
         legalPanel.setContent(legalLayout);
 
+        //  TODO - legal
         legalLayout.addComponent(new Label("Terms of Agreement and Service"));
         legalLayout.addComponent(new Label("blah blah blah we promise to be good but make no promises.."));
         legalLayout.addComponent(new Label("..don't sue me bro."));

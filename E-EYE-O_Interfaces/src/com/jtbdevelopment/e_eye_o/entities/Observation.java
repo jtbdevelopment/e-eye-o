@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.DisplayTableDefaults;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import com.jtbdevelopment.e_eye_o.entities.validation.NoNullsInCollectionCheck;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -15,6 +16,7 @@ import java.util.Set;
  * Time: 3:15 PM
  */
 @PreferredDescription(singular = "Observation", plural = "Observations")
+@DisplayTableDefaults(defaultDisplaySize = 25, defaultSortField = "observationTimestamp", defaultSortAscending = false)
 public interface Observation extends AppUserOwnedObject {
 
     public final static String OBSERVATION_COMMENT_CANNOT_BE_BLANK_OR_NULL_ERROR = "Observation.comment" + CANNOT_BE_BLANK_OR_NULL_ERROR;

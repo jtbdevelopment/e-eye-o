@@ -16,6 +16,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.Runo;
 import org.jsoup.helper.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -63,6 +64,8 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     protected void initialize() {
         this.entities = new AllItemsBeanItemContainer<>(entityType);
 
+        Panel panel = new Panel();
+        panel.addStyleName(Runo.PANEL_LIGHT);
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.addComponent(buildActionRow());
         mainLayout.addComponent(buildMainDisplay());
@@ -72,7 +75,8 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         }
         refreshSizeAndSort();
 
-        setCompositionRoot(mainLayout);
+        panel.setContent(mainLayout);
+        setCompositionRoot(panel);
         ComponentUtils.setImmediateForAll(this, true);
     }
 
@@ -80,22 +84,21 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         return new SimpleStringFilter("summaryDescription", searchFor, true, false);
     }
 
-    protected HorizontalLayout buildActionRow() {
+    protected Layout buildActionRow() {
         HorizontalLayout actionRow = new HorizontalLayout();
-        HorizontalLayout buttonSection = buildActionButtons();
+        Layout buttonSection = buildActionButtons();
         actionRow.addComponent(buttonSection);
         actionRow.setComponentAlignment(buttonSection, Alignment.BOTTOM_LEFT);
 
-        HorizontalLayout filterSection = buildFilterOptions();
+        Layout filterSection = buildFilterOptions();
         actionRow.addComponent(filterSection);
         actionRow.setComponentAlignment(filterSection, Alignment.BOTTOM_RIGHT);
         actionRow.setWidth(100, Unit.PERCENTAGE);
-        actionRow.setExpandRatio(buttonSection, 1);
-        actionRow.setExpandRatio(filterSection, 3);
+        actionRow.setExpandRatio(filterSection, 1.0f);
         return actionRow;
     }
 
-    private HorizontalLayout buildFilterOptions() {
+    private Layout buildFilterOptions() {
         HorizontalLayout filterSection = new HorizontalLayout();
         filterSection.setWidth(null);
         filterSection.setSpacing(true);
@@ -183,7 +186,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         refreshSizeAndSort();
     }
 
-    private HorizontalLayout buildActionButtons() {
+    private Layout buildActionButtons() {
         //  Buttons
         HorizontalLayout buttonSection = new HorizontalLayout();
         buttonSection.setWidth(null);
@@ -206,7 +209,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         T entity;
         if (item instanceof BeanItem) {
             entity = ((BeanItem<T>) item).getBean();
-        } else if (entityType.isAssignableFrom(item.getClass())) {
+        } else if (item != null && entityType.isAssignableFrom(item.getClass())) {
             entity = (T) item;
         } else {
             Notification.show("Not sure what this is - " + (item == null ? "null" : item.toString()));
