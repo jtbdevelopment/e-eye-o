@@ -1,9 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -14,7 +11,13 @@ import org.springframework.context.annotation.Scope;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class Logo extends CustomComponent {
+
+    private final Label beta;
+
     public Logo() {
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeUndefined();
+
         HorizontalLayout horizontalLayout = new HorizontalLayout();
 
         String letters[] = {"E", "-", "E", "Y", "E", "-", "O"};
@@ -32,7 +35,20 @@ public class Logo extends CustomComponent {
 
         horizontalLayout.addStyleName("logo");
         horizontalLayout.setSizeUndefined();
-        setCompositionRoot(horizontalLayout);
+
+        verticalLayout.addComponent(horizontalLayout);
+        beta = new Label("BETA");
+        beta.setSizeUndefined();
+        beta.addStyleName("beta");
+        verticalLayout.addComponent(beta);
+        verticalLayout.setComponentAlignment(beta, Alignment.MIDDLE_CENTER);
+
+        setCompositionRoot(verticalLayout);
         setSizeUndefined();
+    }
+
+    public void setBigLogo() {
+        addStyleName("big-logo");
+        beta.addStyleName("big-logo-beta");
     }
 }

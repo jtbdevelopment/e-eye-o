@@ -60,17 +60,30 @@ public class LoginView extends VerticalLayout implements View {
         setMargin(true);
         setSizeFull();
 
+        Panel panel = new Panel();
+        panel.setSizeFull();
+        panel.addStyleName(Runo.PANEL_LIGHT);
+
+        VerticalLayout outerLayout = new VerticalLayout();
+        outerLayout.setSizeFull();
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeUndefined();
         Layout titleSection = getTitleSection();
-        addComponent(titleSection);
-        setComponentAlignment(titleSection, Alignment.MIDDLE_CENTER);
+        verticalLayout.addComponent(titleSection);
+        verticalLayout.setComponentAlignment(titleSection, Alignment.MIDDLE_CENTER);
 
         Layout loginSection = getLoginSection();
-        addComponent(loginSection);
-        setComponentAlignment(loginSection, Alignment.BOTTOM_CENTER);
+        verticalLayout.addComponent(loginSection);
+        verticalLayout.setComponentAlignment(loginSection, Alignment.MIDDLE_CENTER);
 
         Layout helpSection = getSignUpResetSection();
-        addComponent(helpSection);
-        setComponentAlignment(helpSection, Alignment.TOP_CENTER);
+        verticalLayout.addComponent(helpSection);
+        verticalLayout.setComponentAlignment(helpSection, Alignment.MIDDLE_CENTER);
+        outerLayout.addComponent(verticalLayout);
+        outerLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
+        panel.setContent(outerLayout);
+
+        addComponent(panel);
     }
 
     private Layout getLoginSection() {
@@ -142,6 +155,9 @@ public class LoginView extends VerticalLayout implements View {
         horizontalLayout.addComponent(forgotPasswordLink);
         helpSection.addComponent(horizontalLayout);
         helpSection.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);
+        Label description = new Label("Electronic Early Years Educator's Observations");
+        helpSection.addComponent(description);
+        helpSection.setComponentAlignment(description, Alignment.MIDDLE_CENTER);
         return helpSection;
     }
 
@@ -152,7 +168,7 @@ public class LoginView extends VerticalLayout implements View {
         title.addStyleName("bold");
         titleSection.addComponent(title);
         titleSection.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
-        logo.addStyleName("big-logo");
+        logo.setBigLogo();
         titleSection.addComponent(logo);
         titleSection.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
         return titleSection;
