@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+//  TODO - make pretty
 public class AccountConfirmationView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "ConfirmAccount";
 
