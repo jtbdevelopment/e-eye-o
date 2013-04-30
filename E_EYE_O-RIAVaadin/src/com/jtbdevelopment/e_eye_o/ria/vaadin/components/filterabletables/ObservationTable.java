@@ -11,6 +11,8 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -28,6 +30,8 @@ import java.util.List;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationTable extends IdObjectTable<Observation> {
+    private static final Logger logger = LoggerFactory.getLogger(ObservationTable.class);
+
     private Observable defaultObservationSubject;
 
     @Autowired
@@ -132,6 +136,7 @@ public class ObservationTable extends IdObjectTable<Observation> {
         significantOnly.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": significant only filter " + significantOnly.getValue());
                 if (significantOnly.getValue()) {
                     entities.addContainerFilter("significant", "true", false, true);
                 } else {

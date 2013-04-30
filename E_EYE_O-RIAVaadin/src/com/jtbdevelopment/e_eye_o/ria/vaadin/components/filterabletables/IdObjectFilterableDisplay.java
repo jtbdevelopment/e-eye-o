@@ -18,6 +18,8 @@ import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.jsoup.helper.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -29,6 +31,8 @@ import java.util.Arrays;
  */
 //  TODO - this class is too big
 public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> extends CustomComponent {
+    private static final Logger logger = LoggerFactory.getLogger(IdObjectFilterableDisplay.class);
+
     public interface ClickedOnListener<T> {
         void handleClickEvent(final T entity);
     }
@@ -115,6 +119,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
                 }
 
                 final String searchValue = event.getText();
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": search text now " + searchValue);
                 if (!StringUtil.isBlank(searchValue)) {
                     currentFilter = generateFilter(searchValue);
                     entities.addContainerFilter(currentFilter);
@@ -134,12 +139,14 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         activeCB.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": changing active/archived to " + activeCB.getValue() + "/" + archivedCB.getValue());
                 setActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
             }
         });
         archivedCB.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": changing active/archived to " + activeCB.getValue() + "/" + archivedCB.getValue());
                 setActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
             }
         });
@@ -163,6 +170,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(final Property.ValueChangeEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": changing max size to " + showSize.getValue());
                 maxSize = ((Integer) showSize.getValue());
                 refreshSize();
             }
@@ -196,6 +204,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         newEntityButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": press new entity button for " + entityType.getSimpleName());
                 showEntityEditor(idObjectFactory.newAppUserOwnedObject(entityType, appUser));
             }
         });
@@ -212,9 +221,10 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         } else if (item != null && entityType.isAssignableFrom(item.getClass())) {
             entity = (T) item;
         } else {
-            Notification.show("Not sure what this is - " + (item == null ? "null" : item.toString()));
+            logger.warn(getSession().getAttribute(AppUser.class).getId() + ": clicked on item and didn't know what to do with it " + (item == null ? null : item.getClass().getSimpleName()));
             return null;
         }
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": clicked on " + entity.getId());
         if (clickedOnListener != null) {
             clickedOnListener.handleClickEvent(entity);
         }
@@ -257,6 +267,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     }
 
     public void setDisplayDriver(final IdObject displayDriver) {
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": display driver changed to " + displayDriver.getId());
         this.displayDriver = displayDriver;
         entities.removeAllItems();
         if (displayDriver instanceof AppUser) {

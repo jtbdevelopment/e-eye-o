@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.components.sidetabs;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectRelatedSideTabClicked;

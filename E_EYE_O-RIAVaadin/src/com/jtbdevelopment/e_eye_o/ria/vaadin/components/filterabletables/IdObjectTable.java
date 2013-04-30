@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtons;
@@ -9,6 +10,8 @@ import com.vaadin.event.ItemClickEvent;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
@@ -20,6 +23,8 @@ import java.util.List;
  * Time: 7:11 PM
  */
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObjectFilterableDisplay<T> {
+    private static final Logger logger = LoggerFactory.getLogger(IdObjectTable.class);
+
     //  TODO - diff icons
     protected static final ThemeResource NOT_X = new ThemeResource("../runo/icons/16/cancel.png");
     protected static final ThemeResource IS_X = new ThemeResource("../runo/icons/16/ok.png");
@@ -119,6 +124,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
             public void itemClick(final ItemClickEvent event) {
                 T entity = handleSelectionChange(event.getItem());
                 if (event.isDoubleClick() && entity != null) {
+                    logger.trace(getSession().getAttribute(AppUser.class).getId() + ": double clicked to edit " + entity.getId());
                     //  Get latest from dao in case stale
                     entity = readWriteDAO.get(entityType, entity.getId());
                     showEntityEditor(entity);

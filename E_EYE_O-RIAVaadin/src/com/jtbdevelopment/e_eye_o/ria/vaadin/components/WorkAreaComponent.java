@@ -2,11 +2,14 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectRelatedSideTabClicked;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -20,6 +23,7 @@ import javax.annotation.PostConstruct;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class WorkAreaComponent extends CustomComponent {
+    private static final Logger logger = LoggerFactory.getLogger(WorkAreaComponent.class);
 
     private final Panel panel = new Panel();
     private final VerticalLayout verticalLayout = new VerticalLayout();
@@ -60,6 +64,7 @@ public class WorkAreaComponent extends CustomComponent {
     @Subscribe
     @SuppressWarnings("unused")
     public void changeDataArea(final IdObjectRelatedSideTabClicked event) {
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to " + event.getEntityType());
         Notification.show("Switching to " + event.getEntityType().getCaption());
         ComponentUtils.clearAllErrors(verticalLayout);
         for (Component child : verticalLayout) {
@@ -82,7 +87,7 @@ public class WorkAreaComponent extends CustomComponent {
                 photosWorkArea.setVisible(true);
                 break;
             default:
-                //  TODO - log or notify
+                logger.warn("Received change data area with unknown entity type " + event.getEntityType());
         }
     }
 

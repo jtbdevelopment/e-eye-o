@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
@@ -12,6 +13,8 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.jsoup.helper.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +26,8 @@ import javax.annotation.PostConstruct;
 //  TODO - be nice to recompute the caption at top as we go
 //  TODO - add delete button/workflow
 public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> extends Window {
+    private static final Logger logger = LoggerFactory.getLogger(IdObjectEditorDialogWindow.class);
+
     @Autowired
     protected EventBus eventBus;
 
@@ -52,7 +57,6 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
         setWidth(width, widthUnit);
         setHeight(height, heightUnit);
         setContent(mainLayout);
-
     }
 
     @PostConstruct
@@ -84,6 +88,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
         save.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": clicked save on " + entityBeanFieldGroup.getItemDataSource().getBean().getId());
                 try {
                     save();
                 } catch (FieldGroup.CommitException e) {
@@ -100,6 +105,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
         cancel.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": clicked cancel on " + entityBeanFieldGroup.getItemDataSource().getBean().getId());
                 entityBeanFieldGroup.discard();
                 closeWindow();
             }
@@ -111,6 +117,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
         reset.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": clicked reset on " + entityBeanFieldGroup.getItemDataSource().getBean().getId());
                 entityBeanFieldGroup.discard();
             }
         });

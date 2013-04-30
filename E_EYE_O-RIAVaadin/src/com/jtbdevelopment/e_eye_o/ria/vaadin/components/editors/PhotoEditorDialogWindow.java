@@ -1,10 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
 import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelper;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.Observation;
-import com.jtbdevelopment.e_eye_o.entities.Photo;
+import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.PhotoImageResource;
@@ -12,6 +9,8 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -27,6 +26,8 @@ import java.io.OutputStream;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
+    private static final Logger logger = LoggerFactory.getLogger(PhotoEditorDialogWindow.class);
+
     @Autowired
     private PhotoHelper photoHelper;
 
@@ -94,6 +95,7 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
         upload.addSucceededListener(new Upload.SucceededListener() {
             @Override
             public void uploadSucceeded(Upload.SucceededEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": upload completed");
                 Photo photo = entityBeanFieldGroup.getItemDataSource().getBean();
                 photo.setMimeType(PhotoEditorDialogWindow.this.mimeType.getValue());
                 photoHelper.setPhotoImages(photo, uploadedStream.toByteArray());
@@ -105,6 +107,7 @@ public class PhotoEditorDialogWindow extends IdObjectEditorDialogWindow<Photo> {
         upload.setReceiver(new Upload.Receiver() {
             @Override
             public OutputStream receiveUpload(String filename, String mimeType) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": upload started " + filename + " (" + mimeType + ")");
                 if (!photoHelper.isMimeTypeSupported(mimeType)) {
                     Notification.show("Sorry - this file type is not supported.", Notification.Type.ERROR_MESSAGE);
                     return null;

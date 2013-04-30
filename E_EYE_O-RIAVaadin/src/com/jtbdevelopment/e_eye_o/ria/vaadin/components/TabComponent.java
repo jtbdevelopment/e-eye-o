@@ -4,8 +4,8 @@ import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.sidetabs.IdObjectRelatedTab;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.sidetabs.Tab;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.IdObjectRelatedTab;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.Tab;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,6 @@ public class TabComponent extends CustomComponent {
     public static final String SELECTED_TABS = "selected-tabs";
     public static final String LOGOUT = "Logout";
     public static final String HELP = "Help";
-    public static final String SETTINGS = "Settings";
     public static final String REPORTS = "Reports";
 
     //  TODO - move this?
@@ -104,7 +103,6 @@ public class TabComponent extends CustomComponent {
                 clicked.addStyleName(SELECTED_TABS);
                 currentSelected = (Label) clicked;
             }
-
         }
     }
 }
