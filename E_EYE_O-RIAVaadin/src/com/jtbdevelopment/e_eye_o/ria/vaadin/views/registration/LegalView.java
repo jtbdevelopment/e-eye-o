@@ -5,6 +5,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.views.LoginView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.joda.time.DateTime;
@@ -21,6 +22,7 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+//  TODO - privacy and cookie policies
 public class LegalView extends VerticalLayout implements View {
     public final static String VIEW_NAME = "LegalStuff";
     public static final String AGREEMENT_TIME = "agreementTime";
@@ -38,16 +40,10 @@ public class LegalView extends VerticalLayout implements View {
         setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
 
         Panel legalPanel = new Panel();
-        legalPanel.setWidth(90, Unit.PERCENTAGE);
+        legalPanel.setSizeFull();
         legalPanel.addStyleName(Runo.PANEL_LIGHT);
-        VerticalLayout legalLayout = new VerticalLayout();
-        legalLayout.setSizeFull();
-        legalPanel.setContent(legalLayout);
+        legalPanel.setContent(new Label(TermsAndConditions.TEXT, ContentMode.HTML));
 
-        //  TODO - legal
-        legalLayout.addComponent(new Label("Terms of Agreement and Service"));
-        legalLayout.addComponent(new Label("blah blah blah we promise to be good but make no promises.."));
-        legalLayout.addComponent(new Label("..don't sue me bro."));
         addComponent(legalPanel);
         setComponentAlignment(legalPanel, Alignment.MIDDLE_CENTER);
         setExpandRatio(legalPanel, 1);

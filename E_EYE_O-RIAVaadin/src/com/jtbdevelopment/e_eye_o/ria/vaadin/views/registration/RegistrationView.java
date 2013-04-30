@@ -44,9 +44,9 @@ public class RegistrationView extends VerticalLayout implements View {
         setSizeFull();
 
         //  TODO - record legal agreement somewhere
-
-        addComponent(logo);
-        setComponentAlignment(logo, Alignment.BOTTOM_CENTER);
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.addComponent(logo);
+        verticalLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
 
         FormLayout form = new FormLayout();
         final BeanFieldGroup<AppUser> beanFieldGroup = new BeanFieldGroup<>(AppUser.class);
@@ -70,12 +70,12 @@ public class RegistrationView extends VerticalLayout implements View {
         form.setComponentAlignment(confirmPassword, Alignment.MIDDLE_CENTER);
         form.setSizeUndefined();
 
-        addComponent(form);
-        setComponentAlignment(form, Alignment.MIDDLE_CENTER);
+        verticalLayout.addComponent(form);
+        verticalLayout.setComponentAlignment(form, Alignment.MIDDLE_CENTER);
 
         Button register = new Button("Register");
-        addComponent(register);
-        setComponentAlignment(register, Alignment.TOP_CENTER);
+        verticalLayout.addComponent(register);
+        verticalLayout.setComponentAlignment(register, Alignment.MIDDLE_CENTER);
         register.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
@@ -96,6 +96,8 @@ public class RegistrationView extends VerticalLayout implements View {
                 getSession().getAttribute(Navigator.class).navigateTo(PostRegistrationView.VIEW_NAME);
             }
         });
+        addComponent(verticalLayout);
+        setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
         ComponentUtils.setImmediateForAll(this, true);
     }
 
