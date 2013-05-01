@@ -14,6 +14,8 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.VerticalLayout;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -31,7 +33,8 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @PreserveOnRefresh
 public class EEYEOUI extends EEYEOErrorHandlingUI {
-    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(EEYEOUI.class);
+
     private ReadWriteDAO readWriteDAO;
 
     @Autowired
@@ -70,12 +73,14 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
 
     @Override
     public void close() {
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": EEYEOUI.close called.");
         logoutEventHandler(null);
         super.close();
     }
 
     @Subscribe
     public void logoutEventHandler(final LogoutEvent event) {
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": logoutEventHandlerCalled.");
         AppUser appUser = getSession().getAttribute(AppUser.class);
         appUser.setLastLogout(new DateTime());
         readWriteDAO.update(appUser);

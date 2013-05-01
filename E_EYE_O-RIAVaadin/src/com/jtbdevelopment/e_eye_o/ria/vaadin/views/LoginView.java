@@ -127,6 +127,7 @@ public class LoginView extends VerticalLayout implements View {
                         rememberMeServices.loginSuccess(new FakeRememberMeFlag(key, (VaadinServletRequest) currentRequest), (VaadinServletResponse) currentResponse, authentication);
                     }
                 } catch (AuthenticationException e) {
+                    //  TODO - lock account after X attempts
                     Notification.show("Failed to login.  Username or password does not match an active account.", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
@@ -186,7 +187,6 @@ public class LoginView extends VerticalLayout implements View {
             super(vaadinServletRequest);
             this.rememberMeParameter = rememberMeParameter;
         }
-
 
         @Override
         public String getParameter(final String name) {

@@ -8,6 +8,8 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.IdObjectRelatedTab;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.Tab;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -19,6 +21,7 @@ import org.springframework.context.annotation.Scope;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TabComponent extends CustomComponent {
+    private static final Logger logger = LoggerFactory.getLogger(TabComponent.class);
 
     public static final String SELECTED_TABS = "selected-tabs";
     public static final String LOGOUT = "Logout";
@@ -96,7 +99,9 @@ public class TabComponent extends CustomComponent {
         public void layoutClick(final com.vaadin.event.LayoutEvents.LayoutClickEvent event) {
             Component clicked = event.getChildComponent();
             if (clicked instanceof Tab) {
-                ((Tab) clicked).onClicked();
+                Tab clickedTab = (Tab) clicked;
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Clicked on " + clickedTab.getCaption());
+                clickedTab.onClicked();
                 if (currentSelected != null) {
                     currentSelected.removeStyleName(SELECTED_TABS);
                 }

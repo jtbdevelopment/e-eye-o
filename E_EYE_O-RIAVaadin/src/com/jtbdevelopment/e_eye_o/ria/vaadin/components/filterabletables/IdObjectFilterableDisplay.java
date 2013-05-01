@@ -136,6 +136,10 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
 
         final CheckBox activeCB = new CheckBox("Active");
         final CheckBox archivedCB = new CheckBox("Archived");
+        //  TODO - configurable
+        activeCB.setValue(Boolean.TRUE);
+        //  TODO - configurable
+        archivedCB.setValue(Boolean.FALSE);
         activeCB.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
@@ -150,10 +154,6 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
                 setActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
             }
         });
-        //  TODO - configurable
-        activeCB.setValue(Boolean.TRUE);
-        //  TODO - configurable
-        archivedCB.setValue(Boolean.FALSE);
         filterSection.addComponent(activeCB);
         filterSection.addComponent(archivedCB);
         filterSection.setComponentAlignment(activeCB, Alignment.BOTTOM_LEFT);
@@ -167,6 +167,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
         final NativeSelect showSize = new NativeSelect(null, Arrays.asList(1, 5, 10, 25, 50));
+        showSize.setValue(maxSize);
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(final Property.ValueChangeEvent event) {
@@ -175,7 +176,6 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
                 refreshSize();
             }
         });
-        showSize.setValue(maxSize);
         showSize.setWidth(4, Unit.EM);
         filterSection.addComponent(showSize);
         filterSection.setComponentAlignment(showSize, Alignment.BOTTOM_LEFT);
