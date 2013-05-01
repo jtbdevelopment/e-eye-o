@@ -4,7 +4,6 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.StudentEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LastObservationTimestampStringConverter;
 import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -21,12 +20,9 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class StudentTable extends IdObjectTable<Student> {
+public class StudentTable extends ObservableTable<Student> {
     @Autowired
     private StudentEditorDialogWindow studentEditorDialogWindow;
-
-    @Autowired
-    private LastObservationTimestampStringConverter lastObservationTimestampStringConverter;
 
     public StudentTable() {
         super(Student.class);
@@ -38,10 +34,9 @@ public class StudentTable extends IdObjectTable<Student> {
         headers = new LinkedList<>(
                 Arrays.asList(
                         new HeaderInfo("firstName", "First Name", Table.Align.LEFT),
-                        new HeaderInfo("lastName", "Last Name", Table.Align.LEFT),
-                        new HeaderInfo("lastObservationTimestamp", "Last Observation", Table.Align.CENTER)  //  TODO - move to ObservableTable?
+                        new HeaderInfo("lastName", "Last Name", Table.Align.LEFT)
                 ));
-        headers.addAll(IdObjectTable.headers);
+        headers.addAll(ObservableTable.headers);
     }
 
     @Override
@@ -65,9 +60,4 @@ public class StudentTable extends IdObjectTable<Student> {
         }
     }
 
-    @Override
-    protected void addColumnConverters() {
-        super.addColumnConverters();
-        entityTable.setConverter("lastObservationTimestamp", lastObservationTimestampStringConverter);
-    }
 }

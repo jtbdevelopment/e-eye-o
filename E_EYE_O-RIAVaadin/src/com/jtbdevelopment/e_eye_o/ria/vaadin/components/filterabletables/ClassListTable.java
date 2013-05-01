@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ClassListTable extends IdObjectTable<ClassList> {
+public class ClassListTable extends ObservableTable<ClassList> {
     @Autowired
     private ClassListEditorDialogWindow classListEditorDialogWindow;
 
@@ -35,10 +35,9 @@ public class ClassListTable extends IdObjectTable<ClassList> {
     static {
         headers = new LinkedList<>(
                 Arrays.asList(
-                        new HeaderInfo("description", "Description", Table.Align.LEFT),
-                        new HeaderInfo("lastObservationTimestamp", "Last Observation", Table.Align.CENTER)
+                        new HeaderInfo("description", "Description", Table.Align.LEFT)
                 ));
-        headers.addAll(IdObjectTable.headers);
+        headers.addAll(ObservableTable.headers);
     }
 
     @Override
@@ -51,11 +50,5 @@ public class ClassListTable extends IdObjectTable<ClassList> {
         getUI().addWindow(classListEditorDialogWindow);
         classListEditorDialogWindow.setEntity(entity);
         return classListEditorDialogWindow;
-    }
-
-    @Override
-    protected void addColumnConverters() {
-        super.addColumnConverters();
-        entityTable.setConverter("lastObservationTimestamp", lastObservationTimestampStringConverter);
     }
 }
