@@ -14,7 +14,6 @@ import java.util.Locale;
 public class AppUserOwnedObjectStringConverter implements Converter<String, AppUserOwnedObject> {
     @Override
     public AppUserOwnedObject convertToModel(final String value, final Locale locale) throws ConversionException {
-        //  TODO
         return null;
     }
 

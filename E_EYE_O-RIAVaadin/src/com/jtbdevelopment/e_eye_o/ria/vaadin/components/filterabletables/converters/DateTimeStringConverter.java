@@ -15,12 +15,10 @@ import java.util.Locale;
 public class DateTimeStringConverter implements Converter<String, DateTime> {
     private static final String DEFAULT_FORMAT = "YYYY-MM-dd HH:mm";
 
-    //  TODO - support non-default formats
-    //  TODO - uninitialized string
-    private final String format;
+    private String format = DEFAULT_FORMAT;
 
-    public DateTimeStringConverter() {
-        format = DEFAULT_FORMAT;
+    public void setFormat(final String format) {
+        this.format = format;
     }
 
     @Override

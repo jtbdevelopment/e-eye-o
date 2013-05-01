@@ -9,7 +9,10 @@ import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.vaadin.data.util.converter.Converter;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +28,8 @@ import java.util.Set;
  */
 @Component
 public class ObservationCategorySetStringConverter implements Converter<String, Set> {
+    private static final Logger logger = LoggerFactory.getLogger(ObservationCategorySetStringConverter.class);
+
     @Autowired
     private ReadOnlyDAO readOnlyDAO;
 
@@ -42,7 +47,8 @@ public class ObservationCategorySetStringConverter implements Converter<String, 
             if (category != null) {
                 results.add(category);
             } else {
-                //  TODO - notify/log
+                logger.warn(UI.getCurrent().getSession().getAttribute(AppUser.class).getId() + ": unable to find observation category " + shortCode);
+                Notification.show("Category " + shortCode + " seems to have disappeared.");
             }
         }
         return results;
