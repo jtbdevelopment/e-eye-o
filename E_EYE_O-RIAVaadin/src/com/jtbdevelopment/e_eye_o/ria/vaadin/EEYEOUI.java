@@ -35,6 +35,7 @@ import org.springframework.stereotype.Component;
 public class EEYEOUI extends EEYEOErrorHandlingUI {
     private static final Logger logger = LoggerFactory.getLogger(EEYEOUI.class);
 
+    @Autowired
     private ReadWriteDAO readWriteDAO;
 
     @Autowired

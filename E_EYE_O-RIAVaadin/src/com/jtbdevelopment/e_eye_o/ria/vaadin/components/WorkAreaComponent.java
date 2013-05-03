@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.ria.events.HelpClicked;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectRelatedSideTabClicked;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
@@ -38,6 +39,8 @@ public class WorkAreaComponent extends CustomComponent {
     private PhotosWorkArea photosWorkArea;
     @Autowired
     private ObservationCategoriesWorkArea observationCategoriesWorkArea;
+    @Autowired
+    private HelpWorkArea helpWorkArea;
 
     @Autowired
     private EventBus eventBus;
@@ -49,11 +52,13 @@ public class WorkAreaComponent extends CustomComponent {
         verticalLayout.addComponent(observationCategoriesWorkArea);
         verticalLayout.addComponent(observationsWorkArea);
         verticalLayout.addComponent(photosWorkArea);
+        verticalLayout.addComponent(helpWorkArea);
         photosWorkArea.setVisible(false);
         studentsWorkArea.setVisible(true);               //  TODO - make which one a default
         classListsWorkArea.setVisible(false);
         observationCategoriesWorkArea.setVisible(false);
         observationsWorkArea.setVisible(false);
+        helpWorkArea.setVisible(false);
         verticalLayout.setSizeFull();
         panel.setSizeFull();
         panel.setContent(verticalLayout);
@@ -63,13 +68,19 @@ public class WorkAreaComponent extends CustomComponent {
 
     @Subscribe
     @SuppressWarnings("unused")
+    public void helpArea(final HelpClicked event) {
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to help");
+        Notification.show("Switching to Help");
+        prepForTabSwitch();
+        helpWorkArea.setVisible(true);
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
     public void changeDataArea(final IdObjectRelatedSideTabClicked event) {
         logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to " + event.getEntityType());
         Notification.show("Switching to " + event.getEntityType().getCaption());
-        ComponentUtils.clearAllErrors(verticalLayout);
-        for (Component child : verticalLayout) {
-            child.setVisible(false);
-        }
+        prepForTabSwitch();
         switch (event.getEntityType()) {
             case Students:
                 studentsWorkArea.setVisible(true);
@@ -88,6 +99,13 @@ public class WorkAreaComponent extends CustomComponent {
                 break;
             default:
                 logger.warn("Received change data area with unknown entity type " + event.getEntityType());
+        }
+    }
+
+    private void prepForTabSwitch() {
+        ComponentUtils.clearAllErrors(verticalLayout);
+        for (Component child : verticalLayout) {
+            child.setVisible(false);
         }
     }
 

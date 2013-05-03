@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
+import com.jtbdevelopment.e_eye_o.ria.events.HelpClicked;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.IdObjectRelatedTab;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.Tab;
@@ -74,7 +75,7 @@ public class TabComponent extends CustomComponent {
         welcomeLabel.setDescription("Change settings.");
         sideLayout.addComponent(welcomeLabel);
         sideLayout.addComponent(new Tab(LOGOUT, eventBus, new LogoutEvent()));
-        sideLayout.addComponent(new Tab(HELP, null, null));  // TODO - help
+        sideLayout.addComponent(new Tab(HELP, eventBus, new HelpClicked()));
 
         ClickListener clickListener = new ClickListener();
         mainLayout.addLayoutClickListener(clickListener);

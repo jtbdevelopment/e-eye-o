@@ -26,7 +26,7 @@ import javax.annotation.PostConstruct;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class RegistrationView extends VerticalLayout implements View {
-    public final static String VIEW_NAME = "RegistrationView";
+    public final static String VIEW_NAME = "Registration";
 
     @Autowired
     private Logo logo;

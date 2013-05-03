@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
+package com.jtbdevelopment.e_eye_o.ria.vaadin.components.legal;
 
 import java.math.BigDecimal;
 
@@ -9,8 +9,7 @@ import java.math.BigDecimal;
 public class TermsAndConditions {
     public static final BigDecimal VERSION = new BigDecimal("1.0");
     public static final String TEXT =
-            "<H1><CENTER>TERMS AND CONDITIONS<CENTER></H1>" +
-                    "<H2><CENTER>Credit</H2></CENTER>" +
+            "<H2><CENTER>Credit</H2></CENTER>" +
                     "<p>This document was created using a Contractology template available at http://www.freenetlaw.com." +
                     "<H2><CENTER>Introduction</H2></CENTER>" +
                     "<p>These terms and conditions govern your use of this website; by using this website, you accept these terms and conditions in full.   If you disagree with these terms and conditions or any part of these terms and conditions, you must not use this website." +

@@ -1,13 +1,12 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.legal.LegalTabSheet;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.LoginView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Runo;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -24,11 +23,14 @@ import javax.annotation.PostConstruct;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 //  TODO - privacy and cookie policies
 public class LegalView extends VerticalLayout implements View {
-    public final static String VIEW_NAME = "LegalStuff";
+    public final static String VIEW_NAME = "Legal";
     public static final String AGREEMENT_TIME = "agreementTime";
 
     @Autowired
     private Logo logo;
+
+    @Autowired
+    private LegalTabSheet legalTabSheet;
 
     @PostConstruct
     public void setup() {
@@ -39,14 +41,9 @@ public class LegalView extends VerticalLayout implements View {
         addComponent(logo);
         setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
 
-        Panel legalPanel = new Panel();
-        legalPanel.setSizeFull();
-        legalPanel.addStyleName(Runo.PANEL_LIGHT);
-        legalPanel.setContent(new Label(TermsAndConditions.TEXT, ContentMode.HTML));
-
-        addComponent(legalPanel);
-        setComponentAlignment(legalPanel, Alignment.MIDDLE_CENTER);
-        setExpandRatio(legalPanel, 1);
+        addComponent(legalTabSheet);
+        setComponentAlignment(legalTabSheet, Alignment.MIDDLE_CENTER);
+        setExpandRatio(legalTabSheet, 1);
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setMargin(true);
