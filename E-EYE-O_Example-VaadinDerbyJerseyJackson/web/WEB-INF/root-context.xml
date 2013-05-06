@@ -10,4 +10,7 @@
     </context:component-scan>
 
     <import resource="spring-context-security.xml"/>
+
+    <bean name="eventBus" class="com.google.common.eventbus.EventBus"/>
+
 </beans>

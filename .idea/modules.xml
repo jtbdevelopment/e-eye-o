@@ -6,10 +6,11 @@
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DAOHibernateImpl/E-EYE-O_DAOHibernateImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_DAOHibernateImpl/E-EYE-O_DAOHibernateImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DerbyJacksonBasedIntegrationTests/E-EYE-O_DerbyJacksonBasedIntegrationTests.iml" filepath="$PROJECT_DIR$/E-EYE-O_DerbyJacksonBasedIntegrationTests/E-EYE-O_DerbyJacksonBasedIntegrationTests.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_EntitiesJavaImpl/E-EYE-O_EntitiesJavaImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_EntitiesJavaImpl/E-EYE-O_EntitiesJavaImpl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Example-VaadinDerbyJerseyJackson/E-EYE-O_Example-VaadinDerbyJerseyJackson.iml" filepath="$PROJECT_DIR$/E-EYE-O_Example-VaadinDerbyJerseyJackson/E-EYE-O_Example-VaadinDerbyJerseyJackson.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Interfaces/E-EYE-O_Interfaces.iml" filepath="$PROJECT_DIR$/E-EYE-O_Interfaces/E-EYE-O_Interfaces.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_RESTJSONJersey/E-EYE-O_RESTJSONJersey.iml" filepath="$PROJECT_DIR$/E-EYE-O_RESTJSONJersey/E-EYE-O_RESTJSONJersey.iml" />
+      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_RIAVaadin/E-EYE-O_RIAVaadin.iml" filepath="$PROJECT_DIR$/E-EYE-O_RIAVaadin/E-EYE-O_RIAVaadin.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_SerializationJacksonImpl/E-EYE-O_SerializationJacksonImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_SerializationJacksonImpl/E-EYE-O_SerializationJacksonImpl.iml" />
-      <module fileurl="file://$PROJECT_DIR$/E_EYE_O-RIAVaadin/E_EYE_O-RIAVaadin.iml" filepath="$PROJECT_DIR$/E_EYE_O-RIAVaadin/E_EYE_O-RIAVaadin.iml" />
     </modules>
   </component>
 </project>

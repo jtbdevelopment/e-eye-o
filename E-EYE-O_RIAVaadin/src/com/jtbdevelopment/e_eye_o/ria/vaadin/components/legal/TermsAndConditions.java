@@ -6,6 +6,7 @@ import java.math.BigDecimal;
  * Date: 4/29/13
  * Time: 10:26 PM
  */
+//  TODO - make more substitutable
 public class TermsAndConditions {
     public static final BigDecimal VERSION = new BigDecimal("1.0");
     public static final String TEXT =
@@ -25,7 +26,7 @@ public class TermsAndConditions {
                     "<li>redistribute material from this website except for content specifically and expressly made available for redistribution." +
                     "</ul>" +
                     "<H2><CENTER>User content</H2></CENTER>" +
-                    "<p>In these terms and conditions, “your user content” means material (including without limitation text, images, audio material, video material and audio-visual material) that you submit to this website, for whatever purpose." +
+                    "<p>In these terms and conditions, \"your user content\" means material (including without limitation text, images, audio material, video material and audio-visual material) that you submit to this website, for whatever purpose." +
                     "<p>E-EYE-O does not claim property rights on your user content as part of using the website for its intended purpose.  E-EYE-O does retain the right to access your user content for internal purposes such as, but  not limited to, site maintenance and upgrades, support, and statistical analysis and aggregation.  In general, E-EYE-O will not redistribute your materials and images without your consent. " +
                     "<p>Your user content must not be illegal or unlawful, must not infringe any third party's legal rights, and must not be capable of giving rise to legal action whether against you or E-EYE-O or a third party (in each case under any applicable law).  " +
                     "<p>You must not submit any user content to the website that is or has ever been the subject of any threatened or actual legal proceedings or other similar complaint." +
@@ -42,7 +43,7 @@ public class TermsAndConditions {
                     "<p>If E-EYE-O provides you with a user ID and password to enable you to access restricted areas of this website or other content or services, you must ensure that the user ID and password are kept confidential.  " +
                     "<p>E-EYE-O may disable your user ID and password in E-EYE-O’s sole discretion without notice or explanation." +
                     "<H2><CENTER>No warranties</H2></CENTER>" +
-                    "<p>This website is provided “as is” without any representations or warranties, express or implied.  E-EYE-O makes no representations or warranties in relation to this website or the information and materials provided on this website.  " +
+                    "<p>This website is provided \"as is\" without any representations or warranties, express or implied.  E-EYE-O makes no representations or warranties in relation to this website or the information and materials provided on this website.  " +
                     "<p>Without prejudice to the generality of the foregoing paragraph, E-EYE-O does not warrant that:<ul>" +
                     "<li>this website will be constantly available, or available at all; or" +
                     "<li>the information on this website is complete, true, accurate or non-misleading." +

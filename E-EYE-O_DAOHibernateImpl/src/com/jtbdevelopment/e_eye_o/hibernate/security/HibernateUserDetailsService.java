@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
 /**
  * Date: 4/5/13
  * Time: 10:29 PM
  */
+@Component("userDetailsService")
 @SuppressWarnings("unused")
 public class HibernateUserDetailsService implements UserDetailsService {
     @Autowired

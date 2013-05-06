@@ -6,6 +6,7 @@ import java.math.BigDecimal;
  * Date: 5/2/13
  * Time: 8:45 PM
  */
+//  TODO - make more substitutable
 public class PrivacyPolicy {
     public static final BigDecimal VERSION = new BigDecimal("1.0");
     public static final String TEXT =

@@ -1,11 +1,11 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="E_EYE_O-RIAVaadin:war exploded">
+  <artifact type="exploded-war" name="E-EYE-O_RIAVaadin:war exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/E_EYE_O_RIAVaadin_war_exploded</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="E_EYE_O-RIAVaadin/web/Web" />
+      <element id="javaee-facet-resources" facet="E-EYE-O_RIAVaadin/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="E_EYE_O-RIAVaadin" />
+          <element id="module-output" name="E-EYE-O_RIAVaadin" />
           <element id="module-output" name="E-EYE-O_Interfaces" />
           <element id="module-output" name="E-EYE-O_EntitiesJavaImpl" />
           <element id="module-output" name="E-EYE-O_DAODerbyHibernateImpl" />
@@ -35,7 +35,7 @@
           <element id="library" level="project" name="imgscalr-lib-4.2-javadoc" />
         </element>
       </element>
-      <element id="dir-copy" path="$PROJECT_DIR$/E_EYE_O-RIAVaadin/resources" />
+      <element id="dir-copy" path="$PROJECT_DIR$/E-EYE-O_RIAVaadin/resources" />
     </root>
   </artifact>
 </component>

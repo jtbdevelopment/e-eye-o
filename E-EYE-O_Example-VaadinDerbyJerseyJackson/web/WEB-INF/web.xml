@@ -67,10 +67,9 @@
         <url-pattern>/VAADIN/*</url-pattern>
     </servlet-mapping>
 
-    <!--  TODO - param for vaadin prod mode -->
     <context-param>
         <param-name>productionMode</param-name>
-        <param-value>false</param-value>
+        <param-value>true</param-value>
     </context-param>
 
     <!-- Spring Security -->

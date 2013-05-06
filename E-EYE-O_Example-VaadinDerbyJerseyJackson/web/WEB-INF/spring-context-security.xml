@@ -21,14 +21,6 @@
         <!--beans:constructor-arg name="secret" value=""/-->
     </beans:bean>
 
-    <!-- TODO - remove hibernate direct refs  -->
-    <beans:bean id="userDetailsService"
-                class="com.jtbdevelopment.e_eye_o.hibernate.security.HibernateUserDetailsService"/>
-
-    <!-- TODO - remove hibernate direct refs  -->
-    <beans:bean id="persistentTokenRepository"
-                class="com.jtbdevelopment.e_eye_o.hibernate.security.HibernatePersistentTokenRepository"/>
-
     <beans:bean id="rememberMeServices"
                 class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
         <!--beans:property name="tokenValiditySeconds" value="0"/-->  <!--  TODO -->

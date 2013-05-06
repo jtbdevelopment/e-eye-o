@@ -17,6 +17,9 @@ import java.util.Properties;
  * Date: 11/19/12
  * Time: 5:26 PM
  */
+
+//  TODO - connection pool
+
 @Configuration
 @ImportResource(value = "classpath*:spring-context.xml")
 public class HibernateDAOSpringConfig {

@@ -15,7 +15,7 @@
     <!-- =================================
           target: resolve
          ================================= -->
-    <target name="all-with-libs" depends="resolve,e-eye-o.all" description="rebuild with lib check"/>
+    <target name="all-with-libs" depends="resolve,compile-theme,e-eye-o.all" description="rebuild with lib check"/>
 
     <target name="resolve" description="--> retrieve dependencies with ivy">
         <ivy:retrieve sync="true" type="jar,source,javadoc,bundle" pattern="lib/[artifact]-[revision](-[classifier]).[ext]"/>
@@ -45,5 +45,11 @@
         <testng groups="integration" classpathref="all-paths" outputdir="${basedir}/testng-integration">
             <classfileset dir="${basedir}/out/test" includes="**/*.class"/>
         </testng>
+    </target>
+
+    <target name="compile-theme" description="compile theme">
+        <java classname="com.vaadin.sass.SassCompiler" args="${basedir}/E-EYE-O_RIAVaadin/resources/VAADIN/themes/eeyeo/styles.scss ${basedir}/E-EYE-O_RIAVaadin/resources/VAADIN/themes/eeyeo/styles.css" >
+            <classpath refid="library.com.vaadin:vaadin-server:7.0.1.classpath"/>
+        </java>
     </target>
 </project>

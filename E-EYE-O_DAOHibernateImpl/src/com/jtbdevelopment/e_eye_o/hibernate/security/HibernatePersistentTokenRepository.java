@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,7 @@ import java.util.Date;
  * Date: 4/6/13
  * Time: 12:45 AM
  */
-//  TODO -  docs indicate something should auto-delete expired token in DB
+@Component("persistentTokenRepository")
 @Transactional(propagation = Propagation.REQUIRED)
 public class HibernatePersistentTokenRepository implements PersistentTokenRepository {
     @Autowired
