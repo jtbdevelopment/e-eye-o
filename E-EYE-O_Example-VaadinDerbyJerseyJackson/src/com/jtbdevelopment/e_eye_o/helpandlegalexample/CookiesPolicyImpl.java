@@ -1,4 +1,7 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.components.legal;
+package com.jtbdevelopment.e_eye_o.helpandlegalexample;
+
+import com.jtbdevelopment.e_eye_o.helpandlegal.CookiesPolicy;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
@@ -6,10 +9,12 @@ import java.math.BigDecimal;
  * Date: 5/2/13
  * Time: 8:45 PM
  */
-//  TODO - make more substitutable
-public class CookiesPolicy {
-    public static final BigDecimal VERSION = new BigDecimal("1.0");
-    public static final String TEXT =
+@Component
+@SuppressWarnings("unused")
+public class CookiesPolicyImpl implements CookiesPolicy {
+    private static final BigDecimal VERSION = new BigDecimal("1.0");
+    private static final String LABEL = "Cookies Policy";
+    private static final String TEXT =
             "<H2><CENTER>Credit</H2></CENTER>" +
                     "<p>This document was created using a Contractology template available at http://www.freenetlaw.com." +
                     "<H2><CENTER>About cookies</H2></CENTER>" +
@@ -30,4 +35,19 @@ public class CookiesPolicy {
                     "<p>In Internet Explorer, you can refuse all cookies by clicking \"Tools\", \"Internet Options\", \"Privacy\", and selecting \"Block all cookies\" using the sliding selector." +
                     "<p>In Firefox, you can adjust your cookies settings by clicking \"Tools\", \"Options\" and \"Privacy\"." +
                     "<p>Blocking cookies will have a negative impact upon the usability of some websites.";
+
+    @Override
+    public String getLabel() {
+        return LABEL;
+    }
+
+    @Override
+    public String getText() {
+        return TEXT;
+    }
+
+    @Override
+    public BigDecimal getVersion() {
+        return VERSION;
+    }
 }

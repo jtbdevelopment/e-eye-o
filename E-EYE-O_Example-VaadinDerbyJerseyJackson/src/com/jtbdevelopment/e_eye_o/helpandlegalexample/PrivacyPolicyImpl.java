@@ -1,4 +1,7 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.components.legal;
+package com.jtbdevelopment.e_eye_o.helpandlegalexample;
+
+import com.jtbdevelopment.e_eye_o.helpandlegal.PrivacyPolicy;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
@@ -6,10 +9,12 @@ import java.math.BigDecimal;
  * Date: 5/2/13
  * Time: 8:45 PM
  */
-//  TODO - make more substitutable
-public class PrivacyPolicy {
-    public static final BigDecimal VERSION = new BigDecimal("1.0");
-    public static final String TEXT =
+@Component
+@SuppressWarnings("unused")
+public class PrivacyPolicyImpl implements PrivacyPolicy {
+    private static final BigDecimal VERSION = new BigDecimal("1.0");
+    private static final String LABEL = "Privacy Policy";
+    private static final String TEXT =
             "Your privacy is important to E-EYE-O.  This privacy statement provides information about the personal information that E-EYE-O collects, and the ways in which E-EYE-O uses that personal information." +
                     "<H2><CENTER>Credit</H2></CENTER>" +
                     "<p>This document was created using a Contractology template available at http://www.freenetlaw.com." +
@@ -37,4 +42,19 @@ public class PrivacyPolicy {
                     "<p>You should check this page occasionally to ensure you are familiar with any changes." +
                     "<H2><CENTER>Contact E-EYE-O</H2></CENTER>" +
                     "<p>If you have any questions about this privacy policy or E-EYE-O treatment of your personal information, please use the contact details links on this website.";
+
+    @Override
+    public String getLabel() {
+        return LABEL;
+    }
+
+    @Override
+    public String getText() {
+        return TEXT;
+    }
+
+    @Override
+    public BigDecimal getVersion() {
+        return VERSION;
+    }
 }

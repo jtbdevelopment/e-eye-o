@@ -77,7 +77,6 @@ public class LegalView extends VerticalLayout implements View {
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent event) {
-
     }
 }
 

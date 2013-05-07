@@ -1,4 +1,7 @@
-package com.jtbdevelopment.e_eye_o.ria.vaadin.components.legal;
+package com.jtbdevelopment.e_eye_o.helpandlegalexample;
+
+import com.jtbdevelopment.e_eye_o.helpandlegal.TermsAndConditions;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
@@ -6,10 +9,12 @@ import java.math.BigDecimal;
  * Date: 4/29/13
  * Time: 10:26 PM
  */
-//  TODO - make more substitutable
-public class TermsAndConditions {
-    public static final BigDecimal VERSION = new BigDecimal("1.0");
-    public static final String TEXT =
+@Component
+@SuppressWarnings("unused")
+public class TermsAndConditionsImpl implements TermsAndConditions {
+    private static final BigDecimal VERSION = new BigDecimal("1.0");
+    private static final String LABEL = "Terms And Conditions";
+    private static final String TEXT =
             "<H2><CENTER>Credit</H2></CENTER>" +
                     "<p>This document was created using a Contractology template available at http://www.freenetlaw.com." +
                     "<H2><CENTER>Introduction</H2></CENTER>" +
@@ -84,4 +89,19 @@ public class TermsAndConditions {
                     "<p>These terms and conditions constitute the entire agreement between you and E-EYE-O in relation to your use of this website, and supersede all previous agreements in respect of your use of this website." +
                     "<H2><CENTER>Law and jurisdiction</H2></CENTER>" +
                     "<p>These terms and conditions will be governed by and construed in accordance with United States law, and any disputes relating to these terms and conditions will be subject to the [non-]exclusive jurisdiction of the courts of the United States.";
+
+    @Override
+    public String getLabel() {
+        return LABEL;
+    }
+
+    @Override
+    public String getText() {
+        return TEXT;
+    }
+
+    @Override
+    public BigDecimal getVersion() {
+        return VERSION;
+    }
 }

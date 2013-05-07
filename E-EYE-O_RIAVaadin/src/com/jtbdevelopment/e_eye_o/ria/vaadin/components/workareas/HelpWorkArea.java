@@ -1,7 +1,8 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 
+import com.jtbdevelopment.e_eye_o.helpandlegal.Help;
+import com.jtbdevelopment.e_eye_o.helpandlegal.SafetyTips;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.legal.LegalTabSheet;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.legal.SafetyTips;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 
@@ -23,7 +25,13 @@ import javax.annotation.PostConstruct;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class HelpWorkArea extends CustomComponent {
     @Autowired
-    LegalTabSheet legalTabSheet;
+    private LegalTabSheet legalTabSheet;
+
+    @Autowired
+    private SafetyTips safetyTips;
+
+    @Autowired
+    private Help help;
 
     @PostConstruct
     public void postConstruct() {
@@ -32,19 +40,26 @@ public class HelpWorkArea extends CustomComponent {
         TabSheet tabSheet = new TabSheet();
         tabSheet.addStyleName(Runo.TABSHEET_SMALL);
 
-        Panel panel = new Panel();
-        panel.setSizeFull();
-        panel.addStyleName(Runo.PANEL_LIGHT);
-        //  TODO - help text
-        panel.setContent(new Label("<H1>Coming Eventually</H1>", ContentMode.HTML));
-        tabSheet.addTab(panel).setCaption("General Help");
+        Panel panel;
 
-        panel = new Panel();
-        panel.setSizeFull();
-        panel.addStyleName(Runo.PANEL_LIGHT);
-        panel.setContent(new Label(SafetyTips.TEXT, ContentMode.HTML));
-        tabSheet.addTab(panel).setCaption("Safety Tips");
-        tabSheet.addTab(legalTabSheet).setCaption("Legal Stuff");
+        if (StringUtils.hasLength(help.getText())) {
+            panel = new Panel();
+            panel.setSizeFull();
+            panel.addStyleName(Runo.PANEL_LIGHT);
+            panel.setContent(new Label(help.getText(), ContentMode.HTML));
+            tabSheet.addTab(panel).setCaption(help.getLabel());
+        }
+
+        if (StringUtils.hasLength(safetyTips.getText())) {
+            panel = new Panel();
+            panel.setSizeFull();
+            panel.addStyleName(Runo.PANEL_LIGHT);
+            panel.setContent(new Label(safetyTips.getText(), ContentMode.HTML));
+            tabSheet.addTab(panel).setCaption(safetyTips.getLabel());
+        }
+        if (legalTabSheet.getTabCount() > 0) {
+            tabSheet.addTab(legalTabSheet).setCaption("Legal Stuff");
+        }
 
         setCompositionRoot(tabSheet);
     }
