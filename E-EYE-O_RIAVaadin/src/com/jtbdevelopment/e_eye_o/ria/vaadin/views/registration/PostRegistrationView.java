@@ -2,9 +2,11 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.ExternalResource;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.VerticalLayout;
@@ -12,10 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 /**
  * Date: 4/6/13
@@ -30,10 +35,16 @@ public class PostRegistrationView extends VerticalLayout implements View {
     private Label dummy;
 
     @Autowired
-    private MailSender mailSender;
+    private Logo logo;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Value("${email.registrationverification}")
     private String registrationEmailFrom;
+
+    @Value("${url.root}")
+    private String urlRoot;
 
     @PostConstruct
     public void setUp() {
@@ -46,9 +57,18 @@ public class PostRegistrationView extends VerticalLayout implements View {
 
         dummy = new Label("");
 
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeUndefined();
+        verticalLayout.addComponent(logo);
+        verticalLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
+        verticalLayout.addComponent(action);
+        verticalLayout.setComponentAlignment(action, Alignment.MIDDLE_CENTER);
+        verticalLayout.addComponent(dummy);
+        verticalLayout.setComponentAlignment(dummy, Alignment.MIDDLE_CENTER);
 
-        addComponent(action);
-        addComponent(dummy);
+
+        addComponent(verticalLayout);
+        setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
     }
 
     @Override
@@ -60,5 +80,23 @@ public class PostRegistrationView extends VerticalLayout implements View {
         //  TODO - get rid of me
         Link link = new Link("Click", new ExternalResource("#!" + AccountConfirmationView.VIEW_NAME + "/" + twoPhaseActivity.getId()));
         addComponent(link);
+        generateEmail(twoPhaseActivity);
     }
+
+    //  TODO - got to template generator
+    private void generateEmail(final TwoPhaseActivity activity) {
+        try {
+            MimeMessage mail = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mail, false);
+            helper.setTo(activity.getAppUser().getEmailAddress());
+            helper.setFrom(registrationEmailFrom);
+            helper.setText("<html><body>" +
+                    "Thank you for registering with E-EYE-O!  To complete your sign-up, please follow this <a href=\"" + urlRoot + "#!" + AccountConfirmationView.VIEW_NAME + "/" + activity.getId() + "\">link</a>." +
+                    "</body></html>", true);
+            mailSender.send(mail);
+        } catch (MessagingException e) {
+            //  TODO
+        }
+    }
+
 }

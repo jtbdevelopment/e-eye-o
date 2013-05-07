@@ -8,7 +8,7 @@
          Place any bean overrides here.
     -->
 
-    <!--  You must define a usable org.springframework.mail.MailSender  -->
+    <!--  You must define a usable org.springframework.mail.javamail.JavaMailSender  -->
     <!--  This is a GMAIL example  -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="smtp.gmail.com"/>

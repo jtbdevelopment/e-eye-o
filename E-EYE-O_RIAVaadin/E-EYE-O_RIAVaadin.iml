@@ -37,6 +37,7 @@
     <orderEntry type="library" exported="" scope="PROVIDED" name="sass-stdlib" level="application" />
     <orderEntry type="library" name="imgscalr-lib-4.2-javadoc" level="project" />
     <orderEntry type="library" exported="" name="spring-context-support-3.2.0.RELEASE" level="project" />
+    <orderEntry type="library" name="mail-1.4" level="project" />
   </component>
 </module>
 
