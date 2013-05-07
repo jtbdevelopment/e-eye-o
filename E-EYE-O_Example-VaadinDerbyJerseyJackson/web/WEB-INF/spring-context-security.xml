@@ -21,7 +21,7 @@
 
     <beans:bean id="rememberMeServices"
                 class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
-        <!--beans:property name="tokenValiditySeconds" value="0"/-->  <!--  TODO -->
+        <beans:property name="tokenValiditySeconds" value="${rememberme.token.validity}"/>
         <beans:property name="userDetailsService" ref="userDetailsService"/>
         <beans:property name="tokenRepository" ref="persistentTokenRepository"/>
         <!--beans:property name="useSecureCookie" value="true"/-->  <!--  TODO -->
