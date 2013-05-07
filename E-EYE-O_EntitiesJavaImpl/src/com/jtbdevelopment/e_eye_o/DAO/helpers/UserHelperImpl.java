@@ -41,7 +41,12 @@ public class UserHelperImpl implements UserHelper {
         securePassword(appUser, appUser.getPassword());
         AppUser savedUser = readWriteDAO.create(appUser);
         createSamplesForUser(savedUser);
-        return readWriteDAO.create(idObjectFactory.newTwoPhaseActivityBuilder(savedUser).withActivityType(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION).withExpirationTime(new DateTime().plusDays(1)).build());
+        return generateActivationRequest(savedUser);
+    }
+
+    @Override
+    public TwoPhaseActivity generateActivationRequest(final AppUser appUser) {
+        return readWriteDAO.create(idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION).withExpirationTime(new DateTime().plusDays(1)).build());
     }
 
     private void securePassword(final AppUser appUser, final String clearCasePassword) {

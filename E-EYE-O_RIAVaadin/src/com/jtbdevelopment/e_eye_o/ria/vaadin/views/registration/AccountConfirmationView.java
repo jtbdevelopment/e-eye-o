@@ -2,7 +2,9 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.LoginView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -24,15 +26,21 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//  TODO - make pretty
 public class AccountConfirmationView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "ConfirmAccount";
+
+    @Autowired
+    private Logo logo;
 
     @Autowired
     private ReadOnlyDAO readOnlyDAO;
 
     @Autowired
     private UserHelper userHelper;
+    private AppUser appUserWithExpiredRequest;
+
+    @Autowired
+    private RegistrationEmailGenerator registrationEmailGenerator;
 
     private Button newEmailButton;
     private Label messageText;
@@ -44,34 +52,51 @@ public class AccountConfirmationView extends VerticalLayout implements View {
         setMargin(true);
         setSpacing(true);
 
+        VerticalLayout layout = new VerticalLayout();
+        layout.setSizeUndefined();
+
+        layout.addComponent(logo);
+        layout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
+
         Label title = new Label("Account Confirmation");
         title.setSizeUndefined();
-        addComponent(title);
-        setComponentAlignment(title, Alignment.MIDDLE_CENTER);
+        layout.addComponent(title);
+        layout.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
 
         messageText = new Label("");
         messageText.setSizeUndefined();
-        addComponent(messageText);
-        setComponentAlignment(messageText, Alignment.MIDDLE_CENTER);
+        layout.addComponent(messageText);
+        layout.setComponentAlignment(messageText, Alignment.MIDDLE_CENTER);
 
-        newEmailButton = new Button("Generate Another Email.");
+        newEmailButton = new Button("Generate Another Activation Request.");
         newEmailButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
-                //  TODO - generate another activity and email
+                newEmailButton.setEnabled(false);
+                if (appUserWithExpiredRequest != null) {
+                    TwoPhaseActivity activity = userHelper.generateActivationRequest(appUserWithExpiredRequest);
+                    registrationEmailGenerator.generateEmail(activity);
+                    appUserWithExpiredRequest = null;
+                    getSession().setAttribute(TwoPhaseActivity.class, activity);
+                    getSession().getAttribute(Navigator.class).navigateTo(PostRegistrationView.VIEW_NAME);
+                }
             }
         });
-        addComponent(newEmailButton);
-        setComponentAlignment(newEmailButton, Alignment.MIDDLE_CENTER);
+        layout.addComponent(newEmailButton);
+        layout.setComponentAlignment(newEmailButton, Alignment.MIDDLE_CENTER);
 
         link = new Link();
-        addComponent(link);
-        setComponentAlignment(link, Alignment.MIDDLE_CENTER);
+        layout.addComponent(link);
+        layout.setComponentAlignment(link, Alignment.MIDDLE_CENTER);
+
+        addComponent(layout);
+        setComponentAlignment(layout, Alignment.MIDDLE_CENTER);
     }
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent event) {
         String id = event.getParameters();
+        appUserWithExpiredRequest = null;
         newEmailButton.setEnabled(false);
         newEmailButton.setVisible(false);
         link.setVisible(false);
@@ -95,16 +120,17 @@ public class AccountConfirmationView extends VerticalLayout implements View {
         }
 
         if (activity.isArchived()) {
-            messageText.setValue("This was already completed.  You should try logging in.");
+            messageText.setValue("This was previously completed.  You should try logging in.  Or try resetting your password.");
             link.setEnabled(true);
             link.setVisible(true);
             link.setResource(new ExternalResource("#!" + LoginView.VIEW_NAME));
-            link.setCaption("Login.");
+            link.setCaption("Return to Login Screen");
             return;
         }
 
         if (new DateTime().compareTo(activity.getExpirationTime()) > 0) {
             messageText.setValue("Sorry - this activation has expired.  Press the button to generate a new one.");
+            appUserWithExpiredRequest = activity.getAppUser();
             newEmailButton.setVisible(true);
             newEmailButton.setEnabled(true);
             return;
@@ -116,6 +142,6 @@ public class AccountConfirmationView extends VerticalLayout implements View {
         link.setEnabled(true);
         link.setVisible(true);
         link.setResource(new ExternalResource("#!" + LoginView.VIEW_NAME));
-        link.setCaption("Login.");
+        link.setCaption("Go to Login Screen");
     }
 }

@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
-import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
+import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
@@ -39,7 +39,10 @@ public class RegistrationView extends VerticalLayout implements View {
     private UserHelper userHelper;
 
     @Autowired
-    private ReadOnlyDAO readOnlyDAO;
+    private ReadWriteDAO readOnlyDAO;
+
+    @Autowired
+    private RegistrationEmailGenerator registrationEmailGenerator;
 
     @PostConstruct
     public void setUp() {
@@ -99,7 +102,9 @@ public class RegistrationView extends VerticalLayout implements View {
                 }
 
                 AppUser user = beanFieldGroup.getItemDataSource().getBean();
+                Notification.show("Please wait, initializing account.", Notification.Type.WARNING_MESSAGE);
                 TwoPhaseActivity twoPhaseActivity = userHelper.setUpNewUser(user);
+                registrationEmailGenerator.generateEmail(twoPhaseActivity);
                 getSession().setAttribute(TwoPhaseActivity.class, twoPhaseActivity);
                 getSession().getAttribute(Navigator.class).navigateTo(PostRegistrationView.VIEW_NAME);
             }

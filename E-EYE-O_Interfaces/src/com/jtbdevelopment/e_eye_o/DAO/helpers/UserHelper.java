@@ -11,6 +11,8 @@ public interface UserHelper {
     //  Take a basic login form and do whatever else we want to new user
     TwoPhaseActivity setUpNewUser(final AppUser appUser);
 
+    TwoPhaseActivity generateActivationRequest(final AppUser appUser);
+
     void activateUser(final TwoPhaseActivity twoPhaseActivity);
 
     TwoPhaseActivity requestResetPassword(final AppUser appUser);
