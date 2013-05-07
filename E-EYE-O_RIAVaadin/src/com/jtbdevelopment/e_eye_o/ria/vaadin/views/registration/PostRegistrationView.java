@@ -90,8 +90,9 @@ public class PostRegistrationView extends VerticalLayout implements View {
             MimeMessageHelper helper = new MimeMessageHelper(mail, false);
             helper.setTo(activity.getAppUser().getEmailAddress());
             helper.setFrom(registrationEmailFrom);
+            helper.setSubject("E-EYE-O Registration Confirmation");
             helper.setText("<html><body>" +
-                    "Thank you for registering with E-EYE-O!  To complete your sign-up, please follow this <a href=\"" + urlRoot + "#!" + AccountConfirmationView.VIEW_NAME + "/" + activity.getId() + "\">link</a>." +
+                    "Thank you for registering with E-EYE-O!  To complete your sign-up, please follow this <a href=\"" + urlRoot + "Login#!" + AccountConfirmationView.VIEW_NAME + "/" + activity.getId() + "\">link</a>." +
                     "</body></html>", true);
             mailSender.send(mail);
         } catch (MessagingException e) {

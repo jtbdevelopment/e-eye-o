@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * Date: 3/3/13
@@ -68,8 +69,9 @@ public class EEYEOLoginUI extends EEYEOErrorHandlingUI {
         navigator.addView(PasswordReset.VIEW_NAME, passwordReset);
         getSession().setAttribute(Navigator.class, navigator);
 
-        navigator.navigateTo(LoginView.VIEW_NAME);
-
+        if (!StringUtils.hasLength(getPage().getUriFragment())) {
+            navigator.navigateTo(LoginView.VIEW_NAME);
+        }
     }
 
 }
