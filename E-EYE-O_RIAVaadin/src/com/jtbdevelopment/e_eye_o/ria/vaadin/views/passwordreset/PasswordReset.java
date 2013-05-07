@@ -2,12 +2,15 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.LoginView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,12 @@ public class PasswordReset extends VerticalLayout implements View {
     public static final String VIEW_NAME = "PasswordReset";
 
     @Autowired
+    private Logo logo;
+
+    @Autowired
+    private PasswordResetEmailGenerator passwordResetEmailGenerator;
+
+    @Autowired
     private ReadOnlyDAO readOnlyDAO;
 
     @Autowired
@@ -35,6 +44,7 @@ public class PasswordReset extends VerticalLayout implements View {
     private FormLayout formLayout;
     private Button resetButton;
     private Button newRequest;
+    private AppUser appUserForRequest;
 
     @PostConstruct
     public void setUp() {
@@ -42,24 +52,33 @@ public class PasswordReset extends VerticalLayout implements View {
         setMargin(true);
         setSizeFull();
 
-        Label title = new Label("Reset Password");
-        addComponent(title);
-        setComponentAlignment(title, Alignment.MIDDLE_CENTER);
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeUndefined();
+
+        verticalLayout.addComponent(logo);
+        verticalLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
+
+        Label title = new Label("<H2>Reset Password</H2>", ContentMode.HTML);
+        title.setSizeUndefined();
+        verticalLayout.addComponent(title);
+        verticalLayout.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
 
         formLayout = new FormLayout();
+        formLayout.setSizeUndefined();
         emailField = new TextField("Email Address");
         emailField.setReadOnly(true);
+        emailField.setWidth(1, Unit.PERCENTAGE);
         formLayout.addComponent(emailField);
         final PasswordField password = new PasswordField("New Password");
         final PasswordField confirm = new PasswordField("Confirm Password");
         formLayout.addComponent(password);
         formLayout.addComponent(confirm);
-        addComponent(formLayout);
-        setComponentAlignment(formLayout, Alignment.MIDDLE_CENTER);
+        verticalLayout.addComponent(formLayout);
+        verticalLayout.setComponentAlignment(formLayout, Alignment.MIDDLE_CENTER);
 
         resetButton = new Button("Reset");
-        addComponent(resetButton);
-        setComponentAlignment(resetButton, Alignment.MIDDLE_CENTER);
+        verticalLayout.addComponent(resetButton);
+        verticalLayout.setComponentAlignment(resetButton, Alignment.MIDDLE_CENTER);
 
         resetButton.addClickListener(new Button.ClickListener() {
             @Override
@@ -76,19 +95,30 @@ public class PasswordReset extends VerticalLayout implements View {
 
                 userHelper.resetPassword(getSession().getAttribute(TwoPhaseActivity.class), pass);
                 getSession().getAttribute(Navigator.class).navigateTo(LoginView.VIEW_NAME);
-                Notification.show("Password reset and account activated.");
+                Notification.show("Password reset and account activated.", Notification.Type.WARNING_MESSAGE);
             }
         });
         newRequest = new Button("New Email");
         newRequest.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                //  TODO - new email/activity
+                if (appUserForRequest != null) {
+                    TwoPhaseActivity twoPhaseActivity = userHelper.requestResetPassword(appUserForRequest);
+                    appUserForRequest = null;
+                    passwordResetEmailGenerator.generateEmail(twoPhaseActivity);
+                    getSession().setAttribute(TwoPhaseActivity.class, twoPhaseActivity);
+                    getSession().getAttribute(Navigator.class).navigateTo(PostResetRequest.VIEW_NAME);
+                }
+                newRequest.setEnabled(false);
             }
         });
         newRequest.setVisible(false);
         newRequest.setEnabled(false);
+
+        addComponent(verticalLayout);
+        setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
         ComponentUtils.setImmediateForAll(this, true);
+        ComponentUtils.setTextFieldWidths(this, 20, Unit.EM);
     }
 
     @Override

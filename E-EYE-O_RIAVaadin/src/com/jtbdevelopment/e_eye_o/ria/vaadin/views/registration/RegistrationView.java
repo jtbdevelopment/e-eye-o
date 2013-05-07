@@ -12,6 +12,7 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -54,6 +55,11 @@ public class RegistrationView extends VerticalLayout implements View {
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.addComponent(logo);
         verticalLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
+
+        Label formTitle = new Label("<H2>Account Details</H2>", ContentMode.HTML);
+        formTitle.setSizeUndefined();
+        verticalLayout.addComponent(formTitle);
+        verticalLayout.setComponentAlignment(formTitle, Alignment.MIDDLE_CENTER);
 
         FormLayout form = new FormLayout();
         final BeanFieldGroup<AppUser> beanFieldGroup = new BeanFieldGroup<>(AppUser.class);
@@ -102,7 +108,6 @@ public class RegistrationView extends VerticalLayout implements View {
                 }
 
                 AppUser user = beanFieldGroup.getItemDataSource().getBean();
-                Notification.show("Please wait, initializing account.", Notification.Type.WARNING_MESSAGE);
                 TwoPhaseActivity twoPhaseActivity = userHelper.setUpNewUser(user);
                 registrationEmailGenerator.generateEmail(twoPhaseActivity);
                 getSession().setAttribute(TwoPhaseActivity.class, twoPhaseActivity);
@@ -112,6 +117,7 @@ public class RegistrationView extends VerticalLayout implements View {
         addComponent(verticalLayout);
         setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
         ComponentUtils.setImmediateForAll(this, true);
+        ComponentUtils.setTextFieldWidths(this, 20, Unit.EM);
     }
 
     @Override

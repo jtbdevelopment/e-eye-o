@@ -54,7 +54,7 @@ public class PostRegistrationView extends VerticalLayout implements View {
         TwoPhaseActivity twoPhaseActivity = getSession().getAttribute(TwoPhaseActivity.class);
         final AppUser appUser = twoPhaseActivity.getAppUser();
         //  TODO - template too?
-        action.setValue("<CENTER>Welcome aboard " + appUser.getFirstName() + "!</CENTER>" +
+        action.setValue("<CENTER><H2>Welcome aboard " + appUser.getFirstName() + "!</H2></CENTER>" +
                 "<P><CENTER>An email has been sent to " + appUser.getEmailAddress() + " to verify it.</CENTER>" +
                 "<P><CENTER>It will be sent from " + registrationEmailGenerator.getRegistrationEmailFrom() + ".  Please check spam folders if you do not receive it.</CENTER>" +
                 "<P><CENTER>Please follow the instructions to activate your account.</CENTER>");

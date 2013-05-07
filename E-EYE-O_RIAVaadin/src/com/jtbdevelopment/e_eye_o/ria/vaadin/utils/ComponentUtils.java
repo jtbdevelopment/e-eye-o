@@ -1,9 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.utils;
 
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.AbstractField;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HasComponents;
+import com.vaadin.server.Sizeable;
+import com.vaadin.ui.*;
 
 /**
  * Date: 3/30/13
@@ -37,6 +35,15 @@ public class ComponentUtils {
             @Override
             public void doWork(AbstractComponent component) {
                 component.setComponentError(null);
+            }
+        });
+    }
+
+    public static void setTextFieldWidths(final Component component, final int size, final Sizeable.Unit unit) {
+        processAllComponents(component, AbstractTextField.class, new Callback<AbstractTextField>() {
+            @Override
+            public void doWork(final AbstractTextField component) {
+                component.setWidth(size, unit);
             }
         });
     }

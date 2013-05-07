@@ -3,15 +3,18 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.ResetRequest;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration.LegalView;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.*;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -54,6 +57,9 @@ public class LoginView extends VerticalLayout implements View {
     @Autowired
     private Logo logo;
 
+    @Value("${email.contactus}")
+    private String contact;
+
     @PostConstruct
     public void PostConstruct() {
         setSpacing(true);
@@ -84,32 +90,33 @@ public class LoginView extends VerticalLayout implements View {
         panel.setContent(outerLayout);
 
         addComponent(panel);
+        ComponentUtils.setImmediateForAll(this, true);
+        ComponentUtils.setTextFieldWidths(this, 20, Unit.EM);
     }
 
     private Layout getLoginSection() {
         VerticalLayout loginSection = new VerticalLayout();
 
         FormLayout form = new FormLayout();
-        form.setWidth(null);
-        form.setHeight(null);
+        form.setSizeUndefined();
         loginSection.addComponent(form);
         loginSection.setComponentAlignment(form, Alignment.MIDDLE_CENTER);
 
         form.addComponent(loginField);
-        form.setComponentAlignment(loginField, Alignment.TOP_CENTER);
+        form.setComponentAlignment(loginField, Alignment.MIDDLE_CENTER);
         form.addComponent(passwordField);
-        form.setComponentAlignment(passwordField, Alignment.TOP_CENTER);
+        form.setComponentAlignment(passwordField, Alignment.MIDDLE_CENTER);
 
         final CheckBox rememberMe = new CheckBox("Remember Me");
         rememberMe.setValue(Boolean.FALSE);
-        form.addComponent(rememberMe);
-        form.setComponentAlignment(rememberMe, Alignment.TOP_CENTER);
+        loginSection.addComponent(rememberMe);
+        loginSection.setComponentAlignment(rememberMe, Alignment.MIDDLE_CENTER);
 
         Button loginButton = new Button("Login");
         loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         loginButton.addStyleName(Runo.BUTTON_DEFAULT);
-        form.addComponent(loginButton);
-        form.setComponentAlignment(loginButton, Alignment.TOP_CENTER);
+        loginSection.addComponent(loginButton);
+        loginSection.setComponentAlignment(loginButton, Alignment.MIDDLE_CENTER);
         loginButton.addStyleName("primary");
         loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         loginButton.addClickListener(new Button.ClickListener() {
@@ -159,12 +166,16 @@ public class LoginView extends VerticalLayout implements View {
         Label description = new Label("Electronic Early Years Educator's Observations");
         helpSection.addComponent(description);
         helpSection.setComponentAlignment(description, Alignment.MIDDLE_CENTER);
+        Link link = new Link("Contact Us!", new ExternalResource("mailto:" + contact));
+        link.setSizeUndefined();
+        helpSection.addComponent(link);
+        helpSection.setComponentAlignment(link, Alignment.MIDDLE_CENTER);
         return helpSection;
     }
 
     private Layout getTitleSection() {
         VerticalLayout titleSection = new VerticalLayout();
-        Label title = new Label("Welcome to");
+        Label title = new Label("<H2>Welcome To</H2>", ContentMode.HTML);
         title.setSizeUndefined();
         title.addStyleName("bold");
         titleSection.addComponent(title);

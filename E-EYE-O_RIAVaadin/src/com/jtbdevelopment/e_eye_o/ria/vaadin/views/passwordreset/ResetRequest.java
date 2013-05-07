@@ -4,16 +4,16 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.mail.MailSender;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -28,16 +28,16 @@ public class ResetRequest extends VerticalLayout implements View {
     public static final String VIEW_NAME = "PasswordResetRequest";
 
     @Autowired
+    private Logo logo;
+
+    @Autowired
+    private PasswordResetEmailGenerator passwordResetEmailGenerator;
+
+    @Autowired
     private ReadOnlyDAO readOnlyDAO;
 
     @Autowired
     private UserHelper userHelper;
-
-    @Autowired
-    private MailSender mailSender;
-
-    @Value("${email.passwordreset}")
-    private String resetEmailFrom;
 
     @PostConstruct
     public void setUp() {
@@ -45,19 +45,27 @@ public class ResetRequest extends VerticalLayout implements View {
         setSpacing(true);
         setSizeFull();
 
-        Label title = new Label("Password Reset/Account Reactivation");
-        addComponent(title);
-        setComponentAlignment(title, Alignment.MIDDLE_CENTER);
+        VerticalLayout layout = new VerticalLayout();
+        layout.setSizeUndefined();
+
+        layout.addComponent(logo);
+        layout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
+
+        Label title = new Label("<H2>Password Reset / Account Reactivation</H2", ContentMode.HTML);
+        title.setSizeUndefined();
+        layout.addComponent(title);
+        layout.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
 
 
         FormLayout form = new FormLayout();
         final TextField email = new TextField("Email Address");
         form.addComponent(email);
-        addComponent(form);
-        setComponentAlignment(form, Alignment.MIDDLE_CENTER);
+        form.setSizeUndefined();
+        layout.addComponent(form);
+        layout.setComponentAlignment(form, Alignment.MIDDLE_CENTER);
 
         Button reset = new Button("Request Reset");
-        addComponent(reset);
+        layout.addComponent(reset);
         reset.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
@@ -68,14 +76,17 @@ public class ResetRequest extends VerticalLayout implements View {
                 }
 
                 TwoPhaseActivity twoPhaseActivity = userHelper.requestResetPassword(appUser);
-
-                //  TODO - actually send mail
+                passwordResetEmailGenerator.generateEmail(twoPhaseActivity);
                 getSession().setAttribute(TwoPhaseActivity.class, twoPhaseActivity);
                 getSession().getAttribute(Navigator.class).navigateTo(PostResetRequest.VIEW_NAME);
             }
         });
-        setComponentAlignment(reset, Alignment.MIDDLE_CENTER);
+        layout.setComponentAlignment(reset, Alignment.MIDDLE_CENTER);
+
+        addComponent(layout);
+        setComponentAlignment(layout, Alignment.MIDDLE_CENTER);
         ComponentUtils.setImmediateForAll(this, true);
+        ComponentUtils.setTextFieldWidths(this, 20, Unit.EM);
     }
 
     @Override

@@ -14,7 +14,13 @@ public class HelpImpl implements Help {
     //  TODO - actual help
     private static final String TEXT =
             "<H2><CENTER>Help</H2></CENTER>" +
-                    "<p>Not implemented yet.";
+                    "<p>Not implemented yet." +
+                    "<p>Known things to be not working:<ul>" +
+                    "<li>Photos ignore 'How Many' setting." +
+                    "<li>Help not implemented." +
+                    "<li>Changing settings and preferences not implemented." +
+                    "<li>Reports not implemented." +
+                    "</ul>";
 
     @Override
     public String getLabel() {

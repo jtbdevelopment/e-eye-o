@@ -34,6 +34,8 @@
     <orderEntry type="module" module-name="E-EYE-O_RIAVaadin" exported="" scope="RUNTIME" />
     <orderEntry type="library" exported="" name="org.springframework:spring-context:3.2.0.RELEASE" level="project" />
     <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
+    <orderEntry type="library" name="spring-context-support-3.2.0.RELEASE" level="project" />
+    <orderEntry type="library" name="mail-1.4" level="project" />
   </component>
 </module>
 

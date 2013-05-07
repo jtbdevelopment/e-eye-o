@@ -10,6 +10,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.ExternalResource;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
         layout.addComponent(logo);
         layout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
 
-        Label title = new Label("Account Confirmation");
+        Label title = new Label("<H2>Account Confirmation</H2>", ContentMode.HTML);
         title.setSizeUndefined();
         layout.addComponent(title);
         layout.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
