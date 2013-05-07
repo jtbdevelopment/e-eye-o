@@ -10,11 +10,9 @@
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
-          <root url="file://$MODULE_DIR$/../E-EYE-O-ExampleVaadinDerbyJerseyJackson/web" relative="/" />
+          <root url="file://$MODULE_DIR$/web" relative="/" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/../E-EYE-O-ExampleVaadinDerbyJerseyJackson/src" />
-        </sourceRoots>
+        <sourceRoots />
       </configuration>
       <facet type="Vaadin" name="Vaadin Application">
         <configuration vaadinUsedWebRootPathUrl="file://$MODULE_DIR$/../E-EYE-O-ExampleVaadinDerbyJerseyJackson/web" vaadinGWTLocationPath="" vaadinVMOptions="-Xss8M -Xmx512M -XX:MaxPermSize=512M" vaadinJavaScriptStyle="Obfuscated" vaadinCompilerThreads="" />
@@ -29,12 +27,12 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 7" level="application_server_libraries" />
-    <orderEntry type="library" exported="" name="Spring-3.2.0" level="application" />
     <orderEntry type="module" module-name="E-EYE-O_DAODerbyHibernateImpl" exported="" scope="RUNTIME" />
     <orderEntry type="module" module-name="E-EYE-O_EntitiesJavaImpl" exported="" scope="RUNTIME" />
     <orderEntry type="module" module-name="E-EYE-O_RESTJSONJersey" exported="" scope="RUNTIME" />
     <orderEntry type="module" module-name="E-EYE-O_SerializationJacksonImpl" exported="" scope="RUNTIME" />
     <orderEntry type="module" module-name="E-EYE-O_RIAVaadin" exported="" scope="RUNTIME" />
+    <orderEntry type="library" exported="" name="org.springframework:spring-context:3.2.0.RELEASE" level="project" />
   </component>
 </module>
 

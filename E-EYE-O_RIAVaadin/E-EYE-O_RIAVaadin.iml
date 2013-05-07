@@ -7,11 +7,9 @@
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
-          <root url="file://$MODULE_DIR$/../E_EYE_O-RIAVaadin/web" relative="/" />
+          <root url="file://$MODULE_DIR$/web" relative="/" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/../E_EYE_O-RIAVaadin/src" />
-        </sourceRoots>
+        <sourceRoots />
       </configuration>
       <facet type="Vaadin" name="Vaadin Application">
         <configuration vaadinUsedWebRootPathUrl="file://$MODULE_DIR$/../E_EYE_O-RIAVaadin/web" vaadinGWTLocationPath="" vaadinVMOptions="-Xss8M -Xmx512M -XX:MaxPermSize=512M" vaadinJavaScriptStyle="Obfuscated" vaadinCompilerThreads="" />
