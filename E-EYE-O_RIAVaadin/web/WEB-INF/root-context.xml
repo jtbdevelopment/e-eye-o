@@ -13,8 +13,11 @@
         <property name="location" value="WEB-INF/e-eye-o.properties"/>
     </bean>
 
-    <import resource="spring-context-security.xml"/>
-
     <bean name="eventBus" class="com.google.common.eventbus.EventBus"/>
 
+    <import resource="spring-context-security.xml"/>
+    <import resource="classpath*:spring-context.xml"/>
+
+    <!--  Leave last -->
+    <import resource="classpath:spring-context-overrides.xml"/>
 </beans>

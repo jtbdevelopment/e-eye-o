@@ -10,8 +10,10 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.mail.MailSender;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +32,12 @@ public class ResetRequest extends VerticalLayout implements View {
 
     @Autowired
     private UserHelper userHelper;
+
+    @Autowired
+    private MailSender mailSender;
+
+    @Value("${email.passwordreset}")
+    private String resetEmailFrom;
 
     @PostConstruct
     public void setUp() {

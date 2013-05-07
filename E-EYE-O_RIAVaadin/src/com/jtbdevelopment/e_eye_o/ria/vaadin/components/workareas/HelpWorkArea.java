@@ -58,7 +58,7 @@ public class HelpWorkArea extends CustomComponent {
             tabSheet.addTab(panel).setCaption(safetyTips.getLabel());
         }
         if (legalTabSheet.getTabCount() > 0) {
-            tabSheet.addTab(legalTabSheet).setCaption("Legal Stuff");
+            tabSheet.addTab(legalTabSheet).setCaption("Legal");
         }
 
         setCompositionRoot(tabSheet);

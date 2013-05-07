@@ -9,6 +9,7 @@
         <dependency org="org.springframework" name="org.springframework.beans" rev="3.2.0.RELEASE"/>
         <dependency org="org.springframework" name="org.springframework.orm" rev="3.2.0.RELEASE" transitive="false"/>
         <dependency org="org.springframework" name="org.springframework.context" rev="3.2.0.RELEASE" transitive="false"/>
+        <dependency org="org.springframework" name="spring-context-support" rev="3.2.0.RELEASE"/>
         <dependency org="org.springframework" name="org.springframework.test" rev="3.2.0.RELEASE" transitive="false"/>
         <dependency org="org.springframework" name="spring-expression" rev="3.2.0.RELEASE"/>
         <dependency org="org.springframework" name="spring-aop" rev="3.2.0.RELEASE"/>

@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
+import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
@@ -36,6 +37,9 @@ public class RegistrationView extends VerticalLayout implements View {
 
     @Autowired
     private UserHelper userHelper;
+
+    @Autowired
+    private ReadOnlyDAO readOnlyDAO;
 
     @PostConstruct
     public void setUp() {
@@ -83,7 +87,11 @@ public class RegistrationView extends VerticalLayout implements View {
                     Notification.show("Passwords don't match.  Please try again.", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
-                //  TODO - verify email doesn't exist already.
+                AppUser appUser = readOnlyDAO.getUser(emailAddress.getValue().toString());
+                if (appUser != null) {
+                    Notification.show("We're sorry.  This email address is already registered.  Please try again.  Or use the reset password feature if necessary.", Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
                 try {
                     beanFieldGroup.commit();
                 } catch (FieldGroup.CommitException e) {

@@ -8,6 +8,15 @@
     text-shadow: $brownGray 0 2px 2px;
   }
 
+  .v-link-tabs {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0px;
+    padding: 5px;
+    color: #222222;
+    text-shadow: $brownGray 0 2px 2px;
+  }
+
   .v-label-selected-tabs {
     background-image: linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);
     background-image: -o-linear-gradient(bottom, rgb(224, 166, 116) 20%, rgb(242, 227, 185) 64%, rgb(197, 116, 75) 81%);

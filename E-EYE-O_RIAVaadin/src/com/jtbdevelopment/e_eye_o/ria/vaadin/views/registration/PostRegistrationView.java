@@ -8,8 +8,11 @@ import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.VerticalLayout;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.mail.MailSender;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -26,6 +29,11 @@ public class PostRegistrationView extends VerticalLayout implements View {
     private Label action;
     private Label dummy;
 
+    @Autowired
+    private MailSender mailSender;
+
+    @Value("${email.registrationverification}")
+    private String registrationEmailFrom;
 
     @PostConstruct
     public void setUp() {

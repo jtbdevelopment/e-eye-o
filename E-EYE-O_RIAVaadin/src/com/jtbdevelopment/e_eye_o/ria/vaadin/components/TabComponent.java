@@ -10,10 +10,12 @@ import com.jtbdevelopment.e_eye_o.ria.events.SettingsClicked;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.IdObjectRelatedTab;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.Tab;
 import com.vaadin.event.LayoutEvents;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -58,6 +60,9 @@ public class TabComponent extends CustomComponent {
     @Autowired
     private EventBus eventBus;
 
+    @Value("${email.contactus}")
+    private String contactEmail;
+
     @PostConstruct
     public void postConstruct() {
         HorizontalLayout outerLayout = new HorizontalLayout();
@@ -84,6 +89,12 @@ public class TabComponent extends CustomComponent {
         sideLayout.addComponent(new Tab(LOGOUT, eventBus, new LogoutEvent()));
         sideLayout.addComponent(new Tab(HELP, eventBus, new HelpClicked()));
 
+        Link email = new Link("Contact us!", new ExternalResource("mailto:" + contactEmail));
+        email.setSizeUndefined();
+        email.addStyleName("tabs");
+        sideLayout.addComponent(email);
+
+
         ClickListener clickListener = new ClickListener();
         mainLayout.addLayoutClickListener(clickListener);
         sideLayout.addLayoutClickListener(clickListener);
@@ -99,7 +110,7 @@ public class TabComponent extends CustomComponent {
     public void attach() {
         super.attach();
         AppUser appUser = getUI().getSession().getAttribute(AppUser.class);
-        welcomeLabel.setValue("Welcome " + appUser.getFirstName() + ".");
+        welcomeLabel.setValue("Welcome " + appUser.getFirstName());
     }
 
     private class ClickListener implements LayoutEvents.LayoutClickListener {
