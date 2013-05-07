@@ -5,6 +5,8 @@ import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.ria.events.HelpClicked;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectRelatedSideTabClicked;
+import com.jtbdevelopment.e_eye_o.ria.events.ReportsClicked;
+import com.jtbdevelopment.e_eye_o.ria.events.SettingsClicked;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.ui.*;
@@ -41,29 +43,51 @@ public class WorkAreaComponent extends CustomComponent {
     private ObservationCategoriesWorkArea observationCategoriesWorkArea;
     @Autowired
     private HelpWorkArea helpWorkArea;
+    @Autowired
+    private SettingsWorkArea settingsWorkArea;
+    @Autowired
+    private ReportsWorkArea reportsWorkArea;
 
     @Autowired
     private EventBus eventBus;
 
     @PostConstruct
     public void postConstruct() {
+        verticalLayout.setSizeFull();
         verticalLayout.addComponent(studentsWorkArea);
         verticalLayout.addComponent(classListsWorkArea);
         verticalLayout.addComponent(observationCategoriesWorkArea);
         verticalLayout.addComponent(observationsWorkArea);
         verticalLayout.addComponent(photosWorkArea);
         verticalLayout.addComponent(helpWorkArea);
-        photosWorkArea.setVisible(false);
-        studentsWorkArea.setVisible(true);               //  TODO - make which one a default
-        classListsWorkArea.setVisible(false);
-        observationCategoriesWorkArea.setVisible(false);
-        observationsWorkArea.setVisible(false);
-        helpWorkArea.setVisible(false);
-        verticalLayout.setSizeFull();
+        verticalLayout.addComponent(settingsWorkArea);
+        verticalLayout.addComponent(reportsWorkArea);
+
         panel.setSizeFull();
         panel.setContent(verticalLayout);
         panel.addStyleName(Runo.PANEL_LIGHT);
         setCompositionRoot(panel);
+
+        prepForTabSwitch();
+        studentsWorkArea.setVisible(true);               //  TODO - make which one a default
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void reportsArea(final ReportsClicked event) {
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to reports");
+        Notification.show("Switching to Reports");
+        prepForTabSwitch();
+        reportsWorkArea.setVisible(true);
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void settingsArea(final SettingsClicked event) {
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to settings");
+        Notification.show("Switching to Settings");
+        prepForTabSwitch();
+        settingsWorkArea.setVisible(true);
     }
 
     @Subscribe

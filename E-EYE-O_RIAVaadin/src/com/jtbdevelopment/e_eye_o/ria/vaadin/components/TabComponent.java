@@ -5,6 +5,8 @@ import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import com.jtbdevelopment.e_eye_o.ria.events.HelpClicked;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
+import com.jtbdevelopment.e_eye_o.ria.events.ReportsClicked;
+import com.jtbdevelopment.e_eye_o.ria.events.SettingsClicked;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.IdObjectRelatedTab;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.Tab;
 import com.vaadin.event.LayoutEvents;
@@ -14,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Date: 3/6/13
@@ -49,10 +53,13 @@ public class TabComponent extends CustomComponent {
     }
 
     private Label currentSelected;
-    private final Label welcomeLabel;
+    private Label welcomeLabel;
 
     @Autowired
-    public TabComponent(final EventBus eventBus) {
+    private EventBus eventBus;
+
+    @PostConstruct
+    public void postConstruct() {
         HorizontalLayout outerLayout = new HorizontalLayout();
         outerLayout.setWidth(100, Unit.PERCENTAGE);
 
@@ -67,11 +74,11 @@ public class TabComponent extends CustomComponent {
             }
             mainLayout.addComponent(sideTab);
         }
-        mainLayout.addComponent(new Tab(REPORTS, null, null));
+        mainLayout.addComponent(new Tab(REPORTS, eventBus, new ReportsClicked()));
 
         CssLayout sideLayout = new CssLayout();
         sideLayout.setSizeUndefined();
-        welcomeLabel = new Tab("Welcome", null, null);  //  TODO - settings
+        welcomeLabel = new Tab("Welcome", eventBus, new SettingsClicked());
         welcomeLabel.setDescription("Change settings.");
         sideLayout.addComponent(welcomeLabel);
         sideLayout.addComponent(new Tab(LOGOUT, eventBus, new LogoutEvent()));
