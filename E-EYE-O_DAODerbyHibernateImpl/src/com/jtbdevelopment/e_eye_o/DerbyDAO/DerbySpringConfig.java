@@ -16,8 +16,7 @@ import java.util.Properties;
 @Configuration
 @ImportResource(value = "classpath*:spring-context.xml")
 public class DerbySpringConfig {
-    //  TODO - make location configurable
-    public final static String DEFAULT_DATABASE = "C:/DEV/e-eye-o/EEYEODB";
+    public final static String DEFAULT_DATABASE = System.getProperty("java.io.tmpdir") + "/EEYEODB";
     public final static String DATABASE_NAME = "derbyDatabaseName";
     public final static String CREATE_FLAG = "derbyCreateDatabase";
     public final static String DEFAULT_CREATE = "create";
@@ -49,5 +48,4 @@ public class DerbySpringConfig {
         embeddedDerby.setCreateDatabase((String) derbyProperties.get(CREATE_FLAG));
         return embeddedDerby;
     }
-
 }
