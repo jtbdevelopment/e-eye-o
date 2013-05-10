@@ -17,9 +17,6 @@ import java.util.Properties;
  * Date: 11/19/12
  * Time: 5:26 PM
  */
-
-//  TODO - connection pool
-
 @Configuration
 @ImportResource(value = "classpath*:spring-context*.xml")
 public class HibernateDAOSpringConfig {
@@ -31,18 +28,24 @@ public class HibernateDAOSpringConfig {
 
     @Bean
     @Autowired
-    public LocalSessionFactoryBean sessionFactory(final javax.sql.DataSource dataSource, final @Qualifier("hibernateProperties") Properties hibernateProperties, final @Qualifier("hibernateOverrideProperties") Properties hibernateOverrideProperties, final Interceptor timestampInterceptor) {
-        Properties properties = new Properties();
-        properties.putAll(hibernateProperties);
-        if (hibernateOverrideProperties != null) {
-            properties.putAll(hibernateOverrideProperties);
-        }
+    public LocalSessionFactoryBean sessionFactory(final javax.sql.DataSource dataSource,
+                                                  final @Qualifier("hibernateDefaultProperties") Properties hibernateDefaultProperties,
+                                                  final @Qualifier("hibernateOverrideProperties") Properties hibernateOverrideProperties, final Interceptor timestampInterceptor) {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-        sessionFactoryBean.setHibernateProperties(properties);
+        sessionFactoryBean.setHibernateProperties(buildHibernateProperties(hibernateDefaultProperties, hibernateOverrideProperties));
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setEntityInterceptor(timestampInterceptor);
         sessionFactoryBean.setPackagesToScan("com.jtbdevelopment");
         return sessionFactoryBean;
+    }
+
+    private Properties buildHibernateProperties(final Properties defaultProperties, final Properties overrideProperties) {
+        Properties properties = new Properties();
+        properties.putAll(defaultProperties);
+        if (overrideProperties != null) {
+            properties.putAll(overrideProperties);
+        }
+        return properties;
     }
 
     @Bean
