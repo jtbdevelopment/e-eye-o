@@ -20,6 +20,8 @@
         <dependency org="org.jadira.usertype" name="usertype.core" rev="3.0.0.GA"/>
         <dependency org="javassist" name="javassist" rev="3.12.1.GA"/>
 
+        <dependency org="org.apache.tomcat" name="tomcat-jdbc" rev="7.0.39"/>
+
         <dependency org="org.apache.derby" name="derby" rev="10.9.1.0"/>
 
         <dependency org="mysql" name="mysql-connector-java" rev="5.1.6"/>

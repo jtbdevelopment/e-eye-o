@@ -21,7 +21,7 @@ import java.util.Properties;
 //  TODO - connection pool
 
 @Configuration
-@ImportResource(value = "classpath*:spring-context.xml")
+@ImportResource(value = "classpath*:spring-context*.xml")
 public class HibernateDAOSpringConfig {
 
     @Bean

@@ -8,23 +8,44 @@
          Place any bean overrides here.
     -->
     <util:properties id="hibernateOverrideProperties">
-        <prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.DerbyUniqueNonNull</prop>
-        <!--prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop-->
+        <!--prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.DerbyUniqueNonNull</prop-->
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
     </util:properties>
 
     <!-- Example using Derby  -->
-    <bean id="dataSource" class="org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40">
+    <!--bean id="dataSource" class="org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40">
         <property name="databaseName" value="${java.io.tmpdir}/EEYEODB"/>
         <property name="createDatabase" value="create"/>
-    </bean>
-
-    <!-- Potential Example Using MySQL  -->
-    <!--bean id="dataSource" class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
-        <property name="url" value="jdbc:mysql://localhost:3306/eeyeodbtest"/>
-        <property name="user" value="eeyeodbtestuser"/>
-        <property name="password" value="eeyeodbtestuser"/>
-        <property name="databaseName" value="eeyeodbtest"/>
     </bean-->
+
+    <!-- Example Using MySQL  -->
+    <!--bean id="dataSource" class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
+        <property name="url" value="jdbc:mysql://localhost:3306/eeyeodb"/>
+        <property name="user" value="eeyeodbuser"/>
+        <property name="password" value="eeyeodbuser"/>
+        <property name="databaseName" value="eeyeodb"/>
+    </bean-->
+
+    <!-- Example using Tomcat Pool + MySQL  -->
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
+        <property name="url" value="jdbc:mysql://localhost:3306/eeyeodb"/>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="username" value="eeyeodbuser"/>
+        <property name="password" value="eeyeodbuser"/>
+        <property name="defaultCatalog" value="eeyeodb"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="maxActive" value="20"/>
+        <property name="initialSize" value="5"/>
+        <property name="minIdle" value="5"/>
+        <property name="logAbandoned" value="true"/>
+        <property name="removeAbandoned" value="true"/>
+        <property name="validationQuery" value="SELECT 1"/>
+        <property name="maxWait" value="10000"/>
+        <property name="validationInterval" value="30000"/>
+        <property name="minEvictableIdleTimeMillis" value="30000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="30000"/>
+        <property name="removeAbandonedTimeout" value="60000"/>
+    </bean>
 
     <!--  Strongly recommended  -->
     <bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
