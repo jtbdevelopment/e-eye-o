@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!--
         Last bean file to be imported
          Place any bean overrides here.
     -->
+    <util:properties id="hibernateOverrideProperties">
+        <prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.DerbyUniqueNonNull</prop>
+        <!--prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop-->
+    </util:properties>
+
+    <!-- Example using Derby  -->
+    <bean id="dataSource" class="org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40">
+        <property name="databaseName" value="${java.io.tmpdir}/EEYEODB"/>
+        <property name="createDatabase" value="create"/>
+    </bean>
+
+    <!-- Potential Example Using MySQL  -->
+    <!--bean id="dataSource" class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
+        <property name="url" value="jdbc:mysql://localhost:3306/eeyeodbtest"/>
+        <property name="user" value="eeyeodbtestuser"/>
+        <property name="password" value="eeyeodbtestuser"/>
+        <property name="databaseName" value="eeyeodbtest"/>
+    </bean-->
+
+    <!--  Strongly recommended  -->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+        <constructor-arg value="${password.encoder.secret}"/>
+    </bean>
 
     <!--  You must define a usable org.springframework.mail.javamail.JavaMailSender  -->
-    <!--  This is a GMAIL example  -->
+    <!--  This is an untested GMAIL example  -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="smtp.gmail.com"/>
         <property name="port" value="587"/>

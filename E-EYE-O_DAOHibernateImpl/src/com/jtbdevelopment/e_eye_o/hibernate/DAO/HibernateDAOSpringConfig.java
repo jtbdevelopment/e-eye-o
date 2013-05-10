@@ -25,32 +25,20 @@ import java.util.Properties;
 public class HibernateDAOSpringConfig {
 
     @Bean
-    public Properties hibernateOverrideProperties() {
-        return new Properties();
-    }
-
-    @Bean
-    @Autowired
-    public Properties hibernateProperties(final String hibernateDialect, final @Qualifier("hibernateOverrideProperties") Properties hibernateOverrideProperties) {
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", hibernateDialect);
-        properties.setProperty("hibernate.show_sql", "true");
-        properties.setProperty("hibernate.format_sql", "false");
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");  //  TODO - change this to validate
-        properties.putAll(hibernateOverrideProperties);
-        return properties;
-    }
-
-    @Bean
     public Interceptor timestampInterceptor() {
         return new ModificationTimestampGenerator();
     }
 
     @Bean
     @Autowired
-    public LocalSessionFactoryBean sessionFactory(final javax.sql.DataSource dataSource, final @Qualifier("hibernateProperties") Properties hibernateProperties, final Interceptor timestampInterceptor) {
+    public LocalSessionFactoryBean sessionFactory(final javax.sql.DataSource dataSource, final @Qualifier("hibernateProperties") Properties hibernateProperties, final @Qualifier("hibernateOverrideProperties") Properties hibernateOverrideProperties, final Interceptor timestampInterceptor) {
+        Properties properties = new Properties();
+        properties.putAll(hibernateProperties);
+        if (hibernateOverrideProperties != null) {
+            properties.putAll(hibernateOverrideProperties);
+        }
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-        sessionFactoryBean.setHibernateProperties(hibernateProperties);
+        sessionFactoryBean.setHibernateProperties(properties);
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setEntityInterceptor(timestampInterceptor);
         sessionFactoryBean.setPackagesToScan("com.jtbdevelopment");

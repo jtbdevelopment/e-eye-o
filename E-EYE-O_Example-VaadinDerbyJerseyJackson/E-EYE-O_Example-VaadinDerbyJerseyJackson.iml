@@ -27,15 +27,16 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 7" level="application_server_libraries" />
-    <orderEntry type="module" module-name="E-EYE-O_DAODerbyHibernateImpl" exported="" scope="RUNTIME" />
     <orderEntry type="module" module-name="E-EYE-O_EntitiesJavaImpl" exported="" scope="RUNTIME" />
     <orderEntry type="module" module-name="E-EYE-O_RESTJSONJersey" exported="" scope="RUNTIME" />
     <orderEntry type="module" module-name="E-EYE-O_SerializationJacksonImpl" exported="" scope="RUNTIME" />
     <orderEntry type="module" module-name="E-EYE-O_RIAVaadin" exported="" scope="RUNTIME" />
     <orderEntry type="library" exported="" name="org.springframework:spring-context:3.2.0.RELEASE" level="project" />
     <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
-    <orderEntry type="library" name="spring-context-support-3.2.0.RELEASE" level="project" />
-    <orderEntry type="library" name="mail-1.4" level="project" />
+    <orderEntry type="library" exported="" name="spring-context-support-3.2.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="mail-1.4" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="org.apache.derby:derby:10.9.1.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="mysql-connector-java-5.1.6" level="project" />
   </component>
 </module>
 

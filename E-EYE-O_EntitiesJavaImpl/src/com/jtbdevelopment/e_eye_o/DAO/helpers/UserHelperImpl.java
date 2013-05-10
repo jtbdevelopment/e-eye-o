@@ -33,7 +33,7 @@ public class UserHelperImpl implements UserHelper {
     @Autowired
     private IdObjectFactory idObjectFactory;
 
-    @Autowired
+    @Autowired(required = false)
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -50,7 +50,9 @@ public class UserHelperImpl implements UserHelper {
     }
 
     private void securePassword(final AppUser appUser, final String clearCasePassword) {
-        appUser.setPassword(passwordEncoder.encode(clearCasePassword));
+        if (passwordEncoder != null) {
+            appUser.setPassword(passwordEncoder.encode(clearCasePassword));
+        }
     }
 
     @Override

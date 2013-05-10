@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.DerbyDAO;
+package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.jtbdevelopment.e_eye_o.DAO.AbstractDataProviderIntegration;
 import org.springframework.test.context.ContextConfiguration;
@@ -10,5 +10,5 @@ import org.testng.annotations.Test;
  */
 @ContextConfiguration("/test-integration-context.xml")
 @Test(groups = {"integration"})
-public class DerbyDataProviderImplIntegration extends AbstractDataProviderIntegration {
+public class HibernateDataProviderImplIntegration extends AbstractDataProviderIntegration {
 }

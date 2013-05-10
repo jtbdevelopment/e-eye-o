@@ -1,9 +1,8 @@
-package com.jtdevelopment.e_eye_o.jackson.serialization;
+package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.TestingPhotoHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObjectSerializer;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;

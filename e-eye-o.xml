@@ -67,16 +67,12 @@
       <include name="jre/lib/deploy.jar"/>
       <include name="jre/lib/javaws.jar"/>
       <include name="jre/lib/jce.jar"/>
-      <include name="jre/lib/jfr.jar"/>
-      <include name="jre/lib/jfxrt.jar"/>
       <include name="jre/lib/jsse.jar"/>
       <include name="jre/lib/management-agent.jar"/>
       <include name="jre/lib/plugin.jar"/>
       <include name="jre/lib/resources.jar"/>
       <include name="jre/lib/rt.jar"/>
-      <include name="jre/lib/ext/access-bridge-64.jar"/>
       <include name="jre/lib/ext/dnsns.jar"/>
-      <include name="jre/lib/ext/jaccess.jar"/>
       <include name="jre/lib/ext/localedata.jar"/>
       <include name="jre/lib/ext/sunec.jar"/>
       <include name="jre/lib/ext/sunjce_provider.jar"/>
@@ -130,7 +126,6 @@
     <pathelement location="${basedir}/lib/jersey-spring-1.17.jar"/>
     <pathelement location="${basedir}/lib/jsr250-api-1.0.jar"/>
     <pathelement location="${basedir}/lib/jsr311-api-1.1.1.jar"/>
-    <pathelement location="${basedir}/lib/mail-1.4.jar"/>
     <pathelement location="${basedir}/lib/osgi_R4_core-1.0.jar"/>
     <pathelement location="${basedir}/lib/stax-api-1.0-2.jar"/>
   </path>
@@ -168,6 +163,14 @@
   
   <path id="library.joda-time:joda-time:2.1.classpath">
     <pathelement location="${basedir}/lib/joda-time-2.1.jar"/>
+  </path>
+  
+  <path id="library.mail-1.4.classpath">
+    <pathelement location="${basedir}/lib/mail-1.4.jar"/>
+  </path>
+  
+  <path id="library.mysql-connector-java-5.1.6.classpath">
+    <pathelement location="${basedir}/lib/mysql-connector-java-5.1.6.jar"/>
   </path>
   
   <path id="library.org.apache.derby:derby:10.9.1.0.classpath">
@@ -295,6 +298,10 @@
     <pathelement location="${basedir}/lib/testng-6.8.jar"/>
   </path>
   
+  <path id="library.spring-context-support-3.2.0.release.classpath">
+    <pathelement location="${basedir}/lib/spring-context-support-3.2.0.RELEASE.jar"/>
+  </path>
+  
   <path id="library.spring-vaadin-integration-1.6.6.classpath">
     <pathelement location="${basedir}/lib/spring-vaadin-integration-1.6.6.jar"/>
   </path>
@@ -308,25 +315,8 @@
   <!-- Application Server Libraries -->
   
   <path id="library.tomcat_7.classpath">
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/annotations-api.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/catalina-ant.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/catalina-ha.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/catalina-tribes.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/catalina.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/ecj-3.7.2.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/el-api.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/jasper-el.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/jasper.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/jsp-api.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/servlet-api.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-api.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-coyote.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-dbcp.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-i18n-es.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-i18n-fr.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-i18n-ja.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-jdbc.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-util.jar"/>
+    <pathelement location="C:/Program Files/Apache Software Foundation/Tomcat 7.0/lib/jsp-api.jar"/>
+    <pathelement location="C:/Program Files/Apache Software Foundation/Tomcat 7.0/lib/servlet-api.jar"/>
   </path>
   
   <!-- Modules -->
@@ -781,6 +771,8 @@
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
     <path refid="library.sass-stdlib.classpath"/>
     <path refid="library.imgscalr-lib-4.2-javadoc.classpath"/>
+    <path refid="library.spring-context-support-3.2.0.release.classpath"/>
+    <path refid="library.mail-1.4.classpath"/>
   </path>
   
   <path id="e-eye-o_riavaadin.runtime.production.module.classpath">
@@ -794,6 +786,8 @@
     <path refid="library.confirmdialog-2.0.4.classpath"/>
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
     <path refid="library.imgscalr-lib-4.2-javadoc.classpath"/>
+    <path refid="library.spring-context-support-3.2.0.release.classpath"/>
+    <path refid="library.mail-1.4.classpath"/>
   </path>
   
   <path id="e-eye-o_riavaadin.module.classpath">
@@ -816,6 +810,8 @@
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
     <path refid="library.sass-stdlib.classpath"/>
     <path refid="library.imgscalr-lib-4.2-javadoc.classpath"/>
+    <path refid="library.spring-context-support-3.2.0.release.classpath"/>
+    <path refid="library.mail-1.4.classpath"/>
   </path>
   
   <path id="e-eye-o_riavaadin.runtime.module.classpath">
@@ -831,6 +827,8 @@
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
     <path refid="library.sass-stdlib.classpath"/>
     <path refid="library.imgscalr-lib-4.2-javadoc.classpath"/>
+    <path refid="library.spring-context-support-3.2.0.release.classpath"/>
+    <path refid="library.mail-1.4.classpath"/>
   </path>
   
   
@@ -1172,59 +1170,58 @@
   </target>
   
   
-  <!-- Module E-EYE-O_DAODerbyHibernateImpl -->
+  <!-- Module E-EYE-O_Example-VaadinDerbyJerseyJackson -->
   
-  <dirname property="module.e-eye-o_daoderbyhibernateimpl.basedir" file="${ant.file}"/>
+  <dirname property="module.e-eye-o_example-vaadinderbyjerseyjackson.basedir" file="${ant.file}"/>
   
   
-  <property name="module.jdk.home.e-eye-o_daoderbyhibernateimpl" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.e-eye-o_daoderbyhibernateimpl" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.e-eye-o_daoderbyhibernateimpl" value="${project.jdk.classpath}"/>
+  <property name="module.jdk.home.e-eye-o_example-vaadinderbyjerseyjackson" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.e-eye-o_example-vaadinderbyjerseyjackson" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson" value="${project.jdk.classpath}"/>
   
-  <property name="compiler.args.e-eye-o_daoderbyhibernateimpl" value="${compiler.args}"/>
+  <property name="compiler.args.e-eye-o_example-vaadinderbyjerseyjackson" value="${compiler.args}"/>
   
-  <property name="e-eye-o_daoderbyhibernateimpl.output.dir" value="${module.e-eye-o_daoderbyhibernateimpl.basedir}/out/production/E-EYE-O_DAODerbyHibernateImpl"/>
-  <property name="e-eye-o_daoderbyhibernateimpl.testoutput.dir" value="${module.e-eye-o_daoderbyhibernateimpl.basedir}/out/test/E-EYE-O_DAODerbyHibernateImpl"/>
+  <property name="e-eye-o_example-vaadinderbyjerseyjackson.output.dir" value="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/out/production/E-EYE-O_Example-VaadinDerbyJerseyJackson"/>
+  <property name="e-eye-o_example-vaadinderbyjerseyjackson.testoutput.dir" value="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/out/test/E-EYE-O_Example-VaadinDerbyJerseyJackson"/>
   
-  <path id="e-eye-o_daoderbyhibernateimpl.module.bootclasspath">
+  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.bootclasspath">
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
-  <path id="e-eye-o_daoderbyhibernateimpl.module.production.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_daoderbyhibernateimpl}"/>
-    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
-    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
-    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.production.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson}"/>
+    <path refid="library.tomcat_7.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <pathelement location="${e-eye-o_interfaces.output.dir}"/>
     <path refid="library.joda-time:joda-time:2.1.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
     <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    <path refid="library.commons-beanutils-1.8.3.classpath"/>
-    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
+    <path refid="library.spring-context-support-3.2.0.release.classpath"/>
   </path>
   
-  <path id="e-eye-o_daoderbyhibernateimpl.runtime.production.module.classpath">
-    <pathelement location="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
-    <path refid="e-eye-o_daohibernateimpl.runtime.production.module.classpath"/>
+  <path id="e-eye-o_example-vaadinderbyjerseyjackson.runtime.production.module.classpath">
+    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
+    <path refid="e-eye-o_entitiesjavaimpl.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_restjsonjersey.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_serializationjacksonimpl.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_riavaadin.runtime.production.module.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
+    <path refid="library.spring-context-support-3.2.0.release.classpath"/>
+    <path refid="library.mail-1.4.classpath"/>
     <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
-    <path refid="library.commons-beanutils-1.8.3.classpath"/>
+    <path refid="library.mysql-connector-java-5.1.6.classpath"/>
   </path>
   
-  <path id="e-eye-o_daoderbyhibernateimpl.module.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_daoderbyhibernateimpl}"/>
-    <pathelement location="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
-    <pathelement location="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
-    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
-    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson}"/>
+    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
+    <path refid="library.tomcat_7.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
     <pathelement location="${e-eye-o_interfaces.output.dir}"/>
     <path refid="library.joda-time:joda-time:2.1.classpath"/>
@@ -1232,90 +1229,68 @@
     <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
     <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    <path refid="library.commons-beanutils-1.8.3.classpath"/>
-    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
-    <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+    <path refid="library.spring-context-support-3.2.0.release.classpath"/>
   </path>
   
-  <path id="e-eye-o_daoderbyhibernateimpl.runtime.module.classpath">
-    <pathelement location="${e-eye-o_daoderbyhibernateimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
-    <path refid="e-eye-o_daohibernateimpl.runtime.module.classpath"/>
+  <path id="e-eye-o_example-vaadinderbyjerseyjackson.runtime.module.classpath">
+    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
+    <path refid="library.tomcat_7.classpath"/>
+    <path refid="e-eye-o_entitiesjavaimpl.runtime.module.classpath"/>
+    <path refid="e-eye-o_restjsonjersey.runtime.module.classpath"/>
+    <path refid="e-eye-o_serializationjacksonimpl.runtime.module.classpath"/>
+    <path refid="e-eye-o_riavaadin.runtime.module.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
+    <path refid="library.spring-context-support-3.2.0.release.classpath"/>
+    <path refid="library.mail-1.4.classpath"/>
     <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
-    <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
-    <path refid="library.commons-beanutils-1.8.3.classpath"/>
+    <path refid="library.mysql-connector-java-5.1.6.classpath"/>
   </path>
   
   
-  <patternset id="excluded.from.module.e-eye-o_daoderbyhibernateimpl">
+  <patternset id="excluded.from.module.e-eye-o_example-vaadinderbyjerseyjackson">
     <patternset refid="ignored.files"/>
   </patternset>
   
-  <patternset id="excluded.from.compilation.e-eye-o_daoderbyhibernateimpl">
-    <patternset refid="excluded.from.module.e-eye-o_daoderbyhibernateimpl"/>
+  <patternset id="excluded.from.compilation.e-eye-o_example-vaadinderbyjerseyjackson">
+    <patternset refid="excluded.from.module.e-eye-o_example-vaadinderbyjerseyjackson"/>
   </patternset>
   
-  <path id="e-eye-o_daoderbyhibernateimpl.module.sourcepath">
-    <dirset dir="${module.e-eye-o_daoderbyhibernateimpl.basedir}/E-EYE-O_DAODerbyHibernateImpl">
+  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.sourcepath">
+    <dirset dir="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson">
       <include name="src"/>
     </dirset>
   </path>
   
-  <path id="e-eye-o_daoderbyhibernateimpl.module.test.sourcepath">
-    <dirset dir="${module.e-eye-o_daoderbyhibernateimpl.basedir}/E-EYE-O_DAODerbyHibernateImpl">
-      <include name="test-unit"/>
-    </dirset>
-  </path>
   
+  <target name="compile.module.e-eye-o_example-vaadinderbyjerseyjackson" depends="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.production,compile.module.e-eye-o_example-vaadinderbyjerseyjackson.tests" description="Compile module E-EYE-O_Example-VaadinDerbyJerseyJackson"/>
   
-  <target name="compile.module.e-eye-o_daoderbyhibernateimpl" depends="compile.module.e-eye-o_daoderbyhibernateimpl.production,compile.module.e-eye-o_daoderbyhibernateimpl.tests" description="Compile module E-EYE-O_DAODerbyHibernateImpl"/>
-  
-  <target name="compile.module.e-eye-o_daoderbyhibernateimpl.production" depends="compile.module.e-eye-o_daohibernateimpl" description="Compile module E-EYE-O_DAODerbyHibernateImpl; production classes">
-    <mkdir dir="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
-    <javac destdir="${e-eye-o_daoderbyhibernateimpl.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_daoderbyhibernateimpl}/javac">
-      <compilerarg line="${compiler.args.e-eye-o_daoderbyhibernateimpl}"/>
-      <bootclasspath refid="e-eye-o_daoderbyhibernateimpl.module.bootclasspath"/>
-      <classpath refid="e-eye-o_daoderbyhibernateimpl.module.production.classpath"/>
-      <src refid="e-eye-o_daoderbyhibernateimpl.module.sourcepath"/>
-      <patternset refid="excluded.from.compilation.e-eye-o_daoderbyhibernateimpl"/>
+  <target name="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.production" depends="compile.module.e-eye-o_entitiesjavaimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_riavaadin,compile.module.e-eye-o_interfaces" description="Compile module E-EYE-O_Example-VaadinDerbyJerseyJackson; production classes">
+    <mkdir dir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
+    <javac destdir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_example-vaadinderbyjerseyjackson}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_example-vaadinderbyjerseyjackson}"/>
+      <bootclasspath refid="e-eye-o_example-vaadinderbyjerseyjackson.module.bootclasspath"/>
+      <classpath refid="e-eye-o_example-vaadinderbyjerseyjackson.module.production.classpath"/>
+      <src refid="e-eye-o_example-vaadinderbyjerseyjackson.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_example-vaadinderbyjerseyjackson"/>
     </javac>
     
-    <copy todir="${e-eye-o_daoderbyhibernateimpl.output.dir}">
-      <fileset dir="${module.e-eye-o_daoderbyhibernateimpl.basedir}/E-EYE-O_DAODerbyHibernateImpl/src">
+    <copy todir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}">
+      <fileset dir="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
     </copy>
   </target>
   
-  <target name="compile.module.e-eye-o_daoderbyhibernateimpl.tests" depends="compile.module.e-eye-o_daoderbyhibernateimpl.production" description="compile module E-EYE-O_DAODerbyHibernateImpl; test classes" unless="skip.tests">
-    <mkdir dir="${e-eye-o_daoderbyhibernateimpl.testoutput.dir}"/>
-    <javac destdir="${e-eye-o_daoderbyhibernateimpl.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_daoderbyhibernateimpl}/javac">
-      <compilerarg line="${compiler.args.e-eye-o_daoderbyhibernateimpl}"/>
-      <bootclasspath refid="e-eye-o_daoderbyhibernateimpl.module.bootclasspath"/>
-      <classpath refid="e-eye-o_daoderbyhibernateimpl.module.classpath"/>
-      <src refid="e-eye-o_daoderbyhibernateimpl.module.test.sourcepath"/>
-      <patternset refid="excluded.from.compilation.e-eye-o_daoderbyhibernateimpl"/>
-    </javac>
-    
-    <copy todir="${e-eye-o_daoderbyhibernateimpl.testoutput.dir}">
-      <fileset dir="${module.e-eye-o_daoderbyhibernateimpl.basedir}/E-EYE-O_DAODerbyHibernateImpl/test-unit">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-    </copy>
-  </target>
+  <target name="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.tests" depends="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.production" description="compile module E-EYE-O_Example-VaadinDerbyJerseyJackson; test classes" unless="skip.tests"/>
   
-  <target name="clean.module.e-eye-o_daoderbyhibernateimpl" description="cleanup module">
-    <delete dir="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
-    <delete dir="${e-eye-o_daoderbyhibernateimpl.testoutput.dir}"/>
+  <target name="clean.module.e-eye-o_example-vaadinderbyjerseyjackson" description="cleanup module">
+    <delete dir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
+    <delete dir="${e-eye-o_example-vaadinderbyjerseyjackson.testoutput.dir}"/>
   </target>
   
   
@@ -1339,82 +1314,80 @@
   
   <path id="e-eye-o_derbyjacksonbasedintegrationtests.module.production.classpath">
     <path refid="${module.jdk.classpath.e-eye-o_derbyjacksonbasedintegrationtests}"/>
-    <pathelement location="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
-    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
-    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
-    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
     <pathelement location="${e-eye-o_interfaces.output.dir}"/>
     <path refid="library.joda-time:joda-time:2.1.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
     <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    <path refid="library.commons-beanutils-1.8.3.classpath"/>
-    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
-    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
-    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
     <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
     <pathelement location="${e-eye-o_restjsonjersey.output.dir}"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
+    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
+    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
+    <path refid="library.commons-beanutils-1.8.3.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
   </path>
   
   <path id="e-eye-o_derbyjacksonbasedintegrationtests.runtime.production.module.classpath">
     <pathelement location="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}"/>
-    <path refid="e-eye-o_daoderbyhibernateimpl.runtime.production.module.classpath"/>
     <path refid="e-eye-o_serializationjacksonimpl.runtime.production.module.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
     <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
     <path refid="e-eye-o_restjsonjersey.runtime.production.module.classpath"/>
     <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_daohibernateimpl.runtime.production.module.classpath"/>
   </path>
   
   <path id="e-eye-o_derbyjacksonbasedintegrationtests.module.classpath">
     <path refid="${module.jdk.classpath.e-eye-o_derbyjacksonbasedintegrationtests}"/>
     <pathelement location="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}"/>
-    <pathelement location="${e-eye-o_daoderbyhibernateimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
-    <pathelement location="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
-    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
-    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
     <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
     <pathelement location="${e-eye-o_interfaces.output.dir}"/>
     <path refid="library.joda-time:joda-time:2.1.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
     <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    <path refid="library.commons-beanutils-1.8.3.classpath"/>
-    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
-    <pathelement location="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
-    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
     <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
     <pathelement location="${e-eye-o_restjsonjersey.testoutput.dir}"/>
     <pathelement location="${e-eye-o_restjsonjersey.output.dir}"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
+    <path refid="library.mysql-connector-java-5.1.6.classpath"/>
+    <pathelement location="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
+    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
+    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
+    <path refid="library.commons-beanutils-1.8.3.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
   </path>
   
   <path id="e-eye-o_derbyjacksonbasedintegrationtests.runtime.module.classpath">
     <pathelement location="${e-eye-o_derbyjacksonbasedintegrationtests.testoutput.dir}"/>
     <pathelement location="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}"/>
-    <path refid="e-eye-o_daoderbyhibernateimpl.runtime.module.classpath"/>
     <path refid="e-eye-o_serializationjacksonimpl.runtime.module.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
     <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
@@ -1422,6 +1395,9 @@
     <path refid="e-eye-o_restjsonjersey.runtime.module.classpath"/>
     <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
+    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
+    <path refid="library.mysql-connector-java-5.1.6.classpath"/>
+    <path refid="e-eye-o_daohibernateimpl.runtime.module.classpath"/>
   </path>
   
   
@@ -1448,7 +1424,7 @@
   
   <target name="compile.module.e-eye-o_derbyjacksonbasedintegrationtests" depends="compile.module.e-eye-o_derbyjacksonbasedintegrationtests.production,compile.module.e-eye-o_derbyjacksonbasedintegrationtests.tests" description="Compile module E-EYE-O_DerbyJacksonBasedIntegrationTests"/>
   
-  <target name="compile.module.e-eye-o_derbyjacksonbasedintegrationtests.production" depends="compile.module.e-eye-o_daoderbyhibernateimpl,compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_interfaces" description="Compile module E-EYE-O_DerbyJacksonBasedIntegrationTests; production classes">
+  <target name="compile.module.e-eye-o_derbyjacksonbasedintegrationtests.production" depends="compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_interfaces,compile.module.e-eye-o_daohibernateimpl" description="Compile module E-EYE-O_DerbyJacksonBasedIntegrationTests; production classes">
     <mkdir dir="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}"/>
     <javac destdir="${e-eye-o_derbyjacksonbasedintegrationtests.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_derbyjacksonbasedintegrationtests}/javac">
       <compilerarg line="${compiler.args.e-eye-o_derbyjacksonbasedintegrationtests}"/>
@@ -1489,147 +1465,23 @@
     <delete dir="${e-eye-o_derbyjacksonbasedintegrationtests.testoutput.dir}"/>
   </target>
   
-  
-  <!-- Module E-EYE-O_Example-VaadinDerbyJerseyJackson -->
-  
-  <dirname property="module.e-eye-o_example-vaadinderbyjerseyjackson.basedir" file="${ant.file}"/>
-  
-  
-  <property name="module.jdk.home.e-eye-o_example-vaadinderbyjerseyjackson" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.e-eye-o_example-vaadinderbyjerseyjackson" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson" value="${project.jdk.classpath}"/>
-  
-  <property name="compiler.args.e-eye-o_example-vaadinderbyjerseyjackson" value="${compiler.args}"/>
-  
-  <property name="e-eye-o_example-vaadinderbyjerseyjackson.output.dir" value="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/out/production/E-EYE-O_Example-VaadinDerbyJerseyJackson"/>
-  <property name="e-eye-o_example-vaadinderbyjerseyjackson.testoutput.dir" value="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/out/test/E-EYE-O_Example-VaadinDerbyJerseyJackson"/>
-  
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.bootclasspath">
-    <!-- Paths to be included in compilation bootclasspath -->
-  </path>
-  
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.production.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson}"/>
-    <path refid="library.tomcat_7.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
-    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
-    <path refid="library.joda-time:joda-time:2.1.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
-    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
-    <path refid="library.com.google.guava:guava:13.0.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.runtime.production.module.classpath">
-    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
-    <path refid="e-eye-o_daoderbyhibernateimpl.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_entitiesjavaimpl.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_restjsonjersey.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_serializationjacksonimpl.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_riavaadin.runtime.production.module.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
-    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson}"/>
-    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
-    <path refid="library.tomcat_7.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
-    <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
-    <path refid="library.joda-time:joda-time:2.1.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
-    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
-    <path refid="library.com.google.guava:guava:13.0.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.runtime.module.classpath">
-    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
-    <path refid="library.tomcat_7.classpath"/>
-    <path refid="e-eye-o_daoderbyhibernateimpl.runtime.module.classpath"/>
-    <path refid="e-eye-o_entitiesjavaimpl.runtime.module.classpath"/>
-    <path refid="e-eye-o_restjsonjersey.runtime.module.classpath"/>
-    <path refid="e-eye-o_serializationjacksonimpl.runtime.module.classpath"/>
-    <path refid="e-eye-o_riavaadin.runtime.module.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
-    <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
-  </path>
-  
-  
-  <patternset id="excluded.from.module.e-eye-o_example-vaadinderbyjerseyjackson">
-    <patternset refid="ignored.files"/>
-  </patternset>
-  
-  <patternset id="excluded.from.compilation.e-eye-o_example-vaadinderbyjerseyjackson">
-    <patternset refid="excluded.from.module.e-eye-o_example-vaadinderbyjerseyjackson"/>
-  </patternset>
-  
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.sourcepath">
-    <dirset dir="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson">
-      <include name="src"/>
-    </dirset>
-  </path>
-  
-  
-  <target name="compile.module.e-eye-o_example-vaadinderbyjerseyjackson" depends="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.production,compile.module.e-eye-o_example-vaadinderbyjerseyjackson.tests" description="Compile module E-EYE-O_Example-VaadinDerbyJerseyJackson"/>
-  
-  <target name="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.production" depends="compile.module.e-eye-o_daoderbyhibernateimpl,compile.module.e-eye-o_entitiesjavaimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_riavaadin,compile.module.e-eye-o_interfaces" description="Compile module E-EYE-O_Example-VaadinDerbyJerseyJackson; production classes">
-    <mkdir dir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
-    <javac destdir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_example-vaadinderbyjerseyjackson}/javac">
-      <compilerarg line="${compiler.args.e-eye-o_example-vaadinderbyjerseyjackson}"/>
-      <bootclasspath refid="e-eye-o_example-vaadinderbyjerseyjackson.module.bootclasspath"/>
-      <classpath refid="e-eye-o_example-vaadinderbyjerseyjackson.module.production.classpath"/>
-      <src refid="e-eye-o_example-vaadinderbyjerseyjackson.module.sourcepath"/>
-      <patternset refid="excluded.from.compilation.e-eye-o_example-vaadinderbyjerseyjackson"/>
-    </javac>
-    
-    <copy todir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}">
-      <fileset dir="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson/src">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-    </copy>
-  </target>
-  
-  <target name="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.tests" depends="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.production" description="compile module E-EYE-O_Example-VaadinDerbyJerseyJackson; test classes" unless="skip.tests"/>
-  
-  <target name="clean.module.e-eye-o_example-vaadinderbyjerseyjackson" description="cleanup module">
-    <delete dir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
-    <delete dir="${e-eye-o_example-vaadinderbyjerseyjackson.testoutput.dir}"/>
-  </target>
-  
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
   </target>
   
-  <target name="clean" depends="clean.module.e-eye-o_interfaces, clean.module.e-eye-o_entitiesjavaimpl, clean.module.e-eye-o_restjsonjersey, clean.module.e-eye-o_riavaadin, clean.module.e-eye-o_serializationjacksonimpl, clean.module.e-eye-o_daohibernateimpl, clean.module.e-eye-o_daoderbyhibernateimpl, clean.module.e-eye-o_derbyjacksonbasedintegrationtests, clean.module.e-eye-o_example-vaadinderbyjerseyjackson, clean.artifact.e-eye-o_daoderbyimpl:ejb_exploded, clean.artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded, clean.artifact.e-eye-o_hibernatedaoimpl:ejb_exploded, clean.artifact.e-eye-o_riavaadin:war_exploded" description="cleanup all"/>
+  <target name="clean" depends="clean.module.e-eye-o_interfaces, clean.module.e-eye-o_entitiesjavaimpl, clean.module.e-eye-o_restjsonjersey, clean.module.e-eye-o_riavaadin, clean.module.e-eye-o_serializationjacksonimpl, clean.module.e-eye-o_daohibernateimpl, clean.module.e-eye-o_example-vaadinderbyjerseyjackson, clean.module.e-eye-o_derbyjacksonbasedintegrationtests, clean.artifact.e-eye-o_hibernatedaoimpl:ejb_exploded, clean.artifact.e-eye-o_riavaadin:war_exploded" description="cleanup all"/>
   
-  <target name="build.modules" depends="init, clean, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_restjsonjersey, compile.module.e-eye-o_riavaadin, compile.module.e-eye-o_serializationjacksonimpl, compile.module.e-eye-o_daohibernateimpl, compile.module.e-eye-o_daoderbyhibernateimpl, compile.module.e-eye-o_derbyjacksonbasedintegrationtests, compile.module.e-eye-o_example-vaadinderbyjerseyjackson" description="build all modules"/>
+  <target name="build.modules" depends="init, clean, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_restjsonjersey, compile.module.e-eye-o_riavaadin, compile.module.e-eye-o_serializationjacksonimpl, compile.module.e-eye-o_daohibernateimpl, compile.module.e-eye-o_example-vaadinderbyjerseyjackson, compile.module.e-eye-o_derbyjacksonbasedintegrationtests" description="build all modules"/>
   
   <target name="init.artifacts">
     <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
-    <property name="artifact.output.e-eye-o_daoderbyimpl:ejb_exploded" value="${basedir}/out/artifacts/E_EYE_O_DAODerbyImpl_ejb_exploded"/>
-    <property name="artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded" value="${basedir}/out/artifacts/E_EYE_O_Example_VaadinDerbyJerseyJackson_war_exploded"/>
+    <property name="artifact.output.e-eye-o_entitiesjavaimpl:jar" value="${basedir}/out/artifacts/E_EYE_O_EntitiesJavaImpl_jar"/>
     <property name="artifact.output.e-eye-o_hibernatedaoimpl:ejb_exploded" value="${basedir}/out/artifacts/E_EYE_O_HibernateDAOImpl_ejb_exploded"/>
     <property name="artifact.output.e-eye-o_interfaces" value="${basedir}/out/artifacts/E_EYE_O_Interfaces"/>
     <property name="artifact.output.e-eye-o_riavaadin:war_exploded" value="${basedir}/out/artifacts/E_EYE_O_RIAVaadin_war_exploded"/>
     <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.E-EYE-O_EntitiesJavaImpl.jar" value="${artifacts.temp.dir}/E-EYE-O_EntitiesJavaImpl.jar"/>
     <property name="temp.jar.path.E-EYE-O_Interfaces.jar" value="${artifacts.temp.dir}/E-EYE-O_Interfaces.jar"/>
-  </target>
-  
-  <target name="clean.artifact.e-eye-o_daoderbyimpl:ejb_exploded" description="clean E-EYE-O_DAODerbyImpl:ejb exploded artifact output">
-    <delete dir="${artifact.output.e-eye-o_daoderbyimpl:ejb_exploded}"/>
-  </target>
-  
-  <target name="clean.artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded" description="clean E-EYE-O_Example-VaadinDerbyJerseyJackson:war exploded artifact output">
-    <delete dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}"/>
   </target>
   
   <target name="clean.artifact.e-eye-o_hibernatedaoimpl:ejb_exploded" description="clean E-EYE-O_HibernateDAOImpl:ejb exploded artifact output">
@@ -1640,160 +1492,36 @@
     <delete dir="${artifact.output.e-eye-o_riavaadin:war_exploded}"/>
   </target>
   
-  <target name="artifact.e-eye-o_daoderbyimpl:ejb_exploded" depends="init.artifacts, compile.module.e-eye-o_daoderbyhibernateimpl" description="Build &#39;E-EYE-O_DAODerbyImpl:ejb exploded&#39; artifact">
-    <mkdir dir="${artifact.output.e-eye-o_daoderbyimpl:ejb_exploded}"/>
-    <copy todir="${artifact.output.e-eye-o_daoderbyimpl:ejb_exploded}">
-      <fileset dir="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
-    </copy>
-  </target>
-  
-  <target name="artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded" depends="init.artifacts, compile.module.e-eye-o_example-vaadinderbyjerseyjackson, compile.module.e-eye-o_daoderbyhibernateimpl, compile.module.e-eye-o_daohibernateimpl, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_restjsonjersey, compile.module.e-eye-o_serializationjacksonimpl, compile.module.e-eye-o_riavaadin" description="Build &#39;E-EYE-O_Example-VaadinDerbyJerseyJackson:war exploded&#39; artifact">
-    <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}"/>
-    <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF"/>
-    <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes"/>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes">
-      <fileset dir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
-    </copy>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes">
-      <fileset dir="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
-    </copy>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes">
-      <fileset dir="${e-eye-o_daohibernateimpl.output.dir}"/>
-    </copy>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes">
-      <fileset dir="${e-eye-o_interfaces.output.dir}"/>
-    </copy>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes">
-      <fileset dir="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    </copy>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes">
-      <fileset dir="${e-eye-o_restjsonjersey.output.dir}"/>
-    </copy>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes">
-      <fileset dir="${e-eye-o_serializationjacksonimpl.output.dir}"/>
-    </copy>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes">
-      <fileset dir="${e-eye-o_riavaadin.output.dir}"/>
-    </copy>
-    <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib"/>
-    <copy file="${basedir}/lib/hibernate-core-4.1.9.Final.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/hibernate-core-4.1.9.Final.jar"/>
-    <copy file="${basedir}/lib/dom4j-1.6.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/dom4j-1.6.1.jar"/>
-    <copy file="${basedir}/lib/antlr-2.7.7.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/antlr-2.7.7.jar"/>
-    <copy file="${basedir}/lib/jboss-logging-3.1.0.GA.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jboss-logging-3.1.0.GA.jar"/>
-    <copy file="${basedir}/lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar"/>
-    <copy file="${basedir}/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
-    <copy file="${basedir}/lib/hibernate-commons-annotations-4.0.1.Final.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/hibernate-commons-annotations-4.0.1.Final.jar"/>
-    <copy file="${basedir}/lib/javassist-3.12.1.GA.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/javassist-3.12.1.GA.jar"/>
-    <copy file="${basedir}/lib/org.springframework.orm-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/org.springframework.orm-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/org.springframework.beans-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/org.springframework.beans-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/org.springframework.transaction-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/org.springframework.transaction-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/org.springframework.context-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/org.springframework.context-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/org.springframework.transaction-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/org.springframework.transaction-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/org.springframework.beans-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/org.springframework.beans-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/org.springframework.context-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/org.springframework.context-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/spring-aop-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-aop-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/joda-convert-1.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/joda-convert-1.2.jar"/>
-    <copy file="${basedir}/lib/usertype.core-3.0.0.GA.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/usertype.core-3.0.0.GA.jar"/>
-    <copy file="${basedir}/lib/hibernate-entitymanager-4.0.1.Final.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/hibernate-entitymanager-4.0.1.Final.jar"/>
-    <copy file="${basedir}/lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar"/>
-    <copy file="${basedir}/lib/dom4j-1.6.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/dom4j-1.6.1.jar"/>
-    <copy file="${basedir}/lib/antlr-2.7.7.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/antlr-2.7.7.jar"/>
-    <copy file="${basedir}/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
-    <copy file="${basedir}/lib/hibernate-commons-annotations-4.0.1.Final.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/hibernate-commons-annotations-4.0.1.Final.jar"/>
-    <copy file="${basedir}/lib/joda-money-0.6.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/joda-money-0.6.jar"/>
-    <copy file="${basedir}/lib/usertype.spi-3.0.0.GA.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/usertype.spi-3.0.0.GA.jar"/>
-    <copy file="${basedir}/lib/joda-time-2.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/joda-time-2.1.jar"/>
-    <copy file="${basedir}/lib/hibernate-validator-annotation-processor-4.3.1.Final.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/hibernate-validator-annotation-processor-4.3.1.Final.jar"/>
-    <copy file="${basedir}/lib/hibernate-validator-4.3.1.Final.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/hibernate-validator-4.3.1.Final.jar"/>
-    <copy file="${basedir}/lib/validation-api-1.0.0.GA.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/validation-api-1.0.0.GA.jar"/>
-    <copy file="${basedir}/lib/jboss-logging-3.1.0.GA.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jboss-logging-3.1.0.GA.jar"/>
-    <copy file="${basedir}/lib/org.springframework.beans-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/org.springframework.beans-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/org.springframework.core-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/org.springframework.core-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/logback-classic-1.0.5.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/logback-classic-1.0.5.jar"/>
-    <copy file="${basedir}/lib/logback-core-1.0.5.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/logback-core-1.0.5.jar"/>
-    <copy file="${basedir}/lib/log4j-over-slf4j-1.7.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/log4j-over-slf4j-1.7.2.jar"/>
-    <copy file="${basedir}/lib/slf4j-api-1.7.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/slf4j-api-1.7.2.jar"/>
-    <copy file="${basedir}/lib/aopalliance-1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/aopalliance-1.0.jar"/>
-    <copy file="${basedir}/lib/org.springframework.context-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/org.springframework.context-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/com.springsource.org.apache.commons.logging-1.1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/com.springsource.org.apache.commons.logging-1.1.1.jar"/>
-    <copy file="${basedir}/lib/spring-expression-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-expression-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/spring-jdbc-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-jdbc-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/guava-13.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/guava-13.0.jar"/>
-    <copy file="${basedir}/lib/jsr305-1.3.9.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jsr305-1.3.9.jar"/>
-    <copy file="${basedir}/lib/commons-beanutils-1.8.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-beanutils-1.8.3.jar"/>
-    <copy file="${basedir}/lib/imgscalr-lib-4.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/imgscalr-lib-4.2.jar"/>
-    <copy file="${basedir}/lib/derby-10.9.1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/derby-10.9.1.0.jar"/>
-    <copy file="${basedir}/lib/jersey-server-1.17.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jersey-server-1.17.jar"/>
-    <copy file="${basedir}/lib/asm-3.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/asm-3.1.jar"/>
-    <copy file="${basedir}/lib/mail-1.4.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/mail-1.4.jar"/>
-    <copy file="${basedir}/lib/activation-1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/activation-1.1.jar"/>
-    <copy file="${basedir}/lib/jaxb-api-2.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jaxb-api-2.1.jar"/>
-    <copy file="${basedir}/lib/stax-api-1.0-2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/stax-api-1.0-2.jar"/>
-    <copy file="${basedir}/lib/jsr250-api-1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jsr250-api-1.0.jar"/>
-    <copy file="${basedir}/lib/osgi_R4_core-1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/osgi_R4_core-1.0.jar"/>
-    <copy file="${basedir}/lib/jsr311-api-1.1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jsr311-api-1.1.1.jar"/>
-    <copy file="${basedir}/lib/jersey-core-1.17.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jersey-core-1.17.jar"/>
-    <copy file="${basedir}/lib/jersey-spring-1.17.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jersey-spring-1.17.jar"/>
-    <copy file="${basedir}/lib/jackson-databind-2.1.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jackson-databind-2.1.3.jar"/>
-    <copy file="${basedir}/lib/jackson-annotations-2.1.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jackson-annotations-2.1.2.jar"/>
-    <copy file="${basedir}/lib/jackson-core-2.1.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jackson-core-2.1.3.jar"/>
-    <copy file="${basedir}/lib/jackson-datatype-joda-2.1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jackson-datatype-joda-2.1.1.jar"/>
-    <copy file="${basedir}/lib/confirmdialog-2.0.4.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/confirmdialog-2.0.4.jar"/>
-    <copy file="${basedir}/lib/spring-vaadin-integration-1.6.6.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-vaadin-integration-1.6.6.jar"/>
-    <copy file="${basedir}/lib/vaadin-server-7.0.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/vaadin-server-7.0.1.jar"/>
-    <copy file="${basedir}/lib/portal-service-6.0.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/portal-service-6.0.2.jar"/>
-    <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
-    <copy file="${basedir}/lib/validation-api-1.0.0.GA.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/validation-api-1.0.0.GA.jar"/>
-    <copy file="${basedir}/lib/vaadin-shared-7.0.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/vaadin-shared-7.0.1.jar"/>
-    <copy file="${basedir}/lib/vaadin-shared-deps-1.0.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/vaadin-shared-deps-1.0.2.jar"/>
-    <copy file="${basedir}/lib/vaadin-theme-compiler-7.0.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/vaadin-theme-compiler-7.0.1.jar"/>
-    <copy file="${basedir}/lib/commons-jexl-2.1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-jexl-2.1.1.jar"/>
-    <copy file="${basedir}/lib/commons-logging-1.1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-logging-1.1.1.jar"/>
-    <copy file="${basedir}/lib/sac-1.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/sac-1.3.jar"/>
-    <copy file="${basedir}/lib/cssparser-0.9.5.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/cssparser-0.9.5.jar"/>
-    <copy file="${basedir}/lib/commons-cli-1.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-cli-1.2.jar"/>
-    <copy file="${basedir}/lib/jsoup-1.6.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jsoup-1.6.3.jar"/>
-    <copy file="${basedir}/lib/vaadin-client-compiled-7.0.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/vaadin-client-compiled-7.0.1.jar"/>
-    <copy file="${basedir}/lib/vaadin-themes-7.0.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/vaadin-themes-7.0.1.jar"/>
-    <copy file="${basedir}/lib/servlet-api-2.5.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/servlet-api-2.5.jar"/>
-    <copy file="${basedir}/lib/spring-security-config-3.1.3.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-security-config-3.1.3.RELEASE.jar"/>
-    <copy file="${basedir}/lib/aopalliance-1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/aopalliance-1.0.jar"/>
-    <copy file="${basedir}/lib/spring-security-core-3.1.3.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-security-core-3.1.3.RELEASE.jar"/>
-    <copy file="${basedir}/lib/servlet-api-2.5.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/servlet-api-2.5.jar"/>
-    <copy file="${basedir}/lib/spring-security-web-3.1.3.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-security-web-3.1.3.RELEASE.jar"/>
-    <copy file="${basedir}/lib/aopalliance-1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/aopalliance-1.0.jar"/>
-    <copy file="${basedir}/lib/spring-security-core-3.1.3.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-security-core-3.1.3.RELEASE.jar"/>
-    <copy file="${basedir}/lib/servlet-api-2.5.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/servlet-api-2.5.jar"/>
-    <copy file="${basedir}/lib/spring-web-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-web-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/activation-1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/activation-1.1.jar"/>
-    <copy file="${basedir}/lib/saaj-api-1.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/saaj-api-1.3.jar"/>
-    <copy file="${basedir}/lib/javax.servlet-api-3.0.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/javax.servlet-api-3.0.1.jar"/>
-    <copy file="${basedir}/lib/jsp-api-2.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jsp-api-2.1.jar"/>
-    <copy file="${basedir}/lib/spring-context-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-context-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/spring-core-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-core-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/commons-logging-1.1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-logging-1.1.1.jar"/>
-    <copy file="${basedir}/lib/spring-aop-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-aop-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/aopalliance-1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/aopalliance-1.0.jar"/>
-    <copy file="${basedir}/lib/spring-beans-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-beans-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/spring-expression-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-expression-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}">
-      <fileset dir="${basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson/web"/>
-    </copy>
-    <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF"/>
-    <copy file="${basedir}/E-EYE-O_RIAVaadin/web/WEB-INF/web.xml" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/web.xml"/>
-    <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/META-INF"/>
-    <copy file="${basedir}/E-EYE-O_DAODerbyHibernateImpl/META-INF/ejb-jar.xml" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/META-INF/ejb-jar.xml"/>
-    <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/META-INF"/>
-    <copy file="${basedir}/E-EYE-O_DAOHibernateImpl/META-INF/ejb-jar.xml" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/META-INF/ejb-jar.xml"/>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}">
-      <fileset dir="${basedir}/E-EYE-O_RIAVaadin/web"/>
-    </copy>
-    <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF"/>
-    <copy file="${basedir}/E-EYE-O_RIAVaadin/web/WEB-INF/web.xml" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/web.xml"/>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}">
-      <fileset dir="${basedir}/E-EYE-O_RIAVaadin/resources"/>
-    </copy>
+  <target name="artifact.e-eye-o_entitiesjavaimpl:jar" depends="init.artifacts, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_interfaces" description="Build &#39;E-EYE-O_EntitiesJavaImpl:jar&#39; artifact">
+    <property name="artifact.temp.output.e-eye-o_entitiesjavaimpl:jar" value="${artifacts.temp.dir}/E_EYE_O_EntitiesJavaImpl_jar"/>
+    <mkdir dir="${artifact.temp.output.e-eye-o_entitiesjavaimpl:jar}"/>
+    <jar destfile="${temp.jar.path.E-EYE-O_EntitiesJavaImpl.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${e-eye-o_entitiesjavaimpl.output.dir}"/>
+      <zipfileset dir="${e-eye-o_interfaces.output.dir}"/>
+      <zipfileset src="${basedir}/lib/aopalliance-1.0.jar"/>
+      <zipfileset src="${basedir}/lib/org.springframework.context-3.2.0.RELEASE.jar"/>
+      <zipfileset src="${basedir}/lib/com.springsource.org.apache.commons.logging-1.1.1.jar"/>
+      <zipfileset src="${basedir}/lib/spring-expression-3.2.0.RELEASE.jar"/>
+      <zipfileset src="${basedir}/lib/spring-jdbc-3.2.0.RELEASE.jar"/>
+      <zipfileset src="${basedir}/lib/hibernate-validator-4.3.1.Final.jar"/>
+      <zipfileset src="${basedir}/lib/validation-api-1.0.0.GA.jar"/>
+      <zipfileset src="${basedir}/lib/jboss-logging-3.1.0.GA.jar"/>
+      <zipfileset src="${basedir}/lib/spring-security-config-3.1.3.RELEASE.jar"/>
+      <zipfileset src="${basedir}/lib/spring-security-core-3.1.3.RELEASE.jar"/>
+      <zipfileset src="${basedir}/lib/servlet-api-2.5.jar"/>
+      <zipfileset src="${basedir}/lib/logback-classic-1.0.5.jar"/>
+      <zipfileset src="${basedir}/lib/logback-core-1.0.5.jar"/>
+      <zipfileset src="${basedir}/lib/log4j-over-slf4j-1.7.2.jar"/>
+      <zipfileset src="${basedir}/lib/slf4j-api-1.7.2.jar"/>
+      <zipfileset src="${basedir}/lib/commons-beanutils-1.8.3.jar"/>
+      <zipfileset src="${basedir}/lib/hibernate-validator-annotation-processor-4.3.1.Final.jar"/>
+      <zipfileset src="${basedir}/lib/joda-time-2.1.jar"/>
+      <zipfileset src="${basedir}/lib/org.springframework.beans-3.2.0.RELEASE.jar"/>
+      <zipfileset src="${basedir}/lib/org.springframework.core-3.2.0.RELEASE.jar"/>
+      <zipfileset src="${basedir}/lib/guava-13.0.jar"/>
+      <zipfileset src="${basedir}/lib/jsr305-1.3.9.jar"/>
+    </jar>
+    <copy file="${temp.jar.path.E-EYE-O_EntitiesJavaImpl.jar}" tofile="${artifact.temp.output.e-eye-o_entitiesjavaimpl:jar}/E-EYE-O_EntitiesJavaImpl.jar"/>
   </target>
   
   <target name="artifact.e-eye-o_hibernatedaoimpl:ejb_exploded" depends="init.artifacts, compile.module.e-eye-o_daohibernateimpl" description="Build &#39;E-EYE-O_HibernateDAOImpl:ejb exploded&#39; artifact">
@@ -1812,7 +1540,7 @@
     <copy file="${temp.jar.path.E-EYE-O_Interfaces.jar}" tofile="${artifact.temp.output.e-eye-o_interfaces}/E-EYE-O_Interfaces.jar"/>
   </target>
   
-  <target name="artifact.e-eye-o_riavaadin:war_exploded" depends="init.artifacts, compile.module.e-eye-o_riavaadin, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_daoderbyhibernateimpl, compile.module.e-eye-o_daohibernateimpl" description="Build &#39;E-EYE-O_RIAVaadin:war exploded&#39; artifact">
+  <target name="artifact.e-eye-o_riavaadin:war_exploded" depends="init.artifacts, compile.module.e-eye-o_riavaadin, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_daohibernateimpl" description="Build &#39;E-EYE-O_RIAVaadin:war exploded&#39; artifact">
     <mkdir dir="${artifact.output.e-eye-o_riavaadin:war_exploded}"/>
     <copy todir="${artifact.output.e-eye-o_riavaadin:war_exploded}">
       <fileset dir="${basedir}/E-EYE-O_RIAVaadin/web"/>
@@ -1829,9 +1557,6 @@
     </copy>
     <copy todir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/classes">
       <fileset dir="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    </copy>
-    <copy todir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/classes">
-      <fileset dir="${e-eye-o_daoderbyhibernateimpl.output.dir}"/>
     </copy>
     <copy todir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/classes">
       <fileset dir="${e-eye-o_daohibernateimpl.output.dir}"/>
@@ -1923,12 +1648,19 @@
     <copy file="${basedir}/lib/confirmdialog-2.0.4.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/confirmdialog-2.0.4.jar"/>
     <copy file="${basedir}/lib/spring-vaadin-integration-1.6.6.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/spring-vaadin-integration-1.6.6.jar"/>
     <copy file="${basedir}/lib/imgscalr-lib-4.2.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/imgscalr-lib-4.2.jar"/>
+    <copy file="${basedir}/lib/spring-context-support-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/spring-context-support-3.2.0.RELEASE.jar"/>
+    <copy file="${basedir}/lib/mail-1.4.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/mail-1.4.jar"/>
+    <copy file="${basedir}/lib/mysql-connector-java-5.1.6.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/mysql-connector-java-5.1.6.jar"/>
     <copy todir="${artifact.output.e-eye-o_riavaadin:war_exploded}">
       <fileset dir="${basedir}/E-EYE-O_RIAVaadin/resources"/>
     </copy>
   </target>
   
-  <target name="build.all.artifacts" depends="artifact.e-eye-o_daoderbyimpl:ejb_exploded, artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded, artifact.e-eye-o_hibernatedaoimpl:ejb_exploded, artifact.e-eye-o_interfaces, artifact.e-eye-o_riavaadin:war_exploded" description="Build all artifacts">
+  <target name="build.all.artifacts" depends="artifact.e-eye-o_entitiesjavaimpl:jar, artifact.e-eye-o_hibernatedaoimpl:ejb_exploded, artifact.e-eye-o_interfaces, artifact.e-eye-o_riavaadin:war_exploded" description="Build all artifacts">
+    <mkdir dir="${artifact.output.e-eye-o_entitiesjavaimpl:jar}"/>
+    <copy todir="${artifact.output.e-eye-o_entitiesjavaimpl:jar}">
+      <fileset dir="${artifact.temp.output.e-eye-o_entitiesjavaimpl:jar}"/>
+    </copy>
     <mkdir dir="${artifact.output.e-eye-o_interfaces}"/>
     <copy todir="${artifact.output.e-eye-o_interfaces}">
       <fileset dir="${artifact.temp.output.e-eye-o_interfaces}"/>

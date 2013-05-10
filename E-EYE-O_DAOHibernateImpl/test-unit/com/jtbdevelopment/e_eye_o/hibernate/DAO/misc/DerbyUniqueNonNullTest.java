@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.DerbyDAO;
+package com.jtbdevelopment.e_eye_o.hibernate.DAO.misc;
 
 import org.testng.annotations.Test;
 

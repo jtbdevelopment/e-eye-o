@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DAODerbyHibernateImpl/E-EYE-O_DAODerbyHibernateImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_DAODerbyHibernateImpl/E-EYE-O_DAODerbyHibernateImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DAOHibernateImpl/E-EYE-O_DAOHibernateImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_DAOHibernateImpl/E-EYE-O_DAOHibernateImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DerbyJacksonBasedIntegrationTests/E-EYE-O_DerbyJacksonBasedIntegrationTests.iml" filepath="$PROJECT_DIR$/E-EYE-O_DerbyJacksonBasedIntegrationTests/E-EYE-O_DerbyJacksonBasedIntegrationTests.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_EntitiesJavaImpl/E-EYE-O_EntitiesJavaImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_EntitiesJavaImpl/E-EYE-O_EntitiesJavaImpl.iml" />

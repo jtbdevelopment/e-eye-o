@@ -16,10 +16,6 @@
         <remember-me services-ref="rememberMeServices" key="EEYEO"/>
     </http>
 
-    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
-        <beans:constructor-arg value="${password.encoder.secret}"/>
-    </beans:bean>
-
     <beans:bean id="rememberMeServices"
                 class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
         <beans:property name="tokenValiditySeconds" value="${rememberme.token.validity}"/>

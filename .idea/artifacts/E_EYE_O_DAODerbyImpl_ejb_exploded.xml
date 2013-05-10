@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="exploded-ejb" build-on-make="true" name="E-EYE-O_DAODerbyImpl:ejb exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/E_EYE_O_DAODerbyImpl_ejb_exploded</output-path>
-    <root id="root">
-      <element id="module-output" name="E-EYE-O_DAODerbyHibernateImpl" />
-    </root>
-  </artifact>
-</component>

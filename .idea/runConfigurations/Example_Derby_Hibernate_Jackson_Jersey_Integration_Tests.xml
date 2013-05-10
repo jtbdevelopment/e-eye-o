@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="TestNG Integration Tests" type="TestNG" factoryName="TestNG">
+  <configuration default="false" name="Example Derby Hibernate Jackson Jersey Integration Tests" type="TestNG" factoryName="TestNG">
     <extension name="coverage" enabled="false" merge="false" per_test_coverage_enabled="false" runner="idea" />
-    <module name="" />
+    <module name="E-EYE-O_DerbyJacksonBasedIntegrationTests" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
     <option name="SUITE_NAME" value="" />
@@ -18,7 +18,7 @@
     <option name="ENV_VARIABLES" />
     <option name="PASS_PARENT_ENVS" value="true" />
     <option name="TEST_SEARCH_SCOPE">
-      <value defaultName="wholeProject" />
+      <value defaultName="singleModule" />
     </option>
     <option name="USE_DEFAULT_REPORTERS" value="false" />
     <option name="PROPERTIES_FILE" value="" />
