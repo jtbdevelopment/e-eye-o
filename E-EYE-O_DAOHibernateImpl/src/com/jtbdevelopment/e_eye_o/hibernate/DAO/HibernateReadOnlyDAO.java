@@ -105,7 +105,11 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         TreeSet<T> sortedResults = new TreeSet<>(new Comparator<T>() {
             @Override
             public int compare(final T o1, final T o2) {
-                return o1.getModificationTimestamp().compareTo(o2.getModificationTimestamp());
+                int i = o1.getModificationTimestamp().compareTo(o2.getModificationTimestamp());
+                if (i == 0) {
+                    return o1.getId().compareTo(o2.getId());
+                }
+                return i;
             }
         });
         sortedResults.addAll((List<T>) query.list());
