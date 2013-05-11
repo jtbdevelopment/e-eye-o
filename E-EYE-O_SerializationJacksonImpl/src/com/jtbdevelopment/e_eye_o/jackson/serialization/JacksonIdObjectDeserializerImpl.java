@@ -61,7 +61,7 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
                                 throw new RuntimeException(e);
                             }
                         } else {
-                            assignValue(returnObject, fieldName, parser.getValueAsString());
+                            handleString(parser, returnObject, fieldType, fieldName);
                         }
                         break;
                     case VALUE_FALSE:
@@ -94,6 +94,16 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
         JsonToken currentToken = parser.getCurrentToken();
         if (currentToken != JsonToken.START_OBJECT) {
             throw new IllegalArgumentException("Not positioned at start");
+        }
+    }
+
+    private void handleString(JsonParser parser, IdObject returnObject, final Class fieldType, String fieldName) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException {
+        if (fieldType.isArray()) {
+            if (byte.class.isAssignableFrom(fieldType.getComponentType())) {
+                assignValue(returnObject, fieldName, parser.getBinaryValue());
+            }
+        } else {
+            assignValue(returnObject, fieldName, parser.getValueAsString());
         }
     }
 
