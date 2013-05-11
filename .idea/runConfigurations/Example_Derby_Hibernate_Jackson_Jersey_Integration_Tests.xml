@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Example Derby Hibernate Jackson Jersey Integration Tests" type="TestNG" factoryName="TestNG">
     <extension name="coverage" enabled="false" merge="false" per_test_coverage_enabled="false" runner="idea" />
-    <module name="E-EYE-O_DerbyJacksonBasedIntegrationTests" />
+    <module name="E-EYE-O_Example-Integration-HibernateDerbyJacksonJersey" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
     <option name="SUITE_NAME" value="" />

@@ -24,7 +24,7 @@
 
         <dependency org="org.apache.derby" name="derby" rev="10.9.1.0"/>
 
-        <dependency org="mysql" name="mysql-connector-java" rev="5.1.6"/>
+        <dependency org="mysql" name="mysql-connector-java" rev="5.1.24"/>
 
         <dependency org="org.slf4j" name="slf4j-api" rev="1.6.5"/>
         <dependency org="ch.qos.logback" name="logback-classic" rev="1.0.5"/>

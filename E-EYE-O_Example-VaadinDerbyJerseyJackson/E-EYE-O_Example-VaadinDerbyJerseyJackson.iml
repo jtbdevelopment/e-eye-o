@@ -36,7 +36,7 @@
     <orderEntry type="library" exported="" name="spring-context-support-3.2.0.RELEASE" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="mail-1.4" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="org.apache.derby:derby:10.9.1.0" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="mysql-connector-java-5.1.6" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="mysql-connector-java-5.1.24" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="tomcat-jdbc-7.0.39" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="org.springframework:spring-web:3.2.0.RELEASE" level="project" />
   </component>
