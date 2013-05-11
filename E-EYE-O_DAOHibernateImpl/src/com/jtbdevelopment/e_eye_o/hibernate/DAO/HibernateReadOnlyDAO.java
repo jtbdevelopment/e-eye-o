@@ -101,7 +101,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     public <T extends AppUserOwnedObject> Set<T> getEntitiesModifiedSince(final Class<T> entityType, final AppUser appUser, final DateTime since) {
         Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user and modificationTimestamp > :since");
         query.setParameter("user", appUser);
-        query.setParameter("since", since);
+        query.setParameter("since", since.getMillis());   //  See HibernateIdObject getModificationTimestamp
         TreeSet<T> sortedResults = new TreeSet<>(new Comparator<T>() {
             @Override
             public int compare(final T o1, final T o2) {
@@ -112,7 +112,8 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
                 return i;
             }
         });
-        sortedResults.addAll((List<T>) query.list());
+        List<T> list = (List<T>) query.list();
+        sortedResults.addAll(list);
         return sortedResults;
     }
 

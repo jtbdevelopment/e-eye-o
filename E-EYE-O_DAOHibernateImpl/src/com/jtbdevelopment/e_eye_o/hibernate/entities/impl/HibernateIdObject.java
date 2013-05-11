@@ -5,7 +5,6 @@ import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -93,9 +92,17 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
         return wrapped.getId();
     }
 
+    //
+    //  Unfortunately, despite adding sub-second support in MySQL in 5.6.4
+    //  prepared statements via hibernate are still truncated in the driver
+    //  as of version 5.1.24
+    //
+    //  To manage maximum flexibility, storing modificationTimestamp as instant for now
+    //
     @Override
-    @Column(nullable = false)
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+//    @Column(nullable = false)
+//    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Transient
     public DateTime getModificationTimestamp() {
         return wrapped.getModificationTimestamp();
     }
@@ -103,6 +110,17 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
     @Override
     public void setModificationTimestamp(final DateTime modificationTimestamp) {
         wrapped.setModificationTimestamp(modificationTimestamp);
+    }
+
+    @Column(name = "modificationTimestamp", nullable = false)
+    @SuppressWarnings("unused")
+    private long getModificationTimestampInstant() {
+        return wrapped.getModificationTimestamp().getMillis();
+    }
+
+    @SuppressWarnings("unused")
+    private void setModificationTimestampInstant(final long instant) {
+        wrapped.setModificationTimestamp(new DateTime(instant));
     }
 
     @Override

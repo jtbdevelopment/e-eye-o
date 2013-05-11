@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.Observable;
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -22,6 +23,7 @@ public abstract class HibernateObservable<T extends Observable> extends Hibernat
 
     @Override
     @Column(nullable = false)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     public LocalDateTime getLastObservationTimestamp() {
         return wrapped.getLastObservationTimestamp();
     }

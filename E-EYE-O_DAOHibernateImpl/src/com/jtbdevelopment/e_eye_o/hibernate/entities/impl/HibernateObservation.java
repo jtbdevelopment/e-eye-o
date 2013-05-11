@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -40,6 +41,7 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
 
     @Override
     @Column(nullable = false)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     public LocalDateTime getObservationTimestamp() {
         return wrapped.getObservationTimestamp();
     }

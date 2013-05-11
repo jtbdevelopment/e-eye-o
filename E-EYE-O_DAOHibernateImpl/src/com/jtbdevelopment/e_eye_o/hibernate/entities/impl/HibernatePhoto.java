@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -48,6 +49,7 @@ public class HibernatePhoto extends HibernateAppUserOwnedObject<Photo> implement
 
     @Override
     @Column(nullable = false)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     public LocalDateTime getTimestamp() {
         return wrapped.getTimestamp();
     }

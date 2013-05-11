@@ -11,21 +11,22 @@
     <!-- Recreate the integration DB each time - make sure to use a disposable DB for it  -->
     <util:properties id="hibernateOverrideProperties">
         <prop key="hibernate.hbm2ddl.auto">create</prop>
-        <prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.DerbyUniqueNonNull</prop>
-        <!--prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop-->
+        <!--prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.DerbyUniqueNonNull</prop-->
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
     </util:properties>
 
     <!-- Example using Derby  -->
-    <bean id="dataSource" class="org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40">
+    <!--bean id="dataSource" class="org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40">
         <property name="databaseName" value="EEYEODBTEST"/>
         <property name="createDatabase" value="create"/>
-    </bean>
+    </bean-->
 
-    <!-- Potential Example Using MySQL  -->
-    <!--bean id="dataSource" class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
+    <!-- Example Using MySQL  -->
+    <bean id="dataSource" class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
         <property name="url" value="jdbc:mysql://localhost:3306/eeyeodbtest"/>
         <property name="user" value="eeyeodbtestuser"/>
+        <property name="useLegacyDatetimeCode" value="false"/>
         <property name="password" value="eeyeodbtestuser"/>
         <property name="databaseName" value="eeyeodbtest"/>
-    </bean-->
+    </bean>
 </beans>
