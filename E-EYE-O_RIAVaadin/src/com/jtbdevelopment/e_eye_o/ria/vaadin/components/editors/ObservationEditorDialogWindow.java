@@ -8,6 +8,7 @@ import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
@@ -72,7 +73,18 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         row.addComponent(new Label("Comment:"));
         commentField.setRows(9);
         commentField.setWidth(40, Unit.EM);
-        //  TODO - need to disable/re-enable enter key capture on Default button for text area.
+        commentField.addFocusListener(new FieldEvents.FocusListener() {
+            @Override
+            public void focus(FieldEvents.FocusEvent event) {
+                disableDefaultEnterKey();
+            }
+        });
+        commentField.addBlurListener(new FieldEvents.BlurListener() {
+            @Override
+            public void blur(FieldEvents.BlurEvent event) {
+                enableDefaultEnterKey();
+            }
+        });
         entityBeanFieldGroup.bind(commentField, "comment");
         row.addComponent(commentField);
 

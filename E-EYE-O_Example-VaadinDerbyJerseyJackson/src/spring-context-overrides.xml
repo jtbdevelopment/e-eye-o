@@ -9,7 +9,7 @@
     -->
     <util:properties id="hibernateOverrideProperties">
         <!--prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.DerbyUniqueNonNull</prop-->
-        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
     </util:properties>
 
     <!-- Example using Derby  -->

@@ -39,6 +39,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
     protected final BeanFieldGroup<T> entityBeanFieldGroup;
 
     protected final VerticalLayout mainLayout = new VerticalLayout();
+    private Button saveButton;
 
     protected abstract Layout buildEditorLayout();
 
@@ -81,11 +82,11 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
 
     private Layout buildButtonLayout() {
         HorizontalLayout buttons = new HorizontalLayout();
-        Button save = new Button("Save");
-        save.addStyleName(Runo.BUTTON_DEFAULT);
-        save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        buttons.addComponent(save);
-        save.addClickListener(new Button.ClickListener() {
+        saveButton = new Button("Save");
+        saveButton.addStyleName(Runo.BUTTON_DEFAULT);
+        enableDefaultEnterKey();
+        buttons.addComponent(saveButton);
+        saveButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 logger.trace(getSession().getAttribute(AppUser.class).getId() + ": clicked save on " + entityBeanFieldGroup.getItemDataSource().getBean().getId());
@@ -123,6 +124,14 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
         });
         buttons.addComponent(reset);
         return buttons;
+    }
+
+    protected void enableDefaultEnterKey() {
+        saveButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+    }
+
+    protected void disableDefaultEnterKey() {
+        saveButton.removeClickShortcut();
     }
 
     protected T save() throws FieldGroup.CommitException {
