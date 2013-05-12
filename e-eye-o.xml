@@ -278,7 +278,7 @@
   <path id="library.org.springframework:spring-web:3.2.0.release.classpath">
     <pathelement location="${basedir}/lib/activation-1.1.jar"/>
     <pathelement location="${basedir}/lib/aopalliance-1.0.jar"/>
-    <pathelement location="${basedir}/lib/commons-logging-1.1.1.jar"/>
+    <pathelement location="${basedir}/lib/commons-logging-1.1.2.jar"/>
     <pathelement location="${basedir}/lib/javax.servlet-api-3.0.1.jar"/>
     <pathelement location="${basedir}/lib/jsp-api-2.1.jar"/>
     <pathelement location="${basedir}/lib/portlet-api-2.0.jar"/>
@@ -1600,12 +1600,12 @@
     <copy file="${basedir}/lib/jsp-api-2.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jsp-api-2.1.jar"/>
     <copy file="${basedir}/lib/spring-context-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-context-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/spring-core-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-core-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/commons-logging-1.1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-logging-1.1.1.jar"/>
     <copy file="${basedir}/lib/spring-aop-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-aop-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/aopalliance-1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/aopalliance-1.0.jar"/>
     <copy file="${basedir}/lib/spring-beans-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-beans-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/spring-expression-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-expression-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
+    <copy file="${basedir}/lib/commons-logging-1.1.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-logging-1.1.2.jar"/>
     <copy file="${basedir}/lib/vaadin-server-7.0.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/vaadin-server-7.0.1.jar"/>
     <copy file="${basedir}/lib/portal-service-6.0.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/portal-service-6.0.2.jar"/>
     <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
@@ -1742,12 +1742,12 @@
     <copy file="${basedir}/lib/jsp-api-2.1.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/jsp-api-2.1.jar"/>
     <copy file="${basedir}/lib/spring-context-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/spring-context-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/spring-core-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/spring-core-3.2.0.RELEASE.jar"/>
-    <copy file="${basedir}/lib/commons-logging-1.1.1.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/commons-logging-1.1.1.jar"/>
     <copy file="${basedir}/lib/spring-aop-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/spring-aop-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/aopalliance-1.0.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/aopalliance-1.0.jar"/>
     <copy file="${basedir}/lib/spring-beans-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/spring-beans-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/spring-expression-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/spring-expression-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
+    <copy file="${basedir}/lib/commons-logging-1.1.2.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/commons-logging-1.1.2.jar"/>
     <copy file="${basedir}/lib/vaadin-server-7.0.1.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/vaadin-server-7.0.1.jar"/>
     <copy file="${basedir}/lib/portal-service-6.0.2.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/portal-service-6.0.2.jar"/>
     <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
