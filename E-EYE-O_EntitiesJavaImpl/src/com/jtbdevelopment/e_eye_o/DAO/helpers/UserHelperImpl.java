@@ -4,6 +4,8 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,10 @@ import java.util.Map;
  */
 @Component
 @SuppressWarnings("unused")
+//  TODO - make abstract for new user setup?
 public class UserHelperImpl implements UserHelper {
+    private static final Logger logger = LoggerFactory.getLogger(UserHelperImpl.class);
+
     @Autowired
     private ReadWriteDAO readWriteDAO;
 
@@ -96,33 +101,27 @@ public class UserHelperImpl implements UserHelper {
         readWriteDAO.create(idObjectFactory.newObservationBuilder(savedUser).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withComment("Observation 3").build());
         readWriteDAO.create(idObjectFactory.newObservationBuilder(savedUser).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime().minusDays(1)).addCategory(c2).withComment("You can put general class observations too.").build());
 
-        int counter = 0;
-        //  TODO - real sample photos
+
         for (String string : Arrays.asList(
-                "dummyphotos/3-MostParts.JPG",
-                "dummyphotos/4-MastAndBoom.JPG",
-                "dummyphotos/5-Drying.JPG",
-                "dummyphotos/6-Finished.jpg",
-                "dummyphotos/7-TensionControls.jpg"
+                "class-work-example.jpg",
+                "student-work-example.jpg"
         )) {
             try {
-                URL url = UserHelperImpl.class.getClassLoader().getResource("../../VAADIN/themes/eeyeo/" + string);
+                URL url = UserHelperImpl.class.getClassLoader().getResource("../../VAADIN/themes/eeyeo/newusersamplephotos/" + string);
                 BufferedImage image = ImageIO.read(new File(url.getFile()));
                 final ByteArrayOutputStream imOS = new ByteArrayOutputStream();
                 ImageIO.write(image, "jpg", imOS);
                 imOS.close();
                 image.flush();
                 Photo photo = idObjectFactory.newPhotoBuilder(savedUser).withDescription(string).withMimeType("image/jpeg").withImageData(imOS.toByteArray()).withTimestamp(new LocalDateTime()).build();
-                if (counter % 2 == 0) {
+                if (url.getFile().contains("student")) {
                     photo.setPhotoFor(o1);
                 } else {
                     photo.setPhotoFor(cl);
                 }
                 readWriteDAO.create(photo);
-
-                ++counter;
             } catch (IOException e) {
-                //
+                logger.warn("There was an error creating new user sample photos!", e);
             }
         }
     }
