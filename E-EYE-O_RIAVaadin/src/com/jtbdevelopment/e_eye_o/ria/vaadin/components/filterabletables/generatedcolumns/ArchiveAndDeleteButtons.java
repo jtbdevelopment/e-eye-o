@@ -17,13 +17,13 @@ import org.vaadin.dialogs.ConfirmDialog;
  * Date: 3/16/13
  * Time: 6:42 PM
  */
+//  TODO - there seems to be a filter bug when you archive or unarchive and they should disappear.  They don't.  They are updated, but don't get removed.
 public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> implements Table.ColumnGenerator {
     private static final Logger logger = LoggerFactory.getLogger(ArchiveAndDeleteButtons.class);
 
-    //  TODO - diff icons
-    private static final ThemeResource ARCHIVE_ICON = new ThemeResource("../runo/icons/16/lock.png");
-    private static final ThemeResource ACTIVATE_ICON = new ThemeResource("../runo/icons/16/user.png");
-    private static final ThemeResource DELETE_ICON = new ThemeResource("../runo/icons/16/trash.png");
+    private static final ThemeResource ARCHIVE_ICON = new ThemeResource("icons/16/power_off.png");
+    private static final ThemeResource ACTIVATE_ICON = new ThemeResource("icons/16/power_on.png");
+    private static final ThemeResource DELETE_ICON = new ThemeResource("icons/16/delete.png");
 
     private final ReadWriteDAO readWriteDAO;
     private final EventBus eventBus;

@@ -25,9 +25,8 @@ import java.util.List;
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObjectFilterableDisplay<T> {
     private static final Logger logger = LoggerFactory.getLogger(IdObjectTable.class);
 
-    //  TODO - diff icons
-    protected static final ThemeResource NOT_X = new ThemeResource("../runo/icons/16/cancel.png");
-    protected static final ThemeResource IS_X = new ThemeResource("../runo/icons/16/ok.png");
+    protected static final ThemeResource NOT_X = new ThemeResource("icons/16/no.png");
+    protected static final ThemeResource IS_X = new ThemeResource("icons/16/yes.png");
 
     //  TODO - this should just drive off of annotations it would seem off of interface
     public static class HeaderInfo {
