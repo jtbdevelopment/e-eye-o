@@ -3,11 +3,10 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtons;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtonsGenerator;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.sorter.CompositeItemSorter;
 import com.vaadin.data.Property;
 import com.vaadin.event.ItemClickEvent;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.slf4j.Logger;
@@ -24,9 +23,6 @@ import java.util.List;
  */
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObjectFilterableDisplay<T> {
     private static final Logger logger = LoggerFactory.getLogger(IdObjectTable.class);
-
-    protected static final ThemeResource NOT_X = new ThemeResource("icons/16/no.png");
-    protected static final ThemeResource IS_X = new ThemeResource("icons/16/yes.png");
 
     //  TODO - this should just drive off of annotations it would seem off of interface
     public static class HeaderInfo {
@@ -149,7 +145,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
     }
 
     protected void addGeneratedColumns() {
-        entityTable.addGeneratedColumn("actions", new ArchiveAndDeleteButtons<>(readWriteDAO, eventBus, entities));
+        entityTable.addGeneratedColumn("actions", new ArchiveAndDeleteButtonsGenerator<>(readWriteDAO, eventBus, entities));
         entityTable.addGeneratedColumn("archived", new Table.ColumnGenerator() {
             @Override
             public Object generateCell(Table source, Object itemId, Object columnId) {

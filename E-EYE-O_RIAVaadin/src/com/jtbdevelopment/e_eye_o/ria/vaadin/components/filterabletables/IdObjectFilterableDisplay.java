@@ -15,6 +15,7 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.FieldEvents;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.jsoup.helper.StringUtil;
@@ -31,6 +32,8 @@ import java.util.Arrays;
  */
 //  TODO - this class is too big
 public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> extends CustomComponent {
+    protected static final ThemeResource NOT_X = new ThemeResource("icons/16/no.png");
+    protected static final ThemeResource IS_X = new ThemeResource("icons/16/yes.png");
     private static final Logger logger = LoggerFactory.getLogger(IdObjectFilterableDisplay.class);
 
     public interface ClickedOnListener<T> {

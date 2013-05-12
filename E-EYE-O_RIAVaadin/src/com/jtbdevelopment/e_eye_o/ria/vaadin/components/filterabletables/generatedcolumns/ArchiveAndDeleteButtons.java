@@ -5,7 +5,6 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
@@ -14,40 +13,34 @@ import org.slf4j.LoggerFactory;
 import org.vaadin.dialogs.ConfirmDialog;
 
 /**
- * Date: 3/16/13
- * Time: 6:42 PM
+ * Date: 5/12/13
+ * Time: 5:20 PM
  */
 //  TODO - there seems to be a filter bug when you archive or unarchive and they should disappear.  They don't.  They are updated, but don't get removed.
-public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> implements Table.ColumnGenerator {
+public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> extends CustomComponent {
     private static final Logger logger = LoggerFactory.getLogger(ArchiveAndDeleteButtons.class);
 
     private static final ThemeResource ARCHIVE_ICON = new ThemeResource("icons/16/power_off.png");
     private static final ThemeResource ACTIVATE_ICON = new ThemeResource("icons/16/power_on.png");
     private static final ThemeResource DELETE_ICON = new ThemeResource("icons/16/delete.png");
 
-    private final ReadWriteDAO readWriteDAO;
     private final EventBus eventBus;
-    private final AllItemsBeanItemContainer<T> entities;
 
-    public ArchiveAndDeleteButtons(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final AllItemsBeanItemContainer<T> entities) {
-        this.readWriteDAO = readWriteDAO;
+    public ArchiveAndDeleteButtons(final ReadWriteDAO readWriteDAO, final EventBus eventBus, final T entity) {
         this.eventBus = eventBus;
-        this.entities = entities;
-    }
 
-    @Override
-    public Object generateCell(final Table source, final Object itemId, final Object columnId) {
+        setSizeUndefined();
         final GridLayout layout;
         layout = new GridLayout(2, 1);
-        final T entity = entities.getItem(itemId).getBean();
 
         Embedded archiveAction;
         if (entity.isArchived()) {
             archiveAction = new Embedded(null, ACTIVATE_ICON);
+            archiveAction.setDescription("Re-activating an item puts it back in your default lists.  Re-activating an item will re-activate it's related items.");
         } else {
             archiveAction = new Embedded(null, ARCHIVE_ICON);
+            archiveAction.setDescription("Archiving anything does not delete it, just drops it off your lists by default.  You can always always re-activate them.  Archiving something will archive related items.");
         }
-        archiveAction.setDescription("Archiving anything does not delete it, just drops it off your lists by default.  You can always get to them and you can always re-activate them.  Archiving something will archive related items.");
         archiveAction.addClickListener(new MouseEvents.ClickListener() {
             @Override
             public void click(MouseEvents.ClickEvent event) {
@@ -78,7 +71,8 @@ public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> implements Ta
         layout.addComponent(deleteAction, 1, 0);
         layout.setComponentAlignment(deleteAction, Alignment.MIDDLE_CENTER);
         layout.setSpacing(true);
-        return layout;
+        layout.setSizeUndefined();
+        setCompositionRoot(layout);
     }
 
     private void publishUpdatedDAOObjects(final ReadWriteDAO.ChainedUpdateSet<AppUserOwnedObject> daoResults) {

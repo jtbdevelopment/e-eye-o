@@ -8,6 +8,7 @@ import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.IdObjectEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.PhotoEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectFilterableDisplay;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtons;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.PhotoThumbnailResource;
 import com.vaadin.data.Container;
 import com.vaadin.event.LayoutEvents;
@@ -23,10 +24,8 @@ import org.springframework.context.annotation.Scope;
  */
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//  TODO - how to delete a photo?
 //  TODO - paginatation
 //  TODO - some sort of ordering
-//  TODO - archive/unarchive
 //  TODO - text filter should go deeper into photo for summary desc perhaps
 public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
     private AppUserOwnedObject defaultPhotoFor;
@@ -127,6 +126,13 @@ public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
             photoAndText.addComponent(text);
             photoAndText.setComponentAlignment(photo, Alignment.MIDDLE_CENTER);
             photoAndText.setComponentAlignment(text, Alignment.MIDDLE_CENTER);
+            HorizontalLayout buttons = new HorizontalLayout();
+            buttons.addComponent(new Embedded(null, p.isArchived() ? NOT_X : IS_X));
+            ArchiveAndDeleteButtons<Photo> actionButtons = new ArchiveAndDeleteButtons<>(readWriteDAO, eventBus, p);
+            buttons.addComponent(actionButtons);
+            buttons.setSpacing(true);
+            photoAndText.addComponent(buttons);
+            photoAndText.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
             photoAndText.setSizeUndefined();
 
             CssLayout photoInnerLayout = new CssLayout();
