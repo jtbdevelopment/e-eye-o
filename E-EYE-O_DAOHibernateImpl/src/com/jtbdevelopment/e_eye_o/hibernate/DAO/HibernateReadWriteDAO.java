@@ -201,6 +201,11 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
         if (wrapped instanceof Observable) {
             for (Observation o : getAllObservationsForEntity((Observable) wrapped)) {
+                final List<Photo> allPhotosForObservation = getAllPhotosForEntity(o);
+                for (Photo p : allPhotosForObservation) {
+                    deletedItems.add(p);
+                    currentSession.delete(p);
+                }
                 deletedItems.add(o);
                 currentSession.delete(o);
             }
