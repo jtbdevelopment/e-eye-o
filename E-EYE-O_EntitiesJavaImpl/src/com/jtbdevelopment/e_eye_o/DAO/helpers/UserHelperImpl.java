@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
@@ -105,7 +106,8 @@ public class UserHelperImpl implements UserHelper {
                 "dummyphotos/7-TensionControls.jpg"
         )) {
             try {
-                BufferedImage image = ImageIO.read(new File("c:/dev/e-eye-o/E_EYE_O-RIAVaadin/resources/VAADIN/themes/eeyeo/" + string));
+                URL url = UserHelperImpl.class.getClassLoader().getResource("../../VAADIN/themes/eeyeo/" + string);
+                BufferedImage image = ImageIO.read(new File(url.getFile()));
                 final ByteArrayOutputStream imOS = new ByteArrayOutputStream();
                 ImageIO.write(image, "jpg", imOS);
                 imOS.close();
