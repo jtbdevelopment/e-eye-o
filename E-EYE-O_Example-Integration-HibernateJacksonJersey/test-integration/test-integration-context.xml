@@ -12,7 +12,7 @@
     <util:properties id="hibernateOverrideProperties">
         <prop key="hibernate.hbm2ddl.auto">create</prop>
         <!--prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.DerbyUniqueNonNull</prop-->
-        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+        <prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.MySQL5InnoFixes</prop>
     </util:properties>
 
     <!-- Example using Derby  -->

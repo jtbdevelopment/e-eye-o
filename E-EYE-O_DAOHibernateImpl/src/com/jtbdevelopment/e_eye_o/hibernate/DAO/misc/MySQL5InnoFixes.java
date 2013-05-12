@@ -10,13 +10,9 @@ import java.sql.Types;
  * <p/>
  * Optional - not especially useful while mysql prepared statement processor still truncates
  */
-public class MySQLSubSecondDateTime extends MySQL5InnoDBDialect {
-    public MySQLSubSecondDateTime() {
+public class MySQL5InnoFixes extends MySQL5InnoDBDialect {
+    public MySQL5InnoFixes() {
         super();
-        registerColumnType(Types.TIMESTAMP, "timestamp(6)");
-    }
-
-    public String getCurrentTimestampSelectString() {
-        return "select now(6)";
+        registerColumnType(Types.BOOLEAN, "bit");
     }
 }
