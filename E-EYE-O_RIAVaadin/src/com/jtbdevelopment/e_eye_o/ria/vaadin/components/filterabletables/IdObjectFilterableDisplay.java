@@ -32,8 +32,7 @@ import java.util.Arrays;
  */
 //  TODO - this class is too big
 public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> extends CustomComponent {
-    //  TODO - replace EDIT button
-    protected static final ThemeResource EDIT = new ThemeResource("../runo/icons/16/note.png");
+    protected static final ThemeResource EDIT = new ThemeResource("icons/16/edit.png");
     protected static final ThemeResource NOT_X = new ThemeResource("icons/16/no.png");
     protected static final ThemeResource IS_X = new ThemeResource("icons/16/yes.png");
     private static final Logger logger = LoggerFactory.getLogger(IdObjectFilterableDisplay.class);

@@ -12,6 +12,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generat
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.PhotoThumbnailResource;
 import com.vaadin.data.Container;
 import com.vaadin.event.LayoutEvents;
+import com.vaadin.event.MouseEvents;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +115,7 @@ public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
         while (photoLayout.getComponentCount() > 0) {
             photoLayout.removeComponent(photoLayout.getComponent(0));
         }
-        for (Photo p : entities.getItemIds()) {
+        for (final Photo p : entities.getItemIds()) {
             final Embedded photo = new Embedded(null, new PhotoThumbnailResource(p));
             photo.setAlternateText(p.getDescription());  // TODO - maybe filename?
             photo.setSizeUndefined();
@@ -127,6 +128,14 @@ public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
             photoAndText.setComponentAlignment(photo, Alignment.MIDDLE_CENTER);
             photoAndText.setComponentAlignment(text, Alignment.MIDDLE_CENTER);
             HorizontalLayout buttons = new HorizontalLayout();
+            Embedded editButton = new Embedded(null, EDIT);
+            editButton.addClickListener(new MouseEvents.ClickListener() {
+                @Override
+                public void click(final MouseEvents.ClickEvent event) {
+                    showEntityEditor(p);
+                }
+            });
+            buttons.addComponent(editButton);
             buttons.addComponent(new Embedded(null, p.isArchived() ? NOT_X : IS_X));
             ArchiveAndDeleteButtons<Photo> actionButtons = new ArchiveAndDeleteButtons<>(readWriteDAO, eventBus, p);
             buttons.addComponent(actionButtons);

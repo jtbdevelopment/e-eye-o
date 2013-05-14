@@ -2,7 +2,7 @@ ICON Information
 
 
 ------------------
-delete, no, power_off, power_on, yes PNG files - sourced from http://prothemedesign.com/circular-icons/
+delete, edit, no, power_off, power_on, yes PNG files - sourced from http://prothemedesign.com/circular-icons/
 Text as of 5/12/2013
 "Circular Icon Set - Free!"
 A themed collection of 100+ 16×16 icons in alpha PNG format.
