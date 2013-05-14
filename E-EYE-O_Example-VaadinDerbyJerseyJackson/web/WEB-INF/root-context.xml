@@ -10,13 +10,13 @@
     <context:component-scan base-package="com.jtbdevelopment"/>
 
     <bean id="properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="WEB-INF/e-eye-o.properties"/>
+        <property name="location" value="e-eye-o.properties"/>
     </bean>
 
     <bean name="eventBus" class="com.google.common.eventbus.EventBus"/>
 
     <import resource="spring-context-security.xml"/>
-    <import resource="classpath*:spring-context*.xml"/>
+    <import resource="classpath*:spring-context-vaadin.xml"/>
 
     <!--  Leave last -->
     <import resource="classpath:spring-context-overrides.xml"/>

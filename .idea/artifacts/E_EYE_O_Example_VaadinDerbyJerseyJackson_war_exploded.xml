@@ -43,7 +43,6 @@
         </element>
       </element>
       <element id="javaee-facet-resources" facet="E-EYE-O_Example-VaadinDerbyJerseyJackson/web/Web" />
-      <element id="javaee-facet-resources" facet="E-EYE-O_RIAVaadin/web/Web" />
       <element id="dir-copy" path="$PROJECT_DIR$/E-EYE-O_RIAVaadin/resources" />
     </root>
   </artifact>
