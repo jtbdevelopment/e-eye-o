@@ -7,6 +7,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generat
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.sorter.CompositeItemSorter;
 import com.vaadin.data.Property;
 import com.vaadin.event.ItemClickEvent;
+import com.vaadin.event.MouseEvents;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObjectFilterableDisplay<T> {
     private static final Logger logger = LoggerFactory.getLogger(IdObjectTable.class);
+    public static final HeaderInfo EDIT_HEADER = new HeaderInfo("edit", "", Table.Align.CENTER);
 
     //  TODO - this should just drive off of annotations it would seem off of interface
     public static class HeaderInfo {
@@ -80,7 +82,12 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
         List<String> headers = new LinkedList<>();
         List<Table.Align> aligns = new LinkedList<>();
         List<String> generatedProperties = new LinkedList<>();
-        for (HeaderInfo headerInfo : getHeaderInfo()) {
+
+        //  Force a header info list with edit at front
+        List<HeaderInfo> headerInfos = new LinkedList<>();
+        headerInfos.add(EDIT_HEADER);
+        headerInfos.addAll(getHeaderInfo());
+        for (HeaderInfo headerInfo : headerInfos) {
             if (headerInfo.forceGeneratedSort) {
                 generatedProperties.add(headerInfo.property);
             }
@@ -133,7 +140,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
 
     protected String getDefaultSortField(final List<String> properties) {
         //  TODO - make preference
-        return properties.get(0);
+        return properties.get(1);
     }
 
     protected boolean getDefaultSortAscending() {
@@ -145,6 +152,20 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
     }
 
     protected void addGeneratedColumns() {
+        entityTable.addGeneratedColumn("edit", new Table.ColumnGenerator() {
+            @Override
+            public Object generateCell(final Table source, final Object itemId, final Object columnId) {
+                Embedded embedded = new Embedded(null, EDIT);
+                embedded.addClickListener(new MouseEvents.ClickListener() {
+                    @Override
+                    public void click(final MouseEvents.ClickEvent event) {
+                        T entity = entities.getItem(itemId).getBean();
+                        showEntityEditor(entity);
+                    }
+                });
+                return embedded;
+            }
+        });
         entityTable.addGeneratedColumn("actions", new ArchiveAndDeleteButtonsGenerator<>(readWriteDAO, eventBus, entities));
         entityTable.addGeneratedColumn("archived", new Table.ColumnGenerator() {
             @Override
