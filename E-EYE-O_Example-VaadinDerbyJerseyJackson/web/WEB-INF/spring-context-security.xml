@@ -11,7 +11,7 @@
         <intercept-url pattern="/E-EYE-O/Login/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/VAADIN/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/WEB-INF" access="ROLE_USER, ROLE_ADMIN"/>
-        <intercept-url pattern="/WEB-INF" access="ROLE_USER, ROLE_ADMIN"/>
+        <intercept-url pattern="/**" access="ROLE_USER, ROLE_ADMIN"/>
         <form-login login-page="/E-EYE-O/Login" default-target-url="/E-EYE-O/" always-use-default-target="true"/>
         <remember-me services-ref="rememberMeServices" key="EEYEO"/>
     </http>
