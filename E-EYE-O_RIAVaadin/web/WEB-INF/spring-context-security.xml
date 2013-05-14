@@ -41,7 +41,6 @@
         <authentication-provider user-service-ref="userDetailsService">
             <password-encoder ref="passwordEncoder"/>
         </authentication-provider>
-
     </authentication-manager>
 
 </beans:beans>
