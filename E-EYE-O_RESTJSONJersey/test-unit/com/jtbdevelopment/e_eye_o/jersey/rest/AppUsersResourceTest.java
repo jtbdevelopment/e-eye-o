@@ -21,7 +21,9 @@ public class AppUsersResourceTest extends AbstractResourceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         super.setUp();
-        resource = new AppUsersResource(dao, serializer);
+        resource = new AppUsersResource();
+        resource.readWriteDAO = dao;
+        resource.jsonIdObjectSerializer = serializer;
     }
 
     @Test

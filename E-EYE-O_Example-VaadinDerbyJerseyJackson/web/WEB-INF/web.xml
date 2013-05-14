@@ -50,6 +50,11 @@
         <load-on-startup>10</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>REST</servlet-name>
+        <servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+    </servlet>
+
     <session-config>
         <session-timeout>10</session-timeout>
     </session-config>
@@ -65,6 +70,10 @@
     <servlet-mapping>
         <servlet-name>E-EYE-O</servlet-name>
         <url-pattern>/VAADIN/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>REST</servlet-name>
+        <url-pattern>/REST/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>E-EYE-O</servlet-name>

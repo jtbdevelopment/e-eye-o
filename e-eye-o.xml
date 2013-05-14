@@ -127,6 +127,7 @@
     <pathelement location="${basedir}/lib/jaxb-api-2.1.jar"/>
     <pathelement location="${basedir}/lib/jersey-core-1.17.jar"/>
     <pathelement location="${basedir}/lib/jersey-server-1.17.jar"/>
+    <pathelement location="${basedir}/lib/jersey-servlet-1.17.jar"/>
     <pathelement location="${basedir}/lib/jersey-spring-1.17.jar"/>
     <pathelement location="${basedir}/lib/jsr250-api-1.0.jar"/>
     <pathelement location="${basedir}/lib/jsr311-api-1.1.1.jar"/>
@@ -1227,6 +1228,7 @@
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
     <path refid="library.spring-context-support-3.2.0.release.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
   </path>
   
   <path id="e-eye-o_example-vaadinderbyjerseyjackson.runtime.production.module.classpath">
@@ -1243,6 +1245,7 @@
     <path refid="library.mysql-connector-java-5.1.24.classpath"/>
     <path refid="library.tomcat-jdbc-7.0.39.classpath"/>
     <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
   </path>
   
   <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.classpath">
@@ -1260,6 +1263,7 @@
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
     <path refid="library.spring-context-support-3.2.0.release.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
   </path>
   
   <path id="e-eye-o_example-vaadinderbyjerseyjackson.runtime.module.classpath">
@@ -1278,6 +1282,7 @@
     <path refid="library.mysql-connector-java-5.1.24.classpath"/>
     <path refid="library.tomcat-jdbc-7.0.39.classpath"/>
     <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
   </path>
   
   
@@ -1505,11 +1510,13 @@
   
   <target name="init.artifacts">
     <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war" value="${basedir}/out/artifacts/E_EYE_O_Example_VaadinDerbyJerseyJackson_war"/>
     <property name="artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded" value="${basedir}/out/artifacts/E_EYE_O_Example_VaadinDerbyJerseyJackson_war_exploded"/>
     <property name="artifact.output.e-eye-o_hibernatedaoimpl:ejb_exploded" value="${basedir}/out/artifacts/E_EYE_O_HibernateDAOImpl_ejb_exploded"/>
     <property name="artifact.output.e-eye-o_interfaces" value="${basedir}/out/artifacts/E_EYE_O_Interfaces"/>
     <property name="artifact.output.e-eye-o_riavaadin:war_exploded" value="${basedir}/out/artifacts/E_EYE_O_RIAVaadin_war_exploded"/>
     <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.E-EYE-O_war.war" value="${artifacts.temp.dir}/E-EYE-O_war.war"/>
     <property name="temp.jar.path.E-EYE-O_Interfaces.jar" value="${artifacts.temp.dir}/E-EYE-O_Interfaces.jar"/>
   </target>
   
@@ -1523,6 +1530,15 @@
   
   <target name="clean.artifact.e-eye-o_riavaadin:war_exploded" description="clean E-EYE-O_RIAVaadin:war exploded artifact output">
     <delete dir="${artifact.output.e-eye-o_riavaadin:war_exploded}"/>
+  </target>
+  
+  <target name="artifact.e-eye-o_example-vaadinderbyjerseyjackson:war" depends="init.artifacts, artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded" description="Build &#39;E-EYE-O_Example-VaadinDerbyJerseyJackson:war&#39; artifact">
+    <property name="artifact.temp.output.e-eye-o_example-vaadinderbyjerseyjackson:war" value="${artifacts.temp.dir}/E_EYE_O_Example_VaadinDerbyJerseyJackson_war"/>
+    <mkdir dir="${artifact.temp.output.e-eye-o_example-vaadinderbyjerseyjackson:war}"/>
+    <zip destfile="${temp.jar.path.E-EYE-O_war.war}">
+      <zipfileset dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}"/>
+    </zip>
+    <copy file="${temp.jar.path.E-EYE-O_war.war}" tofile="${artifact.temp.output.e-eye-o_example-vaadinderbyjerseyjackson:war}/E-EYE-O_war.war"/>
   </target>
   
   <target name="artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded" depends="init.artifacts, compile.module.e-eye-o_example-vaadinderbyjerseyjackson, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_restjsonjersey, compile.module.e-eye-o_serializationjacksonimpl, compile.module.e-eye-o_riavaadin, compile.module.e-eye-o_daohibernateimpl" description="Build &#39;E-EYE-O_Example-VaadinDerbyJerseyJackson:war exploded&#39; artifact">
@@ -1581,6 +1597,7 @@
     <copy file="${basedir}/lib/jsr311-api-1.1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jsr311-api-1.1.1.jar"/>
     <copy file="${basedir}/lib/jersey-core-1.17.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jersey-core-1.17.jar"/>
     <copy file="${basedir}/lib/jersey-spring-1.17.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jersey-spring-1.17.jar"/>
+    <copy file="${basedir}/lib/jersey-servlet-1.17.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jersey-servlet-1.17.jar"/>
     <copy file="${basedir}/lib/jackson-databind-2.1.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jackson-databind-2.1.3.jar"/>
     <copy file="${basedir}/lib/jackson-annotations-2.1.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jackson-annotations-2.1.2.jar"/>
     <copy file="${basedir}/lib/jackson-core-2.1.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jackson-core-2.1.3.jar"/>
@@ -1660,12 +1677,7 @@
       <fileset dir="${basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson/web"/>
     </copy>
     <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF"/>
-    <copy file="${basedir}/E-EYE-O_RIAVaadin/web/WEB-INF/web.xml" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/web.xml"/>
-    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}">
-      <fileset dir="${basedir}/E-EYE-O_RIAVaadin/web"/>
-    </copy>
-    <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF"/>
-    <copy file="${basedir}/E-EYE-O_RIAVaadin/web/WEB-INF/web.xml" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/web.xml"/>
+    <copy file="${basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson/web/WEB-INF/web.xml" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/web.xml"/>
     <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}">
       <fileset dir="${basedir}/E-EYE-O_RIAVaadin/resources"/>
     </copy>
@@ -1693,7 +1705,7 @@
       <fileset dir="${basedir}/E-EYE-O_RIAVaadin/web"/>
     </copy>
     <mkdir dir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF"/>
-    <copy file="${basedir}/E-EYE-O_RIAVaadin/web/WEB-INF/web.xml" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/web.xml"/>
+    <copy file="${basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson/web/WEB-INF/web.xml" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/web.xml"/>
     <mkdir dir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF"/>
     <mkdir dir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/classes"/>
     <copy todir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/classes">
@@ -1803,7 +1815,11 @@
     </copy>
   </target>
   
-  <target name="build.all.artifacts" depends="artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded, artifact.e-eye-o_hibernatedaoimpl:ejb_exploded, artifact.e-eye-o_interfaces, artifact.e-eye-o_riavaadin:war_exploded" description="Build all artifacts">
+  <target name="build.all.artifacts" depends="artifact.e-eye-o_example-vaadinderbyjerseyjackson:war, artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded, artifact.e-eye-o_hibernatedaoimpl:ejb_exploded, artifact.e-eye-o_interfaces, artifact.e-eye-o_riavaadin:war_exploded" description="Build all artifacts">
+    <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war}"/>
+    <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war}">
+      <fileset dir="${artifact.temp.output.e-eye-o_example-vaadinderbyjerseyjackson:war}"/>
+    </copy>
     <mkdir dir="${artifact.output.e-eye-o_interfaces}"/>
     <copy todir="${artifact.output.e-eye-o_interfaces}">
       <fileset dir="${artifact.temp.output.e-eye-o_interfaces}"/>
