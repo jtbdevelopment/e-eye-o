@@ -112,8 +112,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
                 return i;
             }
         });
-        List<T> list = (List<T>) query.list();
-        sortedResults.addAll(list);
+        sortedResults.addAll((List<T>) query.list());
         return sortedResults;
     }
 
