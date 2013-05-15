@@ -27,6 +27,7 @@
     <orderEntry type="library" scope="TEST" name="org.apache.derby:derby:10.9.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="mysql-connector-java-5.1.24" level="project" />
     <orderEntry type="module" module-name="E-EYE-O_DAOHibernateImpl" exported="" />
+    <orderEntry type="library" name="jersey-client-1.17-javadoc" level="project" />
   </component>
 </module>
 
