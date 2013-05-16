@@ -120,7 +120,7 @@ public class UserHelperImpl implements UserHelper {
                     photo.setPhotoFor(cl);
                 }
                 readWriteDAO.create(photo);
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 logger.warn("There was an error creating new user sample photos!", e);
             }
         }
