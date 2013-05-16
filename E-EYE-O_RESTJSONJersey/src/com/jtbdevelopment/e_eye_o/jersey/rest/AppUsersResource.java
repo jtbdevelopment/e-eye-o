@@ -35,7 +35,7 @@ public class AppUsersResource extends SecurityAwareResource {
         if (appUser.isAdmin()) {
             return jsonIdObjectSerializer.write(readWriteDAO.getUsers());
         } else {
-            return jsonIdObjectSerializer.write(appUser);
+            return jsonIdObjectSerializer.write(readWriteDAO.get(AppUser.class, appUser.getId()));
         }
     }
 
