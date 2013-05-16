@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.jersey.rest;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
+import org.joda.time.DateTime;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -66,6 +67,12 @@ public class AppUserResource {
                     readWriteDAO.getActiveEntitiesForUser(entityType, appUser);
         }
         return jsonIdObjectSerializer.write(set);
+    }
+
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getModifiedSince(@PathParam("modifiedSince") final String dateTimeString) {
+        DateTime dateTime = DateTime.parse(dateTimeString);
+        return jsonIdObjectSerializer.write(readWriteDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, dateTimeString));
     }
 
     @Path("archived")
