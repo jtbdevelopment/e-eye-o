@@ -32,7 +32,6 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
 
     <T extends AppUserOwnedObject> ChainedUpdateSet<AppUserOwnedObject> changeArchiveStatus(final T entity);
 
-    <T extends AppUserOwnedObject> Map<T, ChainedUpdateSet<AppUserOwnedObject>> changeArchiveStatus(final Collection<T> entities);
 
     /**
      * Similar to delete, will return all app user owned objects that were deleted as part of this.
@@ -41,14 +40,6 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
      * @return their items which were deleted
      */
     ChainedUpdateSet<AppUserOwnedObject> deleteUser(final AppUser user);
-
-    /**
-     * similar to deleteUser but with a mapped result of users to objects
-     *
-     * @param users users to delete
-     * @return their deleted objects
-     */
-    Map<AppUser, ChainedUpdateSet<AppUserOwnedObject>> deleteUsers(final Collection<AppUser> users);
 
     /**
      * Will return the set of items which were deleted along with the requested item

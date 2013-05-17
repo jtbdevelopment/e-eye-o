@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
  * Date: 3/29/13
  * Time: 6:39 PM
  */
+//  TODO - make lastObTimestamp not modifiable except via controlled routes
 public interface Observable extends AppUserOwnedObject {
     public final static LocalDateTime NEVER_OBSERVED = UNINITIALISED_LOCAL_DATE_TIME;
 

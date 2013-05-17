@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:12 PM
  */
+//  TODO - make so active, activated, and admin are not normally modifiable except via controlled routes
 @PreferredDescription(singular = "User", plural = "Users")
 @DisplayTableDefaults(defaultDisplaySize = 50, defaultSortAscending = true, defaultSortField = "login")
 public interface AppUser extends IdObject {

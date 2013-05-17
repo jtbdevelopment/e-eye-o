@@ -120,15 +120,6 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         return new ChainedUpdateSetImpl<>(modifiedObjects, null);
     }
 
-    @Override
-    public <T extends AppUserOwnedObject> Map<T, ChainedUpdateSet<AppUserOwnedObject>> changeArchiveStatus(final Collection<T> entities) {
-        Map<T, ChainedUpdateSet<AppUserOwnedObject>> resultMap = new HashMap<>();
-        for (T entity : entities) {
-            resultMap.put(entity, changeArchiveStatus(entity));
-        }
-        return resultMap;
-    }
-
     //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")
@@ -150,16 +141,6 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         currentSession.delete(wrapped);
         //  TODO - tess
         return new ChainedUpdateSetImpl<>(returnSet.values());
-    }
-
-    @Override
-    public Map<AppUser, ChainedUpdateSet<AppUserOwnedObject>> deleteUsers(final Collection<AppUser> users) {
-        Map<AppUser, ChainedUpdateSet<AppUserOwnedObject>> results = new HashMap<>();
-        for (AppUser user : users) {
-            results.put(user, deleteUser(user));
-        }
-        //  TODO - tests
-        return results;
     }
 
     //  TODO - mark delete and allow undelete

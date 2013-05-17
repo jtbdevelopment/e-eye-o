@@ -306,41 +306,6 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     }
 
     @Test
-    public void testDeletingAUser() {
-        AppUser deleteUser1 = rwDAO.create(factory.newAppUserBuilder().withPassword("pass").withEmailAddress("delete1@delete.test").withFirstName("delete").withLastName("delete").build());
-        AppUser deleteUser2 = rwDAO.create(factory.newAppUserBuilder().withPassword("pass").withEmailAddress("delete2@delete.test").withFirstName("delete").withLastName("delete").build());
-        observationCategoryHelper.createDefaultCategoriesForUser(deleteUser1);
-        Set<ObservationCategory> deleteCategories = rwDAO.getEntitiesForUser(ObservationCategory.class, deleteUser1);
-        ClassList cl = rwDAO.create(factory.newClassListBuilder(deleteUser1).withDescription("delete").build());
-        Student student = factory.newStudentBuilder(deleteUser1).withFirstName("deleteS1").withLastName("deleteS1").addClassList(cl).build();
-        Student s1 = rwDAO.create(student);
-        student = factory.newStudent(deleteUser1);
-        student.setFirstName("deleteS2");
-        student.setLastName("deleteS2");
-        student.addClassList(cl);
-        Student s2 = rwDAO.create(student);
-        Photo p = rwDAO.create(factory.newPhotoBuilder(deleteUser1).withPhotoFor(cl).withDescription("deletePhoto").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build());
-        Observation o = rwDAO.create(factory.newObservationBuilder(deleteUser1).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime()).withCategories(deleteCategories).withComment("delete").build());
-        Map<String, Class<? extends IdObject>> idMap = new HashMap<>();
-        idMap.put(deleteUser1.getId(), AppUser.class);
-        idMap.put(deleteUser2.getId(), AppUser.class);
-        idMap.put(cl.getId(), ClassList.class);
-        idMap.put(s1.getId(), Student.class);
-        idMap.put(s2.getId(), Student.class);
-        idMap.put(p.getId(), Photo.class);
-        idMap.put(o.getId(), Observation.class);
-        for (ObservationCategory oc : deleteCategories) {
-            idMap.put(oc.getId(), ObservationCategory.class);
-        }
-
-        rwDAO.deleteUsers(Arrays.<AppUser>asList(deleteUser1, deleteUser2));
-
-        for (Map.Entry<String, Class<? extends IdObject>> entry : idMap.entrySet()) {
-            assertNull(rwDAO.get(entry.getValue(), entry.getKey()));
-        }
-    }
-
-    @Test
     public void testDeletingUserTwiceOK() {
         AppUser appUser = rwDAO.create(factory.newAppUserBuilder().withPassword("pass").withFirstName("Double").withLastName("Delete").withEmailAddress("delete@double.com").build());
         String id = appUser.getId();

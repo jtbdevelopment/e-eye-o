@@ -503,13 +503,6 @@ public class HibernateReadWriteDAOTest {
         dao.deleteUser(appUserImpl);
     }
 
-    @Test
-    public void testDeletingUsers() {
-        createDeleteUserExpectations();
-
-        dao.deleteUsers(Arrays.asList(appUserImpl));
-    }
-
     private void createDeleteUserExpectations() {
         final List<AppUserOwnedObject> ownedObjects = Arrays.asList(photoLoaded, studentLoaded, deletedLoaded);
         final List<DeletedObject> deletedList = Arrays.asList(deletedLoaded);

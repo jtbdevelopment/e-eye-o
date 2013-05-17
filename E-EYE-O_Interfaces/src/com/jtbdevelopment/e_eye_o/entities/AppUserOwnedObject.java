@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
  * Archived objects will generally not be synced with smart devices
  * but will still be visible on web pages
  */
+//  TODO - make so archived is not normally modifiable except via specific routes
 @ConsistentAppUserCheck(message = AppUserOwnedObject.ALL_OWNED_OBJECTS_MUST_BE_FOR_SAME_USER_ERROR)
 public interface AppUserOwnedObject extends IdObject {
 

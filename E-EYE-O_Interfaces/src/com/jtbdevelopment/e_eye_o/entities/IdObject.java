@@ -11,6 +11,7 @@ import java.beans.Transient;
  * Date: 11/25/12
  * Time: 3:09 PM
  */
+//  TODO - make so modification timestamp is not modifiable except via specific routes
 public interface IdObject {
     //  Standard defaults
     public final static LocalDateTime UNINITIALISED_LOCAL_DATE_TIME = new LocalDateTime(2000, 1, 1, 0, 0, 0);
