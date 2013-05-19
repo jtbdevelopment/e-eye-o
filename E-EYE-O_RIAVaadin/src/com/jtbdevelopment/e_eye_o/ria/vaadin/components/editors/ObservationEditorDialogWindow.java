@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
+import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -144,7 +145,7 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
         Observation entity = super.save();
         if (entity != null) {
             Observable observationSubject = readWriteDAO.get(Observable.class, entity.getObservationSubject().getId());
-            eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, observationSubject));
+            eventBus.post(new AppUserOwnedObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, observationSubject));
         }
         return entity;
     }

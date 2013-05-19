@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.data.Validator;
@@ -148,7 +149,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
             entity = writeUpdateObjectToDAO(entity);
             changeType = IdObjectChanged.ChangeType.MODIFIED;
         }
-        eventBus.post(new IdObjectChanged<>(changeType, entity));
+        eventBus.post(new AppUserOwnedObjectChanged<>(changeType, entity));
         closeWindow();
         return entity;
     }

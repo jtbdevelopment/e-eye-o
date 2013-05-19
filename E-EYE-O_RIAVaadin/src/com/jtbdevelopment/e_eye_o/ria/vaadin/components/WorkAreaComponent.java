@@ -75,6 +75,9 @@ public class WorkAreaComponent extends CustomComponent {
     @Subscribe
     @SuppressWarnings("unused")
     public void reportsArea(final ReportsClicked event) {
+        if (!getSession().getAttribute(AppUser.class).equals(event.getAppUser())) {
+            return;
+        }
         logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to reports");
         Notification.show("Switching to Reports");
         prepForTabSwitch();
@@ -84,6 +87,9 @@ public class WorkAreaComponent extends CustomComponent {
     @Subscribe
     @SuppressWarnings("unused")
     public void settingsArea(final SettingsClicked event) {
+        if (!getSession().getAttribute(AppUser.class).equals(event.getAppUser())) {
+            return;
+        }
         logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to settings");
         Notification.show("Switching to Settings");
         prepForTabSwitch();
@@ -93,6 +99,9 @@ public class WorkAreaComponent extends CustomComponent {
     @Subscribe
     @SuppressWarnings("unused")
     public void helpArea(final HelpClicked event) {
+        if (!getSession().getAttribute(AppUser.class).equals(event.getAppUser())) {
+            return;
+        }
         logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to help");
         Notification.show("Switching to Help");
         prepForTabSwitch();
@@ -102,6 +111,9 @@ public class WorkAreaComponent extends CustomComponent {
     @Subscribe
     @SuppressWarnings("unused")
     public void changeDataArea(final IdObjectRelatedSideTabClicked event) {
+        if (!getSession().getAttribute(AppUser.class).equals(event.getAppUser())) {
+            return;
+        }
         logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to " + event.getEntityType());
         Notification.show("Switching to " + event.getEntityType().getCaption());
         prepForTabSwitch();

@@ -80,10 +80,13 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
 
     @Subscribe
     public void logoutEventHandler(final LogoutEvent event) {
-        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": logoutEventHandlerCalled.");
         AppUser appUser = getSession().getAttribute(AppUser.class);
-        appUser.setLastLogout(new DateTime());
-        readWriteDAO.update(appUser);
-        getPage().setLocation("/j_spring_security_logout");
+        if (event != null && appUser.equals(event.getAppUser())) {
+            logger.trace(appUser.getId() + ": logoutEventHandlerCalled.");
+            appUser = readWriteDAO.get(AppUser.class, appUser.getId());
+            appUser.setLastLogout(new DateTime());
+            readWriteDAO.update(appUser);
+            getPage().setLocation("/j_spring_security_logout");
+        }
     }
 }
