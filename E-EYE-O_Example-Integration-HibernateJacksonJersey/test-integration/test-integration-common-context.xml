@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd   http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <context:component-scan base-package="com.jtbdevelopment"/>
+
+    <!-- Example using Derby  -->
+    <!--bean id="dataSource" class="org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40">
+        <property name="databaseName" value="EEYEODBTEST"/>
+        <property name="createDatabase" value="create"/>
+    </bean-->
+
+    <!-- Example Using MySQL  -->
+    <bean id="dataSource" class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
+        <property name="url" value="jdbc:mysql://localhost:3306/eeyeodbtest"/>
+        <property name="user" value="eeyeodbtestuser"/>
+        <property name="useLegacyDatetimeCode" value="false"/>
+        <property name="password" value="eeyeodbtestuser"/>
+        <property name="databaseName" value="eeyeodbtest"/>
+    </bean>
+
+    <bean id="rememberMeServices"
+          class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
+        <property name="userDetailsService" ref="userDetailsService"/>
+        <property name="tokenRepository" ref="persistentTokenRepository"/>
+        <!--property name="useSecureCookie" value="true"/-->  <!--  TODO -->
+        <property name="key" value="EEYEOTEST"/>
+    </bean>
+
+    <bean id="rememberMeAuthenticationProvider"
+          class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+        <property name="key" value="EEYEOTEST"/>
+    </bean>
+
+    <bean id="rememberMeFilter"
+          class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="rememberMeServices" ref="rememberMeServices"/>
+    </bean>
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="rememberMeAuthenticationProvider"/>
+        <security:authentication-provider user-service-ref="userDetailsService">
+            <!--security:password-encoder ref="passwordEncoder"/-->
+        </security:authentication-provider>
+    </security:authentication-manager>
+</beans>

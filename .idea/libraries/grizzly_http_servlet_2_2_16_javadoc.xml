@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="grizzly-http-servlet-2.2.16-javadoc">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/grizzly-http-servlet-2.2.16.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/grizzly-http-servlet-2.2.16-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/grizzly-http-servlet-2.2.16-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

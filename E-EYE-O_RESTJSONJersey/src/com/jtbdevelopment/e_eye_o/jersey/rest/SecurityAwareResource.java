@@ -10,22 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 
 public abstract class SecurityAwareResource {
-    //  TODO - eliminate
-    private static AppUser injectUser;
-
-    public static AppUser getInjectUser() {
-        return injectUser;
-    }
-
-    public static void setInjectUser(AppUser injectUser) {
-        SecurityAwareResource.injectUser = injectUser;
-    }
-
     protected AppUser getSessionAppUser() {
-        if (injectUser != null) {
-            return injectUser;
-        }
-
         final Object principalAsObject = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principalAsObject instanceof AppUserUserDetails) {
             return ((AppUserUserDetails) principalAsObject).getAppUser();
@@ -33,5 +18,4 @@ public abstract class SecurityAwareResource {
             return null;
         }
     }
-
 }

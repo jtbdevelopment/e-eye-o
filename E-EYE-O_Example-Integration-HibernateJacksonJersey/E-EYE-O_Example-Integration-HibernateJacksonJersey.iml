@@ -18,16 +18,20 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="E-EYE-O_SerializationJacksonImpl" exported="" />
+    <orderEntry type="module" module-name="E-EYE-O_RESTJSONJersey" exported="" />
+    <orderEntry type="module" module-name="E-EYE-O_DAOHibernateImpl" exported="" />
+    <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
     <orderEntry type="library" exported="" name="org.testng:testng:6.8" level="project" />
     <orderEntry type="library" exported="" name="org.springframework:spring-test:3.2.0.RELEASE" level="project" />
-    <orderEntry type="library" name="com.sun.jersey:jersey-grizzly2:1.17" level="project" />
-    <orderEntry type="module" module-name="E-EYE-O_RESTJSONJersey" />
-    <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
     <orderEntry type="library" scope="TEST" name="com.google.guava:guava:13.0" level="project" />
     <orderEntry type="library" scope="TEST" name="org.apache.derby:derby:10.9.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="mysql-connector-java-5.1.24" level="project" />
-    <orderEntry type="module" module-name="E-EYE-O_DAOHibernateImpl" exported="" />
+    <orderEntry type="library" name="com.sun.jersey:jersey-grizzly2:1.17" level="project" />
     <orderEntry type="library" name="jersey-client-1.17-javadoc" level="project" />
+    <orderEntry type="library" name="jersey-grizzly2-servlet-1.17-javadoc" level="project" />
+    <orderEntry type="library" name="com.sun.jersey:jersey-server:1.17" level="project" />
+    <orderEntry type="library" name="ch.qos.logback:logback-classic:1.0.5" level="project" />
+    <orderEntry type="library" name="grizzly-http-servlet-2.2.16-javadoc" level="project" />
   </component>
 </module>
 

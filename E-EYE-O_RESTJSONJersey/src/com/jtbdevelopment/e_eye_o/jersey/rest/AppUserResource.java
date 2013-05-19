@@ -72,7 +72,7 @@ public class AppUserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String getModifiedSince(@PathParam("modifiedSince") final String dateTimeString) {
         DateTime dateTime = DateTime.parse(dateTimeString);
-        return jsonIdObjectSerializer.write(readWriteDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, dateTimeString));
+        return jsonIdObjectSerializer.write(readWriteDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, appUser, dateTime));
     }
 
     @Path("archived")

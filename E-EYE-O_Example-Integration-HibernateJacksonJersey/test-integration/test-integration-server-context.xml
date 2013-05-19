@@ -9,7 +9,7 @@
 
     <!-- Recreate the integration DB each time - make sure to use a disposable DB for it  -->
     <util:properties id="hibernateOverrideProperties">
-        <prop key="hibernate.hbm2ddl.auto">create</prop>
+        <prop key="hibernate.hbm2ddl.auto">validate</prop>
         <!--prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.DerbyUniqueNonNull</prop-->
         <prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.MySQL5InnoFixes</prop>
     </util:properties>
