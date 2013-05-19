@@ -3,10 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
-import com.jtbdevelopment.e_eye_o.ria.events.HelpClicked;
-import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
-import com.jtbdevelopment.e_eye_o.ria.events.ReportsClicked;
-import com.jtbdevelopment.e_eye_o.ria.events.SettingsClicked;
+import com.jtbdevelopment.e_eye_o.ria.events.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.IdObjectRelatedTab;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.Tab;
 import com.vaadin.event.LayoutEvents;
@@ -20,6 +17,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Date: 3/6/13
@@ -28,13 +27,6 @@ import javax.annotation.PostConstruct;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TabComponent extends CustomComponent {
-    private static final Logger logger = LoggerFactory.getLogger(TabComponent.class);
-
-    public static final String SELECTED_TABS = "selected-tabs";
-    public static final String LOGOUT = "Logout";
-    public static final String HELP = "Help";
-    public static final String REPORTS = "Reports";
-
     //  TODO - move this?
     public enum IdObjectTabs {
         Students(Student.class),
@@ -54,8 +46,19 @@ public class TabComponent extends CustomComponent {
         }
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(TabComponent.class);
+
+    public static final String SELECTED_TABS = "selected-tabs";
+    public static final String LOGOUT = "Logout";
+    public static final String HELP = "Help";
+    public static final String REPORTS = "Reports";
+    private List<IdObjectRelatedTab> objectTabs = new LinkedList<>();
+    private Tab reportTab;
+    private Tab logoutTab;
+    private Tab helpTab;
+    private Tab userTab;
+
     private Label currentSelected;
-    private Label welcomeLabel;
 
     @Autowired
     private EventBus eventBus;
@@ -77,23 +80,26 @@ public class TabComponent extends CustomComponent {
                 currentSelected = sideTab;
                 sideTab.addStyleName(SELECTED_TABS);
             }
+            objectTabs.add(sideTab);
             mainLayout.addComponent(sideTab);
         }
-        mainLayout.addComponent(new Tab(REPORTS, eventBus, new ReportsClicked()));
+        reportTab = new Tab(REPORTS, eventBus);
+        mainLayout.addComponent(reportTab);
 
         CssLayout sideLayout = new CssLayout();
         sideLayout.setSizeUndefined();
-        welcomeLabel = new Tab("Welcome", eventBus, new SettingsClicked());
-        welcomeLabel.setDescription("Change settings.");
-        sideLayout.addComponent(welcomeLabel);
-        sideLayout.addComponent(new Tab(LOGOUT, eventBus, new LogoutEvent()));
-        sideLayout.addComponent(new Tab(HELP, eventBus, new HelpClicked()));
+        userTab = new Tab("Welcome", eventBus);
+        userTab.setDescription("Change settings.");
+        sideLayout.addComponent(userTab);
+        logoutTab = new Tab(LOGOUT, eventBus);
+        sideLayout.addComponent(logoutTab);
+        helpTab = new Tab(HELP, eventBus);
+        sideLayout.addComponent(helpTab);
 
         Link email = new Link("Contact us!", new ExternalResource("mailto:" + contactEmail));
         email.setSizeUndefined();
         email.addStyleName("tabs");
         sideLayout.addComponent(email);
-
 
         ClickListener clickListener = new ClickListener();
         mainLayout.addLayoutClickListener(clickListener);
@@ -110,7 +116,14 @@ public class TabComponent extends CustomComponent {
     public void attach() {
         super.attach();
         AppUser appUser = getUI().getSession().getAttribute(AppUser.class);
-        welcomeLabel.setValue("Welcome " + appUser.getFirstName());
+        userTab.setValue("Welcome " + appUser.getFirstName());
+        userTab.setMessageToPublish(new SettingsClicked(appUser));
+        reportTab.setMessageToPublish(new ReportsClicked(appUser));
+        logoutTab.setMessageToPublish(new LogoutEvent(appUser));
+        helpTab.setMessageToPublish(new HelpClicked(appUser));
+        for (IdObjectRelatedTab tab : objectTabs) {
+            tab.setMessageToPublish(new IdObjectRelatedSideTabClicked(appUser, tab.getIdObjectTab()));
+        }
     }
 
     private class ClickListener implements LayoutEvents.LayoutClickListener {

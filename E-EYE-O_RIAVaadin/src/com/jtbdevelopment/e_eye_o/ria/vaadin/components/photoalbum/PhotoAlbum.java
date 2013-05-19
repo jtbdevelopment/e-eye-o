@@ -1,10 +1,11 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum;
 
 import com.google.common.eventbus.Subscribe;
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
-import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
+import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.IdObjectEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.PhotoEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectFilterableDisplay;
@@ -161,7 +162,10 @@ public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
 
     @Subscribe
     @SuppressWarnings("unused")
-    public void handleIdObjectChanged(final IdObjectChanged msg) {
+    public void handleIdObjectChanged(final AppUserOwnedObjectChanged msg) {
+        if (!getSession().getAttribute(AppUser.class).equals(msg.getEntity().getAppUser())) {
+            return;
+        }
         if (msg.getEntity() instanceof Photo) {
             //  TODO - better
             setDisplayDriver(displayDriver);

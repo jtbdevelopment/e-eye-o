@@ -13,20 +13,23 @@ import org.slf4j.LoggerFactory;
 public class Tab extends Label {
     private static final Logger logger = LoggerFactory.getLogger(Tab.class);
     private final EventBus eventBus;
-    private final Object event;
+    private Object messageToPublish;
 
-    public Tab(final String caption, final EventBus eventBus, final Object messageToPublish) {
+    public Tab(final String caption, final EventBus eventBus) {
         super(caption);
         addStyleName("tabs");
         setWidth(null);
         this.eventBus = eventBus;
-        this.event = messageToPublish;
     }
 
     public void onClicked() {
         logger.trace(getUI().getSession().getAttribute(AppUser.class).getId() + ": clicked on Tab " + getCaption());
-        if (eventBus != null && event != null) {
-            eventBus.post(event);
+        if (eventBus != null && messageToPublish != null) {
+            eventBus.post(messageToPublish);
         }
+    }
+
+    public void setMessageToPublish(final Object messageToPublish) {
+        this.messageToPublish = messageToPublish;
     }
 }

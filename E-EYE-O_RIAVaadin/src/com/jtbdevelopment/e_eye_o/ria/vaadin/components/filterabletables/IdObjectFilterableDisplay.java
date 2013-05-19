@@ -6,6 +6,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.IdObjectEditorDialogWindow;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.AllItemsBeanItemContainer;
@@ -237,7 +238,10 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
 
     @Subscribe
     @SuppressWarnings({"unused", "unchecked"})
-    public void handleIdObjectChange(final IdObjectChanged msg) {
+    public void handleIdObjectChange(final AppUserOwnedObjectChanged msg) {
+        if (!getSession().getAttribute(AppUser.class).equals(msg.getEntity().getAppUser())) {
+            return;
+        }
         if (entityType.isAssignableFrom(msg.getEntityType())) {
             T entity = (T) msg.getEntity();
             final T idForBean = entities.getBeanIdResolver().getIdForBean(entity);

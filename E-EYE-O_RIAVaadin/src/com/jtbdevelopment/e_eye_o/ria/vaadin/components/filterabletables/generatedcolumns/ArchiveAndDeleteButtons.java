@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.server.ThemeResource;
@@ -77,10 +78,10 @@ public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> extends Custo
 
     private void publishUpdatedDAOObjects(final ReadWriteDAO.ChainedUpdateSet<AppUserOwnedObject> daoResults) {
         for (AppUserOwnedObject modified : daoResults.getModifiedItems()) {
-            eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, modified));
+            eventBus.post(new AppUserOwnedObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, modified));
         }
         for (AppUserOwnedObject deleted : daoResults.getDeletedItems()) {
-            eventBus.post(new IdObjectChanged<>(IdObjectChanged.ChangeType.DELETED, deleted));
+            eventBus.post(new AppUserOwnedObjectChanged<>(IdObjectChanged.ChangeType.DELETED, deleted));
         }
     }
 }
