@@ -280,7 +280,6 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         List<AppUser> users = jsonIdObjectSerializer.read(json);
 
         assertTrue(users.containsAll(Arrays.asList(testAdmin, testUser1, testUser2)));
-        System.in.read();
     }
 
     /*
