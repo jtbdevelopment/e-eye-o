@@ -5,7 +5,6 @@ import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
-import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.ClassNamesResourceConfig;
 import com.sun.jersey.spi.spring.container.servlet.SpringServlet;
@@ -69,22 +68,6 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     private static HttpServer httpServer;
     private static final URI BASE_URI = UriBuilder.fromUri("http://localhost/").port(9998).build();
-    private static final String REST_BASE = "http://localhost:9998/REST/";
-    private WebResource baseAdmin;
-    private WebResource usersAdmin;
-    private WebResource securityAdmin;
-    private WebResource loginAdmin;
-    private WebResource logoutAdmin;
-    private WebResource baseUser1;
-    private WebResource usersUser1;
-    private WebResource securityUser1;
-    private WebResource loginUser1;
-    private WebResource logoutUser1;
-    private WebResource baseUser2;
-    private WebResource usersUser2;
-    private WebResource securityUser2;
-    private WebResource loginUser2;
-    private WebResource logoutUser2;
     private HttpClient adminClient;
 
     @BeforeMethod
@@ -141,7 +124,6 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         try {
             final Map<String, String> initParams = new HashMap<>();
             initParams.put(ClassNamesResourceConfig.PROPERTY_CLASSNAMES, "com.jtbdevelopment.e_eye_o");
-            //initParams.put(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS, "")
 
             httpServer = GrizzlyServerFactory.createHttpServer(BASE_URI, new HttpHandler() {
                 @Override
@@ -156,18 +138,12 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
             webappContext.addContextInitParameter("contextConfigLocation", "classpath:test-integration-server-context.xml");
             webappContext.addListener("org.springframework.web.context.ContextLoaderListener");
             webappContext.addListener("org.springframework.web.context.request.RequestContextListener");
-
-
             FilterRegistration filterRegistration = webappContext.addFilter("springSecurityFilterChain", DelegatingFilterProxy.class);
-//            filterRegistration.addMappingForServletNames(null, "spring);
             filterRegistration.addMappingForUrlPatterns(null, "/*");
             webappContext.deploy(httpServer);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        java.net.CookieManager cm = new java.net.CookieManager();
-//        java.net.CookieHandler.setDefault(cm);
 
         List<NameValuePair> login = new LinkedList<>();
         UrlEncodedFormEntity loginForm;
