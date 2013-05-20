@@ -39,33 +39,13 @@ public class AccessControlResource {
     @Autowired
     private ReadOnlyDAO readOnlyDAO;
 
-    @Context
-    private HttpServletRequest httpServletRequest;
-    @Context
-    private HttpServletResponse httpServletResponse;
-
-    public AccessControlResource() {
-        logger.info("Constructed");
-    }
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String test() {
-        return "Test";
-    }
-
-    @GET
-    @Path("login")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String testLogin() {
-        return "TestLoin";
-    }
-
     @POST
     @Path("login")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String login(
+            @Context final HttpServletRequest httpServletRequest,
+            @Context final HttpServletResponse httpServletResponse,
             @FormParam("login") final String login,
             @FormParam("password") final String password) {
         Authentication authentication;

@@ -17,6 +17,7 @@ import java.util.Date;
  */
 @Component("persistentTokenRepository")
 @Transactional(propagation = Propagation.REQUIRED)
+@SuppressWarnings("unused")
 public class HibernatePersistentTokenRepository implements PersistentTokenRepository {
     @Autowired
     private SessionFactory sessionFactory;
