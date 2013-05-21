@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.jersey.rest;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
@@ -14,6 +15,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -24,6 +26,7 @@ import org.glassfish.grizzly.http.server.Response;
 import org.glassfish.grizzly.servlet.FilterRegistration;
 import org.glassfish.grizzly.servlet.ServletRegistration;
 import org.glassfish.grizzly.servlet.WebappContext;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.test.context.ContextConfiguration;
@@ -39,8 +42,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.AssertJUnit.*;
 
 /**
  * Date: 2/10/13
@@ -68,7 +70,9 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     private static HttpServer httpServer;
     private static final URI BASE_URI = UriBuilder.fromUri("http://localhost/").port(9998).build();
-    private HttpClient adminClient;
+    public static final String LOGIN_URI = BASE_URI + "security/login/";
+    public static final String USERS_URI = BASE_URI + "users/";
+    private HttpClient adminClient, userClient1, userClient2;
 
     @BeforeMethod
     public synchronized void setup() throws Exception {
@@ -145,55 +149,36 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
             e.printStackTrace();
         }
 
-        List<NameValuePair> login = new LinkedList<>();
-        UrlEncodedFormEntity loginForm;
-        HttpPost loginPost;
+        adminClient = createHttpClientSession(testAdmin);
+        userClient1 = createHttpClientSession(testUser1);
+        userClient2 = createHttpClientSession(testUser2);
+    }
 
-        adminClient = new DefaultHttpClient();
-        login.clear();
-        login.add(new BasicNameValuePair("login", testAdmin.getEmailAddress()));
-        login.add(new BasicNameValuePair("password", testAdmin.getPassword()));
-        login.add(new BasicNameValuePair(rememberMeServices.getParameter(), "true"));
-        loginForm = new UrlEncodedFormEntity(login);
-        loginPost = new HttpPost(BASE_URI + "security/login/?" + rememberMeServices.getParameter() + "=true");
-        loginPost.setEntity(loginForm);
-        HttpResponse response = adminClient.execute(loginPost);
+    public HttpClient createHttpClientSession(final AppUser user) throws Exception {
+        HttpClient httpClient = new DefaultHttpClient();
+        String uri = LOGIN_URI + "?" + rememberMeServices.getParameter() + "=true";
+        List<NameValuePair> formValues = new LinkedList<>();
+        formValues.add(new BasicNameValuePair("login", user.getEmailAddress()));
+        formValues.add(new BasicNameValuePair("password", user.getPassword()));
+        formValues.add(new BasicNameValuePair(rememberMeServices.getParameter(), "true"));
+
+        HttpResponse response = httpPost(httpClient, uri, formValues);
         logger.info(EntityUtils.toString(response.getEntity()));
-        /*
-        Client adminClient = Client.create();
-        baseAdmin = adminClient.resource(REST_BASE);
-        usersAdmin = baseAdmin.path("users/");
-        securityAdmin = baseAdmin.path("security/");
-        loginAdmin = securityAdmin.path("login/");
-        logoutAdmin = securityAdmin.path("logout/");
-        Form form = new Form();
-        form.add("login", testAdmin.getEmailAddress());
-        form.add("password", testAdmin.getPassword());
-        loginAdmin.accept(MediaType.TEXT_PLAIN).type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).post(String.class, form);
-        */
-        /*
-        Client user1Client = Client.create();
-        baseUser1 = user1Client.resource(BASE_URI);
-        usersUser1 = baseUser1.path("users/");
-        securityUser1 = baseUser1.path("security/");
-        loginUser1 = securityUser1.path("login/");
-        logoutUser1 = securityUser1.path("logout/");
-        form = new Form();
-        form.add("login", testUser1.getEmailAddress());
-        form.add("password", testUser1.getPassword());
-        loginUser1.accept(MediaType.TEXT_PLAIN).type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).post(String.class, form);
+        return httpClient;
+    }
 
-        Client user2Client = Client.create();
-        baseUser2 = user2Client.resource(BASE_URI);
-        usersUser2 = baseUser2.path("users/");
-        securityUser2 = baseUser2.path("security/");
-        loginUser2 = securityUser2.path("login/");
-        logoutUser2 = securityUser2.path("logout/");
-        form = new Form();
-        form.add("login", testUser2.getEmailAddress());
-        form.add("password", testUser2.getPassword());
-        loginUser2.accept(MediaType.TEXT_PLAIN).type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).post(String.class, form);
-        */
+    private HttpResponse httpPost(HttpClient httpClient, String uri, List<NameValuePair> formValues) throws IOException {
+        UrlEncodedFormEntity postForm = new UrlEncodedFormEntity(formValues);
+        HttpPost httpPost = new HttpPost(uri);
+        httpPost.setEntity(postForm);
+        return httpClient.execute(httpPost);
+    }
+
+    private HttpResponse httpPut(HttpClient httpClient, String uri, List<NameValuePair> formValues) throws IOException {
+        UrlEncodedFormEntity postForm = new UrlEncodedFormEntity(formValues);
+        HttpPut httpPut = new HttpPut(uri);
+        httpPut.setEntity(postForm);
+        return httpClient.execute(httpPut);
     }
 
     @AfterGroups({"integration"})
@@ -205,21 +190,14 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     }
 
     @Test
-    public void doNothingTest() {
-
-    }
-
-    /*
-    @Test
     public void testGetUserStandard() throws Exception {
-        String s = usersUser1.accept(MediaType.APPLICATION_JSON_TYPE).get(String.class);
-        assertEquals(jsonIdObjectSerializer.write(testUser1), s);
-        assertEquals("", ((AppUser) jsonIdObjectSerializer.read(s)).getPassword());
+        String uri = USERS_URI;
+        checkJSONValue(uri, testUser1, userClient1);
     }
 
     @Test
     public void testModifyUserAsSelf() throws Exception {
-        AppUser testUser1 = jsonIdObjectSerializer.read(jsonIdObjectSerializer.write(JerseyRestViaGrizzlyIntegration.testUser1));
+        AppUser testUser1 = easyClone(JerseyRestViaGrizzlyIntegration.testUser1);
         testUser1.setLastName("New Last");
         testUser1.setAdmin(true);  // should be ignored
         testUser1.setActive(false);  // should be ignored
@@ -227,9 +205,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         testUser1.setPassword("new"); //  should be ignored
         testUser1.setLastLogout(new DateTime());  // should be ignored
 
-        Form f = new Form();
-        f.add("appUser", jsonIdObjectSerializer.write(testUser1));
-        String s = usersUser1.accept(MediaType.APPLICATION_JSON_TYPE).type(MediaType.APPLICATION_FORM_URLENCODED).put(String.class, f);
+        String s = getJSONFromPut(testUser1, "appUser", userClient1, USERS_URI);
 
         AppUser dbTestUser1 = readWriteDAO.get(AppUser.class, testUser1.getId());
         assertEquals(testUser1.getLastName(), dbTestUser1.getLastName());
@@ -240,28 +216,59 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertEquals(AppUser.NEVER_LOGGED_IN, dbTestUser1.getLastLogout());
 
         assertEquals(jsonIdObjectSerializer.write(dbTestUser1), s);
+
         JerseyRestViaGrizzlyIntegration.testUser1 = dbTestUser1;
     }
-    */
+
+    private <T extends IdObject> String getJSONFromPut(final T entity, String param, HttpClient client, String uri) throws IOException {
+        List<NameValuePair> formValues = new LinkedList<>();
+        formValues.add(new BasicNameValuePair(param, jsonIdObjectSerializer.write(entity)));
+        HttpResponse response = httpPut(client, uri, formValues);
+        return getJSONFromResponse(response);
+    }
+
+    private <T extends IdObject> T easyClone(final T entity) {
+        return jsonIdObjectSerializer.read(jsonIdObjectSerializer.write(entity));
+    }
 
     @Test
     public void testGetUsersAdmin() throws Exception {
-        HttpGet get = new HttpGet(BASE_URI + "users/");
-
-        HttpResponse response = adminClient.execute(get);
-        assertEquals(MediaType.APPLICATION_JSON, response.getEntity().getContentType().getValue());
-
-        String json = EntityUtils.toString(response.getEntity());
-        logger.info(json);
-        List<AppUser> users = jsonIdObjectSerializer.read(json);
-
-        assertTrue(users.containsAll(Arrays.asList(testAdmin, testUser1, testUser2)));
+        String uri = BASE_URI + "users/";
+        List<AppUser> expectedResults = Arrays.asList(testAdmin, testUser1, testUser2);
+        checkJSONValues(uri, expectedResults, adminClient);
     }
 
-    /*
+    private <T extends IdObject> void checkJSONValue(String uri, T expectedResult, HttpClient client) throws IOException {
+        String json = getJSONFromHttpGet(uri, client);
+        assertEquals(json, jsonIdObjectSerializer.write(expectedResult));
+    }
+
+    private <T extends IdObject> void checkJSONValues(String uri, List<T> expectedResults, HttpClient client) throws IOException {
+        String json = getJSONFromHttpGet(uri, client);
+        List<T> results = jsonIdObjectSerializer.read(json);
+        assertTrue(results.containsAll(expectedResults));
+    }
+
+    private String getJSONFromHttpGet(String uri, HttpClient client) throws IOException {
+        HttpResponse response = httpGet(uri, client);
+        return getJSONFromResponse(response);
+    }
+
+    private String getJSONFromResponse(HttpResponse response) throws IOException {
+        assertEquals(MediaType.APPLICATION_JSON, response.getEntity().getContentType().getValue());
+        String json = EntityUtils.toString(response.getEntity());
+        logger.info(json);
+        return json;
+    }
+
+    private HttpResponse httpGet(String uri, HttpClient client) throws IOException {
+        HttpGet get = new HttpGet(uri);
+        return client.execute(get);
+    }
+
     @Test
     public void testModifyUserAsAdmin() throws Exception {
-        AppUser testUser2 = jsonIdObjectSerializer.read(jsonIdObjectSerializer.write(JerseyRestViaGrizzlyIntegration.testUser2));
+        AppUser testUser2 = easyClone(JerseyRestViaGrizzlyIntegration.testUser2);
         testUser2.setFirstName("newfirst");
         testUser2.setAdmin(true);
         testUser2.setActive(true);
@@ -269,9 +276,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         testUser2.setPassword("new");
         testUser2.setLastLogout(new DateTime());  // should be ignored
 
-        Form f = new Form();
-        f.add("appUser", jsonIdObjectSerializer.write(testUser2));
-        String s = usersAdmin.accept(MediaType.APPLICATION_JSON_TYPE).type(MediaType.APPLICATION_FORM_URLENCODED).put(String.class, f);
+        String s = getJSONFromPut(testUser2, "appUser", adminClient, USERS_URI);
 
         AppUser dbTestUser2 = readWriteDAO.get(AppUser.class, testUser2.getId());
         assertEquals(testUser2.getFirstName(), dbTestUser2.getFirstName());
@@ -283,7 +288,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
         assertEquals(jsonIdObjectSerializer.write(dbTestUser2), s);
         JerseyRestViaGrizzlyIntegration.testUser2 = dbTestUser2;
+
     }
-*/
 
 }
