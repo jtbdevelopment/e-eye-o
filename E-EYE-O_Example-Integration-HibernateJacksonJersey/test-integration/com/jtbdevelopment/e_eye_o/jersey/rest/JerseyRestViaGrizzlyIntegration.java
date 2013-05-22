@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.jersey.rest;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
@@ -233,7 +234,44 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
         assertEquals(jsonIdObjectSerializer.write(dbTestUser2), s);
         JerseyRestViaGrizzlyIntegration.testUser2 = dbTestUser2;
+    }
 
+    @Test
+    public void testModifyingAnotherUserAsNonAdmin() throws Exception {
+        AppUser user2 = httpHelper.easyClone(testUser2);
+        user2.setLastName("Won't change");
+
+        List<NameValuePair> list = new LinkedList<>();
+        list.add(new BasicNameValuePair("appUser", jsonIdObjectSerializer.write(user2)));
+        HttpResponse response = httpHelper.httpPut(userClient1, USERS_URI, list);
+
+        //  TODO - check response
+
+        AppUser dbTestUser2 = readWriteDAO.get(AppUser.class, testUser2.getId());
+        assertFalse(dbTestUser2.getLastName().equals(user2.getLastName()));
+    }
+
+    @Test
+    public void testGetOwnObjects() throws Exception {
+        Set<AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1);
+        String uri = USERS_URI + testUser1.getId() + "/";
+        httpHelper.getJSONValues(uri, owned, userClient1);
+    }
+
+    @Test
+    public void testGetAnotherUsersObjectsAsNonAdmin() throws Exception {
+        Set<AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser2);
+        String uri = USERS_URI + testUser2.getId() + "/";
+        HttpResponse response = httpHelper.httpGet(uri, userClient1);
+
+        //  TODO
+    }
+
+    @Test
+    public void testGetAnotherUsersObjectsAsAdmin() throws Exception {
+        Set<AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1);
+        String uri = USERS_URI + testUser1.getId() + "/";
+        httpHelper.getJSONValues(uri, owned, adminClient);
     }
 
 }

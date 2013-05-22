@@ -18,6 +18,7 @@ import org.testng.AssertJUnit;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class HttpHelper {
         AssertJUnit.assertEquals(json, jsonIdObjectSerializer.write(expectedResult));
     }
 
-    <T extends IdObject> void getJSONValues(String uri, List<T> expectedResults, HttpClient client) throws IOException {
+    <T extends IdObject> void getJSONValues(String uri, Collection<T> expectedResults, HttpClient client) throws IOException {
         String json = getJSONFromHttpGet(uri, client);
         List<T> results = jsonIdObjectSerializer.read(json);
         AssertJUnit.assertTrue(results.containsAll(expectedResults));
