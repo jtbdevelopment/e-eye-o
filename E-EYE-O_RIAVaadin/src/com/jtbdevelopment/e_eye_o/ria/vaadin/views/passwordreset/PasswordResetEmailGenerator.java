@@ -39,7 +39,7 @@ public class PasswordResetEmailGenerator {
             helper.setText(bodyText, true);
             mailSender.send(mail);
             logger.info("Sent to " + activity.getAppUser().getEmailAddress() + " an email " + bodyText);
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             logger.warn("Unable to generate email to " + activity.getAppUser().getEmailAddress(), e);
         }
     }
