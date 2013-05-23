@@ -2,7 +2,6 @@
   <artifact type="exploded-war" build-on-make="true" name="E-EYE-O_RIAVaadin:war exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/E_EYE_O_RIAVaadin_war_exploded</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="E-EYE-O_RIAVaadin/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="E-EYE-O_RIAVaadin" />

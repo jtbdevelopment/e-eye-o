@@ -63,24 +63,31 @@
   <property name="jdk.bin.1.7" value="${jdk.home.1.7}/bin"/>
   <path id="jdk.classpath.1.7">
     <fileset dir="${jdk.home.1.7}">
+      <include name="lib/ant-javafx.jar"/>
+      <include name="lib/dt.jar"/>
+      <include name="lib/javafx-doclet.jar"/>
+      <include name="lib/javafx-mx.jar"/>
+      <include name="lib/jconsole.jar"/>
+      <include name="lib/sa-jdi.jar"/>
+      <include name="lib/tools.jar"/>
       <include name="jre/lib/charsets.jar"/>
       <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/htmlconverter.jar"/>
       <include name="jre/lib/javaws.jar"/>
       <include name="jre/lib/jce.jar"/>
       <include name="jre/lib/jfr.jar"/>
       <include name="jre/lib/jfxrt.jar"/>
+      <include name="jre/lib/JObjC.jar"/>
       <include name="jre/lib/jsse.jar"/>
       <include name="jre/lib/management-agent.jar"/>
       <include name="jre/lib/plugin.jar"/>
       <include name="jre/lib/resources.jar"/>
       <include name="jre/lib/rt.jar"/>
-      <include name="jre/lib/ext/access-bridge-64.jar"/>
       <include name="jre/lib/ext/dnsns.jar"/>
-      <include name="jre/lib/ext/jaccess.jar"/>
       <include name="jre/lib/ext/localedata.jar"/>
       <include name="jre/lib/ext/sunec.jar"/>
       <include name="jre/lib/ext/sunjce_provider.jar"/>
-      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
       <include name="jre/lib/ext/zipfs.jar"/>
     </fileset>
   </path>
@@ -113,10 +120,10 @@
   
   <path id="library.com.sun.jersey:jersey-grizzly2:1.17.classpath">
     <pathelement location="${basedir}/lib/asm-3.1.jar"/>
-    <pathelement location="${basedir}/lib/grizzly-framework-2.2.16.jar"/>
-    <pathelement location="${basedir}/lib/grizzly-http-2.2.16.jar"/>
-    <pathelement location="${basedir}/lib/grizzly-http-server-2.2.16.jar"/>
-    <pathelement location="${basedir}/lib/grizzly-rcm-2.2.16.jar"/>
+    <pathelement location="${basedir}/lib/grizzly-framework-2.3.2.jar"/>
+    <pathelement location="${basedir}/lib/grizzly-http-2.3.2.jar"/>
+    <pathelement location="${basedir}/lib/grizzly-http-server-2.3.2.jar"/>
+    <pathelement location="${basedir}/lib/grizzly-rcm-2.3.2.jar"/>
     <pathelement location="${basedir}/lib/jersey-grizzly2-1.17.jar"/>
     <pathelement location="${basedir}/lib/jersey-server-1.17.jar"/>
   </path>
@@ -138,7 +145,7 @@
   <path id="library.com.vaadin:vaadin-server:7.0.1.classpath">
     <pathelement location="${basedir}/lib/commons-cli-1.2.jar"/>
     <pathelement location="${basedir}/lib/commons-jexl-2.1.1.jar"/>
-    <pathelement location="${basedir}/lib/commons-logging-1.1.2.jar"/>
+    <pathelement location="${basedir}/lib/commons-logging-1.1.3.jar"/>
     <pathelement location="${basedir}/lib/cssparser-0.9.5.jar"/>
     <pathelement location="${basedir}/lib/jsoup-1.6.3.jar"/>
     <pathelement location="${basedir}/lib/portal-service-6.0.2.jar"/>
@@ -162,8 +169,28 @@
     <pathelement location="${basedir}/lib/confirmdialog-2.0.4.jar"/>
   </path>
   
+  <path id="library.grizzly-http-servlet-2.3.2-javadoc.classpath">
+    <pathelement location="${basedir}/lib/grizzly-http-servlet-2.3.2.jar"/>
+  </path>
+  
+  <path id="library.httpclient-4.2.5-javadoc.classpath">
+    <pathelement location="${basedir}/lib/httpclient-4.2.5.jar"/>
+  </path>
+  
+  <path id="library.httpcore-4.2.4-javadoc.classpath">
+    <pathelement location="${basedir}/lib/httpcore-4.2.4.jar"/>
+  </path>
+  
   <path id="library.imgscalr-lib-4.2-javadoc.classpath">
     <pathelement location="${basedir}/lib/imgscalr-lib-4.2.jar"/>
+  </path>
+  
+  <path id="library.jersey-client-1.17-javadoc.classpath">
+    <pathelement location="${basedir}/lib/jersey-client-1.17.jar"/>
+  </path>
+  
+  <path id="library.jersey-grizzly2-servlet-1.17-javadoc.classpath">
+    <pathelement location="${basedir}/lib/jersey-grizzly2-servlet-1.17.jar"/>
   </path>
   
   <path id="library.joda-time:joda-time:2.1.classpath">
@@ -279,7 +306,7 @@
   <path id="library.org.springframework:spring-web:3.2.0.release.classpath">
     <pathelement location="${basedir}/lib/activation-1.1.jar"/>
     <pathelement location="${basedir}/lib/aopalliance-1.0.jar"/>
-    <pathelement location="${basedir}/lib/commons-logging-1.1.2.jar"/>
+    <pathelement location="${basedir}/lib/commons-logging-1.1.3.jar"/>
     <pathelement location="${basedir}/lib/javax.servlet-api-3.0.1.jar"/>
     <pathelement location="${basedir}/lib/jsp-api-2.1.jar"/>
     <pathelement location="${basedir}/lib/portlet-api-2.0.jar"/>
@@ -317,33 +344,11 @@
   </path>
   
   
-  <!-- Global Libraries -->
-  
-  <path id="library.sass-stdlib.classpath"/>
-  
-  
   <!-- Application Server Libraries -->
   
   <path id="library.tomcat_7.classpath">
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/annotations-api.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/catalina-ant.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/catalina-ha.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/catalina-tribes.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/catalina.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/ecj-3.7.2.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/el-api.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/jasper-el.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/jasper.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/jsp-api.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/servlet-api.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-api.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-coyote.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-dbcp.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-i18n-es.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-i18n-fr.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-i18n-ja.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-jdbc.jar"/>
-    <pathelement location="C:/DEV/Tools/apache-tomcat-7.0.32/lib/tomcat-util.jar"/>
+    <pathelement location="/usr/local/apache-tomcat-7.0.40/lib/jsp-api.jar"/>
+    <pathelement location="/usr/local/apache-tomcat-7.0.40/lib/servlet-api.jar"/>
   </path>
   
   <!-- Modules -->
@@ -661,12 +666,15 @@
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
   </path>
   
   <path id="e-eye-o_restjsonjersey.runtime.production.module.classpath">
     <pathelement location="${e-eye-o_restjsonjersey.output.dir}"/>
     <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
   </path>
   
   <path id="e-eye-o_restjsonjersey.module.classpath">
@@ -685,6 +693,7 @@
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
     <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
   </path>
   
   <path id="e-eye-o_restjsonjersey.runtime.module.classpath">
@@ -694,6 +703,8 @@
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
     <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
   </path>
   
   
@@ -796,7 +807,6 @@
     <path refid="library.com.vaadin:vaadin-server:7.0.1.classpath"/>
     <path refid="library.confirmdialog-2.0.4.classpath"/>
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
-    <path refid="library.sass-stdlib.classpath"/>
     <path refid="library.imgscalr-lib-4.2-javadoc.classpath"/>
     <path refid="library.spring-context-support-3.2.0.release.classpath"/>
     <path refid="library.mail-1.4.classpath"/>
@@ -835,7 +845,6 @@
     <path refid="library.com.vaadin:vaadin-server:7.0.1.classpath"/>
     <path refid="library.confirmdialog-2.0.4.classpath"/>
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
-    <path refid="library.sass-stdlib.classpath"/>
     <path refid="library.imgscalr-lib-4.2-javadoc.classpath"/>
     <path refid="library.spring-context-support-3.2.0.release.classpath"/>
     <path refid="library.mail-1.4.classpath"/>
@@ -852,7 +861,6 @@
     <path refid="library.com.vaadin:vaadin-server:7.0.1.classpath"/>
     <path refid="library.confirmdialog-2.0.4.classpath"/>
     <path refid="library.spring-vaadin-integration-1.6.6.classpath"/>
-    <path refid="library.sass-stdlib.classpath"/>
     <path refid="library.imgscalr-lib-4.2-javadoc.classpath"/>
     <path refid="library.spring-context-support-3.2.0.release.classpath"/>
     <path refid="library.mail-1.4.classpath"/>
@@ -1360,29 +1368,45 @@
     <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
-    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
     <pathelement location="${e-eye-o_restjsonjersey.output.dir}"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
     <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
     <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
     <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
     <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
     <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
     <path refid="library.commons-beanutils-1.8.3.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
+    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
+    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
+    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
+    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
+    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
+    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
   </path>
   
   <path id="e-eye-o_example-integration-hibernatejacksonjersey.runtime.production.module.classpath">
     <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
     <path refid="e-eye-o_serializationjacksonimpl.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_restjsonjersey.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_daohibernateimpl.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
     <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
-    <path refid="e-eye-o_restjsonjersey.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_daohibernateimpl.runtime.production.module.classpath"/>
+    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
+    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
+    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
+    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
   </path>
   
   <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.classpath">
@@ -1401,14 +1425,10 @@
     <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
-    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
     <pathelement location="${e-eye-o_restjsonjersey.testoutput.dir}"/>
     <pathelement location="${e-eye-o_restjsonjersey.output.dir}"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
-    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
-    <path refid="library.mysql-connector-java-5.1.24.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
     <pathelement location="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
     <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
     <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
@@ -1417,22 +1437,42 @@
     <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
     <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
     <path refid="library.commons-beanutils-1.8.3.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
+    <path refid="library.mysql-connector-java-5.1.24.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
+    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
+    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
+    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
+    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
+    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
+    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
   </path>
   
   <path id="e-eye-o_example-integration-hibernatejacksonjersey.runtime.module.classpath">
     <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}"/>
     <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
     <path refid="e-eye-o_serializationjacksonimpl.runtime.module.classpath"/>
+    <path refid="e-eye-o_restjsonjersey.runtime.module.classpath"/>
+    <path refid="e-eye-o_daohibernateimpl.runtime.module.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
     <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
-    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
-    <path refid="e-eye-o_restjsonjersey.runtime.module.classpath"/>
-    <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
     <path refid="library.mysql-connector-java-5.1.24.classpath"/>
-    <path refid="e-eye-o_daohibernateimpl.runtime.module.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
+    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
+    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
+    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
+    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
   </path>
   
   
@@ -1459,7 +1499,7 @@
   
   <target name="compile.module.e-eye-o_example-integration-hibernatejacksonjersey" depends="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.production,compile.module.e-eye-o_example-integration-hibernatejacksonjersey.tests" description="Compile module E-EYE-O_Example-Integration-HibernateJacksonJersey"/>
   
-  <target name="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.production" depends="compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_interfaces,compile.module.e-eye-o_daohibernateimpl" description="Compile module E-EYE-O_Example-Integration-HibernateJacksonJersey; production classes">
+  <target name="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.production" depends="compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_daohibernateimpl,compile.module.e-eye-o_interfaces" description="Compile module E-EYE-O_Example-Integration-HibernateJacksonJersey; production classes">
     <mkdir dir="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
     <javac destdir="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_example-integration-hibernatejacksonjersey}/javac">
       <compilerarg line="${compiler.args.e-eye-o_example-integration-hibernatejacksonjersey}"/>
@@ -1588,13 +1628,8 @@
     <copy file="${basedir}/lib/commons-beanutils-1.8.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-beanutils-1.8.3.jar"/>
     <copy file="${basedir}/lib/imgscalr-lib-4.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/imgscalr-lib-4.2.jar"/>
     <copy file="${basedir}/lib/jersey-server-1.17.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jersey-server-1.17.jar"/>
-    <copy file="${basedir}/lib/asm-3.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/asm-3.1.jar"/>
     <copy file="${basedir}/lib/activation-1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/activation-1.1.jar"/>
-    <copy file="${basedir}/lib/jaxb-api-2.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jaxb-api-2.1.jar"/>
-    <copy file="${basedir}/lib/stax-api-1.0-2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/stax-api-1.0-2.jar"/>
     <copy file="${basedir}/lib/jsr250-api-1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jsr250-api-1.0.jar"/>
-    <copy file="${basedir}/lib/osgi_R4_core-1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/osgi_R4_core-1.0.jar"/>
-    <copy file="${basedir}/lib/jsr311-api-1.1.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jsr311-api-1.1.1.jar"/>
     <copy file="${basedir}/lib/jersey-core-1.17.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jersey-core-1.17.jar"/>
     <copy file="${basedir}/lib/jersey-spring-1.17.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jersey-spring-1.17.jar"/>
     <copy file="${basedir}/lib/jersey-servlet-1.17.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/jersey-servlet-1.17.jar"/>
@@ -1622,7 +1657,7 @@
     <copy file="${basedir}/lib/spring-beans-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-beans-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/spring-expression-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-expression-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
-    <copy file="${basedir}/lib/commons-logging-1.1.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-logging-1.1.2.jar"/>
+    <copy file="${basedir}/lib/commons-logging-1.1.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-logging-1.1.3.jar"/>
     <copy file="${basedir}/lib/vaadin-server-7.0.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/vaadin-server-7.0.1.jar"/>
     <copy file="${basedir}/lib/portal-service-6.0.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/portal-service-6.0.2.jar"/>
     <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
@@ -1638,7 +1673,7 @@
     <copy file="${basedir}/lib/vaadin-client-compiled-7.0.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/vaadin-client-compiled-7.0.1.jar"/>
     <copy file="${basedir}/lib/vaadin-themes-7.0.1.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/vaadin-themes-7.0.1.jar"/>
     <copy file="${basedir}/lib/servlet-api-2.5.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/servlet-api-2.5.jar"/>
-    <copy file="${basedir}/lib/commons-logging-1.1.2.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-logging-1.1.2.jar"/>
+    <copy file="${basedir}/lib/commons-logging-1.1.3.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-logging-1.1.3.jar"/>
     <copy file="${basedir}/lib/spring-security-config-3.1.3.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-security-config-3.1.3.RELEASE.jar"/>
     <copy file="${basedir}/lib/aopalliance-1.0.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/aopalliance-1.0.jar"/>
     <copy file="${basedir}/lib/spring-security-core-3.1.3.RELEASE.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/spring-security-core-3.1.3.RELEASE.jar"/>
@@ -1701,11 +1736,6 @@
   
   <target name="artifact.e-eye-o_riavaadin:war_exploded" depends="init.artifacts, compile.module.e-eye-o_riavaadin, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_daohibernateimpl" description="Build &#39;E-EYE-O_RIAVaadin:war exploded&#39; artifact">
     <mkdir dir="${artifact.output.e-eye-o_riavaadin:war_exploded}"/>
-    <copy todir="${artifact.output.e-eye-o_riavaadin:war_exploded}">
-      <fileset dir="${basedir}/E-EYE-O_RIAVaadin/web"/>
-    </copy>
-    <mkdir dir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF"/>
-    <copy file="${basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson/web/WEB-INF/web.xml" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/web.xml"/>
     <mkdir dir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF"/>
     <mkdir dir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/classes"/>
     <copy todir="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/classes">
@@ -1759,7 +1789,7 @@
     <copy file="${basedir}/lib/spring-beans-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/spring-beans-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/spring-expression-3.2.0.RELEASE.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/spring-expression-3.2.0.RELEASE.jar"/>
     <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
-    <copy file="${basedir}/lib/commons-logging-1.1.2.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/commons-logging-1.1.2.jar"/>
+    <copy file="${basedir}/lib/commons-logging-1.1.3.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/commons-logging-1.1.3.jar"/>
     <copy file="${basedir}/lib/vaadin-server-7.0.1.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/vaadin-server-7.0.1.jar"/>
     <copy file="${basedir}/lib/portal-service-6.0.2.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/portal-service-6.0.2.jar"/>
     <copy file="${basedir}/lib/portlet-api-2.0.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/portlet-api-2.0.jar"/>
@@ -1775,7 +1805,7 @@
     <copy file="${basedir}/lib/vaadin-client-compiled-7.0.1.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/vaadin-client-compiled-7.0.1.jar"/>
     <copy file="${basedir}/lib/vaadin-themes-7.0.1.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/vaadin-themes-7.0.1.jar"/>
     <copy file="${basedir}/lib/servlet-api-2.5.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/servlet-api-2.5.jar"/>
-    <copy file="${basedir}/lib/commons-logging-1.1.2.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/commons-logging-1.1.2.jar"/>
+    <copy file="${basedir}/lib/commons-logging-1.1.3.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/commons-logging-1.1.3.jar"/>
     <copy file="${basedir}/lib/derby-10.9.1.0.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/derby-10.9.1.0.jar"/>
     <copy file="${basedir}/lib/hibernate-core-4.1.9.Final.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/hibernate-core-4.1.9.Final.jar"/>
     <copy file="${basedir}/lib/dom4j-1.6.1.jar" tofile="${artifact.output.e-eye-o_riavaadin:war_exploded}/WEB-INF/lib/dom4j-1.6.1.jar"/>
