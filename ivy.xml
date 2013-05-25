@@ -54,6 +54,8 @@
         <dependency org="junit" name="junit" rev="4.11"/>
 
         <dependency org="org.glassfish.grizzly" name="grizzly-framework" rev="2.3.2" transitive="false"/>
+        <dependency org="org.glassfish.grizzly" name="grizzly-http" rev="2.3.2" transitive="false"/>
+        <dependency org="org.glassfish.grizzly" name="grizzly-rcm" rev="2.3.2" transitive="false"/>
         <dependency org="org.glassfish.grizzly" name="grizzly-http-server" rev="2.3.2" transitive="false"/>
         <dependency org="org.glassfish.grizzly" name="grizzly-http-servlet" rev="2.3.2" transitive="false"/>
         <dependency org="com.sun.jersey" name="jersey-core" rev="1.17" transitive="false"/>
@@ -62,6 +64,9 @@
         <dependency org="com.sun.jersey" name="jersey-grizzly2-servlet" rev="1.17" transitive="false"/>
         <dependency org="com.sun.jersey.contribs" name="jersey-spring" rev="1.17" transitive="false"/>
         <dependency org="com.sun.jersey" name="jersey-servlet" rev="1.17" transitive="false"/>
+        <dependency org="asm" name="asm" rev="3.1"/>
+        <!--dependency org="javax.xml.bind" name="jaxb-api" rev="2.1"/-->
+        <dependency org="javax.ws.rs" name="jsr311-api" rev="1.1.1"/>
 
         <dependency org="com.sun.jersey" name="jersey-client" rev="1.17" transitive="false"/>
         <dependency org="org.apache.httpcomponents" name="httpcore" rev="4.2.4" transitive="false"/>
