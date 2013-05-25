@@ -21,6 +21,7 @@
         <property name="useLegacyDatetimeCode" value="false"/>
         <property name="password" value="eeyeodbtestuser"/>
         <property name="databaseName" value="eeyeodbtest"/>
+        <property name="serverTimezone" value="America/New_York"/>
     </bean>
 
     <bean id="rememberMeServices"

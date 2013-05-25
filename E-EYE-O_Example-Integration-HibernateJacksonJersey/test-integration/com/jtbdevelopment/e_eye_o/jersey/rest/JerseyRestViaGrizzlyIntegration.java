@@ -5,6 +5,7 @@ import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.ClassNamesResourceConfig;
@@ -117,6 +118,9 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
                 userHelper.setUpNewUser(testAdmin);
                 userHelper.setUpNewUser(testUser1);
                 userHelper.setUpNewUser(testUser2);
+                testAdmin = readWriteDAO.getUser(testAdmin.getEmailAddress());
+                testUser1 = readWriteDAO.getUser(testUser1.getEmailAddress());
+                testUser2 = readWriteDAO.getUser(testUser2.getEmailAddress());
             }
         }
 
@@ -260,7 +264,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     @Test
     public void testGetAnotherUsersObjectsAsNonAdmin() throws Exception {
-        Set<AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser2);
+        Set<Photo> owned = readWriteDAO.getEntitiesForUser(Photo.class, testUser2);
         String uri = USERS_URI + testUser2.getId() + "/";
         HttpResponse response = httpHelper.httpGet(uri, userClient1);
 
