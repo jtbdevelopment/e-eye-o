@@ -182,6 +182,13 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     }
 
     @Test
+    public void testGetVersion() throws Exception{
+        String uri = BASE_URI + "/security/version";
+        HttpResponse response = httpHelper.httpGet(uri, adminClient);
+        assertEquals("1.0", EntityUtils.toString(response.getEntity()));
+    }
+
+    @Test
     public void testGetUserStandard() throws Exception {
         String uri = USERS_URI;
         httpHelper.checkJSONVsExpectedResult(uri, testUser1, userClient1);
@@ -287,6 +294,14 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
             String uri = USERS_URI + testUser1.getId() + "/" + entityClass.getAnnotation(PreferredDescription.class).plural().toLowerCase() + "/";
             httpHelper.checkJSONVsExpectedResults(uri, owned, userClient1);
         }
+    }
+
+    @Test
+    public void testGetOwnObject() throws Exception {
+        List<AppUserOwnedObject> owned = new ArrayList(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1));
+        AppUserOwnedObject randomOne = owned.get(new Random().nextInt(owned.size()));
+        String uri = USERS_URI + testUser1.getId() + "/" + randomOne.getId() + "/";
+        httpHelper.checkJSONVsExpectedResult(uri, randomOne, userClient1);
     }
 
     @Test

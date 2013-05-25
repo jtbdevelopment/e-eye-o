@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.math.BigDecimal;
 
 /**
  * Date: 5/17/13
@@ -27,6 +28,8 @@ import javax.ws.rs.core.MediaType;
 @Path("/security")
 public class AccessControlResource {
     private static final Logger logger = LoggerFactory.getLogger(AccessControlResource.class);
+
+    public static final String VERSION = "1.0";
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";
 
@@ -73,5 +76,12 @@ public class AccessControlResource {
     public String logout() {
         //  TODO
         return SUCCESS;
+    }
+
+    @GET
+    @Path("version")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String version() {
+        return VERSION;
     }
 }
