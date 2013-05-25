@@ -99,7 +99,7 @@ public class AppUserResource {
         return getEntityRefinedResource(Student.class);
     }
 
-    @Path("classlists")
+    @Path("classes")
     public AppUserResource getClassLists() {
         return getEntityRefinedResource(ClassList.class);
     }

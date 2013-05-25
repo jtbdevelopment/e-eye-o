@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObje
  * Time: 10:55 PM
  */
 @Service
+@SuppressWarnings("unused")
 public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeserializer {
     private final ReadOnlyDAO readOnlyDAO;
     private final IdObjectFactory idObjectFactory;
@@ -101,10 +103,14 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
         if (fieldType.isArray()) {
             if (byte.class.isAssignableFrom(fieldType.getComponentType())) {
                 assignValue(returnObject, fieldName, parser.getBinaryValue());
+                return;
             }
-        } else {
-            assignValue(returnObject, fieldName, parser.getValueAsString());
         }
+        if (Enum.class.isAssignableFrom(fieldType)) {
+            assignValue(returnObject, fieldName, Enum.valueOf(fieldType, parser.getValueAsString()));
+            return;
+        }
+        assignValue(returnObject, fieldName, parser.getValueAsString());
     }
 
     private void handleFloat(final JsonParser parser, final IdObject returnObject, final Class fieldType, final String fieldName) throws IllegalAccessException, InvocationTargetException, IOException, NoSuchMethodException {

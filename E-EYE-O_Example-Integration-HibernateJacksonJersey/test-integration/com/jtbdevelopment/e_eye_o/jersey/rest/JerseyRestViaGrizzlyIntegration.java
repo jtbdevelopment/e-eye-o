@@ -2,10 +2,8 @@ package com.jtbdevelopment.e_eye_o.jersey.rest;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
-import com.jtbdevelopment.e_eye_o.entities.Photo;
+import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.ClassNamesResourceConfig;
@@ -121,6 +119,11 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
                 testAdmin = readWriteDAO.getUser(testAdmin.getEmailAddress());
                 testUser1 = readWriteDAO.getUser(testUser1.getEmailAddress());
                 testUser2 = readWriteDAO.getUser(testUser2.getEmailAddress());
+
+                readWriteDAO.create(idObjectFactory.newObservationCategoryBuilder(testUser1)
+                        .withShortName("ARCHIVE")
+                        .withDescription("Archived")
+                        .withArchiveFlag(true).build());
             }
         }
 
@@ -181,7 +184,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     @Test
     public void testGetUserStandard() throws Exception {
         String uri = USERS_URI;
-        httpHelper.getJSONValue(uri, testUser1, userClient1);
+        httpHelper.checkJSONVsExpectedResult(uri, testUser1, userClient1);
     }
 
     @Test
@@ -213,7 +216,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     public void testGetUsersAdmin() throws Exception {
         String uri = BASE_URI + "users/";
         List<AppUser> expectedResults = Arrays.asList(testAdmin, testUser1, testUser2);
-        httpHelper.getJSONValues(uri, expectedResults, adminClient);
+        httpHelper.checkJSONVsExpectedResults(uri, expectedResults, adminClient);
     }
 
     @Test
@@ -250,6 +253,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         HttpResponse response = httpHelper.httpPut(userClient1, USERS_URI, list);
 
         //  TODO - check response
+        EntityUtils.consumeQuietly(response.getEntity());
 
         AppUser dbTestUser2 = readWriteDAO.get(AppUser.class, testUser2.getId());
         assertFalse(dbTestUser2.getLastName().equals(user2.getLastName()));
@@ -259,7 +263,30 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     public void testGetOwnObjects() throws Exception {
         Set<AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1);
         String uri = USERS_URI + testUser1.getId() + "/";
-        httpHelper.getJSONValues(uri, owned, userClient1);
+        httpHelper.checkJSONVsExpectedResults(uri, owned, userClient1);
+    }
+
+    @Test
+    public void testGetOwnActiveObjects() throws Exception {
+        Set<AppUserOwnedObject> owned = readWriteDAO.getActiveEntitiesForUser(AppUserOwnedObject.class, testUser1);
+        String uri = USERS_URI + testUser1.getId() + "/active/";
+        httpHelper.checkJSONVsExpectedResults(uri, owned, userClient1);
+    }
+
+    @Test
+    public void testGetOwnArchivedObjects() throws Exception {
+        Set<AppUserOwnedObject> owned = readWriteDAO.getArchivedEntitiesForUser(AppUserOwnedObject.class, testUser1);
+        String uri = USERS_URI + testUser1.getId() + "/archived/";
+        httpHelper.checkJSONVsExpectedResults(uri, owned, userClient1);
+    }
+
+    @Test
+    public void testGetOwnSubsetObjects() throws Exception {
+        for (Class<? extends AppUserOwnedObject> entityClass : Arrays.asList(ClassList.class, Student.class, ObservationCategory.class, Observation.class, Photo.class)) {
+            Set<? extends AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(entityClass, testUser1);
+            String uri = USERS_URI + testUser1.getId() + "/" + entityClass.getAnnotation(PreferredDescription.class).plural().toLowerCase() + "/";
+            httpHelper.checkJSONVsExpectedResults(uri, owned, userClient1);
+        }
     }
 
     @Test
@@ -269,13 +296,15 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         HttpResponse response = httpHelper.httpGet(uri, userClient1);
 
         //  TODO
+        EntityUtils.consumeQuietly(response.getEntity());
     }
 
     @Test
     public void testGetAnotherUsersObjectsAsAdmin() throws Exception {
         Set<AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1);
         String uri = USERS_URI + testUser1.getId() + "/";
-        httpHelper.getJSONValues(uri, owned, adminClient);
+        httpHelper.checkJSONVsExpectedResults(uri, owned, adminClient);
     }
+
 
 }

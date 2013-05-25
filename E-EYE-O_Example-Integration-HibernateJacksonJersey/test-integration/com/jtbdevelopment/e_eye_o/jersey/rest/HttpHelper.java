@@ -56,12 +56,12 @@ public class HttpHelper {
         return httpClient.execute(httpPut);
     }
 
-    <T extends IdObject> void getJSONValue(String uri, T expectedResult, HttpClient client) throws IOException {
+    <T extends IdObject> void checkJSONVsExpectedResult(String uri, T expectedResult, HttpClient client) throws IOException {
         String json = getJSONFromHttpGet(uri, client);
         AssertJUnit.assertEquals(json, jsonIdObjectSerializer.write(expectedResult));
     }
 
-    <T extends IdObject> void getJSONValues(String uri, Collection<T> expectedResults, HttpClient client) throws IOException {
+    <T extends IdObject> void checkJSONVsExpectedResults(String uri, Collection<T> expectedResults, HttpClient client) throws IOException {
         String json = getJSONFromHttpGet(uri, client);
         List<T> results = jsonIdObjectSerializer.read(json);
         AssertJUnit.assertTrue(results.containsAll(expectedResults));
