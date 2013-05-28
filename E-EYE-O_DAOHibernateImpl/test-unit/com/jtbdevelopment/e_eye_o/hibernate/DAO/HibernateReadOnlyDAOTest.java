@@ -329,7 +329,7 @@ public class HibernateReadOnlyDAOTest {
             one(session).createQuery("from HQLNAME where appUser = :user and modificationTimestamp > :since");
             will(returnValue(query));
             one(query).setParameter("user", appUser);
-            one(query).setParameter("since", since);
+            one(query).setParameter("since", since.getMillis());
             one(query).list();
             will(returnValue(Arrays.asList(ACTIVE_WRAPPER, DELETED_WRAPPER, ARCHIVED_WRAPPER)));
         }});

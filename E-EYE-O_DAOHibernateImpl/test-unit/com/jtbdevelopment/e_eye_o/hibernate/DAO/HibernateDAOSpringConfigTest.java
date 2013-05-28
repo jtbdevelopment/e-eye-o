@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-import static org.testng.AssertJUnit.assertSame;
+import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -32,7 +32,7 @@ public class HibernateDAOSpringConfigTest {
     public void testSessionFactory() throws Exception {
         Properties props = new Properties();
         LocalSessionFactoryBean sf = config.sessionFactory(dataSource, props, null, null);
-        assertSame(props, sf.getHibernateProperties());
+        assertEquals(props, sf.getHibernateProperties());
         //  Can't currently verify packages to scan or data source
     }
 

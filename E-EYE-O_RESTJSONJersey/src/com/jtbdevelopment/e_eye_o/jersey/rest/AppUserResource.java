@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Set;
 
 /**
@@ -58,7 +59,7 @@ public class AppUserResource {
     //  TODO - paging
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getEntitiesForUser() {
+    public Response getEntitiesForUser() {
         Set<? extends AppUserOwnedObject> set;
         if (archiveFlag == null)
             set = readWriteDAO.getEntitiesForUser(entityType, appUser);
@@ -66,62 +67,62 @@ public class AppUserResource {
             set = archiveFlag ? readWriteDAO.getArchivedEntitiesForUser(entityType, appUser) :
                     readWriteDAO.getActiveEntitiesForUser(entityType, appUser);
         }
-        return jsonIdObjectSerializer.write(set);
+        return Response.ok(jsonIdObjectSerializer.write(set)).build();
     }
 
     @Produces(MediaType.APPLICATION_JSON)
-    public String getModifiedSince(@PathParam("modifiedSince") final String dateTimeString) {
+    public Response getModifiedSince(@PathParam("modifiedSince") final String dateTimeString) {
         DateTime dateTime = DateTime.parse(dateTimeString);
-        return jsonIdObjectSerializer.write(readWriteDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, appUser, dateTime));
+        return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, appUser, dateTime))).build();
     }
 
     @Path("archived")
-    public AppUserResource getArchived() {
+    public Object getArchived() {
         if (archiveFlag == null)
             return new AppUserResource(this, Boolean.TRUE);
-        return null;
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @Path("active")
-    public AppUserResource getActive() {
+    public Object getActive() {
         if (archiveFlag == null)
             return new AppUserResource(this, Boolean.FALSE);
-        return null;
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @Path("photos")
-    public AppUserResource getPhotos() {
+    public Object getPhotos() {
         return getEntityRefinedResource(Photo.class);
     }
 
     @Path("students")
-    public AppUserResource getStudents() {
+    public Object getStudents() {
         return getEntityRefinedResource(Student.class);
     }
 
     @Path("classes")
-    public AppUserResource getClassLists() {
+    public Object getClassLists() {
         return getEntityRefinedResource(ClassList.class);
     }
 
     @Path("observations")
-    public AppUserResource getObservations() {
+    public Object getObservations() {
         return getEntityRefinedResource(Observation.class);
     }
 
     @Path("categories")
-    public AppUserResource getObservationCategories() {
+    public Object getObservationCategories() {
         return getEntityRefinedResource(ObservationCategory.class);
     }
 
     @Path("{entityId}")
-    public AppUserEntityResource getAppUserEntityResource(@PathParam("entityId") final String entityId) {
+    public Object getAppUserEntityResource(@PathParam("entityId") final String entityId) {
         return new AppUserEntityResource(readWriteDAO, jsonIdObjectSerializer, entityId);
     }
 
-    private AppUserResource getEntityRefinedResource(final Class<? extends AppUserOwnedObject> entityType) {
+    private Object getEntityRefinedResource(final Class<? extends AppUserOwnedObject> entityType) {
         if (this.entityType.equals(AppUserOwnedObject.class))
             return new AppUserResource(this, entityType);
-        return null;
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 }

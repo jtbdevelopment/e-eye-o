@@ -7,8 +7,12 @@ import com.jtbdevelopment.e_eye_o.entities.DeletedObject;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.net.URI;
 
 /**
  * Date: 2/10/13
@@ -27,84 +31,94 @@ public class AppUserEntityResource extends SecurityAwareResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getEntity() {
-        return jsonIdObjectSerializer.write(readWriteDAO.get(AppUserOwnedObject.class, entityId));
+    public Response getEntity() {
+        return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.get(AppUserOwnedObject.class, entityId))).build();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public String createEntity(@FormParam("{appUserOwnedObject}") final String appUserOwnedObjectString) {
+    public Response createEntity(@Context final HttpServletRequest request, @FormParam("{appUserOwnedObject}") final String appUserOwnedObjectString) {
         AppUser sessionAppUser = getSessionAppUser();
         if (sessionAppUser == null) {
-            //  TODO - unauthenticated
-            return null;
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
-        //  TODO - handle arrays
+        //  TODO - handle arrays?
         AppUserOwnedObject newObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
         if (!sessionAppUser.isAdmin()) {
             //  TODO - add this as annotation to classes
             if (newObject instanceof DeletedObject || newObject instanceof TwoPhaseActivity) {
-                //  TODO - unauthorized
-                return null;
+                return Response.status(Response.Status.FORBIDDEN).build();
             }
             newObject.setAppUser(sessionAppUser);
         }
+        final AppUserOwnedObject entity = readWriteDAO.create(newObject);
 
-        return jsonIdObjectSerializer.write(readWriteDAO.create(newObject));
+        return Response.created(URI.create(request.getRequestURI()).resolve("../" + entity.getId() + "/")).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String updateEntity(@FormParam("{appUserOwnedObject}") final String appUserOwnedObjectString) {
+    public Response updateEntity(@FormParam("{appUserOwnedObject}") final String appUserOwnedObjectString) {
         AppUser sessionAppUser = getSessionAppUser();
         if (sessionAppUser == null) {
-            //  TODO - unauthenticated
-            return null;
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
-        AppUserOwnedObject dbEntity = readWriteDAO.get(AppUserOwnedObject.class, entityId);
-        //  TODO - handle arrays
+        //  TODO - handle arrays?
         AppUserOwnedObject updateObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
+        AppUserOwnedObject dbEntity = readWriteDAO.get(updateObject.getClass(), entityId);
+        if (dbEntity == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        if (!dbEntity.equals(updateObject) || !dbEntity.getId().equals(entityId)) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
         if (!sessionAppUser.isAdmin()) {
             //  TODO - add this as annotation to classes
             if (updateObject instanceof DeletedObject || updateObject instanceof TwoPhaseActivity) {
-                //  TODO - unauthorized
-                return null;
+                return Response.status(Response.Status.FORBIDDEN).build();
             }
-            updateObject.setAppUser(sessionAppUser);
-        }
-        if (!dbEntity.equals(updateObject) || !dbEntity.getId().equals(entityId)) {
-            //  TODO - invalid op
-            return null;
+            if (!dbEntity.getAppUser().equals(sessionAppUser)) {
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
+            updateObject.setAppUser(dbEntity.getAppUser());
         }
 
-        //  TODO - deal with archive change
-        return jsonIdObjectSerializer.write(readWriteDAO.update(updateObject));
+        boolean updateArchive = updateObject.isArchived();
+        updateObject.setArchived(dbEntity.isArchived());
+        updateObject = readWriteDAO.update(updateObject);
+        if (updateObject.isArchived() != updateArchive) {
+            readWriteDAO.changeArchiveStatus(updateObject);
+            updateObject = readWriteDAO.get(updateObject.getClass(), updateObject.getId());
+        }
+
+        //  Ignoring any sort of chained updated from archive status change
+        return Response.ok(jsonIdObjectSerializer.write(updateObject)).build();
     }
 
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
-    public String deleteEntity() {
+    public Response deleteEntity() {
         AppUser sessionAppUser = getSessionAppUser();
         if (sessionAppUser == null) {
-            //  TODO - unauthenticated
-            return null;
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         AppUserOwnedObject dbObject = readWriteDAO.get(AppUserOwnedObject.class, entityId);
+        if (dbObject == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
         if (sessionAppUser.isAdmin() || dbObject.getAppUser().equals(sessionAppUser)) {
             //  TODO - annotate class
             if (dbObject instanceof DeletedObject || dbObject instanceof TwoPhaseActivity) {
-                // TODO - invalid op
-                return null;
+                return Response.status(Response.Status.FORBIDDEN).build();
             }
-            ReadWriteDAO.ChainedUpdateSet<AppUserOwnedObject> related = readWriteDAO.delete(dbObject);
-            return jsonIdObjectSerializer.write(related.getDeletedItems());
+            readWriteDAO.delete(dbObject);
+            return Response.ok().build();
         }
-        //  TODO - unauthoerized
-        return null;
+        return Response.status(Response.Status.FORBIDDEN).build();
     }
 }

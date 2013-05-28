@@ -431,6 +431,7 @@ public class HibernateReadWriteDAOTest {
             one(session).update(studentLoaded);
         }});
         createStandardDeleteExpectations(wrapped, loaded, relatedPhotos, relatedObservations);
+        createPhotoQueryMopUp();
 
         dao.delete(impl);
     }
@@ -444,6 +445,10 @@ public class HibernateReadWriteDAOTest {
         final List<Observation> relatedObservations = Arrays.asList(observationLoaded);
 
         createStandardDeleteExpectations(wrapped, loaded, relatedPhotos, relatedObservations);
+        context.checking(new Expectations() {{
+            //  Last Observation Time Update
+            one(session).update(studentWrapped);
+        }});
 
         dao.delete(impl);
     }
@@ -457,6 +462,7 @@ public class HibernateReadWriteDAOTest {
         final List<Observation> relatedObservations = Arrays.asList(observationLoaded);
 
         createStandardDeleteExpectations(wrapped, loaded, relatedPhotos, relatedObservations);
+        createPhotoQueryMopUp();
 
         dao.delete(impl);
     }
@@ -491,6 +497,8 @@ public class HibernateReadWriteDAOTest {
         final List<Observation> sRelatedObservations = Arrays.asList(observationLoaded);
 
         createStandardDeleteExpectations(sWrapped, sLoaded, sRelatedPhotos, sRelatedObservations);
+
+        createPhotoQueryMopUp();
 
         final List<AppUserOwnedObject> entities = Arrays.asList(pImpl, sImpl);
         dao.delete(entities);
@@ -540,19 +548,34 @@ public class HibernateReadWriteDAOTest {
         final List<Observation> sRelatedObservations = Arrays.asList(observationLoaded);
 
         createStandardDeleteExpectations(sWrapped, sLoaded, sRelatedPhotos, sRelatedObservations);
+
+        createPhotoQueryMopUp();
+    }
+
+    private void createPhotoQueryMopUp() {
+        context.checking(new Expectations() {{
+            Query query = context.mock(Query.class, "Q" + new Random().nextInt());
+            allowing(session).createQuery("from Photo where photoFor = :photoFor");
+            will(returnValue(query));
+            one(query).setParameter(with(equal("photoFor")), with(any(Object.class)));
+            will(returnValue(query));
+            one(query).list();
+            will(returnValue(Collections.emptyList()));
+        }});
     }
 
     private void createStandardDeleteExpectations(final IdObject wrapped, final IdObject loaded, final List<Photo> relatedPhotos, final List<Observation> relatedObservations) {
         context.checking(new Expectations() {{
+            Query query = context.mock(Query.class, "Q" + new Random().nextInt());
             one(wrapped).getId();
             will(returnValue("X"));
             one(session).get(TN, "X");
             will(returnValue(loaded));
             one(session).createQuery("from Photo where photoFor = :photoFor");
-            will(returnValue(query1));
-            one(query1).setParameter("photoFor", loaded);
-            will(returnValue(query1));
-            one(query1).list();
+            will(returnValue(query));
+            one(query).setParameter("photoFor", loaded);
+            will(returnValue(query));
+            one(query).list();
             will(returnValue(relatedPhotos));
             for (Photo p : relatedPhotos) {
                 one(session).delete(p);

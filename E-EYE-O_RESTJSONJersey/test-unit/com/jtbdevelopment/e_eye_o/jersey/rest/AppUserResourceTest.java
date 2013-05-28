@@ -5,10 +5,12 @@ import org.jmock.Expectations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.ws.rs.core.Response;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 /**
  * Date: 2/18/13
@@ -24,7 +26,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     public void setUp() throws Exception {
         super.setUp();
         user = context.mock(AppUser.class);
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             allowing(dao).get(AppUser.class, userId);
             will(returnValue(user));
             allowing(serializer).write(objects);
@@ -44,7 +46,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
             one(dao).getEntitiesForUser(AppUserOwnedObject.class, user);
             will(returnValue(objects));
         }});
-        assertEquals(output, resource.getEntitiesForUser());
+        assertEquals(output, resource.getEntitiesForUser().getEntity());
     }
 
     @Test
@@ -55,7 +57,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     @Test
     public void testGetArchived() throws Exception {
         AppUserResource resource = new AppUserResource(dao, serializer, userId, null, null);
-        AppUserResource archived = resource.getArchived();
+        AppUserResource archived = (AppUserResource) resource.getArchived();
         assertNotNull(archived);
         context.checking(new Expectations() {{
             one(dao).getArchivedEntitiesForUser(AppUserOwnedObject.class, user);
@@ -65,9 +67,9 @@ public class AppUserResourceTest extends AbstractResourceTest {
             one(dao).getArchivedEntitiesForUser(Student.class, user);
             will(returnValue(objects));
         }});
-        assertEquals(output, archived.getEntitiesForUser());
-        assertEquals(output, archived.getPhotos().getEntitiesForUser());
-        assertEquals(output, archived.getStudents().getEntitiesForUser());
+        assertEquals(output, archived.getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) archived.getPhotos()).getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) archived.getStudents()).getEntitiesForUser().getEntity());
     }
 
     @Test
@@ -78,7 +80,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     @Test
     public void testGetActive() throws Exception {
         AppUserResource resource = new AppUserResource(dao, serializer, userId, null, null);
-        AppUserResource active = resource.getActive();
+        AppUserResource active = (AppUserResource) resource.getActive();
         assertNotNull(active);
         context.checking(new Expectations() {{
             one(dao).getActiveEntitiesForUser(AppUserOwnedObject.class, user);
@@ -88,22 +90,22 @@ public class AppUserResourceTest extends AbstractResourceTest {
             one(dao).getActiveEntitiesForUser(Observation.class, user);
             will(returnValue(objects));
         }});
-        assertEquals(output, active.getEntitiesForUser());
-        assertEquals(output, active.getClassLists().getEntitiesForUser());
-        assertEquals(output, active.getObservations().getEntitiesForUser());
+        assertEquals(output, active.getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) active.getClassLists()).getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) active.getObservations()).getEntitiesForUser().getEntity());
     }
 
     @Test
     public void testMultipleLevelsOfActiveArchivedNulls() throws Exception {
         AppUserResource resource = new AppUserResource(dao, serializer, userId, null, null);
-        AppUserResource active = resource.getActive();
+        AppUserResource active = (AppUserResource) resource.getActive();
         assertNotNull(active);
-        assertNull(active.getActive());
-        assertNull(active.getArchived());
-        AppUserResource archived = resource.getArchived();
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) active.getActive()).getStatus());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) active.getArchived()).getStatus());
+        AppUserResource archived = (AppUserResource) resource.getArchived();
         assertNotNull(archived);
-        assertNull(archived.getActive());
-        assertNull(archived.getArchived());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) archived.getActive()).getStatus());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) archived.getArchived()).getStatus());
     }
 
     @Test
@@ -114,7 +116,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     @Test
     public void testGetPhotos() throws Exception {
         AppUserResource resource = new AppUserResource(dao, serializer, userId, null, null);
-        AppUserResource photos = resource.getPhotos();
+        AppUserResource photos = (AppUserResource) resource.getPhotos();
         assertNotNull(photos);
         context.checking(new Expectations() {{
             one(dao).getEntitiesForUser(Photo.class, user);
@@ -124,9 +126,9 @@ public class AppUserResourceTest extends AbstractResourceTest {
             one(dao).getArchivedEntitiesForUser(Photo.class, user);
             will(returnValue(objects));
         }});
-        assertEquals(output, photos.getEntitiesForUser());
-        assertEquals(output, photos.getActive().getEntitiesForUser());
-        assertEquals(output, photos.getArchived().getEntitiesForUser());
+        assertEquals(output, photos.getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) photos.getActive()).getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) photos.getArchived()).getEntitiesForUser().getEntity());
     }
 
     @Test
@@ -137,7 +139,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     @Test
     public void testGetStudents() throws Exception {
         AppUserResource resource = new AppUserResource(dao, serializer, userId, null, null);
-        AppUserResource students = resource.getStudents();
+        AppUserResource students = (AppUserResource) resource.getStudents();
         assertNotNull(students);
         context.checking(new Expectations() {{
             one(dao).getEntitiesForUser(Student.class, user);
@@ -147,20 +149,20 @@ public class AppUserResourceTest extends AbstractResourceTest {
             one(dao).getArchivedEntitiesForUser(Student.class, user);
             will(returnValue(objects));
         }});
-        assertEquals(output, students.getEntitiesForUser());
-        assertEquals(output, students.getActive().getEntitiesForUser());
-        assertEquals(output, students.getArchived().getEntitiesForUser());
+        assertEquals(output, students.getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) students.getActive()).getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) students.getArchived()).getEntitiesForUser().getEntity());
     }
 
     @Test
     public void testGetClassListsAnnotations() throws NoSuchMethodException {
-        checkPathForMethod(AppUserResource.class, "getClassLists", "classlists");
+        checkPathForMethod(AppUserResource.class, "getClassLists", "classes");
     }
 
     @Test
     public void testGetClassLists() throws Exception {
         AppUserResource resource = new AppUserResource(dao, serializer, userId, null, null);
-        AppUserResource classLists = resource.getClassLists();
+        AppUserResource classLists = (AppUserResource) resource.getClassLists();
         assertNotNull(classLists);
         context.checking(new Expectations() {{
             one(dao).getEntitiesForUser(ClassList.class, user);
@@ -170,9 +172,9 @@ public class AppUserResourceTest extends AbstractResourceTest {
             one(dao).getArchivedEntitiesForUser(ClassList.class, user);
             will(returnValue(objects));
         }});
-        assertEquals(output, classLists.getEntitiesForUser());
-        assertEquals(output, classLists.getActive().getEntitiesForUser());
-        assertEquals(output, classLists.getArchived().getEntitiesForUser());
+        assertEquals(output, classLists.getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) classLists.getActive()).getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) classLists.getArchived()).getEntitiesForUser().getEntity());
     }
 
     @Test
@@ -184,7 +186,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     @Test
     public void testGetObservations() throws Exception {
         AppUserResource resource = new AppUserResource(dao, serializer, userId, null, null);
-        AppUserResource observations = resource.getObservations();
+        AppUserResource observations = (AppUserResource) resource.getObservations();
         assertNotNull(observations);
         context.checking(new Expectations() {{
             one(dao).getEntitiesForUser(Observation.class, user);
@@ -194,9 +196,9 @@ public class AppUserResourceTest extends AbstractResourceTest {
             one(dao).getArchivedEntitiesForUser(Observation.class, user);
             will(returnValue(objects));
         }});
-        assertEquals(output, observations.getEntitiesForUser());
-        assertEquals(output, observations.getActive().getEntitiesForUser());
-        assertEquals(output, observations.getArchived().getEntitiesForUser());
+        assertEquals(output, observations.getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) observations.getActive()).getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) observations.getArchived()).getEntitiesForUser().getEntity());
     }
 
     @Test
@@ -207,7 +209,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     @Test
     public void testGetObservationCategories() throws Exception {
         AppUserResource resource = new AppUserResource(dao, serializer, userId, null, null);
-        AppUserResource categories = resource.getObservationCategories();
+        AppUserResource categories = (AppUserResource) resource.getObservationCategories();
         assertNotNull(categories);
         context.checking(new Expectations() {{
             one(dao).getEntitiesForUser(ObservationCategory.class, user);
@@ -217,20 +219,20 @@ public class AppUserResourceTest extends AbstractResourceTest {
             one(dao).getArchivedEntitiesForUser(ObservationCategory.class, user);
             will(returnValue(objects));
         }});
-        assertEquals(output, categories.getEntitiesForUser());
-        assertEquals(output, categories.getActive().getEntitiesForUser());
-        assertEquals(output, categories.getArchived().getEntitiesForUser());
+        assertEquals(output, categories.getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) categories.getActive()).getEntitiesForUser().getEntity());
+        assertEquals(output, ((AppUserResource) categories.getArchived()).getEntitiesForUser().getEntity());
     }
 
     @Test
     public void testGettingMultipleEntityTypeDepthsNulls() throws Exception {
         // Not testing every permutation
         AppUserResource resource = new AppUserResource(dao, serializer, userId, null, null);
-        assertNull(resource.getClassLists().getObservations());
-        assertNull(resource.getObservations().getStudents());
-        assertNull(resource.getPhotos().getStudents());
-        assertNull(resource.getStudents().getClassLists());
-        assertNull(resource.getObservationCategories().getClassLists());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) ((AppUserResource) resource.getClassLists()).getObservations()).getStatus());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) ((AppUserResource) resource.getObservations()).getStudents()).getStatus());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) ((AppUserResource) resource.getPhotos()).getStudents()).getStatus());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) ((AppUserResource) resource.getStudents()).getClassLists()).getStatus());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) ((AppUserResource) resource.getObservationCategories()).getClassLists()).getStatus());
     }
 
     @Test
@@ -242,7 +244,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     public void testGetAppUserEntityResource() throws Exception {
         final String someEntityId = "entity";
         AppUserResource resource = new AppUserResource(dao, serializer, userId, null, null);
-        AppUserEntityResource entityResource = resource.getAppUserEntityResource(someEntityId);
+        AppUserEntityResource entityResource = (AppUserEntityResource) resource.getAppUserEntityResource(someEntityId);
         assertNotNull(entityResource);
     }
 }

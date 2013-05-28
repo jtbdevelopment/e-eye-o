@@ -71,18 +71,16 @@ public class AppUsersResource extends SecurityAwareResource {
     }
 
     @Path("{userId}")
-    public AppUserResource getUserEntities(@PathParam("userId") final String userId) {
+    public Object getUserEntities(@PathParam("userId") final String userId) {
         AppUser appUser = getSessionAppUser();
         if (appUser == null) {
-            //  TODO - no session
-            return null;
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         if (appUser.isAdmin() || appUser.getId().equals(userId)) {
             return new AppUserResource(readWriteDAO, jsonIdObjectSerializer, userId, null, null);
         } else {
-            //  TODO - unauthorized
-            return null;
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 }

@@ -32,13 +32,15 @@ public class ModificationTimestampGenerator extends EmptyInterceptor {
     private boolean updateModificationTimestamp(final Object entity, final String[] propertyNames, final Object[] state) {
         if (entity instanceof IdObject) {
             for (int i = 0; i < propertyNames.length; ++i) {
-                switch (propertyNames[i]) {
-                    case MODIFICATION_TIMESTAMP:
-                        state[i] = new DateTime();
-                        return true;
-                    case MODIFICATION_TIMESTAMP_INSTANT:
-                        state[i] = new DateTime().getMillis();
-                        return true;
+                if (propertyNames[i] != null) {
+                    switch (propertyNames[i]) {
+                        case MODIFICATION_TIMESTAMP:
+                            state[i] = new DateTime();
+                            return true;
+                        case MODIFICATION_TIMESTAMP_INSTANT:
+                            state[i] = new DateTime().getMillis();
+                            return true;
+                    }
                 }
             }
         }

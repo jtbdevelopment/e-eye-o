@@ -27,14 +27,14 @@ public class AppUserEntityResourceTest extends AbstractResourceTest {
         final String entityId = "xyz-123";
         final AppUserOwnedObject ownedObject = context.mock(AppUserOwnedObject.class);
         final String serialized = "somestring";
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             one(dao).get(AppUserOwnedObject.class, entityId);
             will(returnValue(ownedObject));
             one(serializer).write(ownedObject);
             will(returnValue(serialized));
         }});
         AppUserEntityResource resource = new AppUserEntityResource(dao, serializer, entityId);
-        assertEquals(serialized, resource.getEntity());
+        assertEquals(serialized, resource.getEntity().getEntity());
 
     }
 }

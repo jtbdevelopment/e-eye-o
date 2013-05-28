@@ -44,6 +44,25 @@ public class ModificationTimestampGeneratorTest {
     }
 
     @Test
+    public void testOnFlushDirtyInstant() throws Exception {
+        final String[] properties = new String[5];
+        final Object[] states = new Object[5];
+        properties[2] = "modificationTimestampInstant";
+        assertTrue(interceptor.onFlushDirty(idObject, null, states, null, properties, null));
+        assertNotNull(states[2]);
+        assertTrue(states[2] instanceof Long);
+    }
+
+    @Test
+    public void testOnFlushDirtyNonIdObjectInstant() throws Exception {
+        final String[] properties = new String[5];
+        final Object[] states = new Object[5];
+        properties[2] = "modificationTimestampInstant";
+        assertFalse(interceptor.onFlushDirty(new Object(), null, states, null, properties, null));
+        assertNull(states[2]);
+    }
+
+    @Test
     public void testOnSave() throws Exception {
         final String[] properties = new String[5];
         final Object[] states = new Object[5];
