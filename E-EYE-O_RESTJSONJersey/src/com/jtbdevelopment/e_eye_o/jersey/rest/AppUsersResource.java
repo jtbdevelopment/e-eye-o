@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Date: 2/10/13
@@ -25,7 +26,7 @@ public class AppUsersResource extends SecurityAwareResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     //  TODO - paging?
-    public String getUsers() {
+    public Response getUsers() {
         AppUser appUser = getSessionAppUser();
         if (appUser == null) {
             //  TODO - no session
@@ -33,24 +34,23 @@ public class AppUsersResource extends SecurityAwareResource {
         }
 
         if (appUser.isAdmin()) {
-            return jsonIdObjectSerializer.write(readWriteDAO.getUsers());
+            return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.getUsers())).build();
         } else {
-            return jsonIdObjectSerializer.write(readWriteDAO.get(AppUser.class, appUser.getId()));
+            return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.get(AppUser.class, appUser.getId()))).build();
         }
     }
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String updateUser(@FormParam("appUser") final String appUserString) {
+    public Response updateUser(@FormParam("appUser") final String appUserString) {
         AppUser updateAppUser = jsonIdObjectSerializer.read(appUserString);
         if (updateAppUser != null) {
             AppUser sessionAppUser = getSessionAppUser();
             if (sessionAppUser.isAdmin() || sessionAppUser.equals(updateAppUser)) {
                 AppUser dbAppUser = readWriteDAO.get(AppUser.class, updateAppUser.getId());
                 if (dbAppUser == null) {
-                    //  TODO - updates only - no creates via JSON
-                    return null;
+                    return Response.status(Response.Status.FORBIDDEN).build();
                 }
                 //  Do not accept certain fields from POST from non-admins
                 if (!sessionAppUser.isAdmin()) {
@@ -61,14 +61,12 @@ public class AppUsersResource extends SecurityAwareResource {
                 updateAppUser.setPassword(dbAppUser.getPassword());
                 updateAppUser.setLastLogout(dbAppUser.getLastLogout());
 
-                return jsonIdObjectSerializer.write(readWriteDAO.update(updateAppUser));
+                return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.update(updateAppUser))).build();
             } else {
-                //  TODO - unauthorized
-                return null;
+                return Response.status(Response.Status.FORBIDDEN).build();
             }
         } else {
-            //  TODO - no session
-            return null;
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
     }
 
