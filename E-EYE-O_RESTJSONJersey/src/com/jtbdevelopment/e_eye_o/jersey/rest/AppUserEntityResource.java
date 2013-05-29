@@ -36,31 +36,9 @@ public class AppUserEntityResource extends SecurityAwareResource {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createEntity(@Context final HttpServletRequest request, @FormParam("{appUserOwnedObject}") final String appUserOwnedObjectString) {
-        AppUser sessionAppUser = getSessionAppUser();
-        if (sessionAppUser == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-
-        //  TODO - handle arrays?
-        AppUserOwnedObject newObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
-        if (!sessionAppUser.isAdmin()) {
-            //  TODO - add this as annotation to classes
-            if (newObject instanceof DeletedObject || newObject instanceof TwoPhaseActivity) {
-                return Response.status(Response.Status.FORBIDDEN).build();
-            }
-            newObject.setAppUser(sessionAppUser);
-        }
-        final AppUserOwnedObject entity = readWriteDAO.create(newObject);
-
-        return Response.created(URI.create(request.getRequestURI()).resolve("../" + entity.getId() + "/")).build();
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateEntity(@FormParam("{appUserOwnedObject}") final String appUserOwnedObjectString) {
+    public Response updateEntity(@FormParam("appUserOwnedObject") final String appUserOwnedObjectString) {
         AppUser sessionAppUser = getSessionAppUser();
         if (sessionAppUser == null) {
             return Response.status(Response.Status.UNAUTHORIZED).build();

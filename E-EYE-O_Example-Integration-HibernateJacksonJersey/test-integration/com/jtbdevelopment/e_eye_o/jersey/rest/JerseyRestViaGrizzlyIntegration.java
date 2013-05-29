@@ -8,6 +8,7 @@ import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.ClassNamesResourceConfig;
 import com.sun.jersey.spi.spring.container.servlet.SpringServlet;
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -31,6 +32,7 @@ import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.net.URI;
@@ -259,8 +261,8 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         list.add(new BasicNameValuePair("appUser", jsonIdObjectSerializer.write(user2)));
         HttpResponse response = httpHelper.httpPut(userClient1, USERS_URI, list);
 
-        //  TODO - check response
         EntityUtils.consumeQuietly(response.getEntity());
+        assertEquals(javax.ws.rs.core.Response.Status.FORBIDDEN.getStatusCode(), response.getStatusLine().getStatusCode());
 
         AppUser dbTestUser2 = readWriteDAO.get(AppUser.class, testUser2.getId());
         assertFalse(dbTestUser2.getLastName().equals(user2.getLastName()));
@@ -315,12 +317,11 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     @Test
     public void testGetAnotherUsersObjectsAsNonAdmin() throws Exception {
-        Set<Photo> owned = readWriteDAO.getEntitiesForUser(Photo.class, testUser2);
         String uri = USERS_URI + testUser2.getId() + "/";
         HttpResponse response = httpHelper.httpGet(uri, userClient1);
 
-        //  TODO
         EntityUtils.consumeQuietly(response.getEntity());
+        assertEquals(405, response.getStatusLine().getStatusCode());
     }
 
     @Test
@@ -329,4 +330,27 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         String uri = USERS_URI + testUser1.getId() + "/";
         httpHelper.checkJSONVsExpectedResults(uri, owned, adminClient);
     }
+
+    @Test
+    public void testCreatingNewObject() throws Exception {
+        String uri = USERS_URI + testUser1.getId() + "/";
+        String description = "By Rest";
+        String rest = "REST";
+        DateTime now = new DateTime();
+        ObservationCategory category= idObjectFactory.newObservationCategoryBuilder(testUser1).withDescription(description).withShortName(rest).build();
+        List<NameValuePair> values = Arrays.<NameValuePair>asList(new BasicNameValuePair("appUserOwnedObject", jsonIdObjectSerializer.write(category)));
+        HttpResponse response = httpHelper.httpPost(userClient1, uri, values);
+        EntityUtils.consumeQuietly(response.getEntity());
+        assertEquals(javax.ws.rs.core.Response.Status.CREATED.getStatusCode(), response.getStatusLine().getStatusCode());
+        Header[] headers = response.getHeaders(HttpHeaders.LOCATION);
+        assertEquals(1, headers.length);
+
+        uri = headers[0].getValue();
+        String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
+        ObservationCategory readCategory = jsonIdObjectSerializer.read(newJson);
+        assertEquals(category.getDescription(), readCategory.getDescription());
+        assertEquals(category.getShortName(), readCategory.getShortName());
+        assertTrue(readCategory.getModificationTimestamp().isAfter(now));
+    }
+
 }

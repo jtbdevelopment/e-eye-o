@@ -5,19 +5,19 @@ import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.joda.time.DateTime;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 import java.util.Set;
 
 /**
  * Date: 2/10/13
  * Time: 12:33 PM
  */
-public class AppUserResource {
+public class AppUserResource extends SecurityAwareResource {
     private final ReadWriteDAO readWriteDAO;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final AppUser appUser;
@@ -113,6 +113,28 @@ public class AppUserResource {
     @Path("categories")
     public Object getObservationCategories() {
         return getEntityRefinedResource(ObservationCategory.class);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response createEntity(@FormParam("appUserOwnedObject") final String appUserOwnedObjectString) {
+        AppUser sessionAppUser = getSessionAppUser();
+        if (sessionAppUser == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        //  TODO - handle arrays?
+        AppUserOwnedObject newObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
+        if (!sessionAppUser.isAdmin()) {
+            //  TODO - add this as annotation to classes
+            if (newObject instanceof DeletedObject || newObject instanceof TwoPhaseActivity) {
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
+            newObject.setAppUser(sessionAppUser);
+        }
+        final AppUserOwnedObject entity = readWriteDAO.create(newObject);
+
+        return Response.created(URI.create(entity.getId() + "/")).build();
     }
 
     @Path("{entityId}")
