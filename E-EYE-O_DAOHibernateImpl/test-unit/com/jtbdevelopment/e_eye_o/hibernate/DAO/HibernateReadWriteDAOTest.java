@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
 import org.hibernate.Query;
@@ -27,6 +28,7 @@ public class HibernateReadWriteDAOTest {
     public static final String DN = "DN";
     private Mockery context;
     private SessionFactory sessionFactory;
+    private IdObjectInterfaceResolver idObjectInterfaceResolver;
     private Session session;
     private DAOIdObjectWrapperFactory daoIdObjectWrapperFactory;
     private HibernateReadWriteDAO dao;
@@ -51,6 +53,7 @@ public class HibernateReadWriteDAOTest {
     public void setUp() throws Exception {
         context = new Mockery();
         sessionFactory = context.mock(SessionFactory.class);
+        idObjectInterfaceResolver = context.mock(IdObjectInterfaceResolver.class);
         session = context.mock(Session.class);
         query1 = context.mock(Query.class, "Q1");
         query2 = context.mock(Query.class, "Q2");
@@ -87,6 +90,36 @@ public class HibernateReadWriteDAOTest {
         wrapped.clear();
         Collections.addAll(wrapped, classListWrapped, appUserWrapped, studentWrapped, photoWrapped, observationWrapped, observationCategoryWrapped);
         context.checking(new Expectations() {{
+            one(idObjectInterfaceResolver).getIdObjectInterfaceForClass(observationLoaded.getClass());
+            will(returnValue(Observation.class));
+            one(idObjectInterfaceResolver).getIdObjectInterfaceForClass(observationWrapped.getClass());
+            will(returnValue(Observation.class));
+            one(idObjectInterfaceResolver).getIdObjectInterfaceForClass(classListLoaded.getClass());
+            will(returnValue(ClassList.class));
+            one(idObjectInterfaceResolver).getIdObjectInterfaceForClass(classListWrapped.getClass());
+            will(returnValue(ClassList.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(studentWrapped.getClass());
+            will(returnValue(Student.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(studentLoaded.getClass());
+            will(returnValue(Student.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(observationCategoryLoaded.getClass());
+            will(returnValue(ObservationCategory.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(observationCategoryWrapped.getClass());
+            will(returnValue(ObservationCategory.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(photoWrapped.getClass());
+            will(returnValue(Photo.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(photoLoaded.getClass());
+            will(returnValue(Photo.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(appUserLoaded.getClass());
+            will(returnValue(AppUser.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(appUserWrapped.getClass());
+            will(returnValue(AppUser.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(DeletedObject.class);
+            will(returnValue(DeletedObject.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(AppUser.class);
+            will(returnValue(AppUser.class));
+            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(AppUserOwnedObject.class);
+            will(returnValue(AppUserOwnedObject.class));
             allowing(sessionFactory).getCurrentSession();
             will(returnValue(session));
             allowing(daoIdObjectWrapperFactory).wrap(deletedImpl);
@@ -131,12 +164,22 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(HibernateAppUserOwnedObject.class));
             allowing(daoIdObjectWrapperFactory).getWrapperForEntity(studentImpl.getClass());
             will(returnValue(HibernateStudent.class));
+            allowing(daoIdObjectWrapperFactory).getWrapperForEntity(Student.class);
+            will(returnValue(HibernateStudent.class));
+            allowing(daoIdObjectWrapperFactory).getWrapperForEntity(Photo.class);
+            will(returnValue(HibernatePhoto.class));
             allowing(daoIdObjectWrapperFactory).getWrapperForEntity(photoImpl.getClass());
             will(returnValue(HibernatePhoto.class));
+            allowing(daoIdObjectWrapperFactory).getWrapperForEntity(ClassList.class);
+            will(returnValue(HibernateClassList.class));
             allowing(daoIdObjectWrapperFactory).getWrapperForEntity(classListImpl.getClass());
             will(returnValue(HibernateClassList.class));
+            allowing(daoIdObjectWrapperFactory).getWrapperForEntity(Observation.class);
+            will(returnValue(HibernateObservation.class));
             allowing(daoIdObjectWrapperFactory).getWrapperForEntity(observationImpl.getClass());
             will(returnValue(HibernateObservation.class));
+            allowing(daoIdObjectWrapperFactory).getWrapperForEntity(ObservationCategory.class);
+            will(returnValue(HibernateObservationCategory.class));
             allowing(daoIdObjectWrapperFactory).getWrapperForEntity(observationCategoryImpl.getClass());
             will(returnValue(HibernateObservationCategory.class));
             allowing(daoIdObjectWrapperFactory).getWrapperForEntity(deletedImpl.getClass());
@@ -186,7 +229,7 @@ public class HibernateReadWriteDAOTest {
             allowing(studentWrapped).setLastObservationTimestamp(now);
         }});
 
-        dao = new HibernateReadWriteDAO(sessionFactory, daoIdObjectWrapperFactory);
+        dao = new HibernateReadWriteDAO(sessionFactory, daoIdObjectWrapperFactory, idObjectInterfaceResolver);
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.DeletedObject;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
+import org.springframework.security.access.annotation.Secured;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -78,6 +79,7 @@ public class AppUserEntityResource extends SecurityAwareResource {
     }
 
     @DELETE
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public Response deleteEntity() {
         AppUser sessionAppUser = getSessionAppUser();
         if (sessionAppUser == null) {

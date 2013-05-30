@@ -1,5 +1,7 @@
 package com.jtbdevelopment.e_eye_o.jersey.rest;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
@@ -32,6 +34,7 @@ import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.annotation.Nullable;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
@@ -332,7 +335,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     }
 
     @Test
-    public void testCreatingNewObject() throws Exception {
+    public void testCreatingNewObjectAsSelf() throws Exception {
         String uri = USERS_URI + testUser1.getId() + "/";
         String description = "By Rest";
         String rest = "REST";
@@ -353,4 +356,58 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertTrue(readCategory.getModificationTimestamp().isAfter(now));
     }
 
+    @Test
+    public void testModifyingObjectAsSelf() throws Exception {
+        String uri = USERS_URI + testUser1.getId() + "/";
+        ClassList classList = idObjectFactory.newClassListBuilder(testUser1).withDescription("Modify Class").build();
+        List<NameValuePair> values = Arrays.<NameValuePair>asList(new BasicNameValuePair("appUserOwnedObject", jsonIdObjectSerializer.write(classList)));
+        HttpResponse response = httpHelper.httpPost(userClient1, uri, values);
+        EntityUtils.consumeQuietly(response.getEntity());
+        assertEquals(javax.ws.rs.core.Response.Status.CREATED.getStatusCode(), response.getStatusLine().getStatusCode());
+        Header[] headers = response.getHeaders(HttpHeaders.LOCATION);
+        assertEquals(1, headers.length);
+        uri = headers[0].getValue();
+        String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
+        ClassList createdClassList = jsonIdObjectSerializer.read(newJson);
+
+        String newDescription = "Modified Class";
+        createdClassList.setDescription(newDescription);
+        newJson = httpHelper.getJSONFromPut(createdClassList, "appUserOwnedObject", userClient1, uri);
+        ClassList modifiedClassList = jsonIdObjectSerializer.read(newJson);
+        assertTrue(modifiedClassList.equals(createdClassList));
+        assertEquals(newDescription, modifiedClassList.getDescription());
+        assertTrue(modifiedClassList.getModificationTimestamp().isAfter(createdClassList.getModificationTimestamp()));
+    }
+
+    @Test
+    public void testDeletingObjectAsSelf() throws Exception {
+        String uri = USERS_URI + testUser1.getId() + "/";
+        Student student = idObjectFactory.newStudentBuilder(testUser1).withFirstName("Delete").withLastName("Delete").build();
+        List<NameValuePair> values = Arrays.<NameValuePair>asList(new BasicNameValuePair("appUserOwnedObject", jsonIdObjectSerializer.write(student)));
+        HttpResponse response = httpHelper.httpPost(userClient1, uri, values);
+        EntityUtils.consumeQuietly(response.getEntity());
+        assertEquals(javax.ws.rs.core.Response.Status.CREATED.getStatusCode(), response.getStatusLine().getStatusCode());
+        Header[] headers = response.getHeaders(HttpHeaders.LOCATION);
+        assertEquals(1, headers.length);
+        uri = headers[0].getValue();
+        String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
+        final Student createdStudent = jsonIdObjectSerializer.read(newJson);
+
+        DateTime now = DateTime.now();
+
+        response = httpHelper.httpDelete(uri, userClient1);
+        assertEquals(javax.ws.rs.core.Response.Status.OK.getStatusCode(), response.getStatusLine().getStatusCode());
+        EntityUtils.consumeQuietly(response.getEntity());
+
+        assertNull(readWriteDAO.get(Student.class, createdStudent.getId()));
+        Collection<DeletedObject> deletedObjects = readWriteDAO.getEntitiesForUser(DeletedObject.class, testUser1);
+        deletedObjects = Collections2.filter(deletedObjects, new Predicate<DeletedObject>() {
+            @Override
+            public boolean apply(@Nullable DeletedObject input) {
+                return input != null && input.getDeletedId().equals(createdStudent.getId());
+            }
+        });
+        assertEquals(1, deletedObjects.size());
+        assertTrue(deletedObjects.iterator().next().getModificationTimestamp().isAfter(now));
+    }
 }

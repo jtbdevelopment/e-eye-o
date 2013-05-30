@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ChainedUpdateSetImpl;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
 import org.hibernate.Session;
@@ -25,8 +26,8 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadWriteDAO {
     @Autowired
-    public HibernateReadWriteDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory) {
-        super(sessionFactory, wrapperFactory);
+    public HibernateReadWriteDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectInterfaceResolver idObjectInterfaceResolver) {
+        super(sessionFactory, wrapperFactory, idObjectInterfaceResolver);
     }
 
     @Override
