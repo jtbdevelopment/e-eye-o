@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 
 /**
@@ -72,16 +73,14 @@ public class AccessControlResource {
 
     @POST
     @Path("logout")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String logout() {
-        //  TODO
-        return SUCCESS;
+    public Response logout() {
+        return Response.ok().build();
     }
 
     @GET
     @Path("version")
     @Produces(MediaType.TEXT_PLAIN)
-    public String version() {
-        return VERSION;
+    public Response version() {
+        return Response.ok(VERSION).build();
     }
 }

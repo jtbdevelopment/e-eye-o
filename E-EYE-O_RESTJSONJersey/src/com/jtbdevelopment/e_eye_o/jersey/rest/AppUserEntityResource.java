@@ -32,18 +32,21 @@ public class AppUserEntityResource extends SecurityAwareResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public Response getEntity() {
-        return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.get(AppUserOwnedObject.class, entityId))).build();
+        AppUserOwnedObject entity = readWriteDAO.get(AppUserOwnedObject.class, entityId);
+        if(entity == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(jsonIdObjectSerializer.write(entity)).build();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public Response updateEntity(@FormParam("appUserOwnedObject") final String appUserOwnedObjectString) {
         AppUser sessionAppUser = getSessionAppUser();
-        if (sessionAppUser == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
 
         //  TODO - handle arrays?
         AppUserOwnedObject updateObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
@@ -82,9 +85,6 @@ public class AppUserEntityResource extends SecurityAwareResource {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public Response deleteEntity() {
         AppUser sessionAppUser = getSessionAppUser();
-        if (sessionAppUser == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
 
         AppUserOwnedObject dbObject = readWriteDAO.get(AppUserOwnedObject.class, entityId);
         if (dbObject == null) {

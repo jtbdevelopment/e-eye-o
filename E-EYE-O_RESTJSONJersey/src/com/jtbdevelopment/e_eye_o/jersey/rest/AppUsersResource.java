@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.*;
@@ -25,13 +26,10 @@ public class AppUsersResource extends SecurityAwareResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     //  TODO - paging?
     public Response getUsers() {
         AppUser appUser = getSessionAppUser();
-        if (appUser == null) {
-            //  TODO - no session
-            return null;
-        }
 
         if (appUser.isAdmin()) {
             return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.getUsers())).build();
@@ -43,6 +41,7 @@ public class AppUsersResource extends SecurityAwareResource {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public Response updateUser(@FormParam("appUser") final String appUserString) {
         AppUser updateAppUser = jsonIdObjectSerializer.read(appUserString);
         if (updateAppUser != null) {
@@ -71,12 +70,9 @@ public class AppUsersResource extends SecurityAwareResource {
     }
 
     @Path("{userId}")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public Object getUserEntities(@PathParam("userId") final String userId) {
         AppUser appUser = getSessionAppUser();
-        if (appUser == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-
         if (appUser.isAdmin() || appUser.getId().equals(userId)) {
             return new AppUserResource(readWriteDAO, jsonIdObjectSerializer, userId, null, null);
         } else {
