@@ -6,6 +6,7 @@ import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -43,14 +44,18 @@ public class AppUsersResource extends SecurityAwareResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public Response updateUser(@FormParam("appUser") final String appUserString) {
+        AppUser sessionAppUser = getSessionAppUser();
+
         AppUser updateAppUser = jsonIdObjectSerializer.read(appUserString);
         if (updateAppUser != null) {
-            AppUser sessionAppUser = getSessionAppUser();
+            if (!StringUtils.hasLength(updateAppUser.getId())) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            AppUser dbAppUser = readWriteDAO.get(AppUser.class, updateAppUser.getId());
+            if (dbAppUser == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
             if (sessionAppUser.isAdmin() || sessionAppUser.equals(updateAppUser)) {
-                AppUser dbAppUser = readWriteDAO.get(AppUser.class, updateAppUser.getId());
-                if (dbAppUser == null) {
-                    return Response.status(Response.Status.FORBIDDEN).build();
-                }
                 //  Do not accept certain fields from POST from non-admins
                 if (!sessionAppUser.isAdmin()) {
                     updateAppUser.setActivated(dbAppUser.isActivated());

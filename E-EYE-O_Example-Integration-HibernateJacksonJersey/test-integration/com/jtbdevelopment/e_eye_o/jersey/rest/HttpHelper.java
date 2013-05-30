@@ -32,54 +32,60 @@ public class HttpHelper {
         return jsonIdObjectSerializer.read(jsonIdObjectSerializer.write(entity));
     }
 
-    HttpResponse httpGet(String uri, HttpClient client) throws IOException {
+    HttpResponse httpGet(final String uri, final HttpClient client) throws IOException {
         HttpGet get = new HttpGet(uri);
         return client.execute(get);
     }
 
-    HttpResponse httpDelete(String uri, HttpClient client) throws IOException {
+    HttpResponse httpDelete(final String uri, final HttpClient client) throws IOException {
         HttpDelete delete = new HttpDelete(uri);
         return client.execute(delete);
     }
 
-    HttpResponse httpPost(HttpClient httpClient, String uri, List<NameValuePair> formValues) throws IOException {
+    <T extends IdObject> HttpResponse httpPost(final String uri, final HttpClient httpClient, final String paramName, final T paramValue) throws IOException {
+        List<NameValuePair> formValues = new LinkedList<>();
+        formValues.add(new BasicNameValuePair(paramName, jsonIdObjectSerializer.write(paramValue)));
+        return httpPost(uri, httpClient, formValues);
+    }
+
+    public HttpResponse httpPost(String uri, HttpClient httpClient, List<NameValuePair> formValues) throws IOException {
         UrlEncodedFormEntity postForm = new UrlEncodedFormEntity(formValues);
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setEntity(postForm);
         return httpClient.execute(httpPost);
     }
 
-    HttpResponse httpPut(HttpClient httpClient, String uri, List<NameValuePair> formValues) throws IOException {
+    <T extends IdObject> HttpResponse httpPut(final String uri, final HttpClient httpClient, final String paramName, final T paramValue) throws IOException {
+        List<NameValuePair> formValues = new LinkedList<>();
+        formValues.add(new BasicNameValuePair(paramName, jsonIdObjectSerializer.write(paramValue)));
         UrlEncodedFormEntity postForm = new UrlEncodedFormEntity(formValues);
         HttpPut httpPut = new HttpPut(uri);
         httpPut.setEntity(postForm);
         return httpClient.execute(httpPut);
     }
 
-    <T extends IdObject> void checkJSONVsExpectedResult(String uri, T expectedResult, HttpClient client) throws IOException {
+    <T extends IdObject> void checkJSONVsExpectedResult(final String uri, final HttpClient client, final T expectedResult) throws IOException {
         String json = getJSONFromHttpGet(uri, client);
         AssertJUnit.assertEquals(json, jsonIdObjectSerializer.write(expectedResult));
     }
 
-    <T extends IdObject> void checkJSONVsExpectedResults(String uri, Collection<T> expectedResults, HttpClient client) throws IOException {
+    <T extends IdObject> void checkJSONVsExpectedResults(final String uri, final HttpClient client, final Collection<T> expectedResults) throws IOException {
         String json = getJSONFromHttpGet(uri, client);
         List<T> results = jsonIdObjectSerializer.read(json);
         AssertJUnit.assertTrue(results.containsAll(expectedResults));
     }
 
-    String getJSONFromHttpGet(String uri, HttpClient client) throws IOException {
+    String getJSONFromHttpGet(final String uri, final HttpClient client) throws IOException {
         HttpResponse response = httpGet(uri, client);
         return getJSONFromResponse(response);
     }
 
-    <T extends IdObject> String getJSONFromPut(final T entity, String param, HttpClient client, String uri) throws IOException {
-        List<NameValuePair> formValues = new LinkedList<NameValuePair>();
-        formValues.add(new BasicNameValuePair(param, jsonIdObjectSerializer.write(entity)));
-        HttpResponse response = httpPut(client, uri, formValues);
+    <T extends IdObject> String getJSONFromPut(final String uri, final HttpClient client, final String paramName, final T paramValue) throws IOException {
+        HttpResponse response = httpPut(uri, client, paramName, paramValue);
         return getJSONFromResponse(response);
     }
 
-    String getJSONFromResponse(HttpResponse response) throws IOException {
+    String getJSONFromResponse(final HttpResponse response) throws IOException {
         AssertJUnit.assertEquals(MediaType.APPLICATION_JSON, response.getEntity().getContentType().getValue());
         String json = EntityUtils.toString(response.getEntity());
         return json;

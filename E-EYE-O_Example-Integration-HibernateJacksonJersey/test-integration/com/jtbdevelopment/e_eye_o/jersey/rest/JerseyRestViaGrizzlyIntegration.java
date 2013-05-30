@@ -51,6 +51,8 @@ import static org.testng.AssertJUnit.*;
 @Test(groups = {"integration"})
 public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContextTests {
 
+    public static final String APP_USER = "appUser";
+    public static final String APP_USER_OWNED_OBJECT = "appUserOwnedObject";
     @Autowired
     private HttpHelper httpHelper;
 
@@ -181,7 +183,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         formValues.add(new BasicNameValuePair("password", user.getPassword()));
         formValues.add(new BasicNameValuePair(rememberMeServices.getParameter(), "true"));
 
-        HttpResponse response = httpHelper.httpPost(httpClient, uri, formValues);
+        HttpResponse response = httpHelper.httpPost(uri, httpClient, formValues);
         logger.info(EntityUtils.toString(response.getEntity()));
         return httpClient;
     }
@@ -196,7 +198,14 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     @Test
     public void testGetUserStandard() throws Exception {
         String uri = USERS_URI;
-        httpHelper.checkJSONVsExpectedResult(uri, testUser1, userClient1);
+        httpHelper.checkJSONVsExpectedResult(uri, userClient1, testUser1);
+    }
+
+    @Test
+    public void testGetUsersAdmin() throws Exception {
+        String uri = BASE_URI + "users/";
+        List<AppUser> expectedResults = Arrays.asList(testAdmin, testUser1, testUser2);
+        httpHelper.checkJSONVsExpectedResults(uri, adminClient, expectedResults);
     }
 
     @Test
@@ -209,7 +218,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         testUser1.setPassword("new"); //  should be ignored
         testUser1.setLastLogout(new DateTime());  // should be ignored
 
-        String s = httpHelper.getJSONFromPut(testUser1, "appUser", userClient1, USERS_URI);
+        String s = httpHelper.getJSONFromPut(USERS_URI, userClient1, APP_USER, testUser1);
 
         AppUser dbTestUser1 = readWriteDAO.get(AppUser.class, testUser1.getId());
         assertEquals(testUser1.getLastName(), dbTestUser1.getLastName());
@@ -225,13 +234,6 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     }
 
     @Test
-    public void testGetUsersAdmin() throws Exception {
-        String uri = BASE_URI + "users/";
-        List<AppUser> expectedResults = Arrays.asList(testAdmin, testUser1, testUser2);
-        httpHelper.checkJSONVsExpectedResults(uri, expectedResults, adminClient);
-    }
-
-    @Test
     public void testModifyUserAsAdmin() throws Exception {
         AppUser testUser2 = httpHelper.easyClone(JerseyRestViaGrizzlyIntegration.testUser2);
         testUser2.setFirstName("newfirst");
@@ -241,7 +243,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         testUser2.setPassword("new");
         testUser2.setLastLogout(new DateTime());  // should be ignored
 
-        String s = httpHelper.getJSONFromPut(testUser2, "appUser", adminClient, USERS_URI);
+        String s = httpHelper.getJSONFromPut(USERS_URI, adminClient, APP_USER, testUser2);
 
         AppUser dbTestUser2 = readWriteDAO.get(AppUser.class, testUser2.getId());
         assertEquals(testUser2.getFirstName(), dbTestUser2.getFirstName());
@@ -260,10 +262,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         AppUser user2 = httpHelper.easyClone(testUser2);
         user2.setLastName("Won't change");
 
-        List<NameValuePair> list = new LinkedList<>();
-        list.add(new BasicNameValuePair("appUser", jsonIdObjectSerializer.write(user2)));
-        HttpResponse response = httpHelper.httpPut(userClient1, USERS_URI, list);
-
+        HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, APP_USER, user2);
         EntityUtils.consumeQuietly(response.getEntity());
         assertEquals(javax.ws.rs.core.Response.Status.FORBIDDEN.getStatusCode(), response.getStatusLine().getStatusCode());
 
@@ -272,24 +271,42 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     }
 
     @Test
+    public void testTryingToAddANewUserFails() throws Exception {
+        AppUser newUser = idObjectFactory.newAppUserBuilder().withFirstName("New").withEmailAddress("newuser@new.com").build();
+
+        HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, APP_USER, newUser);
+        EntityUtils.consumeQuietly(response.getEntity());
+        assertEquals(javax.ws.rs.core.Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testTryingToAddANewWithBadIdUserFails() throws Exception {
+        AppUser newUser = idObjectFactory.newAppUserBuilder().withFirstName("New").withEmailAddress("newuser@new.com").withId("someid").build();
+
+        HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, APP_USER, newUser);
+        EntityUtils.consumeQuietly(response.getEntity());
+        assertEquals(javax.ws.rs.core.Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine().getStatusCode());
+    }
+
+    @Test
     public void testGetOwnObjects() throws Exception {
         Set<AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1);
         String uri = USERS_URI + testUser1.getId() + "/";
-        httpHelper.checkJSONVsExpectedResults(uri, owned, userClient1);
+        httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
     }
 
     @Test
     public void testGetOwnActiveObjects() throws Exception {
         Set<AppUserOwnedObject> owned = readWriteDAO.getActiveEntitiesForUser(AppUserOwnedObject.class, testUser1);
         String uri = USERS_URI + testUser1.getId() + "/active/";
-        httpHelper.checkJSONVsExpectedResults(uri, owned, userClient1);
+        httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
     }
 
     @Test
     public void testGetOwnArchivedObjects() throws Exception {
         Set<AppUserOwnedObject> owned = readWriteDAO.getArchivedEntitiesForUser(AppUserOwnedObject.class, testUser1);
         String uri = USERS_URI + testUser1.getId() + "/archived/";
-        httpHelper.checkJSONVsExpectedResults(uri, owned, userClient1);
+        httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
     }
 
     @Test
@@ -300,13 +317,13 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         for (Class<? extends AppUserOwnedObject> entityClass : Arrays.asList(ClassList.class, Student.class, ObservationCategory.class, Observation.class, Photo.class)) {
             final String entityType = entityClass.getAnnotation(PreferredDescription.class).plural().toLowerCase() + "/";
             String uri = user_uri + entityType;
-            httpHelper.checkJSONVsExpectedResults(uri, readWriteDAO.getEntitiesForUser(entityClass, testUser1), userClient1);
+            httpHelper.checkJSONVsExpectedResults(uri, userClient1, readWriteDAO.getEntitiesForUser(entityClass, testUser1));
             final Set<? extends AppUserOwnedObject> activeEntitiesForUser = readWriteDAO.getActiveEntitiesForUser(entityClass, testUser1);
             final Set<? extends AppUserOwnedObject> archivedEntitiesForUser = readWriteDAO.getArchivedEntitiesForUser(entityClass, testUser1);
-            httpHelper.checkJSONVsExpectedResults(uri + "active/", activeEntitiesForUser, userClient1);
-            httpHelper.checkJSONVsExpectedResults(uri + "archived/", archivedEntitiesForUser, userClient1);
-            httpHelper.checkJSONVsExpectedResults(user_active_uri + entityType, activeEntitiesForUser, userClient1);
-            httpHelper.checkJSONVsExpectedResults(user_archived_uri + entityType, archivedEntitiesForUser, userClient1);
+            httpHelper.checkJSONVsExpectedResults(uri + "active/", userClient1, activeEntitiesForUser);
+            httpHelper.checkJSONVsExpectedResults(uri + "archived/", userClient1, archivedEntitiesForUser);
+            httpHelper.checkJSONVsExpectedResults(user_active_uri + entityType, userClient1, activeEntitiesForUser);
+            httpHelper.checkJSONVsExpectedResults(user_archived_uri + entityType, userClient1, archivedEntitiesForUser);
         }
     }
 
@@ -315,7 +332,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         List<AppUserOwnedObject> owned = new ArrayList<>(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1));
         AppUserOwnedObject randomOne = owned.get(new Random().nextInt(owned.size()));
         String uri = USERS_URI + testUser1.getId() + "/" + randomOne.getId() + "/";
-        httpHelper.checkJSONVsExpectedResult(uri, randomOne, userClient1);
+        httpHelper.checkJSONVsExpectedResult(uri, userClient1, randomOne);
     }
 
     @Test
@@ -331,7 +348,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     public void testGetAnotherUsersObjectsAsAdmin() throws Exception {
         Set<AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1);
         String uri = USERS_URI + testUser1.getId() + "/";
-        httpHelper.checkJSONVsExpectedResults(uri, owned, adminClient);
+        httpHelper.checkJSONVsExpectedResults(uri, adminClient, owned);
     }
 
     @Test
@@ -340,9 +357,8 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         String description = "By Rest";
         String rest = "REST";
         DateTime now = new DateTime();
-        ObservationCategory category= idObjectFactory.newObservationCategoryBuilder(testUser1).withDescription(description).withShortName(rest).build();
-        List<NameValuePair> values = Arrays.<NameValuePair>asList(new BasicNameValuePair("appUserOwnedObject", jsonIdObjectSerializer.write(category)));
-        HttpResponse response = httpHelper.httpPost(userClient1, uri, values);
+        ObservationCategory category = idObjectFactory.newObservationCategoryBuilder(testUser1).withDescription(description).withShortName(rest).build();
+        HttpResponse response = httpHelper.httpPost(uri, userClient1, APP_USER_OWNED_OBJECT, category);
         EntityUtils.consumeQuietly(response.getEntity());
         assertEquals(javax.ws.rs.core.Response.Status.CREATED.getStatusCode(), response.getStatusLine().getStatusCode());
         Header[] headers = response.getHeaders(HttpHeaders.LOCATION);
@@ -360,8 +376,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     public void testModifyingObjectAsSelf() throws Exception {
         String uri = USERS_URI + testUser1.getId() + "/";
         ClassList classList = idObjectFactory.newClassListBuilder(testUser1).withDescription("Modify Class").build();
-        List<NameValuePair> values = Arrays.<NameValuePair>asList(new BasicNameValuePair("appUserOwnedObject", jsonIdObjectSerializer.write(classList)));
-        HttpResponse response = httpHelper.httpPost(userClient1, uri, values);
+        HttpResponse response = httpHelper.httpPost(uri, userClient1, APP_USER_OWNED_OBJECT, classList);
         EntityUtils.consumeQuietly(response.getEntity());
         assertEquals(javax.ws.rs.core.Response.Status.CREATED.getStatusCode(), response.getStatusLine().getStatusCode());
         Header[] headers = response.getHeaders(HttpHeaders.LOCATION);
@@ -372,7 +387,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
         String newDescription = "Modified Class";
         createdClassList.setDescription(newDescription);
-        newJson = httpHelper.getJSONFromPut(createdClassList, "appUserOwnedObject", userClient1, uri);
+        newJson = httpHelper.getJSONFromPut(uri, userClient1, APP_USER_OWNED_OBJECT, createdClassList);
         ClassList modifiedClassList = jsonIdObjectSerializer.read(newJson);
         assertTrue(modifiedClassList.equals(createdClassList));
         assertEquals(newDescription, modifiedClassList.getDescription());
@@ -383,8 +398,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     public void testDeletingObjectAsSelf() throws Exception {
         String uri = USERS_URI + testUser1.getId() + "/";
         Student student = idObjectFactory.newStudentBuilder(testUser1).withFirstName("Delete").withLastName("Delete").build();
-        List<NameValuePair> values = Arrays.<NameValuePair>asList(new BasicNameValuePair("appUserOwnedObject", jsonIdObjectSerializer.write(student)));
-        HttpResponse response = httpHelper.httpPost(userClient1, uri, values);
+        HttpResponse response = httpHelper.httpPost(uri, userClient1, APP_USER_OWNED_OBJECT, student);
         EntityUtils.consumeQuietly(response.getEntity());
         assertEquals(javax.ws.rs.core.Response.Status.CREATED.getStatusCode(), response.getStatusLine().getStatusCode());
         Header[] headers = response.getHeaders(HttpHeaders.LOCATION);
