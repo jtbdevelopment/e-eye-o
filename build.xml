@@ -18,7 +18,8 @@
     <target name="all-with-libs" depends="resolve,compile-theme,e-eye-o.all" description="rebuild with lib check"/>
 
     <target name="resolve" description="--> retrieve dependencies with ivy">
-        <ivy:retrieve sync="true" type="jar,source,javadoc,bundle" pattern="lib/[artifact]-[revision](-[classifier]).[ext]"/>
+        <ivy:retrieve sync="true" type="jar,source,javadoc,bundle"
+                      pattern="lib/[artifact]-[revision](-[classifier]).[ext]"/>
     </target>
 
     <path id="all-paths">
@@ -41,14 +42,29 @@
         </testng>
     </target>
 
+    <path id="integration_tests_classpath">
+        <path refid="e-eye-o_example-integration-hibernatejacksonjersey.module.production.classpath"/>
+        <path refid="e-eye-o_example-integration-hibernatejacksonjersey.runtime.production.module.classpath"/>
+        <path refid="e-eye-o_example-integration-hibernatejacksonjersey.module.classpath"/>
+        <path location="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}"/>
+        <path location="${e-eye-o_interfaces.testoutput.dir}"/>
+    </path>
+
+    <path id="testng">
+        <path refid="library.org.testng:testng:6.8.classpath"/>
+    </path>
+
     <target name="integration-tests" description="integration-tests">
-        <testng groups="integration" classpathref="all-paths" outputdir="${basedir}/testng-integration">
-            <classfileset dir="${basedir}/out/test" includes="**/*.class"/>
+        <testng groups="integration" classpathref="testng"
+                outputdir="${basedir}/testng-integration">
+            <classpath refid="integration_tests_classpath"/>
+            <classfileset dir="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}"/>
         </testng>
     </target>
 
     <target name="compile-theme" description="compile theme">
-        <java classname="com.vaadin.sass.SassCompiler" args="${basedir}/E-EYE-O_RIAVaadin/resources/VAADIN/themes/eeyeo/styles.scss ${basedir}/E-EYE-O_RIAVaadin/resources/VAADIN/themes/eeyeo/styles.css" >
+        <java classname="com.vaadin.sass.SassCompiler"
+              args="${basedir}/E-EYE-O_RIAVaadin/resources/VAADIN/themes/eeyeo/styles.scss ${basedir}/E-EYE-O_RIAVaadin/resources/VAADIN/themes/eeyeo/styles.css">
             <classpath refid="library.com.vaadin:vaadin-server:7.0.1.classpath"/>
         </java>
     </target>
