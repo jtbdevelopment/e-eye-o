@@ -107,7 +107,7 @@ public class UserHelperImpl implements UserHelper {
                 "student-work-example.jpg"
         )) {
             try {
-                URL url = UserHelperImpl.class.getClassLoader().getResource("../../VAADIN/themes/eeyeo/newusersamplephotos/" + string);
+                URL url = UserHelperImpl.class.getClassLoader().getResource("newusersamplephotos/" + string);
                 BufferedImage image = ImageIO.read(new File(url.getFile()));
                 final ByteArrayOutputStream imOS = new ByteArrayOutputStream();
                 ImageIO.write(image, "jpg", imOS);
