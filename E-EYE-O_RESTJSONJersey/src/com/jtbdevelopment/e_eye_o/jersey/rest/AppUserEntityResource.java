@@ -5,15 +5,13 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.DeletedObject;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
+import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.springframework.security.access.annotation.Secured;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URI;
 
 /**
  * Date: 2/10/13
@@ -32,10 +30,10 @@ public class AppUserEntityResource extends SecurityAwareResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response getEntity() {
         AppUserOwnedObject entity = readWriteDAO.get(AppUserOwnedObject.class, entityId);
-        if(entity == null) {
+        if (entity == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(jsonIdObjectSerializer.write(entity)).build();
@@ -44,7 +42,7 @@ public class AppUserEntityResource extends SecurityAwareResource {
     @PUT
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response updateEntity(@FormParam("appUserOwnedObject") final String appUserOwnedObjectString) {
         AppUser sessionAppUser = getSessionAppUser();
 
@@ -82,7 +80,7 @@ public class AppUserEntityResource extends SecurityAwareResource {
     }
 
     @DELETE
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response deleteEntity() {
         AppUser sessionAppUser = getSessionAppUser();
 

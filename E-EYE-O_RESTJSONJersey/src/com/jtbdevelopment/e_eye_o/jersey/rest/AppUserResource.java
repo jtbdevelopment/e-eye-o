@@ -2,13 +2,12 @@ package com.jtbdevelopment.e_eye_o.jersey.rest;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.joda.time.DateTime;
 import org.springframework.security.access.annotation.Secured;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -60,7 +59,7 @@ public class AppUserResource extends SecurityAwareResource {
     //  TODO - paging
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response getEntitiesForUser() {
         Set<? extends AppUserOwnedObject> set;
         if (archiveFlag == null)
@@ -75,14 +74,14 @@ public class AppUserResource extends SecurityAwareResource {
     @GET
     @Path("modifiedSince")
     @Produces(MediaType.APPLICATION_JSON)
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response getModifiedSince(@PathParam("modifiedSince") final String dateTimeString) {
         DateTime dateTime = DateTime.parse(dateTimeString);
         return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, appUser, dateTime))).build();
     }
 
     @Path("archived")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getArchived() {
         if (archiveFlag == null)
             return new AppUserResource(this, Boolean.TRUE);
@@ -90,7 +89,7 @@ public class AppUserResource extends SecurityAwareResource {
     }
 
     @Path("active")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getActive() {
         if (archiveFlag == null)
             return new AppUserResource(this, Boolean.FALSE);
@@ -98,38 +97,38 @@ public class AppUserResource extends SecurityAwareResource {
     }
 
     @Path("photos")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getPhotos() {
         return getEntityRefinedResource(Photo.class);
     }
 
     @Path("students")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getStudents() {
         return getEntityRefinedResource(Student.class);
     }
 
     @Path("classes")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getClassLists() {
         return getEntityRefinedResource(ClassList.class);
     }
 
     @Path("observations")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getObservations() {
         return getEntityRefinedResource(Observation.class);
     }
 
     @Path("categories")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getObservationCategories() {
         return getEntityRefinedResource(ObservationCategory.class);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response createEntity(@FormParam("appUserOwnedObject") final String appUserOwnedObjectString) {
         AppUser sessionAppUser = getSessionAppUser();
 
@@ -148,7 +147,7 @@ public class AppUserResource extends SecurityAwareResource {
     }
 
     @Path("{entityId}")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getAppUserEntityResource(@PathParam("entityId") final String entityId) {
         return new AppUserEntityResource(readWriteDAO, jsonIdObjectSerializer, entityId);
     }

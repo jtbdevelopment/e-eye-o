@@ -8,5 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Time: 11:56 PM
  */
 public interface AppUserUserDetails extends UserDetails {
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
     AppUser getAppUser();
 }

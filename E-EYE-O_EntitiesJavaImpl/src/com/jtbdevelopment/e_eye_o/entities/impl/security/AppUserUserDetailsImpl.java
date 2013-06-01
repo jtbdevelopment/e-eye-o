@@ -12,20 +12,21 @@ import java.util.LinkedList;
  * Date: 4/5/13
  * Time: 11:57 PM
  */
-class AppUserDetailsImpl implements AppUserUserDetails {
+class AppUserUserDetailsImpl implements AppUserUserDetails {
+
     //  TODO - clean up and maybe add more features
     private final AppUser appUser;
 
-    AppUserDetailsImpl(final AppUser appUser) {
+    AppUserUserDetailsImpl(final AppUser appUser) {
         this.appUser = appUser;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         LinkedList<GrantedAuthority> roles = new LinkedList<>();
-        roles.add(new SimpleGrantedAuthority("ROLE_USER"));
+        roles.add(new SimpleGrantedAuthority(ROLE_USER));
         if (appUser.isAdmin()) {
-            roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            roles.add(new SimpleGrantedAuthority(ROLE_ADMIN));
         }
         return roles;
     }
@@ -52,7 +53,7 @@ class AppUserDetailsImpl implements AppUserUserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return appUser.isActivated();
+        return appUser.isActive();
     }
 
     @Override

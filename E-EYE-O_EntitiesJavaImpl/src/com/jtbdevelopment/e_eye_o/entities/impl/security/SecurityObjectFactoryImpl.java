@@ -14,6 +14,6 @@ import org.springframework.stereotype.Component;
 public class SecurityObjectFactoryImpl implements SecurityObjectFactory {
     @Override
     public AppUserUserDetails newAppUserDetails(final AppUser appUser) {
-        return new AppUserDetailsImpl(appUser);
+        return new AppUserUserDetailsImpl(appUser);
     }
 }
