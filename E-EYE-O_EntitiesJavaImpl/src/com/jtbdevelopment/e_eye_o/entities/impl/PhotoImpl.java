@@ -54,22 +54,22 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
 
     @Override
     public String getSummaryDescription() {
-        return (description + " " + timestamp.toString("MMM dd")).trim();
+        return description.trim() + " " + timestamp.toString("MMM dd");
     }
 
     public byte[] getImageData() {
         return imageData;
     }
 
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
+    public void setImageData(final byte[] imageData) {
+        this.imageData = imageData.clone();
     }
 
     public String getMimeType() {
         return mimeType;
     }
 
-    public void setMimeType(String mimeType) {
+    public void setMimeType(final String mimeType) {
         this.mimeType = mimeType;
     }
 
@@ -77,7 +77,7 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
         return thumbnailImageData;
     }
 
-    public void setThumbnailImageData(byte[] thumbnailImageData) {
-        this.thumbnailImageData = thumbnailImageData;
+    public void setThumbnailImageData(final byte[] thumbnailImageData) {
+        this.thumbnailImageData = thumbnailImageData.clone();
     }
 }

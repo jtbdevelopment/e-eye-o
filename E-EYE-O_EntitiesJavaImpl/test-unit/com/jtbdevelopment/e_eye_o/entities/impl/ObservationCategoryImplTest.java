@@ -3,6 +3,8 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import org.testng.annotations.Test;
 
+import static org.testng.AssertJUnit.assertEquals;
+
 /**
  * Date: 12/8/12
  * Time: 2:53 PM
@@ -35,5 +37,13 @@ public class ObservationCategoryImplTest extends AbstractAppUserOwnedObjectTest<
     @Test
     public void testDescriptionSize() throws Exception {
         checkStringSizeValidation("description", TOO_LONG_FOR_DESCRIPTION, ObservationCategory.OBSERVATION_CATEGORY_DESCRIPTION_SIZE_ERROR);
+    }
+
+    @Test
+    public void testSummaryDescription() {
+        ObservationCategoryImpl local = new ObservationCategoryImpl(USER1);
+        final String desc = "some desc";
+        local.setDescription("  " + desc + " ");
+        assertEquals(desc, local.getSummaryDescription());
     }
 }

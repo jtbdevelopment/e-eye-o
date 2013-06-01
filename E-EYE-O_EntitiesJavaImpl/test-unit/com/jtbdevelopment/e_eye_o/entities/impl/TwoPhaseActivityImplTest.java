@@ -64,4 +64,21 @@ public class TwoPhaseActivityImplTest extends AbstractAppUserOwnedObjectTest<Two
         validateNotExpectingError(activity, TwoPhaseActivity.EXPIRATION_TIME_CANNOT_BE_NULL);
     }
 
+    @Test
+    public void testSummaryDescription() {
+        TwoPhaseActivityImpl activity = new TwoPhaseActivityImpl(USER1);
+        final String id = "anId";
+        final TwoPhaseActivity.Activity activityType = TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION;
+        final DateTime now = DateTime.now();
+        final boolean archived = true;
+        activity.setExpirationTime(now);
+        activity.setActivityType(activityType);
+        activity.setArchived(archived);
+        activity.setId(id);
+
+        String desc = "Id=" + id + " For=" + USER1.getSummaryDescription() + " Type=" + activityType.toString() + " Expiration="
+                + now.toString("YYYY-MM-dd HH:mm:ss") + " Archived=" + archived;
+
+        assertEquals(desc, activity.getSummaryDescription());
+    }
 }

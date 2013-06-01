@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -109,5 +110,25 @@ public class StudentImplTest extends AbstractAppUserOwnedObjectTest<StudentImpl>
         assertTrue(activeGet.containsAll(active));
         assertTrue(archived.containsAll(archivedGet));
         assertTrue(archivedGet.containsAll(archived));
+    }
+
+    @Test
+    public void testSummaryDescription() {
+        StudentImpl student = new StudentImpl(USER1);
+        final String first = "Alfred";
+        final String last = "B";
+        student.setFirstName(" " + first + " ");
+        student.setLastName("   " + last + " ");
+        assertEquals(first + " " + last, student.getSummaryDescription());
+    }
+
+    @Test
+    public void testSummaryDescriptionNoLast() {
+        StudentImpl student = new StudentImpl(USER1);
+        final String first = "Alfred";
+        final String last = "";
+        student.setFirstName(" " + first + " ");
+        student.setLastName("   " + last + " ");
+        assertEquals(first, student.getSummaryDescription());
     }
 }

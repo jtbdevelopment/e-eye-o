@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 public interface Observable extends AppUserOwnedObject {
     public final static LocalDateTime NEVER_OBSERVED = UNINITIALISED_LOCAL_DATE_TIME;
 
-    public final static String LAST_OBSERVED_TIME = "Observable.lastObservationTimestamp" + CANNOT_BE_NULL_ERROR;
+    public final static String LAST_OBSERVATION_TIME_CANNOT_BE_NULL = "Observable.lastObservationTimestamp" + CANNOT_BE_NULL_ERROR;
 
-    @NotNull(message = Observable.LAST_OBSERVED_TIME)
+    @NotNull(message = Observable.LAST_OBSERVATION_TIME_CANNOT_BE_NULL)
     LocalDateTime getLastObservationTimestamp();
 
     void setLastObservationTimestamp(final LocalDateTime lastObservationTimestamp);

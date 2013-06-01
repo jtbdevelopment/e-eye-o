@@ -69,4 +69,24 @@ public class AppUserImplTest extends AbstractIdObjectTest<AppUserImpl> {
         appUser.setLastLogout(null);
         validateExpectingError(appUser, AppUser.LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR);
     }
+
+    @Test
+    public void testSummary() {
+        final AppUser appUser = new AppUserImpl();
+        final String firstName = "My First Name";
+        final String lastName = "ALastName";
+        appUser.setFirstName("  " + firstName);
+        appUser.setLastName(lastName + "  ");
+        assertEquals(firstName + " " + lastName, appUser.getSummaryDescription());
+    }
+
+    @Test
+    public void testSummaryNoLast() {
+        final AppUser appUser = new AppUserImpl();
+        final String firstName = "My First Name";
+        final String lastName = "";
+        appUser.setFirstName("  " + firstName);
+        appUser.setLastName(lastName + "  ");
+        assertEquals(firstName, appUser.getSummaryDescription());
+    }
 }

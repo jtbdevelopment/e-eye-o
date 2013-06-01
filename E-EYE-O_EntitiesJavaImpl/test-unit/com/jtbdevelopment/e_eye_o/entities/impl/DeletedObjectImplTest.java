@@ -32,4 +32,12 @@ public class DeletedObjectImplTest extends AbstractAppUserOwnedObjectTest<Delete
         assertEquals(x, impl.getDeletedId());
         impl.setDeletedId("Y");
     }
+
+    @Test
+    public void testSummaryDesription() {
+        DeletedObjectImpl impl = new DeletedObjectImpl(null);
+        final String x = "X";
+        impl.setDeletedId(x);
+        assertEquals(x, impl.getSummaryDescription());
+    }
 }

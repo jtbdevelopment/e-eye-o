@@ -93,6 +93,6 @@ public class StudentImpl extends ObservableImpl implements Student {
 
     @Override
     public String getSummaryDescription() {
-        return (firstName + " " + lastName).trim();
+        return (firstName.trim() + " " + lastName.trim()).trim();
     }
 }

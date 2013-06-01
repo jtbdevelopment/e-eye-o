@@ -17,6 +17,10 @@ import static org.testng.AssertJUnit.*;
  * Time: 11:58 AM
  */
 public class IdObjectImplFactoryTest {
+    public static final List<Class<AppUser>> APP_USER_CLASS_ARRAY = Arrays.asList(AppUser.class);
+    public static final List<Class<?>> NOT_APP_USER_CLASSES_ARRAY = Arrays.asList(Object.class, List.class, String.class, Integer.class, Set.class, HashMap.class);
+    //  TODO - dynamic
+    public static final List<Class<? extends AppUserOwnedObject>> APP_USER_OWNED_CLASSES_ARRAY = Arrays.asList(ClassList.class, Student.class, DeletedObject.class, Photo.class, Observation.class, ObservationCategory.class, TwoPhaseActivity.class);
     private static final Mockery context = new Mockery();
     private static final AppUser appUser = context.mock(AppUser.class);
     private static final IdObjectImplFactory factory = new IdObjectImplFactory();
@@ -30,6 +34,7 @@ public class IdObjectImplFactoryTest {
         assertEquals(PhotoImpl.class, factory.newAppUserOwnedObject(Photo.class, appUser).getClass());
         assertEquals(StudentImpl.class, factory.newAppUserOwnedObject(Student.class, appUser).getClass());
         assertEquals(DeletedObjectImpl.class, factory.newAppUserOwnedObject(DeletedObject.class, appUser).getClass());
+        assertEquals(TwoPhaseActivityImpl.class, factory.newAppUserOwnedObject(TwoPhaseActivity.class, appUser).getClass());
     }
 
     @Test
@@ -41,12 +46,13 @@ public class IdObjectImplFactoryTest {
         assertEquals(PhotoBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(Photo.class, appUser).getClass());
         assertEquals(StudentBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(Student.class, appUser).getClass());
         assertEquals(DeletedObjectBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(DeletedObject.class, appUser).getClass());
+        assertEquals(TwoPhaseActivityBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(TwoPhaseActivity.class, appUser).getClass());
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void testNewIdObjectForAppUserOwnedObjects() {
-        for (Class c : Arrays.asList(ClassList.class, Student.class, DeletedObject.class, Photo.class, Observation.class, ObservationCategory.class)) {
+        for (Class c : APP_USER_OWNED_CLASSES_ARRAY) {
             assertNull(((AppUserOwnedObject) factory.newIdObject(c)).getAppUser());
         }
     }
@@ -55,7 +61,7 @@ public class IdObjectImplFactoryTest {
     @SuppressWarnings("unchecked")
     public void testNewIdObjectForUnknownClasses() throws Exception {
         boolean exception;
-        for (Class c : Arrays.asList(Object.class, List.class, String.class, Integer.class, Set.class, HashMap.class)) {
+        for (Class c : NOT_APP_USER_CLASSES_ARRAY) {
             exception = false;
             try {
                 factory.newIdObject(c);
@@ -71,7 +77,7 @@ public class IdObjectImplFactoryTest {
     @SuppressWarnings("unchecked")
     public void testNewIdObjectBuilderForUnknownClasses() throws Exception {
         boolean exception;
-        for (Class c : Arrays.asList(Object.class, List.class, String.class, Integer.class, Set.class, HashMap.class)) {
+        for (Class c : NOT_APP_USER_CLASSES_ARRAY) {
             exception = false;
             try {
                 factory.newIdObjectBuilder(c);
@@ -103,7 +109,7 @@ public class IdObjectImplFactoryTest {
     @SuppressWarnings("unchecked")
     public void testNewAppUserObjectBuilderForNonAppUserOwnedObjects() {
         boolean exception;
-        for (Class c : Arrays.asList(AppUser.class)) {
+        for (Class c : APP_USER_CLASS_ARRAY) {
             exception = false;
             try {
                 factory.newAppUserOwnedObjectBuilder(c, null);
@@ -119,7 +125,7 @@ public class IdObjectImplFactoryTest {
     @SuppressWarnings("unchecked")
     public void testNewAppUserObjectForUnknownClasses() throws Exception {
         boolean exception;
-        for (Class c : Arrays.asList(Object.class, List.class, String.class, Integer.class, Set.class, HashMap.class)) {
+        for (Class c : NOT_APP_USER_CLASSES_ARRAY) {
             exception = false;
             try {
                 factory.newAppUserOwnedObject(c, null);

@@ -62,7 +62,7 @@ public class AppUserImpl extends IdObjectImpl implements AppUser {
 
     @Override
     public String getSummaryDescription() {
-        return (firstName + " " + lastName).trim();
+        return (firstName.trim() + " " + lastName.trim()).trim();
     }
 
     @Override

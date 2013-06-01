@@ -106,7 +106,7 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
             @Nullable
             @Override
             public String apply(@Nullable final ObservationCategory input) {
-                return input != null ? input.getShortName() : null;
+                return input != null ? (input.getShortName() != null ? input.getShortName().trim() : null) : null;
             }
         }))
         ).trim();

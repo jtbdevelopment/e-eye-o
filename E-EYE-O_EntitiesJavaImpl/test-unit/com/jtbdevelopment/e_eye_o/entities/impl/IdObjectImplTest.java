@@ -114,4 +114,12 @@ public class IdObjectImplTest extends AbstractIdObjectTest<IdObjectImplTest.IdOb
         local.setId(ID + ID);
         fail("Should have exception");
     }
+
+    @Test
+    public void testGetSummaryDescription() {
+        IdObjectExtends local = new IdObjectExtends();
+        final String myId = "ID!";
+        local.setId(myId);
+        assertEquals(myId, local.getSummaryDescription());
+    }
 }

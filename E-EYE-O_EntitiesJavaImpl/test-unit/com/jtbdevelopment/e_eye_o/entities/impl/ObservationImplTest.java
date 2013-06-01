@@ -106,4 +106,58 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
     public void testCommentSize() throws Exception {
         checkStringSizeValidation("comment", TOO_LONG_FOR_COMMENT, Observation.OBSERVATION_COMMENT_SIZE_ERROR);
     }
+
+    @Test
+    public void testSummaryDescriptionNormal() {
+        Observation observation = new ObservationImpl(USER1);
+        StudentImpl student = new StudentImpl(USER1);
+        student.setFirstName("First");
+        student.setLastName("Last");
+        ObservationCategoryImpl category1 = new ObservationCategoryImpl(USER1);
+        category1.setShortName("ONE ");
+        ObservationCategoryImpl category2 = new ObservationCategoryImpl(USER1);
+        category2.setShortName("TWO ");
+        ObservationCategoryImpl category3 = new ObservationCategoryImpl(USER1);
+        category3.setShortName(null);
+        LocalDateTime now = LocalDateTime.now();
+        observation.setObservationTimestamp(now);
+        observation.setObservationSubject(student);
+        observation.addCategory(category1);
+        observation.addCategory(category2);
+        observation.addCategory(category3);
+
+        String okBase = student.getSummaryDescription()
+                + " on "
+                + now.toString("YYY-MM-dd")
+                + " for ";
+        String ok1 = okBase
+                + "ONE, TWO";
+        String ok2 = okBase
+                + "TWO, ONE";
+
+        assertTrue(ok1.equals(observation.getSummaryDescription()) || ok2.equals(observation.getSummaryDescription()));
+    }
+
+    @Test
+    public void testSummaryDescriptionNullSubject() {
+        Observation observation = new ObservationImpl(USER1);
+        ObservationCategoryImpl category1 = new ObservationCategoryImpl(USER1);
+        category1.setShortName("ONE");
+        ObservationCategoryImpl category2 = new ObservationCategoryImpl(USER1);
+        category2.setShortName("TWO");
+        LocalDateTime now = LocalDateTime.now();
+        observation.setObservationTimestamp(now);
+        observation.addCategory(category1);
+        observation.addCategory(category2);
+
+        String okBase = "? on "
+                + now.toString("YYY-MM-dd")
+                + " for ";
+        String ok1 = okBase
+                + "ONE, TWO";
+        String ok2 = okBase
+                + "TWO, ONE";
+
+        assertTrue(ok1.equals(observation.getSummaryDescription()) || ok2.equals(observation.getSummaryDescription()));
+    }
 }

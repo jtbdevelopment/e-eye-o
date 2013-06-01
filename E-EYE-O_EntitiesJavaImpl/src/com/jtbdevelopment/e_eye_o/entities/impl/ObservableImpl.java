@@ -8,9 +8,7 @@ import org.joda.time.LocalDateTime;
  * Date: 3/29/13
  * Time: 6:49 PM
  */
-//  TODO tests
 public abstract class ObservableImpl extends AppUserOwnedObjectImpl implements Observable {
-
     private LocalDateTime lastObservationTimestamp = Observable.NEVER_OBSERVED;
 
     protected ObservableImpl(AppUser appUser) {
