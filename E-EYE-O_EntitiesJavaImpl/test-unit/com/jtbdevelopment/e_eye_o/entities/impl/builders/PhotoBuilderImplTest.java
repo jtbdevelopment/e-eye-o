@@ -1,8 +1,12 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.builders;
 
+import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelper;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
 import org.joda.time.LocalDateTime;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.testng.AssertJUnit.*;
@@ -14,7 +18,19 @@ import static org.testng.AssertJUnit.*;
 public class PhotoBuilderImplTest extends AppUserOwnedObjectBuilderImplTest {
     private final Photo photo = factory.newPhoto(null);
     private final ClassList classList = factory.newClassList(null);
-    private final PhotoBuilderImpl builder = new PhotoBuilderImpl(null, photo);
+    private final byte[] bytes = {0x11, 0x4, 0x44, 0x13, 0x32};
+    private PhotoHelper helper;
+    private Mockery context;
+
+    private PhotoBuilderImpl builder = new PhotoBuilderImpl(null, photo);
+
+    @BeforeMethod
+    public void setup() {
+        context = new Mockery();
+        helper = context.mock(PhotoHelper.class);
+        builder = new PhotoBuilderImpl(helper, photo);
+
+    }
 
     @Test
     public void testWithPhotoFor() throws Exception {
@@ -37,5 +53,24 @@ public class PhotoBuilderImplTest extends AppUserOwnedObjectBuilderImplTest {
         photo.setTimestamp(dateTime.minusMonths(21));
         assertSame(builder, builder.withTimestamp(dateTime));
         assertEquals(dateTime, photo.getTimestamp());
+    }
+
+    @Test
+    public void testWithMimeType() {
+        assertEquals("", photo.getMimeType());
+
+        String mimeType = "some/type";
+        builder.withMimeType(mimeType);
+        assertEquals(mimeType, photo.getMimeType());
+    }
+
+    @Test
+    public void testWithImageData() {
+        assertNull(photo.getImageData());
+
+        context.checking(new Expectations() {{
+            one(helper).setPhotoImages(photo, bytes);
+        }});
+        builder.withImageData(bytes);
     }
 }
