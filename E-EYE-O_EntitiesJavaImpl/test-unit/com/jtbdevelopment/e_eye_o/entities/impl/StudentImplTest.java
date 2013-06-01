@@ -15,8 +15,6 @@ import static org.testng.Assert.assertTrue;
  * Time: 6:52 PM
  */
 public class StudentImplTest extends AbstractAppUserOwnedObjectTest<StudentImpl> {
-
-
     public StudentImplTest() {
         super(StudentImpl.class);
     }
