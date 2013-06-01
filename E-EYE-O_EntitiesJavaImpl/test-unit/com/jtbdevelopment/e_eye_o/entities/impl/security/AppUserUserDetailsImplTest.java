@@ -11,8 +11,7 @@ import org.testng.annotations.Test;
 
 import java.util.Collection;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.AssertJUnit.*;
 
 /**
  * Date: 5/31/13
@@ -109,5 +108,10 @@ public class AppUserUserDetailsImplTest {
             will(returnValue(false));
         }});
         assertTrue(!details.isAccountNonLocked());
+    }
+
+    @Test
+    public void testGetAppUser() {
+        assertSame(appUser, details.getAppUser());
     }
 }
