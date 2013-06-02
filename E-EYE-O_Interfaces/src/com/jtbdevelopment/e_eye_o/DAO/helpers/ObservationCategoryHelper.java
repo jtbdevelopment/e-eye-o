@@ -13,6 +13,7 @@ import java.util.Set;
  * <p/>
  * Observation Category Helpers.
  */
+//  TODO - move this default map to spring property
 public interface ObservationCategoryHelper {
     public static final Map<String, String> NEW_USER_DEFAULT_CATEGORIES = new HashMap<String, String>() {{
         put("PSE", "Personal, Social & Emotional");

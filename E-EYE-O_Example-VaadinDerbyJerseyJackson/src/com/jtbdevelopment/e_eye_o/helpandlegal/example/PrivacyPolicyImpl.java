@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.helpandlegalexample;
+package com.jtbdevelopment.e_eye_o.helpandlegal.example;
 
 import com.jtbdevelopment.e_eye_o.helpandlegal.PrivacyPolicy;
 import org.springframework.stereotype.Component;

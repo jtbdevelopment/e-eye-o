@@ -1,0 +1,71 @@
+package com.jtbdevelopment.e_eye_o.DAO.helpers.integration;
+
+import com.jtbdevelopment.e_eye_o.DAO.helpers.AbstractUserHelperImpl;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
+import com.jtbdevelopment.e_eye_o.entities.*;
+import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
+
+/**
+ * Date: 6/2/13
+ * Time: 3:27 PM
+ */
+@Component
+@SuppressWarnings("unused")
+public class UserHelperImpl extends AbstractUserHelperImpl {
+    private static final Logger logger = LoggerFactory.getLogger(UserHelperImpl.class);
+
+    @Autowired
+    private ObservationCategoryHelper observationCategoryHelper;
+
+    @Override
+    protected void createSamplesForNewUser(final AppUser newUser) {
+        observationCategoryHelper.createDefaultCategoriesForUser(newUser);
+        Map<String, ObservationCategory> map = observationCategoryHelper.getObservationCategoriesAsMap(newUser);
+        ClassList cl = readWriteDAO.create(idObjectFactory.newClassListBuilder(newUser).withDescription("Example Class").build());
+        Student s1 = readWriteDAO.create(idObjectFactory.newStudentBuilder(newUser).withFirstName("Student").withLastName("A").addClassList(cl).build());
+        Student s2 = readWriteDAO.create(idObjectFactory.newStudentBuilder(newUser).withFirstName("Student").withLastName("B").addClassList(cl).build());
+        final Iterator<Map.Entry<String, ObservationCategory>> entryIterator = map.entrySet().iterator();
+        ObservationCategory c1 = entryIterator.next().getValue();
+        ObservationCategory c2 = entryIterator.next().getValue();
+        Observation o1 = readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationTimestamp(new LocalDateTime().minusDays(7)).withObservationSubject(s1).withComment("Observation 1").addCategory(c1).build());
+        Observation o2 = readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationTimestamp(new LocalDateTime().minusDays(3)).withObservationSubject(s1).withComment("Observation 2").addCategory(c1).addCategory(c2).build());
+        readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withComment("Observation 3").build());
+        readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime().minusDays(1)).addCategory(c2).withComment("You can put general class observations too.").build());
+
+
+        try {
+            URL url = AbstractUserHelperImpl.class.getClassLoader().getResource("/simple.png");
+            if (url == null) {
+                logger.warn("Unable to find simple.png");
+                return;
+            }
+            BufferedImage image = ImageIO.read(new File(url.getFile()));
+            final ByteArrayOutputStream imOS = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", imOS);
+            imOS.close();
+            image.flush();
+            Photo photo = idObjectFactory.newPhotoBuilder(newUser).withDescription("simple.png").withMimeType("image/jpeg").withImageData(imOS.toByteArray()).withTimestamp(new LocalDateTime()).build();
+            if (url.getFile().contains("student")) {
+                photo.setPhotoFor(o1);
+            } else {
+                photo.setPhotoFor(cl);
+            }
+            readWriteDAO.create(photo);
+        } catch (IOException e) {
+            logger.warn("There was an error creating new user sample photos!", e);
+        }
+    }
+}

@@ -5,7 +5,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -13,7 +13,7 @@ import java.util.*;
  * Date: 11/25/12
  * Time: 7:54 PM
  */
-@Service
+@Component
 public class ObservationCategoryHelperImpl implements ObservationCategoryHelper {
     private final ReadWriteDAO dao;
     private final IdObjectFactory objectFactory;

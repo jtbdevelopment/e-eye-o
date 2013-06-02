@@ -1244,15 +1244,17 @@
   <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.production.classpath">
     <path refid="${module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson}"/>
     <path refid="library.tomcat_7.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
     <pathelement location="${e-eye-o_interfaces.output.dir}"/>
     <path refid="library.joda-time:joda-time:2.1.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
     <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+    <path refid="library.commons-beanutils-1.8.3.classpath"/>
     <path refid="library.spring-context-support-3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
   </path>
@@ -1278,7 +1280,8 @@
     <path refid="${module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson}"/>
     <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
     <path refid="library.tomcat_7.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
     <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
     <pathelement location="${e-eye-o_interfaces.output.dir}"/>
     <path refid="library.joda-time:joda-time:2.1.classpath"/>
@@ -1286,8 +1289,10 @@
     <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
     <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+    <path refid="library.commons-beanutils-1.8.3.classpath"/>
     <path refid="library.spring-context-support-3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
   </path>
