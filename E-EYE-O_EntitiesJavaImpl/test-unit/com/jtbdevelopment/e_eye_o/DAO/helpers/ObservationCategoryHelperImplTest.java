@@ -8,6 +8,7 @@ import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImplFactory;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.*;
@@ -25,14 +26,26 @@ public class ObservationCategoryHelperImplTest {
     private final ReadWriteDAO dao = context.mock(ReadWriteDAO.class);
     private final AppUser user = context.mock(AppUser.class);
     private final IdObjectFactory factory = new IdObjectImplFactory();
-    private final ObservationCategoryHelperImpl helper = new ObservationCategoryHelperImpl(dao, factory);
+    private final ObservationCategoryHelperImpl helper = new ObservationCategoryHelperImpl();
+    private final Map<String, String> defaults = new HashMap<String, String>() {{
+        put("Category1", "The Category First");
+        put("Category2", "The Category Second");
+        put("Other", "Some Other Category");
+    }};
+
+    @BeforeMethod
+    public void setUp() {
+        helper.dao = dao;
+        helper.objectFactory = factory;
+        helper.newUserDefaultObservationCategories = defaults;
+    }
 
     @Test
     @SuppressWarnings("unchecked")
     public void testCreatesDefault() {
         final Map<String, ObservationCategory> shortMap = new HashMap<>();
         final List<ObservationCategory> initialList = new ArrayList<>();
-        for (Map.Entry<String, String> entry : ObservationCategoryHelperImpl.NEW_USER_DEFAULT_CATEGORIES.entrySet()) {
+        for (Map.Entry<String, String> entry : defaults.entrySet()) {
             final ObservationCategory impl = factory.newObservationCategoryBuilder(user).withShortName(entry.getKey()).withDescription(entry.getValue()).build();
             impl.setId(entry.getKey());
             initialList.add(impl);
@@ -44,7 +57,7 @@ public class ObservationCategoryHelperImplTest {
             will(returnValue(initialList));
         }});
         Set<ObservationCategory> ocs = helper.createDefaultCategoriesForUser(user);
-        assertEquals(ObservationCategoryHelperImpl.NEW_USER_DEFAULT_CATEGORIES.size(), ocs.size());
+        assertEquals(defaults.size(), ocs.size());
         assertTrue(ocs.containsAll(shortMap.values()));
     }
 

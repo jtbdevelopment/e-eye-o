@@ -3,8 +3,9 @@
        xmlns:security="http://www.springframework.org/schema/security"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd   http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd   http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <context:component-scan base-package="com.jtbdevelopment"/>
 
@@ -47,4 +48,16 @@
         <security:authentication-provider ref="rememberMeAuthenticationProvider"/>
         <security:authentication-provider user-service-ref="userDetailsService"/>
     </security:authentication-manager>
+
+    <!--  You must define default observation categories for new users  -->
+    <util:map id="newUserDefaultObservationCategories" key-type="java.lang.String" value-type="java.lang.String"
+              map-class="java.util.HashMap">
+        <entry key="PSE" value="Personal, Social &amp; Emotional"/>
+        <entry key="MD" value="Mathematics"/>
+        <entry key="CLL" value="Communication, Language &amp; Literacy"/>
+        <entry key="KUW" value="Knowledge &amp; Understanding of the World"/>
+        <entry key="PD" value="Physical"/>
+        <entry key="CD" value="Creative"/>
+        <entry key="RD" value="Religious"/>
+    </util:map>
 </beans>

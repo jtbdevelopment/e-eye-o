@@ -7,6 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -15,18 +16,18 @@ import java.util.*;
  */
 @Component
 public class ObservationCategoryHelperImpl implements ObservationCategoryHelper {
-    private final ReadWriteDAO dao;
-    private final IdObjectFactory objectFactory;
+    @Autowired
+    protected ReadWriteDAO dao;
 
     @Autowired
-    public ObservationCategoryHelperImpl(final ReadWriteDAO dao, final IdObjectFactory objectFactory) {
-        this.dao = dao;
-        this.objectFactory = objectFactory;
-    }
+    protected IdObjectFactory objectFactory;
+
+    @Resource(name = "newUserDefaultObservationCategories")
+    Map<String, String> newUserDefaultObservationCategories;
 
     public Set<ObservationCategory> createDefaultCategoriesForUser(final AppUser appUser) {
-        List<ObservationCategory> defaults = new ArrayList<>(NEW_USER_DEFAULT_CATEGORIES.size());
-        for (Map.Entry<String, String> entry : NEW_USER_DEFAULT_CATEGORIES.entrySet()) {
+        List<ObservationCategory> defaults = new ArrayList<>(newUserDefaultObservationCategories.size());
+        for (Map.Entry<String, String> entry : newUserDefaultObservationCategories.entrySet()) {
             defaults.add(objectFactory.newObservationCategoryBuilder(appUser).withShortName(entry.getKey()).withDescription(entry.getValue()).build());
         }
         return new HashSet<>(dao.create(defaults));

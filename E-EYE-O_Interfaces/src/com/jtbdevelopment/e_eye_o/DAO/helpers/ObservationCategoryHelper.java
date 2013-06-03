@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,18 +12,7 @@ import java.util.Set;
  * <p/>
  * Observation Category Helpers.
  */
-//  TODO - move this default map to spring property
 public interface ObservationCategoryHelper {
-    public static final Map<String, String> NEW_USER_DEFAULT_CATEGORIES = new HashMap<String, String>() {{
-        put("PSE", "Personal, Social & Emotional");
-        put("MD", "Mathematics");
-        put("CLL", "Communication, Language & Literacy");
-        put("KUW", "Knowledge & Understanding of the World");
-        put("PD", "Physical");
-        put("CD", "Creative");
-        put("RD", "Religious");
-    }};
-
     /**
      * Generates default categories for a user and saves them to DAO
      *

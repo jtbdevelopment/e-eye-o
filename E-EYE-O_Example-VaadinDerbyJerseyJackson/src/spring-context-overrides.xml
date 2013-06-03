@@ -68,4 +68,16 @@
         </property>
     </bean>
 
+    <!--  You must define default observation categories for new users  -->
+    <util:map id="newUserDefaultObservationCategories" key-type="java.lang.String" value-type="java.lang.String"
+              map-class="java.util.HashMap">
+        <entry key="PSE" value="Personal, Social &amp; Emotional"/>
+        <entry key="MD" value="Mathematics"/>
+        <entry key="CLL" value="Communication, Language &amp; Literacy"/>
+        <entry key="KUW" value="Knowledge &amp; Understanding of the World"/>
+        <entry key="PD" value="Physical"/>
+        <entry key="CD" value="Creative"/>
+        <entry key="RD" value="Religious"/>
+    </util:map>
+
 </beans>
