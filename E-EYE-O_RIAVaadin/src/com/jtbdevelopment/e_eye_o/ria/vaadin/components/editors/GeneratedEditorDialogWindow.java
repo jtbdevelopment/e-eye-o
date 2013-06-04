@@ -43,11 +43,9 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
     @Override
     protected Layout buildEditorLayout() {
         Map<String, IdObjectFieldPreferences> fields = interfaceResolver.getAllFieldPreferences(entityType);
-        VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.setSpacing(true);
+        AbstractOrderedLayout rowContainerLayout = getRowContainerLayout();
         for (List<String> fieldRow : getFieldRows()) {
-            HorizontalLayout editorRow = new HorizontalLayout();
-            editorRow.setSpacing(true);
+            Layout editorRow = getEditorRow();
             for (String fieldName : fieldRow) {
                 IdObjectFieldPreferences preferences = fields.get(fieldName);
                 if (preferences == null || !preferences.displayable() || !IdObjectFieldPreferences.EditableBy.USER.equals(preferences.editableBy())) {
@@ -63,10 +61,22 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
                     }
                 }
             }
-            verticalLayout.addComponent(editorRow);
-            verticalLayout.setComponentAlignment(editorRow, Alignment.MIDDLE_CENTER);
+            rowContainerLayout.addComponent(editorRow);
+            rowContainerLayout.setComponentAlignment(editorRow, Alignment.MIDDLE_CENTER);
         }
+        return rowContainerLayout;
+    }
+
+    protected AbstractOrderedLayout getRowContainerLayout() {
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSpacing(true);
         return verticalLayout;
+    }
+
+    protected Layout getEditorRow() {
+        HorizontalLayout editorRow = new HorizontalLayout();
+        editorRow.setSpacing(true);
+        return editorRow;
     }
 
     private Focusable generateField(final String fieldName, final IdObjectFieldPreferences preferences) {

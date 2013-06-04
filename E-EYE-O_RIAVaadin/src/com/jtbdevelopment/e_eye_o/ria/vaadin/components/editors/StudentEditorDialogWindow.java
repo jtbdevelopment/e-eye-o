@@ -3,9 +3,13 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbstractSelect;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Date: 3/16/13
@@ -13,17 +17,36 @@ import org.springframework.context.annotation.Scope;
  */
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class StudentEditorDialogWindow extends IdObjectEditorDialogWindow<Student> {
-    private final TextField firstName = new TextField();
+public class StudentEditorDialogWindow extends GeneratedEditorDialogWindow<Student> {
     private final BeanItemContainer<ClassList> potentialClasses = new BeanItemContainer<>(ClassList.class);
 
     public StudentEditorDialogWindow() {
-        super(Student.class, 50, 14.25f);
+        super(Student.class, 50, 15.5f);
     }
 
     @Override
-    protected Focusable getInitialFocusComponent() {
-        return firstName;
+    protected String getDefaultField() {
+        return "firstName";
+    }
+
+    @Override
+    protected List<List<String>> getFieldRows() {
+        List<List<String>> rows = new LinkedList<>();
+        rows.add(Arrays.asList("firstName", "lastName"));
+        rows.add(Arrays.asList("classLists"));
+        return rows;
+    }
+
+
+    @Override
+    protected void addDataSourceToSelectField(final String fieldName, final AbstractSelect select) {
+        switch (fieldName) {
+            case "classLists":
+                select.setContainerDataSource(potentialClasses);
+                select.setItemCaptionPropertyId("description");
+                break;
+        }
+        super.addDataSourceToSelectField(fieldName, select);
     }
 
     @Override
@@ -35,46 +58,5 @@ public class StudentEditorDialogWindow extends IdObjectEditorDialogWindow<Studen
             potentialClasses.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, student.getAppUser()));
         }
         super.setEntity(student);
-    }
-
-    @Override
-    protected Layout buildEditorLayout() {
-        //  TODO - lot of duplication here with tables
-        HorizontalLayout editorRow = new HorizontalLayout();
-        editorRow.setSpacing(true);
-
-        VerticalLayout nameLayout = new VerticalLayout();
-        nameLayout.setSpacing(true);
-
-        HorizontalLayout nameRow = new HorizontalLayout();
-        nameRow.setSpacing(true);
-        nameRow.addComponent(new Label("First Name:"));
-        entityBeanFieldGroup.bind(firstName, "firstName");
-        firstName.setTabIndex(1);
-        nameRow.addComponent(firstName);
-        nameLayout.addComponent(nameRow);
-
-        nameRow = new HorizontalLayout();
-        nameRow.setSpacing(true);
-        nameRow.addComponent(new Label("Last Name:"));
-        final TextField lastName = new TextField();
-        entityBeanFieldGroup.bind(lastName, "lastName");
-        nameRow.addComponent(lastName);
-        lastName.setTabIndex(2);
-        nameLayout.addComponent(nameRow);
-
-        editorRow.addComponent(nameLayout);
-
-        editorRow.addComponent(new Label("Classes:"));
-
-        TwinColSelect classes = new TwinColSelect();
-        classes.setRows(3);
-        classes.setTabIndex(3);
-        classes.setContainerDataSource(potentialClasses);
-        classes.setItemCaptionPropertyId("description");
-        entityBeanFieldGroup.bind(classes, "classLists");
-        editorRow.addComponent(classes);
-
-        return editorRow;
     }
 }

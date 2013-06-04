@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectTableDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.validation.NoNullsInCollectionCheck;
@@ -28,6 +29,7 @@ public interface Student extends Observable {
 
     @NotNull(message = STUDENT_CLASS_LISTS_CANNOT_BE_NULL)
     @NoNullsInCollectionCheck(message = STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL)
+    @IdObjectFieldPreferences(defautlLabel = "Classes", height = 4, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.MULTI_SELECT_PICKER, uiAlignment = IdObjectFieldPreferences.PreferredAlignment.LEFT)
     Set<ClassList> getClassLists();
 
     @Transient
@@ -46,12 +48,14 @@ public interface Student extends Observable {
 
     @NotEmpty(message = STUDENT_FIRST_NAME_CANNOT_BE_NULL_OR_BLANK_ERROR)
     @Size(max = MAX_NAME_SIZE, message = STUDENT_FIRST_NAME_SIZE_ERROR)
+    @IdObjectFieldPreferences(defautlLabel = "First Name", width = 15, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.TEXT, uiAlignment = IdObjectFieldPreferences.PreferredAlignment.LEFT)
     String getFirstName();
 
     void setFirstName(final String firstName);
 
     @NotNull(message = STUDENT_LAST_NAME_CANNOT_BE_NULL_ERROR)
     @Size(max = MAX_NAME_SIZE, message = STUDENT_LAST_NAME_SIZE_ERROR)
+    @IdObjectFieldPreferences(defautlLabel = "Last Name", width = 15, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.TEXT, uiAlignment = IdObjectFieldPreferences.PreferredAlignment.LEFT)
     String getLastName();
 
     void setLastName(final String lastName);
