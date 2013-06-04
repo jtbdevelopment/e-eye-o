@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationWithSubjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum.PhotoAlbum;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
@@ -22,7 +22,7 @@ import javax.annotation.PostConstruct;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationsWorkArea extends CustomComponent {
     @Autowired
-    private ObservationTable observationTable;
+    private ObservationWithSubjectTable observationTable;
 
     @Autowired
     private PhotoAlbum photoAlbum;
