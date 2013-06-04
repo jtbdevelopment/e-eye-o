@@ -2,9 +2,11 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import com.google.common.primitives.Ints;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectTableDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
@@ -25,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 
 /**
  * Date: 4/24/13
@@ -171,7 +172,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         filterSection.addComponent(showSizeLabel);
         filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
-        final NativeSelect showSize = new NativeSelect(null, Arrays.asList(1, 5, 10, 25, 50));
+        final NativeSelect showSize = new NativeSelect(null, Ints.asList(entityType.getAnnotation(IdObjectTableDisplayPreferences.class).displaySizes()));
         showSize.setValue(maxSize);
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
@@ -205,7 +206,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         buttonSection.setWidth(null);
         buttonSection.setSpacing(true);
 
-        Button newEntityButton = new Button("New " + interfaceResolver.getIdObjectInterfaceForClass(entityType).getAnnotation(PreferredDescription.class).singular());
+        Button newEntityButton = new Button("New " + interfaceResolver.getIdObjectInterfaceForClass(entityType).getAnnotation(IdObjectPreferredDescription.class).singular());
         newEntityButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {

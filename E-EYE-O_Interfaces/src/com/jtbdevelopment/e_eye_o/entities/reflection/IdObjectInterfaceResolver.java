@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities.reflection;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.util.Collection;
@@ -13,9 +14,6 @@ import java.util.Map;
  * Given a concrete implementation of an IdObject returns the interface it implements
  */
 public interface IdObjectInterfaceResolver {
-    public static final String GET = "get";
-    public static final String IS = "is";
-
     @Cacheable("idObjectInterfaceForImpl")
     <T extends IdObject> Class<T> getIdObjectInterfaceForClass(final Class<T> entityType);
 
@@ -24,4 +22,8 @@ public interface IdObjectInterfaceResolver {
      */
     @Cacheable("idObjectGetMethods")
     <T extends IdObject> Collection<Map.Entry<String, Class>> getAllGetters(final Class<T> entityType);
+
+
+    @Cacheable("idObjectFieldPreferences")
+    <T extends IdObject> Map<String, IdObjectFieldPreferences> getAllFieldPreferences(final Class<T> entityType);
 }

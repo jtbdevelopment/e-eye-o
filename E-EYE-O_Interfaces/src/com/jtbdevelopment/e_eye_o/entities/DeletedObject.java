@@ -1,5 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectTableDisplayPreferences;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -18,6 +20,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  * i)  explicitly called for
  * ii) looking for a time based change list
  */
+@IdObjectPreferredDescription(singular = "Deleted Item", plural = "Deleted Items")
+@IdObjectTableDisplayPreferences(displayable = false, defaultSortField = "deletedId")
 public interface DeletedObject extends AppUserOwnedObject {
     final static String DELETED_OBJECT_DELETED_ID_CANNOT_BE_BLANK_OR_NULL_ERROR = "DeletedObject.deletedId" + CANNOT_BE_BLANK_OR_NULL_ERROR;
 

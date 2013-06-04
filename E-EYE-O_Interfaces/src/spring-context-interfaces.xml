@@ -22,6 +22,9 @@
                     <property name="name" value="idObjectGetMethods"/>
                 </bean>
                 <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
+                    <property name="name" value="idObjectFieldPreferences"/>
+                </bean>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
                     <property name="name" value="idObjectInterfaceForImpl"/>
                 </bean>
             </set>

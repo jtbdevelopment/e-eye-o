@@ -5,7 +5,7 @@ import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.annotations.PreferredDescription;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.ClassNamesResourceConfig;
@@ -315,7 +315,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         final String user_active_uri = USERS_URI + testUser1.getId() + "/active/";
         final String user_archived_uri = USERS_URI + testUser1.getId() + "/archived/";
         for (Class<? extends AppUserOwnedObject> entityClass : Arrays.asList(ClassList.class, Student.class, ObservationCategory.class, Observation.class, Photo.class)) {
-            final String entityType = entityClass.getAnnotation(PreferredDescription.class).plural().toLowerCase() + "/";
+            final String entityType = entityClass.getAnnotation(IdObjectPreferredDescription.class).plural().toLowerCase() + "/";
             String uri = user_uri + entityType;
             httpHelper.checkJSONVsExpectedResults(uri, userClient1, readWriteDAO.getEntitiesForUser(entityClass, testUser1));
             final Set<? extends AppUserOwnedObject> activeEntitiesForUser = readWriteDAO.getActiveEntitiesForUser(entityClass, testUser1);

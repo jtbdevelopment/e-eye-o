@@ -6,15 +6,15 @@ import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.FieldEvents;
-import com.vaadin.shared.ui.combobox.FilteringMode;
-import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbstractSelect;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Date: 3/16/13
@@ -22,8 +22,7 @@ import org.springframework.context.annotation.Scope;
  */
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Observation> {
-    private final TextArea commentField = new TextArea();
+public class ObservationEditorDialogWindow extends GeneratedEditorDialogWindow<Observation> {
     private final BeanItemContainer<ObservationCategory> potentialCategories = new BeanItemContainer<>(ObservationCategory.class);
     private final BeanItemContainer<AppUserOwnedObject> potentialSubjects = new BeanItemContainer<>(AppUserOwnedObject.class);
 
@@ -59,88 +58,6 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
     }
 
     @Override
-    protected Layout buildEditorLayout() {
-        VerticalLayout outerLayout = new VerticalLayout();
-        outerLayout.setSpacing(true);
-        outerLayout.setSizeUndefined();
-
-        HorizontalLayout row;
-
-        //
-
-        row = new HorizontalLayout();
-        row.setSpacing(true);
-
-        row.addComponent(new Label("Comment:"));
-        commentField.setRows(9);
-        commentField.setWidth(40, Unit.EM);
-        commentField.addFocusListener(new FieldEvents.FocusListener() {
-            @Override
-            public void focus(FieldEvents.FocusEvent event) {
-                disableDefaultEnterKey();
-            }
-        });
-        commentField.addBlurListener(new FieldEvents.BlurListener() {
-            @Override
-            public void blur(FieldEvents.BlurEvent event) {
-                enableDefaultEnterKey();
-            }
-        });
-        entityBeanFieldGroup.bind(commentField, "comment");
-        row.addComponent(commentField);
-
-        row.addComponent(new Label("Categories:"));
-        TwinColSelect categories = new TwinColSelect();
-        categories.setRows(7);
-        categories.setItemCaptionPropertyId("shortName");
-        categories.setContainerDataSource(potentialCategories);
-        entityBeanFieldGroup.bind(categories, "categories");
-        row.addComponent(categories);
-
-        outerLayout.addComponent(row);
-        outerLayout.setComponentAlignment(row, Alignment.MIDDLE_CENTER);
-
-        //
-
-        row = new HorizontalLayout();
-        row.setSpacing(true);
-
-        row.addComponent(new Label("Observation For:"));
-        ComboBox observationFor = new ComboBox();
-        observationFor.setFilteringMode(FilteringMode.CONTAINS);
-        observationFor.setNewItemsAllowed(false);
-        observationFor.setTextInputAllowed(true);
-        observationFor.setContainerDataSource(potentialSubjects);
-        observationFor.setItemCaptionPropertyId("summaryDescription");
-        entityBeanFieldGroup.bind(observationFor, "observationSubject");
-        row.addComponent(observationFor);
-        outerLayout.addComponent(row);
-        outerLayout.setComponentAlignment(row, Alignment.MIDDLE_CENTER);
-
-        row.addComponent(new Label("Significant?"));
-        CheckBox significant = new CheckBox();
-        entityBeanFieldGroup.bind(significant, "significant");
-        row.addComponent(significant);
-
-        row.addComponent(new Label("Observation Time"));
-        DateField observationTimestamp = new DateField();
-        observationTimestamp.setResolution(Resolution.MINUTE);
-        observationTimestamp.setConverter(new LocalDateTimeDateConverter());
-        entityBeanFieldGroup.bind(observationTimestamp, "observationTimestamp");
-        row.addComponent(observationTimestamp);
-
-        outerLayout.addComponent(row);
-        outerLayout.setComponentAlignment(row, Alignment.MIDDLE_CENTER);
-
-        return outerLayout;
-    }
-
-    @Override
-    protected Focusable getInitialFocusComponent() {
-        return commentField;
-    }
-
-    @Override
     protected Observation save() throws FieldGroup.CommitException {
         Observation entity = super.save();
         if (entity != null) {
@@ -148,5 +65,34 @@ public class ObservationEditorDialogWindow extends IdObjectEditorDialogWindow<Ob
             eventBus.post(new AppUserOwnedObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, observationSubject));
         }
         return entity;
+    }
+
+    @Override
+    protected String getDefaultField() {
+        return "comment";
+    }
+
+    @Override
+    protected List<List<String>> getFieldRows() {
+        List<List<String>> rows = new LinkedList<>();
+        rows.add(Arrays.asList("comment", "categories"));
+        rows.add(Arrays.asList("observationSubject", "significant", "observationTimestamp"));
+        return rows;
+    }
+
+    @Override
+    protected void addDataSourceToSelectField(final String fieldName, final AbstractSelect select) {
+        switch (fieldName) {
+            case "categories":
+                select.setItemCaptionPropertyId("shortName");
+                select.setContainerDataSource(potentialCategories);
+                break;
+            case "observationSubject":
+                select.setContainerDataSource(potentialSubjects);
+                select.setItemCaptionPropertyId("summaryDescription");
+                break;
+        }
+
+        super.addDataSourceToSelectField(fieldName, select);
     }
 }
