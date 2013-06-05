@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
 import com.vaadin.ui.Table;
 import org.joda.time.DateTime;
@@ -21,6 +22,9 @@ import java.util.Map;
 public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> extends IdObjectTable<T> {
 
     private List<HeaderInfo> headers;
+
+    @Autowired
+    protected DateTimeStringConverter dateTimeStringConverter;
 
     @Autowired
     private IdObjectInterfaceResolver idObjectInterfaceResolver;
@@ -44,7 +48,6 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
                 } else if (LocalDateTime.class.equals(returnType)) {
                     entityTable.setConverter(fieldName, localDateTimeStringConverter);
                 }
-
             }
         });
     }

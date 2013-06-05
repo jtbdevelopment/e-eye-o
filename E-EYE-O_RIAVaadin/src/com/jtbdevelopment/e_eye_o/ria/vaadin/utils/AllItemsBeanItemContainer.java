@@ -20,19 +20,12 @@ public class AllItemsBeanItemContainer<T extends IdObject> extends BeanItemConta
     public Collection<?> getSortableContainerPropertyIds() {
         List<Object> allProperties = new LinkedList<>();
         allProperties.addAll(super.getSortableContainerPropertyIds());
-        if (additionalSortableProperties != null) {
-            allProperties.addAll(additionalSortableProperties);
-        }
+        allProperties.addAll(additionalSortableProperties);
         return allProperties;
     }
 
-    public Set<String> getAdditionalSortableProperties() {
-        return additionalSortableProperties;
-    }
-
-    public void setAdditionalSortableProperties(final Collection<String> additionalSortableProperties) {
-        this.additionalSortableProperties.clear();
-        this.additionalSortableProperties.addAll(additionalSortableProperties);
+    public void addAdditionalSortableProperty(final String additionalSortableProperty) {
+        additionalSortableProperties.add(additionalSortableProperty);
     }
 
 }

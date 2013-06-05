@@ -71,6 +71,7 @@ public class ObservationTable extends GeneratedIdObjectTable<Observation> {
     protected void addColumnConverters() {
         super.addColumnConverters();
         entityTable.setConverter("categories", observationCategorySetStringConverter);
+        entities.addAdditionalSortableProperty("categories");
         entityTable.setConverter("comment", shortenedCommentConverter);
         entityTable.setItemDescriptionGenerator(new AbstractSelect.ItemDescriptionGenerator() {
             @Override

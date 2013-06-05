@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtonsGenerator;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.sorter.CompositeItemSorter;
 import com.vaadin.data.Property;
@@ -12,9 +11,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,35 +28,13 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
         private final String property;
         private final String description;
         private final Table.Align align;
-        private final boolean forceGeneratedSort;
 
         public HeaderInfo(final String property, final String description, final Table.Align align) {
             this.description = description;
             this.property = property;
             this.align = align;
-            this.forceGeneratedSort = false;
-        }
-
-        public HeaderInfo(final String property, final String description, final Table.Align align, final boolean forceGeneratedSort) {
-            this.description = description;
-            this.property = property;
-            this.align = align;
-            this.forceGeneratedSort = forceGeneratedSort;
         }
     }
-
-    protected static final List<HeaderInfo> headers;
-
-    static {
-        headers = Arrays.asList(
-                new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("archived", "Active", Table.Align.CENTER),
-                new HeaderInfo("actions", "Actions", Table.Align.RIGHT)
-        );
-    }
-
-    @Autowired
-    protected DateTimeStringConverter dateTimeStringConverter;
 
     protected final Table entityTable = new Table();
 
@@ -81,21 +56,16 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
         List<String> properties = new LinkedList<>();
         List<String> headers = new LinkedList<>();
         List<Table.Align> aligns = new LinkedList<>();
-        List<String> generatedProperties = new LinkedList<>();
 
         //  Force a header info list with edit at front
         List<HeaderInfo> headerInfos = new LinkedList<>();
         headerInfos.add(EDIT_HEADER);
         headerInfos.addAll(getHeaderInfo());
         for (HeaderInfo headerInfo : headerInfos) {
-            if (headerInfo.forceGeneratedSort) {
-                generatedProperties.add(headerInfo.property);
-            }
             properties.add(headerInfo.property);
             headers.add(headerInfo.description);
             aligns.add(headerInfo.align);
         }
-        entities.setAdditionalSortableProperties(generatedProperties);
 
         entityTable.setContainerDataSource(entities);
         entityTable.addStyleName(Runo.TABLE_SMALL);
@@ -148,7 +118,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
     }
 
     protected void addColumnConverters() {
-        entityTable.setConverter("modificationTimestamp", dateTimeStringConverter);
     }
 
     protected void addGeneratedColumns() {

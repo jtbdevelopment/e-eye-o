@@ -4,13 +4,11 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.StudentEditorDialogWindow;
-import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,22 +24,6 @@ public class StudentTable extends ObservableTable<Student> {
 
     public StudentTable() {
         super(Student.class);
-    }
-
-    private static final List<HeaderInfo> headers;
-
-    static {
-        headers = new LinkedList<>(
-                Arrays.asList(
-                        new HeaderInfo("firstName", "First Name", Table.Align.LEFT),
-                        new HeaderInfo("lastName", "Last Name", Table.Align.LEFT)
-                ));
-        headers.addAll(ObservableTable.headers);
-    }
-
-    @Override
-    protected List<HeaderInfo> getHeaderInfo() {
-        return headers;
     }
 
     @Override
@@ -60,4 +42,13 @@ public class StudentTable extends ObservableTable<Student> {
         }
     }
 
+    @Override
+    protected List<String> getTableFields() {
+        final List<String> s = super.getTableFields();
+        return new LinkedList<String>() {{
+            add("firstName");
+            add("lastName");
+            addAll(s);
+        }};
+    }
 }

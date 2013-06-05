@@ -39,6 +39,7 @@ public class ObservationWithSubjectTable extends ObservationTable {
     protected void addColumnConverters() {
         super.addColumnConverters();
         entityTable.setConverter("observationSubject", appUserOwnedObjectStringConverter);
+        entities.addAdditionalSortableProperty("observationSubject");
     }
 
     @Override
