@@ -31,13 +31,13 @@ public interface IdObject {
     public final static String ID_OBJECT_ID_MAY_NOT_BE_EMPTY_ERROR = "IdObject.id" + CANNOT_BE_BLANK_OR_NULL_ERROR;
 
     @NotEmpty(message = ID_OBJECT_ID_MAY_NOT_BE_EMPTY_ERROR)
-    @IdObjectFieldPreferences(displayable = false, editableBy = IdObjectFieldPreferences.EditableBy.NONE)
+    @IdObjectFieldPreferences(viewable = false, editableBy = IdObjectFieldPreferences.EditableBy.NONE)
     String getId();
 
     void setId(final String id);
 
     @NotNull
-    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.NONE, defautlLabel = "Last Update", uiAlignment = IdObjectFieldPreferences.PreferredAlignment.MIDDLE)
+    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.NONE, label = "Last Update", alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
     DateTime getModificationTimestamp();
 
     void setModificationTimestamp(final DateTime modificationTimestamp);

@@ -14,13 +14,11 @@ import java.lang.annotation.Target;
 public @interface IdObjectFieldPreferences {
     public enum EditableBy {USER, ADMIN, NONE}
 
-    ;
+    public enum DisplayFieldType {DEFAULT, TEXT, PASSWORD, MULTI_LINE_TEXT, SINGLE_SELECT_LIST, MULTI_SELECT_PICKER, DATE_TIME, CHECKBOX, REVERSE_CHECKBOX, CUSTOM}
 
-    public enum PreferredUIFieldType {DEFAULT, TEXT, PASSWORD, MULTI_LINE_TEXT, SINGLE_SELECT_LIST, MULTI_SELECT_PICKER, DATE, DATE_TIME, CHECKBOX, CUSTOM}
+    public enum DisplayAlignment {DEFAULT, LEFT, CENTER, RIGHT}
 
-    public enum PreferredAlignment {DEFAULT, LEFT, MIDDLE, RIGHT}
-
-    boolean displayable() default true;
+    boolean viewable() default true;
 
     EditableBy editableBy() default EditableBy.USER;
 
@@ -28,21 +26,21 @@ public @interface IdObjectFieldPreferences {
 
     int height() default 1;  //  Dependent on display type
 
-    String defautlLabel() default "";
+    String label() default "";
 
     String tableLabel() default "";  // use default label
 
     String editLabel() default "";  //  Use default label
 
-    PreferredUIFieldType uiFieldType() default PreferredUIFieldType.DEFAULT;
+    DisplayFieldType fieldType() default DisplayFieldType.DEFAULT;
 
-    PreferredUIFieldType tableFieldType() default PreferredUIFieldType.DEFAULT;  // use uifieldtype
+    DisplayFieldType tableFieldType() default DisplayFieldType.DEFAULT;
 
-    PreferredUIFieldType editFieldType() default PreferredUIFieldType.DEFAULT;  // use uifieldtype
+    DisplayFieldType editFieldType() default DisplayFieldType.DEFAULT;
 
-    PreferredAlignment uiAlignment() default PreferredAlignment.DEFAULT;
+    DisplayAlignment alignment() default DisplayAlignment.DEFAULT;
 
-    PreferredAlignment tableAlignment() default PreferredAlignment.DEFAULT;
+    DisplayAlignment tableAlignment() default DisplayAlignment.DEFAULT;
 
-    PreferredAlignment editableAlignment() default PreferredAlignment.DEFAULT;
+    DisplayAlignment editableAlignment() default DisplayAlignment.DEFAULT;
 }

@@ -1,7 +1,8 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectTableDisplayPreferences;
 import org.joda.time.DateTime;
 
 import javax.validation.constraints.NotNull;
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Time: 2:42 PM
  */
 @IdObjectPreferredDescription(singular = "Two Phase Operations", plural = "Two Phase Operations")
-@IdObjectTableDisplayPreferences(displayable = false, defaultSortField = "expirationTime")
+@IdObjectDisplayPreferences(viewable = false, defaultSortField = "expirationTime", editable = false)
 public interface TwoPhaseActivity extends AppUserOwnedObject {
     public static final String ACTIVITY_TYPE_CANNOT_BE_NULL = "TwoPhaseActivity.activityType" + CANNOT_BE_NULL_ERROR;
     public static final String EXPIRATION_TIME_CANNOT_BE_NULL = "TwoPhaseActivity.expirationTime" + CANNOT_BE_NULL_ERROR;
@@ -22,11 +23,13 @@ public interface TwoPhaseActivity extends AppUserOwnedObject {
     }
 
     @NotNull(message = ACTIVITY_TYPE_CANNOT_BE_NULL)
+    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.NONE, label = "Type")
     Activity getActivityType();
 
     void setActivityType(final Activity activityType);
 
     @NotNull(message = EXPIRATION_TIME_CANNOT_BE_NULL)
+    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.NONE, label = "Expiry")
     DateTime getExpirationTime();
 
     void setExpirationTime(final DateTime expirationTime);

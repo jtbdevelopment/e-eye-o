@@ -1,8 +1,8 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectTableDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.validation.NoNullsInCollectionCheck;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -17,7 +17,7 @@ import java.util.Set;
  * Time: 3:14 PM
  */
 @IdObjectPreferredDescription(singular = "Student", plural = "Students")
-@IdObjectTableDisplayPreferences(defaultDisplaySize = 25, defaultSortField = "lastObservation", defaultSortAscending = true)
+@IdObjectDisplayPreferences(defaultPageSize = 25, defaultSortField = "lastObservation", defaultSortAscending = true)
 public interface Student extends Observable {
 
     public static final String STUDENT_CLASS_LISTS_CANNOT_BE_NULL = "Student.classLists" + CANNOT_BE_NULL_ERROR;
@@ -29,7 +29,7 @@ public interface Student extends Observable {
 
     @NotNull(message = STUDENT_CLASS_LISTS_CANNOT_BE_NULL)
     @NoNullsInCollectionCheck(message = STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL)
-    @IdObjectFieldPreferences(defautlLabel = "Classes", height = 4, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.MULTI_SELECT_PICKER, uiAlignment = IdObjectFieldPreferences.PreferredAlignment.LEFT)
+    @IdObjectFieldPreferences(label = "Classes", height = 4, fieldType = IdObjectFieldPreferences.DisplayFieldType.MULTI_SELECT_PICKER, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT)
     Set<ClassList> getClassLists();
 
     @Transient
@@ -48,14 +48,14 @@ public interface Student extends Observable {
 
     @NotEmpty(message = STUDENT_FIRST_NAME_CANNOT_BE_NULL_OR_BLANK_ERROR)
     @Size(max = MAX_NAME_SIZE, message = STUDENT_FIRST_NAME_SIZE_ERROR)
-    @IdObjectFieldPreferences(defautlLabel = "First Name", width = 15, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.TEXT, uiAlignment = IdObjectFieldPreferences.PreferredAlignment.LEFT)
+    @IdObjectFieldPreferences(label = "First Name", width = 15, fieldType = IdObjectFieldPreferences.DisplayFieldType.TEXT, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT)
     String getFirstName();
 
     void setFirstName(final String firstName);
 
     @NotNull(message = STUDENT_LAST_NAME_CANNOT_BE_NULL_ERROR)
     @Size(max = MAX_NAME_SIZE, message = STUDENT_LAST_NAME_SIZE_ERROR)
-    @IdObjectFieldPreferences(defautlLabel = "Last Name", width = 15, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.TEXT, uiAlignment = IdObjectFieldPreferences.PreferredAlignment.LEFT)
+    @IdObjectFieldPreferences(label = "Last Name", width = 15, fieldType = IdObjectFieldPreferences.DisplayFieldType.TEXT, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT)
     String getLastName();
 
     void setLastName(final String lastName);

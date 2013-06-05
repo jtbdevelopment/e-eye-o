@@ -59,7 +59,7 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
                 if (preferences == null || !IdObjectFieldPreferences.EditableBy.USER.equals(preferences.editableBy())) {
                     continue;
                 }
-                Label label = new Label(preferences.defautlLabel() + ":");
+                Label label = new Label(preferences.label() + ":");
                 Component component = generateField(fieldName, preferences);
                 if (component != null) {
                     editorRow.addComponent(label);
@@ -89,7 +89,7 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
 
     private Component generateField(final String fieldName, final IdObjectFieldPreferences preferences) {
         Component component = null;
-        switch (preferences.uiFieldType()) {
+        switch (preferences.fieldType()) {
             case CHECKBOX:
                 CheckBox checkBox = new CheckBox();
                 entityBeanFieldGroup.bind(checkBox, fieldName);

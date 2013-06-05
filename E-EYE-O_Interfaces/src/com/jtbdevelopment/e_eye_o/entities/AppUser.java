@@ -1,8 +1,8 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectTableDisplayPreferences;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
  * Time: 3:12 PM
  */
 @IdObjectPreferredDescription(singular = "User", plural = "Users")
-@IdObjectTableDisplayPreferences(defaultDisplaySize = 50, defaultSortAscending = true, defaultSortField = "login")
+@IdObjectDisplayPreferences(defaultPageSize = 50, defaultSortAscending = true, defaultSortField = "login")
 public interface AppUser extends IdObject {
     public final static DateTime NEVER_LOGGED_IN = UNINITIALISED_LOCAL_DATE_TIME.toDateTime();
 
@@ -37,14 +37,14 @@ public interface AppUser extends IdObject {
 
     @NotEmpty(message = FIRST_NAME_CANNOT_BE_BLANK_OR_NULL_ERROR)
     @Size(max = MAX_NAME_SIZE, message = APP_USER_FIRST_NAME_SIZE_ERROR)
-    @IdObjectFieldPreferences(defautlLabel = "First Name", uiAlignment = IdObjectFieldPreferences.PreferredAlignment.LEFT, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.TEXT)
+    @IdObjectFieldPreferences(label = "First Name", alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT, fieldType = IdObjectFieldPreferences.DisplayFieldType.TEXT)
     String getFirstName();
 
     void setFirstName(final String firstName);
 
     @NotNull(message = LAST_NAME_CANNOT_BE_NULL_ERROR)
     @Size(max = MAX_NAME_SIZE, message = APP_USER_LAST_NAME_SIZE_ERROR)
-    @IdObjectFieldPreferences(defautlLabel = "Last Name", uiAlignment = IdObjectFieldPreferences.PreferredAlignment.LEFT, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.TEXT)
+    @IdObjectFieldPreferences(label = "Last Name", alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT, fieldType = IdObjectFieldPreferences.DisplayFieldType.TEXT)
     String getLastName();
 
     void setLastName(final String lastName);
@@ -52,38 +52,38 @@ public interface AppUser extends IdObject {
     @NotEmpty(message = EMAIL_CANNOT_BE_NULL_ERROR)
     @Email(message = EMAIL_MUST_BE_A_VALID_FORMAT_ERROR)
     @Size(max = MAX_EMAIL_SIZE, message = APP_USER_EMAIL_SIZE_ERROR)
-    @IdObjectFieldPreferences(defautlLabel = "E-Mail", uiAlignment = IdObjectFieldPreferences.PreferredAlignment.LEFT, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.TEXT)
+    @IdObjectFieldPreferences(label = "E-Mail", alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT, fieldType = IdObjectFieldPreferences.DisplayFieldType.TEXT)
     String getEmailAddress();
 
     void setEmailAddress(final String emailAddress);
 
     @NotEmpty(message = APP_PASSWORD_CANNOT_BE_NULL_ERROR)
     @Size(max = MAX_PASSWORD_SIZE, message = APP_PASSWORD_SIZE_ERROR)
-    @IdObjectFieldPreferences(defautlLabel = "Password", uiAlignment = IdObjectFieldPreferences.PreferredAlignment.LEFT, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.PASSWORD)
+    @IdObjectFieldPreferences(label = "Password", alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT, fieldType = IdObjectFieldPreferences.DisplayFieldType.PASSWORD)
     String getPassword();
 
     void setPassword(final String password);
 
     @NotNull(message = LAST_LOGIN_TIME_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(defautlLabel = "Last Session End", editableBy = IdObjectFieldPreferences.EditableBy.NONE, uiAlignment = IdObjectFieldPreferences.PreferredAlignment.MIDDLE, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.DATE_TIME)
+    @IdObjectFieldPreferences(label = "Last Session End", editableBy = IdObjectFieldPreferences.EditableBy.NONE, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER, fieldType = IdObjectFieldPreferences.DisplayFieldType.DATE_TIME)
     DateTime getLastLogout();
 
     void setLastLogout(final DateTime lastLogout);
 
     @NotNull(message = ACTIVATED_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(defautlLabel = "Activated", editableBy = IdObjectFieldPreferences.EditableBy.ADMIN, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.CHECKBOX)
+    @IdObjectFieldPreferences(label = "Activated", editableBy = IdObjectFieldPreferences.EditableBy.ADMIN, fieldType = IdObjectFieldPreferences.DisplayFieldType.CHECKBOX)
     boolean isActivated();
 
     void setActivated(final boolean activated);
 
     @NotNull(message = ACTIVE_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(defautlLabel = "Active", editableBy = IdObjectFieldPreferences.EditableBy.ADMIN, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.CHECKBOX)
+    @IdObjectFieldPreferences(label = "Active", editableBy = IdObjectFieldPreferences.EditableBy.ADMIN, fieldType = IdObjectFieldPreferences.DisplayFieldType.CHECKBOX)
     boolean isActive();
 
     void setActive(final boolean active);
 
     @NotNull(message = ADMIN_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(defautlLabel = "Admin", editableBy = IdObjectFieldPreferences.EditableBy.ADMIN, uiFieldType = IdObjectFieldPreferences.PreferredUIFieldType.CHECKBOX)
+    @IdObjectFieldPreferences(label = "Admin", editableBy = IdObjectFieldPreferences.EditableBy.ADMIN, fieldType = IdObjectFieldPreferences.DisplayFieldType.CHECKBOX)
     boolean isAdmin();
 
     void setAdmin(final boolean admin);

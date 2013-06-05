@@ -5,8 +5,8 @@ import com.google.common.eventbus.Subscribe;
 import com.google.common.primitives.Ints;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectTableDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
@@ -172,7 +172,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         filterSection.addComponent(showSizeLabel);
         filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
-        final NativeSelect showSize = new NativeSelect(null, Ints.asList(entityType.getAnnotation(IdObjectTableDisplayPreferences.class).displaySizes()));
+        final NativeSelect showSize = new NativeSelect(null, Ints.asList(entityType.getAnnotation(IdObjectDisplayPreferences.class).pageSizes()));
         showSize.setValue(maxSize);
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override

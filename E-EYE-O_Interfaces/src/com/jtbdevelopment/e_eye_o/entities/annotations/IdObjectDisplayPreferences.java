@@ -11,14 +11,16 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface IdObjectTableDisplayPreferences {
-    int[] displaySizes() default {5, 10, 25, 50};
+public @interface IdObjectDisplayPreferences {
+    int[] pageSizes() default {5, 10, 25, 50};
 
-    int defaultDisplaySize() default 10;
+    int defaultPageSize() default 10;
 
     String defaultSortField();
 
     boolean defaultSortAscending() default true;
 
-    boolean displayable() default true;
+    boolean viewable() default true;
+
+    boolean editable() default true;
 }
