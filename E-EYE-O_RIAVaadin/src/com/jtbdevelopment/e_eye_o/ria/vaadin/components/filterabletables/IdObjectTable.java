@@ -24,7 +24,7 @@ import java.util.List;
  */
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObjectFilterableDisplay<T> {
     private static final Logger logger = LoggerFactory.getLogger(IdObjectTable.class);
-    public static final HeaderInfo EDIT_HEADER = new HeaderInfo("edit", "", Table.Align.CENTER);
+    protected static final HeaderInfo EDIT_HEADER = new HeaderInfo("edit", "", Table.Align.CENTER);
 
     //  TODO - this should just drive off of annotations it would seem off of interface
     public static class HeaderInfo {
@@ -53,7 +53,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
     static {
         headers = Arrays.asList(
                 new HeaderInfo("modificationTimestamp", "Last Update", Table.Align.CENTER),
-                new HeaderInfo("archived", "Active", Table.Align.CENTER, true),
+                new HeaderInfo("archived", "Active", Table.Align.CENTER),
                 new HeaderInfo("actions", "Actions", Table.Align.RIGHT)
         );
     }

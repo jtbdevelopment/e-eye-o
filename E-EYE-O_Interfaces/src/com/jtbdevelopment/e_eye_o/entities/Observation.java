@@ -35,7 +35,7 @@ public interface Observation extends AppUserOwnedObject {
     void setObservationSubject(final Observable observationSubject);
 
     @NotNull(message = OBSERVATION_OBSERVATION_TIMESTAMP_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(label = "Observation Time", fieldType = IdObjectFieldPreferences.DisplayFieldType.DATE_TIME, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
+    @IdObjectFieldPreferences(label = "Observation Time", fieldType = IdObjectFieldPreferences.DisplayFieldType.LOCAL_DATE_TIME, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
     LocalDateTime getObservationTimestamp();
 
     void setObservationTimestamp(final LocalDateTime observationDate);
@@ -60,7 +60,7 @@ public interface Observation extends AppUserOwnedObject {
 
     @NotEmpty(message = OBSERVATION_COMMENT_CANNOT_BE_BLANK_OR_NULL_ERROR)
     @Size(max = MAX_COMMENT_SIZE, message = OBSERVATION_COMMENT_SIZE_ERROR)
-    @IdObjectFieldPreferences(label = "Comment", width = 40, height = 9, fieldType = IdObjectFieldPreferences.DisplayFieldType.MULTI_LINE_TEXT, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
+    @IdObjectFieldPreferences(label = "Comment", width = 40, height = 9, fieldType = IdObjectFieldPreferences.DisplayFieldType.MULTI_LINE_TEXT, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT)
     String getComment();
 
     void setComment(final String comment);

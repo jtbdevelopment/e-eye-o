@@ -39,7 +39,26 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
     }
 
     @Override
-    public <T extends IdObject> Collection<Map.Entry<String, Class>> getAllGetters(final Class<T> entityType) {
+    public <T extends IdObject> Map<String, Method> getAllGetMethods(Class<T> entityType) {
+        Function<PropertyDescriptor, Map.Entry<String, Method>> function = new Function<PropertyDescriptor, Map.Entry<String, Method>>() {
+            @Nullable
+            @Override
+            public Map.Entry<String, Method> apply(@Nullable PropertyDescriptor property) {
+                if (property == null) {
+                    return null;
+                }
+                return new AbstractMap.SimpleEntry<>(property.getName(), property.getReadMethod());
+            }
+        };
+        Map<String, Method> readMethods = new HashMap<>();
+        for (Map.Entry<String, Method> field : traverseInterfaces(entityType, function)) {
+            readMethods.put(field.getKey(), field.getValue());
+        }
+        return readMethods;
+    }
+
+    @Override
+    public <T extends IdObject> Collection<Map.Entry<String, Class>> getAllGetMethodReturns(final Class<T> entityType) {
         Function<PropertyDescriptor, Map.Entry<String, Class>> function = new Function<PropertyDescriptor, Map.Entry<String, Class>>() {
             @Nullable
             @Override

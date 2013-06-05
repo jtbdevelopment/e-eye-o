@@ -42,7 +42,7 @@ public interface Photo extends AppUserOwnedObject {
     void setDescription(String description);
 
     @NotNull(message = PHOTO_TIMESTAMP_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(label = "Taken", fieldType = IdObjectFieldPreferences.DisplayFieldType.DATE_TIME, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
+    @IdObjectFieldPreferences(label = "Taken", fieldType = IdObjectFieldPreferences.DisplayFieldType.LOCAL_DATE_TIME, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
     LocalDateTime getTimestamp();
 
     void setTimestamp(LocalDateTime timestamp);

@@ -25,7 +25,6 @@ import javax.annotation.PostConstruct;
  * Time: 8:13 PM
  */
 //  TODO - be nice to recompute the caption at top as we go
-//  TODO - add delete button/workflow
 public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> extends Window {
     private static final Logger logger = LoggerFactory.getLogger(IdObjectEditorDialogWindow.class);
 

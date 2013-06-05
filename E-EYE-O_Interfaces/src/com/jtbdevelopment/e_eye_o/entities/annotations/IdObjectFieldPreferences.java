@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 public @interface IdObjectFieldPreferences {
     public enum EditableBy {USER, ADMIN, NONE}
 
-    public enum DisplayFieldType {DEFAULT, TEXT, PASSWORD, MULTI_LINE_TEXT, SINGLE_SELECT_LIST, MULTI_SELECT_PICKER, DATE_TIME, CHECKBOX, REVERSE_CHECKBOX, CUSTOM}
+    public enum DisplayFieldType {DEFAULT, TEXT, PASSWORD, MULTI_LINE_TEXT, SINGLE_SELECT_LIST, MULTI_SELECT_PICKER, DATE_TIME, LOCAL_DATE_TIME, CHECKBOX, REVERSE_CHECKBOX, CUSTOM}
 
     public enum DisplayAlignment {DEFAULT, LEFT, CENTER, RIGHT}
 

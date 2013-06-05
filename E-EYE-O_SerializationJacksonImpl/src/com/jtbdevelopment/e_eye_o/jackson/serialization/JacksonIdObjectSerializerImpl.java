@@ -36,7 +36,7 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
         }
         generator.writeStartObject();
         generator.writeStringField(ENTITY_TYPE_FIELD, valueInterface.getCanonicalName());
-        for (Map.Entry<String, Class> field : interfaceResolver.getAllGetters(valueInterface)) {
+        for (Map.Entry<String, Class> field : interfaceResolver.getAllGetMethodReturns(valueInterface)) {
             final String fieldName = field.getKey();
             final Object fieldValue = getFieldValue(value, fieldName);
             final Class<?> valueType = field.getValue();

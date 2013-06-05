@@ -29,7 +29,7 @@ public interface Student extends Observable {
 
     @NotNull(message = STUDENT_CLASS_LISTS_CANNOT_BE_NULL)
     @NoNullsInCollectionCheck(message = STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL)
-    @IdObjectFieldPreferences(label = "Classes", height = 4, fieldType = IdObjectFieldPreferences.DisplayFieldType.MULTI_SELECT_PICKER, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT)
+    @IdObjectFieldPreferences(viewable = false, label = "Classes", height = 4, fieldType = IdObjectFieldPreferences.DisplayFieldType.MULTI_SELECT_PICKER, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT)
     Set<ClassList> getClassLists();
 
     @Transient

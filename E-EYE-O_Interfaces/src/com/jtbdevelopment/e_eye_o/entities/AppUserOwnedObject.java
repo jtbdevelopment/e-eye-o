@@ -26,7 +26,7 @@ public interface AppUserOwnedObject extends IdObject {
 
     void setAppUser(final AppUser appUser);
 
-    @IdObjectFieldPreferences(label = "Active", editableBy = IdObjectFieldPreferences.EditableBy.NONE, fieldType = IdObjectFieldPreferences.DisplayFieldType.CHECKBOX, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
+    @IdObjectFieldPreferences(label = "Active", editableBy = IdObjectFieldPreferences.EditableBy.NONE, fieldType = IdObjectFieldPreferences.DisplayFieldType.REVERSE_CHECKBOX, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
     boolean isArchived();
 
     void setArchived(boolean archived);

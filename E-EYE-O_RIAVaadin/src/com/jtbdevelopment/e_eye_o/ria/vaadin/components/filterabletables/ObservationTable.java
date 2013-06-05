@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ObservationCategorySetStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ShortenedCommentConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.filters.ObservationCategoryFilter;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,16 +26,13 @@ import java.util.List;
 //  TODO - add date range filter
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ObservationTable extends IdObjectTable<Observation> {
+public class ObservationTable extends GeneratedIdObjectTable<Observation> {
     private static final Logger logger = LoggerFactory.getLogger(ObservationTable.class);
 
     private Observable defaultObservationSubject;
 
     @Autowired
     private ObservationEditorDialogWindow observationEditorDialogWindow;
-
-    @Autowired
-    private LocalDateTimeStringConverter localDateTimeStringConverter;
 
     @Autowired
     private ObservationCategorySetStringConverter observationCategorySetStringConverter;
@@ -47,24 +42,6 @@ public class ObservationTable extends IdObjectTable<Observation> {
 
     public ObservationTable() {
         super(Observation.class);
-    }
-
-    protected static final List<HeaderInfo> headers;
-
-    static {
-        headers = new LinkedList<>(
-                Arrays.asList(
-                        new HeaderInfo("observationTimestamp", "Time", Table.Align.LEFT),
-                        new HeaderInfo("comment", "Comment", Table.Align.LEFT),
-                        new HeaderInfo("categories", "Categories", Table.Align.LEFT, true),
-                        new HeaderInfo("significant", "Significant?", Table.Align.CENTER, true)
-                ));
-        headers.addAll(IdObjectTable.headers);
-    }
-
-    @Override
-    protected List<HeaderInfo> getHeaderInfo() {
-        return headers;
     }
 
     @Override
@@ -93,7 +70,6 @@ public class ObservationTable extends IdObjectTable<Observation> {
     @Override
     protected void addColumnConverters() {
         super.addColumnConverters();
-        entityTable.setConverter("observationTimestamp", localDateTimeStringConverter);
         entityTable.setConverter("categories", observationCategorySetStringConverter);
         entityTable.setConverter("comment", shortenedCommentConverter);
         entityTable.setItemDescriptionGenerator(new AbstractSelect.ItemDescriptionGenerator() {
@@ -106,6 +82,18 @@ public class ObservationTable extends IdObjectTable<Observation> {
                 return null;
             }
         });
+    }
+
+    @Override
+    protected List<String> getTableFields() {
+        final List<String> s = super.getTableFields();
+        return new LinkedList<String>() {{
+            add("observationTimestamp");
+            add("comment");
+            add("categories");
+            add("significant");
+            addAll(s);
+        }};
     }
 
     @Override

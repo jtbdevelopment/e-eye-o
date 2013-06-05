@@ -185,7 +185,7 @@ public class IdObjectInterfaceResolverImplTest {
             add(new MyEntry("objectValue", Object.class));
             add(new MyEntry("stringValues", Set.class));
         }};
-        Collection<Map.Entry<String, Class>> getters = resolver.getAllGetters(LocalOneImpl.class);
+        Collection<Map.Entry<String, Class>> getters = resolver.getAllGetMethodReturns(LocalOneImpl.class);
         List<Map.Entry<String, Class>> returned = new LinkedList<>(getters);
         assertEquals(expected.size(), returned.size());
         for (int i = 0; i < returned.size(); ++i) {

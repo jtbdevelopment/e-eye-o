@@ -95,6 +95,7 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
                 entityBeanFieldGroup.bind(checkBox, fieldName);
                 component = checkBox;
                 break;
+            case LOCAL_DATE_TIME:
             case DATE_TIME:
                 DateField dateTimeField = new DateField();
                 dateTimeField.setResolution(Resolution.MINUTE);

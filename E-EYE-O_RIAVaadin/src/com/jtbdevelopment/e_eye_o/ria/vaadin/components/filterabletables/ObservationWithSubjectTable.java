@@ -4,12 +4,10 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.convert
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.filters.ObservationSubjectFilter;
 import com.vaadin.data.Container;
 import com.vaadin.data.util.filter.Or;
-import com.vaadin.ui.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,18 +21,6 @@ public class ObservationWithSubjectTable extends ObservationTable {
 
     @Autowired
     AppUserOwnedObjectStringConverter appUserOwnedObjectStringConverter;
-
-    private static final List<HeaderInfo> headers;
-
-    static {
-        headers = new LinkedList<>(Arrays.asList(new HeaderInfo("observationSubject", "Subject", Table.Align.LEFT, true)));
-        headers.addAll(ObservationTable.headers);
-    }
-
-    @Override
-    protected List<HeaderInfo> getHeaderInfo() {
-        return headers;
-    }
 
     @Override
     protected Container.Filter generateFilter(String searchFor) {
@@ -55,5 +41,12 @@ public class ObservationWithSubjectTable extends ObservationTable {
         entityTable.setConverter("observationSubject", appUserOwnedObjectStringConverter);
     }
 
-
+    @Override
+    protected List<String> getTableFields() {
+        final List<String> s = super.getTableFields();
+        return new LinkedList<String>() {{
+            add("observationSubject");
+            addAll(s);
+        }};
+    }
 }

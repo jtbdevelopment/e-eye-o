@@ -16,7 +16,7 @@ public interface Observable extends AppUserOwnedObject {
     public final static String LAST_OBSERVATION_TIME_CANNOT_BE_NULL = "Observable.lastObservationTimestamp" + CANNOT_BE_NULL_ERROR;
 
     @NotNull(message = Observable.LAST_OBSERVATION_TIME_CANNOT_BE_NULL)
-    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.NONE, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER, fieldType = IdObjectFieldPreferences.DisplayFieldType.DATE_TIME)
+    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.NONE, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER, fieldType = IdObjectFieldPreferences.DisplayFieldType.LOCAL_DATE_TIME)
     LocalDateTime getLastObservationTimestamp();
 
     void setLastObservationTimestamp(final LocalDateTime lastObservationTimestamp);
