@@ -27,12 +27,20 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
         super(entityType, width, height);
     }
 
+    public GeneratedEditorDialogWindow(final Class<T> entityType, final float width, final Unit widthUnit, final float height, final Unit heightUnit) {
+        super(entityType, width, widthUnit, height, heightUnit);
+    }
+
     protected abstract String getDefaultField();
 
     protected abstract List<List<String>> getFieldRows();
 
     @SuppressWarnings("unused")
     protected void addDataSourceToSelectField(final String fieldName, final AbstractSelect select) {
+    }
+
+    protected Component getCustomField(final String fieldName) {
+        return null;
     }
 
     @Override
@@ -48,16 +56,16 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
             Layout editorRow = getEditorRow();
             for (String fieldName : fieldRow) {
                 IdObjectFieldPreferences preferences = fields.get(fieldName);
-                if (preferences == null || !preferences.displayable() || !IdObjectFieldPreferences.EditableBy.USER.equals(preferences.editableBy())) {
+                if (preferences == null || !IdObjectFieldPreferences.EditableBy.USER.equals(preferences.editableBy())) {
                     continue;
                 }
                 Label label = new Label(preferences.defautlLabel() + ":");
-                Focusable component = generateField(fieldName, preferences);
+                Component component = generateField(fieldName, preferences);
                 if (component != null) {
                     editorRow.addComponent(label);
                     editorRow.addComponent(component);
-                    if (getDefaultField().equals(fieldName)) {
-                        defaultFocus = component;
+                    if (getDefaultField().equals(fieldName) && component instanceof Focusable) {
+                        defaultFocus = (Focusable) component;
                     }
                 }
             }
@@ -79,8 +87,8 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
         return editorRow;
     }
 
-    private Focusable generateField(final String fieldName, final IdObjectFieldPreferences preferences) {
-        Focusable component = null;
+    private Component generateField(final String fieldName, final IdObjectFieldPreferences preferences) {
+        Component component = null;
         switch (preferences.uiFieldType()) {
             case CHECKBOX:
                 CheckBox checkBox = new CheckBox();
@@ -134,6 +142,9 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
                 });
                 entityBeanFieldGroup.bind(textArea, fieldName);
                 component = textArea;
+                break;
+            case CUSTOM:
+                component = getCustomField(fieldName);
                 break;
             default:
                 break;
