@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.AppUserOwnedObjectStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
 import com.vaadin.ui.Table;
@@ -21,14 +22,14 @@ import java.util.Map;
  */
 public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> extends IdObjectTable<T> {
 
-    private List<HeaderInfo> headers;
-
     @Autowired
     protected DateTimeStringConverter dateTimeStringConverter;
 
     @Autowired
     private IdObjectInterfaceResolver idObjectInterfaceResolver;
 
+    @Autowired
+    AppUserOwnedObjectStringConverter appUserOwnedObjectStringConverter;
 
     @Autowired
     private LocalDateTimeStringConverter localDateTimeStringConverter;
@@ -47,6 +48,9 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
                     entityTable.setConverter(fieldName, dateTimeStringConverter);
                 } else if (LocalDateTime.class.equals(returnType)) {
                     entityTable.setConverter(fieldName, localDateTimeStringConverter);
+                } else if (AppUserOwnedObject.class.isAssignableFrom(returnType)) {
+                    entityTable.setConverter(fieldName, appUserOwnedObjectStringConverter);
+                    entities.addAdditionalSortableProperty(fieldName);
                 }
             }
         });
@@ -60,19 +64,45 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
     }
 
     @Override
-    protected synchronized List<HeaderInfo> getHeaderInfo() {
-        if (headers == null) {
-            headers = new LinkedList<>();
-            applyFunctionToFields(new Callback() {
-                @Override
-                public void apply(String fieldName, Method readMethod, IdObjectFieldPreferences field) {
-                    headers.add(new HeaderInfo(fieldName, field.label(), getAlignment(field)));
-                }
-            });
-            headers.add(new HeaderInfo("actions", "Actions", Table.Align.RIGHT));
-        }
+    protected String[] getVisibleColumns() {
+        final List<String> fieldNames = new LinkedList<>();
+        fieldNames.add("edit");
+        applyFunctionToFields(new Callback() {
+            @Override
+            public void apply(String fieldName, Method readMethod, IdObjectFieldPreferences field) {
+                fieldNames.add(fieldName);
+            }
+        });
+        fieldNames.add("actions");
+        return fieldNames.toArray(new String[fieldNames.size()]);
+    }
 
-        return headers;
+    @Override
+    protected String[] getColumnHeaders() {
+        final List<String> fieldLabels = new LinkedList<>();
+        fieldLabels.add("");
+        applyFunctionToFields(new Callback() {
+            @Override
+            public void apply(String fieldName, Method readMethod, IdObjectFieldPreferences field) {
+                fieldLabels.add(field.label());
+            }
+        });
+        fieldLabels.add("Actions");
+        return fieldLabels.toArray(new String[fieldLabels.size()]);
+    }
+
+    @Override
+    protected Table.Align[] getColumnAlignments() {
+        final List<Table.Align> alignments = new LinkedList<>();
+        alignments.add(Table.Align.CENTER);
+        applyFunctionToFields(new Callback() {
+            @Override
+            public void apply(String fieldName, Method readMethod, IdObjectFieldPreferences field) {
+                alignments.add(getAlignment(field));
+            }
+        });
+        alignments.add(Table.Align.RIGHT);
+        return alignments.toArray(new Table.Align[alignments.size()]);
     }
 
     protected Table.Align getAlignment(IdObjectFieldPreferences field) {

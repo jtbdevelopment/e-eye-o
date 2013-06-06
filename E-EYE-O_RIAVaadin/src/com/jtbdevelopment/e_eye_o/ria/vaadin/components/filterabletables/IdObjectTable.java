@@ -12,33 +12,20 @@ import com.vaadin.ui.themes.Runo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Date: 3/16/13
  * Time: 7:11 PM
  */
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObjectFilterableDisplay<T> {
     private static final Logger logger = LoggerFactory.getLogger(IdObjectTable.class);
-    protected static final HeaderInfo EDIT_HEADER = new HeaderInfo("edit", "", Table.Align.CENTER);
-
-    //  TODO - this should just drive off of annotations it would seem off of interface
-    public static class HeaderInfo {
-        private final String property;
-        private final String description;
-        private final Table.Align align;
-
-        public HeaderInfo(final String property, final String description, final Table.Align align) {
-            this.description = description;
-            this.property = property;
-            this.align = align;
-        }
-    }
 
     protected final Table entityTable = new Table();
 
-    protected abstract List<HeaderInfo> getHeaderInfo();
+    protected abstract String[] getVisibleColumns();
+
+    protected abstract String[] getColumnHeaders();
+
+    protected abstract Table.Align[] getColumnAlignments();
 
     public IdObjectTable(final Class<T> entityType) {
         super(entityType);
@@ -53,20 +40,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
 
     @Override
     protected Component buildMainDisplay() {
-        List<String> properties = new LinkedList<>();
-        List<String> headers = new LinkedList<>();
-        List<Table.Align> aligns = new LinkedList<>();
-
-        //  Force a header info list with edit at front
-        List<HeaderInfo> headerInfos = new LinkedList<>();
-        headerInfos.add(EDIT_HEADER);
-        headerInfos.addAll(getHeaderInfo());
-        for (HeaderInfo headerInfo : headerInfos) {
-            properties.add(headerInfo.property);
-            headers.add(headerInfo.description);
-            aligns.add(headerInfo.align);
-        }
-
         entityTable.setContainerDataSource(entities);
         entityTable.addStyleName(Runo.TABLE_SMALL);
         addGeneratedColumns();
@@ -77,11 +50,12 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
         entityTable.setNullSelectionAllowed(false);
         entityTable.setMultiSelect(false);
 
-        entityTable.setVisibleColumns(properties.toArray(new String[properties.size()]));
-        entityTable.setColumnHeaders(headers.toArray(new String[headers.size()]));
-        entityTable.setSortContainerPropertyId(getDefaultSortField(properties));
+        String[] visibleColumns = getVisibleColumns();
+        entityTable.setVisibleColumns(visibleColumns);
+        entityTable.setColumnHeaders(getColumnHeaders());
+        entityTable.setColumnAlignments(getColumnAlignments());
+        entityTable.setSortContainerPropertyId(getDefaultSortField(visibleColumns));
         entityTable.setSortAscending(getDefaultSortAscending());
-        entityTable.setColumnAlignments(aligns.toArray(new Table.Align[aligns.size()]));
         addColumnConverters();
 
         entityTable.addValueChangeListener(new Property.ValueChangeListener() {
@@ -108,9 +82,9 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
         return entityTable;
     }
 
-    protected String getDefaultSortField(final List<String> properties) {
+    protected String getDefaultSortField(final String[] properties) {
         //  TODO - make preference
-        return properties.get(1);
+        return properties[1];
     }
 
     protected boolean getDefaultSortAscending() {
