@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
@@ -10,6 +11,7 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +33,27 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
         super(entityType, width, widthUnit, height, heightUnit);
     }
 
-    protected abstract String getDefaultField();
+    protected String getDefaultField() {
+        return getFieldRows().get(0).get(0);
+    }
 
-    protected abstract List<List<String>> getFieldRows();
+    protected List<List<String>> getFieldRows() {
+        List<List<String>> rows = new LinkedList<>();
+        List<String> currentRow = new LinkedList<>();
+
+        for (String field : entityType.getAnnotation(IdObjectDisplayPreferences.class).editFieldOrder()) {
+            if (IdObjectDisplayPreferences.SECTION_BREAK.equals(field)) {
+                rows.add(currentRow);
+                currentRow = new LinkedList<>();
+            } else {
+                currentRow.add(field);
+            }
+        }
+        if (currentRow.size() > 0) {
+            rows.add(currentRow);
+        }
+        return rows;
+    }
 
     @SuppressWarnings("unused")
     protected void addDataSourceToSelectField(final String fieldName, final AbstractSelect select) {

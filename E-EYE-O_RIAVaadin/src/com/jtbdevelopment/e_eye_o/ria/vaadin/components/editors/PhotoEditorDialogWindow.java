@@ -15,9 +15,6 @@ import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Date: 4/19/13
@@ -43,19 +40,6 @@ public class PhotoEditorDialogWindow extends GeneratedEditorDialogWindow<Photo> 
 
     public PhotoEditorDialogWindow() {
         super(Photo.class, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
-    }
-
-    @Override
-    protected String getDefaultField() {
-        return "description";
-    }
-
-    @Override
-    protected List<List<String>> getFieldRows() {
-        List<List<String>> rows = new LinkedList<>();
-        rows.add(Arrays.asList("description", "photoFor", "timestamp"));
-        rows.add(Arrays.asList("imageData"));
-        return rows;
     }
 
     @Override

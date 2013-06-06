@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
 import com.jtbdevelopment.e_eye_o.entities.validation.NoNullsInCollectionCheck;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -16,9 +15,11 @@ import java.util.Set;
  * Date: 11/25/12
  * Time: 3:14 PM
  */
-@IdObjectPreferredDescription(singular = "Student", plural = "Students")
 @IdObjectDisplayPreferences(defaultPageSize = 25, defaultSortField = "lastObservation", defaultSortAscending = true,
-        viewFieldOrder = {"firstName", "lastName", "modificationTimestamp", "archived"})
+        singular = "Student", plural = "Students",
+        viewFieldOrder = {"firstName", "lastName", "modificationTimestamp", "archived"},
+        editFieldOrder = {"firstName", "lastName", IdObjectDisplayPreferences.SECTION_BREAK, "classLists"}
+)
 public interface Student extends Observable {
 
     public static final String STUDENT_CLASS_LISTS_CANNOT_BE_NULL = "Student.classLists" + CANNOT_BE_NULL_ERROR;

@@ -12,6 +12,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface IdObjectDisplayPreferences {
+    // Since we cannot put multi-dimensional arrays into annotations, we have to provide break indicator
+    public static final String SECTION_BREAK = "SECTION_BREAK";
+
+    String singular() default "";
+
+    String plural() default "";
+
     int[] pageSizes() default {5, 10, 25, 50};
 
     int defaultPageSize() default 10;
@@ -25,4 +32,6 @@ public @interface IdObjectDisplayPreferences {
     boolean editable() default true;
 
     String[] viewFieldOrder() default {};
+
+    String[] editFieldOrder() default {};
 }

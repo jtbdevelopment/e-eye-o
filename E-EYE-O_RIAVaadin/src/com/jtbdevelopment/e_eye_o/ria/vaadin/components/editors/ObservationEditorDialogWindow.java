@@ -12,10 +12,6 @@ import com.vaadin.ui.AbstractSelect;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Date: 3/16/13
  * Time: 6:36 PM
@@ -65,19 +61,6 @@ public class ObservationEditorDialogWindow extends GeneratedEditorDialogWindow<O
             eventBus.post(new AppUserOwnedObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, observationSubject));
         }
         return entity;
-    }
-
-    @Override
-    protected String getDefaultField() {
-        return "comment";
-    }
-
-    @Override
-    protected List<List<String>> getFieldRows() {
-        List<List<String>> rows = new LinkedList<>();
-        rows.add(Arrays.asList("comment", "categories"));
-        rows.add(Arrays.asList("observationSubject", "significant", "observationTimestamp"));
-        return rows;
     }
 
     @Override

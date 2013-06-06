@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDateTime;
 
@@ -13,8 +12,8 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:18 PM
  */
-@IdObjectPreferredDescription(singular = "Photo", plural = "Photos")
-@IdObjectDisplayPreferences(defaultPageSize = 10, defaultSortField = "timestamp", defaultSortAscending = true)
+@IdObjectDisplayPreferences(defaultPageSize = 10, defaultSortField = "timestamp", defaultSortAscending = true, singular = "Photo", plural = "Photos",
+        editFieldOrder = {"description", "photoFor", "taken", IdObjectDisplayPreferences.SECTION_BREAK, "imageData"})
 public interface Photo extends AppUserOwnedObject {
 
     public static final int THUMBNAIL_SIZE = 150;

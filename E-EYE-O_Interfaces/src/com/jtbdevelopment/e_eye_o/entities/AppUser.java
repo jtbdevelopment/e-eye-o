@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -14,8 +13,7 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:12 PM
  */
-@IdObjectPreferredDescription(singular = "User", plural = "Users")
-@IdObjectDisplayPreferences(defaultPageSize = 50, defaultSortAscending = true, defaultSortField = "login")
+@IdObjectDisplayPreferences(defaultPageSize = 50, defaultSortAscending = true, defaultSortField = "login", singular = "User", plural = "Users")
 public interface AppUser extends IdObject {
     public final static DateTime NEVER_LOGGED_IN = UNINITIALISED_LOCAL_DATE_TIME.toDateTime();
 

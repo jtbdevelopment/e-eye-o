@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.ria.events.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.IdObjectRelatedTab;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.Tab;
@@ -42,7 +42,7 @@ public class TabComponent extends CustomComponent {
         private final Class<? extends AppUserOwnedObject> entityType;
 
         public String getCaption() {
-            return entityType.getAnnotation(IdObjectPreferredDescription.class).plural();
+            return entityType.getAnnotation(IdObjectDisplayPreferences.class).plural();
         }
     }
 

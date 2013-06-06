@@ -7,10 +7,6 @@ import com.vaadin.ui.AbstractSelect;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Date: 3/16/13
  * Time: 6:36 PM
@@ -23,20 +19,6 @@ public class StudentEditorDialogWindow extends GeneratedEditorDialogWindow<Stude
     public StudentEditorDialogWindow() {
         super(Student.class, 50, 15.5f);
     }
-
-    @Override
-    protected String getDefaultField() {
-        return "firstName";
-    }
-
-    @Override
-    protected List<List<String>> getFieldRows() {
-        List<List<String>> rows = new LinkedList<>();
-        rows.add(Arrays.asList("firstName", "lastName"));
-        rows.add(Arrays.asList("classLists"));
-        return rows;
-    }
-
 
     @Override
     protected void addDataSourceToSelectField(final String fieldName, final AbstractSelect select) {

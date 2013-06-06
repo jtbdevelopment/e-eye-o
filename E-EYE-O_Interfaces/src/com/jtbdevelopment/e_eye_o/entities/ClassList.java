@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
@@ -11,9 +10,10 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:15 PM
  */
-@IdObjectPreferredDescription(singular = "Class", plural = "Classes")
 @IdObjectDisplayPreferences(defaultPageSize = 5, defaultSortField = "description", defaultSortAscending = true,
-        viewFieldOrder = {"description", "lastObservationTimestamp", "modificationTimestamp", "archived"})
+        singular = "Class", plural = "Classes",
+        viewFieldOrder = {"description", "lastObservationTimestamp", "modificationTimestamp", "archived"},
+        editFieldOrder = {"description"})
 public interface ClassList extends Observable {
 
     public final static String CLASS_LIST_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL_ERROR = "ClassList.description" + CANNOT_BE_BLANK_OR_NULL_ERROR;

@@ -28,19 +28,7 @@ public @interface IdObjectFieldPreferences {
 
     String label() default "";
 
-    String tableLabel() default "";  // use default label
-
-    String editLabel() default "";  //  Use default label
-
     DisplayFieldType fieldType() default DisplayFieldType.DEFAULT;
 
-    DisplayFieldType tableFieldType() default DisplayFieldType.DEFAULT;
-
-    DisplayFieldType editFieldType() default DisplayFieldType.DEFAULT;
-
     DisplayAlignment alignment() default DisplayAlignment.DEFAULT;
-
-    DisplayAlignment tableAlignment() default DisplayAlignment.DEFAULT;
-
-    DisplayAlignment editableAlignment() default DisplayAlignment.DEFAULT;
 }

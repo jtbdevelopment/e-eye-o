@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
 import com.jtbdevelopment.e_eye_o.entities.validation.NoNullsInCollectionCheck;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDateTime;
@@ -16,9 +15,10 @@ import java.util.Set;
  * Date: 11/25/12
  * Time: 3:15 PM
  */
-@IdObjectPreferredDescription(singular = "Observation", plural = "Observations")
 @IdObjectDisplayPreferences(defaultPageSize = 25, defaultSortField = "observationTimestamp", defaultSortAscending = false,
-        viewFieldOrder = {"observationSubject", "observationTimestamp", "comment", "categories", "significant", "modificationTimestamp", "archived"})
+        singular = "Observation", plural = "Observations",
+        viewFieldOrder = {"observationSubject", "observationTimestamp", "comment", "categories", "significant", "modificationTimestamp", "archived"},
+        editFieldOrder = {"comment", "categories", IdObjectDisplayPreferences.SECTION_BREAK, "observationSubject", "significant", "observationTimestamp"})
 public interface Observation extends AppUserOwnedObject {
 
     public final static String OBSERVATION_COMMENT_CANNOT_BE_BLANK_OR_NULL_ERROR = "Observation.comment" + CANNOT_BE_BLANK_OR_NULL_ERROR;

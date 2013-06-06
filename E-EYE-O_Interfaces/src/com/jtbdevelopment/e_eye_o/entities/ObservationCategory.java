@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectPreferredDescription;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
@@ -11,9 +10,10 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:18 PM
  */
-@IdObjectPreferredDescription(singular = "Category", plural = "Categories")
 @IdObjectDisplayPreferences(defaultPageSize = 10, defaultSortField = "shortName", defaultSortAscending = true,
-        viewFieldOrder = {"shortName", "description", "modificationTimestamp", "archived"})
+        singular = "Category", plural = "Categories",
+        viewFieldOrder = {"shortName", "description", "modificationTimestamp", "archived"},
+        editFieldOrder = {"shortName", "description"})
 public interface ObservationCategory extends AppUserOwnedObject {
 
     public final static String OBSERVATION_CATEGORY_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL = "ObservationCategory.description" + CANNOT_BE_BLANK_OR_NULL_ERROR;
