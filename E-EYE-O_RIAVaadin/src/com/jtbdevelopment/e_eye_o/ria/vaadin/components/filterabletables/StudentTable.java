@@ -9,16 +9,13 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Date: 3/17/13
  * Time: 1:58 PM
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class StudentTable extends ObservableTable<Student> {
+public class StudentTable extends GeneratedIdObjectTable<Student> {
     @Autowired
     private StudentEditorDialogWindow studentEditorDialogWindow;
 
@@ -40,15 +37,5 @@ public class StudentTable extends ObservableTable<Student> {
             entities.addAll(readWriteDAO.getAllStudentsForClassList((ClassList) tableDriver));
             refreshSizeAndSort();
         }
-    }
-
-    @Override
-    protected List<String> getTableFields() {
-        final List<String> s = super.getTableFields();
-        return new LinkedList<String>() {{
-            add("firstName");
-            add("lastName");
-            addAll(s);
-        }};
     }
 }

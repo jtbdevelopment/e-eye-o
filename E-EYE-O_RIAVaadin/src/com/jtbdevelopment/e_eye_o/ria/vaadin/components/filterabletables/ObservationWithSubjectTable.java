@@ -6,16 +6,13 @@ import com.vaadin.data.util.filter.Or;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Date: 3/17/13
  * Time: 4:45 PM
  */
 @Component
 @Scope("prototype")
-public class ObservationWithSubjectTable extends ObservationTable {
+public class ObservationWithSubjectTable extends GeneratedObservationTable {
 
     @Override
     protected Container.Filter generateFilter(String searchFor) {
@@ -28,14 +25,5 @@ public class ObservationWithSubjectTable extends ObservationTable {
     @Override
     protected String getDefaultSortField(final String[] properties) {
         return "observationTimestamp";
-    }
-
-    @Override
-    protected List<String> getTableFields() {
-        final List<String> s = super.getTableFields();
-        return new LinkedList<String>() {{
-            add("observationSubject");
-            addAll(s);
-        }};
     }
 }

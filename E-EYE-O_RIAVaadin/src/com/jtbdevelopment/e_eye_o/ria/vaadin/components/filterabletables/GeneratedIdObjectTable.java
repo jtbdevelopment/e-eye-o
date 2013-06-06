@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.AppUserOwnedObjectStringConverter;
@@ -12,6 +13,7 @@ import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -57,10 +59,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
     }
 
     protected List<String> getTableFields() {
-        return new LinkedList<String>() {{
-            add("modificationTimestamp");
-            add("archived");
-        }};
+        return Arrays.asList(entityType.getAnnotation(IdObjectDisplayPreferences.class).viewFieldOrder());
     }
 
     @Override

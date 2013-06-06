@@ -9,7 +9,6 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -30,10 +29,9 @@ public class ClassListsWorkArea extends CustomComponent {
     @Autowired
     private StudentTable studentTable;
     @Autowired
-    private ObservationTable observationTable;
+    private ObservationWithoutSubjectTable observationWithoutSubjectTable;
     @Autowired
-    @Qualifier("observationTable")
-    private ObservationTable observationsForStudentTable;
+    private ObservationWithoutSubjectTable observationsForStudentTable;
     @Autowired
     private PhotoAlbum photoAlbum;
     @Autowired
@@ -51,7 +49,7 @@ public class ClassListsWorkArea extends CustomComponent {
             @Override
             public void handleClickEvent(final ClassList entity) {
                 studentTable.setDisplayDriver(entity);
-                observationTable.setDisplayDriver(entity);
+                observationWithoutSubjectTable.setDisplayDriver(entity);
                 photoAlbum.setDisplayDriver(entity);
             }
         });
@@ -61,7 +59,7 @@ public class ClassListsWorkArea extends CustomComponent {
         tabSheet.addStyleName(Runo.TABSHEET_SMALL);
         tabSheet.addTab(createTabLayout(Arrays.asList(studentTable, observationsForStudentTable, photosForStudentsObservations)))
                 .setCaption(Student.class.getAnnotation(IdObjectPreferredDescription.class).plural());
-        tabSheet.addTab(createTabLayout(Arrays.asList(observationTable, photosForObservations)))
+        tabSheet.addTab(createTabLayout(Arrays.asList(observationWithoutSubjectTable, photosForObservations)))
                 .setCaption(Observation.class.getAnnotation(IdObjectPreferredDescription.class).plural());
         tabSheet.addTab(photoAlbum).setCaption(Photo.class.getAnnotation(IdObjectPreferredDescription.class).plural());
         mainLayout.addComponent(tabSheet);

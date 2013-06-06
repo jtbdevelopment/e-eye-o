@@ -13,34 +13,23 @@ import com.vaadin.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
- * Date: 3/17/13
- * Time: 2:02 PM
+ * Date: 6/5/13
+ * Time: 10:22 PM
  */
 //  TODO - add date range filter
-@org.springframework.stereotype.Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ObservationTable extends GeneratedIdObjectTable<Observation> {
-    private static final Logger logger = LoggerFactory.getLogger(ObservationTable.class);
-
+public class GeneratedObservationTable extends GeneratedIdObjectTable<Observation> {
+    private static final Logger logger = LoggerFactory.getLogger(ObservationWithoutSubjectTable.class);
     private Observable defaultObservationSubject;
-
     @Autowired
     private ObservationEditorDialogWindow observationEditorDialogWindow;
-
     @Autowired
     private ObservationCategorySetStringConverter observationCategorySetStringConverter;
-
     @Autowired
     private ShortenedCommentConverter shortenedCommentConverter;
 
-    public ObservationTable() {
+    public GeneratedObservationTable() {
         super(Observation.class);
     }
 
@@ -83,18 +72,6 @@ public class ObservationTable extends GeneratedIdObjectTable<Observation> {
                 return null;
             }
         });
-    }
-
-    @Override
-    protected List<String> getTableFields() {
-        final List<String> s = super.getTableFields();
-        return new LinkedList<String>() {{
-            add("observationTimestamp");
-            add("comment");
-            add("categories");
-            add("significant");
-            addAll(s);
-        }};
     }
 
     @Override
@@ -156,5 +133,4 @@ public class ObservationTable extends GeneratedIdObjectTable<Observation> {
     public void setDefaultObservationSubject(final Observable defaultObservationSubject) {
         this.defaultObservationSubject = defaultObservationSubject;
     }
-
 }

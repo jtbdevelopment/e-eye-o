@@ -142,6 +142,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
 
         final CheckBox activeCB = new CheckBox("Active");
         final CheckBox archivedCB = new CheckBox("Archived");
+        //  TODO - filters do not apply properly at start
         //  TODO - configurable
         activeCB.setValue(Boolean.TRUE);
         //  TODO - configurable

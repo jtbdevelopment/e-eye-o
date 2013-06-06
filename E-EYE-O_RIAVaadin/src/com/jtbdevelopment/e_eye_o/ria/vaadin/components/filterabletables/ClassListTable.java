@@ -1,13 +1,14 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ClassListEditorDialogWindow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ClassListTable extends ObservableTable<ClassList> {
+public class ClassListTable extends GeneratedIdObjectTable<ClassList> {
     @Autowired
     private ClassListEditorDialogWindow classListEditorDialogWindow;
 
@@ -33,10 +34,6 @@ public class ClassListTable extends ObservableTable<ClassList> {
 
     @Override
     protected List<String> getTableFields() {
-        final List<String> s = super.getTableFields();
-        return new LinkedList<String>() {{
-            add("description");
-            addAll(s);
-        }};
+        return Arrays.asList(entityType.getAnnotation(IdObjectDisplayPreferences.class).viewFieldOrder());
     }
 }

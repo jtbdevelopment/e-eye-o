@@ -23,4 +23,6 @@ public @interface IdObjectDisplayPreferences {
     boolean viewable() default true;
 
     boolean editable() default true;
+
+    String[] viewFieldOrder() default {};
 }

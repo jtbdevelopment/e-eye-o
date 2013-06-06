@@ -7,9 +7,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Date: 3/17/13
  * Time: 1:58 PM
@@ -22,16 +19,6 @@ public class ObservationCategoryTable extends GeneratedIdObjectTable<Observation
 
     public ObservationCategoryTable() {
         super(ObservationCategory.class);
-    }
-
-    @Override
-    protected List<String> getTableFields() {
-        final List<String> s = super.getTableFields();
-        return new LinkedList<String>() {{
-            add("shortName");
-            add("description");
-            addAll(s);
-        }};
     }
 
     @Override

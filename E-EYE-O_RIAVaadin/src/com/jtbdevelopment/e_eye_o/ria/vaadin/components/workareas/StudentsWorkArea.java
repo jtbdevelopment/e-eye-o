@@ -4,7 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationTable;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationWithoutSubjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.StudentTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum.PhotoAlbum;
 import com.vaadin.ui.CustomComponent;
@@ -25,7 +25,7 @@ public class StudentsWorkArea extends CustomComponent {
     private StudentTable studentTable;
 
     @Autowired
-    private ObservationTable observationTable;
+    private ObservationWithoutSubjectTable observationWithoutSubjectTable;
 
     @Autowired
     private PhotoAlbum photoAlbum;
@@ -38,13 +38,13 @@ public class StudentsWorkArea extends CustomComponent {
         studentTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Student>() {
             @Override
             public void handleClickEvent(Student entity) {
-                observationTable.setDisplayDriver(entity);
+                observationWithoutSubjectTable.setDisplayDriver(entity);
             }
         });
         mainLayout.addComponent(studentTable);
 
-        mainLayout.addComponent(observationTable);
-        observationTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Observation>() {
+        mainLayout.addComponent(observationWithoutSubjectTable);
+        observationWithoutSubjectTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Observation>() {
             @Override
             public void handleClickEvent(final Observation entity) {
                 photoAlbum.setDisplayDriver(entity);
