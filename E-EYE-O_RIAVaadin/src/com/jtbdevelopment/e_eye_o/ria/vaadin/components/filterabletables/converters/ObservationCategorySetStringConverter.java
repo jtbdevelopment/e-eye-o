@@ -4,7 +4,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.gwt.thirdparty.guava.common.base.Function;
 import com.google.gwt.thirdparty.guava.common.collect.Collections2;
-import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
@@ -29,9 +28,6 @@ import java.util.Set;
 @Component
 public class ObservationCategorySetStringConverter implements Converter<String, Set> {
     private static final Logger logger = LoggerFactory.getLogger(ObservationCategorySetStringConverter.class);
-
-    @Autowired
-    private ReadOnlyDAO readOnlyDAO;
 
     @Autowired
     private ObservationCategoryHelper observationCategoryHelper;
