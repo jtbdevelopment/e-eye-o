@@ -202,7 +202,6 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     }
 
     private Layout buildActionButtons() {
-        //  Buttons
         HorizontalLayout buttonSection = new HorizontalLayout();
         buttonSection.setWidth(null);
         buttonSection.setSpacing(true);

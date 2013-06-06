@@ -110,13 +110,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
             }
         });
         entityTable.addGeneratedColumn("actions", new ArchiveAndDeleteButtonsGenerator<>(readWriteDAO, eventBus, entities));
-        entityTable.addGeneratedColumn("archived", new Table.ColumnGenerator() {
-            @Override
-            public Object generateCell(Table source, Object itemId, Object columnId) {
-                T entity = entities.getItem(itemId).getBean();
-                return new Embedded(null, entity.isArchived() ? NOT_X : IS_X);
-            }
-        });
     }
 
     @Override

@@ -7,11 +7,13 @@ import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.AppUserOwnedObjectStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
+import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Table;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -53,6 +55,40 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
                 } else if (AppUserOwnedObject.class.isAssignableFrom(returnType)) {
                     entityTable.setConverter(fieldName, appUserOwnedObjectStringConverter);
                     entities.addAdditionalSortableProperty(fieldName);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void addGeneratedColumns() {
+        super.addGeneratedColumns();
+        applyFunctionToFields(new Callback() {
+            @Override
+            public void apply(final String fieldName, final Method readMethod, final IdObjectFieldPreferences field) {
+                if (boolean.class.equals(readMethod.getReturnType())) {
+                    switch (field.fieldType()) {
+                        case CHECKBOX:
+                        case REVERSE_CHECKBOX:
+                            entityTable.addGeneratedColumn(fieldName, new Table.ColumnGenerator() {
+                                @Override
+                                public Object generateCell(Table source, Object itemId, Object columnId) {
+                                    T entity = entities.getItem(itemId).getBean();
+                                    try {
+                                        if (IdObjectFieldPreferences.DisplayFieldType.REVERSE_CHECKBOX.equals(field.fieldType())) {
+                                            return new Embedded(null, (boolean) readMethod.invoke(entity) ? NOT_X : null);
+                                        } else {
+                                            return new Embedded(null, (boolean) readMethod.invoke(entity) ? IS_X : null);
+
+                                        }
+                                    } catch (IllegalAccessException | InvocationTargetException e) {
+                                        //  TODO log
+                                        return null;
+                                    }
+                                }
+                            });
+                            break;
+                    }
                 }
             }
         });

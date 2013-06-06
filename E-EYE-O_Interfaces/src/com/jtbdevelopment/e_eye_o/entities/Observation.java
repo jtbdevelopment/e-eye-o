@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @IdObjectPreferredDescription(singular = "Observation", plural = "Observations")
 @IdObjectDisplayPreferences(defaultPageSize = 25, defaultSortField = "observationTimestamp", defaultSortAscending = false,
-        viewFieldOrder = {"observationSubject", "observationTimestamp", "comment", "categories", "significant", "archived", "modificationTimestamp"})
+        viewFieldOrder = {"observationSubject", "observationTimestamp", "comment", "categories", "significant", "modificationTimestamp", "archived"})
 public interface Observation extends AppUserOwnedObject {
 
     public final static String OBSERVATION_COMMENT_CANNOT_BE_BLANK_OR_NULL_ERROR = "Observation.comment" + CANNOT_BE_BLANK_OR_NULL_ERROR;

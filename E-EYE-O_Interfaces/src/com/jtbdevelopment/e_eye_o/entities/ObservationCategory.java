@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
  */
 @IdObjectPreferredDescription(singular = "Category", plural = "Categories")
 @IdObjectDisplayPreferences(defaultPageSize = 10, defaultSortField = "shortName", defaultSortAscending = true,
-        viewFieldOrder = {"shortName", "description", "archived", "modificationTimestamp"})
+        viewFieldOrder = {"shortName", "description", "modificationTimestamp", "archived"})
 public interface ObservationCategory extends AppUserOwnedObject {
 
     public final static String OBSERVATION_CATEGORY_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL = "ObservationCategory.description" + CANNOT_BE_BLANK_OR_NULL_ERROR;

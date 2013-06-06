@@ -77,15 +77,8 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
     @Override
     protected void addGeneratedColumns() {
         super.addGeneratedColumns();
-        entityTable.addGeneratedColumn("significant", new Table.ColumnGenerator() {
-            @Override
-            public Object generateCell(Table source, Object itemId, Object columnId) {
-                Observation observation = entities.getItem(itemId).getBean();
-                return observation.isSignificant() ? new Embedded(null, IS_X) : null;
-            }
-        });
 
-        //  TODO - do his better
+        //  TODO - do this better
         entityTable.setColumnExpandRatio("observationTimestamp", 0.10f);
         entityTable.setColumnExpandRatio("categories", 0.10f);
         entityTable.setColumnExpandRatio("modificationTimestamp", 0.10f);

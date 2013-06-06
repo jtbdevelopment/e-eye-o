@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
  */
 @IdObjectPreferredDescription(singular = "Class", plural = "Classes")
 @IdObjectDisplayPreferences(defaultPageSize = 5, defaultSortField = "description", defaultSortAscending = true,
-        viewFieldOrder = {"description", "lastObservationTimestamp", "archived", "modificationTimestamp"})
+        viewFieldOrder = {"description", "lastObservationTimestamp", "modificationTimestamp", "archived"})
 public interface ClassList extends Observable {
 
     public final static String CLASS_LIST_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL_ERROR = "ClassList.description" + CANNOT_BE_BLANK_OR_NULL_ERROR;

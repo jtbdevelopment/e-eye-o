@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @IdObjectPreferredDescription(singular = "Student", plural = "Students")
 @IdObjectDisplayPreferences(defaultPageSize = 25, defaultSortField = "lastObservation", defaultSortAscending = true,
-        viewFieldOrder = {"firstName", "lastName", "archived", "modificationTimestamp"})
+        viewFieldOrder = {"firstName", "lastName", "modificationTimestamp", "archived"})
 public interface Student extends Observable {
 
     public static final String STUDENT_CLASS_LISTS_CANNOT_BE_NULL = "Student.classLists" + CANNOT_BE_NULL_ERROR;
