@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
+//  TODO  - put tests around usage
 public @interface IdObjectDisplayPreferences {
     // Since we cannot put multi-dimensional arrays into annotations, we have to provide break indicator
     public static final String SECTION_BREAK = "SECTION_BREAK";

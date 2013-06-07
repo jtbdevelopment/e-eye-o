@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
+//  TODO  - put tests around usage
 public @interface IdObjectFieldPreferences {
     public enum EditableBy {USER, ADMIN, NONE}
 
