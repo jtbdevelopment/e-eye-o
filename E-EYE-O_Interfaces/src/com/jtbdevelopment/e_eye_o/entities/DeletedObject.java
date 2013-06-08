@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * i)  explicitly called for
  * ii) looking for a time based change list
  */
-@IdObjectDisplayPreferences(viewable = false, defaultSortField = "deletedId", editable = false, singular = "Deleted Item", plural = "Deleted Items")
+@IdObjectDisplayPreferences(viewable = true, editable = false, defaultSortField = "deletedId", singular = "Deleted Item", plural = "Deleted Items")
 public interface DeletedObject extends AppUserOwnedObject {
     final static String DELETED_OBJECT_DELETED_ID_CANNOT_BE_BLANK_OR_NULL_ERROR = "DeletedObject.deletedId" + CANNOT_BE_BLANK_OR_NULL_ERROR;
 

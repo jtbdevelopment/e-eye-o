@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  * Date: 4/6/13
  * Time: 2:42 PM
  */
-@IdObjectDisplayPreferences(viewable = false, defaultSortField = "expirationTime", editable = false, singular = "Two Phase Operations", plural = "Two Phase Operations")
+@IdObjectDisplayPreferences(viewable = false, editable = false, defaultSortField = "expirationTime", singular = "Two Phase Operations", plural = "Two Phase Operations")
 public interface TwoPhaseActivity extends AppUserOwnedObject {
     public static final String ACTIVITY_TYPE_CANNOT_BE_NULL = "TwoPhaseActivity.activityType" + CANNOT_BE_NULL_ERROR;
     public static final String EXPIRATION_TIME_CANNOT_BE_NULL = "TwoPhaseActivity.expirationTime" + CANNOT_BE_NULL_ERROR;

@@ -76,7 +76,7 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
             Layout editorRow = getEditorRow();
             for (String fieldName : fieldRow) {
                 IdObjectFieldPreferences preferences = fields.get(fieldName);
-                if (preferences == null || !IdObjectFieldPreferences.EditableBy.USER.equals(preferences.editableBy())) {
+                if (preferences == null) {
                     continue;
                 }
                 Label label = new Label(preferences.label() + ":");

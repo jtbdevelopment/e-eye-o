@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:12 PM
  */
+//  TODO - edit and view fields
 @IdObjectDisplayPreferences(defaultPageSize = 50, defaultSortAscending = true, defaultSortField = "login", singular = "User", plural = "Users")
 public interface AppUser extends IdObject {
     public final static DateTime NEVER_LOGGED_IN = UNINITIALISED_LOCAL_DATE_TIME.toDateTime();
@@ -50,14 +51,14 @@ public interface AppUser extends IdObject {
     @NotEmpty(message = EMAIL_CANNOT_BE_NULL_ERROR)
     @Email(message = EMAIL_MUST_BE_A_VALID_FORMAT_ERROR)
     @Size(max = MAX_EMAIL_SIZE, message = APP_USER_EMAIL_SIZE_ERROR)
-    @IdObjectFieldPreferences(label = "E-Mail", alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT, fieldType = IdObjectFieldPreferences.DisplayFieldType.TEXT)
+    @IdObjectFieldPreferences(label = "E-Mail", editableBy = IdObjectFieldPreferences.EditableBy.LIMITED_USER, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT, fieldType = IdObjectFieldPreferences.DisplayFieldType.TEXT)
     String getEmailAddress();
 
     void setEmailAddress(final String emailAddress);
 
     @NotEmpty(message = APP_PASSWORD_CANNOT_BE_NULL_ERROR)
     @Size(max = MAX_PASSWORD_SIZE, message = APP_PASSWORD_SIZE_ERROR)
-    @IdObjectFieldPreferences(label = "Password", alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT, fieldType = IdObjectFieldPreferences.DisplayFieldType.PASSWORD)
+    @IdObjectFieldPreferences(viewable = false, editableBy = IdObjectFieldPreferences.EditableBy.LIMITED_USER, label = "Password", alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT, fieldType = IdObjectFieldPreferences.DisplayFieldType.PASSWORD)
     String getPassword();
 
     void setPassword(final String password);
@@ -69,13 +70,13 @@ public interface AppUser extends IdObject {
     void setLastLogout(final DateTime lastLogout);
 
     @NotNull(message = ACTIVATED_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(label = "Activated", editableBy = IdObjectFieldPreferences.EditableBy.ADMIN, fieldType = IdObjectFieldPreferences.DisplayFieldType.CHECKBOX)
+    @IdObjectFieldPreferences(label = "Activated", editableBy = IdObjectFieldPreferences.EditableBy.LIMITED_USER, fieldType = IdObjectFieldPreferences.DisplayFieldType.CHECKBOX)
     boolean isActivated();
 
     void setActivated(final boolean activated);
 
     @NotNull(message = ACTIVE_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(label = "Active", editableBy = IdObjectFieldPreferences.EditableBy.ADMIN, fieldType = IdObjectFieldPreferences.DisplayFieldType.CHECKBOX)
+    @IdObjectFieldPreferences(label = "Active", editableBy = IdObjectFieldPreferences.EditableBy.LIMITED_USER, fieldType = IdObjectFieldPreferences.DisplayFieldType.CHECKBOX)
     boolean isActive();
 
     void setActive(final boolean active);
@@ -85,6 +86,5 @@ public interface AppUser extends IdObject {
     boolean isAdmin();
 
     void setAdmin(final boolean admin);
-
 }
 

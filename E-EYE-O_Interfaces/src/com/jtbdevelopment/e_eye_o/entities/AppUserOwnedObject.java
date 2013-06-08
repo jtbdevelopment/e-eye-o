@@ -21,12 +21,12 @@ public interface AppUserOwnedObject extends IdObject {
     public final static String ALL_OWNED_OBJECTS_MUST_BE_FOR_SAME_USER_ERROR = "All AppUserOwnedObjects must match.";
 
     @NotNull(message = APP_USER_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(viewable = false, editableBy = IdObjectFieldPreferences.EditableBy.NONE)
+    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.ADMIN)
     AppUser getAppUser();
 
     void setAppUser(final AppUser appUser);
 
-    @IdObjectFieldPreferences(label = "Active", editableBy = IdObjectFieldPreferences.EditableBy.NONE, fieldType = IdObjectFieldPreferences.DisplayFieldType.REVERSE_CHECKBOX, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
+    @IdObjectFieldPreferences(label = "Active", editableBy = IdObjectFieldPreferences.EditableBy.LIMITED_USER, fieldType = IdObjectFieldPreferences.DisplayFieldType.REVERSE_CHECKBOX, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
     boolean isArchived();
 
     void setArchived(boolean archived);

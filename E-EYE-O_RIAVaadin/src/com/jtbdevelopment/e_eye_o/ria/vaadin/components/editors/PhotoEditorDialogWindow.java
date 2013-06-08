@@ -37,6 +37,7 @@ public class PhotoEditorDialogWindow extends GeneratedEditorDialogWindow<Photo> 
     private Panel photoPanel;
 
     private String mimeType;
+    private Upload upload = new Upload();
 
     public PhotoEditorDialogWindow() {
         super(Photo.class, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
@@ -68,7 +69,6 @@ public class PhotoEditorDialogWindow extends GeneratedEditorDialogWindow<Photo> 
                 photoPanel.setSizeUndefined();
                 photoRow.addComponent(photoPanel);
 
-                final Upload upload = new Upload();
                 upload.setButtonCaption("Pick...");
                 photoRow.addComponent(upload);
 
@@ -112,10 +112,12 @@ public class PhotoEditorDialogWindow extends GeneratedEditorDialogWindow<Photo> 
             bigPhoto.setSource(new PhotoImageResource(entity));
             bigPhoto.setAlternateText(entity.getDescription());
             mimeType = entity.getMimeType();
+            upload.setVisible(false);
         } else {
             bigPhoto = new Embedded();
             photoPanel.setContent(bigPhoto);
             mimeType = "";
+            upload.setVisible(true);
         }
         potentialPhotoFors.removeAllItems();
         if (entity.isArchived()) {

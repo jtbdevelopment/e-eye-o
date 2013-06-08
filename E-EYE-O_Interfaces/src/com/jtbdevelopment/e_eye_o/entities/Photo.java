@@ -47,20 +47,20 @@ public interface Photo extends AppUserOwnedObject {
     void setTimestamp(LocalDateTime timestamp);
 
     @NotEmpty(message = PHOTO_MIME_TYPE_CANNOT_BE_BLANK_OR_NULL)
-    @IdObjectFieldPreferences(viewable = false, editableBy = IdObjectFieldPreferences.EditableBy.NONE)
+    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.NONE)
     String getMimeType();
 
     void setMimeType(final String mimeType);
 
     //  TODO - max size
     @NotEmpty(message = PHOTO_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL)
-    @IdObjectFieldPreferences(viewable = false, label = "Picture", fieldType = IdObjectFieldPreferences.DisplayFieldType.CUSTOM)
+    @IdObjectFieldPreferences(label = "Picture", editableBy = IdObjectFieldPreferences.EditableBy.NONE, fieldType = IdObjectFieldPreferences.DisplayFieldType.CUSTOM)
     byte[] getImageData();
 
     void setImageData(final byte[] imageBytes);
 
     @NotEmpty(message = PHOTO_THUMBNAIL_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL)
-    @IdObjectFieldPreferences(viewable = true, label = "Picture", editableBy = IdObjectFieldPreferences.EditableBy.NONE)
+    @IdObjectFieldPreferences(label = "Picture", editableBy = IdObjectFieldPreferences.EditableBy.NONE, fieldType = IdObjectFieldPreferences.DisplayFieldType.CUSTOM)
     byte[] getThumbnailImageData();
 
     void setThumbnailImageData(final byte[] thumbnailBytes);
