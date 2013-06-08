@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper.HibernateIdObjectWrapperFactory;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -20,13 +20,13 @@ public class HibernateAbstractIdObjectTest {
     protected final String STRING_VALUE = "S";
     protected Mockery context;
     protected IdObjectFactory implFactory;
-    protected IdObjectInterfaceResolver interfaceResolver;
+    protected IdObjectReflectionHelper interfaceResolver;
     protected HibernateIdObjectWrapperFactory daoFactory;
 
     protected void setUp() {
         context = new Mockery();
         implFactory = context.mock(IdObjectFactory.class);
-        interfaceResolver = context.mock(IdObjectInterfaceResolver.class);
+        interfaceResolver = context.mock(IdObjectReflectionHelper.class);
         context.checking(new Expectations() {{
             allowing(interfaceResolver).getIdObjectInterfaceForClass(with(new IsInstanceOf(AppUser.class)));
             will(returnValue(AppUser.class));

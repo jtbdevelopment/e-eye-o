@@ -6,7 +6,7 @@ import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateIdObject;
 import org.hibernate.Query;
@@ -32,15 +32,15 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     private final static Logger logger = LoggerFactory.getLogger(HibernateReadOnlyDAO.class);
 
-    private final IdObjectInterfaceResolver interfaceResolver;
+    private final IdObjectReflectionHelper interfaceResolver;
     protected final SessionFactory sessionFactory;
     protected final DAOIdObjectWrapperFactory wrapperFactory;
 
     @Autowired
-    public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectInterfaceResolver idObjectInterfaceResolver) {
+    public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
         this.sessionFactory = sessionFactory;
         this.wrapperFactory = wrapperFactory;
-        this.interfaceResolver = idObjectInterfaceResolver;
+        this.interfaceResolver = idObjectReflectionHelper;
     }
 
 

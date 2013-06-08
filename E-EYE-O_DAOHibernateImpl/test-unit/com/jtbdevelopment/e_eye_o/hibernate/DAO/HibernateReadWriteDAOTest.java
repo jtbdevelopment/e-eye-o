@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
 import org.hibernate.Query;
@@ -28,7 +28,7 @@ public class HibernateReadWriteDAOTest {
     public static final String DN = "DN";
     private Mockery context;
     private SessionFactory sessionFactory;
-    private IdObjectInterfaceResolver idObjectInterfaceResolver;
+    private IdObjectReflectionHelper idObjectReflectionHelper;
     private Session session;
     private DAOIdObjectWrapperFactory daoIdObjectWrapperFactory;
     private HibernateReadWriteDAO dao;
@@ -53,7 +53,7 @@ public class HibernateReadWriteDAOTest {
     public void setUp() throws Exception {
         context = new Mockery();
         sessionFactory = context.mock(SessionFactory.class);
-        idObjectInterfaceResolver = context.mock(IdObjectInterfaceResolver.class);
+        idObjectReflectionHelper = context.mock(IdObjectReflectionHelper.class);
         session = context.mock(Session.class);
         query1 = context.mock(Query.class, "Q1");
         query2 = context.mock(Query.class, "Q2");
@@ -90,35 +90,35 @@ public class HibernateReadWriteDAOTest {
         wrapped.clear();
         Collections.addAll(wrapped, classListWrapped, appUserWrapped, studentWrapped, photoWrapped, observationWrapped, observationCategoryWrapped);
         context.checking(new Expectations() {{
-            one(idObjectInterfaceResolver).getIdObjectInterfaceForClass(observationLoaded.getClass());
+            one(idObjectReflectionHelper).getIdObjectInterfaceForClass(observationLoaded.getClass());
             will(returnValue(Observation.class));
-            one(idObjectInterfaceResolver).getIdObjectInterfaceForClass(observationWrapped.getClass());
+            one(idObjectReflectionHelper).getIdObjectInterfaceForClass(observationWrapped.getClass());
             will(returnValue(Observation.class));
-            one(idObjectInterfaceResolver).getIdObjectInterfaceForClass(classListLoaded.getClass());
+            one(idObjectReflectionHelper).getIdObjectInterfaceForClass(classListLoaded.getClass());
             will(returnValue(ClassList.class));
-            one(idObjectInterfaceResolver).getIdObjectInterfaceForClass(classListWrapped.getClass());
+            one(idObjectReflectionHelper).getIdObjectInterfaceForClass(classListWrapped.getClass());
             will(returnValue(ClassList.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(studentWrapped.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(studentWrapped.getClass());
             will(returnValue(Student.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(studentLoaded.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(studentLoaded.getClass());
             will(returnValue(Student.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(observationCategoryLoaded.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(observationCategoryLoaded.getClass());
             will(returnValue(ObservationCategory.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(observationCategoryWrapped.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(observationCategoryWrapped.getClass());
             will(returnValue(ObservationCategory.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(photoWrapped.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(photoWrapped.getClass());
             will(returnValue(Photo.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(photoLoaded.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(photoLoaded.getClass());
             will(returnValue(Photo.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(appUserLoaded.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(appUserLoaded.getClass());
             will(returnValue(AppUser.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(appUserWrapped.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(appUserWrapped.getClass());
             will(returnValue(AppUser.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(DeletedObject.class);
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(DeletedObject.class);
             will(returnValue(DeletedObject.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(AppUser.class);
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(AppUser.class);
             will(returnValue(AppUser.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(AppUserOwnedObject.class);
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(AppUserOwnedObject.class);
             will(returnValue(AppUserOwnedObject.class));
             allowing(sessionFactory).getCurrentSession();
             will(returnValue(session));
@@ -229,7 +229,7 @@ public class HibernateReadWriteDAOTest {
             allowing(studentWrapped).setLastObservationTimestamp(now);
         }});
 
-        dao = new HibernateReadWriteDAO(sessionFactory, daoIdObjectWrapperFactory, idObjectInterfaceResolver);
+        dao = new HibernateReadWriteDAO(sessionFactory, daoIdObjectWrapperFactory, idObjectReflectionHelper);
     }
 
     @Test

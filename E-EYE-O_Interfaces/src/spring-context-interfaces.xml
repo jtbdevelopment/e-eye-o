@@ -22,7 +22,7 @@
                     <property name="name" value="idObjectGetterMethods"/>
                 </bean>
                 <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
-                    <property name="name" value="idObjectGetMethodReturnTypes"/>
+                    <property name="name" value="idObjectSetterMethods"/>
                 </bean>
                 <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
                     <property name="name" value="idObjectFieldPreferences"/>

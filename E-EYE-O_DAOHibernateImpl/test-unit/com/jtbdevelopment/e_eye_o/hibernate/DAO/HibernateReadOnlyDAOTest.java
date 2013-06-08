@@ -5,7 +5,7 @@ import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.impl.AppUserOwnedObjectImpl;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateDeletedObject;
@@ -31,7 +31,7 @@ import static org.testng.AssertJUnit.*;
 public class HibernateReadOnlyDAOTest {
     private Mockery context;
     private DAOIdObjectWrapperFactory wrapperFactory;
-    private IdObjectInterfaceResolver idObjectInterfaceResolver;
+    private IdObjectReflectionHelper idObjectReflectionHelper;
     private SessionFactory sessionFactory;
     private ClassMetadata hibernateData;
     private AppUser appUser;
@@ -67,21 +67,21 @@ public class HibernateReadOnlyDAOTest {
         context = new Mockery();
         wrapperFactory = context.mock(DAOIdObjectWrapperFactory.class);
         sessionFactory = context.mock(SessionFactory.class);
-        idObjectInterfaceResolver = context.mock(IdObjectInterfaceResolver.class);
+        idObjectReflectionHelper = context.mock(IdObjectReflectionHelper.class);
         hibernateData = context.mock(ClassMetadata.class);
         session = context.mock(Session.class);
         appUser = context.mock(AppUser.class);
         query = context.mock(Query.class);
         DELETED_WRAPPER = context.mock(DeletedObject.class);
-        dao = new HibernateReadOnlyDAO(sessionFactory, wrapperFactory, idObjectInterfaceResolver);
+        dao = new HibernateReadOnlyDAO(sessionFactory, wrapperFactory, idObjectReflectionHelper);
         context.checking(new Expectations() {{
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(LocalInterface.class);
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(LocalInterface.class);
             will(returnValue(LocalInterface.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(DeletedObject.class);
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(DeletedObject.class);
             will(returnValue(DeletedObject.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(AppUser.class);
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(AppUser.class);
             will(returnValue(AppUser.class));
-            allowing(idObjectInterfaceResolver).getIdObjectInterfaceForClass(AppUserOwnedObject.class);
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(AppUserOwnedObject.class);
             will(returnValue(AppUserOwnedObject.class));
             allowing(wrapperFactory).getWrapperForEntity(LocalInterface.class);
             will(returnValue(HibernateWrapper.class));
@@ -314,7 +314,7 @@ public class HibernateReadOnlyDAOTest {
     public void testGetHibernateEntityNameWhereFactoryDoesNotProvidesMappingAndNeitherDoesHibernate() throws Exception {
         context.checking(new Expectations() {{
             //  Intentional return of impl not interface to generate failed mapping
-            one(idObjectInterfaceResolver).getIdObjectInterfaceForClass(LocalImpl.class);
+            one(idObjectReflectionHelper).getIdObjectInterfaceForClass(LocalImpl.class);
             will(returnValue(LocalImpl.class));
             one(wrapperFactory).getWrapperForEntity(LocalImpl.class);
             will(returnValue(null));

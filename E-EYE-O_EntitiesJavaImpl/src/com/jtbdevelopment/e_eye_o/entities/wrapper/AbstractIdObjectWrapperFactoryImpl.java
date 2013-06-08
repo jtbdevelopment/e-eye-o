@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities.wrapper;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -11,10 +11,10 @@ import java.util.*;
 public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
     private final Map<Class<? extends IdObject>, Class<? extends IdObject>> entityToWrapperMap = new HashMap<>();
     private final Map<Class<? extends IdObject>, Class<? extends IdObject>> wrapperToEntityMap = new HashMap<>();
-    private final IdObjectInterfaceResolver interfaceResolver;
+    private final IdObjectReflectionHelper interfaceResolver;
     private final Class<? extends IdObjectWrapper> baseClass;
 
-    protected AbstractIdObjectWrapperFactoryImpl(final Class<? extends IdObjectWrapper> baseClass, final IdObjectInterfaceResolver interfaceResolver) {
+    protected AbstractIdObjectWrapperFactoryImpl(final Class<? extends IdObjectWrapper> baseClass, final IdObjectReflectionHelper interfaceResolver) {
         this.baseClass = baseClass;
         this.interfaceResolver = interfaceResolver;
     }

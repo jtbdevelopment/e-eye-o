@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.shared.ui.combobox.FilteringMode;
@@ -23,7 +23,7 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
     private Focusable defaultFocus;
 
     @Autowired
-    private IdObjectInterfaceResolver interfaceResolver;
+    private IdObjectReflectionHelper interfaceResolver;
 
     public GeneratedEditorDialogWindow(Class<T> entityType, float width, float height) {
         super(entityType, width, height);

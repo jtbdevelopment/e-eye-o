@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.AppUserOwnedObjectStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeStringConverter;
@@ -30,7 +30,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
     protected DateTimeStringConverter dateTimeStringConverter;
 
     @Autowired
-    private IdObjectInterfaceResolver idObjectInterfaceResolver;
+    private IdObjectReflectionHelper idObjectReflectionHelper;
 
     @Autowired
     AppUserOwnedObjectStringConverter appUserOwnedObjectStringConverter;
@@ -158,7 +158,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
     }
 
     private void applyFunctionToFields(final Callback callback) {
-        Map<String, Method> fields = idObjectInterfaceResolver.getAllGetMethods(entityType);
+        Map<String, Method> fields = idObjectReflectionHelper.getAllGetMethods(entityType);
         for (String fieldName : getTableFields()) {
             Method readMethod = fields.get(fieldName);
             if (readMethod == null) {

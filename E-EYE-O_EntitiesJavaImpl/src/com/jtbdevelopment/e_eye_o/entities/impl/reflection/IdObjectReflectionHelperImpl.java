@@ -5,7 +5,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ import java.util.*;
  */
 @Service
 @SuppressWarnings("unused")
-public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver {
+public class IdObjectReflectionHelperImpl implements IdObjectReflectionHelper {
 
     @SuppressWarnings("unchecked")
     public <T extends IdObject> Class<T> getIdObjectInterfaceForClass(final Class<T> entityType) {
@@ -58,26 +58,22 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
     }
 
     @Override
-    public <T extends IdObject> Collection<Map.Entry<String, Class>> getAllGetMethodReturns(final Class<T> entityType) {
-        Function<PropertyDescriptor, Map.Entry<String, Class>> function = new Function<PropertyDescriptor, Map.Entry<String, Class>>() {
+    public <T extends IdObject> Map<String, Method> getAllSetMethods(Class<T> entityType) {
+        Function<PropertyDescriptor, Map.Entry<String, Method>> function = new Function<PropertyDescriptor, Map.Entry<String, Method>>() {
             @Nullable
             @Override
-            public Map.Entry<String, Class> apply(@Nullable PropertyDescriptor property) {
+            public Map.Entry<String, Method> apply(@Nullable PropertyDescriptor property) {
                 if (property == null) {
                     return null;
                 }
-                return new AbstractMap.SimpleEntry<>(property.getName(), (Class) property.getPropertyType());
+                return new AbstractMap.SimpleEntry<>(property.getName(), property.getWriteMethod());
             }
         };
-        List<Map.Entry<String, Class>> propertyList = traverseInterfaces(entityType, function);
-
-        Collections.sort(propertyList, new Comparator<Map.Entry<String, Class>>() {
-            @Override
-            public int compare(final Map.Entry<String, Class> o1, final Map.Entry<String, Class> o2) {
-                return o1.getKey().compareTo(o2.getKey());
-            }
-        });
-        return propertyList;
+        Map<String, Method> readMethods = new HashMap<>();
+        for (Map.Entry<String, Method> field : traverseInterfaces(entityType, function)) {
+            readMethods.put(field.getKey(), field.getValue());
+        }
+        return readMethods;
     }
 
     @Override

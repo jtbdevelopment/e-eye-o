@@ -4,13 +4,13 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.impl.AppUserOwnedObjectImpl;
 import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImpl;
-import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import java.beans.Transient;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertSame;
 
 /**
@@ -125,7 +125,7 @@ public class IdObjectInterfaceResolverImplTest {
         }
     }
 
-    private final IdObjectInterfaceResolverImpl resolver = new IdObjectInterfaceResolverImpl();
+    private final IdObjectReflectionHelperImpl resolver = new IdObjectReflectionHelperImpl();
 
     @Test
     public void testIdInterface() throws Exception {
@@ -171,26 +171,6 @@ public class IdObjectInterfaceResolverImplTest {
             Class oldValue = value;
             this.value = value;
             return oldValue;
-        }
-    }
-
-    @Test
-    public void testGettingAllGetters() {
-        List<Map.Entry<String, Class>> expected = new LinkedList<Map.Entry<String, Class>>() {{
-            add(new MyEntry("appUserOwnedObject", AppUserOwnedObject.class));
-            add(new MyEntry("booleanValue", boolean.class));
-            add(new MyEntry("id", String.class));
-            add(new MyEntry("intValue", int.class));
-            add(new MyEntry("modificationTimestamp", DateTime.class));
-            add(new MyEntry("objectValue", Object.class));
-            add(new MyEntry("stringValues", Set.class));
-        }};
-        Collection<Map.Entry<String, Class>> getters = resolver.getAllGetMethodReturns(LocalOneImpl.class);
-        List<Map.Entry<String, Class>> returned = new LinkedList<>(getters);
-        assertEquals(expected.size(), returned.size());
-        for (int i = 0; i < returned.size(); ++i) {
-            assertEquals(expected.get(i).getKey(), returned.get(i).getKey());
-            assertEquals(expected.get(i).getValue(), returned.get(i).getValue());
         }
     }
 

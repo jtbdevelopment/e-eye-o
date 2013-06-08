@@ -2,15 +2,15 @@ package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Method;
+import java.util.*;
 
 import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObjectSerializer.ENTITY_TYPE_FIELD;
 import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObjectSerializer.ID_FIELD;
@@ -20,13 +20,10 @@ import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObje
  * Time: 10:00 PM
  */
 @Service
+@SuppressWarnings("unused")
 public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer {
-    private final IdObjectInterfaceResolver interfaceResolver;
-
     @Autowired
-    public JacksonIdObjectSerializerImpl(final IdObjectInterfaceResolver interfaceResolver) {
-        this.interfaceResolver = interfaceResolver;
-    }
+    private IdObjectReflectionHelper interfaceResolver;
 
     @Override
     public void serialize(final IdObject value, final JsonGenerator generator) throws IOException {
@@ -36,10 +33,12 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
         }
         generator.writeStartObject();
         generator.writeStringField(ENTITY_TYPE_FIELD, valueInterface.getCanonicalName());
-        for (Map.Entry<String, Class> field : interfaceResolver.getAllGetMethodReturns(valueInterface)) {
-            final String fieldName = field.getKey();
+        Map<String, Method> getters = interfaceResolver.getAllGetMethods(valueInterface);
+        List<String> sortedKeys = new LinkedList<>(getters.keySet());
+        Collections.sort(sortedKeys);
+        for (String fieldName : sortedKeys) {
             final Object fieldValue = getFieldValue(value, fieldName);
-            final Class<?> valueType = field.getValue();
+            final Class<?> valueType = getters.get(fieldName).getReturnType();
 
             generator.writeFieldName(fieldName);
             if (IdObject.class.isAssignableFrom(valueType)) {
