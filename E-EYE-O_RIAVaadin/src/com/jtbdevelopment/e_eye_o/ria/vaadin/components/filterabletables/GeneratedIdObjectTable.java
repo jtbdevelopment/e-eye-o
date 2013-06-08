@@ -1,8 +1,8 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.AppUserOwnedObjectStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
@@ -46,7 +46,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
     protected void addColumnConverters() {
         applyFunctionToFields(new Callback() {
             @Override
-            public void apply(String fieldName, Method readMethod, IdObjectFieldPreferences field) {
+            public void apply(String fieldName, Method readMethod, IdObjectFieldSettings field) {
                 Class<?> returnType = readMethod.getReturnType();
                 if (DateTime.class.equals(returnType)) {
                     entityTable.setConverter(fieldName, dateTimeStringConverter);
@@ -65,7 +65,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
         super.addGeneratedColumns();
         applyFunctionToFields(new Callback() {
             @Override
-            public void apply(final String fieldName, final Method readMethod, final IdObjectFieldPreferences field) {
+            public void apply(final String fieldName, final Method readMethod, final IdObjectFieldSettings field) {
                 if (boolean.class.equals(readMethod.getReturnType())) {
                     switch (field.fieldType()) {
                         case CHECKBOX:
@@ -75,7 +75,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
                                 public Object generateCell(Table source, Object itemId, Object columnId) {
                                     T entity = entities.getItem(itemId).getBean();
                                     try {
-                                        if (IdObjectFieldPreferences.DisplayFieldType.REVERSE_CHECKBOX.equals(field.fieldType())) {
+                                        if (IdObjectFieldSettings.DisplayFieldType.REVERSE_CHECKBOX.equals(field.fieldType())) {
                                             return new Embedded(null, (boolean) readMethod.invoke(entity) ? NOT_X : null);
                                         } else {
                                             return new Embedded(null, (boolean) readMethod.invoke(entity) ? IS_X : null);
@@ -95,7 +95,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
     }
 
     protected List<String> getTableFields() {
-        return Arrays.asList(entityType.getAnnotation(IdObjectDisplayPreferences.class).viewFieldOrder());
+        return Arrays.asList(entityType.getAnnotation(IdObjectEntitySettings.class).viewFieldOrder());
     }
 
     @Override
@@ -104,7 +104,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
         fieldNames.add("edit");
         applyFunctionToFields(new Callback() {
             @Override
-            public void apply(String fieldName, Method readMethod, IdObjectFieldPreferences field) {
+            public void apply(String fieldName, Method readMethod, IdObjectFieldSettings field) {
                 fieldNames.add(fieldName);
             }
         });
@@ -118,7 +118,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
         fieldLabels.add("");
         applyFunctionToFields(new Callback() {
             @Override
-            public void apply(String fieldName, Method readMethod, IdObjectFieldPreferences field) {
+            public void apply(String fieldName, Method readMethod, IdObjectFieldSettings field) {
                 fieldLabels.add(field.label());
             }
         });
@@ -132,7 +132,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
         alignments.add(Table.Align.CENTER);
         applyFunctionToFields(new Callback() {
             @Override
-            public void apply(String fieldName, Method readMethod, IdObjectFieldPreferences field) {
+            public void apply(String fieldName, Method readMethod, IdObjectFieldSettings field) {
                 alignments.add(getAlignment(field));
             }
         });
@@ -140,7 +140,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
         return alignments.toArray(new Table.Align[alignments.size()]);
     }
 
-    protected Table.Align getAlignment(IdObjectFieldPreferences field) {
+    protected Table.Align getAlignment(IdObjectFieldSettings field) {
         Table.Align align = Table.Align.LEFT;
         switch (field.alignment()) {
             case CENTER:
@@ -154,7 +154,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
     }
 
     private static interface Callback {
-        public void apply(final String fieldName, final Method readMethod, final IdObjectFieldPreferences field);
+        public void apply(final String fieldName, final Method readMethod, final IdObjectFieldSettings field);
     }
 
     private void applyFunctionToFields(final Callback callback) {
@@ -164,8 +164,8 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
             if (readMethod == null) {
                 continue;
             }
-            IdObjectFieldPreferences field = readMethod.getAnnotation(IdObjectFieldPreferences.class);
-            if (field == null || !field.viewable()) {
+            IdObjectFieldSettings field = readMethod.getAnnotation(IdObjectFieldSettings.class);
+            if (field == null) {
                 continue;
             }
             callback.apply(fieldName, readMethod, field);

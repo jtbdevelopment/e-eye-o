@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
-import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
+import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
@@ -34,7 +34,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
     private Logo logo;
 
     @Autowired
-    private ReadOnlyDAO readOnlyDAO;
+    private ReadWriteDAO readWriteDAO;
 
     @Autowired
     private UserHelper userHelper;
@@ -107,7 +107,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
             return;
         }
 
-        TwoPhaseActivity activity = readOnlyDAO.get(TwoPhaseActivity.class, id);
+        TwoPhaseActivity activity = readWriteDAO.get(TwoPhaseActivity.class, id);
         if (activity == null) {
             messageText.setValue("This is embarrassing.  We can't find your open account activation.");
             //  TODO - more instructions on what to do next
@@ -137,7 +137,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
             return;
         }
 
-        userHelper.activateUser(activity);
+        readWriteDAO.activateUser(activity);
 
         messageText.setValue("Congratulations.  " + activity.getAppUser().getEmailAddress() + " has been activated.  Try logging in now.");
         link.setEnabled(true);

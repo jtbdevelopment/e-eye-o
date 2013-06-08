@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.stereotype.Service;
@@ -81,11 +81,11 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
     }
 
     @Override
-    public <T extends IdObject> Map<String, IdObjectFieldPreferences> getAllFieldPreferences(final Class<T> entityType) {
-        final Function<PropertyDescriptor, Map.Entry<String, IdObjectFieldPreferences>> function = new Function<PropertyDescriptor, Map.Entry<String, IdObjectFieldPreferences>>() {
+    public <T extends IdObject> Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<T> entityType) {
+        final Function<PropertyDescriptor, Map.Entry<String, IdObjectFieldSettings>> function = new Function<PropertyDescriptor, Map.Entry<String, IdObjectFieldSettings>>() {
             @Nullable
             @Override
-            public Map.Entry<String, IdObjectFieldPreferences> apply(@Nullable PropertyDescriptor property) {
+            public Map.Entry<String, IdObjectFieldSettings> apply(@Nullable PropertyDescriptor property) {
                 if (property == null) {
                     return null;
                 }
@@ -93,7 +93,7 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
                 if (read == null) {
                     return null;
                 }
-                IdObjectFieldPreferences preferences = read.getAnnotation(IdObjectFieldPreferences.class);
+                IdObjectFieldSettings preferences = read.getAnnotation(IdObjectFieldSettings.class);
                 if (preferences != null) {
                     return new AbstractMap.SimpleEntry<>(property.getName(), preferences);
                 }
@@ -101,8 +101,8 @@ public class IdObjectInterfaceResolverImpl implements IdObjectInterfaceResolver 
             }
         };
 
-        Map<String, IdObjectFieldPreferences> fieldPreferencesMap = new HashMap<>();
-        for (Map.Entry<String, IdObjectFieldPreferences> field : traverseInterfaces(entityType, function)) {
+        Map<String, IdObjectFieldSettings> fieldPreferencesMap = new HashMap<>();
+        for (Map.Entry<String, IdObjectFieldSettings> field : traverseInterfaces(entityType, function)) {
             fieldPreferencesMap.put(field.getKey(), field.getValue());
         }
         return fieldPreferencesMap;

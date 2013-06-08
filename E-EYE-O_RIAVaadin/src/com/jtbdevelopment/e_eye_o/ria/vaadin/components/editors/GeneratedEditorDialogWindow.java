@@ -1,8 +1,8 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
 import com.vaadin.event.FieldEvents;
@@ -41,8 +41,8 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
         List<List<String>> rows = new LinkedList<>();
         List<String> currentRow = new LinkedList<>();
 
-        for (String field : entityType.getAnnotation(IdObjectDisplayPreferences.class).editFieldOrder()) {
-            if (IdObjectDisplayPreferences.SECTION_BREAK.equals(field)) {
+        for (String field : entityType.getAnnotation(IdObjectEntitySettings.class).editFieldOrder()) {
+            if (IdObjectEntitySettings.SECTION_BREAK.equals(field)) {
                 rows.add(currentRow);
                 currentRow = new LinkedList<>();
             } else {
@@ -70,12 +70,12 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
 
     @Override
     protected Layout buildEditorLayout() {
-        Map<String, IdObjectFieldPreferences> fields = interfaceResolver.getAllFieldPreferences(entityType);
+        Map<String, IdObjectFieldSettings> fields = interfaceResolver.getAllFieldPreferences(entityType);
         AbstractOrderedLayout rowContainerLayout = getRowContainerLayout();
         for (List<String> fieldRow : getFieldRows()) {
             Layout editorRow = getEditorRow();
             for (String fieldName : fieldRow) {
-                IdObjectFieldPreferences preferences = fields.get(fieldName);
+                IdObjectFieldSettings preferences = fields.get(fieldName);
                 if (preferences == null) {
                     continue;
                 }
@@ -107,7 +107,7 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
         return editorRow;
     }
 
-    private Component generateField(final String fieldName, final IdObjectFieldPreferences preferences) {
+    private Component generateField(final String fieldName, final IdObjectFieldSettings preferences) {
         Component component = null;
         switch (preferences.fieldType()) {
             case CHECKBOX:

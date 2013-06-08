@@ -121,6 +121,33 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         return new ChainedUpdateSetImpl<>(modifiedObjects, null);
     }
 
+    @Override
+    public ChainedUpdateSet<IdObject> activateUser(final TwoPhaseActivity relatedActivity) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        relatedActivity.setArchived(true);
+        AppUser wrappedAppUser = wrapperFactory.wrap(relatedActivity.getAppUser());
+        wrappedAppUser.setActive(true);
+        wrappedAppUser.setActivated(true);
+        currentSession.update(wrappedAppUser);
+        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(relatedActivity);
+        currentSession.update(wrappedRelatedActivity);
+        return new ChainedUpdateSetImpl<>(Arrays.<IdObject>asList(wrappedAppUser, wrappedRelatedActivity), null);
+    }
+
+    @Override
+    public ChainedUpdateSet<IdObject> resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        relatedActivity.setArchived(true);
+        AppUser wrappedAppUser = wrapperFactory.wrap(relatedActivity.getAppUser());
+        wrappedAppUser.setActive(true);
+        wrappedAppUser.setActivated(true);
+        wrappedAppUser.setPassword(newPassword);
+        currentSession.update(wrappedAppUser);
+        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(relatedActivity);
+        currentSession.update(wrappedRelatedActivity);
+        return new ChainedUpdateSetImpl<>(Arrays.<IdObject>asList(wrappedAppUser, wrappedRelatedActivity), null);
+    }
+
     //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")

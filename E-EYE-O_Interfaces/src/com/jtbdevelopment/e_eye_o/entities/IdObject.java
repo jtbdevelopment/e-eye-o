@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -31,13 +31,13 @@ public interface IdObject {
     public final static String ID_OBJECT_ID_MAY_NOT_BE_EMPTY_ERROR = "IdObject.id" + CANNOT_BE_BLANK_OR_NULL_ERROR;
 
     @NotEmpty(message = ID_OBJECT_ID_MAY_NOT_BE_EMPTY_ERROR)
-    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.NONE)
+    @IdObjectFieldSettings(editableBy = IdObjectFieldSettings.EditableBy.NONE)
     String getId();
 
     void setId(final String id);
 
     @NotNull
-    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.NONE, label = "Last Update", alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
+    @IdObjectFieldSettings(editableBy = IdObjectFieldSettings.EditableBy.NONE, label = "Last Update", alignment = IdObjectFieldSettings.DisplayAlignment.CENTER)
     DateTime getModificationTimestamp();
 
     void setModificationTimestamp(final DateTime modificationTimestamp);

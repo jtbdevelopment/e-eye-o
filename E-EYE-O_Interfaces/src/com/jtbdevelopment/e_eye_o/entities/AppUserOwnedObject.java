@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.validation.ConsistentAppUserCheck;
 
 import javax.validation.constraints.NotNull;
@@ -21,12 +21,12 @@ public interface AppUserOwnedObject extends IdObject {
     public final static String ALL_OWNED_OBJECTS_MUST_BE_FOR_SAME_USER_ERROR = "All AppUserOwnedObjects must match.";
 
     @NotNull(message = APP_USER_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.ADMIN)
+    @IdObjectFieldSettings(editableBy = IdObjectFieldSettings.EditableBy.ADMIN)
     AppUser getAppUser();
 
     void setAppUser(final AppUser appUser);
 
-    @IdObjectFieldPreferences(label = "Active", editableBy = IdObjectFieldPreferences.EditableBy.LIMITED_USER, fieldType = IdObjectFieldPreferences.DisplayFieldType.REVERSE_CHECKBOX, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
+    @IdObjectFieldSettings(label = "Active", editableBy = IdObjectFieldSettings.EditableBy.LIMITED_USER, fieldType = IdObjectFieldSettings.DisplayFieldType.REVERSE_CHECKBOX, alignment = IdObjectFieldSettings.DisplayAlignment.CENTER)
     boolean isArchived();
 
     void setArchived(boolean archived);

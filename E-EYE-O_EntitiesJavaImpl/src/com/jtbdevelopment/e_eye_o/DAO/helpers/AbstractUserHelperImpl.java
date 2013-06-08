@@ -8,8 +8,6 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Arrays;
-
 /**
  * Date: 4/6/13
  * Time: 6:26 PM
@@ -32,7 +30,7 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
 
     @Override
     public TwoPhaseActivity setUpNewUser(final AppUser appUser) {
-        securePassword(appUser, appUser.getPassword());
+        appUser.setPassword(securePassword(appUser.getPassword()));
         AppUser savedUser = readWriteDAO.create(appUser);
         createSamplesForNewUser(savedUser);
         return generateActivationRequest(savedUser);
@@ -43,19 +41,11 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
         return readWriteDAO.create(idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION).withExpirationTime(new DateTime().plusDays(1)).build());
     }
 
-    private void securePassword(final AppUser appUser, final String clearCasePassword) {
+    private String securePassword(final String clearCasePassword) {
         if (passwordEncoder != null) {
-            appUser.setPassword(passwordEncoder.encode(clearCasePassword));
+            return passwordEncoder.encode(clearCasePassword);
         }
-    }
-
-    @Override
-    public void activateUser(final TwoPhaseActivity twoPhaseActivity) {
-        twoPhaseActivity.setArchived(true);
-        final AppUser appUser = twoPhaseActivity.getAppUser();
-        appUser.setActivated(true);
-        appUser.setActive(true);
-        readWriteDAO.update(Arrays.asList(appUser, twoPhaseActivity));
+        return clearCasePassword;
     }
 
     @Override
@@ -67,12 +57,7 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
 
     @Override
     public void resetPassword(final TwoPhaseActivity twoPhaseActivity, final String newPassword) {
-        twoPhaseActivity.setArchived(true);
-        final AppUser appUser = twoPhaseActivity.getAppUser();
-        appUser.setActivated(true);
-        appUser.setActive(true);
-        securePassword(appUser, newPassword);
-        readWriteDAO.update(Arrays.asList(appUser, twoPhaseActivity));
+        readWriteDAO.resetUserPassword(twoPhaseActivity, securePassword(newPassword));
     }
 
 }

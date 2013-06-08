@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 //  TODO  - put tests around usage
-public @interface IdObjectFieldPreferences {
+public @interface IdObjectFieldSettings {
     /*
      * NONE - Not editable
      * ADMIN - Only Admin users may affect the field

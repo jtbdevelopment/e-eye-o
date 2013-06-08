@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ClassListEditorDialogWindow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -34,6 +34,6 @@ public class ClassListTable extends GeneratedIdObjectTable<ClassList> {
 
     @Override
     protected List<String> getTableFields() {
-        return Arrays.asList(entityType.getAnnotation(IdObjectDisplayPreferences.class).viewFieldOrder());
+        return Arrays.asList(entityType.getAnnotation(IdObjectEntitySettings.class).viewFieldOrder());
     }
 }

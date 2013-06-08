@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.DAO;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ public class ChainedUpdateSetImpl<T> implements ReadWriteDAO.ChainedUpdateSet<T>
     private final Set<T> deletedItems = new HashSet<>();
     private final Set<T> modifiedItems = new HashSet<>();
 
-    public ChainedUpdateSetImpl(final Set<T> modifiedItems, final Set<T> deletedItems) {
+    public ChainedUpdateSetImpl(final Collection<T> modifiedItems, final Collection<T> deletedItems) {
         if (deletedItems != null)
             this.deletedItems.addAll(deletedItems);
         if (modifiedItems != null)

@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import org.joda.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
@@ -16,7 +16,7 @@ public interface Observable extends AppUserOwnedObject {
     public final static String LAST_OBSERVATION_TIME_CANNOT_BE_NULL = "Observable.lastObservationTimestamp" + CANNOT_BE_NULL_ERROR;
 
     @NotNull(message = Observable.LAST_OBSERVATION_TIME_CANNOT_BE_NULL)
-    @IdObjectFieldPreferences(label = "Last Observation", editableBy = IdObjectFieldPreferences.EditableBy.NONE, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER, fieldType = IdObjectFieldPreferences.DisplayFieldType.LOCAL_DATE_TIME)
+    @IdObjectFieldSettings(label = "Last Observation", editableBy = IdObjectFieldSettings.EditableBy.NONE, alignment = IdObjectFieldSettings.DisplayAlignment.CENTER, fieldType = IdObjectFieldSettings.DisplayFieldType.LOCAL_DATE_TIME)
     LocalDateTime getLastObservationTimestamp();
 
     void setLastObservationTimestamp(final LocalDateTime lastObservationTimestamp);

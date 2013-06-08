@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDateTime;
 
@@ -12,8 +12,8 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:18 PM
  */
-@IdObjectDisplayPreferences(defaultPageSize = 10, defaultSortField = "timestamp", defaultSortAscending = true, singular = "Photo", plural = "Photos",
-        editFieldOrder = {"description", "photoFor", "taken", IdObjectDisplayPreferences.SECTION_BREAK, "imageData"})
+@IdObjectEntitySettings(defaultPageSize = 10, defaultSortField = "timestamp", defaultSortAscending = true, singular = "Photo", plural = "Photos",
+        editFieldOrder = {"description", "photoFor", "taken", IdObjectEntitySettings.SECTION_BREAK, "imageData"})
 public interface Photo extends AppUserOwnedObject {
 
     public static final int THUMBNAIL_SIZE = 150;
@@ -28,39 +28,39 @@ public interface Photo extends AppUserOwnedObject {
     public static final String PHOTO_THUMBNAIL_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL = "Photo.thumbnail" + CANNOT_BE_BLANK_OR_NULL_ERROR;
 
     @NotNull(message = PHOTO_PHOTO_FOR_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(label = "Photo For", fieldType = IdObjectFieldPreferences.DisplayFieldType.SINGLE_SELECT_LIST, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT)
+    @IdObjectFieldSettings(label = "Photo For", fieldType = IdObjectFieldSettings.DisplayFieldType.SINGLE_SELECT_LIST, alignment = IdObjectFieldSettings.DisplayAlignment.LEFT)
     AppUserOwnedObject getPhotoFor();
 
     void setPhotoFor(final AppUserOwnedObject photoFor);
 
     @NotEmpty(message = PHOTO_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL_ERROR)
     @Size(max = MAX_DESCRIPTION_SIZE, message = PHOTO_DESCRIPTION_SIZE_ERROR)
-    @IdObjectFieldPreferences(label = "Description", width = 30, fieldType = IdObjectFieldPreferences.DisplayFieldType.TEXT, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT)
+    @IdObjectFieldSettings(label = "Description", width = 30, fieldType = IdObjectFieldSettings.DisplayFieldType.TEXT, alignment = IdObjectFieldSettings.DisplayAlignment.LEFT)
     String getDescription();
 
     void setDescription(String description);
 
     @NotNull(message = PHOTO_TIMESTAMP_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldPreferences(label = "Taken", fieldType = IdObjectFieldPreferences.DisplayFieldType.LOCAL_DATE_TIME, alignment = IdObjectFieldPreferences.DisplayAlignment.CENTER)
+    @IdObjectFieldSettings(label = "Taken", fieldType = IdObjectFieldSettings.DisplayFieldType.LOCAL_DATE_TIME, alignment = IdObjectFieldSettings.DisplayAlignment.CENTER)
     LocalDateTime getTimestamp();
 
     void setTimestamp(LocalDateTime timestamp);
 
     @NotEmpty(message = PHOTO_MIME_TYPE_CANNOT_BE_BLANK_OR_NULL)
-    @IdObjectFieldPreferences(editableBy = IdObjectFieldPreferences.EditableBy.NONE)
+    @IdObjectFieldSettings(editableBy = IdObjectFieldSettings.EditableBy.NONE)
     String getMimeType();
 
     void setMimeType(final String mimeType);
 
     //  TODO - max size
     @NotEmpty(message = PHOTO_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL)
-    @IdObjectFieldPreferences(label = "Picture", editableBy = IdObjectFieldPreferences.EditableBy.NONE, fieldType = IdObjectFieldPreferences.DisplayFieldType.CUSTOM)
+    @IdObjectFieldSettings(label = "Picture", editableBy = IdObjectFieldSettings.EditableBy.NONE, fieldType = IdObjectFieldSettings.DisplayFieldType.CUSTOM)
     byte[] getImageData();
 
     void setImageData(final byte[] imageBytes);
 
     @NotEmpty(message = PHOTO_THUMBNAIL_IMAGE_DATA_CANNOT_BE_BLANK_OR_NULL)
-    @IdObjectFieldPreferences(label = "Picture", editableBy = IdObjectFieldPreferences.EditableBy.NONE, fieldType = IdObjectFieldPreferences.DisplayFieldType.CUSTOM)
+    @IdObjectFieldSettings(label = "Picture", editableBy = IdObjectFieldSettings.EditableBy.NONE, fieldType = IdObjectFieldSettings.DisplayFieldType.CUSTOM)
     byte[] getThumbnailImageData();
 
     void setThumbnailImageData(final byte[] thumbnailBytes);

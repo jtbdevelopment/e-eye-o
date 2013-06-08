@@ -5,7 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.common.primitives.Ints;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectInterfaceResolver;
 import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
@@ -172,7 +172,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         filterSection.addComponent(showSizeLabel);
         filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
-        final NativeSelect showSize = new NativeSelect(null, Ints.asList(entityType.getAnnotation(IdObjectDisplayPreferences.class).pageSizes()));
+        final NativeSelect showSize = new NativeSelect(null, Ints.asList(entityType.getAnnotation(IdObjectEntitySettings.class).pageSizes()));
         showSize.setValue(maxSize);
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
@@ -205,7 +205,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         buttonSection.setWidth(null);
         buttonSection.setSpacing(true);
 
-        Button newEntityButton = new Button("New " + interfaceResolver.getIdObjectInterfaceForClass(entityType).getAnnotation(IdObjectDisplayPreferences.class).singular());
+        Button newEntityButton = new Button("New " + interfaceResolver.getIdObjectInterfaceForClass(entityType).getAnnotation(IdObjectEntitySettings.class).singular());
         newEntityButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {

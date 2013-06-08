@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectDisplayPreferences;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:18 PM
  */
-@IdObjectDisplayPreferences(defaultPageSize = 10, defaultSortField = "shortName", defaultSortAscending = true,
+@IdObjectEntitySettings(defaultPageSize = 10, defaultSortField = "shortName", defaultSortAscending = true,
         singular = "Category", plural = "Categories",
         viewFieldOrder = {"shortName", "description", "modificationTimestamp", "archived"},
         editFieldOrder = {"shortName", "description"})
@@ -23,14 +23,14 @@ public interface ObservationCategory extends AppUserOwnedObject {
 
     @NotEmpty(message = OBSERVATION_CATEGORY_SHORT_NAME_CANNOT_BE_BLANK_OR_NULL)
     @Size(max = MAX_SHORT_NAME_SIZE, message = OBSERVATION_CATEGORY_SHORT_NAME_SIZE_ERROR)
-    @IdObjectFieldPreferences(label = "Short Name", width = 5, fieldType = IdObjectFieldPreferences.DisplayFieldType.TEXT, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT)
+    @IdObjectFieldSettings(label = "Short Name", width = 5, fieldType = IdObjectFieldSettings.DisplayFieldType.TEXT, alignment = IdObjectFieldSettings.DisplayAlignment.LEFT)
     String getShortName();
 
     void setShortName(String shortName);
 
     @NotEmpty(message = OBSERVATION_CATEGORY_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL)
     @Size(max = MAX_DESCRIPTION_SIZE, message = OBSERVATION_CATEGORY_DESCRIPTION_SIZE_ERROR)
-    @IdObjectFieldPreferences(label = "Description", width = 30, fieldType = IdObjectFieldPreferences.DisplayFieldType.TEXT, alignment = IdObjectFieldPreferences.DisplayAlignment.LEFT)
+    @IdObjectFieldSettings(label = "Description", width = 30, fieldType = IdObjectFieldSettings.DisplayFieldType.TEXT, alignment = IdObjectFieldSettings.DisplayAlignment.LEFT)
     String getDescription();
 
     void setDescription(String description);

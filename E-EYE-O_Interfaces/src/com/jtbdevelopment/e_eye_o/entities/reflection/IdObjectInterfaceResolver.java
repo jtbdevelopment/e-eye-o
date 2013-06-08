@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities.reflection;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldPreferences;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.lang.reflect.Method;
@@ -32,5 +32,5 @@ public interface IdObjectInterfaceResolver {
 
 
     @Cacheable("idObjectFieldPreferences")
-    <T extends IdObject> Map<String, IdObjectFieldPreferences> getAllFieldPreferences(final Class<T> entityType);
+    <T extends IdObject> Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<T> entityType);
 }
