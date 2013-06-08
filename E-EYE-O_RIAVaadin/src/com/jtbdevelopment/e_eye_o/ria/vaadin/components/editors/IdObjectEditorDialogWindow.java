@@ -154,7 +154,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
     }
 
     protected T writeUpdateObjectToDAO(final T entity) {
-        return readWriteDAO.update(entity);
+        return readWriteDAO.update(getSession().getAttribute(AppUser.class), entity);
     }
 
     protected T writeNewObjectToDAO(final T entity) {

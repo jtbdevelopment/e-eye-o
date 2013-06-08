@@ -117,7 +117,7 @@ public class IdObjectReflectionHelperImpl implements IdObjectReflectionHelper {
                         return false;
                     }
                     Method read = property.getReadMethod();
-                    return read != null && !"class".equals(read.getName()) && !read.isAnnotationPresent(Transient.class) && !"getPassword".equals(read.getName());
+                    return read != null && !"class".equals(read.getName()) && !read.isAnnotationPresent(Transient.class);
                 }
             });
             traversalResults.addAll(Collections2.transform(filteredProperties, function));

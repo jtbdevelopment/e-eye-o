@@ -119,7 +119,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         student = rwDAO.create(student);
         final DateTime initialTimestamp = student.getModificationTimestamp();
         student.setFirstName("XX");
-        rwDAO.update(student);
+        rwDAO.update(testUser1, student);
         assertTrue(student.getModificationTimestamp().isAfter(initialTimestamp));
     }
 
@@ -204,9 +204,9 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         assertFalse(archivePhotos.contains(photo));
 
         photo.setDescription("Archived");
-        photo.setArchived(true);
         DateTime originalTS = photo.getModificationTimestamp();
-        photo = rwDAO.update(photo);
+        rwDAO.changeArchiveStatus(photo);
+        photo = rwDAO.update(testUser1, photo);
         assertTrue(originalTS.isBefore(photo.getModificationTimestamp()));
         activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         archivePhotos = rwDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
@@ -240,7 +240,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         o.addCategory(lang);
         o.setObservationSubject(testClassList1ForU1);
         DateTime originalTS = o.getModificationTimestamp();
-        o = rwDAO.update(o);
+        o = rwDAO.update(testUser1, o);
         o = rwDAO.get(Observation.class, o.getId());
         assertTrue(originalTS.isBefore(o.getModificationTimestamp()));
         assertEquals(2, o.getCategories().size());
@@ -270,8 +270,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Thread.sleep(1);
         p.setDescription("P2");
         s.addClassList(cl);
-        p = rwDAO.update(p);
-        s = rwDAO.update(s);
+        p = rwDAO.update(updateUser, p);
+        s = rwDAO.update(updateUser, s);
         final List<AppUserOwnedObject> secondList = Arrays.asList(s, p);
         final Set<AppUserOwnedObject> secondSet = rwDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, updateUser, secondTS);
         assertEquals(secondList.size(), secondSet.size());
@@ -317,11 +317,11 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Test
     public void testAddingClassListsToStudent() {
         testStudentForU1.removeClassList(testClassList1ForU1);
-        testStudentForU1 = rwDAO.update(testStudentForU1);
+        testStudentForU1 = rwDAO.update(testUser1, testStudentForU1);
         assertTrue(testStudentForU1.getClassLists().isEmpty());
         testStudentForU1.addClassList(testClassList1ForU1);
         testStudentForU1.addClassLists(Arrays.asList(testClassList2ForU1, testClassList3ForU1));
-        testStudentForU1 = rwDAO.update(testStudentForU1);
+        testStudentForU1 = rwDAO.update(testUser1, testStudentForU1);
         assertTrue(testStudentForU1.getClassLists().containsAll(Arrays.asList(testClassList1ForU1, testClassList2ForU1, testClassList3ForU1)));
     }
 
@@ -351,7 +351,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         assertFalse(deleted.isEmpty());
         DeletedObject dobj = deleted.iterator().next();
         dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));
-        rwDAO.update(dobj);
+        rwDAO.update(testUser1, dobj);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

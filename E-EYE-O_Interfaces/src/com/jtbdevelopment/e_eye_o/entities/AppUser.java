@@ -51,14 +51,14 @@ public interface AppUser extends IdObject {
     @NotEmpty(message = EMAIL_CANNOT_BE_NULL_ERROR)
     @Email(message = EMAIL_MUST_BE_A_VALID_FORMAT_ERROR)
     @Size(max = MAX_EMAIL_SIZE, message = APP_USER_EMAIL_SIZE_ERROR)
-    @IdObjectFieldSettings(label = "E-Mail", editableBy = IdObjectFieldSettings.EditableBy.LIMITED_USER, alignment = IdObjectFieldSettings.DisplayAlignment.LEFT, fieldType = IdObjectFieldSettings.DisplayFieldType.TEXT)
+    @IdObjectFieldSettings(label = "E-Mail", editableBy = IdObjectFieldSettings.EditableBy.CONTROLLED, alignment = IdObjectFieldSettings.DisplayAlignment.LEFT, fieldType = IdObjectFieldSettings.DisplayFieldType.TEXT)
     String getEmailAddress();
 
     void setEmailAddress(final String emailAddress);
 
     @NotEmpty(message = APP_PASSWORD_CANNOT_BE_NULL_ERROR)
     @Size(max = MAX_PASSWORD_SIZE, message = APP_PASSWORD_SIZE_ERROR)
-    @IdObjectFieldSettings(viewable = false, editableBy = IdObjectFieldSettings.EditableBy.LIMITED_USER, label = "Password", alignment = IdObjectFieldSettings.DisplayAlignment.LEFT, fieldType = IdObjectFieldSettings.DisplayFieldType.PASSWORD)
+    @IdObjectFieldSettings(viewable = false, editableBy = IdObjectFieldSettings.EditableBy.CONTROLLED, label = "Password", alignment = IdObjectFieldSettings.DisplayAlignment.LEFT, fieldType = IdObjectFieldSettings.DisplayFieldType.PASSWORD)
     String getPassword();
 
     void setPassword(final String password);
@@ -70,13 +70,13 @@ public interface AppUser extends IdObject {
     void setLastLogout(final DateTime lastLogout);
 
     @NotNull(message = ACTIVATED_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldSettings(label = "Activated", editableBy = IdObjectFieldSettings.EditableBy.LIMITED_USER, fieldType = IdObjectFieldSettings.DisplayFieldType.CHECKBOX)
+    @IdObjectFieldSettings(label = "Activated", editableBy = IdObjectFieldSettings.EditableBy.CONTROLLED, fieldType = IdObjectFieldSettings.DisplayFieldType.CHECKBOX)
     boolean isActivated();
 
     void setActivated(final boolean activated);
 
     @NotNull(message = ACTIVE_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldSettings(label = "Active", editableBy = IdObjectFieldSettings.EditableBy.LIMITED_USER, fieldType = IdObjectFieldSettings.DisplayFieldType.CHECKBOX)
+    @IdObjectFieldSettings(label = "Active", editableBy = IdObjectFieldSettings.EditableBy.CONTROLLED, fieldType = IdObjectFieldSettings.DisplayFieldType.CHECKBOX)
     boolean isActive();
 
     void setActive(final boolean active);

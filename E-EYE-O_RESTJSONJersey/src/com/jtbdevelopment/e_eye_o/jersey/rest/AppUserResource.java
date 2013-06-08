@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.jersey.rest;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.joda.time.DateTime;
@@ -20,18 +21,21 @@ import java.util.Set;
 public class AppUserResource extends SecurityAwareResource {
     private final ReadWriteDAO readWriteDAO;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
+    private final IdObjectReflectionHelper idObjectReflectionHelper;
     private final AppUser appUser;
     private Boolean archiveFlag;
     private Class<? extends AppUserOwnedObject> entityType;
 
     public AppUserResource(final ReadWriteDAO readWriteDAO,
                            final JSONIdObjectSerializer jsonIdObjectSerializer,
+                           final IdObjectReflectionHelper idObjectReflectionHelper,
                            final String userId,
                            final Boolean archiveFlag,
                            final Class<? extends AppUserOwnedObject> entityType) {
         this.readWriteDAO = readWriteDAO;
         this.jsonIdObjectSerializer = jsonIdObjectSerializer;
         this.appUser = readWriteDAO.get(AppUser.class, userId);
+        this.idObjectReflectionHelper = idObjectReflectionHelper;
         this.archiveFlag = archiveFlag;
         this.entityType = entityType == null ? AppUserOwnedObject.class : entityType;
     }
@@ -39,6 +43,7 @@ public class AppUserResource extends SecurityAwareResource {
     private AppUserResource(final AppUserResource appUserResource) {
         this.readWriteDAO = appUserResource.readWriteDAO;
         this.jsonIdObjectSerializer = appUserResource.jsonIdObjectSerializer;
+        this.idObjectReflectionHelper = appUserResource.idObjectReflectionHelper;
         this.appUser = appUserResource.appUser;
     }
 
@@ -149,7 +154,7 @@ public class AppUserResource extends SecurityAwareResource {
     @Path("{entityId}")
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getAppUserEntityResource(@PathParam("entityId") final String entityId) {
-        return new AppUserEntityResource(readWriteDAO, jsonIdObjectSerializer, entityId);
+        return new AppUserEntityResource(readWriteDAO, jsonIdObjectSerializer, idObjectReflectionHelper, entityId);
     }
 
     private Object getEntityRefinedResource(final Class<? extends AppUserOwnedObject> entityType) {

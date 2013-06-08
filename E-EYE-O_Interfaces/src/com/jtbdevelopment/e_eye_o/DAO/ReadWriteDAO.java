@@ -27,7 +27,16 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
 
     <T extends IdObject> Collection<T> create(final Collection<T> entities);
 
-    <T extends IdObject> T update(final T entity);
+    /**
+     * An import part of the contract is that update will ignore changes to fields which the user is not entitled
+     * to change.
+     *
+     * @param updatingAppUser - user performing change
+     * @param entity          - entity under change
+     * @param <T>             - entityType
+     * @return updated entity
+     */
+    <T extends IdObject> T update(final AppUser updatingAppUser, final T entity);
 
     <T extends IdObject> Collection<T> update(final Collection<T> entities);
 
@@ -36,6 +45,8 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
     ChainedUpdateSet<IdObject> activateUser(final TwoPhaseActivity relatedActivity);
 
     ChainedUpdateSet<IdObject> resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword);
+
+    AppUser updateAppUserLogout(final AppUser appUser);
 
     /**
      * Similar to delete, will return all app user owned objects that were deleted as part of this.

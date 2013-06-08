@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
         List<String> sortedKeys = new LinkedList<>(getters.keySet());
         Collections.sort(sortedKeys);
         for (String fieldName : sortedKeys) {
+            if (!getters.get(fieldName).getAnnotation(IdObjectFieldSettings.class).viewable()) {
+                continue;
+            }
             final Object fieldValue = getFieldValue(value, fieldName);
             final Class<?> valueType = getters.get(fieldName).getReturnType();
 

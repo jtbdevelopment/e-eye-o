@@ -33,7 +33,7 @@ public class AppUserEntityResourceTest extends AbstractResourceTest {
             one(serializer).write(ownedObject);
             will(returnValue(serialized));
         }});
-        AppUserEntityResource resource = new AppUserEntityResource(dao, serializer, entityId);
+        AppUserEntityResource resource = new AppUserEntityResource(dao, serializer, reflectionHelper, entityId);
         assertEquals(serialized, resource.getEntity().getEntity());
 
     }

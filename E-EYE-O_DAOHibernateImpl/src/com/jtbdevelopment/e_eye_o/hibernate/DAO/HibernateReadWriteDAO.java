@@ -2,13 +2,16 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.jtbdevelopment.e_eye_o.DAO.ChainedUpdateSetImpl;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectUpdateHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,6 +28,9 @@ import java.util.*;
 @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 @SuppressWarnings("unused")
 public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadWriteDAO {
+    @Autowired
+    protected IdObjectUpdateHelper idObjectUpdateHelper;
+
     @Autowired
     public HibernateReadWriteDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
         super(sessionFactory, wrapperFactory, idObjectReflectionHelper);
@@ -55,10 +61,18 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     }
 
     @Override
-    public <T extends IdObject> T update(final T entity) {
-        if (entity instanceof DeletedObject) {
-            throw new IllegalArgumentException("You cannot explicitly update a DeletedObject.");
+    public <T extends IdObject> T update(final AppUser updatingUser, final T entity) {
+
+        if (!idObjectReflectionHelper.getIdObjectInterfaceForClass(entity.getClass()).getAnnotation(IdObjectEntitySettings.class).editable()) {
+            throw new IllegalArgumentException("You cannot explicitly update a " + entity.getClass() + ".");
         }
+        final T existing = get((Class<T>) entity.getClass(), entity.getId());
+        idObjectUpdateHelper.validateUpdates(updatingUser, existing, entity);
+        sessionFactory.getCurrentSession().clear();
+        return internalUpdate(entity);
+    }
+
+    private <T extends IdObject> T internalUpdate(final T entity) {
         final T wrapped = wrapperFactory.wrap(entity);
         sessionFactory.getCurrentSession().update(wrapped);
         dealWithObservationUpdatesOrDeletes(wrapped);
@@ -146,6 +160,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(relatedActivity);
         currentSession.update(wrappedRelatedActivity);
         return new ChainedUpdateSetImpl<>(Arrays.<IdObject>asList(wrappedAppUser, wrappedRelatedActivity), null);
+    }
+
+    @Override
+    public AppUser updateAppUserLogout(final AppUser appUser) {
+        AppUser loaded = get(AppUser.class, appUser.getId());
+        loaded.setLastLogout(new DateTime());
+        return internalUpdate(loaded);
     }
 
     //  TODO - mark delete and allow undelete
@@ -247,7 +268,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             Observable observable = observation.getObservationSubject();
             if (observation.getObservationTimestamp().compareTo(observable.getLastObservationTimestamp()) > 0) {
                 observable.setLastObservationTimestamp(observation.getObservationTimestamp());
-                update(observable);
+                internalUpdate(observable);
                 return observable;
             }
         }
@@ -262,7 +283,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             LocalDateTime lastObservationTimestamp = getLastObservationTimestampForEntity(observable);
             if (lastObservationTimestamp.compareTo(observable.getLastObservationTimestamp()) != 0) {
                 observable.setLastObservationTimestamp(lastObservationTimestamp);
-                update(observable);
+                internalUpdate(observable);
                 return observable;
             }
         }

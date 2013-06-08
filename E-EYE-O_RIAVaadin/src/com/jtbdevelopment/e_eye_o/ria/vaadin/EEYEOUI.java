@@ -13,7 +13,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.VerticalLayout;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,9 +82,7 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         AppUser appUser = getSession().getAttribute(AppUser.class);
         if (event != null && appUser.equals(event.getAppUser())) {
             logger.trace(appUser.getId() + ": logoutEventHandlerCalled.");
-            appUser = readWriteDAO.get(AppUser.class, appUser.getId());
-            appUser.setLastLogout(new DateTime());
-            readWriteDAO.update(appUser);
+            readWriteDAO.updateAppUserLogout(appUser);
             getPage().setLocation("/j_spring_security_logout");
         }
     }

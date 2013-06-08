@@ -238,9 +238,9 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         AppUser testUser2 = httpHelper.easyClone(JerseyRestViaGrizzlyIntegration.testUser2);
         testUser2.setFirstName("newfirst");
         testUser2.setAdmin(true);
-        testUser2.setActive(true);
-        testUser2.setActivated(true);
-        testUser2.setPassword("new");
+        testUser2.setActive(true);     //  should be ignored
+        testUser2.setActivated(true);  //  should be ignored
+        testUser2.setPassword("new");  //  should be ignored
         testUser2.setLastLogout(new DateTime());  // should be ignored
 
         String s = httpHelper.getJSONFromPut(USERS_URI, adminClient, APP_USER, testUser2);
@@ -249,8 +249,8 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertEquals(testUser2.getFirstName(), dbTestUser2.getFirstName());
         assertFalse(testUser2.getPassword().equals(dbTestUser2.getPassword()));
         assertTrue(dbTestUser2.isAdmin());
-        assertTrue(dbTestUser2.isActivated());
-        assertTrue(dbTestUser2.isActive());
+        assertFalse(dbTestUser2.isActivated());
+        assertFalse(dbTestUser2.isActive());
         assertEquals(AppUser.NEVER_LOGGED_IN, dbTestUser2.getLastLogout());
 
         assertEquals(jsonIdObjectSerializer.write(dbTestUser2), s);

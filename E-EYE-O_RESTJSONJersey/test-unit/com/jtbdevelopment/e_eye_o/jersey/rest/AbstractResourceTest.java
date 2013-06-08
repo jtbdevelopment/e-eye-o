@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.jersey.rest;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.jmock.Mockery;
 import org.testng.annotations.BeforeMethod;
@@ -23,11 +24,13 @@ public class AbstractResourceTest {
     protected Mockery context;
     protected ReadWriteDAO dao;
     protected JSONIdObjectSerializer serializer;
+    protected IdObjectReflectionHelper reflectionHelper;
 
     @BeforeMethod
     public void setUp() throws Exception {
         context = new Mockery();
         dao = context.mock(ReadWriteDAO.class);
+        reflectionHelper = context.mock(IdObjectReflectionHelper.class);
         serializer = context.mock(JSONIdObjectSerializer.class);
     }
 

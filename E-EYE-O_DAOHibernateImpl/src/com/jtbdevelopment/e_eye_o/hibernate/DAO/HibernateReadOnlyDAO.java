@@ -32,7 +32,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     private final static Logger logger = LoggerFactory.getLogger(HibernateReadOnlyDAO.class);
 
-    private final IdObjectReflectionHelper interfaceResolver;
+    protected final IdObjectReflectionHelper idObjectReflectionHelper;
     protected final SessionFactory sessionFactory;
     protected final DAOIdObjectWrapperFactory wrapperFactory;
 
@@ -40,7 +40,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
         this.sessionFactory = sessionFactory;
         this.wrapperFactory = wrapperFactory;
-        this.interfaceResolver = idObjectReflectionHelper;
+        this.idObjectReflectionHelper = idObjectReflectionHelper;
     }
 
 
@@ -173,7 +173,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         Class<T> wrapperFor;
         if (!HibernateIdObject.class.isAssignableFrom(entityType)) {
 
-            wrapperFor = wrapperFactory.getWrapperForEntity(interfaceResolver.getIdObjectInterfaceForClass(entityType));
+            wrapperFor = wrapperFactory.getWrapperForEntity(idObjectReflectionHelper.getIdObjectInterfaceForClass(entityType));
             if (wrapperFor == null) {
                 throw new IllegalArgumentException("Unknown entity type " + entityType.getSimpleName());
             }

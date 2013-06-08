@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
+import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectUpdateHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
@@ -29,6 +30,7 @@ public class HibernateReadWriteDAOTest {
     private Mockery context;
     private SessionFactory sessionFactory;
     private IdObjectReflectionHelper idObjectReflectionHelper;
+    private IdObjectUpdateHelper idObjectUpdateHelper;
     private Session session;
     private DAOIdObjectWrapperFactory daoIdObjectWrapperFactory;
     private HibernateReadWriteDAO dao;
@@ -55,6 +57,7 @@ public class HibernateReadWriteDAOTest {
         sessionFactory = context.mock(SessionFactory.class);
         idObjectReflectionHelper = context.mock(IdObjectReflectionHelper.class);
         session = context.mock(Session.class);
+        idObjectUpdateHelper = context.mock(IdObjectUpdateHelper.class);
         query1 = context.mock(Query.class, "Q1");
         query2 = context.mock(Query.class, "Q2");
         query3 = context.mock(Query.class, "Q3");
@@ -90,13 +93,20 @@ public class HibernateReadWriteDAOTest {
         wrapped.clear();
         Collections.addAll(wrapped, classListWrapped, appUserWrapped, studentWrapped, photoWrapped, observationWrapped, observationCategoryWrapped);
         context.checking(new Expectations() {{
-            one(idObjectReflectionHelper).getIdObjectInterfaceForClass(observationLoaded.getClass());
+            allowing(idObjectUpdateHelper).validateUpdates(with(any(AppUser.class)), with(any(IdObject.class)), with(any(IdObject.class)));
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(deletedImpl.getClass());
+            will(returnValue(DeletedObject.class));
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(deletedLoaded.getClass());
+            will(returnValue(DeletedObject.class));
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(deletedWrapped.getClass());
+            will(returnValue(DeletedObject.class));
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(observationLoaded.getClass());
             will(returnValue(Observation.class));
-            one(idObjectReflectionHelper).getIdObjectInterfaceForClass(observationWrapped.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(observationWrapped.getClass());
             will(returnValue(Observation.class));
-            one(idObjectReflectionHelper).getIdObjectInterfaceForClass(classListLoaded.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(classListLoaded.getClass());
             will(returnValue(ClassList.class));
-            one(idObjectReflectionHelper).getIdObjectInterfaceForClass(classListWrapped.getClass());
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(classListWrapped.getClass());
             will(returnValue(ClassList.class));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(studentWrapped.getClass());
             will(returnValue(Student.class));
@@ -230,6 +240,7 @@ public class HibernateReadWriteDAOTest {
         }});
 
         dao = new HibernateReadWriteDAO(sessionFactory, daoIdObjectWrapperFactory, idObjectReflectionHelper);
+        dao.idObjectUpdateHelper = idObjectUpdateHelper;
     }
 
     @Test
@@ -304,7 +315,33 @@ public class HibernateReadWriteDAOTest {
 
     @Test
     public void testUpdateSingleWithImpls() {
+        final String id = "id";
         context.checking(new Expectations() {{
+            allowing(session).clear();
+            one(classListImpl).getId();
+            will(returnValue(id));
+            one(studentImpl).getId();
+            will(returnValue(id));
+            one(observationCategoryImpl).getId();
+            will(returnValue(id));
+            one(observationImpl).getId();
+            will(returnValue(id));
+            one(photoImpl).getId();
+            will(returnValue(id));
+            one(appUserImpl).getId();
+            will(returnValue(id));
+            one(session).get(TN, id);
+            will(returnValue(classListLoaded));
+            one(session).get(TN, id);
+            will(returnValue(studentLoaded));
+            one(session).get(TN, id);
+            will(returnValue(observationCategoryLoaded));
+            one(session).get(TN, id);
+            will(returnValue(observationLoaded));
+            one(session).get(TN, id);
+            will(returnValue(photoLoaded));
+            one(session).get(TN, id);
+            will(returnValue(appUserLoaded));
             one(session).update(classListWrapped);
             one(session).update(studentWrapped);
             one(session).update(observationCategoryWrapped);
@@ -321,7 +358,7 @@ public class HibernateReadWriteDAOTest {
         }});
 
         for (IdObject i : impl) {
-            IdObject r = dao.update(i);
+            IdObject r = dao.update(appUserImpl, i);
             assertNotSame(i, r);
             assertTrue(wrapped.contains(r));
         }
@@ -329,7 +366,33 @@ public class HibernateReadWriteDAOTest {
 
     @Test
     public void testUpdateSingleWithWrapped() {
+        final String id = "id";
         context.checking(new Expectations() {{
+            allowing(session).clear();
+            one(classListWrapped).getId();
+            will(returnValue(id));
+            one(studentWrapped).getId();
+            will(returnValue(id));
+            one(observationCategoryWrapped).getId();
+            will(returnValue(id));
+            one(observationWrapped).getId();
+            will(returnValue(id));
+            one(photoWrapped).getId();
+            will(returnValue(id));
+            one(appUserWrapped).getId();
+            will(returnValue(id));
+            one(session).get(TN, id);
+            will(returnValue(classListLoaded));
+            one(session).get(TN, id);
+            will(returnValue(studentLoaded));
+            one(session).get(TN, id);
+            will(returnValue(observationCategoryLoaded));
+            one(session).get(TN, id);
+            will(returnValue(observationLoaded));
+            one(session).get(TN, id);
+            will(returnValue(photoLoaded));
+            one(session).get(TN, id);
+            will(returnValue(appUserLoaded));
             one(session).update(classListWrapped);
             one(session).update(studentWrapped);
             one(session).update(observationCategoryWrapped);
@@ -346,7 +409,7 @@ public class HibernateReadWriteDAOTest {
         }});
 
         for (IdObject i : wrapped) {
-            IdObject r = dao.update(i);
+            IdObject r = dao.update(appUserImpl, i);
             assertSame(i, r);
             assertTrue(wrapped.contains(r));
         }
@@ -672,7 +735,7 @@ public class HibernateReadWriteDAOTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testUdpdateingDeletedObjectExceptions() {
-        dao.update(deletedImpl);
+        dao.update(appUserImpl, deletedImpl);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

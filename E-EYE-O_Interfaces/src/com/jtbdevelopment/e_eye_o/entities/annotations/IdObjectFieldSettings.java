@@ -13,19 +13,23 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 //  TODO  - put tests around usage
 public @interface IdObjectFieldSettings {
-    /*
+    /**
      * NONE - Not editable
+     * CONTROLLED - Only via specialized functions
      * ADMIN - Only Admin users may affect the field
-     * LIMITED_USER - users may update but only via special specific functions, not general update command.  Admin users can update.
      * USER - user editable
      */
     public enum EditableBy {
-        NONE, ADMIN, LIMITED_USER, USER
+        NONE, CONTROLLED, ADMIN, USER
     }
 
-    public enum DisplayFieldType {DEFAULT, TEXT, PASSWORD, MULTI_LINE_TEXT, SINGLE_SELECT_LIST, MULTI_SELECT_PICKER, DATE_TIME, LOCAL_DATE_TIME, CHECKBOX, REVERSE_CHECKBOX, CUSTOM}
+    public enum DisplayFieldType {
+        DEFAULT, TEXT, PASSWORD, MULTI_LINE_TEXT, SINGLE_SELECT_LIST, MULTI_SELECT_PICKER, DATE_TIME, LOCAL_DATE_TIME, CHECKBOX, REVERSE_CHECKBOX, CUSTOM
+    }
 
-    public enum DisplayAlignment {DEFAULT, LEFT, CENTER, RIGHT}
+    public enum DisplayAlignment {
+        DEFAULT, LEFT, CENTER, RIGHT
+    }
 
     boolean viewable() default true;
 
