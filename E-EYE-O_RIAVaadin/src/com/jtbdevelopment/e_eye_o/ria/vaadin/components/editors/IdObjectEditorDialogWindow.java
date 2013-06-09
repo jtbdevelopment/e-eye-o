@@ -67,7 +67,6 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
     }
 
     protected void buildMainLayout() {
-        // the main layout and components will be created here
         mainLayout.setMargin(true);
         mainLayout.setSpacing(true);
 

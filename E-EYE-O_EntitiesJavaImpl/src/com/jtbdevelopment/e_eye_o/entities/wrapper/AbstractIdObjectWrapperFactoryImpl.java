@@ -11,12 +11,12 @@ import java.util.*;
 public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
     private final Map<Class<? extends IdObject>, Class<? extends IdObject>> entityToWrapperMap = new HashMap<>();
     private final Map<Class<? extends IdObject>, Class<? extends IdObject>> wrapperToEntityMap = new HashMap<>();
-    private final IdObjectReflectionHelper interfaceResolver;
+    private final IdObjectReflectionHelper idObjectReflectionHelper;
     private final Class<? extends IdObjectWrapper> baseClass;
 
-    protected AbstractIdObjectWrapperFactoryImpl(final Class<? extends IdObjectWrapper> baseClass, final IdObjectReflectionHelper interfaceResolver) {
+    protected AbstractIdObjectWrapperFactoryImpl(final Class<? extends IdObjectWrapper> baseClass, final IdObjectReflectionHelper idObjectReflectionHelper) {
         this.baseClass = baseClass;
-        this.interfaceResolver = interfaceResolver;
+        this.idObjectReflectionHelper = idObjectReflectionHelper;
     }
 
     protected boolean needsWrapping(final Object entity) {
@@ -30,7 +30,7 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         if (!baseClass.isAssignableFrom(wrapperType)) {
             throw new IllegalArgumentException("wrapperType class of " + wrapperType.getSimpleName() + " must be implement " + baseClass.getSimpleName());
         }
-        final Class<W> idObjectInterfaceForWrapper = interfaceResolver.getIdObjectInterfaceForClass(wrapperType);
+        final Class<W> idObjectInterfaceForWrapper = idObjectReflectionHelper.getIdObjectInterfaceForClass(wrapperType);
         if (!entityType.equals(idObjectInterfaceForWrapper)) {
             throw new IllegalArgumentException(
                     "entityType and wrapperType should implement same IdObject interface entityType = "
@@ -101,8 +101,8 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
             if (wrapped == null) {
                 throw new IllegalArgumentException("Cannot re-wrap a wrapperType of " + entity.getClass().getSimpleName() + " with null for wrapped object");
             }
-            Class wrappedInterface = interfaceResolver.getIdObjectInterfaceForClass(wrapped.getClass());
-            Class wrapperInterface = interfaceResolver.getIdObjectInterfaceForClass(entity.getClass());
+            Class wrappedInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(wrapped.getClass());
+            Class wrapperInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(entity.getClass());
             if (wrappedInterface.equals(wrapperInterface)) {
                 return (T) wrapped;
             } else {
@@ -124,7 +124,7 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
 
     @SuppressWarnings("unchecked")
     private <T extends IdObject> Constructor<T> getConstructor(final T entity) {
-        Class<T> idObjectInterface = (Class<T>) interfaceResolver.getIdObjectInterfaceForClass(entity.getClass());
+        Class<T> idObjectInterface = (Class<T>) idObjectReflectionHelper.getIdObjectInterfaceForClass(entity.getClass());
         Class<T> impl = getWrapperForInterface(idObjectInterface);
         try {
             final Constructor<T> declaredConstructor = impl.getDeclaredConstructor(idObjectInterface);

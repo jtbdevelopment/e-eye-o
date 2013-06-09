@@ -24,17 +24,17 @@ import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObje
 @SuppressWarnings("unused")
 public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer {
     @Autowired
-    private IdObjectReflectionHelper interfaceResolver;
+    private IdObjectReflectionHelper idObjectReflectionHelper;
 
     @Override
     public void serialize(final IdObject value, final JsonGenerator generator) throws IOException {
-        Class<? extends IdObject> valueInterface = interfaceResolver.getIdObjectInterfaceForClass(value.getClass());
+        Class<? extends IdObject> valueInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(value.getClass());
         if (valueInterface == null) {
             throw new RuntimeException("Cannot resolve IdObjectInterface for object");
         }
         generator.writeStartObject();
         generator.writeStringField(ENTITY_TYPE_FIELD, valueInterface.getCanonicalName());
-        Map<String, Method> getters = interfaceResolver.getAllGetMethods(valueInterface);
+        Map<String, Method> getters = idObjectReflectionHelper.getAllGetMethods(valueInterface);
         List<String> sortedKeys = new LinkedList<>(getters.keySet());
         Collections.sort(sortedKeys);
         for (String fieldName : sortedKeys) {
@@ -82,7 +82,7 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
 
     private void writeSubEntity(final JsonGenerator jgen, final Class<? extends IdObject> entityType, final IdObject entity) throws IOException {
         jgen.writeStartObject();
-        jgen.writeStringField(ENTITY_TYPE_FIELD, interfaceResolver.getIdObjectInterfaceForClass(entityType).getCanonicalName());
+        jgen.writeStringField(ENTITY_TYPE_FIELD, idObjectReflectionHelper.getIdObjectInterfaceForClass(entityType).getCanonicalName());
         jgen.writeStringField(ID_FIELD, entity == null ? null : entity.getId());
         jgen.writeEndObject();
     }

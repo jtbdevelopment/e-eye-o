@@ -23,7 +23,7 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
     private Focusable defaultFocus;
 
     @Autowired
-    private IdObjectReflectionHelper interfaceResolver;
+    private IdObjectReflectionHelper idObjectReflectionHelper;
 
     public GeneratedEditorDialogWindow(Class<T> entityType, float width, float height) {
         super(entityType, width, height);
@@ -70,7 +70,7 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
 
     @Override
     protected Layout buildEditorLayout() {
-        Map<String, IdObjectFieldSettings> fields = interfaceResolver.getAllFieldPreferences(entityType);
+        Map<String, IdObjectFieldSettings> fields = idObjectReflectionHelper.getAllFieldPreferences(entityType);
         AbstractOrderedLayout rowContainerLayout = getRowContainerLayout();
         for (List<String> fieldRow : getFieldRows()) {
             Layout editorRow = getEditorRow();

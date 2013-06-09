@@ -17,7 +17,7 @@ import static org.testng.AssertJUnit.assertSame;
  * Date: 1/28/13
  * Time: 10:48 PM
  */
-public class IdObjectInterfaceResolverImplTest {
+public class IdObjectReflectionHelperImplTest {
     @SuppressWarnings("unused")
     public static interface LocalOne extends IdObject {
         public AppUserOwnedObject getAppUserOwnedObject();

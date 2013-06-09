@@ -100,7 +100,7 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
     @Override
     protected void addCustomFilters(final HorizontalLayout filterSection) {
         super.addCustomFilters(filterSection);
-        Label label = new Label("From:");
+        Label label = new Label("From");
         filterSection.addComponent(label);
         filterSection.setComponentAlignment(label, Alignment.BOTTOM_LEFT);
         from.setResolution(Resolution.DAY);
@@ -114,7 +114,7 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
                 updateDateRangeFilter();
             }
         });
-        label = new Label("To:");
+        label = new Label("To");
         filterSection.addComponent(label);
         filterSection.setComponentAlignment(label, Alignment.BOTTOM_LEFT);
         to.setResolution(Resolution.DAY);
@@ -151,6 +151,7 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         }
         dateRangeFilter = new Between("observationTimestamp", new LocalDateTime(from.getConvertedValue()), new LocalDateTime(to.getConvertedValue()));
         entities.addContainerFilter(dateRangeFilter);
+        refreshSizeAndSort();
     }
 
     @Override
@@ -174,7 +175,6 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         significantOnly.setValue(false);
         from.setConvertedValue(new LocalDateTime().minusYears(1));
         to.setConvertedValue(new LocalDateTime());
-
     }
 
     public void setDefaultObservationSubject(final Observable defaultObservationSubject) {

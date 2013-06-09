@@ -21,7 +21,7 @@ public class HibernateIdObjectWrapperFactoryTest extends HibernateAbstractIdObje
     @BeforeClass
     public void setUp() {
         super.setUp();
-        factory = new HibernateIdObjectWrapperFactory(implFactory, interfaceResolver);
+        factory = new HibernateIdObjectWrapperFactory(implFactory, idObjectReflectionHelper);
     }
 
     private static final Map<Class<? extends IdObject>, Class<? extends IdObject>> expectedEntries = new HashMap<Class<? extends IdObject>, Class<? extends IdObject>>() {{

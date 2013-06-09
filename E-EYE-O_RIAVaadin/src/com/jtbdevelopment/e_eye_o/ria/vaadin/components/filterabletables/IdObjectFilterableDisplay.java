@@ -45,7 +45,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     }
 
     @Autowired
-    protected IdObjectReflectionHelper interfaceResolver;
+    protected IdObjectReflectionHelper idObjectReflectionHelper;
     @Autowired
     protected IdObjectFactory idObjectFactory;
     // TODO make preference
@@ -148,6 +148,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
             public void valueChange(Property.ValueChangeEvent event) {
                 logger.trace(getSession().getAttribute(AppUser.class).getId() + ": changing active/archived to " + activeCB.getValue() + "/" + archivedCB.getValue());
                 setActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
+                refreshSizeAndSort();
             }
         });
         archivedCB.addValueChangeListener(new Property.ValueChangeListener() {
@@ -155,6 +156,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
             public void valueChange(Property.ValueChangeEvent event) {
                 logger.trace(getSession().getAttribute(AppUser.class).getId() + ": changing active/archived to " + activeCB.getValue() + "/" + archivedCB.getValue());
                 setActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
+                refreshSizeAndSort();
             }
         });
         filterSection.addComponent(activeCB);
@@ -201,7 +203,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         buttonSection.setWidth(null);
         buttonSection.setSpacing(true);
 
-        Button newEntityButton = new Button("New " + interfaceResolver.getIdObjectInterfaceForClass(entityType).getAnnotation(IdObjectEntitySettings.class).singular());
+        Button newEntityButton = new Button("New " + idObjectReflectionHelper.getIdObjectInterfaceForClass(entityType).getAnnotation(IdObjectEntitySettings.class).singular());
         newEntityButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
@@ -301,6 +303,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         appUser = getSession().getAttribute(AppUser.class);
         initializeFilters();
         eventBus.register(this);
+        refreshSize();
     }
 
     protected void initializeFilters() {
