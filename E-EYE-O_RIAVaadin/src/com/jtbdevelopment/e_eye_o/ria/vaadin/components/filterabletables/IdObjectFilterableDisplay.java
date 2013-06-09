@@ -107,6 +107,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         return actionRow;
     }
 
+    //  TODO - filter defaults should be set at attach
     private Layout buildFilterOptions() {
         HorizontalLayout filterSection = new HorizontalLayout();
         filterSection.setWidth(null);

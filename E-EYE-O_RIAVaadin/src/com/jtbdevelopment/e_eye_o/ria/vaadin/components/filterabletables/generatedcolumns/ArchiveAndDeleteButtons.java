@@ -17,7 +17,6 @@ import org.vaadin.dialogs.ConfirmDialog;
  * Date: 5/12/13
  * Time: 5:20 PM
  */
-//  TODO - there seems to be a filter bug when you archive or unarchive and they should disappear.  They don't.  They are updated, but don't get removed.
 public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> extends CustomComponent {
     private static final Logger logger = LoggerFactory.getLogger(ArchiveAndDeleteButtons.class);
 

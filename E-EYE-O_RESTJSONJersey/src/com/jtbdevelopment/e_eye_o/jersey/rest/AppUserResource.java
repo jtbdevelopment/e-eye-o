@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.jersey.rest;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
@@ -136,12 +137,9 @@ public class AppUserResource extends SecurityAwareResource {
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response createEntity(@FormParam("appUserOwnedObject") final String appUserOwnedObjectString) {
         AppUser sessionAppUser = getSessionAppUser();
-
-        //  TODO - handle arrays?
         AppUserOwnedObject newObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
         if (!sessionAppUser.isAdmin()) {
-            //  TODO - add this as annotation to classes
-            if (newObject instanceof DeletedObject || newObject instanceof TwoPhaseActivity) {
+            if (!idObjectReflectionHelper.getIdObjectInterfaceForClass(newObject.getClass()).getAnnotation(IdObjectEntitySettings.class).editable()) {
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
             newObject.setAppUser(sessionAppUser);

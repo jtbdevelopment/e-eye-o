@@ -21,7 +21,6 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//  TODO - privacy and cookie policies
 public class LegalView extends VerticalLayout implements View {
     public final static String VIEW_NAME = "Legal";
     public static final String AGREEMENT_TIME = "agreementTime";
