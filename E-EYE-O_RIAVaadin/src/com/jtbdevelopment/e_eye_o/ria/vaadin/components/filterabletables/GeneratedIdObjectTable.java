@@ -11,6 +11,8 @@ import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Table;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,8 +27,8 @@ import java.util.Map;
  * Time: 10:31 PM
  */
 public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> extends IdObjectTable<T> {
+    private static final Logger logger = LoggerFactory.getLogger(GeneratedIdObjectTable.class);
 
-    @Autowired
     protected DateTimeStringConverter dateTimeStringConverter;
 
     @Autowired
@@ -82,7 +84,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
 
                                         }
                                     } catch (IllegalAccessException | InvocationTargetException e) {
-                                        //  TODO log
+                                        logger.warn("Failure to create embedded checkbox image for " + fieldName, e);
                                         return null;
                                     }
                                 }
