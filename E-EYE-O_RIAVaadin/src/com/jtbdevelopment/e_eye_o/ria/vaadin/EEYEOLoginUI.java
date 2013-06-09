@@ -21,7 +21,8 @@ import org.springframework.util.StringUtils;
  * Date: 3/3/13
  * Time: 11:30 AM
  */
-//  TODO - add some about info
+// TODO - add some about info
+// TODO - add guided tour?
 @Component(value = "eeyeoLoginUI")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Theme("eeyeo")

@@ -2,14 +2,18 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors.ObservationEditorDialogWindow;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ObservationCategorySetStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.ShortenedCommentConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.filters.ObservationCategoryFilter;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.filter.Between;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Date: 6/5/13
  * Time: 10:22 PM
  */
-//  TODO - add date range filter
 public class GeneratedObservationTable extends GeneratedIdObjectTable<Observation> {
     private static final Logger logger = LoggerFactory.getLogger(ObservationWithoutSubjectTable.class);
     private Observable defaultObservationSubject;
@@ -28,6 +31,13 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
     private ObservationCategorySetStringConverter observationCategorySetStringConverter;
     @Autowired
     private ShortenedCommentConverter shortenedCommentConverter;
+    @Autowired
+    private LocalDateTimeDateConverter localDateTimeDateConverter;
+
+    private CheckBox significantOnly = new CheckBox("Significant Only");
+    private DateField from = new DateField();
+    private DateField to = new DateField();
+    private Between dateRangeFilter;
 
     public GeneratedObservationTable() {
         super(Observation.class);
@@ -90,7 +100,35 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
     @Override
     protected void addCustomFilters(final HorizontalLayout filterSection) {
         super.addCustomFilters(filterSection);
-        final CheckBox significantOnly = new CheckBox("Significant Only");
+        Label label = new Label("From:");
+        filterSection.addComponent(label);
+        filterSection.setComponentAlignment(label, Alignment.BOTTOM_LEFT);
+        from.setResolution(Resolution.DAY);
+        from.setConverter(localDateTimeDateConverter);
+        filterSection.addComponent(from);
+        filterSection.setComponentAlignment(from, Alignment.BOTTOM_LEFT);
+        from.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": from filter " + from.getValue());
+                updateDateRangeFilter();
+            }
+        });
+        label = new Label("To:");
+        filterSection.addComponent(label);
+        filterSection.setComponentAlignment(label, Alignment.BOTTOM_LEFT);
+        to.setResolution(Resolution.DAY);
+        to.setConverter(localDateTimeDateConverter);
+        to.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": to filter " + to.getValue());
+                updateDateRangeFilter();
+            }
+        });
+        filterSection.addComponent(to);
+        filterSection.setComponentAlignment(to, Alignment.BOTTOM_LEFT);
+
         significantOnly.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
@@ -103,10 +141,16 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
                 refreshSizeAndSort();
             }
         });
-        //  TODO - make preference
-        significantOnly.setValue(false);
         filterSection.addComponent(significantOnly);
         filterSection.setComponentAlignment(significantOnly, Alignment.BOTTOM_LEFT);
+    }
+
+    private void updateDateRangeFilter() {
+        if (dateRangeFilter != null) {
+            entities.removeContainerFilter(dateRangeFilter);
+        }
+        dateRangeFilter = new Between("observationTimestamp", new LocalDateTime(from.getConvertedValue()), new LocalDateTime(to.getConvertedValue()));
+        entities.addContainerFilter(dateRangeFilter);
     }
 
     @Override
@@ -121,6 +165,16 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
             }
             refreshSizeAndSort();
         }
+    }
+
+    @Override
+    protected void initializeFilters() {
+        super.initializeFilters();
+        //  TODO - make preferences
+        significantOnly.setValue(false);
+        from.setConvertedValue(new LocalDateTime().minusYears(1));
+        to.setConvertedValue(new LocalDateTime());
+
     }
 
     public void setDefaultObservationSubject(final Observable defaultObservationSubject) {

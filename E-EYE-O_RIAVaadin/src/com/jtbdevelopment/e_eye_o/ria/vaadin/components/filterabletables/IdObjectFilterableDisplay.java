@@ -37,6 +37,8 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     protected static final ThemeResource NOT_X = new ThemeResource("icons/16/no.png");
     protected static final ThemeResource IS_X = new ThemeResource("icons/16/yes.png");
     private static final Logger logger = LoggerFactory.getLogger(IdObjectFilterableDisplay.class);
+    private CheckBox activeCB;
+    private CheckBox archivedCB;
 
     public interface ClickedOnListener<T> {
         void handleClickEvent(final T entity);
@@ -107,7 +109,6 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         return actionRow;
     }
 
-    //  TODO - filter defaults should be set at attach
     private Layout buildFilterOptions() {
         HorizontalLayout filterSection = new HorizontalLayout();
         filterSection.setWidth(null);
@@ -140,13 +141,8 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         filterSection.addComponent(showWhichLabel);
         filterSection.setComponentAlignment(showWhichLabel, Alignment.BOTTOM_LEFT);
 
-        final CheckBox activeCB = new CheckBox("Active");
-        final CheckBox archivedCB = new CheckBox("Archived");
-        //  TODO - filters do not apply properly at start
-        //  TODO - configurable
-        activeCB.setValue(Boolean.TRUE);
-        //  TODO - configurable
-        archivedCB.setValue(Boolean.FALSE);
+        activeCB = new CheckBox("Active");
+        archivedCB = new CheckBox("Archived");
         activeCB.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
@@ -165,7 +161,6 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         filterSection.addComponent(archivedCB);
         filterSection.setComponentAlignment(activeCB, Alignment.BOTTOM_LEFT);
         filterSection.setComponentAlignment(archivedCB, Alignment.BOTTOM_LEFT);
-
 
         addCustomFilters(filterSection);
 
@@ -304,7 +299,15 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     public void attach() {
         super.attach();
         appUser = getSession().getAttribute(AppUser.class);
+        initializeFilters();
         eventBus.register(this);
+    }
+
+    protected void initializeFilters() {
+        //  TODO - configurable
+        activeCB.setValue(Boolean.TRUE);
+        //  TODO - configurable
+        archivedCB.setValue(Boolean.FALSE);
     }
 
     @Override
@@ -313,7 +316,6 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         super.detach();
     }
 
-    @SuppressWarnings("unused")
     protected void addCustomFilters(final HorizontalLayout filterSection) {
         //  None by default
     }
