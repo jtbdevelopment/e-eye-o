@@ -41,7 +41,7 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
         List<List<String>> rows = new LinkedList<>();
         List<String> currentRow = new LinkedList<>();
 
-        for (String field : entityType.getAnnotation(IdObjectEntitySettings.class).editFieldOrder()) {
+        for (String field : entitySettings.editFieldOrder()) {
             if (IdObjectEntitySettings.SECTION_BREAK.equals(field)) {
                 rows.add(currentRow);
                 currentRow = new LinkedList<>();

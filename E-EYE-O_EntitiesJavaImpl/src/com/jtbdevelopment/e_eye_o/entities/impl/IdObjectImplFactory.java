@@ -107,7 +107,7 @@ public class IdObjectImplFactory implements IdObjectFactory {
     }
 
     @Override
-    public AppUserOwnedObjectBuilder newAppUserSettingsBuilder(final AppUser appUser) {
+    public AppUserSettingsBuilder newAppUserSettingsBuilder(final AppUser appUser) {
         return new AppUserSettingsBuilderImpl(newAppUserSettings(appUser));
     }
 

@@ -21,7 +21,7 @@ public interface IdObjectFactory {
 
     AppUserSettings newAppUserSettings(final AppUser appUser);
 
-    AppUserOwnedObjectBuilder newAppUserSettingsBuilder(final AppUser appUser);
+    AppUserSettingsBuilder newAppUserSettingsBuilder(final AppUser appUser);
 
     ClassList newClassList(final AppUser appUser);
 

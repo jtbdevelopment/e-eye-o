@@ -1,7 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.AppUserOwnedObjectStringConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.DateTimeStringConverter;
@@ -94,7 +93,7 @@ public abstract class GeneratedIdObjectTable<T extends AppUserOwnedObject> exten
     }
 
     protected List<String> getTableFields() {
-        return Arrays.asList(entityType.getAnnotation(IdObjectEntitySettings.class).viewFieldOrder());
+        return Arrays.asList(entitySettings.viewFieldOrder());
     }
 
     @Override

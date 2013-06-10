@@ -92,7 +92,7 @@ public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
     }
 
     @Override
-    protected void refreshSize() {
+    protected void refreshSize(final int maxSize) {
         //  TODO
     }
 

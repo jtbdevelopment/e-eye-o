@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import org.joda.time.DateTime;
@@ -32,8 +33,13 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
     public TwoPhaseActivity setUpNewUser(final AppUser appUser) {
         appUser.setPassword(securePassword(appUser.getPassword()));
         AppUser savedUser = readWriteDAO.create(appUser);
+        createDefaultSettingsForNewUser(savedUser);
         createSamplesForNewUser(savedUser);
         return generateActivationRequest(savedUser);
+    }
+
+    protected void createDefaultSettingsForNewUser(final AppUser newUser) {
+        AppUserSettings settings = readWriteDAO.create(idObjectFactory.newAppUserSettingsBuilder(newUser).build());
     }
 
     @Override

@@ -13,7 +13,9 @@ import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,7 +151,9 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         if (dateRangeFilter != null) {
             entities.removeContainerFilter(dateRangeFilter);
         }
-        dateRangeFilter = new Between("observationTimestamp", new LocalDateTime(from.getConvertedValue()), new LocalDateTime(to.getConvertedValue()));
+        dateRangeFilter = new Between("observationTimestamp",
+                new LocalDateTime(from.getConvertedValue()),
+                new LocalDate(to.getConvertedValue()).toLocalDateTime(new LocalTime(23, 59, 59)));
         entities.addContainerFilter(dateRangeFilter);
         refreshSizeAndSort();
     }
@@ -171,9 +175,9 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
     @Override
     protected void initializeFilters() {
         super.initializeFilters();
-        //  TODO - make preferences
-        significantOnly.setValue(false);
-        from.setConvertedValue(new LocalDateTime().minusYears(1));
+        AppUserSettings settings = getSession().getAttribute(AppUserSettings.class);
+        significantOnly.setValue(settings.getSettingAsBoolean("web.view.significantonly.default", false));
+        from.setConvertedValue(new LocalDateTime().minusMonths(settings.getSettingAsInt("web.view.earliestobservationbackmonths.default", 1)));
         to.setConvertedValue(new LocalDateTime());
     }
 

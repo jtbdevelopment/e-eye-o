@@ -15,9 +15,9 @@ import java.util.Set;
  * Date: 11/25/12
  * Time: 3:14 PM
  */
-@IdObjectEntitySettings(defaultPageSize = 25, defaultSortField = "lastObservation", defaultSortAscending = true,
+@IdObjectEntitySettings(defaultPageSize = 25, defaultSortField = "lastObservationTimestamp", defaultSortAscending = false,
         singular = "Student", plural = "Students",
-        viewFieldOrder = {"firstName", "lastName", "modificationTimestamp", "archived"},
+        viewFieldOrder = {"firstName", "lastName", "lastObservationTimestamp", "modificationTimestamp", "archived"},
         editFieldOrder = {"firstName", "lastName", IdObjectEntitySettings.SECTION_BREAK, "classLists"}
 )
 public interface Student extends Observable {

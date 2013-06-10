@@ -4,6 +4,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
+import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TitleBarComposite;
@@ -20,6 +22,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 /**
  * Date: 3/3/13
@@ -45,6 +49,9 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
     @Autowired
     private TitleBarComposite titleBarComposite;
 
+    @Autowired
+    private IdObjectFactory idObjectFactory;
+
     @Override
     protected void init(final VaadinRequest request) {
         super.init(request);
@@ -53,6 +60,16 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         if (principalAsObject instanceof AppUserUserDetails) {
             AppUser appUser = ((AppUserUserDetails) principalAsObject).getAppUser();
             getSession().setAttribute(AppUser.class, appUser);
+            Set<AppUserSettings> settings = readWriteDAO.getEntitiesForUser(AppUserSettings.class, appUser);
+            AppUserSettings setting;
+            if (settings.isEmpty()) {
+                //  Legacy users
+                setting = readWriteDAO.create(idObjectFactory.newAppUserSettings(appUser));
+
+            } else {
+                setting = settings.iterator().next();
+            }
+            getSession().setAttribute(AppUserSettings.class, setting);
         } else {
             throw new RuntimeException("Invalid Principal Object");
         }

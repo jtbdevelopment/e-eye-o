@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
@@ -40,6 +41,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
 
     protected final VerticalLayout mainLayout = new VerticalLayout();
     private Button saveButton;
+    protected IdObjectEntitySettings entitySettings;
 
     protected abstract Layout buildEditorLayout();
 
@@ -52,6 +54,7 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
     public IdObjectEditorDialogWindow(final Class<T> entityType, final float width, final Unit widthUnit, final float height, final Unit heightUnit) {
         this.entityBeanFieldGroup = new BeanFieldGroup<>(entityType);
         this.entityType = entityType;
+        entitySettings = entityType.getAnnotation(IdObjectEntitySettings.class);
         setSizeUndefined();
         setModal(true);
         addStyleName(Runo.WINDOW_DIALOG);

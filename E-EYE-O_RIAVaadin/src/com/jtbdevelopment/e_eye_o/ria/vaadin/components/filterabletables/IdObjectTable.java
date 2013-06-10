@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtonsGenerator;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.sorter.CompositeItemSorter;
 import com.vaadin.data.Property;
@@ -32,6 +33,13 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
     }
 
     @Override
+    public void attach() {
+        entityTable.setSortContainerPropertyId(getDefaultSortField());
+        entityTable.setSortAscending(getDefaultSortAscending());
+        super.attach();
+    }
+
+    @Override
     protected AbstractLayout buildDisplayFooter() {
         CssLayout spacer = new CssLayout();
         spacer.addStyleName("table-spacer-row");
@@ -54,8 +62,6 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
         entityTable.setVisibleColumns(visibleColumns);
         entityTable.setColumnHeaders(getColumnHeaders());
         entityTable.setColumnAlignments(getColumnAlignments());
-        entityTable.setSortContainerPropertyId(getDefaultSortField(visibleColumns));
-        entityTable.setSortAscending(getDefaultSortAscending());
         addColumnConverters();
 
         entityTable.addValueChangeListener(new Property.ValueChangeListener() {
@@ -82,13 +88,14 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
         return entityTable;
     }
 
-    protected String getDefaultSortField(final String[] properties) {
-        //  TODO - make preference
-        return properties[1];
+    protected String getDefaultSortField() {
+        AppUserSettings settings = getSession().getAttribute(AppUserSettings.class);
+        return settings.getSettingAsString(baseConfigSetting + ".defaultSortField", entitySettings.defaultSortField());
     }
 
     protected boolean getDefaultSortAscending() {
-        return true;
+        AppUserSettings settings = getSession().getAttribute(AppUserSettings.class);
+        return settings.getSettingAsBoolean(baseConfigSetting + ".defaultSortAscending", entitySettings.defaultSortAscending());
     }
 
     protected void addColumnConverters() {
@@ -113,7 +120,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
     }
 
     @Override
-    protected void refreshSize() {
+    protected void refreshSize(final int maxSize) {
         entityTable.setPageLength(Math.min(maxSize, entities.size()));
     }
 

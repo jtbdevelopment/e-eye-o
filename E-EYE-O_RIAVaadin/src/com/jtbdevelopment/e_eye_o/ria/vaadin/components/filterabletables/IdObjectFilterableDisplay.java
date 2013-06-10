@@ -39,6 +39,9 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     private static final Logger logger = LoggerFactory.getLogger(IdObjectFilterableDisplay.class);
     private CheckBox activeCB;
     private CheckBox archivedCB;
+    private NativeSelect showSize;
+    protected String baseConfigSetting;
+    protected IdObjectEntitySettings entitySettings;
 
     public interface ClickedOnListener<T> {
         void handleClickEvent(final T entity);
@@ -48,8 +51,6 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     protected IdObjectReflectionHelper idObjectReflectionHelper;
     @Autowired
     protected IdObjectFactory idObjectFactory;
-    // TODO make preference
-    protected int maxSize = 10;
     private Container.Filter currentFilter;
 
     protected final Class<T> entityType;
@@ -67,12 +68,14 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
 
     public abstract IdObjectEditorDialogWindow<T> showEntityEditor(final T entity);
 
-    protected abstract void refreshSize();
+    protected abstract void refreshSize(final int maxSize);
 
     protected abstract void refreshSort();
 
     @PostConstruct
     protected void initialize() {
+        entitySettings = entityType.getAnnotation(IdObjectEntitySettings.class);
+        baseConfigSetting = "web.view." + entitySettings.plural();
         this.entities = new AllItemsBeanItemContainer<>(entityType);
 
         Panel panel = new Panel();
@@ -84,8 +87,6 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         if (footer != null) {
             mainLayout.addComponent(footer);
         }
-        refreshSizeAndSort();
-
         panel.setContent(mainLayout);
         setCompositionRoot(panel);
         ComponentUtils.setImmediateForAll(this, true);
@@ -170,14 +171,12 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         filterSection.addComponent(showSizeLabel);
         filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
-        final NativeSelect showSize = new NativeSelect(null, Ints.asList(entityType.getAnnotation(IdObjectEntitySettings.class).pageSizes()));
-        showSize.setValue(maxSize);
+        showSize = new NativeSelect(null, Ints.asList(entitySettings.pageSizes()));
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(final Property.ValueChangeEvent event) {
                 logger.trace(getSession().getAttribute(AppUser.class).getId() + ": changing max size to " + showSize.getValue());
-                maxSize = ((Integer) showSize.getValue());
-                refreshSize();
+                refreshSize((Integer) showSize.getValue());
             }
         });
         showSize.setWidth(4, Unit.EM);
@@ -203,7 +202,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         buttonSection.setWidth(null);
         buttonSection.setSpacing(true);
 
-        Button newEntityButton = new Button("New " + idObjectReflectionHelper.getIdObjectInterfaceForClass(entityType).getAnnotation(IdObjectEntitySettings.class).singular());
+        Button newEntityButton = new Button("New " + entitySettings.singular());
         newEntityButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
@@ -285,7 +284,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     }
 
     public void refreshSizeAndSort() {
-        refreshSize();
+        refreshSize((Integer) showSize.getValue());
         refreshSort();
     }
 
@@ -303,13 +302,14 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         appUser = getSession().getAttribute(AppUser.class);
         initializeFilters();
         eventBus.register(this);
-        refreshSize();
+        refreshSizeAndSort();
     }
 
     protected void initializeFilters() {
-        //  TODO - configurable
-        activeCB.setValue(Boolean.TRUE);
-        //  TODO - configurable
+        AppUserSettings settings = getSession().getAttribute(AppUserSettings.class);
+        showSize.setValue(settings.getSettingAsInt(baseConfigSetting + ".defaultsize", entitySettings.defaultPageSize()));
+        activeCB.setValue(settings.getSettingAsBoolean(baseConfigSetting + ".showActive", true));
+        archivedCB.setValue(settings.getSettingAsBoolean(baseConfigSetting + ".showArchived", false));
         archivedCB.setValue(Boolean.FALSE);
     }
 

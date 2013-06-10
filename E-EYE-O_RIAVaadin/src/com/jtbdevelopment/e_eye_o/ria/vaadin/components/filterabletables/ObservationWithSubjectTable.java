@@ -21,9 +21,4 @@ public class ObservationWithSubjectTable extends GeneratedObservationTable {
                 new ObservationSubjectFilter(searchFor)
         );
     }
-
-    @Override
-    protected String getDefaultSortField(final String[] properties) {
-        return "observationTimestamp";
-    }
 }
