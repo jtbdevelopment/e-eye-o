@@ -75,6 +75,8 @@ public class HibernateReadOnlyDAOTest {
         DELETED_WRAPPER = context.mock(DeletedObject.class);
         dao = new HibernateReadOnlyDAO(sessionFactory, wrapperFactory, idObjectReflectionHelper);
         context.checking(new Expectations() {{
+            allowing(DELETED_WRAPPER).isArchived();
+            will(returnValue(false));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(LocalInterface.class);
             will(returnValue(LocalInterface.class));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(DeletedObject.class);
@@ -236,7 +238,6 @@ public class HibernateReadOnlyDAOTest {
     @Test
     public void testGetEntitiesForUser() throws Exception {
         final List<AppUserOwnedObject> fromDB = Arrays.asList(ACTIVE_WRAPPER, ARCHIVED_WRAPPER, DELETED_WRAPPER);
-        final List<HibernateWrapper> expected = Arrays.asList(ACTIVE_WRAPPER, ARCHIVED_WRAPPER);
         context.checking(new Expectations() {{
             allowing(session).createQuery("from " + HQLNAME + " where appUser = :user");
             will(returnValue(query));
@@ -246,8 +247,8 @@ public class HibernateReadOnlyDAOTest {
         }});
         for (Class<? extends LocalInterface> c : Arrays.asList(LocalInterface.class, HibernateWrapper.class)) {
             Set entitiesForUser = dao.getEntitiesForUser(c, appUser);
-            assertTrue(entitiesForUser.containsAll(expected));
-            assertTrue(expected.containsAll(entitiesForUser));
+            assertTrue(entitiesForUser.containsAll(fromDB));
+            assertTrue(fromDB.containsAll(entitiesForUser));
         }
     }
 
@@ -282,7 +283,7 @@ public class HibernateReadOnlyDAOTest {
         final Collection<AppUserOwnedObject> expected = Collections2.filter(fromDB, new Predicate<AppUserOwnedObject>() {
             @Override
             public boolean apply(@Nullable final AppUserOwnedObject input) {
-                return input != DELETED_WRAPPER && input.isArchived() == archived;
+                return input.isArchived() == archived;
             }
         });
         context.checking(new Expectations() {{

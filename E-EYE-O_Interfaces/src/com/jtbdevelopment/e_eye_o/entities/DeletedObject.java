@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -24,6 +25,7 @@ public interface DeletedObject extends AppUserOwnedObject {
     final static String DELETED_OBJECT_DELETED_ID_CANNOT_BE_BLANK_OR_NULL_ERROR = "DeletedObject.deletedId" + CANNOT_BE_BLANK_OR_NULL_ERROR;
 
     @NotEmpty(message = DELETED_OBJECT_DELETED_ID_CANNOT_BE_BLANK_OR_NULL_ERROR)
+    @IdObjectFieldSettings(editableBy = IdObjectFieldSettings.EditableBy.NONE, label = "Deleted Object Id")
     String getDeletedId();
 
     void setDeletedId(final String deletedId);

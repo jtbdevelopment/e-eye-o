@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -31,6 +32,9 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
         Class<? extends IdObject> valueInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(value.getClass());
         if (valueInterface == null) {
             throw new RuntimeException("Cannot resolve IdObjectInterface for object");
+        }
+        if (!valueInterface.getAnnotation(IdObjectEntitySettings.class).viewable()) {
+            return;
         }
         generator.writeStartObject();
         generator.writeStringField(ENTITY_TYPE_FIELD, valueInterface.getCanonicalName());

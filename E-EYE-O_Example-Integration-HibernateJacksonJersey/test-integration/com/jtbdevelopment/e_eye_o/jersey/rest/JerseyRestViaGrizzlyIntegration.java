@@ -6,6 +6,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.ClassNamesResourceConfig;
@@ -70,6 +71,9 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     @Autowired
     private PersistentTokenBasedRememberMeServices rememberMeServices;
+
+    @Autowired
+    private IdObjectReflectionHelper idObjectReflectionHelper;
 
     private static AppUser testUser1 = null, testUser2 = null, testAdmin = null;
 
@@ -290,14 +294,14 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     @Test
     public void testGetOwnObjects() throws Exception {
-        Set<AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1);
+        Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1));
         String uri = USERS_URI + testUser1.getId() + "/";
         httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
     }
 
     @Test
     public void testGetOwnActiveObjects() throws Exception {
-        Set<AppUserOwnedObject> owned = readWriteDAO.getActiveEntitiesForUser(AppUserOwnedObject.class, testUser1);
+        Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getActiveEntitiesForUser(AppUserOwnedObject.class, testUser1));
         String uri = USERS_URI + testUser1.getId() + "/active/";
         httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
     }
@@ -346,9 +350,22 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     @Test
     public void testGetAnotherUsersObjectsAsAdmin() throws Exception {
-        Set<AppUserOwnedObject> owned = readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1);
+        Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1));
         String uri = USERS_URI + testUser1.getId() + "/";
         httpHelper.checkJSONVsExpectedResults(uri, adminClient, owned);
+    }
+
+    private <T extends AppUserOwnedObject> Collection<T> filterUnreadableItems(final Set<T> results) {
+        return Collections2.filter(results, new Predicate<T>() {
+            @Override
+            public boolean apply(@Nullable T input) {
+                if (input == null) {
+                    return false;
+                }
+                Class<? extends AppUserOwnedObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(input.getClass());
+                return idObjectInterface.getAnnotation(IdObjectEntitySettings.class).viewable();
+            }
+        });
     }
 
     @Test

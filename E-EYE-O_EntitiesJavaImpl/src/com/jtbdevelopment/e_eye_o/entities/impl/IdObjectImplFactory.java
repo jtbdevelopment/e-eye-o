@@ -22,6 +22,8 @@ public class IdObjectImplFactory implements IdObjectFactory {
         switch (idObjectType.getSimpleName()) {
             case "AppUser":
                 return (T) newAppUser();
+            case "AppUserSettings":
+                return (T) newAppUserSettings(null);
             case "Observation":
                 return (T) newObservation(null);
             case "ObservationCategory":
@@ -47,6 +49,8 @@ public class IdObjectImplFactory implements IdObjectFactory {
         switch (idObjectType.getSimpleName()) {
             case "AppUser":
                 return (B) newAppUserBuilder();
+            case "AppUserSettings":
+                return (B) newAppUserSettingsBuilder(null);
             case "Observation":
                 return (B) newObservationBuilder(null);
             case "ObservationCategory":
@@ -95,6 +99,16 @@ public class IdObjectImplFactory implements IdObjectFactory {
     @Override
     public AppUserBuilder newAppUserBuilder() {
         return new AppUserBuilderImpl(newAppUser());
+    }
+
+    @Override
+    public AppUserSettings newAppUserSettings(final AppUser appUser) {
+        return new AppUserSettingsImpl(appUser);
+    }
+
+    @Override
+    public AppUserOwnedObjectBuilder newAppUserSettingsBuilder(final AppUser appUser) {
+        return new AppUserSettingsBuilderImpl(newAppUserSettings(appUser));
     }
 
     @Override

@@ -19,6 +19,10 @@ public interface IdObjectFactory {
 
     AppUserBuilder newAppUserBuilder();
 
+    AppUserSettings newAppUserSettings(final AppUser appUser);
+
+    AppUserOwnedObjectBuilder newAppUserSettingsBuilder(final AppUser appUser);
+
     ClassList newClassList(final AppUser appUser);
 
     ClassListBuilder newClassListBuilder(final AppUser appUser);

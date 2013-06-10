@@ -81,12 +81,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
         Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user");
         query.setParameter("user", appUser);
-        return new HashSet<>(Collections2.filter((List<T>) query.list(), new Predicate<T>() {
-            @Override
-            public boolean apply(@Nullable final T input) {
-                return (input != null) && ((entityType == DeletedObject.class) || !(input instanceof DeletedObject));
-            }
-        }));
+        return new HashSet<>((List<T>) query.list());
     }
 
     @Override

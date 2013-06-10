@@ -276,7 +276,6 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         final Set<AppUserOwnedObject> secondSet = rwDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, updateUser, secondTS);
         assertEquals(secondList.size(), secondSet.size());
         assertTrue(secondSet.containsAll(secondList));
-
     }
 
     @Test
@@ -293,7 +292,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Thread.sleep(1);
 
         rwDAO.delete(Arrays.asList(oc, cl, s, p, o));
-        assertTrue(rwDAO.getEntitiesForUser(AppUserOwnedObject.class, deleteUserThings).isEmpty());
+        assertFalse(rwDAO.getEntitiesForUser(AppUserOwnedObject.class, deleteUserThings).isEmpty());
         final Set<DeletedObject> deletedObjects = rwDAO.getEntitiesForUser(DeletedObject.class, deleteUserThings);
         assertFalse(deletedObjects.isEmpty());
         for (DeletedObject deletedObject : deletedObjects) {
@@ -302,7 +301,6 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
             ids.remove(deletedObject.getDeletedId());
         }
         assertTrue(ids.isEmpty());
-
     }
 
     @Test

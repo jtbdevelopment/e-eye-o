@@ -1,5 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ChainedUpdateSetImpl;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectUpdateHelper;
@@ -8,7 +10,6 @@ import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -62,7 +64,6 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     @Override
     public <T extends IdObject> T update(final AppUser updatingUser, final T entity) {
-
         if (!idObjectReflectionHelper.getIdObjectInterfaceForClass(entity.getClass()).getAnnotation(IdObjectEntitySettings.class).editable()) {
             throw new IllegalArgumentException("You cannot explicitly update a " + entity.getClass() + ".");
         }
@@ -181,8 +182,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             return new ChainedUpdateSetImpl<AppUserOwnedObject>(Collections.EMPTY_SET, Collections.EMPTY_SET);  //  Already deleted?
         }
 
-        Map<HibernateAppUserOwnedObject, ChainedUpdateSet<AppUserOwnedObject>> returnSet
-                = delete(getEntitiesForUser(HibernateAppUserOwnedObject.class, wrapped));
+        Collection<AppUserOwnedObject> filtered = Collections2.filter(getEntitiesForUser(AppUserOwnedObject.class, wrapped), new Predicate<AppUserOwnedObject>() {
+            @Override
+            public boolean apply(@Nullable AppUserOwnedObject input) {
+                return input != null && !(input instanceof DeletedObject);
+            }
+        });
+        Map<AppUserOwnedObject, ChainedUpdateSet<AppUserOwnedObject>> returnSet = delete(filtered);
         for (DeletedObject deletedObject : getEntitiesForUser(DeletedObject.class, wrapped)) {
             currentSession.delete(deletedObject);
         }
