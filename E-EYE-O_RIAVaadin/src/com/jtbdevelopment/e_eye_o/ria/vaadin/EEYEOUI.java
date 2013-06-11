@@ -3,9 +3,9 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TitleBarComposite;
@@ -50,7 +50,7 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
     private TitleBarComposite titleBarComposite;
 
     @Autowired
-    private IdObjectFactory idObjectFactory;
+    private UserHelper userHelper;
 
     // TODO - determine if new legal info needs to be shown
     @Override
@@ -65,8 +65,7 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
             AppUserSettings setting;
             if (settings.isEmpty()) {
                 //  Legacy users
-                setting = readWriteDAO.create(idObjectFactory.newAppUserSettings(appUser));
-
+                setting = userHelper.createDefaultSettingsForNewUser(appUser);
             } else {
                 setting = settings.iterator().next();
             }

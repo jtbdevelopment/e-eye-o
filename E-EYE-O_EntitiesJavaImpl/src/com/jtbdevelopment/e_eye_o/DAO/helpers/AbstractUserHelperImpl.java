@@ -50,7 +50,8 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
         return generateActivationRequest(savedUser);
     }
 
-    protected AppUserSettings createDefaultSettingsForNewUser(final AppUser newUser) {
+    @Override
+    public AppUserSettings createDefaultSettingsForNewUser(final AppUser newUser) {
         return readWriteDAO.create(
                 idObjectFactory.newAppUserSettingsBuilder(newUser)
                         .withSetting(AppUserSettings.COOKIES_POLICY_VERSION, cookiesPolicy.getVersion())

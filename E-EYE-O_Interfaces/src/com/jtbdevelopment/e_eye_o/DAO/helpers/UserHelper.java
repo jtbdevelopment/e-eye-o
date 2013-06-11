@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.DAO.helpers;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 
 /**
@@ -11,6 +12,8 @@ public interface UserHelper {
     //  Take a basic login form and do whatever else we want to new user
     //  Implicitly records legal, cookie and privacy policy versions agreed to
     TwoPhaseActivity setUpNewUser(final AppUser appUser);
+
+    AppUserSettings createDefaultSettingsForNewUser(final AppUser newUser);
 
     TwoPhaseActivity generateActivationRequest(final AppUser appUser);
 
