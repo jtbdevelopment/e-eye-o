@@ -69,7 +69,8 @@ public class WorkAreaComponent extends CustomComponent {
         setCompositionRoot(panel);
 
         prepForTabSwitch();
-        studentsWorkArea.setVisible(true);               //  TODO - make which one a default
+        eventBus.register(this);
+//        studentsWorkArea.setVisible(true);               //  TODO - make which one a default
     }
 
     @Subscribe
@@ -111,7 +112,7 @@ public class WorkAreaComponent extends CustomComponent {
     @Subscribe
     @SuppressWarnings("unused")
     public void changeDataArea(final IdObjectRelatedSideTabClicked event) {
-        if (!getSession().getAttribute(AppUser.class).equals(event.getAppUser())) {
+        if (!getUI().getSession().getAttribute(AppUser.class).equals(event.getAppUser())) {
             return;
         }
         logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to " + event.getEntityType());
@@ -148,7 +149,6 @@ public class WorkAreaComponent extends CustomComponent {
     @Override
     public void attach() {
         super.attach();
-        eventBus.register(this);
     }
 
     @Override

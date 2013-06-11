@@ -76,10 +76,6 @@ public class TabComponent extends CustomComponent {
 
         for (IdObjectTabs entityType : IdObjectTabs.values()) {
             final IdObjectRelatedTab sideTab = new IdObjectRelatedTab(entityType, eventBus);
-            if (IdObjectTabs.Students.equals(entityType)) {  //  TODO - config
-                currentSelected = sideTab;
-                sideTab.addStyleName(SELECTED_TABS);
-            }
             objectTabs.add(sideTab);
             mainLayout.addComponent(sideTab);
         }
@@ -116,13 +112,21 @@ public class TabComponent extends CustomComponent {
     public void attach() {
         super.attach();
         AppUser appUser = getUI().getSession().getAttribute(AppUser.class);
+        AppUserSettings settings = getUI().getSession().getAttribute(AppUserSettings.class);
         userTab.setValue("Welcome " + appUser.getFirstName());
         userTab.setMessageToPublish(new SettingsClicked(appUser));
         reportTab.setMessageToPublish(new ReportsClicked(appUser));
         logoutTab.setMessageToPublish(new LogoutEvent(appUser));
         helpTab.setMessageToPublish(new HelpClicked(appUser));
+
+        String defaultTab = settings.getSettingAsString("web.view.defaultTab", IdObjectTabs.Students.getCaption());
         for (IdObjectRelatedTab tab : objectTabs) {
             tab.setMessageToPublish(new IdObjectRelatedSideTabClicked(appUser, tab.getIdObjectTab()));
+            if (defaultTab.equals(tab.getValue())) {
+                tab.onClicked();
+                currentSelected = tab;
+                tab.addStyleName(SELECTED_TABS);
+            }
         }
     }
 
