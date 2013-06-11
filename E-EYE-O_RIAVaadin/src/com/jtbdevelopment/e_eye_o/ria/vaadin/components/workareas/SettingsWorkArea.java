@@ -1,9 +1,12 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 
-import com.vaadin.ui.Alignment;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings.UserPreferences;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings.UserSettings;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Runo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -16,8 +19,12 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//  TODO - everything
 public class SettingsWorkArea extends CustomComponent {
+    @Autowired
+    private UserPreferences userPreferences;
+
+    @Autowired
+    private UserSettings userSettings;
 
     @PostConstruct
     public void postConstruct() {
@@ -25,10 +32,13 @@ public class SettingsWorkArea extends CustomComponent {
         mainLayout.setImmediate(true);
         mainLayout.setSpacing(true);
 
-        Label label = new Label("Settings.  Under development.");
-        label.setSizeUndefined();
-        mainLayout.addComponent(label);
-        mainLayout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
+        TabSheet tabSheet = new TabSheet();
+        tabSheet.addStyleName(Runo.TABSHEET_SMALL);
+        tabSheet.addTab(userPreferences, "Preferences");
+        tabSheet.addTab(userSettings, "Personal");
+        tabSheet.setSizeFull();
+
+        mainLayout.addComponent(tabSheet);
         setCompositionRoot(mainLayout);
     }
 }
