@@ -21,13 +21,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * to create default entries (if any) for new users
  */
 public abstract class AbstractUserHelperImpl implements UserHelper {
-    @Autowired
+    @Autowired(required = false)
     private TermsAndConditions termsAndConditions;
 
-    @Autowired
+    @Autowired(required = false)
     private PrivacyPolicy privacyPolicy;
 
-    @Autowired
+    @Autowired(required = false)
     private CookiesPolicy cookiesPolicy;
 
     @Autowired
@@ -54,9 +54,9 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
     public AppUserSettings createDefaultSettingsForNewUser(final AppUser newUser) {
         return readWriteDAO.create(
                 idObjectFactory.newAppUserSettingsBuilder(newUser)
-                        .withSetting(AppUserSettings.COOKIES_POLICY_VERSION, cookiesPolicy.getVersion())
-                        .withSetting(AppUserSettings.PRIVACY_POLICY_VERSION, privacyPolicy.getVersion())
-                        .withSetting(AppUserSettings.TERMS_AND_CONDITIONS_VERSION, termsAndConditions.getVersion())
+                        .withSetting(AppUserSettings.COOKIES_POLICY_VERSION, cookiesPolicy == null ? 0 : cookiesPolicy.getVersion())
+                        .withSetting(AppUserSettings.PRIVACY_POLICY_VERSION, privacyPolicy == null ? 0 : privacyPolicy.getVersion())
+                        .withSetting(AppUserSettings.TERMS_AND_CONDITIONS_VERSION, termsAndConditions == null ? 0 : termsAndConditions.getVersion())
                         .build()
         );
     }
