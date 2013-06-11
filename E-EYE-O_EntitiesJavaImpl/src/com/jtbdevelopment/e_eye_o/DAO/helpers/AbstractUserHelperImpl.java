@@ -5,6 +5,9 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
+import com.jtbdevelopment.e_eye_o.helpandlegal.CookiesPolicy;
+import com.jtbdevelopment.e_eye_o.helpandlegal.PrivacyPolicy;
+import com.jtbdevelopment.e_eye_o.helpandlegal.TermsAndConditions;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +21,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * to create default entries (if any) for new users
  */
 public abstract class AbstractUserHelperImpl implements UserHelper {
+    @Autowired
+    private TermsAndConditions termsAndConditions;
+
+    @Autowired
+    private PrivacyPolicy privacyPolicy;
+
+    @Autowired
+    private CookiesPolicy cookiesPolicy;
+
     @Autowired
     protected ReadWriteDAO readWriteDAO;
 
@@ -38,8 +50,14 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
         return generateActivationRequest(savedUser);
     }
 
-    protected void createDefaultSettingsForNewUser(final AppUser newUser) {
-        AppUserSettings settings = readWriteDAO.create(idObjectFactory.newAppUserSettingsBuilder(newUser).build());
+    protected AppUserSettings createDefaultSettingsForNewUser(final AppUser newUser) {
+        return readWriteDAO.create(
+                idObjectFactory.newAppUserSettingsBuilder(newUser)
+                        .withSetting(AppUserSettings.COOKIES_POLICY_VERSION, cookiesPolicy.getVersion())
+                        .withSetting(AppUserSettings.PRIVACY_POLICY_VERSION, privacyPolicy.getVersion())
+                        .withSetting(AppUserSettings.TERMS_AND_CONDITIONS_VERSION, termsAndConditions.getVersion())
+                        .build()
+        );
     }
 
     @Override

@@ -12,6 +12,10 @@ import java.util.Map;
  */
 @IdObjectEntitySettings(singular = "Setting", plural = "Settings", viewable = false, editable = false, defaultSortField = "")
 public interface AppUserSettings extends AppUserOwnedObject {
+    static final String TERMS_AND_CONDITIONS_VERSION = "legal.termsAndConditions.version";
+    static final String PRIVACY_POLICY_VERSION = "legal.privacyPolicy.version";
+    static final String COOKIES_POLICY_VERSION = "legal.cookiesPolicy.version";
+
     @IdObjectFieldSettings(viewable = false, editableBy = IdObjectFieldSettings.EditableBy.CONTROLLED, label = "Settings")
     Map<String, String> getSettings();
 

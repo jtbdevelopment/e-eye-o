@@ -1,7 +1,5 @@
 package com.jtbdevelopment.e_eye_o.helpandlegal;
 
-import java.math.BigDecimal;
-
 /**
  * Date: 5/7/13
  * Time: 10:03 AM
@@ -14,5 +12,5 @@ public interface SafetyTips {
 
     String getText();
 
-    BigDecimal getVersion();
+    int getVersion();
 }

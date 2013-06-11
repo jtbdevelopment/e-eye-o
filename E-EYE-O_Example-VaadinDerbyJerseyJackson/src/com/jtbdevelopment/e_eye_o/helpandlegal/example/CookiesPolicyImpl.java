@@ -3,8 +3,6 @@ package com.jtbdevelopment.e_eye_o.helpandlegal.example;
 import com.jtbdevelopment.e_eye_o.helpandlegal.CookiesPolicy;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-
 /**
  * Date: 5/2/13
  * Time: 8:45 PM
@@ -12,7 +10,7 @@ import java.math.BigDecimal;
 @Component
 @SuppressWarnings("unused")
 public class CookiesPolicyImpl implements CookiesPolicy {
-    private static final BigDecimal VERSION = new BigDecimal("1.0");
+    private static final int VERSION = 1;
     private static final String LABEL = "Cookies Policy";
     private static final String TEXT =
             "<H2><CENTER>Credit</H2></CENTER>" +
@@ -47,7 +45,7 @@ public class CookiesPolicyImpl implements CookiesPolicy {
     }
 
     @Override
-    public BigDecimal getVersion() {
+    public int getVersion() {
         return VERSION;
     }
 }

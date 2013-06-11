@@ -70,7 +70,6 @@ public class WorkAreaComponent extends CustomComponent {
 
         prepForTabSwitch();
         eventBus.register(this);
-//        studentsWorkArea.setVisible(true);               //  TODO - make which one a default
     }
 
     @Subscribe

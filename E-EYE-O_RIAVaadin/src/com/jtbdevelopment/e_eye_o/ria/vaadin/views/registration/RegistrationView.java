@@ -51,7 +51,6 @@ public class RegistrationView extends VerticalLayout implements View {
         setSpacing(true);
         setSizeFull();
 
-        //  TODO - record legal agreement somewhere
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.addComponent(logo);
         verticalLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);

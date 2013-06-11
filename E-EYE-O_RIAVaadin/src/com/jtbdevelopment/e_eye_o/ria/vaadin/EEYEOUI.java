@@ -52,6 +52,7 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
     @Autowired
     private IdObjectFactory idObjectFactory;
 
+    // TODO - determine if new legal info needs to be shown
     @Override
     protected void init(final VaadinRequest request) {
         super.init(request);

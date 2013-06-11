@@ -3,8 +3,6 @@ package com.jtbdevelopment.e_eye_o.helpandlegal.example;
 import com.jtbdevelopment.e_eye_o.helpandlegal.SafetyTips;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-
 /**
  * Date: 5/2/13
  * Time: 9:08 PM
@@ -12,7 +10,7 @@ import java.math.BigDecimal;
 @Component
 @SuppressWarnings("unused")
 public class SafetyTipsImpl implements SafetyTips {
-    private static final BigDecimal VERSION = new BigDecimal("1.0");
+    private static final int VERSION = 1;
     private static final String LABEL = "Safety Tips";
     private static final String TEXT =
             "<H2><CENTER>Privacy Tips</H2></CENTER>" +
@@ -37,7 +35,7 @@ public class SafetyTipsImpl implements SafetyTips {
     }
 
     @Override
-    public BigDecimal getVersion() {
+    public int getVersion() {
         return VERSION;
     }
 }

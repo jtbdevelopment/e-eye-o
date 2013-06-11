@@ -9,6 +9,7 @@ import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
  */
 public interface UserHelper {
     //  Take a basic login form and do whatever else we want to new user
+    //  Implicitly records legal, cookie and privacy policy versions agreed to
     TwoPhaseActivity setUpNewUser(final AppUser appUser);
 
     TwoPhaseActivity generateActivationRequest(final AppUser appUser);
