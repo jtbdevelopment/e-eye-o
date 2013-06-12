@@ -1,21 +1,26 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs;
 
 import com.google.common.eventbus.EventBus;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TabComponent;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 
 /**
  * Date: 3/10/13
  * Time: 3:35 PM
  */
 public class IdObjectRelatedTab extends Tab {
-    private final TabComponent.IdObjectTabs idObjectTab;
+    private final IdObjectEntitySettings entitySettings;
 
-    public IdObjectRelatedTab(final TabComponent.IdObjectTabs sideTab, final EventBus eventBus) {
-        super(sideTab.getCaption(), eventBus);
-        this.idObjectTab = sideTab;
+    public IdObjectRelatedTab(final IdObjectEntitySettings entitySettings, final EventBus eventBus) {
+        super(entitySettings.plural(), eventBus);
+        this.entitySettings = entitySettings;
     }
 
-    public TabComponent.IdObjectTabs getIdObjectTab() {
-        return idObjectTab;
+    public IdObjectRelatedTab(final Class<? extends IdObject> entityType, final EventBus eventBus) {
+        this(entityType.getAnnotation(IdObjectEntitySettings.class), eventBus);
+    }
+
+    public IdObjectEntitySettings getIdObjectTab() {
+        return entitySettings;
     }
 }

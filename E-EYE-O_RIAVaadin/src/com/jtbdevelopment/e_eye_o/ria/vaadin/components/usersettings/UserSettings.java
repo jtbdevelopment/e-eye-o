@@ -30,6 +30,7 @@ public class UserSettings extends CustomComponent {
         layout.addComponent(todo);
         layout.setComponentAlignment(todo, Alignment.MIDDLE_CENTER);
 
+        setSizeFull();
         setCompositionRoot(layout);
     }
 }

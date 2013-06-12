@@ -1,7 +1,10 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components;
 
 import com.google.common.eventbus.EventBus;
-import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
+import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.ria.events.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.tabs.IdObjectRelatedTab;
@@ -17,6 +20,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,25 +31,6 @@ import java.util.List;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TabComponent extends CustomComponent {
-    //  TODO - move this?
-    public enum IdObjectTabs {
-        Students(Student.class),
-        Observations(Observation.class),
-        Photos(Photo.class),
-        Classes(ClassList.class),
-        Categories(ObservationCategory.class);
-
-        IdObjectTabs(final Class<? extends AppUserOwnedObject> entityType) {
-            this.entityType = entityType;
-        }
-
-        private final Class<? extends AppUserOwnedObject> entityType;
-
-        public String getCaption() {
-            return entityType.getAnnotation(IdObjectEntitySettings.class).plural();
-        }
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(TabComponent.class);
 
     public static final String SELECTED_TABS = "selected-tabs";
@@ -59,6 +44,9 @@ public class TabComponent extends CustomComponent {
     private Tab userTab;
 
     private Label currentSelected;
+
+    @Resource(name = "primaryAppUserObjects")
+    private List<Class<? extends AppUserOwnedObject>> entityTypes;
 
     @Autowired
     private EventBus eventBus;
@@ -74,7 +62,7 @@ public class TabComponent extends CustomComponent {
         CssLayout mainLayout = new CssLayout();
         mainLayout.setSizeUndefined();
 
-        for (IdObjectTabs entityType : IdObjectTabs.values()) {
+        for (Class<? extends AppUserOwnedObject> entityType : entityTypes) {
             final IdObjectRelatedTab sideTab = new IdObjectRelatedTab(entityType, eventBus);
             objectTabs.add(sideTab);
             mainLayout.addComponent(sideTab);
@@ -119,7 +107,7 @@ public class TabComponent extends CustomComponent {
         logoutTab.setMessageToPublish(new LogoutEvent(appUser));
         helpTab.setMessageToPublish(new HelpClicked(appUser));
 
-        String defaultTab = settings.getSettingAsString("web.view.defaultTab", IdObjectTabs.Students.getCaption());
+        String defaultTab = settings.getSettingAsString("web.view.defaultTab", Observation.class.getAnnotation(IdObjectEntitySettings.class).plural());
         for (IdObjectRelatedTab tab : objectTabs) {
             tab.setMessageToPublish(new IdObjectRelatedSideTabClicked(appUser, tab.getIdObjectTab()));
             if (defaultTab.equals(tab.getValue())) {

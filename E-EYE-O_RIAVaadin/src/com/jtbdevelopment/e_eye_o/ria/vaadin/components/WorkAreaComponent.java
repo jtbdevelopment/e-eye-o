@@ -114,27 +114,27 @@ public class WorkAreaComponent extends CustomComponent {
         if (!getUI().getSession().getAttribute(AppUser.class).equals(event.getAppUser())) {
             return;
         }
-        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to " + event.getEntityType());
-        Notification.show("Switching to " + event.getEntityType().getCaption());
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to " + event.getEntitySettings().plural());
+        Notification.show("Switching to " + event.getEntitySettings().plural());
         prepForTabSwitch();
-        switch (event.getEntityType()) {
-            case Students:
+        switch (event.getEntitySettings().plural()) {
+            case "Students":
                 studentsWorkArea.setVisible(true);
                 break;
-            case Classes:
+            case "Classes":
                 classListsWorkArea.setVisible(true);
                 break;
-            case Observations:
+            case "Observations":
                 observationsWorkArea.setVisible(true);
                 break;
-            case Categories:
+            case "Categories":
                 observationCategoriesWorkArea.setVisible(true);
                 break;
-            case Photos:
+            case "Photos":
                 photosWorkArea.setVisible(true);
                 break;
             default:
-                logger.warn("Received change data area with unknown entity type " + event.getEntityType());
+                logger.warn("Received change data area with unknown entity type " + event.getEntitySettings().plural());
         }
     }
 
