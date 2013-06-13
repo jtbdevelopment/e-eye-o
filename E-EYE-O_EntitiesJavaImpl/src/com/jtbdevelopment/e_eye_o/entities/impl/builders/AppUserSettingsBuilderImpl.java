@@ -21,7 +21,7 @@ public class AppUserSettingsBuilderImpl extends AppUserOwnedObjectBuilderImpl<Ap
     }
 
     @Override
-    public AppUserSettingsBuilderImpl withSettings(final Map<String, String> settings) {
+    public AppUserSettingsBuilderImpl withSettings(final Map<String, Object> settings) {
         entity.setSettings(settings);
         return this;
     }
