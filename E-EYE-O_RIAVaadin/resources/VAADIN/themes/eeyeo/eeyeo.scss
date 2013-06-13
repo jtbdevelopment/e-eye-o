@@ -41,4 +41,16 @@ $brownGray: #c9a283;
   div.photo {
     display: inline-block;
   }
+
+  div.v-filterselect-right-align .v-filterselect-input {
+    text-align: right;
+  }
+
+  div.v-filterselect-suggestpopup-right-align > .v-filterselect-suggestmenu .gwt-MenuItem {
+    text-align: right;
+  }
+
+  .v-filterselect-suggestmenu .gwt-MenuItem {
+    text-align: center;
+  }
 }

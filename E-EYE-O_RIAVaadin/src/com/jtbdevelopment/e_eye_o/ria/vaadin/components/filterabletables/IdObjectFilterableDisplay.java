@@ -37,6 +37,10 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     protected static final ThemeResource NOT_X = new ThemeResource("icons/16/no.png");
     protected static final ThemeResource IS_X = new ThemeResource("icons/16/yes.png");
     private static final Logger logger = LoggerFactory.getLogger(IdObjectFilterableDisplay.class);
+    public static final String WEB_VIEW_BASE_SETTING = "web.view.";
+    public static final String DEFAULT_SIZE_SETTING = ".defaultsize";
+    public static final String SHOW_ACTIVE_SETTING = ".showActive";
+    public static final String SHOW_ARCHIVED_SETTING = ".showArchived";
     private CheckBox activeCB;
     private CheckBox archivedCB;
     private NativeSelect showSize;
@@ -75,7 +79,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     @PostConstruct
     protected void initialize() {
         entitySettings = entityType.getAnnotation(IdObjectEntitySettings.class);
-        baseConfigSetting = "web.view." + entitySettings.plural();
+        baseConfigSetting = WEB_VIEW_BASE_SETTING + entitySettings.plural();
         this.entities = new AllItemsBeanItemContainer<>(entityType);
 
         Panel panel = new Panel();
@@ -307,9 +311,9 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
 
     protected void initializeFilters() {
         AppUserSettings settings = getSession().getAttribute(AppUserSettings.class);
-        showSize.setValue(settings.getSettingAsInt(baseConfigSetting + ".defaultsize", entitySettings.defaultPageSize()));
-        activeCB.setValue(settings.getSettingAsBoolean(baseConfigSetting + ".showActive", true));
-        archivedCB.setValue(settings.getSettingAsBoolean(baseConfigSetting + ".showArchived", false));
+        showSize.setValue(settings.getSettingAsInt(baseConfigSetting + DEFAULT_SIZE_SETTING, entitySettings.defaultPageSize()));
+        activeCB.setValue(settings.getSettingAsBoolean(baseConfigSetting + SHOW_ACTIVE_SETTING, true));
+        archivedCB.setValue(settings.getSettingAsBoolean(baseConfigSetting + SHOW_ARCHIVED_SETTING, false));
         archivedCB.setValue(Boolean.FALSE);
     }
 

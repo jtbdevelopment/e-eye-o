@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,13 +19,20 @@ public class AppUserSettingsImpl extends AppUserOwnedObjectImpl implements AppUs
 
     @Override
     public Map<String, String> getSettings() {
-        return Collections.unmodifiableMap(settings);
+        return new HashMap<>(settings);
     }
 
     @Override
-    public void setSettings(final Map<String, String> settings) {
+    public void setSettings(final Map<String, Object> settings) {
         this.settings.clear();
-        this.settings.putAll(settings);
+        updateSettings(settings);
+    }
+
+    @Override
+    public void updateSettings(final Map<String, Object> settings) {
+        for (Map.Entry<String, Object> setting : settings.entrySet()) {
+            this.settings.put(setting.getKey(), setting.getValue().toString());
+        }
     }
 
     @Override

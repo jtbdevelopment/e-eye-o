@@ -37,6 +37,7 @@ public class TabComponent extends CustomComponent {
     public static final String LOGOUT = "Logout";
     public static final String HELP = "Help";
     public static final String REPORTS = "Reports";
+    public static final String WEB_VIEW_DEFAULT_TAB_SETTING = "web.view.defaultTab";
     private List<IdObjectRelatedTab> objectTabs = new LinkedList<>();
     private Tab reportTab;
     private Tab logoutTab;
@@ -107,7 +108,7 @@ public class TabComponent extends CustomComponent {
         logoutTab.setMessageToPublish(new LogoutEvent(appUser));
         helpTab.setMessageToPublish(new HelpClicked(appUser));
 
-        String defaultTab = settings.getSettingAsString("web.view.defaultTab", Observation.class.getAnnotation(IdObjectEntitySettings.class).plural());
+        String defaultTab = settings.getSettingAsString(WEB_VIEW_DEFAULT_TAB_SETTING, Observation.class.getAnnotation(IdObjectEntitySettings.class).plural());
         for (IdObjectRelatedTab tab : objectTabs) {
             tab.setMessageToPublish(new IdObjectRelatedSideTabClicked(appUser, tab.getIdObjectTab()));
             if (defaultTab.equals(tab.getValue())) {

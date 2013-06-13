@@ -13,7 +13,8 @@ import javax.validation.constraints.Size;
  * Time: 3:18 PM
  */
 @IdObjectEntitySettings(defaultPageSize = 10, defaultSortField = "timestamp", defaultSortAscending = true, singular = "Photo", plural = "Photos",
-        editFieldOrder = {"description", "photoFor", "taken", IdObjectEntitySettings.SECTION_BREAK, "imageData"})
+        viewFieldOrder = {"description", "photoFo", "timestamp", "modificationTimestamp", "archived"},
+        editFieldOrder = {"description", "photoFor", "timestamp", IdObjectEntitySettings.SECTION_BREAK, "imageData"})
 public interface Photo extends AppUserOwnedObject {
 
     public static final int THUMBNAIL_SIZE = 150;

@@ -19,7 +19,9 @@ public interface AppUserSettings extends AppUserOwnedObject {
     @IdObjectFieldSettings(viewable = false, editableBy = IdObjectFieldSettings.EditableBy.CONTROLLED, label = "Settings")
     Map<String, String> getSettings();
 
-    void setSettings(final Map<String, String> settings);
+    void setSettings(final Map<String, Object> settings);
+
+    void updateSettings(final Map<String, Object> settings);
 
     /**
      * Internally will store value as string via toString

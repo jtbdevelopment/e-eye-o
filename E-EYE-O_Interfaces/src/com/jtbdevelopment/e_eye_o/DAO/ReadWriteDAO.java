@@ -1,9 +1,6 @@
 package com.jtbdevelopment.e_eye_o.DAO;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
+import com.jtbdevelopment.e_eye_o.entities.*;
 
 import java.util.Collection;
 import java.util.Map;
@@ -47,6 +44,8 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
     ChainedUpdateSet<IdObject> resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword);
 
     AppUser updateAppUserLogout(final AppUser appUser);
+
+    AppUserSettings updateSettings(final AppUser appUser, Map<String, Object> settings);
 
     /**
      * Similar to delete, will return all app user owned objects that were deleted as part of this.

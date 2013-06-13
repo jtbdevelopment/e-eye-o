@@ -170,6 +170,14 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         return internalUpdate(loaded);
     }
 
+    @Override
+    public AppUserSettings updateSettings(final AppUser appUser, final Map<String, Object> settings) {
+        AppUserSettings userSettings = getEntitiesForUser(AppUserSettings.class, appUser).iterator().next();
+        userSettings.updateSettings(settings);
+        sessionFactory.getCurrentSession().update(userSettings);
+        return userSettings;
+    }
+
     //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")

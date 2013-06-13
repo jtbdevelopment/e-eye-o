@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObjectFilterableDisplay<T> {
     private static final Logger logger = LoggerFactory.getLogger(IdObjectTable.class);
+    public static final String DEFAULT_SORT_FIELD_SETTING = ".defaultSortField";
+    public static final String DEFAULT_SORT_ASCENDING_SETTING = ".defaultSortAscending";
 
     protected final Table entityTable = new Table();
 
@@ -90,12 +92,12 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
 
     protected String getDefaultSortField() {
         AppUserSettings settings = getSession().getAttribute(AppUserSettings.class);
-        return settings.getSettingAsString(baseConfigSetting + ".defaultSortField", entitySettings.defaultSortField());
+        return settings.getSettingAsString(baseConfigSetting + DEFAULT_SORT_FIELD_SETTING, entitySettings.defaultSortField());
     }
 
     protected boolean getDefaultSortAscending() {
         AppUserSettings settings = getSession().getAttribute(AppUserSettings.class);
-        return settings.getSettingAsBoolean(baseConfigSetting + ".defaultSortAscending", entitySettings.defaultSortAscending());
+        return settings.getSettingAsBoolean(baseConfigSetting + DEFAULT_SORT_ASCENDING_SETTING, entitySettings.defaultSortAscending());
     }
 
     protected void addColumnConverters() {

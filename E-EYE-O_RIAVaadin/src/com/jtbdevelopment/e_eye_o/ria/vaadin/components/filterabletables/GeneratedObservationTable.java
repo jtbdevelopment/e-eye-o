@@ -26,6 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class GeneratedObservationTable extends GeneratedIdObjectTable<Observation> {
     private static final Logger logger = LoggerFactory.getLogger(ObservationWithoutSubjectTable.class);
+    public static final String SIGNIFICANTONLY_DEFAULT = ".significantonly.default";
+    public static final String MONTHSBACK_DEFAULT = ".monthsback.default";
     private Observable defaultObservationSubject;
     @Autowired
     private ObservationEditorDialogWindow observationEditorDialogWindow;
@@ -176,8 +178,8 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
     protected void initializeFilters() {
         super.initializeFilters();
         AppUserSettings settings = getSession().getAttribute(AppUserSettings.class);
-        significantOnly.setValue(settings.getSettingAsBoolean("web.view.significantonly.default", false));
-        from.setConvertedValue(new LocalDateTime().minusMonths(settings.getSettingAsInt("web.view.earliestobservationbackmonths.default", 1)));
+        significantOnly.setValue(settings.getSettingAsBoolean(baseConfigSetting + SIGNIFICANTONLY_DEFAULT, false));
+        from.setConvertedValue(new LocalDateTime().minusMonths(settings.getSettingAsInt(baseConfigSetting + MONTHSBACK_DEFAULT, 1)));
         to.setConvertedValue(new LocalDateTime());
     }
 

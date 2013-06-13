@@ -40,8 +40,13 @@ public class HibernateAppUserSettings extends HibernateAppUserOwnedObject<AppUse
     }
 
     @Override
-    public void setSettings(final Map<String, String> settings) {
+    public void setSettings(final Map<String, Object> settings) {
         wrapped.setSettings(settings);
+    }
+
+    @Override
+    public void updateSettings(final Map<String, Object> settings) {
+        wrapped.updateSettings(settings);
     }
 
     @Override

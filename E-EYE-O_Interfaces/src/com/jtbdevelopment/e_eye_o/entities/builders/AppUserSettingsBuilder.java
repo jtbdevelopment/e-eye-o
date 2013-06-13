@@ -11,5 +11,5 @@ import java.util.Map;
 public interface AppUserSettingsBuilder extends AppUserOwnedObjectBuilder<AppUserSettings> {
     AppUserSettingsBuilder withSetting(final String name, final Object value);
 
-    AppUserSettingsBuilder withSettings(final Map<String, String> settings);
+    AppUserSettingsBuilder withSettings(final Map<String, Object> settings);
 }

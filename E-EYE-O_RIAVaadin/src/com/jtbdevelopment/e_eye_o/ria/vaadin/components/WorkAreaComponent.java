@@ -146,11 +146,6 @@ public class WorkAreaComponent extends CustomComponent {
     }
 
     @Override
-    public void attach() {
-        super.attach();
-    }
-
-    @Override
     public void detach() {
         eventBus.unregister(this);
         super.detach();
