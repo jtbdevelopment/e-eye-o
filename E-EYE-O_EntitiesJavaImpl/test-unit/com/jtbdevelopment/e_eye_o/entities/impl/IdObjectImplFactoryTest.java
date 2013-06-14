@@ -35,6 +35,7 @@ public class IdObjectImplFactoryTest {
         assertEquals(StudentImpl.class, factory.newAppUserOwnedObject(Student.class, appUser).getClass());
         assertEquals(DeletedObjectImpl.class, factory.newAppUserOwnedObject(DeletedObject.class, appUser).getClass());
         assertEquals(TwoPhaseActivityImpl.class, factory.newAppUserOwnedObject(TwoPhaseActivity.class, appUser).getClass());
+        assertEquals(AppUserSettingsImpl.class, factory.newAppUserOwnedObject(AppUserSettings.class, appUser).getClass());
     }
 
     @Test
@@ -47,6 +48,7 @@ public class IdObjectImplFactoryTest {
         assertEquals(StudentBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(Student.class, appUser).getClass());
         assertEquals(DeletedObjectBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(DeletedObject.class, appUser).getClass());
         assertEquals(TwoPhaseActivityBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(TwoPhaseActivity.class, appUser).getClass());
+        assertEquals(AppUserSettingsBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(AppUserSettings.class, appUser).getClass());
     }
 
     @Test

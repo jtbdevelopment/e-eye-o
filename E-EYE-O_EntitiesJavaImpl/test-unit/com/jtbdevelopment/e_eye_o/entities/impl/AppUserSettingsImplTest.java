@@ -12,7 +12,7 @@ import static org.testng.AssertJUnit.assertTrue;
  * Date: 6/14/13
  * Time: 2:48 PM
  */
-public class AppUserSettingsImplTest extends AbstractAppUserOwnedObjectTest {
+public class AppUserSettingsImplTest extends AbstractAppUserOwnedObjectTest<AppUserSettingsImpl> {
 
     public static final Map<String, Object> SAMPLE_VALUES = new HashMap<String, Object>() {{
         put("string", "astring");
@@ -76,6 +76,7 @@ public class AppUserSettingsImplTest extends AbstractAppUserOwnedObjectTest {
         assertTrue(impl.getSettings().isEmpty());
         impl.setSetting("string", "string2");
         assertEquals("string2", impl.getSettingAsString("string", ""));
+        assertEquals("default", impl.getSettingAsString("default", "default"));
     }
 
     @Test
@@ -85,6 +86,7 @@ public class AppUserSettingsImplTest extends AbstractAppUserOwnedObjectTest {
         impl.setSetting("int", 11);
         assertEquals("11", impl.getSettingAsString("int", ""));
         assertEquals(11, impl.getSettingAsInt("int", 12));
+        assertEquals(12, impl.getSettingAsInt("default", 12));
     }
 
     @Test
@@ -94,5 +96,6 @@ public class AppUserSettingsImplTest extends AbstractAppUserOwnedObjectTest {
         impl.setSetting("boolean", false);
         assertEquals("false", impl.getSettingAsString("boolean", ""));
         assertEquals(false, impl.getSettingAsBoolean("boolean", true));
+        assertEquals(true, impl.getSettingAsBoolean("default", true));
     }
 }
