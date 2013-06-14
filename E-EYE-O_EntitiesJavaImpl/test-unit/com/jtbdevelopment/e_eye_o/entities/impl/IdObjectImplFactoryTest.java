@@ -20,7 +20,7 @@ public class IdObjectImplFactoryTest {
     public static final List<Class<AppUser>> APP_USER_CLASS_ARRAY = Arrays.asList(AppUser.class);
     public static final List<Class<?>> NOT_APP_USER_CLASSES_ARRAY = Arrays.asList(Object.class, List.class, String.class, Integer.class, Set.class, HashMap.class);
     //  TODO - dynamic
-    public static final List<Class<? extends AppUserOwnedObject>> APP_USER_OWNED_CLASSES_ARRAY = Arrays.asList(ClassList.class, Student.class, DeletedObject.class, Photo.class, Observation.class, ObservationCategory.class, TwoPhaseActivity.class);
+    public static final List<Class<? extends AppUserOwnedObject>> APP_USER_OWNED_CLASSES_ARRAY = Arrays.asList(ClassList.class, Student.class, DeletedObject.class, Photo.class, Observation.class, ObservationCategory.class, TwoPhaseActivity.class, AppUserSettings.class);
     private static final Mockery context = new Mockery();
     private static final AppUser appUser = context.mock(AppUser.class);
     private static final IdObjectImplFactory factory = new IdObjectImplFactory();
