@@ -23,7 +23,6 @@ import javax.annotation.PostConstruct;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class LegalView extends VerticalLayout implements View {
     public final static String VIEW_NAME = "Legal";
-    public static final String AGREEMENT_TIME = "agreementTime";
 
     @Autowired
     private Logo logo;
@@ -53,8 +52,6 @@ public class LegalView extends VerticalLayout implements View {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 DateTime agreementTime = new DateTime();
-                //  TODO - store this somewhere
-                getSession().setAttribute(AGREEMENT_TIME, agreementTime);
                 getSession().getAttribute(Navigator.class).navigateTo(RegistrationView.VIEW_NAME);
             }
         });
@@ -64,7 +61,6 @@ public class LegalView extends VerticalLayout implements View {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 Notification.show("Well this is awkward then..", Notification.Type.WARNING_MESSAGE);
-                getSession().setAttribute(AGREEMENT_TIME, null);
                 getSession().getAttribute(Navigator.class).navigateTo(LoginView.VIEW_NAME);
             }
         });

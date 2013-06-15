@@ -60,3 +60,4 @@ public class PostRegistrationView extends VerticalLayout implements View {
                 "<P><CENTER>Please follow the instructions to activate your account.</CENTER>");
     }
 }
+N

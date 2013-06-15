@@ -52,11 +52,15 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
 
     @Override
     public AppUserSettings createDefaultSettingsForNewUser(final AppUser newUser) {
+        DateTime now = DateTime.now();
         return readWriteDAO.create(
                 idObjectFactory.newAppUserSettingsBuilder(newUser)
                         .withSetting(AppUserSettings.COOKIES_POLICY_VERSION, cookiesPolicy == null ? 0 : cookiesPolicy.getVersion())
+                        .withSetting(AppUserSettings.COOKIES_POLICY_TIMESTAMP, now.getMillis())
                         .withSetting(AppUserSettings.PRIVACY_POLICY_VERSION, privacyPolicy == null ? 0 : privacyPolicy.getVersion())
+                        .withSetting(AppUserSettings.PRIVACY_POLICY_TIMESTAMP, now.getMillis())
                         .withSetting(AppUserSettings.TERMS_AND_CONDITIONS_VERSION, termsAndConditions == null ? 0 : termsAndConditions.getVersion())
+                        .withSetting(AppUserSettings.TERMS_AND_CONDITIONS_TIMESTAMP, now.getMillis())
                         .build()
         );
     }
