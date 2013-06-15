@@ -43,7 +43,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     public static final String SHOW_ARCHIVED_SETTING = ".showArchived";
     private CheckBox activeCB;
     private CheckBox archivedCB;
-    private NativeSelect showSize;
+    private ComboBox showSize;
     protected String baseConfigSetting;
     protected IdObjectEntitySettings entitySettings;
 
@@ -175,7 +175,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         filterSection.addComponent(showSizeLabel);
         filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
-        showSize = new NativeSelect(null, Ints.asList(entitySettings.pageSizes()));
+        showSize = new ComboBox(null, Ints.asList(entitySettings.pageSizes()));
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(final Property.ValueChangeEvent event) {
@@ -184,6 +184,8 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
             }
         });
         showSize.setWidth(4, Unit.EM);
+        showSize.addStyleName("right-align");
+        showSize.setNullSelectionAllowed(false);
         filterSection.addComponent(showSize);
         filterSection.setComponentAlignment(showSize, Alignment.BOTTOM_LEFT);
         return filterSection;
