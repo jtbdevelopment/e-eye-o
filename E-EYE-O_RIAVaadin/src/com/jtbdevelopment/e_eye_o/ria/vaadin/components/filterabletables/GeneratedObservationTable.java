@@ -28,6 +28,8 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
     private static final Logger logger = LoggerFactory.getLogger(ObservationWithoutSubjectTable.class);
     public static final String SIGNIFICANTONLY_DEFAULT = ".significantonly.default";
     public static final String MONTHSBACK_DEFAULT = ".monthsback.default";
+    public static final boolean DEFAULT_SIGNIFICANT_ONLY = false;
+    public static final int DEFAULT_FROM_MONTHS_BACK = 1;
     private Observable defaultObservationSubject;
     @Autowired
     private ObservationEditorDialogWindow observationEditorDialogWindow;
@@ -178,8 +180,8 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
     protected void initializeFilters() {
         super.initializeFilters();
         AppUserSettings settings = getSession().getAttribute(AppUserSettings.class);
-        significantOnly.setValue(settings.getSettingAsBoolean(baseConfigSetting + SIGNIFICANTONLY_DEFAULT, false));
-        from.setConvertedValue(new LocalDateTime().minusMonths(settings.getSettingAsInt(baseConfigSetting + MONTHSBACK_DEFAULT, 1)));
+        significantOnly.setValue(settings.getSettingAsBoolean(baseConfigSetting + SIGNIFICANTONLY_DEFAULT, DEFAULT_SIGNIFICANT_ONLY));
+        from.setConvertedValue(new LocalDateTime().minusMonths(settings.getSettingAsInt(baseConfigSetting + MONTHSBACK_DEFAULT, DEFAULT_FROM_MONTHS_BACK)));
         to.setConvertedValue(new LocalDateTime());
     }
 

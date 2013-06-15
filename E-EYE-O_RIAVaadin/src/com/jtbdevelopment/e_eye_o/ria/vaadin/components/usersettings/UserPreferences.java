@@ -13,10 +13,10 @@ import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TabComponent;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.GeneratedObservationTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectFilterableDisplay;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
-import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,6 @@ import java.util.Map;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//  TODO - everything
 public class UserPreferences extends CustomComponent {
     @Resource(name = "primaryAppUserObjects")
     private List<Class<? extends AppUserOwnedObject>> entityTypes;
@@ -69,34 +68,13 @@ public class UserPreferences extends CustomComponent {
         panel.addStyleName(Runo.PANEL_LIGHT);
         VerticalLayout layout = new VerticalLayout();
         layout.setSpacing(true);
-        layout.setSizeFull();
         layout.setMargin(true);
 
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.setSpacing(true);
-        Button button = new Button("Save Settings");
-        button.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                updateSettings();
-            }
-        });
-        horizontalLayout.addComponent(button);
-        button = new Button("Reset");
-        button.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                resetToCurrentValues();
-            }
-        });
-        horizontalLayout.addComponent(button);
-        layout.addComponent(horizontalLayout);
+        GridLayout gridLayout = new GridLayout(2, entityTypes.size() + 1);
+        gridLayout.setSpacing(true);
+        layout.addComponent(gridLayout);
 
-        layout.addComponent(new Label("<hr/>", ContentMode.HTML));
-        horizontalLayout = new HorizontalLayout();
-        horizontalLayout.setSpacing(true);
-
-        horizontalLayout.addComponent(new Label("Default View On Login:"));
+        gridLayout.addComponent(new Label("Default View On Login:"));
         OptionGroup optionGroup = new OptionGroup(null, Collections2.transform(entityTypes, new Function<Class<? extends AppUserOwnedObject>, String>() {
             @Nullable
             @Override
@@ -107,16 +85,16 @@ public class UserPreferences extends CustomComponent {
         optionGroup.setData(new SettingData<>(TabComponent.WEB_VIEW_DEFAULT_TAB_SETTING, Observation.class.getAnnotation(IdObjectEntitySettings.class).plural()));
         optionGroup.addStyleName("horizontal");
         optionFields.add(optionGroup);
-        horizontalLayout.addComponent(optionGroup);
-        layout.addComponent(horizontalLayout);
+        gridLayout.addComponent(optionGroup);
 
         for (Class<? extends AppUserOwnedObject> entityType : entityTypes) {
             IdObjectEntitySettings entitySettings = entityType.getAnnotation(IdObjectEntitySettings.class);
-            layout.addComponent(new Label("<hr/>", ContentMode.HTML));
-            layout.addComponent(new Label(entitySettings.plural()));
-            horizontalLayout = new HorizontalLayout();
+            gridLayout.addComponent(new Label("Defaults for " + entitySettings.plural() + ":"));
+
+            HorizontalLayout horizontalLayout = new HorizontalLayout();
             horizontalLayout.setSpacing(true);
-            layout.addComponent(horizontalLayout);
+            gridLayout.addComponent(horizontalLayout);
+
             String baseConfig = IdObjectFilterableDisplay.WEB_VIEW_BASE_SETTING + entitySettings.plural();
             horizontalLayout.addComponent(new Label("How Many To Show?"));
             ComboBox select = new ComboBox(null, Ints.asList(entitySettings.pageSizes()));
@@ -152,7 +130,46 @@ public class UserPreferences extends CustomComponent {
             cb.setData(new SettingData<>(baseConfig + IdObjectTable.DEFAULT_SORT_ASCENDING_SETTING, entitySettings.defaultSortAscending()));
             optionFields.add(cb);
             horizontalLayout.addComponent(cb);
+            if (Observation.class.equals(entityType)) {
+                cb = new CheckBox("Significant Only?");
+                cb.setData(new SettingData<>(baseConfig + GeneratedObservationTable.SIGNIFICANTONLY_DEFAULT, GeneratedObservationTable.DEFAULT_SIGNIFICANT_ONLY));
+                optionFields.add(cb);
+                horizontalLayout.addComponent(cb);
+
+                horizontalLayout.addComponent(new Label("Observations How Far Back (months)?"));
+                select = new ComboBox(null);
+                select.setWidth(5, Unit.EM);
+                select.addStyleName("right-align");
+                select.setPageLength(15);
+                select.setNullSelectionAllowed(false);
+                for (int i = 0; i <= 12; ++i) {
+                    select.addItem(i);
+                }
+                select.setData(new SettingData<>(baseConfig + GeneratedObservationTable.MONTHSBACK_DEFAULT, GeneratedObservationTable.DEFAULT_FROM_MONTHS_BACK));
+                optionFields.add(select);
+                horizontalLayout.addComponent(select);
+            }
         }
+
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.setSpacing(true);
+        Button button = new Button("Save Settings");
+        button.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                updateSettings();
+            }
+        });
+        horizontalLayout.addComponent(button);
+        button = new Button("Reset");
+        button.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                resetToCurrentValues();
+            }
+        });
+        horizontalLayout.addComponent(button);
+        layout.addComponent(horizontalLayout);
 
 
         panel.setSizeFull();
@@ -168,6 +185,7 @@ public class UserPreferences extends CustomComponent {
         resetToCurrentValues();
     }
 
+    @SuppressWarnings("unchecked")
     private void resetToCurrentValues() {
         AppUserSettings fresh = readWriteDAO.get(AppUserSettings.class, getSession().getAttribute(AppUserSettings.class).getId());
         for (AbstractField field : optionFields) {
