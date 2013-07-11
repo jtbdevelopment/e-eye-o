@@ -78,7 +78,7 @@ public class AppUserResource extends SecurityAwareResource {
     }
 
     @GET
-    @Path("modifiedSince")
+    @Path("ModifiedSince/{modifiedSince}")
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response getModifiedSince(@PathParam("modifiedSince") final String dateTimeString) {
