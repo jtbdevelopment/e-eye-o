@@ -55,6 +55,7 @@ public class HibernatePersistentTokenRepository implements PersistentTokenReposi
         return new PersistentRememberMeToken(hToken.getUsername(), hToken.getSeries(), hToken.getToken(), hToken.getTimestamp());
     }
 
+    //  TODO - logging out seems to log you out on all devices
     @Override
     public void removeUserTokens(final String username) {
         Query query = sessionFactory.getCurrentSession().createQuery("from " + sessionFactory.getClassMetadata(HibernatePersistentToken.class).getEntityName() + " where username = :username");
