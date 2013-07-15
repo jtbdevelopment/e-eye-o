@@ -9,6 +9,7 @@
 
     <http auto-config="true">
         <intercept-url pattern="/E-EYE-O/Login/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <intercept-url pattern="/REST/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/VAADIN/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/WEB-INF" access="ROLE_USER, ROLE_ADMIN"/>
         <intercept-url pattern="/**" access="ROLE_USER, ROLE_ADMIN"/>
