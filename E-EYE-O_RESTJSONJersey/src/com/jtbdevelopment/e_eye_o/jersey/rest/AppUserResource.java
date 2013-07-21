@@ -26,7 +26,6 @@ public class AppUserResource extends SecurityAwareResource {
     private final AppUser appUser;
     private Boolean archiveFlag;
     private Class<? extends AppUserOwnedObject> entityType;
-    private final String roleUser = AppUserUserDetails.ROLE_USER;
 
     public AppUserResource(final ReadWriteDAO readWriteDAO,
                            final JSONIdObjectSerializer jsonIdObjectSerializer,
