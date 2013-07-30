@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
-import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;

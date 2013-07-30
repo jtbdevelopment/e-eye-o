@@ -1,9 +1,8 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.DeletedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.SessionFactory;
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
@@ -25,12 +24,14 @@ public class DeletedItemsGenerator implements PreDeleteEventListener {
     private final DAOIdObjectWrapperFactory daoIdObjectWrapperFactory;
     private final IdObjectFactory idObjectFactory;
     private final SessionFactory sessionFactory;
+    private final IdObjectSerializer idObjectSerializer;
 
     @Autowired
-    public DeletedItemsGenerator(final DAOIdObjectWrapperFactory daoIdObjectWrapperFactory, final IdObjectFactory idObjectFactory, final SessionFactory sessionFactory) {
+    public DeletedItemsGenerator(final DAOIdObjectWrapperFactory daoIdObjectWrapperFactory, final IdObjectFactory idObjectFactory, final SessionFactory sessionFactory, final IdObjectSerializer idObjectSerializer) {
         this.daoIdObjectWrapperFactory = daoIdObjectWrapperFactory;
         this.idObjectFactory = idObjectFactory;
         this.sessionFactory = sessionFactory;
+        this.idObjectSerializer = idObjectSerializer;
     }
 
     @PostConstruct
@@ -48,6 +49,14 @@ public class DeletedItemsGenerator implements PreDeleteEventListener {
             final DeletedObject deletedObject = idObjectFactory.newDeletedObjectBuilder(entity.getAppUser()).withDeletedId(entity.getId()).build();
             final DeletedObject wrap = daoIdObjectWrapperFactory.wrap(deletedObject);
             event.getSession().save(wrap);
+            //  TODO - logic duped with R/W DAO
+            if (!(entity instanceof AppUserSettings) && !(entity instanceof TwoPhaseActivity)) {
+                final HibernateHistory hibernateHistory = new HibernateHistory();
+                hibernateHistory.setAppUser(wrap.getAppUser());
+                hibernateHistory.setSerializedVersion(idObjectSerializer.write(wrap));
+                hibernateHistory.setModificationTimestamp(wrap.getModificationTimestamp());
+                event.getSession().save(hibernateHistory);
+            }
         }
         return false;
     }

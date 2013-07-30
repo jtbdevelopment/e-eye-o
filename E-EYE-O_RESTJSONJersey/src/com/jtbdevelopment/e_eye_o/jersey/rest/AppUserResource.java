@@ -83,7 +83,7 @@ public class AppUserResource extends SecurityAwareResource {
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response getModifiedSince(@PathParam("modifiedSince") final String dateTimeString) {
         DateTime dateTime = DateTime.parse(dateTimeString);
-        return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, appUser, dateTime))).build();
+        return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.getModificationsSince(AppUserOwnedObject.class, appUser, dateTime))).build();
     }
 
     @Path("archived")

@@ -259,21 +259,21 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Student s = rwDAO.create(factory.newStudentBuilder(updateUser).withFirstName("A").withLastName("B").build());
         Photo p = rwDAO.create(factory.newPhotoBuilder(updateUser).withDescription("D").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).withPhotoFor(s).build());
         Observation o = rwDAO.create(factory.newObservationBuilder(updateUser).withComment("T").withObservationSubject(cl).build());
-        cl = rwDAO.get(ClassList.class, cl.getId());  //  Observation made it dirty need to re-read for compare to work
+        ClassList clV2 = rwDAO.get(ClassList.class, cl.getId());  //  Observation made it dirty need to re-read for compare to work
 
-        Set<AppUserOwnedObject> firstSet = rwDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, updateUser, firstTS);
-        final List<AppUserOwnedObject> initialList = Arrays.asList(oc, cl, s, p, o);
+        List<AppUserOwnedObject> firstSet = rwDAO.getModificationsSince(AppUserOwnedObject.class, updateUser, firstTS);
+        final List<AppUserOwnedObject> initialList = Arrays.asList(oc, cl, s, p, o, clV2);
         assertEquals(initialList.size(), firstSet.size());
         assertTrue(firstSet.containsAll(initialList));
 
         DateTime secondTS = new DateTime();
         Thread.sleep(1);
         p.setDescription("P2");
-        s.addClassList(cl);
+        s.addClassList(clV2);
         p = rwDAO.update(updateUser, p);
         s = rwDAO.update(updateUser, s);
         final List<AppUserOwnedObject> secondList = Arrays.asList(s, p);
-        final Set<AppUserOwnedObject> secondSet = rwDAO.getEntitiesModifiedSince(AppUserOwnedObject.class, updateUser, secondTS);
+        final List<AppUserOwnedObject> secondSet = rwDAO.getModificationsSince(AppUserOwnedObject.class, updateUser, secondTS);
         assertEquals(secondList.size(), secondSet.size());
         assertTrue(secondSet.containsAll(secondList));
     }

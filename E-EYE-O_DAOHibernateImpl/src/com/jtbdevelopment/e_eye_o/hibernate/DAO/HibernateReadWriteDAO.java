@@ -10,6 +10,7 @@ import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
@@ -30,12 +31,12 @@ import java.util.*;
 @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 @SuppressWarnings("unused")
 public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadWriteDAO {
-    @Autowired
-    protected IdObjectUpdateHelper idObjectUpdateHelper;
+    protected final IdObjectUpdateHelper idObjectUpdateHelper;
 
     @Autowired
-    public HibernateReadWriteDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
+    public HibernateReadWriteDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper) {
         super(sessionFactory, wrapperFactory, idObjectReflectionHelper);
+        this.idObjectUpdateHelper = idObjectUpdateHelper;
     }
 
     @Override
@@ -46,6 +47,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         final T wrapped = wrapperFactory.wrap(entity);
         sessionFactory.getCurrentSession().save(wrapped);
         dealWithNewObservations(wrapped);
+        if (wrapped instanceof AppUserOwnedObject) {
+            saveHistory((AppUserOwnedObject) wrapped);
+        }
         return wrapped;
     }
 
@@ -58,8 +62,25 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 throw new IllegalArgumentException("You cannot explicitly create a DeletedObject.");
             }
             session.save(entity);
+            if (entity instanceof AppUserOwnedObject) {
+                saveHistory((AppUserOwnedObject) entity);
+            }
         }
         return wrappedCollection;
+    }
+
+    private void saveHistory(final AppUserOwnedObject appUserOwnedObject) {
+        if (appUserOwnedObject instanceof AppUserSettings || appUserOwnedObject instanceof TwoPhaseActivity) {
+            return;
+        }
+        if (idObjectSerializer == null) {
+            idObjectSerializer = applicationContext.getBean(IdObjectSerializer.class);
+        }
+        HibernateHistory hibernateHistory = new HibernateHistory();
+        hibernateHistory.setAppUser(appUserOwnedObject.getAppUser());
+        hibernateHistory.setModificationTimestamp(appUserOwnedObject.getModificationTimestamp());
+        hibernateHistory.setSerializedVersion(idObjectSerializer.write(appUserOwnedObject));
+        sessionFactory.getCurrentSession().save(hibernateHistory);
     }
 
     @Override
@@ -77,6 +98,10 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         final T wrapped = wrapperFactory.wrap(entity);
         sessionFactory.getCurrentSession().update(wrapped);
         dealWithObservationUpdatesOrDeletes(wrapped);
+        if (entity instanceof AppUserOwnedObject) {
+            sessionFactory.getCurrentSession().flush();
+            saveHistory((AppUserOwnedObject) wrapped);
+        }
         return wrapped;
     }
 
@@ -89,6 +114,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 throw new IllegalArgumentException("You cannot explicitly update a DeletedObject.");
             }
             session.update(entity);
+            if (entity instanceof AppUserOwnedObject) {
+                saveHistory((AppUserOwnedObject) entity);
+            }
         }
         return wrappedEntities;
     }
@@ -133,6 +161,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         wrapped.setArchived(newArchivedState);
         currentSession.update(wrapped);
         modifiedObjects.add(wrapped);
+        if (wrapped instanceof AppUserOwnedObject) {
+            saveHistory(wrapped);
+        }
         return new ChainedUpdateSetImpl<>(modifiedObjects, null);
     }
 
@@ -175,6 +206,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         AppUserSettings userSettings = getEntitiesForUser(AppUserSettings.class, appUser).iterator().next();
         userSettings.updateSettings(settings);
         sessionFactory.getCurrentSession().update(userSettings);
+        saveHistory(userSettings);
         return userSettings;
     }
 
@@ -228,6 +260,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             for (Observation observation : getAllObservationsForObservationCategory((ObservationCategory) wrapped)) {
                 observation.removeCategory((ObservationCategory) wrapped);
                 currentSession.update(observation);
+                saveHistory(observation);
                 updatedItems.add(observation);
             }
         }
@@ -235,6 +268,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             for (Student student : getAllStudentsForClassList((ClassList) wrapped)) {
                 student.removeClassList((ClassList) wrapped);
                 currentSession.update(student);
+                saveHistory(student);
                 updatedItems.add(student);
             }
         }

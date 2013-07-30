@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
@@ -9,13 +10,17 @@ import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateIdObject;
+import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,13 +33,17 @@ import java.util.*;
  */
 @SuppressWarnings("unused")
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class HibernateReadOnlyDAO implements ReadOnlyDAO {
+public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAware {
+
+    //  TODO - eliminate need for this - circular issue
+    protected ApplicationContext applicationContext;
 
     private final static Logger logger = LoggerFactory.getLogger(HibernateReadOnlyDAO.class);
 
     protected final IdObjectReflectionHelper idObjectReflectionHelper;
     protected final SessionFactory sessionFactory;
     protected final DAOIdObjectWrapperFactory wrapperFactory;
+    protected IdObjectSerializer idObjectSerializer;
 
     @Autowired
     public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
@@ -96,11 +105,31 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> Set<T> getEntitiesModifiedSince(final Class<T> entityType, final AppUser appUser, final DateTime since) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user and modificationTimestamp > :since");
+    public <T extends AppUserOwnedObject> List<T> getModificationsSince(final Class<T> entityType, final AppUser appUser, final DateTime since) {
+        if (idObjectSerializer == null) {
+            idObjectSerializer = applicationContext.getBean(IdObjectSerializer.class);
+        }
+        //Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user and modificationTimestamp > :since");
+        Query query = sessionFactory.getCurrentSession().createQuery("from HistoricalFeed where appUser = :user and modificationTimestamp > :since");
         query.setParameter("user", appUser);
         query.setParameter("since", since.getMillis());   //  See HibernateIdObject getModificationTimestamp
-        TreeSet<T> sortedResults = new TreeSet<>(new Comparator<T>() {
+        List<HibernateHistory> results = query.list();
+        Collection<? extends IdObject> transformedResults = Collections2.transform(results, new Function<HibernateHistory, IdObject>() {
+            @Nullable
+            @Override
+            public IdObject apply(@Nullable HibernateHistory input) {
+                return idObjectSerializer.read(input.getSerializedVersion());
+            }
+        });
+
+        Collection<? extends IdObject> filtered = Collections2.filter(transformedResults, new Predicate<IdObject>() {
+            @Override
+            public boolean apply(@Nullable IdObject input) {
+                return input != null && entityType.isAssignableFrom(input.getClass());
+            }
+        });
+        List<T> sortedResults = new LinkedList<>((Collection<T>) filtered);
+        Collections.sort(sortedResults, new Comparator<T>() {
             @Override
             public int compare(final T o1, final T o2) {
                 int i = o1.getModificationTimestamp().compareTo(o2.getModificationTimestamp());
@@ -110,7 +139,6 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
                 return i;
             }
         });
-        sortedResults.addAll((List<T>) query.list());
         return sortedResults;
     }
 
@@ -177,5 +205,10 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         }
 
         return sessionFactory.getClassMetadata(wrapperFor).getEntityName();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

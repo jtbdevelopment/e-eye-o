@@ -239,8 +239,7 @@ public class HibernateReadWriteDAOTest {
             allowing(studentWrapped).setLastObservationTimestamp(now);
         }});
 
-        dao = new HibernateReadWriteDAO(sessionFactory, daoIdObjectWrapperFactory, idObjectReflectionHelper);
-        dao.idObjectUpdateHelper = idObjectUpdateHelper;
+        dao = new HibernateReadWriteDAO(sessionFactory, daoIdObjectWrapperFactory, idObjectReflectionHelper, idObjectUpdateHelper);
     }
 
     @Test

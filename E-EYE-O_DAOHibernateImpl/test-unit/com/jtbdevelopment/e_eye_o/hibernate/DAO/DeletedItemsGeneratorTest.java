@@ -42,7 +42,7 @@ public class DeletedItemsGeneratorTest {
         wrapped = context.mock(DeletedObject.class, "W");
         appUser = context.mock(AppUser.class);
         session = context.mock(Session.class);
-        listener = new DeletedItemsGenerator(wrapper, factory, null);
+        listener = new DeletedItemsGenerator(wrapper, factory, null, null);
         eventSource = context.mock(EventSource.class);
         builder = context.mock(DeletedObjectBuilder.class);
         context.checking(new Expectations() {{

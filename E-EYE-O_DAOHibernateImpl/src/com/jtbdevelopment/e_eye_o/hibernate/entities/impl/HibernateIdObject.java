@@ -92,6 +92,10 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
         return wrapped.getId();
     }
 
+    public void setId(final String id) {
+        wrapped.setId(id);
+    }
+
     //
     //  Unfortunately, despite adding sub-second support in MySQL in 5.6.4
     //  prepared statements via hibernate are still truncated in the driver
@@ -100,8 +104,6 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
     //  To manage maximum flexibility, storing modificationTimestamp as instant for now
     //
     @Override
-//    @Column(nullable = false)
-//    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Transient
     public DateTime getModificationTimestamp() {
         return wrapped.getModificationTimestamp();
@@ -127,10 +129,6 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
     @Transient
     public String getSummaryDescription() {
         return wrapped.getSummaryDescription();
-    }
-
-    public void setId(final String id) {
-        wrapped.setId(id);
     }
 
     protected static <OO extends IdObject> OO wrap(OO entity) {
