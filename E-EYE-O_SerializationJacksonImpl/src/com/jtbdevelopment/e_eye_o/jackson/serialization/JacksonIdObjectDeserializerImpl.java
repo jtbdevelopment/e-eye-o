@@ -8,6 +8,7 @@ import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 
 import java.beans.PropertyDescriptor;
@@ -101,7 +102,7 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
     private void handleString(JsonParser parser, IdObject returnObject, final Class fieldType, String fieldName) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException {
         if (fieldType.isArray()) {
             if (byte.class.isAssignableFrom(fieldType.getComponentType())) {
-                assignValue(returnObject, fieldName, parser.getBinaryValue());
+                assignValue(returnObject, fieldName, Base64.decode(parser.getBinaryValue()));
                 return;
             }
         }

@@ -7,6 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -55,6 +56,8 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
                 writeSubEntity(generator, fieldValueClass, (IdObject) fieldValue);
             } else if (Set.class.isAssignableFrom(valueType)) {
                 writeSet(generator, (Set) fieldValue);
+            } else if (valueType.isArray()) {
+                generator.writeObject(Base64.encode((byte[]) fieldValue));
             } else {
                 generator.writeObject(fieldValue);
             }
