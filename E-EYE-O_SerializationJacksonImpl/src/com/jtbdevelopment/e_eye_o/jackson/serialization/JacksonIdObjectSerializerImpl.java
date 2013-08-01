@@ -57,7 +57,7 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
             } else if (Set.class.isAssignableFrom(valueType)) {
                 writeSet(generator, (Set) fieldValue);
             } else if (valueType.isArray()) {
-                generator.writeObject(Base64.encode((byte[]) fieldValue));
+                generator.writeObject(new String(Base64.encode((byte[]) fieldValue)));
             } else {
                 generator.writeObject(fieldValue);
             }
