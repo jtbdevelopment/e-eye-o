@@ -3,8 +3,10 @@ package com.jtbdevelopment.e_eye_o.jackson.serialization;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelper;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.Photo;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +31,13 @@ import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObje
 public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeserializer {
     private final ReadOnlyDAO readOnlyDAO;
     private final IdObjectFactory idObjectFactory;
+    private final PhotoHelper photoHelper;
 
     @Autowired
-    public JacksonIdObjectDeserializerImpl(final ReadOnlyDAO readOnlyDAO, final IdObjectFactory idObjectFactory) {
+    public JacksonIdObjectDeserializerImpl(final ReadOnlyDAO readOnlyDAO, final IdObjectFactory idObjectFactory, final PhotoHelper photoHelper) {
         this.readOnlyDAO = readOnlyDAO;
         this.idObjectFactory = idObjectFactory;
+        this.photoHelper = photoHelper;
     }
 
     @Override
@@ -102,7 +106,17 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
     private void handleString(JsonParser parser, IdObject returnObject, final Class fieldType, String fieldName) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException {
         if (fieldType.isArray()) {
             if (byte.class.isAssignableFrom(fieldType.getComponentType())) {
-                assignValue(returnObject, fieldName, Base64.decode(parser.getBinaryValue()));
+                String s = parser.getValueAsString();
+                //  TODO - better ways - use different variant - need to do on ios side too tho
+                s = s.replace('-', '+');
+                s = s.replace('_', '/');
+                s = s.replace(',', '=');
+                byte[] decoded = Base64.decode(s.getBytes());
+                if ("imageData".equals(fieldName) && returnObject instanceof Photo) {
+                    photoHelper.setPhotoImages((Photo) returnObject, decoded);
+                } else {
+                    assignValue(returnObject, fieldName, decoded);
+                }
                 return;
             }
         }
@@ -111,6 +125,9 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
             return;
         }
         assignValue(returnObject, fieldName, parser.getValueAsString());
+        if ("mimeType".equals(fieldName) && returnObject instanceof Photo) {
+            photoHelper.reprocessForMimeType((Photo) returnObject);
+        }
     }
 
     private void handleFloat(final JsonParser parser, final IdObject returnObject, final Class fieldType, final String fieldName) throws IllegalAccessException, InvocationTargetException, IOException, NoSuchMethodException {
