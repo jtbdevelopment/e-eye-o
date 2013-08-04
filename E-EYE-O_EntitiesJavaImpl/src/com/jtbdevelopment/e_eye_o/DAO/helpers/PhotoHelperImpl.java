@@ -26,8 +26,19 @@ public class PhotoHelperImpl implements PhotoHelper {
 
     public void setPhotoImages(final Photo photo, final byte[] imageData) {
         photo.setImageData(imageData);
-        updateThumbnailImage(photo);
-        standardizePrimaryImage(photo);
+        resizeWithMimeType(photo);
+    }
+
+    @Override
+    public void reprocessForMimeType(final Photo photo) {
+        resizeWithMimeType(photo);
+    }
+
+    private void resizeWithMimeType(final Photo photo) {
+        if (StringUtils.hasLength(photo.getMimeType()) && photo.getImageData() != null && photo.getImageData().length > 0) {
+            standardizePrimaryImage(photo);
+            updateThumbnailImage(photo);
+        }
     }
 
     @Override
