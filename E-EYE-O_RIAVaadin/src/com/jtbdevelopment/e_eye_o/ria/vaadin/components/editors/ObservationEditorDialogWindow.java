@@ -4,8 +4,6 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
-import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.AbstractSelect;
@@ -58,7 +56,6 @@ public class ObservationEditorDialogWindow extends GeneratedEditorDialogWindow<O
         Observation entity = super.save();
         if (entity != null) {
             Observable observationSubject = readWriteDAO.get(Observable.class, entity.getObservationSubject().getId());
-            eventBus.post(new AppUserOwnedObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, observationSubject));
         }
         return entity;
     }

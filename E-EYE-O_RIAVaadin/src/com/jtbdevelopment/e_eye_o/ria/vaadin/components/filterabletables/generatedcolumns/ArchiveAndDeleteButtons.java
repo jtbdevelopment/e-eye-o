@@ -4,8 +4,6 @@ import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
-import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
@@ -45,7 +43,7 @@ public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> extends Custo
             @Override
             public void click(MouseEvents.ClickEvent event) {
                 logger.trace(UI.getCurrent().getSession().getAttribute(AppUser.class).getId() + ": archive/unarchive called on " + entity.getId());
-                publishUpdatedDAOObjects(readWriteDAO.changeArchiveStatus(entity));
+                readWriteDAO.changeArchiveStatus(entity);
             }
         });
 
@@ -60,7 +58,7 @@ public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> extends Custo
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             logger.trace(UI.getCurrent().getSession().getAttribute(AppUser.class).getId() + ": delete dialog confirmed on " + entity.getId());
-                            publishUpdatedDAOObjects(readWriteDAO.delete(entity));
+                            readWriteDAO.delete(entity);
                         }
                     }
                 });
@@ -73,14 +71,5 @@ public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> extends Custo
         layout.setSpacing(true);
         layout.setSizeUndefined();
         setCompositionRoot(layout);
-    }
-
-    private void publishUpdatedDAOObjects(final ReadWriteDAO.ChainedUpdateSet<AppUserOwnedObject> daoResults) {
-        for (AppUserOwnedObject modified : daoResults.getModifiedItems()) {
-            eventBus.post(new AppUserOwnedObjectChanged<>(IdObjectChanged.ChangeType.MODIFIED, modified));
-        }
-        for (AppUserOwnedObject deleted : daoResults.getDeletedItems()) {
-            eventBus.post(new AppUserOwnedObjectChanged<>(IdObjectChanged.ChangeType.DELETED, deleted));
-        }
     }
 }

@@ -1,8 +1,10 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
+import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectUpdateHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
+import com.jtbdevelopment.e_eye_o.entities.events.EventFactory;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
@@ -48,12 +50,16 @@ public class HibernateReadWriteDAOTest {
     private List<IdObject> impl = new ArrayList<>();
     private List<IdObject> loaded = new ArrayList<>();
 
+    private static EventBus eventBus = new EventBus();
+    private EventFactory eventFactory;
+
     private static final LocalDateTime now = new LocalDateTime();
     private static final LocalDateTime past = now.minusHours(1);
 
     @BeforeMethod
     public void setUp() throws Exception {
         context = new Mockery();
+        eventFactory = context.mock(EventFactory.class);
         sessionFactory = context.mock(SessionFactory.class);
         idObjectReflectionHelper = context.mock(IdObjectReflectionHelper.class);
         session = context.mock(Session.class);
@@ -239,7 +245,7 @@ public class HibernateReadWriteDAOTest {
             allowing(studentWrapped).setLastObservationTimestamp(now);
         }});
 
-        dao = new HibernateReadWriteDAO(sessionFactory, daoIdObjectWrapperFactory, idObjectReflectionHelper, idObjectUpdateHelper);
+        dao = new HibernateReadWriteDAO(eventBus, eventFactory, sessionFactory, daoIdObjectWrapperFactory, idObjectReflectionHelper, idObjectUpdateHelper);
     }
 
     @Test
@@ -280,36 +286,6 @@ public class HibernateReadWriteDAOTest {
             assertSame(i, r);
             assertTrue(wrapped.contains(r));
         }
-    }
-
-    @Test
-    public void testCreateMultiWithImpls() {
-        context.checking(new Expectations() {{
-            one(session).save(classListWrapped);
-            one(session).save(studentWrapped);
-            one(session).save(observationCategoryWrapped);
-            one(session).save(observationWrapped);
-            one(session).save(photoWrapped);
-            one(session).save(appUserWrapped);
-        }});
-
-        Collection<IdObject> r = dao.create(impl);
-        assertSame(wrapped, r);
-    }
-
-    @Test
-    public void testCreateMultiWithWrapped() {
-        context.checking(new Expectations() {{
-            one(session).save(classListWrapped);
-            one(session).save(studentWrapped);
-            one(session).save(observationCategoryWrapped);
-            one(session).save(observationWrapped);
-            one(session).save(photoWrapped);
-            one(session).save(appUserWrapped);
-        }});
-
-        Collection<IdObject> r = dao.create(wrapped);
-        assertSame(wrapped, r);
     }
 
     @Test
@@ -412,36 +388,6 @@ public class HibernateReadWriteDAOTest {
             assertSame(i, r);
             assertTrue(wrapped.contains(r));
         }
-    }
-
-    @Test
-    public void testUpdateMultiWithImpls() {
-        context.checking(new Expectations() {{
-            one(session).update(classListWrapped);
-            one(session).update(studentWrapped);
-            one(session).update(observationCategoryWrapped);
-            one(session).update(observationWrapped);
-            one(session).update(photoWrapped);
-            one(session).update(appUserWrapped);
-        }});
-
-        Collection<IdObject> r = dao.update(impl);
-        assertSame(wrapped, r);
-    }
-
-    @Test
-    public void testUpdateMultiWithWrapped() {
-        context.checking(new Expectations() {{
-            one(session).update(classListWrapped);
-            one(session).update(studentWrapped);
-            one(session).update(observationCategoryWrapped);
-            one(session).update(observationWrapped);
-            one(session).update(photoWrapped);
-            one(session).update(appUserWrapped);
-        }});
-
-        Collection<IdObject> r = dao.update(wrapped);
-        assertSame(wrapped, r);
     }
 
     @Test
@@ -586,30 +532,6 @@ public class HibernateReadWriteDAOTest {
     }
 
     @Test
-    public void testDeletingMultipleItems() {
-        final Photo pImpl = photoImpl;
-        final Photo pWrapped = photoWrapped;
-        final Photo pLoaded = photoLoaded;
-        final List<Photo> pRelatedPhotos = Collections.emptyList();
-        final List<Observation> pRelatedObservations = Collections.emptyList();
-
-        createStandardDeleteExpectations(pWrapped, pLoaded, pRelatedPhotos, pRelatedObservations);
-
-        final Student sImpl = studentImpl;
-        final Student sWrapped = studentWrapped;
-        final Student sLoaded = studentLoaded;
-        final List<Photo> sRelatedPhotos = Arrays.asList(photoLoaded);
-        final List<Observation> sRelatedObservations = Arrays.asList(observationLoaded);
-
-        createStandardDeleteExpectations(sWrapped, sLoaded, sRelatedPhotos, sRelatedObservations);
-
-        createPhotoQueryMopUp();
-
-        final List<AppUserOwnedObject> entities = Arrays.asList(pImpl, sImpl);
-        dao.delete(entities);
-    }
-
-    @Test
     public void testDeletingAUser() {
         createDeleteUserExpectations();
 
@@ -713,37 +635,12 @@ public class HibernateReadWriteDAOTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreatingDeletedObjectAsListExceptions() {
-        final List<DeletedObject> entities = Arrays.asList(deletedImpl);
-        context.checking(new Expectations() {{
-            one(daoIdObjectWrapperFactory).wrap(entities);
-            will(returnValue(entities));
-        }});
-        dao.create(entities);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testDeletingDeletedObjectExceptions() {
         dao.delete(deletedImpl);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testDeletingDeletedObjectAsListExceptions() {
-        dao.delete(Arrays.asList(deletedImpl));
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testUdpdateingDeletedObjectExceptions() {
         dao.update(appUserImpl, deletedImpl);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testUpdatingDeletedObjectAsListExceptions() {
-        final List<DeletedObject> entities = Arrays.asList(deletedImpl);
-        context.checking(new Expectations() {{
-            one(daoIdObjectWrapperFactory).wrap(entities);
-            will(returnValue(entities));
-        }});
-        dao.update(entities);
     }
 }

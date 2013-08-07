@@ -1,12 +1,9 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.editors;
 
-import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
-import com.jtbdevelopment.e_eye_o.ria.events.AppUserOwnedObjectChanged;
-import com.jtbdevelopment.e_eye_o.ria.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -28,9 +25,6 @@ import javax.annotation.PostConstruct;
 //  TODO - be nice to recompute the caption at top as we go
 public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> extends Window {
     private static final Logger logger = LoggerFactory.getLogger(IdObjectEditorDialogWindow.class);
-
-    @Autowired
-    protected EventBus eventBus;
 
     @Autowired
     protected ReadWriteDAO readWriteDAO;
@@ -142,15 +136,11 @@ public abstract class IdObjectEditorDialogWindow<T extends AppUserOwnedObject> e
         if (entity == null) {
             return null;
         }
-        IdObjectChanged.ChangeType changeType;
         if (StringUtil.isBlank(entity.getId())) {
             entity = writeNewObjectToDAO(entity);
-            changeType = IdObjectChanged.ChangeType.ADDED;
         } else {
             entity = writeUpdateObjectToDAO(entity);
-            changeType = IdObjectChanged.ChangeType.MODIFIED;
         }
-        eventBus.post(new AppUserOwnedObjectChanged<>(changeType, entity));
         closeWindow();
         return entity;
     }

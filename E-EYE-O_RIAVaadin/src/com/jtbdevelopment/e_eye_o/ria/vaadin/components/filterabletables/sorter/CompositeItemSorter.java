@@ -21,6 +21,7 @@ public class CompositeItemSorter<T extends AppUserOwnedObject> implements ItemSo
     private boolean[] ascending;
     private Table entityTable;
     private BeanItemContainer<T> entities;
+    private Locale locale = null;
 
     public CompositeItemSorter(final Table entityTable, final BeanItemContainer<T> entities) {
         this.entityTable = entityTable;
@@ -42,7 +43,9 @@ public class CompositeItemSorter<T extends AppUserOwnedObject> implements ItemSo
 
     @Override
     public int compare(Object itemId1, Object itemId2) {
-        Locale locale = UI.getCurrent().getLocale();
+        if (locale == null) {
+            locale = UI.getCurrent().getLocale();
+        }
         for (int i = 0; i < propertyIds.length; ++i) {
             if (converters[i] != null) {
                 Object object1 = entityTable.getContainerProperty(itemId1, propertyIds[i]).getValue();

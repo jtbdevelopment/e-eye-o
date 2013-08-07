@@ -291,7 +291,9 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         List<String> ids = new ArrayList<>(Arrays.asList(oc.getId(), cl.getId(), s.getId(), p.getId(), o.getId()));
         Thread.sleep(1);
 
-        rwDAO.delete(Arrays.asList(oc, cl, s, p, o));
+        for (AppUserOwnedObject owned : Arrays.asList(oc, cl, s, p, o)) {
+            rwDAO.delete(owned);
+        }
         assertFalse(rwDAO.getEntitiesForUser(AppUserOwnedObject.class, deleteUserThings).isEmpty());
         final Set<DeletedObject> deletedObjects = rwDAO.getEntitiesForUser(DeletedObject.class, deleteUserThings);
         assertFalse(deletedObjects.isEmpty());
@@ -332,11 +334,6 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testExplicitlyCreatingADeletedObjectListExceptions() {
-        rwDAO.create(Arrays.asList(factory.newDeletedObjectBuilder(testUser2).withDeletedId("TEST").build()));
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExplicitlyCreatingADeletedObjectExceptions() {
         rwDAO.create(factory.newDeletedObjectBuilder(testUser2).withDeletedId("TEST").build());
     }
@@ -353,17 +350,6 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testExplicitlyUpdatingAsListADeletedObjectExceptions() {
-        ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
-        rwDAO.delete(cl);
-        Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
-        assertFalse(deleted.isEmpty());
-        DeletedObject dobj = deleted.iterator().next();
-        dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));
-        rwDAO.update(Arrays.asList(dobj));
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExplicitlyDeletingADeletedObjectExceptions() {
         ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
         rwDAO.delete(cl);
@@ -372,16 +358,5 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         DeletedObject dobj = deleted.iterator().next();
         dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));
         rwDAO.delete(dobj);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testExplicitlyDeletingAsListADeletedObjectExceptions() {
-        ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
-        rwDAO.delete(cl);
-        Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
-        assertFalse(deleted.isEmpty());
-        DeletedObject dobj = deleted.iterator().next();
-        dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));
-        rwDAO.delete(Arrays.asList(dobj));
     }
 }

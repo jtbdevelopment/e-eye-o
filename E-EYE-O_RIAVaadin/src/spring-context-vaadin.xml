@@ -7,5 +7,4 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <bean name="eventBus" class="com.google.common.eventbus.EventBus"/>
 </beans>

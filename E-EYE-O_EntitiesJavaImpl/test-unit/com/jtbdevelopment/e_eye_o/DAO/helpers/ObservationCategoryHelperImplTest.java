@@ -53,8 +53,9 @@ public class ObservationCategoryHelperImplTest {
         }
 
         context.checking(new Expectations() {{
-            allowing(dao).create(with(any(List.class)));
-            will(returnValue(initialList));
+            //  TODO - fix me
+//            allowing(dao).create(with(any(ObservationCategory.class)));
+//            will(returnValue(initialList));
         }});
         Set<ObservationCategory> ocs = helper.createDefaultCategoriesForUser(user);
         assertEquals(defaults.size(), ocs.size());

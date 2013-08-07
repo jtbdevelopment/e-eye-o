@@ -2,12 +2,14 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.jtbdevelopment.e_eye_o.DAO.ChainedUpdateSetImpl;
+import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectUpdateHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
+import com.jtbdevelopment.e_eye_o.entities.events.EventFactory;
+import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
@@ -31,12 +33,16 @@ import java.util.*;
 @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 @SuppressWarnings("unused")
 public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadWriteDAO {
-    protected final IdObjectUpdateHelper idObjectUpdateHelper;
+    private final IdObjectUpdateHelper idObjectUpdateHelper;
+    private final EventBus eventBus;
+    private final EventFactory eventFactory;
 
     @Autowired
-    public HibernateReadWriteDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper) {
+    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper) {
         super(sessionFactory, wrapperFactory, idObjectReflectionHelper);
         this.idObjectUpdateHelper = idObjectUpdateHelper;
+        this.eventBus = eventBus;
+        this.eventFactory = eventFactory;
     }
 
     @Override
@@ -49,24 +55,11 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         dealWithNewObservations(wrapped);
         if (wrapped instanceof AppUserOwnedObject) {
             saveHistory((AppUserOwnedObject) wrapped);
+            eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.ADDED, (AppUserOwnedObject) wrapped));
+        } else {
+            eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.ADDED, wrapped));
         }
         return wrapped;
-    }
-
-    @Override
-    public <T extends IdObject> Collection<T> create(final Collection<T> entities) {
-        Session session = sessionFactory.getCurrentSession();
-        Collection<T> wrappedCollection = wrapperFactory.wrap(entities);
-        for (T entity : wrappedCollection) {
-            if (entity instanceof DeletedObject) {
-                throw new IllegalArgumentException("You cannot explicitly create a DeletedObject.");
-            }
-            session.save(entity);
-            if (entity instanceof AppUserOwnedObject) {
-                saveHistory((AppUserOwnedObject) entity);
-            }
-        }
-        return wrappedCollection;
     }
 
     private void saveHistory(final AppUserOwnedObject appUserOwnedObject) {
@@ -101,28 +94,15 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (entity instanceof AppUserOwnedObject) {
             sessionFactory.getCurrentSession().flush();
             saveHistory((AppUserOwnedObject) wrapped);
+            eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, (AppUserOwnedObject) wrapped));
+        } else {
+            eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
         }
         return wrapped;
     }
 
     @Override
-    public <T extends IdObject> Collection<T> update(final Collection<T> entities) {
-        Session session = sessionFactory.getCurrentSession();
-        Collection<T> wrappedEntities = wrapperFactory.wrap(entities);
-        for (T entity : wrappedEntities) {
-            if (entity instanceof DeletedObject) {
-                throw new IllegalArgumentException("You cannot explicitly update a DeletedObject.");
-            }
-            session.update(entity);
-            if (entity instanceof AppUserOwnedObject) {
-                saveHistory((AppUserOwnedObject) entity);
-            }
-        }
-        return wrappedEntities;
-    }
-
-    @Override
-    public <T extends AppUserOwnedObject> ChainedUpdateSet<AppUserOwnedObject> changeArchiveStatus(final T entity) {
+    public <T extends AppUserOwnedObject> void changeArchiveStatus(final T entity) {
         boolean initialArchivedState = entity.isArchived();
         boolean newArchivedState = !initialArchivedState;
 
@@ -131,14 +111,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         T wrapped = wrapperFactory.wrap(entity);
         wrapped = (T) get(wrapped.getClass(), wrapped.getId());
         if (wrapped == null) {
-            return new ChainedUpdateSetImpl<AppUserOwnedObject>(Collections.EMPTY_SET, Collections.EMPTY_SET);  //  Already deleted?
+            return;  //  Already deleted?
         }
-        Set<AppUserOwnedObject> modifiedObjects = new HashSet<>();
         if (entity instanceof ClassList) {
             for (Student student : getAllStudentsForClassList((ClassList) entity)) {
                 if (student.isArchived() == initialArchivedState) {
                     if (!newArchivedState || student.getActiveClassLists().size() == 1) {
-                        modifiedObjects.addAll(changeArchiveStatus(student).getModifiedItems());
+                        changeArchiveStatus(student);
                     }
                 }
             }
@@ -146,29 +125,26 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
         for (Photo photo : getAllPhotosForEntity(entity)) {
             if (photo.isArchived() == initialArchivedState) {
-                modifiedObjects.addAll(changeArchiveStatus(photo).getModifiedItems());
+                changeArchiveStatus(photo);
             }
         }
 
         if (entity instanceof Observable) {
             for (Observation observation : getAllObservationsForEntity((Observable) entity)) {
                 if (observation.isArchived() == initialArchivedState) {
-                    modifiedObjects.addAll(changeArchiveStatus(observation).getModifiedItems());
+                    changeArchiveStatus(observation);
                 }
             }
         }
 
         wrapped.setArchived(newArchivedState);
         currentSession.update(wrapped);
-        modifiedObjects.add(wrapped);
-        if (wrapped instanceof AppUserOwnedObject) {
-            saveHistory(wrapped);
-        }
-        return new ChainedUpdateSetImpl<>(modifiedObjects, null);
+        saveHistory(wrapped);
+        eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
     }
 
     @Override
-    public ChainedUpdateSet<IdObject> activateUser(final TwoPhaseActivity relatedActivity) {
+    public TwoPhaseActivity activateUser(final TwoPhaseActivity relatedActivity) {
         Session currentSession = sessionFactory.getCurrentSession();
         relatedActivity.setArchived(true);
         AppUser wrappedAppUser = wrapperFactory.wrap(relatedActivity.getAppUser());
@@ -177,11 +153,11 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         currentSession.update(wrappedAppUser);
         TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(relatedActivity);
         currentSession.update(wrappedRelatedActivity);
-        return new ChainedUpdateSetImpl<>(Arrays.<IdObject>asList(wrappedAppUser, wrappedRelatedActivity), null);
+        return wrappedRelatedActivity;
     }
 
     @Override
-    public ChainedUpdateSet<IdObject> resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword) {
+    public TwoPhaseActivity resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword) {
         Session currentSession = sessionFactory.getCurrentSession();
         relatedActivity.setArchived(true);
         AppUser wrappedAppUser = wrapperFactory.wrap(relatedActivity.getAppUser());
@@ -191,7 +167,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         currentSession.update(wrappedAppUser);
         TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(relatedActivity);
         currentSession.update(wrappedRelatedActivity);
-        return new ChainedUpdateSetImpl<>(Arrays.<IdObject>asList(wrappedAppUser, wrappedRelatedActivity), null);
+        return wrappedRelatedActivity;
     }
 
     @Override
@@ -213,13 +189,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")
-    public ChainedUpdateSet<AppUserOwnedObject> deleteUser(final AppUser appUser) {
+    public void deleteUser(final AppUser appUser) {
         Session currentSession = sessionFactory.getCurrentSession();
 
         AppUser wrapped = wrapperFactory.wrap(appUser);
         wrapped = get(AppUser.class, wrapped.getId());
         if (wrapped == null) {
-            return new ChainedUpdateSetImpl<AppUserOwnedObject>(Collections.EMPTY_SET, Collections.EMPTY_SET);  //  Already deleted?
+            return;  //  Already deleted?
         }
 
         Collection<AppUserOwnedObject> filtered = Collections2.filter(getEntitiesForUser(AppUserOwnedObject.class, wrapped), new Predicate<AppUserOwnedObject>() {
@@ -228,20 +204,22 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 return input != null && !(input instanceof DeletedObject);
             }
         });
-        Map<AppUserOwnedObject, ChainedUpdateSet<AppUserOwnedObject>> returnSet = delete(filtered);
+        for (AppUserOwnedObject entity : filtered) {
+            delete(entity);
+        }
         for (DeletedObject deletedObject : getEntitiesForUser(DeletedObject.class, wrapped)) {
             currentSession.delete(deletedObject);
         }
 
         currentSession.delete(wrapped);
-        //  TODO - tess
-        return new ChainedUpdateSetImpl<>(returnSet.values());
+        eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.DELETED, wrapped));
+        //  TODO - test
     }
 
     //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> ChainedUpdateSet<AppUserOwnedObject> delete(final T entity) {
+    public <T extends AppUserOwnedObject> void delete(final T entity) {
         Set<AppUserOwnedObject> updatedItems = new HashSet<>();
         Set<AppUserOwnedObject> deletedItems = new HashSet<>();
         if (entity instanceof DeletedObject) {
@@ -253,7 +231,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         wrapped = (T) get(wrapped.getClass(), wrapped.getId());
         if (wrapped == null) {
             //  Already deleted
-            return new ChainedUpdateSetImpl<>(updatedItems, deletedItems);
+            return;
         }
 
         if (wrapped instanceof ObservationCategory) {
@@ -297,17 +275,16 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
         currentSession.flush();   //  Force any delete object generations inside this session
         //  TODO - unit test adjustments for updated/deletedItems verification
-        return new ChainedUpdateSetImpl<>(updatedItems, deletedItems);
+        publishChanges(updatedItems, deletedItems);
     }
 
-    @Override
-    public <T extends AppUserOwnedObject> Map<T, ChainedUpdateSet<AppUserOwnedObject>> delete(final Collection<T> entities) {
-        Map<T, ChainedUpdateSet<AppUserOwnedObject>> deletedItems = new HashMap<>();
-        for (T entity : entities) {
-            deletedItems.put(entity, delete(entity));
+    private void publishChanges(Set<AppUserOwnedObject> updatedItems, Set<AppUserOwnedObject> deletedItems) {
+        for (AppUserOwnedObject updaedItem : updatedItems) {
+            eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, updaedItem));
         }
-        //  TODO - verify
-        return deletedItems;
+        for (AppUserOwnedObject deletedItem : deletedItems) {
+            eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, deletedItem));
+        }
     }
 
     private Observable dealWithNewObservations(final IdObject idObject) {
