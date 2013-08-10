@@ -1,20 +1,21 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
-import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectUpdateHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
-import com.jtbdevelopment.e_eye_o.entities.events.EventFactory;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
+import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.metadata.ClassMetadata;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.springframework.context.ApplicationContext;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -37,6 +38,8 @@ public class HibernateReadWriteDAOTest {
     private DAOIdObjectWrapperFactory daoIdObjectWrapperFactory;
     private HibernateReadWriteDAO dao;
     private ClassMetadata metadata, deletedMetaData;
+    private ApplicationContext appContext;
+    private IdObjectSerializer serializer;
     private Query query1, query2, query3;
 
     private ClassList classListImpl, classListWrapped, classListLoaded;
@@ -50,16 +53,15 @@ public class HibernateReadWriteDAOTest {
     private List<IdObject> impl = new ArrayList<>();
     private List<IdObject> loaded = new ArrayList<>();
 
-    private static EventBus eventBus = new EventBus();
-    private EventFactory eventFactory;
-
     private static final LocalDateTime now = new LocalDateTime();
+    private static final DateTime dtNow = new DateTime();
     private static final LocalDateTime past = now.minusHours(1);
 
     @BeforeMethod
     public void setUp() throws Exception {
         context = new Mockery();
-        eventFactory = context.mock(EventFactory.class);
+        serializer = context.mock(IdObjectSerializer.class);
+        appContext = context.mock(ApplicationContext.class);
         sessionFactory = context.mock(SessionFactory.class);
         idObjectReflectionHelper = context.mock(IdObjectReflectionHelper.class);
         session = context.mock(Session.class);
@@ -99,6 +101,8 @@ public class HibernateReadWriteDAOTest {
         wrapped.clear();
         Collections.addAll(wrapped, classListWrapped, appUserWrapped, studentWrapped, photoWrapped, observationWrapped, observationCategoryWrapped);
         context.checking(new Expectations() {{
+            allowing(appContext).getBean(IdObjectSerializer.class);
+            will(returnValue(serializer));
             allowing(idObjectUpdateHelper).validateUpdates(with(any(AppUser.class)), with(any(IdObject.class)), with(any(IdObject.class)));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(deletedImpl.getClass());
             will(returnValue(DeletedObject.class));
@@ -243,23 +247,40 @@ public class HibernateReadWriteDAOTest {
             allowing(studentLoaded).setLastObservationTimestamp(now);
             allowing(studentImpl).setLastObservationTimestamp(now);
             allowing(studentWrapped).setLastObservationTimestamp(now);
+
+            allowing(classListWrapped).getAppUser();
+            will(returnValue(appUserWrapped));
+            allowing(studentWrapped).getAppUser();
+            will(returnValue(appUserWrapped));
+            allowing(photoWrapped).getAppUser();
+            will(returnValue(appUserWrapped));
+            allowing(studentWrapped).getAppUser();
+            will(returnValue(appUserWrapped));
+            allowing(observationCategoryWrapped).getAppUser();
+            will(returnValue(appUserWrapped));
+            allowing(observationWrapped).getAppUser();
+            will(returnValue(appUserWrapped));
+            allowing(classListWrapped).getModificationTimestamp();
+            will(returnValue(dtNow));
+            allowing(photoWrapped).getModificationTimestamp();
+            will(returnValue(dtNow));
+            allowing(studentWrapped).getModificationTimestamp();
+            will(returnValue(dtNow));
+            allowing(studentWrapped).getModificationTimestamp();
+            will(returnValue(dtNow));
+            allowing(observationCategoryWrapped).getModificationTimestamp();
+            will(returnValue(dtNow));
+            allowing(observationWrapped).getModificationTimestamp();
+            will(returnValue(dtNow));
         }});
 
-        dao = new HibernateReadWriteDAO(eventBus, eventFactory, sessionFactory, daoIdObjectWrapperFactory, idObjectReflectionHelper, idObjectUpdateHelper);
+        dao = new HibernateReadWriteDAO(null, null, sessionFactory, daoIdObjectWrapperFactory, idObjectReflectionHelper, idObjectUpdateHelper);
+        dao.setApplicationContext(appContext);
     }
 
     @Test
     public void testCreateSingleWithImpls() {
-        context.checking(new Expectations() {{
-            one(session).save(classListWrapped);
-            one(session).save(studentWrapped);
-            one(session).save(observationCategoryWrapped);
-            one(session).save(observationWrapped);
-            one(session).save(photoWrapped);
-            one(session).save(appUserWrapped);
-            one(session).save(deletedWrapped);
-            one(session).update(studentWrapped);
-        }});
+        setCreateExpections();
 
         for (IdObject i : impl) {
             IdObject r = dao.create(i);
@@ -268,18 +289,44 @@ public class HibernateReadWriteDAOTest {
         }
     }
 
-    @Test
-    public void testCreateSingleWithWrapped() {
+    private void setCreateExpections() {
+        final String content = "X";
         context.checking(new Expectations() {{
             one(session).save(classListWrapped);
+            one(serializer).write(classListWrapped);
+            will(returnValue(content));
             one(session).save(studentWrapped);
+            one(serializer).write(studentWrapped);
+            will(returnValue(content));
             one(session).save(observationCategoryWrapped);
+            one(serializer).write(observationCategoryWrapped);
+            will(returnValue(content));
             one(session).save(observationWrapped);
+            one(serializer).write(observationWrapped);
+            will(returnValue(content));
             one(session).save(photoWrapped);
+            one(serializer).write(photoWrapped);
+            will(returnValue(content));
             one(session).save(appUserWrapped);
             one(session).save(deletedWrapped);
-            one(session).update(studentWrapped);
+            one(serializer).write(deletedWrapped);
+            will(returnValue(content));
+
+            allowing(session).update(studentWrapped);
+            allowing(serializer).write(studentWrapped);
+            will(returnValue(content));
+            one(serializer).write(photoWrapped);
+            will(returnValue(content));
+            one(serializer).write(observationCategoryWrapped);
+            will(returnValue(content));
+            allowing(session).save(with(any(HibernateHistory.class)));
+            allowing(session).flush();
         }});
+    }
+
+    @Test
+    public void testCreateSingleWithWrapped() {
+        setCreateExpections();
 
         for (IdObject i : wrapped) {
             IdObject r = dao.create(i);
@@ -330,6 +377,19 @@ public class HibernateReadWriteDAOTest {
             one(query3).uniqueResult();
             will(returnValue(now));
             one(session).update(studentWrapped);
+            allowing(session).flush();
+            String content = "Content";
+            one(serializer).write(classListWrapped);
+            will(returnValue(content));
+            allowing(serializer).write(studentWrapped);
+            will(returnValue(content));
+            one(serializer).write(photoWrapped);
+            will(returnValue(content));
+            one(serializer).write(observationWrapped);
+            will(returnValue(content));
+            one(serializer).write(observationCategoryWrapped);
+            will(returnValue(content));
+            allowing(session).save(with(any(HibernateHistory.class)));
         }});
 
         for (IdObject i : impl) {
@@ -381,6 +441,20 @@ public class HibernateReadWriteDAOTest {
             one(query3).uniqueResult();
             will(returnValue(now));
             one(session).update(studentWrapped);
+
+            allowing(session).flush();
+            String content = "Content";
+            one(serializer).write(classListWrapped);
+            will(returnValue(content));
+            allowing(serializer).write(studentWrapped);
+            will(returnValue(content));
+            one(serializer).write(photoWrapped);
+            will(returnValue(content));
+            one(serializer).write(observationWrapped);
+            will(returnValue(content));
+            one(serializer).write(observationCategoryWrapped);
+            will(returnValue(content));
+            allowing(session).save(with(any(HibernateHistory.class)));
         }});
 
         for (IdObject i : wrapped) {

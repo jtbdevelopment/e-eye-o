@@ -55,9 +55,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         dealWithNewObservations(wrapped);
         if (wrapped instanceof AppUserOwnedObject) {
             saveHistory((AppUserOwnedObject) wrapped);
-            eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.ADDED, (AppUserOwnedObject) wrapped));
+            if (eventBus != null) {
+                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.ADDED, (AppUserOwnedObject) wrapped));
+            }
         } else {
-            eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.ADDED, wrapped));
+            if (eventBus != null) {
+                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.ADDED, wrapped));
+            }
         }
         return wrapped;
     }
@@ -94,9 +98,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (entity instanceof AppUserOwnedObject) {
             sessionFactory.getCurrentSession().flush();
             saveHistory((AppUserOwnedObject) wrapped);
-            eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, (AppUserOwnedObject) wrapped));
+            if (eventBus != null) {
+                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, (AppUserOwnedObject) wrapped));
+            }
         } else {
-            eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
+            if (eventBus != null) {
+                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
+            }
         }
         return wrapped;
     }
@@ -140,7 +148,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         wrapped.setArchived(newArchivedState);
         currentSession.update(wrapped);
         saveHistory(wrapped);
-        eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
+        if (eventBus != null) {
+            eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
+        }
     }
 
     @Override
@@ -212,7 +222,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
 
         currentSession.delete(wrapped);
-        eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.DELETED, wrapped));
+        if (eventBus != null) {
+            eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.DELETED, wrapped));
+        }
         //  TODO - test
     }
 
@@ -279,25 +291,25 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     }
 
     private void publishChanges(Set<AppUserOwnedObject> updatedItems, Set<AppUserOwnedObject> deletedItems) {
-        for (AppUserOwnedObject updaedItem : updatedItems) {
-            eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, updaedItem));
-        }
-        for (AppUserOwnedObject deletedItem : deletedItems) {
-            eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, deletedItem));
+        if (eventBus != null) {
+            for (AppUserOwnedObject updaedItem : updatedItems) {
+                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, updaedItem));
+            }
+            for (AppUserOwnedObject deletedItem : deletedItems) {
+                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, deletedItem));
+            }
         }
     }
 
-    private Observable dealWithNewObservations(final IdObject idObject) {
+    private void dealWithNewObservations(final IdObject idObject) {
         if (idObject instanceof Observation) {
             Observation observation = (Observation) idObject;
             Observable observable = observation.getObservationSubject();
             if (observation.getObservationTimestamp().compareTo(observable.getLastObservationTimestamp()) > 0) {
                 observable.setLastObservationTimestamp(observation.getObservationTimestamp());
                 internalUpdate(observable);
-                return observable;
             }
         }
-        return null;
     }
 
     //  TODO - not efficient, but easy to code
