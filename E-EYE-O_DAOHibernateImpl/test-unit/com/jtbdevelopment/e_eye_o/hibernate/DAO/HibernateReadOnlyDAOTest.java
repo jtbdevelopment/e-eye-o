@@ -9,6 +9,7 @@ import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateDeletedObject;
+import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,6 +17,7 @@ import org.hibernate.metadata.ClassMetadata;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.joda.time.DateTime;
+import org.springframework.context.ApplicationContext;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -332,21 +334,41 @@ public class HibernateReadOnlyDAOTest {
         final DateTime ts2 = baseTS;
         final DateTime ts3 = baseTS.plusMillis(1);
         final DateTime since = baseTS.minusMillis(2);
+        final ApplicationContext appContext;
+        final IdObjectSerializer serializer;
+        serializer = context.mock(IdObjectSerializer.class);
+        appContext = context.mock(ApplicationContext.class);
+        dao.setApplicationContext(appContext);
+        final HibernateHistory h1 = new HibernateHistory();
+        final HibernateHistory h2 = new HibernateHistory();
+        final HibernateHistory h3 = new HibernateHistory();
+        h1.setSerializedVersion("1");
+        h2.setSerializedVersion("2");
+        h3.setSerializedVersion("3");
         ARCHIVED_WRAPPER.setModificationTimestamp(ts2);
         ACTIVE_WRAPPER.setModificationTimestamp(ts3);
 
         context.checking(new Expectations() {{
+            allowing(appContext).getBean(IdObjectSerializer.class);
+            will(returnValue(serializer));
+
             allowing(DELETED_WRAPPER).getModificationTimestamp();
             will(returnValue(ts1));
 
             one(sessionFactory).getCurrentSession();
             will(returnValue(session));
-            one(session).createQuery("from HQLNAME where appUser = :user and modificationTimestamp > :since");
+            one(session).createQuery("from HistoricalFeed where appUser = :user and modificationTimestamp > :since");
             will(returnValue(query));
             one(query).setParameter("user", appUser);
             one(query).setParameter("since", since.getMillis());
             one(query).list();
-            will(returnValue(Arrays.asList(ACTIVE_WRAPPER, DELETED_WRAPPER, ARCHIVED_WRAPPER)));
+            will(returnValue(Arrays.asList(h1, h2, h3)));
+            one(serializer).read("1");
+            will(returnValue(ACTIVE_WRAPPER));
+            one(serializer).read("2");
+            will(returnValue(ARCHIVED_WRAPPER));
+            one(serializer).read("3");
+            will(returnValue(DELETED_WRAPPER));
         }});
 
         List<AppUserOwnedObject> set = dao.getModificationsSince(AppUserOwnedObject.class, appUser, since);

@@ -1,17 +1,14 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
-import com.jtbdevelopment.e_eye_o.entities.DeletedObject;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.builders.DeletedObjectBuilder;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
-import org.hibernate.Session;
+import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.event.spi.EventSource;
 import org.hibernate.event.spi.PreDeleteEvent;
-import org.hibernate.internal.SessionFactoryImpl;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.joda.time.DateTime;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -25,13 +22,12 @@ public class DeletedItemsGeneratorTest {
     private Mockery context;
     private DAOIdObjectWrapperFactory wrapper;
     private IdObjectFactory factory;
-    private SessionFactoryImpl sfi;
     private DeletedItemsGenerator listener;
     private DeletedObject impl, wrapped;
     private DeletedObjectBuilder builder;
     private AppUser appUser;
-    private Session session;
     private EventSource eventSource;
+    private IdObjectSerializer serializer;
 
     @BeforeMethod
     public void setUp() {
@@ -41,8 +37,8 @@ public class DeletedItemsGeneratorTest {
         impl = context.mock(DeletedObject.class, "I");
         wrapped = context.mock(DeletedObject.class, "W");
         appUser = context.mock(AppUser.class);
-        session = context.mock(Session.class);
-        listener = new DeletedItemsGenerator(wrapper, factory, null, null);
+        serializer = context.mock(IdObjectSerializer.class);
+        listener = new DeletedItemsGenerator(wrapper, factory, null, serializer);
         eventSource = context.mock(EventSource.class);
         builder = context.mock(DeletedObjectBuilder.class);
         context.checking(new Expectations() {{
@@ -88,6 +84,39 @@ public class DeletedItemsGeneratorTest {
             one(wrapper).wrap(impl);
             will(returnValue(wrapped));
             one(eventSource).save(wrapped);
+            one(wrapped).getAppUser();
+            will(returnValue(appUser));
+            one(serializer).write(wrapped);
+            will(returnValue("Content"));
+            one(wrapped).getModificationTimestamp();
+            will(returnValue(new DateTime()));
+            one(eventSource).save(with(any(HibernateHistory.class)));
+        }});
+
+        PreDeleteEvent pde = new PreDeleteEvent(local, null, null, null, eventSource);
+        assertFalse(listener.onPreDelete(pde));
+    }
+
+    @Test
+    public void testOnPreDeleteTwoPhaseActivity() throws Exception {
+        final TwoPhaseActivity local = context.mock(TwoPhaseActivity.class);
+        final String localId = "X";
+
+        context.checking(new Expectations() {{
+            one(local).getAppUser();
+            will(returnValue(appUser));
+            one(local).getId();
+            will(returnValue(localId));
+            one(factory).newDeletedObjectBuilder(appUser);
+            will(returnValue(builder));
+            one(builder).withDeletedId(localId);
+            will(returnValue(builder));
+            one(builder).build();
+            will(returnValue(impl));
+            one(wrapper).wrap(impl);
+            will(returnValue(wrapped));
+            one(eventSource).save(wrapped);
+
         }});
 
         PreDeleteEvent pde = new PreDeleteEvent(local, null, null, null, eventSource);

@@ -52,11 +52,12 @@ public class ObservationCategoryHelperImplTest {
             shortMap.put(entry.getKey(), impl);
         }
 
-        context.checking(new Expectations() {{
-            //  TODO - fix me
-//            allowing(dao).create(with(any(ObservationCategory.class)));
-//            will(returnValue(initialList));
-        }});
+        for (final ObservationCategory oc : initialList) {
+            context.checking(new Expectations() {{
+                one(dao).create(with(any(ObservationCategory.class)));
+                will(returnValue(oc));
+            }});
+        }
         Set<ObservationCategory> ocs = helper.createDefaultCategoriesForUser(user);
         assertEquals(defaults.size(), ocs.size());
         assertTrue(ocs.containsAll(shortMap.values()));
