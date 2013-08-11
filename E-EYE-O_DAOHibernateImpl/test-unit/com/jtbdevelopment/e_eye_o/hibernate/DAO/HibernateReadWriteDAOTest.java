@@ -530,6 +530,15 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(relatedOCObservations));
             one(observationLoaded).removeCategory(loaded);
             one(session).update(observationLoaded);
+
+
+            one(observationLoaded).getAppUser();
+            will(returnValue(appUserWrapped));
+            one(observationLoaded).getModificationTimestamp();
+            will(returnValue(new DateTime()));
+            one(serializer).write(observationLoaded);
+            will(returnValue("X"));
+            one(session).save(with(any(HibernateHistory.class)));
         }});
         createStandardDeleteExpectations(wrapped, loaded, relatedPhotos, relatedObservations);
 
@@ -554,6 +563,14 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(relatedStudents));
             one(studentLoaded).removeClassList(loaded);
             one(session).update(studentLoaded);
+
+            one(studentLoaded).getAppUser();
+            will(returnValue(appUserWrapped));
+            one(studentLoaded).getModificationTimestamp();
+            will(returnValue(new DateTime()));
+            one(serializer).write(studentLoaded);
+            will(returnValue("X"));
+            one(session).save(with(any(HibernateHistory.class)));
         }});
         createStandardDeleteExpectations(wrapped, loaded, relatedPhotos, relatedObservations);
         createPhotoQueryMopUp();
@@ -573,6 +590,15 @@ public class HibernateReadWriteDAOTest {
         context.checking(new Expectations() {{
             //  Last Observation Time Update
             one(session).update(studentWrapped);
+
+            one(studentWrapped).getAppUser();
+            will(returnValue(appUserWrapped));
+            one(studentWrapped).getModificationTimestamp();
+            will(returnValue(new DateTime()));
+            one(serializer).write(studentWrapped);
+            will(returnValue("X"));
+            one(session).save(with(any(HibernateHistory.class)));
+            one(session).flush();
         }});
 
         dao.delete(impl);
