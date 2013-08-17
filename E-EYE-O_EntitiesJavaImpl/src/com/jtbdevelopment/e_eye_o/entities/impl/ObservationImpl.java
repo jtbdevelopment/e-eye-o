@@ -23,7 +23,9 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
     private String comment = "";
     private LocalDateTime observationTimestamp = new LocalDateTime();
     private Observable observationSubject;
-    private boolean significant = false;
+
+    //  TODO - make default configurable
+    private boolean significant = true;
 
     private Set<ObservationCategory> categories = new HashSet<>();
 
