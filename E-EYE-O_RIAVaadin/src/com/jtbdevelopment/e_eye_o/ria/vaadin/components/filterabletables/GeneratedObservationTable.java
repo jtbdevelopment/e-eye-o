@@ -95,10 +95,10 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         super.addGeneratedColumns();
 
         //  TODO - do this better
-        entityTable.setColumnExpandRatio("observationTimestamp", 0.10f);
+        entityTable.setColumnExpandRatio("observationTimestamp", 0.15f);
         entityTable.setColumnExpandRatio("categories", 0.10f);
-        entityTable.setColumnExpandRatio("modificationTimestamp", 0.10f);
-        entityTable.setColumnExpandRatio("comment", 0.60f);
+        entityTable.setColumnExpandRatio("modificationTimestamp", 0.15f);
+        entityTable.setColumnExpandRatio("comment", 0.50f);
         entityTable.setColumnExpandRatio("archived", 0.05f);
         entityTable.setColumnExpandRatio("significant", 0.05f);
     }
