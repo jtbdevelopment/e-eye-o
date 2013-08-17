@@ -44,4 +44,6 @@ public @interface IdObjectFieldSettings {
     DisplayFieldType fieldType() default DisplayFieldType.DEFAULT;
 
     DisplayAlignment alignment() default DisplayAlignment.DEFAULT;
+
+    String defaultValueSetting() default "";
 }

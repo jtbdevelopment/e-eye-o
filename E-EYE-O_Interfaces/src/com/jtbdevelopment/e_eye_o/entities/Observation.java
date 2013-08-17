@@ -29,6 +29,8 @@ public interface Observation extends AppUserOwnedObject {
     public final static int MAX_COMMENT_SIZE = 5000;
     public final static String OBSERVATION_COMMENT_SIZE_ERROR = "Observation.comment cannot be longer than " + MAX_COMMENT_SIZE + " characters.";
 
+    public final static String DEFAULT_SIGNIFICANT_SETTING = "entity.observation.defaultsignificant";
+
     @NotNull(message = OBSERVATION_OBSERVATION_SUBJECT_CANNOT_BE_NULL_ERROR)
     @IdObjectFieldSettings(label = "Observation For", fieldType = IdObjectFieldSettings.DisplayFieldType.SINGLE_SELECT_LIST, alignment = IdObjectFieldSettings.DisplayAlignment.LEFT)
     Observable getObservationSubject();
@@ -41,7 +43,7 @@ public interface Observation extends AppUserOwnedObject {
 
     void setObservationTimestamp(final LocalDateTime observationDate);
 
-    @IdObjectFieldSettings(label = "Significant?", fieldType = IdObjectFieldSettings.DisplayFieldType.CHECKBOX, alignment = IdObjectFieldSettings.DisplayAlignment.CENTER)
+    @IdObjectFieldSettings(label = "Significant?", fieldType = IdObjectFieldSettings.DisplayFieldType.CHECKBOX, alignment = IdObjectFieldSettings.DisplayAlignment.CENTER, defaultValueSetting = DEFAULT_SIGNIFICANT_SETTING)
     boolean isSignificant();
 
     void setSignificant(final boolean significant);
