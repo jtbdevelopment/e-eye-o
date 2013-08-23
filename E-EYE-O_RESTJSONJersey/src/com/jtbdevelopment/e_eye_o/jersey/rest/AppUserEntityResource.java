@@ -87,7 +87,8 @@ public class AppUserEntityResource extends SecurityAwareResource {
 
         AppUserOwnedObject dbObject = readWriteDAO.get(AppUserOwnedObject.class, entityId);
         if (dbObject == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            //  Probably OK
+            return Response.ok().build();
         }
 
         Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(dbObject.getClass());
