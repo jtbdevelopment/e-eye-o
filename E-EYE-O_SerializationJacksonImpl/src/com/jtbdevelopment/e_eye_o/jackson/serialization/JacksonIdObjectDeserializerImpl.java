@@ -153,7 +153,7 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
     private void handleStartArray(final JsonParser parser, final IdObject returnObject, final Class fieldType, final String fieldName) throws IOException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Object value;
         if (fieldType != null && Set.class.isAssignableFrom(fieldType)) {
-            value = readSet(parser);
+            value = readSet(parser, fieldName);
         } else {
             value = deserializeObject(fieldType, parser);
         }
@@ -164,7 +164,7 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
     private void handleStartObject(final JsonParser parser, final IdObject returnObject, final Class fieldType, final String fieldName) throws IOException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Object value;
         if (fieldType != null && IdObject.class.isAssignableFrom(fieldType)) {
-            value = readSubObject(parser);
+            value = readSubObject(parser, fieldName, fieldType);
         } else {
             value = deserializeObject(fieldType, parser);
         }
@@ -177,7 +177,7 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
     }
 
     @SuppressWarnings("unchecked")
-    private IdObject readSubObject(final JsonParser parser) throws IOException {
+    private IdObject readSubObject(final JsonParser parser, final String subObjectField, final Class expectedSubObjectType) throws IOException {
         JsonToken currentToken = parser.getCurrentToken();
         String subObjectType = null;
         String subObjectId = null;
@@ -201,21 +201,30 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
 
         if (subObjectType != null && subObjectId != null) {
             try {
-                return readOnlyDAO.get((Class<? extends IdObject>) Class.forName(subObjectType), subObjectId);
+                IdObject o = readOnlyDAO.get((Class<? extends IdObject>) Class.forName(subObjectType), subObjectId);
+                if (o == null) {
+                    throw new RuntimeException("Load idObject for field {" + subObjectField +
+                            "} of class {" + subObjectType +
+                            "} and id {" + subObjectId + "} returned null");
+                }
+                return o;
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
-        return null;
+        throw new RuntimeException("While loading field {" +
+                subObjectField + "} of expected type {" +
+                expectedSubObjectType.getCanonicalName() + "}, either type {" +
+                subObjectType + "} or Id {" + subObjectId + "} were null.");
     }
 
-    private Set<IdObject> readSet(final JsonParser parser) throws IOException {
+    private Set<IdObject> readSet(final JsonParser parser, final String fieldName) throws IOException {
         JsonToken currentToken = parser.getCurrentToken();
         Set<IdObject> returnSet = new HashSet<>();
         while (currentToken != JsonToken.END_ARRAY) {
             switch (currentToken) {
                 case START_OBJECT:
-                    returnSet.add(readSubObject(parser));
+                    returnSet.add(readSubObject(parser, fieldName, Object.class));
                     break;
                 default:
             }

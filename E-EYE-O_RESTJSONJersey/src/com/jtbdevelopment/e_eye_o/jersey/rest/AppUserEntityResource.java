@@ -8,6 +8,8 @@ import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 
 import javax.ws.rs.*;
@@ -19,6 +21,7 @@ import javax.ws.rs.core.Response;
  * Time: 7:07 PM
  */
 public class AppUserEntityResource extends SecurityAwareResource {
+    private final static Logger logger = LoggerFactory.getLogger(AppUserEntityResource.class);
     private final ReadWriteDAO readWriteDAO;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final IdObjectReflectionHelper idObjectReflectionHelper;
@@ -47,58 +50,68 @@ public class AppUserEntityResource extends SecurityAwareResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response updateEntity(@FormParam("appUserOwnedObject") final String appUserOwnedObjectString) {
-        AppUser sessionAppUser = getSessionAppUser();
+        try {
+            AppUser sessionAppUser = getSessionAppUser();
 
-        AppUserOwnedObject updateObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
-        Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(updateObject.getClass());
-        if (!idObjectInterface.getAnnotation(IdObjectEntitySettings.class).editable()) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        AppUserOwnedObject dbEntity = readWriteDAO.get(updateObject.getClass(), entityId);
-        if (dbEntity == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        if (!dbEntity.equals(updateObject) || !dbEntity.getId().equals(entityId)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        boolean archiveRequested = updateObject.isArchived();
-        if (sessionAppUser.isAdmin() || dbEntity.getAppUser().equals(sessionAppUser)) {
-            updateObject = readWriteDAO.update(sessionAppUser, updateObject);
-            if (updateObject.isArchived() != archiveRequested) {
-                readWriteDAO.changeArchiveStatus(updateObject);
-                updateObject = readWriteDAO.get(updateObject.getClass(), updateObject.getId());
-            }
-        } else {
-            if (!dbEntity.getAppUser().equals(sessionAppUser)) {
+            AppUserOwnedObject updateObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
+            Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(updateObject.getClass());
+            if (!idObjectInterface.getAnnotation(IdObjectEntitySettings.class).editable()) {
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
-        }
 
-        //  Ignoring any sort of chained updated from archive status change
-        return Response.ok(jsonIdObjectSerializer.write(updateObject)).build();
+            AppUserOwnedObject dbEntity = readWriteDAO.get(updateObject.getClass(), entityId);
+            if (dbEntity == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            if (!dbEntity.equals(updateObject) || !dbEntity.getId().equals(entityId)) {
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
+
+            boolean archiveRequested = updateObject.isArchived();
+            if (sessionAppUser.isAdmin() || dbEntity.getAppUser().equals(sessionAppUser)) {
+                updateObject = readWriteDAO.update(sessionAppUser, updateObject);
+                if (updateObject.isArchived() != archiveRequested) {
+                    readWriteDAO.changeArchiveStatus(updateObject);
+                    updateObject = readWriteDAO.get(updateObject.getClass(), updateObject.getId());
+                }
+            } else {
+                if (!dbEntity.getAppUser().equals(sessionAppUser)) {
+                    return Response.status(Response.Status.FORBIDDEN).build();
+                }
+            }
+
+            //  Ignoring any sort of chained updated from archive status change
+            return Response.ok(jsonIdObjectSerializer.write(updateObject)).build();
+        } catch (Exception e) {
+            logger.error("Error PUTing " + appUserOwnedObjectString, e);
+            return Response.serverError().build();
+        }
     }
 
     @DELETE
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response deleteEntity() {
-        AppUser sessionAppUser = getSessionAppUser();
+        try {
+            AppUser sessionAppUser = getSessionAppUser();
 
-        AppUserOwnedObject dbObject = readWriteDAO.get(AppUserOwnedObject.class, entityId);
-        if (dbObject == null) {
-            //  Probably OK
-            return Response.ok().build();
-        }
-
-        Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(dbObject.getClass());
-        if (sessionAppUser.isAdmin() || dbObject.getAppUser().equals(sessionAppUser)) {
-            if (!idObjectInterface.getAnnotation(IdObjectEntitySettings.class).editable()) {
-                return Response.status(Response.Status.FORBIDDEN).build();
+            AppUserOwnedObject dbObject = readWriteDAO.get(AppUserOwnedObject.class, entityId);
+            if (dbObject == null) {
+                //  Probably OK
+                return Response.ok().build();
             }
-            readWriteDAO.delete(dbObject);
-            return Response.ok().build();
+
+            Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(dbObject.getClass());
+            if (sessionAppUser.isAdmin() || dbObject.getAppUser().equals(sessionAppUser)) {
+                if (!idObjectInterface.getAnnotation(IdObjectEntitySettings.class).editable()) {
+                    return Response.status(Response.Status.FORBIDDEN).build();
+                }
+                readWriteDAO.delete(dbObject);
+                return Response.ok().build();
+            }
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (Exception e) {
+            logger.error("Error DELETEing " + entityId, e);
+            return Response.serverError().build();
         }
-        return Response.status(Response.Status.FORBIDDEN).build();
     }
 }

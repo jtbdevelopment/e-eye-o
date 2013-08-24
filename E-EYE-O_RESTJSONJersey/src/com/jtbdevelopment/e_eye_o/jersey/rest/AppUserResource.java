@@ -7,6 +7,8 @@ import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 
 import javax.ws.rs.*;
@@ -20,6 +22,7 @@ import java.util.Set;
  * Time: 12:33 PM
  */
 public class AppUserResource extends SecurityAwareResource {
+    private final static Logger logger = LoggerFactory.getLogger(AppUserResource.class);
     private final ReadWriteDAO readWriteDAO;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final IdObjectReflectionHelper idObjectReflectionHelper;
@@ -136,17 +139,22 @@ public class AppUserResource extends SecurityAwareResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response createEntity(@FormParam("appUserOwnedObject") final String appUserOwnedObjectString) {
-        AppUser sessionAppUser = getSessionAppUser();
-        AppUserOwnedObject newObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
-        if (!sessionAppUser.isAdmin()) {
-            if (!idObjectReflectionHelper.getIdObjectInterfaceForClass(newObject.getClass()).getAnnotation(IdObjectEntitySettings.class).editable()) {
-                return Response.status(Response.Status.FORBIDDEN).build();
+        try {
+            AppUser sessionAppUser = getSessionAppUser();
+            AppUserOwnedObject newObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
+            if (!sessionAppUser.isAdmin()) {
+                if (!idObjectReflectionHelper.getIdObjectInterfaceForClass(newObject.getClass()).getAnnotation(IdObjectEntitySettings.class).editable()) {
+                    return Response.status(Response.Status.FORBIDDEN).build();
+                }
+                newObject.setAppUser(sessionAppUser);
             }
-            newObject.setAppUser(sessionAppUser);
-        }
-        final AppUserOwnedObject entity = readWriteDAO.create(newObject);
+            final AppUserOwnedObject entity = readWriteDAO.create(newObject);
 
-        return Response.created(URI.create(entity.getId() + "/")).build();
+            return Response.created(URI.create(entity.getId() + "/")).build();
+        } catch (Exception e) {
+            logger.error("Error POSTing " + appUserOwnedObjectString, e);
+            return Response.serverError().build();
+        }
     }
 
     @Path("{entityId}")
