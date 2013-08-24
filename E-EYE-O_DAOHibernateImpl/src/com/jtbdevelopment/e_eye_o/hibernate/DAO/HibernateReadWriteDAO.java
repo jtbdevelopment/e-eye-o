@@ -305,6 +305,15 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (idObject instanceof Observation) {
             Observation observation = (Observation) idObject;
             Observable observable = observation.getObservationSubject();
+            if (observable == null) {
+                throw new RuntimeException("observable is null");
+            }
+            if (observation.getObservationTimestamp() == null) {
+                throw new RuntimeException("observationTimeStamp is null");
+            }
+            if (observable.getLastObservationTimestamp() == null) {
+                throw new RuntimeException("lastObservationTimestamp is null");
+            }
             if (observation.getObservationTimestamp().compareTo(observable.getLastObservationTimestamp()) > 0) {
                 observable.setLastObservationTimestamp(observation.getObservationTimestamp());
                 internalUpdate(observable);
