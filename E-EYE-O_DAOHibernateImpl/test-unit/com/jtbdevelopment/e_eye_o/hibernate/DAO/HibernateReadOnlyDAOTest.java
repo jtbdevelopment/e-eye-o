@@ -336,9 +336,6 @@ public class HibernateReadOnlyDAOTest {
         final DateTime since = baseTS.minusMillis(2);
         final ApplicationContext appContext;
         final IdObjectSerializer serializer;
-        serializer = context.mock(IdObjectSerializer.class);
-        appContext = context.mock(ApplicationContext.class);
-        dao.setApplicationContext(appContext);
         final HibernateHistory h1 = new HibernateHistory();
         final HibernateHistory h2 = new HibernateHistory();
         final HibernateHistory h3 = new HibernateHistory();
@@ -349,8 +346,6 @@ public class HibernateReadOnlyDAOTest {
         ACTIVE_WRAPPER.setModificationTimestamp(ts3);
 
         context.checking(new Expectations() {{
-            allowing(appContext).getBean(IdObjectSerializer.class);
-            will(returnValue(serializer));
 
             allowing(DELETED_WRAPPER).getModificationTimestamp();
             will(returnValue(ts1));
@@ -363,12 +358,6 @@ public class HibernateReadOnlyDAOTest {
             one(query).setParameter("since", since.getMillis());
             one(query).list();
             will(returnValue(Arrays.asList(h1, h2, h3)));
-            one(serializer).read("1");
-            will(returnValue(ACTIVE_WRAPPER));
-            one(serializer).read("2");
-            will(returnValue(ARCHIVED_WRAPPER));
-            one(serializer).read("3");
-            will(returnValue(DELETED_WRAPPER));
         }});
 
         List<String> set = dao.getModificationsSince(appUser, since);

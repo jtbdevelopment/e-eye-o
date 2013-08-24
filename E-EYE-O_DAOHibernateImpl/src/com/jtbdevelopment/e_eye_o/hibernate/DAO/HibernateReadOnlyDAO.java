@@ -10,17 +10,13 @@ import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateIdObject;
-import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,17 +29,12 @@ import java.util.*;
  */
 @SuppressWarnings("unused")
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAware {
-
-    //  TODO - eliminate need for this - circular issue
-    protected ApplicationContext applicationContext;
-
+public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     private final static Logger logger = LoggerFactory.getLogger(HibernateReadOnlyDAO.class);
 
     protected final IdObjectReflectionHelper idObjectReflectionHelper;
     protected final SessionFactory sessionFactory;
     protected final DAOIdObjectWrapperFactory wrapperFactory;
-    protected IdObjectSerializer idObjectSerializer;
 
     @Autowired
     public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
@@ -106,9 +97,6 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAwar
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since) {
-        if (idObjectSerializer == null) {
-            idObjectSerializer = applicationContext.getBean(IdObjectSerializer.class);
-        }
         Query query = sessionFactory.getCurrentSession().createQuery("from HistoricalFeed where appUser = :user and modificationTimestamp > :since");
         query.setParameter("user", appUser);
         query.setParameter("since", since.getMillis());   //  See HibernateIdObject getModificationTimestamp
@@ -198,10 +186,5 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAwar
         }
 
         return sessionFactory.getClassMetadata(wrapperFor).getEntityName();
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 }
