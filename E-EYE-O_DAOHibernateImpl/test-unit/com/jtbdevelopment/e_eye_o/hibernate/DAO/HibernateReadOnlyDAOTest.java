@@ -371,8 +371,8 @@ public class HibernateReadOnlyDAOTest {
             will(returnValue(DELETED_WRAPPER));
         }});
 
-        List<AppUserOwnedObject> set = dao.getModificationsSince(AppUserOwnedObject.class, appUser, since);
-        Iterator<AppUserOwnedObject> iter = set.iterator();
+        List<String> set = dao.getModificationsSince(appUser, since);
+        Iterator<String> iter = set.iterator();
         assertSame(DELETED_WRAPPER, iter.next());
         assertSame(ARCHIVED_WRAPPER, iter.next());
         assertSame(ACTIVE_WRAPPER, iter.next());

@@ -76,7 +76,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         HibernateHistory hibernateHistory = new HibernateHistory();
         hibernateHistory.setAppUser(appUserOwnedObject.getAppUser());
         hibernateHistory.setModificationTimestamp(appUserOwnedObject.getModificationTimestamp());
-        hibernateHistory.setSerializedVersion(idObjectSerializer.write(appUserOwnedObject));
+        hibernateHistory.setSerializedVersion(idObjectSerializer.writeEntity(appUserOwnedObject));
         sessionFactory.getCurrentSession().save(hibernateHistory);
     }
 

@@ -9,6 +9,8 @@ import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObje
 @Service
 @SuppressWarnings("unused")
 public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeserializer {
+    private static final Logger logger = LoggerFactory.getLogger(JacksonIdObjectDeserializer.class);
     private final ReadOnlyDAO readOnlyDAO;
     private final IdObjectFactory idObjectFactory;
     private final PhotoHelper photoHelper;
@@ -203,7 +206,7 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
             try {
                 IdObject o = readOnlyDAO.get((Class<? extends IdObject>) Class.forName(subObjectType), subObjectId);
                 if (o == null) {
-                    throw new RuntimeException("Load idObject for field {" + subObjectField +
+                    logger.warn("Load idObject for field {" + subObjectField +
                             "} of class {" + subObjectType +
                             "} and id {" + subObjectId + "} returned null");
                 }

@@ -232,7 +232,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertTrue(dbTestUser1.isActive());
         assertEquals(AppUser.NEVER_LOGGED_IN, dbTestUser1.getLastLogout());
 
-        assertEquals(jsonIdObjectSerializer.write(dbTestUser1), s);
+        assertEquals(jsonIdObjectSerializer.writeEntity(dbTestUser1), s);
 
         JerseyRestViaGrizzlyIntegration.testUser1 = dbTestUser1;
     }
@@ -257,7 +257,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertFalse(dbTestUser2.isActive());
         assertEquals(AppUser.NEVER_LOGGED_IN, dbTestUser2.getLastLogout());
 
-        assertEquals(jsonIdObjectSerializer.write(dbTestUser2), s);
+        assertEquals(jsonIdObjectSerializer.writeEntity(dbTestUser2), s);
         JerseyRestViaGrizzlyIntegration.testUser2 = dbTestUser2;
     }
 

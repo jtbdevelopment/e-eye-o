@@ -86,7 +86,7 @@ public class DeletedItemsGeneratorTest {
             one(eventSource).save(wrapped);
             one(wrapped).getAppUser();
             will(returnValue(appUser));
-            one(serializer).write(wrapped);
+            one(serializer).writeEntity(wrapped);
             will(returnValue("Content"));
             one(wrapped).getModificationTimestamp();
             will(returnValue(new DateTime()));

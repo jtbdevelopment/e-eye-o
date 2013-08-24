@@ -29,7 +29,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
         context.checking(new Expectations() {{
             allowing(dao).get(AppUser.class, userId);
             will(returnValue(user));
-            allowing(serializer).write(objects);
+            allowing(serializer).writeEntities(objects);
             will(returnValue(output));
         }});
     }

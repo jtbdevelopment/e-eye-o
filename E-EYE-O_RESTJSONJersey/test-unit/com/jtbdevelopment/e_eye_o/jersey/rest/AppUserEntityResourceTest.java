@@ -30,7 +30,7 @@ public class AppUserEntityResourceTest extends AbstractResourceTest {
         context.checking(new Expectations() {{
             one(dao).get(AppUserOwnedObject.class, entityId);
             will(returnValue(ownedObject));
-            one(serializer).write(ownedObject);
+            one(serializer).writeEntity(ownedObject);
             will(returnValue(serialized));
         }});
         AppUserEntityResource resource = new AppUserEntityResource(dao, serializer, reflectionHelper, entityId);

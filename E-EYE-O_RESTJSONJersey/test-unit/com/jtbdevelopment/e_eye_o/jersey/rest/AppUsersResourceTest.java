@@ -45,7 +45,7 @@ public class AppUsersResourceTest extends AbstractResourceTest {
         context.checking(new Expectations() {{
             one(dao).getUsers();
             will(returnValue(daoResults));
-            one(serializer).write(daoResults);
+            one(serializer).writeEntities(daoResults);
             will(returnValue(serialString));
             one(appUser).isAdmin();
             will(returnValue(true));

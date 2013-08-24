@@ -20,9 +20,11 @@ import java.util.Collection;
  * So for
  */
 public interface IdObjectSerializer {
-    String write(final IdObject entity);
+    String writeEntity(final IdObject entity);
 
-    String write(final Collection<? extends IdObject> entities);
+    String writeEntities(final Collection<? extends IdObject> entities);
+
+    String writeStrings(final Collection<String> entities);
 
     <T> T read(final String input);
 }

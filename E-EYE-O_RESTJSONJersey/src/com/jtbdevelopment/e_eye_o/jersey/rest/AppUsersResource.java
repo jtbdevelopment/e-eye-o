@@ -37,9 +37,9 @@ public class AppUsersResource extends SecurityAwareResource {
         AppUser appUser = getSessionAppUser();
 
         if (appUser.isAdmin()) {
-            return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.getUsers())).build();
+            return Response.ok(jsonIdObjectSerializer.writeEntities(readWriteDAO.getUsers())).build();
         } else {
-            return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.get(AppUser.class, appUser.getId()))).build();
+            return Response.ok(jsonIdObjectSerializer.writeEntity(readWriteDAO.get(AppUser.class, appUser.getId()))).build();
         }
     }
 
@@ -60,7 +60,7 @@ public class AppUsersResource extends SecurityAwareResource {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
             if (sessionAppUser.isAdmin() || sessionAppUser.equals(updateAppUser)) {
-                return Response.ok(jsonIdObjectSerializer.write(readWriteDAO.update(sessionAppUser, updateAppUser))).build();
+                return Response.ok(jsonIdObjectSerializer.writeEntity(readWriteDAO.update(sessionAppUser, updateAppUser))).build();
             } else {
                 return Response.status(Response.Status.FORBIDDEN).build();
             }

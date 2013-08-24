@@ -55,7 +55,7 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
     }
 
     @Override
-    public String write(final IdObject entity) {
+    public String writeEntity(final IdObject entity) {
         try (final JsonGenerator generator = createGenerator()) {
             jacksonIdObjectSerializer.serialize(entity, generator);
             return completeGeneration(generator);
@@ -65,7 +65,7 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
     }
 
     @Override
-    public String write(final Collection<? extends IdObject> entities) {
+    public String writeEntities(final Collection<? extends IdObject> entities) {
         try (final JsonGenerator generator = createGenerator()) {
             generator.writeStartArray();
             for (IdObject entity : entities) {
@@ -76,6 +76,23 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String writeStrings(final Collection<String> entities) {
+        StringBuilder builder = new StringBuilder("[\n");
+        boolean first = true;
+        for (final String entity : entities) {
+            if (first) {
+                first = false;
+            } else {
+                builder.append(",\n");
+            }
+            builder.append(entity);
+        }
+
+        builder.append("\n]");
+        return builder.toString();
     }
 
     @SuppressWarnings("unchecked")

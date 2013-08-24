@@ -107,7 +107,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
         for (Map.Entry<IdObject, String> entry : jsonValues.entrySet()) {
             final IdObject object = serializer.read(entry.getValue());
             assertEquals(entry.getKey(), object);
-            assertEquals(entry.getValue(), serializer.write(object));
+            assertEquals(entry.getValue(), serializer.writeEntity(object));
         }
     }
 
@@ -133,7 +133,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
         for (int i = 0; i < entities.size(); ++i) {
             assertEquals(entities.get(i), objects.get(i));
         }
-        String jsonOutput = serializer.write(entities);
+        String jsonOutput = serializer.writeEntities(entities);
         assertEquals(builder.toString(), jsonOutput);
     }
 

@@ -53,7 +53,7 @@ public class DeletedItemsGenerator implements PreDeleteEventListener {
             if (!(entity instanceof AppUserSettings) && !(entity instanceof TwoPhaseActivity)) {
                 final HibernateHistory hibernateHistory = new HibernateHistory();
                 hibernateHistory.setAppUser(wrap.getAppUser());
-                hibernateHistory.setSerializedVersion(idObjectSerializer.write(wrap));
+                hibernateHistory.setSerializedVersion(idObjectSerializer.writeEntity(wrap));
                 hibernateHistory.setModificationTimestamp(wrap.getModificationTimestamp());
                 event.getSession().save(hibernateHistory);
             }

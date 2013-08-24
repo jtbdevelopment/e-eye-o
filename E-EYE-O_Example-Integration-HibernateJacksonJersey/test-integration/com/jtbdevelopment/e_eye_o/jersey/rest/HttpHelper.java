@@ -29,7 +29,7 @@ public class HttpHelper {
 
 
     public <T extends IdObject> T easyClone(final T entity) {
-        return jsonIdObjectSerializer.read(jsonIdObjectSerializer.write(entity));
+        return jsonIdObjectSerializer.read(jsonIdObjectSerializer.writeEntity(entity));
     }
 
     HttpResponse httpGet(final String uri, final HttpClient client) throws IOException {
@@ -44,7 +44,7 @@ public class HttpHelper {
 
     <T extends IdObject> HttpResponse httpPost(final String uri, final HttpClient httpClient, final String paramName, final T paramValue) throws IOException {
         List<NameValuePair> formValues = new LinkedList<>();
-        formValues.add(new BasicNameValuePair(paramName, jsonIdObjectSerializer.write(paramValue)));
+        formValues.add(new BasicNameValuePair(paramName, jsonIdObjectSerializer.writeEntity(paramValue)));
         return httpPost(uri, httpClient, formValues);
     }
 
@@ -57,7 +57,7 @@ public class HttpHelper {
 
     <T extends IdObject> HttpResponse httpPut(final String uri, final HttpClient httpClient, final String paramName, final T paramValue) throws IOException {
         List<NameValuePair> formValues = new LinkedList<>();
-        formValues.add(new BasicNameValuePair(paramName, jsonIdObjectSerializer.write(paramValue)));
+        formValues.add(new BasicNameValuePair(paramName, jsonIdObjectSerializer.writeEntity(paramValue)));
         UrlEncodedFormEntity postForm = new UrlEncodedFormEntity(formValues);
         HttpPut httpPut = new HttpPut(uri);
         httpPut.setEntity(postForm);
@@ -66,7 +66,7 @@ public class HttpHelper {
 
     <T extends IdObject> void checkJSONVsExpectedResult(final String uri, final HttpClient client, final T expectedResult) throws IOException {
         String json = getJSONFromHttpGet(uri, client);
-        AssertJUnit.assertEquals(json, jsonIdObjectSerializer.write(expectedResult));
+        AssertJUnit.assertEquals(json, jsonIdObjectSerializer.writeEntity(expectedResult));
     }
 
     <T extends IdObject> void checkJSONVsExpectedResults(final String uri, final HttpClient client, final Collection<T> expectedResults) throws IOException {

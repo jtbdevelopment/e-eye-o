@@ -58,7 +58,7 @@ public class JacksonJSONIdObjectSerializerTest {
                 assertTrue(generator.getPrettyPrinter() instanceof DefaultPrettyPrinter);
             }
         }, null);
-        assertEquals("{" + newline + "  \"jodaTest\" : [ 2012, 4, 15 ]" + newline + "}", readWrite.write(context.mock(AppUser.class)));
+        assertEquals("{" + newline + "  \"jodaTest\" : [ 2012, 4, 15 ]" + newline + "}", readWrite.writeEntity(context.mock(AppUser.class)));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class JacksonJSONIdObjectSerializerTest {
             context.checking(new Expectations() {{
                 one(serializer).serialize(with(object), with(any(JsonGenerator.class)));
             }});
-            Assert.assertEquals("", readWrite.write(object));
+            Assert.assertEquals("", readWrite.writeEntity(object));
         }
     }
 
@@ -86,7 +86,7 @@ public class JacksonJSONIdObjectSerializerTest {
                 one(serializer).serialize(with(object), with(any(JsonGenerator.class)));
             }});
         }
-        assertEquals("[ ]", readWrite.write(objects));
+        assertEquals("[ ]", readWrite.writeEntities(objects));
     }
 
     @Test

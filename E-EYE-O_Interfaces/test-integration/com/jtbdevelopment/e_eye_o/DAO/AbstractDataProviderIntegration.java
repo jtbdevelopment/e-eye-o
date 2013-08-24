@@ -261,7 +261,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Observation o = rwDAO.create(factory.newObservationBuilder(updateUser).withComment("T").withObservationSubject(cl).build());
         ClassList clV2 = rwDAO.get(ClassList.class, cl.getId());  //  Observation made it dirty need to re-read for compare to work
 
-        List<AppUserOwnedObject> firstSet = rwDAO.getModificationsSince(AppUserOwnedObject.class, updateUser, firstTS);
+        List<String> firstSet = rwDAO.getModificationsSince(updateUser, firstTS);
         final List<AppUserOwnedObject> initialList = Arrays.asList(oc, cl, s, p, o, clV2);
         assertEquals(initialList.size(), firstSet.size());
         assertTrue(firstSet.containsAll(initialList));
@@ -273,7 +273,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         p = rwDAO.update(updateUser, p);
         s = rwDAO.update(updateUser, s);
         final List<AppUserOwnedObject> secondList = Arrays.asList(s, p);
-        final List<AppUserOwnedObject> secondSet = rwDAO.getModificationsSince(AppUserOwnedObject.class, updateUser, secondTS);
+        final List<String> secondSet = rwDAO.getModificationsSince(updateUser, secondTS);
         assertEquals(secondList.size(), secondSet.size());
         assertTrue(secondSet.containsAll(secondList));
     }

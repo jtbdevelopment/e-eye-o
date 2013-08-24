@@ -105,33 +105,18 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAwar
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> List<T> getModificationsSince(final Class<T> entityType, final AppUser appUser, final DateTime since) {
+    public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since) {
         if (idObjectSerializer == null) {
             idObjectSerializer = applicationContext.getBean(IdObjectSerializer.class);
         }
-        //Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user and modificationTimestamp > :since");
         Query query = sessionFactory.getCurrentSession().createQuery("from HistoricalFeed where appUser = :user and modificationTimestamp > :since");
         query.setParameter("user", appUser);
         query.setParameter("since", since.getMillis());   //  See HibernateIdObject getModificationTimestamp
         List<HibernateHistory> results = query.list();
-        Collection<? extends IdObject> transformedResults = Collections2.transform(results, new Function<HibernateHistory, IdObject>() {
-            @Nullable
+        List<HibernateHistory> sortedResults = new LinkedList<>(results);
+        Collections.sort(sortedResults, new Comparator<HibernateHistory>() {
             @Override
-            public IdObject apply(@Nullable HibernateHistory input) {
-                return idObjectSerializer.read(input.getSerializedVersion());
-            }
-        });
-
-        Collection<? extends IdObject> filtered = Collections2.filter(transformedResults, new Predicate<IdObject>() {
-            @Override
-            public boolean apply(@Nullable IdObject input) {
-                return input != null && entityType.isAssignableFrom(input.getClass());
-            }
-        });
-        List<T> sortedResults = new LinkedList<>((Collection<T>) filtered);
-        Collections.sort(sortedResults, new Comparator<T>() {
-            @Override
-            public int compare(final T o1, final T o2) {
+            public int compare(final HibernateHistory o1, final HibernateHistory o2) {
                 int i = o1.getModificationTimestamp().compareTo(o2.getModificationTimestamp());
                 if (i == 0) {
                     return o1.getId().compareTo(o2.getId());
@@ -139,7 +124,15 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAwar
                 return i;
             }
         });
-        return sortedResults;
+        Collection<String> transformedResults = Collections2.transform(sortedResults, new Function<HibernateHistory, String>() {
+            @Nullable
+            @Override
+            public String apply(@Nullable HibernateHistory input) {
+                return input.getSerializedVersion();
+            }
+        });
+
+        return new LinkedList<>(transformedResults);
     }
 
     @SuppressWarnings("unchecked")

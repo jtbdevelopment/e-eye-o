@@ -42,7 +42,7 @@ public class AppUserEntityResource extends SecurityAwareResource {
         if (entity == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(jsonIdObjectSerializer.write(entity)).build();
+        return Response.ok(jsonIdObjectSerializer.writeEntity(entity)).build();
     }
 
     @PUT
@@ -81,7 +81,7 @@ public class AppUserEntityResource extends SecurityAwareResource {
             }
 
             //  Ignoring any sort of chained updated from archive status change
-            return Response.ok(jsonIdObjectSerializer.write(updateObject)).build();
+            return Response.ok(jsonIdObjectSerializer.writeEntity(updateObject)).build();
         } catch (Exception e) {
             logger.error("Error PUTing " + appUserOwnedObjectString, e);
             return Response.serverError().build();
