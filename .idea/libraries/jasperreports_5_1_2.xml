@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="jasperreports-5.1.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jasperreports-5.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ideaLibSources/jasperreports-5.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

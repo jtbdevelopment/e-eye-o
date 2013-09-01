@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ReportDesigner">
+    <output-path>$PROJECT_DIR$/out/artifacts/ReportDesigner</output-path>
+    <root id="archive" name="ReportDesigner.jar">
+      <element id="module-output" name="E-EYE-O_ReportsJasper" />
+      <element id="module-test-output" name="E-EYE-O_ReportsJasper" />
+      <element id="module-output" name="E-EYE-O_Interfaces" />
+      <element id="module-output" name="E-EYE-O_EntitiesJavaImpl" />
+      <element id="module-test-output" name="E-EYE-O_Interfaces" />
+      <element id="file-copy" path="$PROJECT_DIR$/E-EYE-O_Example-Integration-HibernateJacksonJersey/test-integration/simple.png" />
+      <element id="dir-copy" path="$PROJECT_DIR$/E-EYE-O_ReportsJasper/src/reports" />
+    </root>
+  </artifact>
+</component>
