@@ -102,7 +102,7 @@ public class TabComponent extends CustomComponent {
         super.attach();
         AppUser appUser = getUI().getSession().getAttribute(AppUser.class);
         AppUserSettings settings = getUI().getSession().getAttribute(AppUserSettings.class);
-        userTab.setValue("Welcome " + appUser.getFirstName());
+        userTab.setValue("Settings");
         userTab.setMessageToPublish(new SettingsClicked(appUser));
         reportTab.setMessageToPublish(new ReportsClicked(appUser));
         logoutTab.setMessageToPublish(new LogoutEvent(appUser));

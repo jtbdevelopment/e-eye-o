@@ -15,6 +15,7 @@ import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,17 +174,17 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     public List<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to) {
-//        LocalDateTime adjustedTo = new LocalDateTime(to.plusDays(1));
         Query query;
         if (observationCategory != null) {
-            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where observationSubject = :observationSubject AND :category member of O.categories");// AND observationTimestamp >= :from and observationTimestamp < :to");
+            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where observationSubject = :observationSubject AND :category member of O.categories AND observationTimestamp >= :from and observationTimestamp < :to");
             query.setParameter("category", observationCategory);
         } else {
-            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where observationSubject = :observationSubject AND size( O.categories ) = 0");// AND observationTimestamp >= :from and observationTimestamp < :to");
+            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where observationSubject = :observationSubject AND size( O.categories ) = 0 AND observationTimestamp >= :from and observationTimestamp < :to");
         }
         query.setParameter("observationSubject", observable);
-//        query.setParameter("from", new LocalDateTime(from));
-//        query.setParameter("to", adjustedTo);
+        LocalTime time = new LocalTime(0, 0, 0, 0);
+        query.setParameter("from", from.toLocalDateTime(time));
+        query.setParameter("to", to.plusDays(1).toLocalDateTime(time));
 
         return (List<Observation>) query.list();
     }

@@ -1,12 +1,14 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.ClassList;
-import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.entities.Student;
+import com.google.common.eventbus.Subscribe;
+import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
+import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.reports.ReportBuilder;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.ConnectorResource;
 import com.vaadin.server.DownloadStream;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.joda.time.LocalDate;
@@ -18,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Date: 5/7/13
@@ -28,8 +30,52 @@ import java.util.Collections;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 //  TODO - everything
 public class ReportsWorkArea extends CustomComponent {
+    public static final String BY_STUDENT_BY_CATEGORY = "By Student, By Category";
+    public static final String BY_CATEGORY_BY_STUDENT = "By Category, By Student";
+    public static final String STUDENT_DISPLAY_PROPERTY = "summaryDescription";
+    public static final String CATEGORY_DISPLAY_PROPERTY = "description";
+    public static final String CLASS_DISPLAY_PROPERTY = "description";
+    private DateField fromField;
+    private DateField toField;
+    private ListSelect reportTypeField;
+
     @Autowired
     private ReportBuilder reportBuilder;
+
+    @Autowired
+    private ReadOnlyDAO readOnlyDAO;
+
+    private AppUser appUser;
+    private ListSelect classListField;
+    private ListSelect categoryListField;
+    private ListSelect studentListField;
+
+    @Override
+    public void attach() {
+        appUser = getUI().getSession().getAttribute(AppUser.class);
+        refreshLists();
+        super.attach();
+    }
+
+    private void refreshLists() {
+        BeanItemContainer<ObservationCategory> categories = new BeanItemContainer<>(ObservationCategory.class);
+        categories.addAll(readOnlyDAO.getActiveEntitiesForUser(ObservationCategory.class, appUser));
+        categories.sort(new String[]{CATEGORY_DISPLAY_PROPERTY}, new boolean[]{true});
+        categoryListField.setContainerDataSource(categories);
+        categoryListField.setRows(categories.size());
+
+        BeanItemContainer<ClassList> classes = new BeanItemContainer<>(ClassList.class);
+        classes.addAll(readOnlyDAO.getActiveEntitiesForUser(ClassList.class, appUser));
+        classes.sort(new String[]{CLASS_DISPLAY_PROPERTY}, new boolean[]{true});
+        classListField.setContainerDataSource(classes);
+        classListField.setRows(classes.size());
+
+        BeanItemContainer<Student> students = new BeanItemContainer<>(Student.class);
+        students.addAll(readOnlyDAO.getActiveEntitiesForUser(Student.class, appUser));
+        students.sort(new String[]{STUDENT_DISPLAY_PROPERTY}, new boolean[]{true});
+        studentListField.setContainerDataSource(students);
+        studentListField.setRows(students.size());
+    }
 
     @PostConstruct
     public void postConstruct() {
@@ -38,17 +84,74 @@ public class ReportsWorkArea extends CustomComponent {
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
         mainLayout.setSpacing(true);
+        mainLayout.setMargin(true);
         setCompositionRoot(mainLayout);
 
-        Button generate = new Button("Generate");
-        mainLayout.addComponent(generate);
+        HorizontalLayout selectionRow = new HorizontalLayout();
+        selectionRow.setSpacing(true);
+        reportTypeField = new ListSelect("Report Type:");
+        reportTypeField.addItem(BY_STUDENT_BY_CATEGORY);
+        reportTypeField.addItem(BY_CATEGORY_BY_STUDENT);
+        reportTypeField.setMultiSelect(false);
+        reportTypeField.setValue(BY_STUDENT_BY_CATEGORY);
+        reportTypeField.setNullSelectionAllowed(false);
+        reportTypeField.setRows(2);
+        selectionRow.addComponent(reportTypeField);
 
+        VerticalLayout dates = new VerticalLayout();
+        dates.setSpacing(true);
+        final LocalDate now = new LocalDate();
+        final LocalDate lastAugust;
+        if (now.getMonthOfYear() < 8) {
+            lastAugust = new LocalDate(now.getYear() - 1, 8, 1);
+        } else {
+            lastAugust = new LocalDate(now.getYear(), 8, 1);
+        }
+        fromField = new DateField("From:");
+        fromField.setResolution(Resolution.DAY);
+        fromField.setValue(lastAugust.toDate());
+        dates.addComponent(fromField);
+
+        toField = new DateField("To:");
+        toField.setResolution(Resolution.DAY);
+        toField.setValue(now.toDate());
+        dates.addComponent(toField);
+        selectionRow.addComponent(dates);
+
+        classListField = new ListSelect("Limit To Classes:");
+        classListField.setMultiSelect(true);
+        classListField.setItemCaptionPropertyId(CLASS_DISPLAY_PROPERTY);
+        selectionRow.addComponent(classListField);
+
+        categoryListField = new ListSelect("Limit to Categories:");
+        categoryListField.setMultiSelect(true);
+        categoryListField.setItemCaptionPropertyId(CATEGORY_DISPLAY_PROPERTY);
+        selectionRow.addComponent(categoryListField);
+
+        studentListField = new ListSelect("Limit to Students:");
+        studentListField.setMultiSelect(true);
+        studentListField.setItemCaptionPropertyId(STUDENT_DISPLAY_PROPERTY);
+        selectionRow.addComponent(studentListField);
+
+        VerticalLayout buttons = new VerticalLayout();
+        buttons.setSpacing(true);
+        Button generate = new Button("Generate");
+        buttons.addComponent(generate);
+
+        Button reset = new Button("Reset");
+        buttons.addComponent(reset);
+        selectionRow.addComponent(buttons);
+        selectionRow.setComponentAlignment(buttons, Alignment.MIDDLE_LEFT);
 
         generate.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                AppUser user = getUI().getSession().getAttribute(AppUser.class);
-                final byte[] pdf = reportBuilder.generateObservationReportByStudentAndCategory(user, Collections.<ClassList>emptySet(), Collections.<Student>emptySet(), Collections.<ObservationCategory>emptySet(), new LocalDate().minusYears(2), new LocalDate());
+                final byte[] pdf = reportBuilder.generateObservationReportByStudentAndCategory(appUser,
+                        (Set<ClassList>) classListField.getValue(),
+                        (Set<Student>) studentListField.getValue(),
+                        (Set<ObservationCategory>) categoryListField.getValue(),
+                        new LocalDate(fromField.getValue()),
+                        new LocalDate(toField.getValue()));
                 BrowserFrame report = new BrowserFrame(null, new ConnectorResource() {
                     @Override
                     public String getMIMEType() {
@@ -82,5 +185,31 @@ public class ReportsWorkArea extends CustomComponent {
             }
         });
 
+        reset.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                getUI().setFocusedComponent(reportTypeField);
+                classListField.setValue(null);
+                studentListField.setValue(null);
+                categoryListField.setValue(null);
+                fromField.setValue(lastAugust.toDate());
+                toField.setValue(now.toDate());
+                reportTypeField.setValue(BY_STUDENT_BY_CATEGORY);
+            }
+        });
+        mainLayout.addComponent(selectionRow);
+        mainLayout.setComponentAlignment(selectionRow, Alignment.TOP_CENTER);
+    }
+
+    @Subscribe
+    @SuppressWarnings({"unused", "unchecked"})
+    public void handleIdObjectChange(final AppUserOwnedObjectChanged msg) {
+        if (!getSession().getAttribute(AppUser.class).equals(msg.getEntity().getAppUser())) {
+            return;
+        }
+        if (Observation.class.isAssignableFrom(msg.getEntityType())) {
+            return;
+        }
+        refreshLists();
     }
 }
