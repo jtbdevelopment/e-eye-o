@@ -5,10 +5,7 @@
       <root url="jar://$PROJECT_DIR$/lib/jersey-server-1.17.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/asm-3.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/activation-1.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/jaxb-api-2.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/stax-api-1.0-2.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jsr250-api-1.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/osgi_R4_core-1.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jsr311-api-1.1.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jersey-core-1.17.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jersey-spring-1.17.jar!/" />

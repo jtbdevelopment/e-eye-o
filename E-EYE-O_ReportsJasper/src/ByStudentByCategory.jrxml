@@ -166,7 +166,7 @@
 			<frame>
 				<reportElement uuid="ea85a97d-b30f-41c4-a8f6-be05aaf408c0" mode="Opaque" x="-21" y="1" width="843" height="24" forecolor="#C5734B" backcolor="#FFFFFF"/>
 				<textField evaluationTime="Report">
-					<reportElement uuid="032e7391-82b5-400c-9439-11d1f5a2e64f" style="Column header" x="783" y="1" width="40" height="20" forecolor="#736343"/>
+					<reportElement uuid="032e7391-82b5-400c-9439-11d1f5a2e64f" style="Column header" x="783" y="1" width="40" height="20" forecolor="#C5734B"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>

@@ -173,17 +173,17 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     public List<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to) {
-        LocalDateTime adjustedTo = new LocalDateTime(to.plusDays(1));
+//        LocalDateTime adjustedTo = new LocalDateTime(to.plusDays(1));
         Query query;
         if (observationCategory != null) {
-            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where observationSubject = :observationSubject AND :category member of O.categories AND observationTimestamp >= :from and observationTimestamp < :to");
+            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where observationSubject = :observationSubject AND :category member of O.categories");// AND observationTimestamp >= :from and observationTimestamp < :to");
             query.setParameter("category", observationCategory);
         } else {
-            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where observationSubject = :observationSubject AND size( O.categories ) = 0 AND observationTimestamp >= :from and observationTimestamp < :to");
+            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where observationSubject = :observationSubject AND size( O.categories ) = 0");// AND observationTimestamp >= :from and observationTimestamp < :to");
         }
         query.setParameter("observationSubject", observable);
-        query.setParameter("from", new LocalDateTime(from));
-        query.setParameter("to", adjustedTo);
+//        query.setParameter("from", new LocalDateTime(from));
+//        query.setParameter("to", adjustedTo);
 
         return (List<Observation>) query.list();
     }
