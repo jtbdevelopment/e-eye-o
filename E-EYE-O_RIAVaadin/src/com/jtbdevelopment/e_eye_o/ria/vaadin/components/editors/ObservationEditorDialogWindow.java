@@ -4,7 +4,6 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.AbstractSelect;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -39,6 +38,7 @@ public class ObservationEditorDialogWindow extends GeneratedEditorDialogWindow<O
         } else {
             potentialCategories.addAll(readWriteDAO.getActiveEntitiesForUser(ObservationCategory.class, observation.getAppUser()));
         }
+        potentialCategories.sort(new String[]{"shortName"}, new boolean[]{true});
 
         potentialSubjects.removeAllItems();
         boolean showArchivedSubjects = observation.getObservationSubject() != null && observation.getObservationSubject().isArchived();
@@ -47,17 +47,9 @@ public class ObservationEditorDialogWindow extends GeneratedEditorDialogWindow<O
         } else {
             potentialSubjects.addAll(readWriteDAO.getActiveEntitiesForUser(Observable.class, observation.getAppUser()));
         }
+        potentialSubjects.sort(new String[]{"summaryDescription"}, new boolean[]{true});
 
         super.setEntity(observation);
-    }
-
-    @Override
-    protected Observation save() throws FieldGroup.CommitException {
-        Observation entity = super.save();
-        if (entity != null) {
-            Observable observationSubject = readWriteDAO.get(Observable.class, entity.getObservationSubject().getId());
-        }
-        return entity;
     }
 
     @Override

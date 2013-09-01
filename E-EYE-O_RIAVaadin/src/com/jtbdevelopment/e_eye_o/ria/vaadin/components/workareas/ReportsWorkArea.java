@@ -146,12 +146,27 @@ public class ReportsWorkArea extends CustomComponent {
         generate.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                final byte[] pdf = reportBuilder.generateObservationReportByStudentAndCategory(appUser,
-                        (Set<ClassList>) classListField.getValue(),
-                        (Set<Student>) studentListField.getValue(),
-                        (Set<ObservationCategory>) categoryListField.getValue(),
-                        new LocalDate(fromField.getValue()),
-                        new LocalDate(toField.getValue()));
+                final byte[] pdf;
+                switch ((String) reportTypeField.getValue()) {
+                    case BY_CATEGORY_BY_STUDENT:
+                        pdf = reportBuilder.generateObservationReportByCategoryAndStudent(appUser,
+                                (Set<ClassList>) classListField.getValue(),
+                                (Set<Student>) studentListField.getValue(),
+                                (Set<ObservationCategory>) categoryListField.getValue(),
+                                new LocalDate(fromField.getValue()),
+                                new LocalDate(toField.getValue()));
+                        break;
+                    case BY_STUDENT_BY_CATEGORY:
+                        pdf = reportBuilder.generateObservationReportByStudentAndCategory(appUser,
+                                (Set<ClassList>) classListField.getValue(),
+                                (Set<Student>) studentListField.getValue(),
+                                (Set<ObservationCategory>) categoryListField.getValue(),
+                                new LocalDate(fromField.getValue()),
+                                new LocalDate(toField.getValue()));
+                        break;
+                    default:
+                        throw new RuntimeException("Unknown Report Type");
+                }
                 BrowserFrame report = new BrowserFrame(null, new ConnectorResource() {
                     @Override
                     public String getMIMEType() {

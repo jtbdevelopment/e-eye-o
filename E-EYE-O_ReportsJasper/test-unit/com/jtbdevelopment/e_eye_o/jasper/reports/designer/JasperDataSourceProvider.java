@@ -1,10 +1,11 @@
-package com.jtbdevelopment.e_eye_o.jasper.reports;
+package com.jtbdevelopment.e_eye_o.jasper.reports.designer;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
+import com.jtbdevelopment.e_eye_o.jasper.reports.JasperField;
 import net.sf.jasperreports.engine.*;
 
 import java.lang.reflect.Array;
@@ -18,7 +19,6 @@ import java.util.Map;
  * Date: 8/28/13
  * Time: 6:39 AM
  */
-//  TODO - might move to test if only used for designer
 public abstract class JasperDataSourceProvider implements JRDataSourceProvider {
     protected final IdObjectReflectionHelper reflectionHelper;
     protected final List<Class<? extends AppUserOwnedObject>> groupBy;

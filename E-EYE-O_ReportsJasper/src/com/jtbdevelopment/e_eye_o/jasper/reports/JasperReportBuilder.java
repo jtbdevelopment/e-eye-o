@@ -5,7 +5,6 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.entities.Student;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.reports.ReportBuilder;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -23,20 +22,25 @@ import java.util.Set;
  * Time: 11:26 AM
  */
 @Component
+@SuppressWarnings("unused")
 public class JasperReportBuilder implements ReportBuilder {
-    private final IdObjectReflectionHelper idObjectReflectionHelper;
     private final ReadOnlyDAO readOnlyDAO;
 
     private final JasperReport byStudentByCategoryReport;
+    private final JasperReport byCategoryByStudentReport;
 
     @Autowired
-    public JasperReportBuilder(final IdObjectReflectionHelper idObjectReflectionHelper, final ReadOnlyDAO readOnlyDAO) throws JRException {
-        this.idObjectReflectionHelper = idObjectReflectionHelper;
+    public JasperReportBuilder(final ReadOnlyDAO readOnlyDAO) throws JRException {
         this.readOnlyDAO = readOnlyDAO;
 
-        InputStream jrxml = JasperReportBuilder.class.getClassLoader().getResourceAsStream("ByStudentByCategory.jrxml");
+        byStudentByCategoryReport = loadReportFromJRXML("ByStudentByCategory.jrxml");
+        byCategoryByStudentReport = loadReportFromJRXML("ByCategoryByStudent.jrxml");
+    }
+
+    private JasperReport loadReportFromJRXML(String name) throws JRException {
+        InputStream jrxml = JasperReportBuilder.class.getClassLoader().getResourceAsStream(name);
         JasperDesign design = JRXmlLoader.load(jrxml);
-        byStudentByCategoryReport = JasperCompileManager.compileReport(design);
+        return JasperCompileManager.compileReport(design);
     }
 
     @Override
@@ -44,6 +48,17 @@ public class JasperReportBuilder implements ReportBuilder {
         try {
             ByStudentCategoryDataSource dataSource = new ByStudentCategoryDataSource(readOnlyDAO, appUser, classListsFilter, studentsFilter, categoriesFilter, fromDate, toDate);
             JasperPrint report = JasperFillManager.fillReport(byStudentByCategoryReport, new HashMap<String, Object>(), dataSource);
+            return JasperExportManager.exportReportToPdf(report);
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public byte[] generateObservationReportByCategoryAndStudent(final AppUser appUser, final Set<ClassList> classListsFilter, final Set<Student> studentsFilter, final Set<ObservationCategory> categoriesFilter, final LocalDate fromDate, final LocalDate toDate) {
+        try {
+            ByCategoryStudentDataSource dataSource = new ByCategoryStudentDataSource(readOnlyDAO, appUser, classListsFilter, studentsFilter, categoriesFilter, fromDate, toDate);
+            JasperPrint report = JasperFillManager.fillReport(byCategoryByStudentReport, new HashMap<String, Object>(), dataSource);
             return JasperExportManager.exportReportToPdf(report);
         } catch (JRException e) {
             throw new RuntimeException(e);

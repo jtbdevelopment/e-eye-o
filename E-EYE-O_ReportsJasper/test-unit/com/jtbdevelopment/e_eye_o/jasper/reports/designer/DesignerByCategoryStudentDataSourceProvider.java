@@ -11,9 +11,9 @@ import java.util.Collections;
  * Date: 8/29/13
  * Time: 8:28 PM
  */
-public class DesignerByStudentCategoryDataSourceProvider extends ByStudentCategoryDataSourceProvider {
+public class DesignerByCategoryStudentDataSourceProvider extends ByCategoryStudentDataSourceProvider {
 
-    public DesignerByStudentCategoryDataSourceProvider() {
+    public DesignerByCategoryStudentDataSourceProvider() {
         super(new BaseData.FakeDAO(), new IdObjectReflectionHelperImpl(), BaseData.appUser1, Collections.<ClassList>emptySet(), Collections.<Student>emptySet(), Collections.<ObservationCategory>emptySet(), null, null);
     }
 

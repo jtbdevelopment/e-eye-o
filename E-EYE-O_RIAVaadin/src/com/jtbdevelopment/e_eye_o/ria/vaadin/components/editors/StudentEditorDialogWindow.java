@@ -39,6 +39,7 @@ public class StudentEditorDialogWindow extends GeneratedEditorDialogWindow<Stude
         } else {
             potentialClasses.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, student.getAppUser()));
         }
+        potentialClasses.sort(new String[]{"description"}, new boolean[]{true});
         super.setEntity(student);
     }
 }

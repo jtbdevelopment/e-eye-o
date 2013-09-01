@@ -127,6 +127,7 @@ public class PhotoEditorDialogWindow extends GeneratedEditorDialogWindow<Photo> 
             potentialPhotoFors.addAll(readWriteDAO.getActiveEntitiesForUser(Observation.class, entity.getAppUser()));
             potentialPhotoFors.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, entity.getAppUser()));
         }
+        potentialPhotoFors.sort(new String[]{"summaryDescription"}, new boolean[]{true});
         super.setEntity(entity);
     }
 }
