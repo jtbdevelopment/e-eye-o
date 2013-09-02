@@ -1,11 +1,10 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin;
 
-import com.vaadin.server.DefaultErrorHandler;
-import com.vaadin.server.ErrorHandler;
-import com.vaadin.server.ExternalResource;
-import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.*;
 import com.vaadin.ui.*;
 import org.springframework.security.access.AccessDeniedException;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Date: 3/3/13
@@ -16,6 +15,15 @@ public abstract class EEYEOErrorHandlingUI extends UI implements ErrorHandler {
     @Override
     protected void init(final VaadinRequest request) {
         getSession().setErrorHandler(this);
+        if (request instanceof VaadinServletRequest) {
+            HttpServletRequest httpRequest = ((VaadinServletRequest) request).getHttpServletRequest();
+            String userAgent = httpRequest.getHeader("User-Agent").toLowerCase();
+
+            if (!userAgent.contains("firefox") && !userAgent.contains("chrome") && !userAgent.contains("chromium")) {
+                Notification.show("WARNING:  Currently optimized for Chrome or Firefox - views may be odd under other browsers.", Notification.Type.TRAY_NOTIFICATION);
+            }
+
+        }
     }
 
     @Override
