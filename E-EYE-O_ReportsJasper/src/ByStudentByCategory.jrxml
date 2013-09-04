@@ -54,7 +54,14 @@
 	<field name="CATEGORY_shortName" class="java.lang.String">
 		<fieldDescription><![CDATA[CATEGORY_shortName]]></fieldDescription>
 	</field>
-	<variable name="Variable_1" class="java.lang.String"/>
+	<variable name="StudentCount" class="java.lang.Integer" resetType="Group" resetGroup="Group1" calculation="Count">
+		<variableExpression><![CDATA[$F{OBSERVATION_id}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CategoryCount" class="java.lang.Integer" resetType="Group" resetGroup="Group2" calculation="Count">
+		<variableExpression><![CDATA[$F{OBSERVATION_id}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
 	<group name="Group1" isStartNewPage="true">
 		<groupExpression><![CDATA[$F{STUDENT_id}]]></groupExpression>
 		<groupHeader>
@@ -70,11 +77,21 @@
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textField>
-						<reportElement uuid="36fd8ca1-10e0-42a3-99ef-54f6a76fed7e" style="SubTitle" x="20" y="0" width="761" height="24" forecolor="#FFFFFF"/>
+						<reportElement uuid="36fd8ca1-10e0-42a3-99ef-54f6a76fed7e" style="SubTitle" x="20" y="0" width="690" height="24" forecolor="#FFFFFF">
+							<property name="local_mesure_unitwidth" value="pixel"/>
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						</reportElement>
 						<textElement>
 							<font isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{STUDENT_lastName} + ", " + $F{STUDENT_firstName}]]></textFieldExpression>
+					</textField>
+					<textField evaluationTime="Auto">
+						<reportElement uuid="b1fcffac-c027-406b-a9bb-6f67a8fd7e34" style="SubTitle" x="730" y="2" width="91" height="20" forecolor="#FEFFFE"/>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="16"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$V{StudentCount}]]></textFieldExpression>
 					</textField>
 				</frame>
 			</band>
@@ -102,11 +119,21 @@
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textField>
-						<reportElement uuid="2eaa0fc2-10a3-464e-8169-82779e7e61cc" style="SubTitle" x="20" y="2" width="801" height="20"/>
+						<reportElement uuid="2eaa0fc2-10a3-464e-8169-82779e7e61cc" style="SubTitle" x="20" y="2" width="690" height="20">
+							<property name="local_mesure_unitwidth" value="pixel"/>
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						</reportElement>
 						<textElement markup="none">
 							<font size="16" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{CATEGORY_shortName} + " - " + $F{CATEGORY_description}]]></textFieldExpression>
+					</textField>
+					<textField evaluationTime="Auto">
+						<reportElement uuid="4e9eefec-ade0-4c3d-8d9d-927d1588c82b" style="SubTitle" mode="Transparent" x="730" y="0" width="91" height="24"/>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$V{CategoryCount}]]></textFieldExpression>
 					</textField>
 				</frame>
 			</band>
