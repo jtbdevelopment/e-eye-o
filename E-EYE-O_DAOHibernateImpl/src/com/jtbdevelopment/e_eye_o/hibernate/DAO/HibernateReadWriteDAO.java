@@ -86,6 +86,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (idObjectSerializer == null) {
             idObjectSerializer = applicationContext.getBean(IdObjectSerializer.class);
         }
+        sessionFactory.getCurrentSession().flush();  // Force update so timestamp is updated
         HibernateHistory hibernateHistory = new HibernateHistory();
         hibernateHistory.setAppUser(appUserOwnedObject.getAppUser());
         hibernateHistory.setModificationTimestamp(appUserOwnedObject.getModificationTimestamp());
@@ -134,8 +135,29 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (wrapped == null) {
             return;  //  Already deleted?
         }
-        if (entity instanceof ClassList) {
-            for (Student student : getAllStudentsForClassList((ClassList) entity)) {
+
+        if (!newArchivedState) {
+            //  If un-archiving, un-archive this one first
+            wrapped.setArchived(newArchivedState);
+            currentSession.update(wrapped);
+            saveHistory(wrapped);
+        }
+        for (Photo photo : getAllPhotosForEntity(wrapped)) {
+            if (photo.isArchived() == initialArchivedState) {
+                changeArchiveStatus(photo);
+            }
+        }
+
+        if (wrapped instanceof Observable) {
+            for (Observation observation : getAllObservationsForEntity((Observable) wrapped)) {
+                if (observation.isArchived() == initialArchivedState) {
+                    changeArchiveStatus(observation);
+                }
+            }
+        }
+
+        if (wrapped instanceof ClassList) {
+            for (Student student : getAllStudentsForClassList((ClassList) wrapped)) {
                 if (student.isArchived() == initialArchivedState) {
                     if (!newArchivedState || student.getActiveClassLists().size() == 1) {
                         changeArchiveStatus(student);
@@ -144,23 +166,12 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             }
         }
 
-        for (Photo photo : getAllPhotosForEntity(entity)) {
-            if (photo.isArchived() == initialArchivedState) {
-                changeArchiveStatus(photo);
-            }
+        if (newArchivedState) {
+            //  If un-archiving, un-archive this one last
+            wrapped.setArchived(newArchivedState);
+            currentSession.update(wrapped);
+            saveHistory(wrapped);
         }
-
-        if (entity instanceof Observable) {
-            for (Observation observation : getAllObservationsForEntity((Observable) entity)) {
-                if (observation.isArchived() == initialArchivedState) {
-                    changeArchiveStatus(observation);
-                }
-            }
-        }
-
-        wrapped.setArchived(newArchivedState);
-        currentSession.update(wrapped);
-        saveHistory(wrapped);
         if (eventBus != null) {
             eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
         }

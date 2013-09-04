@@ -13,6 +13,11 @@ public class PhotoThumbnailResource extends PhotoResource {
     }
 
     @Override
+    public String getFilename() {
+        return "TN" + super.getFilename();
+    }
+
+    @Override
     protected byte[] getData() {
         return photo.getThumbnailImageData();
     }
