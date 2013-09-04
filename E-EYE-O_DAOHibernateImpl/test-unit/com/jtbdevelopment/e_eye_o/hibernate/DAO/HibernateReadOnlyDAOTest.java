@@ -9,7 +9,6 @@ import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateDeletedObject;
-import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,7 +16,6 @@ import org.hibernate.metadata.ClassMetadata;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.joda.time.DateTime;
-import org.springframework.context.ApplicationContext;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -334,16 +332,18 @@ public class HibernateReadOnlyDAOTest {
         final DateTime ts2 = baseTS;
         final DateTime ts3 = baseTS.plusMillis(1);
         final DateTime since = baseTS.minusMillis(2);
-        final ApplicationContext appContext;
-        final IdObjectSerializer serializer;
         final HibernateHistory h1 = new HibernateHistory();
         final HibernateHistory h2 = new HibernateHistory();
         final HibernateHistory h3 = new HibernateHistory();
-        h1.setSerializedVersion("1");
-        h2.setSerializedVersion("2");
-        h3.setSerializedVersion("3");
-        ARCHIVED_WRAPPER.setModificationTimestamp(ts2);
-        ACTIVE_WRAPPER.setModificationTimestamp(ts3);
+        String serializedVersion1 = "1";
+        h1.setSerializedVersion(serializedVersion1);
+        String serializedVersion2 = "2";
+        h2.setSerializedVersion(serializedVersion2);
+        String serializedVersion3 = "3";
+        h3.setSerializedVersion(serializedVersion3);
+        h1.setModificationTimestamp(ts1);
+        h2.setModificationTimestamp(ts2);
+        h3.setModificationTimestamp(ts3);
 
         context.checking(new Expectations() {{
 
@@ -357,14 +357,14 @@ public class HibernateReadOnlyDAOTest {
             one(query).setParameter("user", appUser);
             one(query).setParameter("since", since.getMillis());
             one(query).list();
-            will(returnValue(Arrays.asList(h1, h2, h3)));
+            will(returnValue(Arrays.asList(h3, h1, h2)));
         }});
 
         List<String> set = dao.getModificationsSince(appUser, since);
         Iterator<String> iter = set.iterator();
-        assertSame(DELETED_WRAPPER, iter.next());
-        assertSame(ARCHIVED_WRAPPER, iter.next());
-        assertSame(ACTIVE_WRAPPER, iter.next());
+        assertSame(serializedVersion1, iter.next());
+        assertSame(serializedVersion2, iter.next());
+        assertSame(serializedVersion3, iter.next());
         assertFalse(iter.hasNext());
     }
 }

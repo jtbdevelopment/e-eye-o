@@ -133,6 +133,7 @@ public class ReportsWorkArea extends CustomComponent {
         studentListField.setItemCaptionPropertyId(STUDENT_DISPLAY_PROPERTY);
         selectionRow.addComponent(studentListField);
 
+
         VerticalLayout buttons = new VerticalLayout();
         buttons.setSpacing(true);
         Button generate = new Button("Generate");

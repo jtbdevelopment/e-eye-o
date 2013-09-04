@@ -598,7 +598,7 @@ public class HibernateReadWriteDAOTest {
             one(serializer).writeEntity(studentWrapped);
             will(returnValue("X"));
             one(session).save(with(any(HibernateHistory.class)));
-            one(session).flush();
+            allowing(session).flush();
         }});
 
         dao.delete(impl);
@@ -725,7 +725,7 @@ public class HibernateReadWriteDAOTest {
             one(query3).uniqueResult();
             will(returnValue(now));
             one(session).delete(loaded);
-            one(session).flush();
+            allowing(session).flush();
         }});
     }
 

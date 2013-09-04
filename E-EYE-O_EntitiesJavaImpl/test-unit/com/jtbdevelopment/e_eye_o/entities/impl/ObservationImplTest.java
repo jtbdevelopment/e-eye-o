@@ -69,7 +69,7 @@ public class ObservationImplTest extends AbstractAppUserOwnedObjectTest<Observat
 
     @Test
     public void testSetSignificant() throws Exception {
-        checkBooleanDefaultAndSetGet("significant", false);
+        checkBooleanDefaultAndSetGet("significant", true);
     }
 
     @Test
