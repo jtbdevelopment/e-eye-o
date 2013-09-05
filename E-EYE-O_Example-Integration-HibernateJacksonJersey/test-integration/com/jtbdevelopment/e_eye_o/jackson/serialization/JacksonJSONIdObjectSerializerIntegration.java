@@ -276,7 +276,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"id\" : \"" + student1For1.getId() + "\"" + newline +
                     "  }," + newline +
                     "  \"observationTimestamp\" : [ 2013, 1, 18, 15, 12, 0, 0 ]," + newline +
-                    "  \"significant\" : false" + newline +
+                    "  \"significant\" : true" + newline +
                     "}");
             put(o2ForS1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Observation\"," + newline +
@@ -297,7 +297,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
                     "    \"id\" : \"" + student1For1.getId() + "\"" + newline +
                     "  }," + newline +
                     "  \"observationTimestamp\" : [ 2012, 1, 18, 15, 12, 0, 0 ]," + newline +
-                    "  \"significant\" : false" + newline +
+                    "  \"significant\" : true" + newline +
                     "}");
             put(photo1for1, "{" + newline +
                     "  \"entityType\" : \"com.jtbdevelopment.e_eye_o.entities.Photo\"," + newline +

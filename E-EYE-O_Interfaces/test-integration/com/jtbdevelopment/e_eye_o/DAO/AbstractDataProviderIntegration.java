@@ -1,8 +1,11 @@
 package com.jtbdevelopment.e_eye_o.DAO;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
 import com.jtbdevelopment.e_eye_o.TestingPhotoHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.annotation.Nullable;
 import javax.validation.ConstraintViolationException;
 import java.util.*;
 
@@ -34,6 +38,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     private ObservationCategoryHelper observationCategoryHelper;
     @Autowired
     private IdObjectFactory factory;
+    @Autowired
+    private JSONIdObjectSerializer serializer;
 
     private static AppUser testUser1;
     private static AppUser testUser2;
@@ -262,9 +268,17 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         ClassList clV2 = rwDAO.get(ClassList.class, cl.getId());  //  Observation made it dirty need to re-read for compare to work
 
         List<String> firstSet = rwDAO.getModificationsSince(updateUser, firstTS);
-        final List<AppUserOwnedObject> initialList = Arrays.asList(oc, cl, s, p, o, clV2);
+        final Collection<String> initialList = Collections2.transform(Arrays.asList(oc, cl, s, p, o, clV2), new Function<AppUserOwnedObject, String>() {
+            @Nullable
+            @Override
+            public String apply(@Nullable final AppUserOwnedObject input) {
+                return serializer.writeEntity(input);
+            }
+        });
         assertEquals(initialList.size(), firstSet.size());
-        assertTrue(firstSet.containsAll(initialList));
+        for (final String initialString : initialList) {
+            assertTrue(firstSet.contains(initialString));
+        }
 
         DateTime secondTS = new DateTime();
         Thread.sleep(1);
@@ -272,7 +286,13 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         s.addClassList(clV2);
         p = rwDAO.update(updateUser, p);
         s = rwDAO.update(updateUser, s);
-        final List<AppUserOwnedObject> secondList = Arrays.asList(s, p);
+        final Collection<String> secondList = Collections2.transform(Arrays.asList(s, p), new Function<AppUserOwnedObject, String>() {
+            @Nullable
+            @Override
+            public String apply(@Nullable final AppUserOwnedObject input) {
+                return serializer.writeEntity(input);
+            }
+        });
         final List<String> secondSet = rwDAO.getModificationsSince(updateUser, secondTS);
         assertEquals(secondList.size(), secondSet.size());
         assertTrue(secondSet.containsAll(secondList));
