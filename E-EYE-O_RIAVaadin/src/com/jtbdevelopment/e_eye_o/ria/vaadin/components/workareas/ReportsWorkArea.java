@@ -101,7 +101,7 @@ public class ReportsWorkArea extends CustomComponent {
         reportTypeField.setMultiSelect(false);
         reportTypeField.setValue(BY_STUDENT_BY_CATEGORY);
         reportTypeField.setNullSelectionAllowed(false);
-        reportTypeField.setRows(2);
+        reportTypeField.setRows(3);
         selectionRow.addComponent(reportTypeField);
 
         VerticalLayout dates = new VerticalLayout();
