@@ -32,6 +32,7 @@ import java.util.Set;
 public class ReportsWorkArea extends CustomComponent {
     public static final String BY_STUDENT_BY_CATEGORY = "By Student, By Category";
     public static final String BY_CATEGORY_BY_STUDENT = "By Category, By Student";
+    public static final String SUMMARY_REPORT = "Summary Report";
     public static final String STUDENT_DISPLAY_PROPERTY = "summaryDescription";
     public static final String CATEGORY_DISPLAY_PROPERTY = "description";
     public static final String CLASS_DISPLAY_PROPERTY = "description";
@@ -87,11 +88,16 @@ public class ReportsWorkArea extends CustomComponent {
         mainLayout.setMargin(true);
         setCompositionRoot(mainLayout);
 
+        Label instruction = new Label("All ACTIVE classes, students and categories will be included by default unless you limit to specific ones.");
+        instruction.setSizeUndefined();
+        mainLayout.addComponent(instruction);
+        mainLayout.setComponentAlignment(instruction, Alignment.MIDDLE_CENTER);
         HorizontalLayout selectionRow = new HorizontalLayout();
         selectionRow.setSpacing(true);
         reportTypeField = new ListSelect("Report Type:");
         reportTypeField.addItem(BY_STUDENT_BY_CATEGORY);
         reportTypeField.addItem(BY_CATEGORY_BY_STUDENT);
+        reportTypeField.addItem(SUMMARY_REPORT);
         reportTypeField.setMultiSelect(false);
         reportTypeField.setValue(BY_STUDENT_BY_CATEGORY);
         reportTypeField.setNullSelectionAllowed(false);
@@ -118,17 +124,17 @@ public class ReportsWorkArea extends CustomComponent {
         dates.addComponent(toField);
         selectionRow.addComponent(dates);
 
-        classListField = new ListSelect("Limit To Classes:");
+        classListField = new ListSelect("Only Include Classes:");
         classListField.setMultiSelect(true);
         classListField.setItemCaptionPropertyId(CLASS_DISPLAY_PROPERTY);
         selectionRow.addComponent(classListField);
 
-        categoryListField = new ListSelect("Limit to Categories:");
+        categoryListField = new ListSelect("Only Include Categories:");
         categoryListField.setMultiSelect(true);
         categoryListField.setItemCaptionPropertyId(CATEGORY_DISPLAY_PROPERTY);
         selectionRow.addComponent(categoryListField);
 
-        studentListField = new ListSelect("Limit to Students:");
+        studentListField = new ListSelect("Only Include Students:");
         studentListField.setMultiSelect(true);
         studentListField.setItemCaptionPropertyId(STUDENT_DISPLAY_PROPERTY);
         selectionRow.addComponent(studentListField);
@@ -159,6 +165,14 @@ public class ReportsWorkArea extends CustomComponent {
                         break;
                     case BY_STUDENT_BY_CATEGORY:
                         pdf = reportBuilder.generateObservationReportByStudentAndCategory(appUser,
+                                (Set<ClassList>) classListField.getValue(),
+                                (Set<Student>) studentListField.getValue(),
+                                (Set<ObservationCategory>) categoryListField.getValue(),
+                                new LocalDate(fromField.getValue()),
+                                new LocalDate(toField.getValue()));
+                        break;
+                    case SUMMARY_REPORT:
+                        pdf = reportBuilder.generateObservationStudentSummaryReport(appUser,
                                 (Set<ClassList>) classListField.getValue(),
                                 (Set<Student>) studentListField.getValue(),
                                 (Set<ObservationCategory>) categoryListField.getValue(),

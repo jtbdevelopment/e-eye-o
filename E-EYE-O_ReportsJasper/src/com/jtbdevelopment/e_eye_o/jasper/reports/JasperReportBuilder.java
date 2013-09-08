@@ -28,6 +28,7 @@ public class JasperReportBuilder implements ReportBuilder {
 
     private final JasperReport byStudentByCategoryReport;
     private final JasperReport byCategoryByStudentReport;
+    private final JasperReport summaryReport;
 
     @Autowired
     public JasperReportBuilder(final ReadOnlyDAO readOnlyDAO) throws JRException {
@@ -35,6 +36,7 @@ public class JasperReportBuilder implements ReportBuilder {
 
         byStudentByCategoryReport = loadReportFromJRXML("ByStudentByCategory.jrxml");
         byCategoryByStudentReport = loadReportFromJRXML("ByCategoryByStudent.jrxml");
+        summaryReport = loadReportFromJRXML("ByStudentByCategorySummary.jrxml");
     }
 
     private JasperReport loadReportFromJRXML(String name) throws JRException {
@@ -64,4 +66,16 @@ public class JasperReportBuilder implements ReportBuilder {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public byte[] generateObservationStudentSummaryReport(AppUser appUser, Set<ClassList> classListsFilter, Set<Student> studentsFilter, Set<ObservationCategory> categoriesFilter, LocalDate fromDate, LocalDate toDate) {
+        try {
+            ByStudentCategoryDataSource dataSource = new ByStudentCategoryDataSource(readOnlyDAO, appUser, classListsFilter, studentsFilter, categoriesFilter, fromDate, toDate);
+            JasperPrint report = JasperFillManager.fillReport(summaryReport, new HashMap<String, Object>(), dataSource);
+            return JasperExportManager.exportReportToPdf(report);
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

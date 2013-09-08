@@ -34,4 +34,6 @@ public interface ReportBuilder {
      * @return pdf byte array
      */
     byte[] generateObservationReportByCategoryAndStudent(final AppUser appUser, final Set<ClassList> classListsFilter, final Set<Student> studentsFilter, final Set<ObservationCategory> categoriesFilter, final LocalDate fromDate, final LocalDate toDate);
+
+    byte[] generateObservationStudentSummaryReport(final AppUser appUser, final Set<ClassList> classListsFilter, final Set<Student> studentsFilter, final Set<ObservationCategory> categoriesFilter, final LocalDate fromDate, final LocalDate toDate);
 }
