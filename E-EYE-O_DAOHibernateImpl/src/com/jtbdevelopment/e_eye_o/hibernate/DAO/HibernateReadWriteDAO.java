@@ -76,7 +76,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.ADDED, wrapped));
             }
         }
-        return wrapped;
+        sessionFactory.getCurrentSession().flush();
+        sessionFactory.getCurrentSession().clear();
+        return (T) get(wrapped.getClass(), wrapped.getId());
     }
 
     private void saveHistory(final AppUserOwnedObject appUserOwnedObject) {
@@ -87,10 +89,12 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             idObjectSerializer = applicationContext.getBean(IdObjectSerializer.class);
         }
         sessionFactory.getCurrentSession().flush();  // Force update so timestamp is updated
+        sessionFactory.getCurrentSession().clear();  // Force update so timestamp is updated
+        AppUserOwnedObject reloaded = get(AppUserOwnedObject.class, appUserOwnedObject.getId());
         HibernateHistory hibernateHistory = new HibernateHistory();
-        hibernateHistory.setAppUser(appUserOwnedObject.getAppUser());
-        hibernateHistory.setModificationTimestamp(appUserOwnedObject.getModificationTimestamp());
-        hibernateHistory.setSerializedVersion(idObjectSerializer.writeEntity(appUserOwnedObject));
+        hibernateHistory.setAppUser(reloaded.getAppUser());
+        hibernateHistory.setModificationTimestamp(reloaded.getModificationTimestamp());
+        hibernateHistory.setSerializedVersion(idObjectSerializer.writeEntity(reloaded));
         sessionFactory.getCurrentSession().save(hibernateHistory);
     }
 
@@ -120,11 +124,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
             }
         }
-        return wrapped;
+        sessionFactory.getCurrentSession().flush();
+        sessionFactory.getCurrentSession().clear();
+        return (T) get(wrapped.getClass(), wrapped.getId());
     }
 
     @Override
-    public <T extends AppUserOwnedObject> void changeArchiveStatus(final T entity) {
+    public <T extends AppUserOwnedObject> T changeArchiveStatus(final T entity) {
         boolean initialArchivedState = entity.isArchived();
         boolean newArchivedState = !initialArchivedState;
 
@@ -133,14 +139,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         T wrapped = wrapperFactory.wrap(entity);
         wrapped = (T) get(wrapped.getClass(), wrapped.getId());
         if (wrapped == null) {
-            return;  //  Already deleted?
+            return null;  //  Already deleted?
         }
 
         if (!newArchivedState) {
             //  If un-archiving, un-archive this one first
             wrapped.setArchived(newArchivedState);
-            currentSession.update(wrapped);
-            saveHistory(wrapped);
+            wrapped = internalUpdate(wrapped);
         }
         for (Photo photo : getAllPhotosForEntity(wrapped)) {
             if (photo.isArchived() == initialArchivedState) {
@@ -169,12 +174,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (newArchivedState) {
             //  If un-archiving, un-archive this one last
             wrapped.setArchived(newArchivedState);
-            currentSession.update(wrapped);
-            saveHistory(wrapped);
+            wrapped = internalUpdate(wrapped);
         }
-        if (eventBus != null) {
-            eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
-        }
+        return wrapped;
     }
 
     @Override
@@ -327,11 +329,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     private void dealWithNewObservations(final IdObject idObject) {
         if (idObject instanceof Observation) {
-            Observation observation = (Observation) idObject;
-            Observable observable = observation.getObservationSubject();
-            if (observable == null) {
-                throw new RuntimeException("observable is null");
+            sessionFactory.getCurrentSession().flush();
+            sessionFactory.getCurrentSession().clear();
+            Observation observation = get(Observation.class, idObject.getId());
+            if (observation.getObservationSubject() == null) {
+                throw new RuntimeException("observationSubject is null");
             }
+            Observable observable = observation.getObservationSubject();
             if (observation.getObservationTimestamp() == null) {
                 throw new RuntimeException("observationTimeStamp is null");
             }

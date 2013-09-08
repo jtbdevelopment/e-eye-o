@@ -52,6 +52,7 @@ public class HibernateReadWriteDAOTest {
     private List<IdObject> wrapped = new ArrayList<>();
     private List<IdObject> impl = new ArrayList<>();
     private List<IdObject> loaded = new ArrayList<>();
+    private Map<IdObject, IdObject> toWrapped = new HashMap<>();
 
     private static final LocalDateTime now = new LocalDateTime();
     private static final DateTime dtNow = new DateTime();
@@ -73,24 +74,52 @@ public class HibernateReadWriteDAOTest {
         classListImpl = context.mock(ClassList.class, "CLI");
         classListLoaded = context.mock(ClassList.class, "CLL");
         classListWrapped = context.mock(ClassList.class, "CLW");
+        toWrapped.put(classListImpl, classListWrapped);
+        toWrapped.put(classListLoaded, classListWrapped);
+        toWrapped.put(classListWrapped, classListWrapped);
+
         observationImpl = context.mock(Observation.class, "OI");
         observationLoaded = context.mock(Observation.class, "OL");
         observationWrapped = context.mock(Observation.class, "OW");
+        toWrapped.put(observationImpl, observationWrapped);
+        toWrapped.put(observationLoaded, observationWrapped);
+        toWrapped.put(observationWrapped, observationWrapped);
+
         observationCategoryImpl = context.mock(ObservationCategory.class, "OCI");
         observationCategoryLoaded = context.mock(ObservationCategory.class, "OCL");
         observationCategoryWrapped = context.mock(ObservationCategory.class, "OCW");
+        toWrapped.put(observationCategoryImpl, observationCategoryWrapped);
+        toWrapped.put(observationCategoryLoaded, observationCategoryWrapped);
+        toWrapped.put(observationCategoryWrapped, observationCategoryWrapped);
+
         photoImpl = context.mock(Photo.class, "PI");
         photoLoaded = context.mock(Photo.class, "PL");
         photoWrapped = context.mock(Photo.class, "PW");
+        toWrapped.put(photoImpl, photoWrapped);
+        toWrapped.put(photoLoaded, photoWrapped);
+        toWrapped.put(photoWrapped, photoWrapped);
+
         studentImpl = context.mock(Student.class, "SI");
         studentLoaded = context.mock(Student.class, "SL");
         studentWrapped = context.mock(Student.class, "SW");
+        toWrapped.put(studentImpl, studentWrapped);
+        toWrapped.put(studentLoaded, studentWrapped);
+        toWrapped.put(studentWrapped, studentWrapped);
+
         appUserImpl = context.mock(AppUser.class, "AUI");
-        appUserWrapped = context.mock(AppUser.class, "AUL");
-        appUserLoaded = context.mock(AppUser.class, "AUW");
+        appUserLoaded = context.mock(AppUser.class, "AUL");
+        appUserWrapped = context.mock(AppUser.class, "AUW");
+        toWrapped.put(appUserImpl, appUserWrapped);
+        toWrapped.put(appUserLoaded, appUserWrapped);
+        toWrapped.put(appUserWrapped, appUserWrapped);
+
         deletedImpl = context.mock(DeletedObject.class, "DOI");
         deletedLoaded = context.mock(DeletedObject.class, "DOL");
         deletedWrapped = context.mock(DeletedObject.class, "DOW");
+        toWrapped.put(deletedImpl, deletedWrapped);
+        toWrapped.put(deletedLoaded, deletedWrapped);
+        toWrapped.put(deletedWrapped, deletedWrapped);
+
         metadata = context.mock(ClassMetadata.class, "MD");
         deletedMetaData = context.mock(ClassMetadata.class, "DMD");
 
@@ -280,55 +309,66 @@ public class HibernateReadWriteDAOTest {
 
     @Test
     public void testCreateSingleWithImpls() {
-        setCreateExpections();
 
         for (IdObject i : impl) {
+            setCreateExpectations(i, toWrapped.get(i));
             IdObject r = dao.create(i);
             assertNotSame(i, r);
             assertTrue(wrapped.contains(r));
         }
     }
 
-    private void setCreateExpections() {
+    private void setCreateExpectations(final IdObject initial, final IdObject wrapped) {
+        if (wrapped == null) {
+            throw new RuntimeException("wrapped is null");
+        }
         final String content = "X";
+        final String id = "ID";
+        final String id2 = "ID2";
         context.checking(new Expectations() {{
-            one(session).save(classListWrapped);
-            one(serializer).writeEntity(classListWrapped);
-            will(returnValue(content));
-            one(session).save(studentWrapped);
-            one(serializer).writeEntity(studentWrapped);
-            will(returnValue(content));
-            one(session).save(observationCategoryWrapped);
-            one(serializer).writeEntity(observationCategoryWrapped);
-            will(returnValue(content));
-            one(session).save(observationWrapped);
-            one(serializer).writeEntity(observationWrapped);
-            will(returnValue(content));
-            one(session).save(photoWrapped);
-            one(serializer).writeEntity(photoWrapped);
-            will(returnValue(content));
-            one(session).save(appUserWrapped);
-            one(session).save(deletedWrapped);
-            one(serializer).writeEntity(deletedWrapped);
-            will(returnValue(content));
+            if (initial instanceof AppUser) {
+                exactly(1).of(wrapped).getId();
+                will(returnValue(id));
+                exactly(1).of(session).get(TN, id);
+                will(returnValue(wrapped));
+            } else {
+                exactly(2).of(wrapped).getId();
+                will(returnValue(id));
+                exactly(2).of(session).get(TN, id);
+                will(returnValue(wrapped));
+            }
 
-            allowing(session).update(studentWrapped);
-            allowing(serializer).writeEntity(studentWrapped);
-            will(returnValue(content));
-            one(serializer).writeEntity(photoWrapped);
-            will(returnValue(content));
-            one(serializer).writeEntity(observationCategoryWrapped);
-            will(returnValue(content));
+            if (initial instanceof Observation) {
+                one(wrapped).getId();
+                will(returnValue(id));
+                one(session).get(TN, id);
+                will(returnValue(wrapped));
+                one(idObjectReflectionHelper).getIdObjectInterfaceForClass(Observation.class);
+                will(returnValue(Observation.class));
+                one(session).update(studentWrapped);
+                exactly(2).of(studentWrapped).getId();
+                will(returnValue(id2));
+                exactly(2).of(session).get(TN, id2);
+                will(returnValue(studentWrapped));
+                one(serializer).writeEntity(studentWrapped);
+                will(returnValue(content));
+            }
+            one(session).save(wrapped);
+            if (!(wrapped instanceof AppUser) && !(wrapped instanceof AppUserSettings) && !(wrapped instanceof TwoPhaseActivity)) {
+                one(serializer).writeEntity(wrapped);
+                will(returnValue(content));
+            }
             allowing(session).save(with(any(HibernateHistory.class)));
             allowing(session).flush();
+            allowing(session).clear();
         }});
     }
 
     @Test
     public void testCreateSingleWithWrapped() {
-        setCreateExpections();
 
         for (IdObject i : wrapped) {
+            setCreateExpectations(i, toWrapped.get(i));
             IdObject r = dao.create(i);
             assertSame(i, r);
             assertTrue(wrapped.contains(r));
@@ -337,113 +377,40 @@ public class HibernateReadWriteDAOTest {
 
     @Test
     public void testUpdateSingleWithImpls() {
-        final String id = "id";
-        context.checking(new Expectations() {{
-            allowing(session).clear();
-            one(classListImpl).getId();
-            will(returnValue(id));
-            one(studentImpl).getId();
-            will(returnValue(id));
-            one(observationCategoryImpl).getId();
-            will(returnValue(id));
-            one(observationImpl).getId();
-            will(returnValue(id));
-            one(photoImpl).getId();
-            will(returnValue(id));
-            one(appUserImpl).getId();
-            will(returnValue(id));
-            one(session).get(TN, id);
-            will(returnValue(classListLoaded));
-            one(session).get(TN, id);
-            will(returnValue(studentLoaded));
-            one(session).get(TN, id);
-            will(returnValue(observationCategoryLoaded));
-            one(session).get(TN, id);
-            will(returnValue(observationLoaded));
-            one(session).get(TN, id);
-            will(returnValue(photoLoaded));
-            one(session).get(TN, id);
-            will(returnValue(appUserLoaded));
-            one(session).update(classListWrapped);
-            one(session).update(studentWrapped);
-            one(session).update(observationCategoryWrapped);
-            one(session).update(observationWrapped);
-            one(session).update(photoWrapped);
-            one(session).update(appUserWrapped);
-            one(session).createQuery("select max(observationTimestamp) from Observation where observationSubject = :observationSubject");
-            will(returnValue(query3));
-            one(query3).setParameter("observationSubject", studentWrapped);
-            will(returnValue(query3));
-            one(query3).uniqueResult();
-            will(returnValue(now));
-            one(session).update(studentWrapped);
-            allowing(session).flush();
-            String content = "Content";
-            one(serializer).writeEntity(classListWrapped);
-            will(returnValue(content));
-            allowing(serializer).writeEntity(studentWrapped);
-            will(returnValue(content));
-            one(serializer).writeEntity(photoWrapped);
-            will(returnValue(content));
-            one(serializer).writeEntity(observationWrapped);
-            will(returnValue(content));
-            one(serializer).writeEntity(observationCategoryWrapped);
-            will(returnValue(content));
-            allowing(session).save(with(any(HibernateHistory.class)));
-        }});
-
         for (IdObject i : impl) {
+            setUpdateExpecations(i, toWrapped.get(i));
             IdObject r = dao.update(appUserImpl, i);
             assertNotSame(i, r);
             assertTrue(wrapped.contains(r));
         }
     }
 
-    @Test
-    public void testUpdateSingleWithWrapped() {
+    private void setUpdateExpecations(final IdObject initial, final IdObject wrapped) {
         final String id = "id";
+        final String content = "Content";
         context.checking(new Expectations() {{
             allowing(session).clear();
-            one(classListWrapped).getId();
+            one(initial).getId();
             will(returnValue(id));
-            one(studentWrapped).getId();
+            exactly(2).of(wrapped).getId();
             will(returnValue(id));
-            one(observationCategoryWrapped).getId();
-            will(returnValue(id));
-            one(observationWrapped).getId();
-            will(returnValue(id));
-            one(photoWrapped).getId();
-            will(returnValue(id));
-            one(appUserWrapped).getId();
-            will(returnValue(id));
-            one(session).get(TN, id);
-            will(returnValue(classListLoaded));
-            one(session).get(TN, id);
-            will(returnValue(studentLoaded));
-            one(session).get(TN, id);
-            will(returnValue(observationCategoryLoaded));
-            one(session).get(TN, id);
-            will(returnValue(observationLoaded));
-            one(session).get(TN, id);
-            will(returnValue(photoLoaded));
-            one(session).get(TN, id);
-            will(returnValue(appUserLoaded));
-            one(session).update(classListWrapped);
-            one(session).update(studentWrapped);
-            one(session).update(observationCategoryWrapped);
-            one(session).update(observationWrapped);
-            one(session).update(photoWrapped);
-            one(session).update(appUserWrapped);
-            one(session).createQuery("select max(observationTimestamp) from Observation where observationSubject = :observationSubject");
-            will(returnValue(query3));
-            one(query3).setParameter("observationSubject", studentWrapped);
-            will(returnValue(query3));
-            one(query3).uniqueResult();
-            will(returnValue(now));
-            one(session).update(studentWrapped);
-
+            exactly(3).of(session).get(TN, id);
+            will(returnValue(wrapped));
+            one(session).update(wrapped);
+            if (initial instanceof Observation) {
+                one(session).createQuery("select max(observationTimestamp) from Observation where observationSubject = :observationSubject");
+                will(returnValue(query3));
+                one(query3).setParameter("observationSubject", studentWrapped);
+                will(returnValue(query3));
+                one(query3).uniqueResult();
+                will(returnValue(now));
+                one(session).update(studentWrapped);
+                exactly(2).of(studentWrapped).getId();
+                will(returnValue("SID"));
+                exactly(2).of(session).get("TN", "SID");
+                will(returnValue(studentWrapped));
+            }
             allowing(session).flush();
-            String content = "Content";
             one(serializer).writeEntity(classListWrapped);
             will(returnValue(content));
             allowing(serializer).writeEntity(studentWrapped);
@@ -457,7 +424,12 @@ public class HibernateReadWriteDAOTest {
             allowing(session).save(with(any(HibernateHistory.class)));
         }});
 
+    }
+
+    @Test
+    public void testUpdateSingleWithWrapped() {
         for (IdObject i : wrapped) {
+            setUpdateExpecations(i, toWrapped.get(i));
             IdObject r = dao.update(appUserImpl, i);
             assertSame(i, r);
             assertTrue(wrapped.contains(r));
@@ -530,7 +502,10 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(relatedOCObservations));
             one(observationLoaded).removeCategory(loaded);
             one(session).update(observationLoaded);
-
+            one(observationLoaded).getId();
+            will(returnValue("OID"));
+            one(session).get("TN", "OID");
+            will(returnValue(observationLoaded));
 
             one(observationLoaded).getAppUser();
             will(returnValue(appUserWrapped));
@@ -563,6 +538,10 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(relatedStudents));
             one(studentLoaded).removeClassList(loaded);
             one(session).update(studentLoaded);
+            one(studentLoaded).getId();
+            will(returnValue("Sid"));
+            one(session).get("TN", "Sid");
+            will(returnValue(studentLoaded));
 
             one(studentLoaded).getAppUser();
             will(returnValue(appUserWrapped));
@@ -591,6 +570,10 @@ public class HibernateReadWriteDAOTest {
             //  Last Observation Time Update
             one(session).update(studentWrapped);
 
+            exactly(2).of(studentWrapped).getId();
+            will(returnValue("SID"));
+            exactly(2).of(session).get("TN", "SID");
+            will(returnValue(studentWrapped));
             one(studentWrapped).getAppUser();
             will(returnValue(appUserWrapped));
             one(studentWrapped).getModificationTimestamp();
@@ -726,6 +709,7 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(now));
             one(session).delete(loaded);
             allowing(session).flush();
+            allowing(session).clear();
         }});
     }
 

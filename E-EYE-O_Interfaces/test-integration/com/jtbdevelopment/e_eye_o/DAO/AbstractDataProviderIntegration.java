@@ -209,9 +209,9 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         assertTrue(activePhotos.contains(photo));
         assertFalse(archivePhotos.contains(photo));
 
-        photo.setDescription("Archived");
         DateTime originalTS = photo.getModificationTimestamp();
-        rwDAO.changeArchiveStatus(photo);
+        photo = rwDAO.changeArchiveStatus(photo);
+        photo.setDescription("Archived");
         photo = rwDAO.update(testUser1, photo);
         assertTrue(originalTS.isBefore(photo.getModificationTimestamp()));
         activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
@@ -268,17 +268,19 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         ClassList clV2 = rwDAO.get(ClassList.class, cl.getId());  //  Observation made it dirty need to re-read for compare to work
 
         List<String> firstSet = rwDAO.getModificationsSince(updateUser, firstTS);
-        final Collection<String> initialList = Collections2.transform(Arrays.asList(oc, cl, s, p, o, clV2), new Function<AppUserOwnedObject, String>() {
+        final List<String> initialList = new LinkedList<>(Collections2.transform(Arrays.asList(oc, cl, s, p, o, clV2), new Function<AppUserOwnedObject, String>() {
             @Nullable
             @Override
             public String apply(@Nullable final AppUserOwnedObject input) {
                 return serializer.writeEntity(input);
             }
-        });
+        }));
         assertEquals(initialList.size(), firstSet.size());
-        for (final String initialString : initialList) {
-            assertTrue(firstSet.contains(initialString));
+        int counter = 0;
+        for (final String received : firstSet) {
+            assertEquals(initialList.get(counter++), received);
         }
+        assertTrue(firstSet.containsAll(initialList));
 
         DateTime secondTS = new DateTime();
         Thread.sleep(1);

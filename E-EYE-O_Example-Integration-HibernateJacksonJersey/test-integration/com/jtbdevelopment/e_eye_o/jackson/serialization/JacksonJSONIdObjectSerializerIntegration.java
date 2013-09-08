@@ -92,6 +92,8 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
         o2ForS1 = factory.newObservationBuilder(appUser1).addCategory(oc1For1).withObservationSubject(student1For1)
                 .withComment("Comment").withObservationTimestamp(new LocalDateTime(2012, 1, 18, 15, 12)).build();
         o2ForS1 = readWriteDAO.create(o2ForS1);
+        student1For1 = readWriteDAO.get(Student.class, student1For1.getId());
+        student2For1 = readWriteDAO.get(Student.class, student2For1.getId());
         photo1for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2011, 11, 11, 11, 11, 11)).withPhotoFor(student1For1).withDescription("Photo1").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build();
         photo1for1 = readWriteDAO.create(photo1for1);
         photo2for1 = factory.newPhotoBuilder(appUser1).withTimestamp(new LocalDateTime(2012, 12, 12, 12, 12, 12)).withPhotoFor(o2ForS1).withDescription("Photo2").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build();

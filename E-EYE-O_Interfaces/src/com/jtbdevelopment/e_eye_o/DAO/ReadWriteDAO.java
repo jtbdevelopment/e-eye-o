@@ -26,7 +26,7 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
      */
     <T extends IdObject> T update(final AppUser updatingAppUser, final T entity);
 
-    <T extends AppUserOwnedObject> void changeArchiveStatus(final T entity);
+    <T extends AppUserOwnedObject> T changeArchiveStatus(final T entity);
 
     TwoPhaseActivity activateUser(final TwoPhaseActivity relatedActivity);
 
