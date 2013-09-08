@@ -210,7 +210,7 @@ public class ReportsWorkArea extends CustomComponent {
                 mainLayout.addComponent(report);
                 window.addStyleName(Runo.WINDOW_DIALOG);
                 window.setModal(true);
-                window.setCaption("Report Contents");
+                window.setCaption("Report Contents - Close This When Done By Pressing x in corner ----------->");
                 getUI().addWindow(window);
             }
         });
