@@ -13,12 +13,12 @@ import java.util.Locale;
 @Component
 public class ShortenedCommentConverter implements Converter<String, String> {
     @Override
-    public String convertToModel(final String value, final Locale locale) throws ConversionException {
+    public String convertToModel(String value, Class<? extends String> targetType, Locale locale) throws ConversionException {
         return null;
     }
 
     @Override
-    public String convertToPresentation(final String value, final Locale locale) throws ConversionException {
+    public String convertToPresentation(String value, Class<? extends String> targetType, Locale locale) throws ConversionException {
         String shortenedComment = value;
         if (shortenedComment.length() > 70) {
             shortenedComment = shortenedComment.substring(0, 67) + "...";

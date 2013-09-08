@@ -146,7 +146,11 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             //  If un-archiving, un-archive this one first
             wrapped.setArchived(newArchivedState);
             wrapped = internalUpdate(wrapped);
+            currentSession.flush();
+            currentSession.clear();
+            wrapped = (T) get(wrapped.getClass(), wrapped.getId());
         }
+
         for (Photo photo : getAllPhotosForEntity(wrapped)) {
             if (photo.isArchived() == initialArchivedState) {
                 changeArchiveStatus(photo);
@@ -171,7 +175,11 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             }
         }
 
+        currentSession.flush();
+        currentSession.clear();
+
         if (newArchivedState) {
+            wrapped = (T) get(wrapped.getClass(), wrapped.getId());
             //  If un-archiving, un-archive this one last
             wrapped.setArchived(newArchivedState);
             wrapped = internalUpdate(wrapped);

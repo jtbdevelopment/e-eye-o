@@ -24,14 +24,14 @@ public class LocalDateTimeStringConverter implements Converter<String, LocalDate
     }
 
     @Override
-    public LocalDateTime convertToModel(final String value, final Locale locale) throws ConversionException {
+    public LocalDateTime convertToModel(final String value, Class<? extends LocalDateTime> targetType, final Locale locale) throws ConversionException {
         return value == null ? null :
                 DEFAULT_VALUE.equals(value) ? IdObject.UNINITIALISED_LOCAL_DATE_TIME :
                         LocalDateTime.parse(value, DateTimeFormat.forPattern(format).withLocale(locale));
     }
 
     @Override
-    public String convertToPresentation(final LocalDateTime value, final Locale locale) throws ConversionException {
+    public String convertToPresentation(final LocalDateTime value, Class<? extends String> targetType, final Locale locale) throws ConversionException {
         return value == null ? null :
                 value.equals(IdObject.UNINITIALISED_LOCAL_DATE_TIME) ? DEFAULT_VALUE :
                         value.toString(format, locale);

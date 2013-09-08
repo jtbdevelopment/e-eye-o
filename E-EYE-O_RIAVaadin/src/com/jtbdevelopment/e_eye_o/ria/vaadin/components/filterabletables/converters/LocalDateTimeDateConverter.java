@@ -15,12 +15,12 @@ import java.util.Locale;
 public class LocalDateTimeDateConverter implements Converter<Date, LocalDateTime> {
 
     @Override
-    public LocalDateTime convertToModel(final Date value, final Locale locale) throws ConversionException {
+    public LocalDateTime convertToModel(final Date value, Class<? extends LocalDateTime> targetType, final Locale locale) throws ConversionException {
         return value == null ? null : new LocalDateTime(value);
     }
 
     @Override
-    public Date convertToPresentation(final LocalDateTime value, final Locale locale) throws ConversionException {
+    public Date convertToPresentation(final LocalDateTime value, Class<? extends Date> targetType, final Locale locale) throws ConversionException {
         return value == null ? null : value.toDate();
     }
 

@@ -33,7 +33,7 @@ public class ObservationCategorySetStringConverter implements Converter<String, 
     private ObservationCategoryHelper observationCategoryHelper;
 
     @Override
-    public Set<ObservationCategory> convertToModel(final String value, final Locale locale) throws ConversionException {
+    public Set<ObservationCategory> convertToModel(final String value, Class<? extends Set> targetType, final Locale locale) throws ConversionException {
 
         Set<ObservationCategory> results = new HashSet<>();
 
@@ -52,7 +52,7 @@ public class ObservationCategorySetStringConverter implements Converter<String, 
 
     @Override
     @SuppressWarnings("unchecked")
-    public String convertToPresentation(final Set value, final Locale locale) throws ConversionException {
+    public String convertToPresentation(final Set value, Class<? extends String> targetType, final Locale locale) throws ConversionException {
         Set<ObservationCategory> ocs = (Set<ObservationCategory>) value;
         return Joiner.on(", ").skipNulls().join(Collections2.transform(ocs, new Function<ObservationCategory, String>() {
             @Override

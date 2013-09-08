@@ -50,8 +50,8 @@ public class CompositeItemSorter<T extends AppUserOwnedObject> implements ItemSo
             if (converters[i] != null) {
                 Object object1 = entityTable.getContainerProperty(itemId1, propertyIds[i]).getValue();
                 Object object2 = entityTable.getContainerProperty(itemId2, propertyIds[i]).getValue();
-                String value1 = converters[i].convertToPresentation(object1, locale);
-                String value2 = converters[i].convertToPresentation(object2, locale);
+                String value1 = converters[i].convertToPresentation(object1, String.class, locale);
+                String value2 = converters[i].convertToPresentation(object2, String.class, locale);
                 if (value1 != null) {
                     if (value2 != null) {
                         int compare = value1.compareTo(value2);

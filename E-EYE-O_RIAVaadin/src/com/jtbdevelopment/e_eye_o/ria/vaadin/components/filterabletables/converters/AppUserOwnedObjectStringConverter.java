@@ -13,12 +13,12 @@ import java.util.Locale;
 @Component
 public class AppUserOwnedObjectStringConverter implements Converter<String, AppUserOwnedObject> {
     @Override
-    public AppUserOwnedObject convertToModel(final String value, final Locale locale) throws ConversionException {
+    public AppUserOwnedObject convertToModel(final String value, Class<? extends AppUserOwnedObject> targetType, final Locale locale) throws ConversionException {
         return null;
     }
 
     @Override
-    public String convertToPresentation(final AppUserOwnedObject value, final Locale locale) throws ConversionException {
+    public String convertToPresentation(final AppUserOwnedObject value, Class<? extends String> targetType, final Locale locale) throws ConversionException {
         return value == null ? null : value.getSummaryDescription();
     }
 
