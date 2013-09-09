@@ -48,7 +48,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     private static ClassList testClassList2ForU1;
     private static ClassList testClassList3ForU1;
     private static Student testStudentForU1;
-    private static Observation testObservationForU1;
+    private static Observation testObservation1ForU1, testObservation2ForU1, testObservation3ForU1;
 
     @BeforeMethod
     public synchronized void initialize() {
@@ -66,12 +66,26 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         testClassList3ForU1 = rwDAO.create(factory.newClassListBuilder(testUser1).withDescription("Test Class List3").build());
         Student s = factory.newStudentBuilder(testUser1).addClassList(testClassList1ForU1).withFirstName("Test").withLastName("Student").build();
         testStudentForU1 = rwDAO.create(s);
-        testObservationForU1 = rwDAO.create(factory.newObservationBuilder(testUser1).withComment("Test Observation").withObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("CD")).addCategory(testOCsForU1.get("PD")).build());
+        testObservation1ForU1 = rwDAO.create(factory.newObservationBuilder(testUser1).withComment("Test Observation").withObservationSubject(testStudentForU1).addCategory(testOCsForU1.get("CD")).addCategory(testOCsForU1.get("PD")).build());
+        testObservation2ForU1 = rwDAO.create(factory.newObservationBuilder(testUser1).withComment("Test Observation").withObservationSubject(testStudentForU1).build());
+        testObservation3ForU1 = rwDAO.create(factory.newObservationBuilder(testUser1).withComment("Test Observation").withObservationSubject(testClassList1ForU1).addCategory(testOCsForU1.get("CD")).build());
 
         testUser2 = rwDAO.create(factory.newAppUserBuilder().withFirstName("Another").withLastName("Tester").withPassword("pass").withEmailAddress("another@test.com").build());
 
         logger.info("Created Test Tester with ID " + testUser1.getId());
         logger.info("Created Test Tester2 with ID " + testUser2.getId());
+    }
+
+    @Test
+    public void testLookupUserByEmail() {
+        AppUser user = rwDAO.getUser(testUser1.getEmailAddress());
+        assertNotNull(user);
+        assertEquals(testUser1, user);
+    }
+
+    @Test
+    public void testBadUserLookup() {
+        assertNull(rwDAO.getUser("idontexist@imaginary.com"));
     }
 
     @Test
@@ -107,6 +121,26 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
             return;
         }
         fail("Should have had an exception.");
+    }
+
+    @Test
+    public void testGetObservationCategory() {
+        assertTrue(rwDAO.getAllObservationsForObservationCategory(testOCsForU1.get("CD")).containsAll(Arrays.asList(testObservation1ForU1, testObservation3ForU1)));
+        assertTrue(rwDAO.getAllObservationsForObservationCategory(null).containsAll(Arrays.asList(testObservation2ForU1)));
+        assertTrue(rwDAO.getAllObservationsForObservationCategory(testOCsForU1.get("PD")).containsAll(Arrays.asList(testObservation1ForU1)));
+    }
+
+    @Test
+    public void testGetObservationCategoryAndEntityInsideTimeBounds() {
+        assertTrue(rwDAO.getAllObservationsForEntityAndCategory(testStudentForU1, testOCsForU1.get("CD"), testObservation1ForU1.getObservationTimestamp().toLocalDate(), testObservation3ForU1.getObservationTimestamp().toLocalDate()).containsAll(Arrays.asList(testObservation1ForU1)));
+        assertTrue(rwDAO.getAllObservationsForEntityAndCategory(testClassList1ForU1, testOCsForU1.get("CD"), testObservation1ForU1.getObservationTimestamp().toLocalDate(), testObservation3ForU1.getObservationTimestamp().toLocalDate()).containsAll(Arrays.asList(testObservation3ForU1)));
+        assertTrue(rwDAO.getAllObservationsForEntityAndCategory(testStudentForU1, null, testObservation1ForU1.getObservationTimestamp().toLocalDate(), testObservation3ForU1.getObservationTimestamp().toLocalDate()).containsAll(Arrays.asList(testObservation2ForU1)));
+        assertTrue(rwDAO.getAllObservationsForEntityAndCategory(testStudentForU1, testOCsForU1.get("PD"), testObservation1ForU1.getObservationTimestamp().toLocalDate(), testObservation3ForU1.getObservationTimestamp().toLocalDate()).containsAll(Arrays.asList(testObservation1ForU1)));
+    }
+
+    @Test
+    public void testGetObservationCategoryAndEntityOutsideTimeBounds() {
+        assertTrue(rwDAO.getAllObservationsForEntityAndCategory(testStudentForU1, testOCsForU1.get("CD"), testObservation1ForU1.getObservationTimestamp().toLocalDate().minusDays(2), testObservation3ForU1.getObservationTimestamp().toLocalDate().minusDays(2)).isEmpty());
     }
 
     @Test
@@ -191,12 +225,12 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testCreatePhotoForObservation() {
-        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).withTimestamp(new LocalDateTime()).withPhotoFor(testObservationForU1).build());
+        Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).withTimestamp(new LocalDateTime()).withPhotoFor(testObservation1ForU1).build());
         Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
             if (setPhoto.equals(photo)) {
-                assertEquals(testObservationForU1, setPhoto.getPhotoFor());
+                assertEquals(testObservation1ForU1, setPhoto.getPhotoFor());
             }
         }
     }

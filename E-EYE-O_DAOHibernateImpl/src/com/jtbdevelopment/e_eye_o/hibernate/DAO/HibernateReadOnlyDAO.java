@@ -60,14 +60,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     public AppUser getUser(final String emailAddress) {
         final Query query = sessionFactory.getCurrentSession().createQuery("from AppUser where emailAddress = :emailAddress");
         query.setParameter("emailAddress", emailAddress);
-        List<AppUser> users = (List<AppUser>) query.list();
-        if (users.isEmpty()) {
-            return null;
-        }
-        if (users.size() > 1) {
-            throw new IllegalStateException("Duplicate users with same emailAddress - not possible");
-        }
-        return users.get(0);
+        return (AppUser) query.uniqueResult();
     }
 
     @Override
