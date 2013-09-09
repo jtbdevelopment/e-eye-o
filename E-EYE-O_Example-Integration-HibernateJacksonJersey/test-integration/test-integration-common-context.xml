@@ -29,21 +29,21 @@
 
     <bean id="rememberMeServices"
           class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
-        <property name="userDetailsService" ref="userDetailsService"/>
-        <property name="tokenRepository" ref="persistentTokenRepository"/>
+        <constructor-arg name="userDetailsService" ref="userDetailsService"/>
+        <constructor-arg name="tokenRepository" ref="persistentTokenRepository"/>
         <!--property name="useSecureCookie" value="true"/-->  <!--  TODO -->
-        <property name="key" value="EEYEOTEST"/>
+        <constructor-arg name="key" value="EEYEOTEST"/>
     </bean>
 
     <bean id="rememberMeAuthenticationProvider"
           class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
-        <property name="key" value="EEYEOTEST"/>
+        <constructor-arg name="key" value="EEYEOTEST"/>
     </bean>
 
     <bean id="rememberMeFilter"
           class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
-        <property name="authenticationManager" ref="authenticationManager"/>
-        <property name="rememberMeServices" ref="rememberMeServices"/>
+        <constructor-arg name="authenticationManager" ref="authenticationManager"/>
+        <constructor-arg name="rememberMeServices" ref="rememberMeServices"/>
     </bean>
 
     <security:authentication-manager alias="authenticationManager">
