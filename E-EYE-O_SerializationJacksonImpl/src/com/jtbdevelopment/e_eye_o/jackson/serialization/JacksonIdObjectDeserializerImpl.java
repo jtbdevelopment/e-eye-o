@@ -110,10 +110,6 @@ public class JacksonIdObjectDeserializerImpl implements JacksonIdObjectDeseriali
         if (fieldType.isArray()) {
             if (byte.class.isAssignableFrom(fieldType.getComponentType())) {
                 String s = parser.getValueAsString();
-                //  TODO - better ways - use different variant - need to do on ios side too tho
-                s = s.replace('-', '+');
-                s = s.replace('_', '/');
-                s = s.replace(',', '=');
                 byte[] decoded = Base64.decode(s.getBytes());
                 if ("imageData".equals(fieldName) && returnObject instanceof Photo) {
                     photoHelper.setPhotoImages((Photo) returnObject, decoded);

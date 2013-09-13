@@ -58,10 +58,6 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
                 writeSet(generator, (Set) fieldValue);
             } else if (valueType.isArray()) {
                 String base64 = new String(Base64.encode((byte[]) fieldValue));
-                //  TODO - better implementation of url safe encoding
-                base64 = base64.replace('+', '-');
-                base64 = base64.replace('/', '_');
-                base64 = base64.replace('=', ',');
                 generator.writeObject(base64);
             } else {
                 generator.writeObject(fieldValue);
