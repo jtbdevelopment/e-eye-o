@@ -46,10 +46,10 @@ public class AppUserEntityResource extends SecurityAwareResource {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
-    public Response updateEntity(@FormParam("appUserOwnedObject") final String appUserOwnedObjectString) {
+    public Response updateEntity(final String appUserOwnedObjectString) {
         try {
             AppUser sessionAppUser = getSessionAppUser();
 

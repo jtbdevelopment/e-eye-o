@@ -136,9 +136,9 @@ public class AppUserResource extends SecurityAwareResource {
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
-    public Response createEntity(@FormParam("appUserOwnedObject") final String appUserOwnedObjectString) {
+    public Response createEntity(final String appUserOwnedObjectString) {
         try {
             AppUser sessionAppUser = getSessionAppUser();
             AppUserOwnedObject newObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
