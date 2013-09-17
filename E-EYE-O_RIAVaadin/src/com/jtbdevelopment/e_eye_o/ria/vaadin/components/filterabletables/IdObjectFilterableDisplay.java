@@ -278,12 +278,19 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     }
 
     public void setDisplayDriver(final IdObject displayDriver) {
-        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": display driver changed to " + displayDriver.getId());
+        if (displayDriver == null) {
+            return;
+        }
+        AppUser appUser = getSession().getAttribute(AppUser.class);
+        if (appUser == null) {
+            return;
+        }
+        logger.trace(appUser.getId() + ": display driver changed to " + displayDriver.getId());
         this.displayDriver = displayDriver;
         entities.removeAllItems();
         if (displayDriver instanceof AppUser) {
-            if (displayDriver.equals(appUser)) {
-                entities.addAll(readWriteDAO.getEntitiesForUser(entityType, appUser));
+            if (displayDriver.equals(this.appUser)) {
+                entities.addAll(readWriteDAO.getEntitiesForUser(entityType, this.appUser));
                 refreshSizeAndSort();
             }
         }

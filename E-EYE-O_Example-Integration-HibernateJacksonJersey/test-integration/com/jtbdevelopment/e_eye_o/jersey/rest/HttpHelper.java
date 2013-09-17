@@ -10,7 +10,7 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,6 @@ import org.testng.AssertJUnit;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 @Component
@@ -43,24 +42,29 @@ public class HttpHelper {
     }
 
     <T extends IdObject> HttpResponse httpPost(final String uri, final HttpClient httpClient, final String paramName, final T paramValue) throws IOException {
-        List<NameValuePair> formValues = new LinkedList<>();
-        formValues.add(new BasicNameValuePair(paramName, jsonIdObjectSerializer.writeEntity(paramValue)));
-        return httpPost(uri, httpClient, formValues);
+        return httpPostJson(uri, httpClient, jsonIdObjectSerializer.writeEntity(paramValue));
     }
 
-    public HttpResponse httpPost(String uri, HttpClient httpClient, List<NameValuePair> formValues) throws IOException {
+    public HttpResponse httpPostJson(String uri, HttpClient httpClient, final String json) throws IOException {
+        StringEntity jsonEntity = new StringEntity(json);
+        HttpPost httpPost = new HttpPost(uri);
+        httpPost.setHeader("Content-Type", "application/json");
+        httpPost.setEntity(jsonEntity);
+        return httpClient.execute(httpPost);
+    }
+
+    public HttpResponse httpPostForm(String uri, HttpClient httpClient, List<NameValuePair> formValues) throws IOException {
         UrlEncodedFormEntity postForm = new UrlEncodedFormEntity(formValues);
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setEntity(postForm);
         return httpClient.execute(httpPost);
     }
 
-    <T extends IdObject> HttpResponse httpPut(final String uri, final HttpClient httpClient, final String paramName, final T paramValue) throws IOException {
-        List<NameValuePair> formValues = new LinkedList<>();
-        formValues.add(new BasicNameValuePair(paramName, jsonIdObjectSerializer.writeEntity(paramValue)));
-        UrlEncodedFormEntity postForm = new UrlEncodedFormEntity(formValues);
+    <T extends IdObject> HttpResponse httpPut(final String uri, final HttpClient httpClient, final T entity) throws IOException {
+        StringEntity stringEntity = new StringEntity(jsonIdObjectSerializer.writeEntity(entity));
         HttpPut httpPut = new HttpPut(uri);
-        httpPut.setEntity(postForm);
+        httpPut.setHeader("Content-Type", "application/json");
+        httpPut.setEntity(stringEntity);
         return httpClient.execute(httpPut);
     }
 
@@ -80,8 +84,8 @@ public class HttpHelper {
         return getJSONFromResponse(response);
     }
 
-    <T extends IdObject> String getJSONFromPut(final String uri, final HttpClient client, final String paramName, final T paramValue) throws IOException {
-        HttpResponse response = httpPut(uri, client, paramName, paramValue);
+    <T extends IdObject> String getJSONFromPut(final String uri, final HttpClient client, final T entity) throws IOException {
+        HttpResponse response = httpPut(uri, client, entity);
         return getJSONFromResponse(response);
     }
 

@@ -1,7 +1,5 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectUpdateHelper;
@@ -13,6 +11,7 @@ import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -242,24 +240,38 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             return;  //  Already deleted?
         }
 
-        Collection<AppUserOwnedObject> filtered = Collections2.filter(getEntitiesForUser(AppUserOwnedObject.class, wrapped), new Predicate<AppUserOwnedObject>() {
-            @Override
-            public boolean apply(@Nullable AppUserOwnedObject input) {
-                return input != null && !(input instanceof DeletedObject);
+        for (Class<? extends AppUserOwnedObject> appUserClass : Arrays.asList(Student.class, ClassList.class, ObservationCategory.class, TwoPhaseActivity.class, AppUserSettings.class)) {
+            Collection<? extends AppUserOwnedObject> deleteList = getEntitiesForUser(appUserClass, wrapped);
+            for (AppUserOwnedObject entity : deleteList) {
+                delete(entity);
             }
-        });
-        for (AppUserOwnedObject entity : filtered) {
-            delete(entity);
         }
         for (DeletedObject deletedObject : getEntitiesForUser(DeletedObject.class, wrapped)) {
             currentSession.delete(deletedObject);
         }
+        currentSession.flush();
+
+        Query query = sessionFactory.getCurrentSession().createQuery("delete  " + sessionFactory.getClassMetadata(HibernateHistory.class).getEntityName() + " where appUser = :appUser");
+        query.setParameter("appUser", wrapped);
+        query.executeUpdate();
+        currentSession.flush();
 
         currentSession.delete(wrapped);
         if (eventBus != null) {
             eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.DELETED, wrapped));
         }
         //  TODO - test
+    }
+
+    @Override
+    public void deactivateUser(final AppUser user) {
+        AppUser wrapped = wrapperFactory.wrap(user);
+        wrapped.setActive(false);
+
+        sessionFactory.getCurrentSession().update(wrapped);
+        if (eventBus != null) {
+            eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
+        }
     }
 
     //  TODO - mark delete and allow undelete

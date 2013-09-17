@@ -52,7 +52,6 @@ import static org.testng.AssertJUnit.*;
 @Test(groups = {"integration"})
 public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContextTests {
 
-    public static final String APP_USER = "appUser";
     public static final String APP_USER_OWNED_OBJECT = "appUserOwnedObject";
     @Autowired
     private HttpHelper httpHelper;
@@ -187,7 +186,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         formValues.add(new BasicNameValuePair("password", user.getPassword()));
         formValues.add(new BasicNameValuePair(rememberMeServices.getParameter(), "true"));
 
-        HttpResponse response = httpHelper.httpPost(uri, httpClient, formValues);
+        HttpResponse response = httpHelper.httpPostForm(uri, httpClient, formValues);
         logger.info(EntityUtils.toString(response.getEntity()));
         return httpClient;
     }
@@ -222,7 +221,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         testUser1.setPassword("new"); //  should be ignored
         testUser1.setLastLogout(new DateTime());  // should be ignored
 
-        String s = httpHelper.getJSONFromPut(USERS_URI, userClient1, APP_USER, testUser1);
+        String s = httpHelper.getJSONFromPut(USERS_URI, userClient1, testUser1);
 
         AppUser dbTestUser1 = readWriteDAO.get(AppUser.class, testUser1.getId());
         assertEquals(testUser1.getLastName(), dbTestUser1.getLastName());
@@ -247,7 +246,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         testUser2.setPassword("new");  //  should be ignored
         testUser2.setLastLogout(new DateTime());  // should be ignored
 
-        String s = httpHelper.getJSONFromPut(USERS_URI, adminClient, APP_USER, testUser2);
+        String s = httpHelper.getJSONFromPut(USERS_URI, adminClient, testUser2);
 
         AppUser dbTestUser2 = readWriteDAO.get(AppUser.class, testUser2.getId());
         assertEquals(testUser2.getFirstName(), dbTestUser2.getFirstName());
@@ -266,7 +265,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         AppUser user2 = httpHelper.easyClone(testUser2);
         user2.setLastName("Won't change");
 
-        HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, APP_USER, user2);
+        HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, user2);
         EntityUtils.consumeQuietly(response.getEntity());
         assertEquals(javax.ws.rs.core.Response.Status.FORBIDDEN.getStatusCode(), response.getStatusLine().getStatusCode());
 
@@ -278,7 +277,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     public void testTryingToAddANewUserFails() throws Exception {
         AppUser newUser = idObjectFactory.newAppUserBuilder().withFirstName("New").withEmailAddress("newuser@new.com").build();
 
-        HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, APP_USER, newUser);
+        HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, newUser);
         EntityUtils.consumeQuietly(response.getEntity());
         assertEquals(javax.ws.rs.core.Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine().getStatusCode());
     }
@@ -287,7 +286,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     public void testTryingToAddANewWithBadIdUserFails() throws Exception {
         AppUser newUser = idObjectFactory.newAppUserBuilder().withFirstName("New").withEmailAddress("newuser@new.com").withId("someid").build();
 
-        HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, APP_USER, newUser);
+        HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, newUser);
         EntityUtils.consumeQuietly(response.getEntity());
         assertEquals(javax.ws.rs.core.Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine().getStatusCode());
     }
@@ -404,7 +403,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
         String newDescription = "Modified Class";
         createdClassList.setDescription(newDescription);
-        newJson = httpHelper.getJSONFromPut(uri, userClient1, APP_USER_OWNED_OBJECT, createdClassList);
+        newJson = httpHelper.getJSONFromPut(uri, userClient1, createdClassList);
         ClassList modifiedClassList = jsonIdObjectSerializer.read(newJson);
         assertTrue(modifiedClassList.equals(createdClassList));
         assertEquals(newDescription, modifiedClassList.getDescription());

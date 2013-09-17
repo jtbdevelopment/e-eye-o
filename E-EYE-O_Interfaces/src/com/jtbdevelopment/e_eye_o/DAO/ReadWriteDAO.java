@@ -43,6 +43,8 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
      */
     void deleteUser(final AppUser user);
 
+    void deactivateUser(final AppUser user);
+
     /**
      * Will return the set of items which were deleted along with the requested item
      * <p/>

@@ -6,6 +6,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
+import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TitleBarComposite;
@@ -101,6 +102,17 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
             logger.trace(appUser.getId() + ": logoutEventHandlerCalled.");
             readWriteDAO.updateAppUserLogout(appUser);
             getPage().setLocation("/j_spring_security_logout");
+        }
+    }
+
+    @Subscribe
+    public void deleteUserHandler(final IdObjectChanged idObjectChanged) {
+        if (AppUser.class.isAssignableFrom(idObjectChanged.getEntityType()) && idObjectChanged.getChangeType().equals(IdObjectChanged.ChangeType.DELETED)) {
+            AppUser appUser = getSession().getAttribute(AppUser.class);
+            if (appUser.equals(idObjectChanged.getEntity())) {
+                logger.trace(appUser.getId() + ": deleteUserHandler called.");
+                getPage().setLocation("/j_spring_security_logout");
+            }
         }
     }
 }

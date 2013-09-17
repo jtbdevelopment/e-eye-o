@@ -45,9 +45,9 @@ public class AppUsersResource extends SecurityAwareResource {
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
-    public Response updateUser(@FormParam("appUser") final String appUserString) {
+    public Response updateUser(final String appUserString) {
         AppUser sessionAppUser = getSessionAppUser();
 
         AppUser updateAppUser = jsonIdObjectSerializer.read(appUserString);
