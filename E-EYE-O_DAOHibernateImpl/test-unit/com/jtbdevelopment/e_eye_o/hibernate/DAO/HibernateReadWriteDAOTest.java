@@ -40,7 +40,7 @@ public class HibernateReadWriteDAOTest {
     private ClassMetadata metadata, deletedMetaData;
     private ApplicationContext appContext;
     private IdObjectSerializer serializer;
-    private Query query1, query2, query3;
+    private Query query1, query3;
 
     private ClassList classListImpl, classListWrapped, classListLoaded;
     private Observation observationImpl, observationWrapped, observationLoaded;
@@ -68,7 +68,6 @@ public class HibernateReadWriteDAOTest {
         session = context.mock(Session.class);
         idObjectUpdateHelper = context.mock(IdObjectUpdateHelper.class);
         query1 = context.mock(Query.class, "Q1");
-        query2 = context.mock(Query.class, "Q2");
         query3 = context.mock(Query.class, "Q3");
         daoIdObjectWrapperFactory = context.mock(DAOIdObjectWrapperFactory.class);
         classListImpl = context.mock(ClassList.class, "CLI");
@@ -163,10 +162,18 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(AppUser.class));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(appUserWrapped.getClass());
             will(returnValue(AppUser.class));
-            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(DeletedObject.class);
-            will(returnValue(DeletedObject.class));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(AppUser.class);
             will(returnValue(AppUser.class));
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(Student.class);
+            will(returnValue(Student.class));
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(ClassList.class);
+            will(returnValue(ClassList.class));
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(ObservationCategory.class);
+            will(returnValue(ObservationCategory.class));
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(TwoPhaseActivity.class);
+            will(returnValue(TwoPhaseActivity.class));
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(DeletedObject.class);
+            will(returnValue(DeletedObject.class));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(AppUserOwnedObject.class);
             will(returnValue(AppUserOwnedObject.class));
             allowing(sessionFactory).getCurrentSession();
@@ -177,6 +184,8 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(deletedWrapped));
             allowing(daoIdObjectWrapperFactory).wrap(classListImpl);
             will(returnValue(classListWrapped));
+            allowing(daoIdObjectWrapperFactory).wrap(classListLoaded);
+            will(returnValue(classListLoaded));
             allowing(daoIdObjectWrapperFactory).wrap(classListWrapped);
             will(returnValue(classListWrapped));
             allowing(daoIdObjectWrapperFactory).wrap(observationImpl);
@@ -612,54 +621,6 @@ public class HibernateReadWriteDAOTest {
         createStandardDeleteExpectations(wrapped, loaded, relatedPhotos, relatedObservations);
 
         dao.delete(impl);
-    }
-
-    @Test
-    public void testDeletingAUser() {
-        createDeleteUserExpectations();
-
-        dao.deleteUser(appUserImpl);
-    }
-
-    private void createDeleteUserExpectations() {
-        final List<AppUserOwnedObject> ownedObjects = Arrays.asList(photoLoaded, studentLoaded, deletedLoaded);
-        final List<DeletedObject> deletedList = Arrays.asList(deletedLoaded);
-        context.checking(new Expectations() {{
-            one(appUserWrapped).getId();
-            will(returnValue("X"));
-            one(session).get(TN, "X");
-            will(returnValue(appUserLoaded));
-            one(session).createQuery("from TN where appUser = :user");
-            will(returnValue(query1));
-            one(query1).setParameter("user", appUserLoaded);
-            will(returnValue(query1));
-            one(query1).list();
-            will(returnValue(ownedObjects));
-            one(session).createQuery("from DN where appUser = :user");
-            will(returnValue(query2));
-            one(query2).setParameter("user", appUserLoaded);
-            will(returnValue(query2));
-            one(query2).list();
-            will(returnValue(deletedList));
-            one(session).delete(appUserLoaded);
-            one(session).delete(deletedLoaded);
-        }});
-
-        final Photo pWrapped = photoWrapped;
-        final Photo pLoaded = photoLoaded;
-        final List<Photo> pRelatedPhotos = Collections.emptyList();
-        final List<Observation> pRelatedObservations = Collections.emptyList();
-
-        createStandardDeleteExpectations(pWrapped, pLoaded, pRelatedPhotos, pRelatedObservations);
-
-        final Student sWrapped = studentWrapped;
-        final Student sLoaded = studentLoaded;
-        final List<Photo> sRelatedPhotos = Arrays.asList(photoLoaded);
-        final List<Observation> sRelatedObservations = Arrays.asList(observationLoaded);
-
-        createStandardDeleteExpectations(sWrapped, sLoaded, sRelatedPhotos, sRelatedObservations);
-
-        createPhotoQueryMopUp();
     }
 
     private void createPhotoQueryMopUp() {
