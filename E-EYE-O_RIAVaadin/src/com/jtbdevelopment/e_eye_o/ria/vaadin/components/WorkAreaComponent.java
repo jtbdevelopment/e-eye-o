@@ -9,10 +9,16 @@ import com.jtbdevelopment.e_eye_o.ria.events.ReportsClicked;
 import com.jtbdevelopment.e_eye_o.ria.events.SettingsClicked;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas.*;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
-import com.vaadin.ui.*;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Runo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -25,50 +31,29 @@ import javax.annotation.PostConstruct;
  */
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class WorkAreaComponent extends CustomComponent {
+public class WorkAreaComponent extends CustomComponent implements BeanFactoryAware {
     private static final Logger logger = LoggerFactory.getLogger(WorkAreaComponent.class);
+
+    private BeanFactory beanFactory;
 
     private final Panel panel = new Panel();
     private final VerticalLayout verticalLayout = new VerticalLayout();
 
     @Autowired
-    private StudentsWorkArea studentsWorkArea;
-    @Autowired
-    private ClassListsWorkArea classListsWorkArea;
-    @Autowired
-    private ObservationsWorkArea observationsWorkArea;
-    @Autowired
-    private PhotosWorkArea photosWorkArea;
-    @Autowired
-    private ObservationCategoriesWorkArea observationCategoriesWorkArea;
-    @Autowired
-    private HelpWorkArea helpWorkArea;
-    @Autowired
-    private SettingsWorkArea settingsWorkArea;
-    @Autowired
-    private ReportsWorkArea reportsWorkArea;
-
-    @Autowired
     private EventBus eventBus;
+
+    private CustomComponent currentComponent;
 
     @PostConstruct
     public void postConstruct() {
         verticalLayout.setSizeFull();
-        verticalLayout.addComponent(studentsWorkArea);
-        verticalLayout.addComponent(classListsWorkArea);
-        verticalLayout.addComponent(observationCategoriesWorkArea);
-        verticalLayout.addComponent(observationsWorkArea);
-        verticalLayout.addComponent(photosWorkArea);
-        verticalLayout.addComponent(helpWorkArea);
-        verticalLayout.addComponent(settingsWorkArea);
-        verticalLayout.addComponent(reportsWorkArea);
 
         panel.setSizeFull();
         panel.setContent(verticalLayout);
         panel.addStyleName(Runo.PANEL_LIGHT);
         setCompositionRoot(panel);
 
-        prepForTabSwitch();
+        prepForTabSwitch(null);
         setSizeFull();
         eventBus.register(this);
     }
@@ -81,8 +66,7 @@ public class WorkAreaComponent extends CustomComponent {
         }
         logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to reports");
         Notification.show("Switching to Reports");
-        prepForTabSwitch();
-        reportsWorkArea.setVisible(true);
+        prepForTabSwitch(beanFactory.getBean(ReportsWorkArea.class));
     }
 
     @Subscribe
@@ -93,8 +77,7 @@ public class WorkAreaComponent extends CustomComponent {
         }
         logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to settings");
         Notification.show("Switching to Settings");
-        prepForTabSwitch();
-        settingsWorkArea.setVisible(true);
+        prepForTabSwitch(beanFactory.getBean(SettingsWorkArea.class));
     }
 
     @Subscribe
@@ -105,8 +88,7 @@ public class WorkAreaComponent extends CustomComponent {
         }
         logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to help");
         Notification.show("Switching to Help");
-        prepForTabSwitch();
-        helpWorkArea.setVisible(true);
+        prepForTabSwitch(beanFactory.getBean(HelpWorkArea.class));
     }
 
     @Subscribe
@@ -117,32 +99,35 @@ public class WorkAreaComponent extends CustomComponent {
         }
         logger.trace(getSession().getAttribute(AppUser.class).getId() + ": Switching to " + event.getEntitySettings().plural());
         Notification.show("Switching to " + event.getEntitySettings().plural());
-        prepForTabSwitch();
         switch (event.getEntitySettings().plural()) {
             case "Students":
-                studentsWorkArea.setVisible(true);
+                prepForTabSwitch(beanFactory.getBean(StudentsWorkArea.class));
                 break;
             case "Classes":
-                classListsWorkArea.setVisible(true);
+                prepForTabSwitch(beanFactory.getBean(ClassListsWorkArea.class));
                 break;
             case "Observations":
-                observationsWorkArea.setVisible(true);
+                prepForTabSwitch(beanFactory.getBean(ObservationsWorkArea.class));
                 break;
             case "Categories":
-                observationCategoriesWorkArea.setVisible(true);
+                prepForTabSwitch(beanFactory.getBean(ObservationCategoriesWorkArea.class));
                 break;
             case "Photos":
-                photosWorkArea.setVisible(true);
+                prepForTabSwitch(beanFactory.getBean(PhotosWorkArea.class));
                 break;
             default:
                 logger.warn("Received change data area with unknown entity type " + event.getEntitySettings().plural());
         }
     }
 
-    private void prepForTabSwitch() {
+    private void prepForTabSwitch(final CustomComponent newComponent) {
         ComponentUtils.clearAllErrors(verticalLayout);
-        for (Component child : verticalLayout) {
-            child.setVisible(false);
+        if (currentComponent != null) {
+            verticalLayout.removeComponent(currentComponent);
+        }
+        currentComponent = newComponent;
+        if (currentComponent != null) {
+            verticalLayout.addComponent(currentComponent);
         }
     }
 
@@ -150,5 +135,10 @@ public class WorkAreaComponent extends CustomComponent {
     public void detach() {
         eventBus.unregister(this);
         super.detach();
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
     }
 }
