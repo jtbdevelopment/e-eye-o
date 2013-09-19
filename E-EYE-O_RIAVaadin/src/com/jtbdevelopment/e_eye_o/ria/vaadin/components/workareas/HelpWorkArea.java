@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 import com.jtbdevelopment.e_eye_o.helpandlegal.Help;
 import com.jtbdevelopment.e_eye_o.helpandlegal.SafetyTips;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.legal.LegalTabSheet;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.quicktour.QuickTour;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
@@ -33,12 +34,16 @@ public class HelpWorkArea extends CustomComponent {
     @Autowired
     private Help help;
 
+    @Autowired
+    private QuickTour quickTour;
+
     @PostConstruct
     public void postConstruct() {
         setSizeFull();
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.addStyleName(Runo.TABSHEET_SMALL);
+        tabSheet.setSizeFull();
 
         Panel panel;
 
@@ -49,6 +54,12 @@ public class HelpWorkArea extends CustomComponent {
             panel.setContent(new Label(help.getText(), ContentMode.HTML));
             tabSheet.addTab(panel).setCaption(help.getLabel());
         }
+
+        panel = new Panel();
+        panel.setSizeFull();
+        panel.addStyleName(Runo.PANEL_LIGHT);
+        panel.setContent(quickTour);
+        tabSheet.addTab(panel).setCaption("Quick Tour");
 
         if (StringUtils.hasLength(safetyTips.getText())) {
             panel = new Panel();

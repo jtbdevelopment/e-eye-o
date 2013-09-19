@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Scope;
 public class ClassListEditorDialogWindow extends GeneratedEditorDialogWindow<ClassList> {
 
     public ClassListEditorDialogWindow() {
-        //  height seems to be ignored as less than some minimum it wants
-        super(ClassList.class, 50, 2);
+        super(ClassList.class, 50, 20);
     }
 }

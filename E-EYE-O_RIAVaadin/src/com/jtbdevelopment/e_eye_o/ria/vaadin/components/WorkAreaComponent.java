@@ -69,6 +69,7 @@ public class WorkAreaComponent extends CustomComponent {
         setCompositionRoot(panel);
 
         prepForTabSwitch();
+        setSizeFull();
         eventBus.register(this);
     }
 

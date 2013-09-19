@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationCategoryEditorDialogWindow extends GeneratedEditorDialogWindow<ObservationCategory> {
     public ObservationCategoryEditorDialogWindow() {
-        //  height seems to be ignored as less than some minimum it wants
-        super(ObservationCategory.class, 50, 2);
+        super(ObservationCategory.class, 50, 20);
     }
 }

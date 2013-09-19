@@ -12,8 +12,6 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class Logo extends CustomComponent {
 
-    private final Label beta;
-
     public Logo() {
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setSizeUndefined();
@@ -37,11 +35,6 @@ public class Logo extends CustomComponent {
         horizontalLayout.setSizeUndefined();
 
         verticalLayout.addComponent(horizontalLayout);
-        beta = new Label("BETA");
-        beta.setSizeUndefined();
-        beta.addStyleName("beta");
-        verticalLayout.addComponent(beta);
-        verticalLayout.setComponentAlignment(beta, Alignment.MIDDLE_CENTER);
 
         setCompositionRoot(verticalLayout);
         setSizeUndefined();
@@ -49,6 +42,5 @@ public class Logo extends CustomComponent {
 
     public void setBigLogo() {
         addStyleName("big-logo");
-        beta.addStyleName("big-logo-beta");
     }
 }

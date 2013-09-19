@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.views;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.quicktour.QuickTour;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.ResetRequest;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration.LegalView;
@@ -56,6 +57,9 @@ public class LoginView extends VerticalLayout implements View {
 
     @Autowired
     private Logo logo;
+
+    @Autowired
+    private QuickTour quickTour;
 
     @Value("${email.contactus}")
     private String contact;
@@ -157,15 +161,45 @@ public class LoginView extends VerticalLayout implements View {
         VerticalLayout helpSection = new VerticalLayout();
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setSpacing(true);
+
+        helpSection.addComponent(new Label("<br/>", ContentMode.HTML));
+
         Link registerLink = new Link("Register for Account", new ExternalResource("#!" + LegalView.VIEW_NAME));
         horizontalLayout.addComponent(registerLink);
         Link forgotPasswordLink = new Link("Forgot Password?", new ExternalResource("#!" + ResetRequest.VIEW_NAME));
         horizontalLayout.addComponent(forgotPasswordLink);
         helpSection.addComponent(horizontalLayout);
         helpSection.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);
-        Label description = new Label("Electronic Early Years Educator's Observations");
+
+        helpSection.addComponent(new Label("<br/>", ContentMode.HTML));
+
+        Label description = new Label("<H2>Electronic Early Years Educator's Observations</H2>", ContentMode.HTML);
+        description.addStyleName("bold");
         helpSection.addComponent(description);
         helpSection.setComponentAlignment(description, Alignment.MIDDLE_CENTER);
+
+        final Button tour = new Button("Take the Quick Tour!");
+        tour.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                Window window = new Window();
+                Panel panel = new Panel();
+                panel.setSizeFull();
+                panel.addStyleName(Runo.PANEL_LIGHT);
+
+                window.setContent(quickTour);
+                window.setSizeFull();
+                window.setModal(true);
+                window.setCloseShortcut(ShortcutAction.KeyCode.ESCAPE);
+
+                tour.getUI().addWindow(window);
+            }
+        });
+        helpSection.addComponent(tour);
+        helpSection.setComponentAlignment(tour, Alignment.MIDDLE_CENTER);
+
+        helpSection.addComponent(new Label("<br/>", ContentMode.HTML));
+
         Link link = new Link("Contact Us!", new ExternalResource("mailto:" + contact));
         link.setSizeUndefined();
         helpSection.addComponent(link);
