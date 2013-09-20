@@ -104,7 +104,6 @@ public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
     @Override
     public void setDisplayDriver(final IdObject driver) {
         super.setDisplayDriver(driver);
-        //  TODO - show all for a student?
         if (driver instanceof AppUserOwnedObject) {
             entities.addAll(readWriteDAO.getAllPhotosForEntity((AppUserOwnedObject) driver));
             setDefaultPhotoFor((AppUserOwnedObject) driver);

@@ -323,7 +323,6 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         showSize.setValue(settings.getSettingAsInt(baseConfigSetting + DEFAULT_SIZE_SETTING, entitySettings.defaultPageSize()));
         activeCB.setValue(settings.getSettingAsBoolean(baseConfigSetting + SHOW_ACTIVE_SETTING, true));
         archivedCB.setValue(settings.getSettingAsBoolean(baseConfigSetting + SHOW_ARCHIVED_SETTING, false));
-        archivedCB.setValue(Boolean.FALSE);
     }
 
     @Override

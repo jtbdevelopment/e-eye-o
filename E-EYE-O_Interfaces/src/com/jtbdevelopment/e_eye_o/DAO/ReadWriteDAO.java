@@ -32,6 +32,8 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
 
     TwoPhaseActivity resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword);
 
+    TwoPhaseActivity cancelResetPassword(final TwoPhaseActivity relatedActivity);
+
     AppUser updateAppUserLogout(final AppUser appUser);
 
     AppUserSettings updateSettings(final AppUser appUser, Map<String, Object> settings);

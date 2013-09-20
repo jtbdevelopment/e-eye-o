@@ -107,11 +107,21 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
 
     @Subscribe
     public void deleteUserHandler(final IdObjectChanged idObjectChanged) {
-        if (AppUser.class.isAssignableFrom(idObjectChanged.getEntityType()) && idObjectChanged.getChangeType().equals(IdObjectChanged.ChangeType.DELETED)) {
-            AppUser appUser = getSession().getAttribute(AppUser.class);
+        AppUser appUser = getSession().getAttribute(AppUser.class);
+        if (AppUser.class.isAssignableFrom(idObjectChanged.getEntityType())) {
             if (appUser.equals(idObjectChanged.getEntity())) {
-                logger.trace(appUser.getId() + ": deleteUserHandler called.");
-                getPage().setLocation("/j_spring_security_logout");
+                if (IdObjectChanged.ChangeType.DELETED.equals(idObjectChanged.getChangeType())) {
+                    logger.trace(appUser.getId() + ": deleteUserHandler called.");
+                    getPage().setLocation("/j_spring_security_logout");
+                } else {
+                    getSession().setAttribute(AppUser.class, (AppUser) idObjectChanged.getEntity());
+                }
+            }
+        }
+        if (AppUserSettings.class.isAssignableFrom(idObjectChanged.getEntityType())) {
+            AppUserSettings settings = (AppUserSettings) idObjectChanged.getEntity();
+            if (appUser.equals(settings.getAppUser())) {
+                getSession().setAttribute(AppUserSettings.class, settings);
             }
         }
     }

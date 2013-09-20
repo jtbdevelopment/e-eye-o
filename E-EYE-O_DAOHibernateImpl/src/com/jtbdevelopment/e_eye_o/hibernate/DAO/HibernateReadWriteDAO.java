@@ -66,14 +66,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         dealWithNewObservations(wrapped);
         if (wrapped instanceof AppUserOwnedObject) {
             saveHistory((AppUserOwnedObject) wrapped);
-            if (eventBus != null) {
-                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.ADDED, (AppUserOwnedObject) wrapped));
-            }
-        } else {
-            if (eventBus != null) {
-                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.ADDED, wrapped));
-            }
         }
+
+        publishCreate(wrapped);
         sessionFactory.getCurrentSession().flush();
         sessionFactory.getCurrentSession().clear();
         return (T) get(wrapped.getClass(), wrapped.getId());
@@ -114,14 +109,8 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (entity instanceof AppUserOwnedObject) {
             sessionFactory.getCurrentSession().flush();
             saveHistory((AppUserOwnedObject) wrapped);
-            if (eventBus != null) {
-                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, (AppUserOwnedObject) wrapped));
-            }
-        } else {
-            if (eventBus != null) {
-                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
-            }
         }
+        publishUpdate(wrapped);
         sessionFactory.getCurrentSession().flush();
         sessionFactory.getCurrentSession().clear();
         return (T) get(wrapped.getClass(), wrapped.getId());
@@ -213,6 +202,16 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     }
 
     @Override
+    public TwoPhaseActivity cancelResetPassword(final TwoPhaseActivity relatedActivity) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        relatedActivity.setArchived(true);
+        relatedActivity.setExpirationTime(new DateTime());
+        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(relatedActivity);
+        currentSession.update(wrappedRelatedActivity);
+        return wrappedRelatedActivity;
+    }
+
+    @Override
     public AppUser updateAppUserLogout(final AppUser appUser) {
         AppUser loaded = get(AppUser.class, appUser.getId());
         loaded.setLastLogout(new DateTime());
@@ -225,6 +224,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         userSettings.updateSettings(settings);
         sessionFactory.getCurrentSession().update(userSettings);
         saveHistory(userSettings);
+        publishUpdate(userSettings);
         return userSettings;
     }
 
@@ -251,16 +251,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
         currentSession.flush();
 
-        Query query = sessionFactory.getCurrentSession().createQuery("delete  " + sessionFactory.getClassMetadata(HibernateHistory.class).getEntityName() + " where appUser = :appUser");
+        Query query = sessionFactory.getCurrentSession().createQuery("delete " + sessionFactory.getClassMetadata(HibernateHistory.class).getEntityName() + " where appUser = :appUser");
         query.setParameter("appUser", wrapped);
         query.executeUpdate();
         currentSession.flush();
 
         currentSession.delete(wrapped);
-        if (eventBus != null) {
-            eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.DELETED, wrapped));
-        }
-        //  TODO - test
+        publishDelete(wrapped);
     }
 
     @Override
@@ -269,12 +266,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         wrapped.setActive(false);
 
         sessionFactory.getCurrentSession().update(wrapped);
-        if (eventBus != null) {
-            eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
-        }
+        publishUpdate(wrapped);
     }
 
-    //  TODO - mark delete and allow undelete
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> void delete(final T entity) {
@@ -332,19 +326,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             updatedItems.add(observable);  //  Flush forced internally
         }
         currentSession.flush();   //  Force any delete object generations inside this session
-        //  TODO - unit test adjustments for updated/deletedItems verification
         publishChanges(updatedItems, deletedItems);
-    }
-
-    private void publishChanges(Set<AppUserOwnedObject> updatedItems, Set<AppUserOwnedObject> deletedItems) {
-        if (eventBus != null) {
-            for (AppUserOwnedObject updaedItem : updatedItems) {
-                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, updaedItem));
-            }
-            for (AppUserOwnedObject deletedItem : deletedItems) {
-                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, deletedItem));
-            }
-        }
     }
 
     private void dealWithNewObservations(final IdObject idObject) {
@@ -382,5 +364,46 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             }
         }
         return null;
+    }
+
+    private <T extends IdObject> void publishCreate(T wrapped) {
+        if (eventBus != null) {
+            if (wrapped instanceof AppUserOwnedObject) {
+                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.ADDED, (AppUserOwnedObject) wrapped));
+            } else {
+                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.ADDED, wrapped));
+            }
+        }
+    }
+
+    private <T extends IdObject> void publishUpdate(T wrapped) {
+        if (eventBus != null) {
+            if (wrapped instanceof AppUserOwnedObject) {
+                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, (AppUserOwnedObject) wrapped));
+            } else {
+                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
+            }
+        }
+    }
+
+    private void publishChanges(Set<AppUserOwnedObject> updatedItems, Set<AppUserOwnedObject> deletedItems) {
+        if (eventBus != null) {
+            for (AppUserOwnedObject updatedItem : updatedItems) {
+                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, updatedItem));
+            }
+            for (AppUserOwnedObject deletedItem : deletedItems) {
+                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, deletedItem));
+            }
+        }
+    }
+
+    private <T extends IdObject> void publishDelete(final T wrapped) {
+        if (eventBus != null) {
+            if (wrapped instanceof AppUserOwnedObject) {
+                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, (AppUserOwnedObject) wrapped));
+            } else {
+                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.DELETED, wrapped));
+            }
+        }
     }
 }

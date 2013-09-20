@@ -208,7 +208,7 @@ public class UserPreferences extends CustomComponent {
             SettingData settingData = (SettingData) field.getData();
             settings.put(settingData.setting, field.getValue());
         }
-        AppUserSettings fresh = readWriteDAO.updateSettings(getSession().getAttribute(AppUser.class), settings);
-        eventBus.post(fresh);
+        readWriteDAO.updateSettings(getSession().getAttribute(AppUser.class), settings);
+        Notification.show("Preferences saved.", Notification.Type.HUMANIZED_MESSAGE);
     }
 }

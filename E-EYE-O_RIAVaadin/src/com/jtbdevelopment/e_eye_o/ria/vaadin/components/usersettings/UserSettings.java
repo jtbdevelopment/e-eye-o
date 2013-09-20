@@ -3,10 +3,14 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.PasswordResetEmailGenerator;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -22,6 +26,12 @@ import javax.annotation.PostConstruct;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserSettings extends CustomComponent {
+
+    @Autowired
+    private PasswordResetEmailGenerator passwordResetEmailGenerator;
+
+    @Autowired
+    private UserHelper userHelper;
 
     @Autowired
     private ReadWriteDAO readWriteDAO;
@@ -67,8 +77,8 @@ public class UserSettings extends CustomComponent {
                 AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
                 user.setFirstName(firstName.getValue());
                 user.setLastName(lastName.getValue());
-                user = readWriteDAO.update(user, user);
-                getSession().setAttribute(AppUser.class, user);
+                readWriteDAO.update(user, user);
+                Notification.show("Changes saved.", Notification.Type.HUMANIZED_MESSAGE);
             }
         });
         row.addComponent(save);
@@ -85,10 +95,42 @@ public class UserSettings extends CustomComponent {
 
         row = new HorizontalLayout();
         row.setSizeUndefined();
-        Button changeEmail = new Button("Change Email");
+        final Button changeEmail = new Button("Change Email");
+        changeEmail.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                Notification.show("Change email not implemented yet.");
+                //  TODO
+            }
+        });
         row.addComponent(changeEmail);
-        Button changePassword = new Button("Change Password");
+        final Button changePassword = new Button("Change Password");
         row.addComponent(changePassword);
+        changePassword.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                AppUser appUser = changePassword.getUI().getSession().getAttribute(AppUser.class);
+                final TwoPhaseActivity twoPhaseActivity = userHelper.requestResetPassword(appUser);
+                passwordResetEmailGenerator.generateEmail(twoPhaseActivity);
+                ConfirmDialog.show(changePassword.getUI(),
+                        "Password change requested.",
+                        "A password reset request has been sent to "
+                                + appUser.getEmailAddress()
+                                + " from "
+                                + passwordResetEmailGenerator.getResetEmailFrom() + ".  Follow the directions within it.",
+                        "OK", "Cancel Request",
+                        new ConfirmDialog.Listener() {
+                            @Override
+                            public void onClose(ConfirmDialog dialog) {
+                                if (!dialog.isConfirmed()) {
+                                    twoPhaseActivity.setExpirationTime(new DateTime());
+                                    readWriteDAO.cancelResetPassword(twoPhaseActivity);
+                                    Notification.show("Request cancelled.  Ignore email.", Notification.Type.ERROR_MESSAGE);
+                                }
+                            }
+                        });
+            }
+        });
         layout.addComponent(row);
         layout.setComponentAlignment(row, Alignment.MIDDLE_CENTER);
 
