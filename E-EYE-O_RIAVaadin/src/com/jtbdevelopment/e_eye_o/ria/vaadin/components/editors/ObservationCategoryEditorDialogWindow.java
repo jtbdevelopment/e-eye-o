@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ObservationCategoryEditorDialogWindow extends GeneratedEditorDialogWindow<ObservationCategory> {
     public ObservationCategoryEditorDialogWindow() {
-        super(ObservationCategory.class, 50, 20);
+        super(ObservationCategory.class, 50, 9);
     }
 }

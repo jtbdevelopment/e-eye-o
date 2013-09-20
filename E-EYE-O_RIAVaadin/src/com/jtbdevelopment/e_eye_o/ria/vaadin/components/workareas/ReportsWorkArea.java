@@ -6,6 +6,7 @@ import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.reports.ReportBuilder;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.ConnectorResource;
 import com.vaadin.server.DownloadStream;
 import com.vaadin.shared.ui.datefield.Resolution;
@@ -211,6 +212,7 @@ public class ReportsWorkArea extends CustomComponent {
                 window.addStyleName(Runo.WINDOW_DIALOG);
                 window.setModal(true);
                 window.setCaption("Report Contents - Close This When Done By Pressing x in corner ----------->");
+                window.setCloseShortcut(ShortcutAction.KeyCode.ESCAPE);
                 getUI().addWindow(window);
             }
         });

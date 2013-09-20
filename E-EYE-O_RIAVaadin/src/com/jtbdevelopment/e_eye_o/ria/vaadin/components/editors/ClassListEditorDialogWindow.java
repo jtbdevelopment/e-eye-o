@@ -13,6 +13,6 @@ import org.springframework.context.annotation.Scope;
 public class ClassListEditorDialogWindow extends GeneratedEditorDialogWindow<ClassList> {
 
     public ClassListEditorDialogWindow() {
-        super(ClassList.class, 50, 20);
+        super(ClassList.class, 50, 9);
     }
 }
