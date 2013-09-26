@@ -13,15 +13,15 @@ public class PasswordResetEmailGenerator extends AbstractEmailGenerator {
     @Value("${email.passwordreset}")
     private String resetEmailFrom;
 
-    private static final String SUBJECT = "E-EYE-O Password Reset Confirmation";
+    private static final String PASSWORD_RESET_SUBJECT = "E-EYE-O Password Reset Confirmation";
 
     //  TODO - go to template generator
-    public void generateEmail(final TwoPhaseActivity activity) {
+    public void generatePasswordResetEmail(final TwoPhaseActivity activity) {
         final String bodyText = "<html><body>" +
                 "A request has been made to reset your E-EYE-O password!  To complete the reset, follow this <a href=\"" + urlRoot + "Login#!" + PasswordReset.VIEW_NAME + "/" + activity.getId() + "\">link</a>." +
                 "<p>If you have not made any such request please know your existing password is still valid." +
                 "</body></html>";
-        sendEmail(activity, resetEmailFrom, bodyText, SUBJECT);
+        sendEmail(activity.getAppUser().getEmailAddress(), resetEmailFrom, bodyText, PASSWORD_RESET_SUBJECT);
     }
 
     public String getResetEmailFrom() {

@@ -2,11 +2,14 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings;
 
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
+import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.PasswordResetEmailGenerator;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
@@ -14,7 +17,9 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import javax.annotation.PostConstruct;
@@ -28,7 +33,19 @@ import javax.annotation.PostConstruct;
 public class UserSettings extends CustomComponent {
 
     @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
     private PasswordResetEmailGenerator passwordResetEmailGenerator;
+
+    @Autowired
+    private ChangeEmailAddressEmailGenerator changeEmailAddressEmailGenerator;
+
+    @Autowired
+    private DeletedAccountEmailGenerator deletedAccountEmailGenerator;
+
+    @Autowired
+    private DeactivateAccountEmailGenerator deactivateAccountEmailGenerator;
 
     @Autowired
     private UserHelper userHelper;
@@ -41,35 +58,38 @@ public class UserSettings extends CustomComponent {
 
     private TextField firstName;
     private TextField lastName;
-    private TextField email;
+    private Label email;
+    private Button changeEmail;
+    private Button changePassword;
+    private Label warning;
 
     @PostConstruct
     public void postConstruct() {
         Panel panel = new Panel();
         panel.addStyleName(Runo.PANEL_LIGHT);
-
-        VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(true);
-        layout.setSpacing(true);
-        layout.setSizeUndefined();
-        panel.setContent(layout);
         setCompositionRoot(panel);
         setSizeFull();
 
-        FormLayout formLayout = new FormLayout();
-        formLayout.setMargin(true);
-        layout.addComponent(formLayout);
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeFull();
+        verticalLayout.setSpacing(true);
+        verticalLayout.setMargin(true);
+        panel.setContent(verticalLayout);
 
-        firstName = new TextField("First Name:");
-        formLayout.addComponent(firstName);
-        lastName = new TextField("Last Name:");
-        formLayout.addComponent(lastName);
-        email = new TextField("Email:");
-        email.setReadOnly(true);
-        formLayout.addComponent(email);
+        verticalLayout.addComponent(new Label("For security you cannot change your password and your email at the same time.  If you are experiencing a security breach, change your password first."));
 
-        HorizontalLayout row = new HorizontalLayout();
-        row.setSizeUndefined();
+        GridLayout grid = new GridLayout(2, 8);
+        grid.setMargin(true);
+        grid.setSpacing(true);
+        grid.setSizeUndefined();
+        verticalLayout.addComponent(grid);
+
+        firstName = new TextField();
+        buildRow(grid, "First Name:", firstName);
+
+        lastName = new TextField();
+        buildRow(grid, "Last Name:", lastName);
+
         Button save = new Button("Save");
         save.addClickListener(new Button.ClickListener() {
             @Override
@@ -81,7 +101,6 @@ public class UserSettings extends CustomComponent {
                 Notification.show("Changes saved.", Notification.Type.HUMANIZED_MESSAGE);
             }
         });
-        row.addComponent(save);
         Button reset = new Button("Reset");
         reset.addClickListener(new Button.ClickListener() {
             @Override
@@ -89,35 +108,43 @@ public class UserSettings extends CustomComponent {
                 initForUser();
             }
         });
-        row.addComponent(reset);
-        layout.addComponent(row);
-        layout.setComponentAlignment(row, Alignment.MIDDLE_CENTER);
+        buildRow(grid, null, save, reset);
+        buildRow(grid, null, new Label(), new Label());
 
-        row = new HorizontalLayout();
-        row.setSizeUndefined();
-        final Button changeEmail = new Button("Change Email");
+        email = new Label();
+        buildRow(grid, "Email:", email);
+
+        changeEmail = new Button("Change Email");
         changeEmail.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                Notification.show("Change email not implemented yet.");
-                //  TODO
+                final AppUser appUser = getUI().getSession().getAttribute(AppUser.class);
+                ConfirmEmailChange confirmEmailChange = new ConfirmEmailChange(appUser, userHelper, authenticationManager, changeEmailAddressEmailGenerator);
+                getUI().addWindow(confirmEmailChange);
+                initForUser();
             }
         });
-        row.addComponent(changeEmail);
-        final Button changePassword = new Button("Change Password");
-        row.addComponent(changePassword);
+
+        changePassword = new Button("Change Password");
         changePassword.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                AppUser appUser = changePassword.getUI().getSession().getAttribute(AppUser.class);
-                final TwoPhaseActivity twoPhaseActivity = userHelper.requestResetPassword(appUser);
-                passwordResetEmailGenerator.generateEmail(twoPhaseActivity);
+                final AppUser appUser = changePassword.getUI().getSession().getAttribute(AppUser.class);
+                final TwoPhaseActivity twoPhaseActivity;
+                try {
+                    twoPhaseActivity = userHelper.requestResetPassword(appUser);
+                } catch (UserHelper.EmailChangeTooRecent e) {
+                    Notification.show("Email was changed too recently to also change password.", Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
+
+                passwordResetEmailGenerator.generatePasswordResetEmail(twoPhaseActivity);
                 ConfirmDialog.show(changePassword.getUI(),
                         "Password change requested.",
                         "A password reset request has been sent to "
                                 + appUser.getEmailAddress()
                                 + " from "
-                                + passwordResetEmailGenerator.getResetEmailFrom() + ".  Follow the directions within it.",
+                                + passwordResetEmailGenerator.getResetEmailFrom() + ".  Follow the directions within it.  Press OK to logout, Cancel to cancel password reset request.",
                         "OK", "Cancel Request",
                         new ConfirmDialog.Listener() {
                             @Override
@@ -126,70 +153,114 @@ public class UserSettings extends CustomComponent {
                                     twoPhaseActivity.setExpirationTime(new DateTime());
                                     readWriteDAO.cancelResetPassword(twoPhaseActivity);
                                     Notification.show("Request cancelled.  Ignore email.", Notification.Type.ERROR_MESSAGE);
+                                } else {
+                                    eventBus.post(new LogoutEvent(appUser));
                                 }
                             }
                         });
             }
         });
-        layout.addComponent(row);
-        layout.setComponentAlignment(row, Alignment.MIDDLE_CENTER);
+        buildRow(grid, null, changeEmail, changePassword);
+        buildRow(grid, null, new Label(), new Label());
 
-        row = new HorizontalLayout();
-        row.setSizeUndefined();
         Button deactivate = new Button("Deactivate Account");
         deactivate.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
-                ConfirmDialog confirmDialog = new ConfirmDialog();
-                confirmDialog.show(firstName.getUI(), "Deactivating your account will not immediately delete data and you can reactivate your account by using password reset on login screen.  Continue?", new ConfirmDialog.Listener() {
+                ConfirmDialog.show(firstName.getUI(), "Deactivating your account will not immediately delete data and you can reactivate your account by using password reset on login screen.  Continue?", new ConfirmDialog.Listener() {
                     @Override
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
                             readWriteDAO.deactivateUser(user);
                             LogoutEvent logoutEvent = new LogoutEvent(user);
+                            deactivateAccountEmailGenerator.generateAccountDeactivatedEmail(user);
                             eventBus.post(logoutEvent);
                         }
                     }
                 });
             }
         });
-
-        row.addComponent(deactivate);
         Button delete = new Button("Delete Account");
         delete.addClickListener(new Button.ClickListener() {
+
+            //  TODO - password protect this..
             @Override
             public void buttonClick(final Button.ClickEvent event) {
-                ConfirmDialog confirmDialog = new ConfirmDialog();
-                confirmDialog.show(firstName.getUI(), "Deleting your account is permanent and all your data is deleted immediately.  You can re-register but you will be starting with a blank new account.  Continue?", new ConfirmDialog.Listener() {
+                ConfirmDialog.show(firstName.getUI(), "Deleting your account is permanent and all your data is deleted immediately.  You can re-register but you will be starting with a blank new account.  Continue?", new ConfirmDialog.Listener() {
                     @Override
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
+                            final String email = user.getEmailAddress();
                             readWriteDAO.deleteUser(user);
+                            deletedAccountEmailGenerator.generateAccountDeletedEmail(email);
                         }
                     }
                 });
             }
         });
-        row.addComponent(delete);
-        layout.addComponent(row);
-        layout.setComponentAlignment(row, Alignment.MIDDLE_CENTER);
+        buildRow(grid, null, deactivate, delete);
 
+        //  TODO - configurable
+        warning = new Label("Password and email cannot be changed within one week of each other.");
+        verticalLayout.addComponent(warning);
+        ComponentUtils.setImmediateForAll(this, true);
+    }
+
+    private void buildRow(final GridLayout layout, final String content, final com.vaadin.ui.Component... components) {
+        if (StringUtils.hasLength(content)) {
+            layout.addComponent(new Label(content));
+        }
+        for (com.vaadin.ui.Component component : components) {
+            layout.addComponent(component);
+            layout.setComponentAlignment(component, Alignment.MIDDLE_CENTER);
+        }
+    }
+
+    @Override
+    public void detach() {
+        eventBus.unregister(this);
     }
 
     @Override
     public void attach() {
         super.attach();
         initForUser();
+        eventBus.register(this);
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void handleUpdate(final IdObjectChanged idObjectChanged) {
+        if (AppUser.class.isAssignableFrom(idObjectChanged.getEntityType())) {
+            if (idObjectChanged.getChangeType().equals(IdObjectChanged.ChangeType.MODIFIED)) {
+                if (idObjectChanged.getEntity().equals(getSession().getAttribute(AppUser.class))) {
+                    getSession().setAttribute(AppUser.class, (AppUser) idObjectChanged.getEntity());
+                    initForUser();
+                }
+            }
+        }
     }
 
     private void initForUser() {
         AppUser user = getSession().getAttribute(AppUser.class);
         firstName.setValue(user.getFirstName());
         lastName.setValue(user.getLastName());
-        email.setReadOnly(false);
         email.setValue(user.getEmailAddress());
-        email.setReadOnly(true);
+        warning.setVisible(false);
+        if (userHelper.canChangeEmailAddress(user)) {
+            changeEmail.setEnabled(true);
+        } else {
+            changeEmail.setEnabled(false);
+            warning.setVisible(true);
+        }
+
+        if (userHelper.canChangePassword(user)) {
+            changePassword.setEnabled(true);
+        } else {
+            changePassword.setEnabled(false);
+            warning.setVisible(true);
+        }
     }
 }

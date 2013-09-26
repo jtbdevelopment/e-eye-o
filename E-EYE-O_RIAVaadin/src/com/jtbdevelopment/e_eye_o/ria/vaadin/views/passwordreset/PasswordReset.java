@@ -103,9 +103,15 @@ public class PasswordReset extends VerticalLayout implements View {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 if (appUserForRequest != null) {
-                    TwoPhaseActivity twoPhaseActivity = userHelper.requestResetPassword(appUserForRequest);
+                    TwoPhaseActivity twoPhaseActivity;
+                    try {
+                        twoPhaseActivity = userHelper.requestResetPassword(appUserForRequest);
+                    } catch (UserHelper.EmailChangeTooRecent e) {
+                        Notification.show("Email was changed too recently to also change password.", Notification.Type.ERROR_MESSAGE);
+                        return;
+                    }
                     appUserForRequest = null;
-                    passwordResetEmailGenerator.generateEmail(twoPhaseActivity);
+                    passwordResetEmailGenerator.generatePasswordResetEmail(twoPhaseActivity);
                     getSession().setAttribute(TwoPhaseActivity.class, twoPhaseActivity);
                     getSession().getAttribute(Navigator.class).navigateTo(PostResetRequest.VIEW_NAME);
                 }

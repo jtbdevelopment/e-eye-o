@@ -1,5 +1,7 @@
 package com.jtbdevelopment.e_eye_o.DAO.helpers;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
@@ -11,6 +13,9 @@ import com.jtbdevelopment.e_eye_o.helpandlegal.TermsAndConditions;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.annotation.Nullable;
+import java.util.Set;
 
 /**
  * Date: 4/6/13
@@ -70,6 +75,25 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
         return readWriteDAO.create(idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION).withExpirationTime(new DateTime().plusDays(1)).build());
     }
 
+    @Override
+    public boolean canChangeEmailAddress(final AppUser appUser) {
+        return !hasRecentActivity(appUser, TwoPhaseActivity.Activity.PASSWORD_RESET);
+    }
+
+    @Override
+    public boolean canChangePassword(final AppUser appUser) {
+        return !hasRecentActivity(appUser, TwoPhaseActivity.Activity.EMAIL_CHANGE);
+    }
+
+    @Override
+    public TwoPhaseActivity changeEmailAddress(final AppUser appUser, final String newEmailAddress) throws PasswordChangeTooRecent {
+        if (!canChangeEmailAddress(appUser)) {
+            throw new PasswordChangeTooRecent();
+        }
+        TwoPhaseActivity changeRequest = idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.EMAIL_CHANGE).withExpirationTime(new DateTime()).withArchiveFlag(true).build();
+        return readWriteDAO.updateUserEmailAddress(changeRequest, newEmailAddress);
+    }
+
     private String securePassword(final String clearCasePassword) {
         if (passwordEncoder != null) {
             return passwordEncoder.encode(clearCasePassword);
@@ -78,10 +102,27 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
     }
 
     @Override
-    public TwoPhaseActivity requestResetPassword(AppUser appUser) {
+    public TwoPhaseActivity requestResetPassword(final AppUser appUser) throws EmailChangeTooRecent {
+        if (!canChangePassword(appUser)) {
+            throw new EmailChangeTooRecent();
+        }
         TwoPhaseActivity requestReset = idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.PASSWORD_RESET).withExpirationTime(new DateTime().plusDays(1)).build();
         requestReset = readWriteDAO.create(requestReset);
         return requestReset;
+    }
+
+    private boolean hasRecentActivity(final AppUser appUser, final TwoPhaseActivity.Activity activityToCheckFor) {
+        //  TODO - make configurable
+        final DateTime tooRecent = DateTime.now().minusDays(7);
+        Set<TwoPhaseActivity> activities = readWriteDAO.getEntitiesForUser(TwoPhaseActivity.class, appUser);
+        return !Collections2.filter(activities, new Predicate<TwoPhaseActivity>() {
+            @Override
+            public boolean apply(@Nullable final TwoPhaseActivity input) {
+                return input != null &&
+                        input.getActivityType().equals(activityToCheckFor) &&
+                        input.getModificationTimestamp().compareTo(tooRecent) > 0;
+            }
+        }).isEmpty();
     }
 
     @Override

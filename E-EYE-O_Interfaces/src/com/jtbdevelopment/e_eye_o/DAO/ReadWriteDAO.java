@@ -30,6 +30,8 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
 
     TwoPhaseActivity activateUser(final TwoPhaseActivity relatedActivity);
 
+    TwoPhaseActivity updateUserEmailAddress(final TwoPhaseActivity changeRequest, final String newAddress);
+
     TwoPhaseActivity resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword);
 
     TwoPhaseActivity cancelResetPassword(final TwoPhaseActivity relatedActivity);

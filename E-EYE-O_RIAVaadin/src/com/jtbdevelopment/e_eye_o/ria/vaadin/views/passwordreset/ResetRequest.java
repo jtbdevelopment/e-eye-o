@@ -75,8 +75,14 @@ public class ResetRequest extends VerticalLayout implements View {
                     return;
                 }
 
-                TwoPhaseActivity twoPhaseActivity = userHelper.requestResetPassword(appUser);
-                passwordResetEmailGenerator.generateEmail(twoPhaseActivity);
+                TwoPhaseActivity twoPhaseActivity;
+                try {
+                    twoPhaseActivity = userHelper.requestResetPassword(appUser);
+                } catch (UserHelper.EmailChangeTooRecent e) {
+                    Notification.show("Email was changed too recently to also change password.", Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
+                passwordResetEmailGenerator.generatePasswordResetEmail(twoPhaseActivity);
                 getSession().setAttribute(TwoPhaseActivity.class, twoPhaseActivity);
                 getSession().getAttribute(Navigator.class).navigateTo(PostResetRequest.VIEW_NAME);
             }

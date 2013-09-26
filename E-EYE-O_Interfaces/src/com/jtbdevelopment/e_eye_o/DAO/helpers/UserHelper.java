@@ -9,6 +9,12 @@ import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
  * Time: 6:25 PM
  */
 public interface UserHelper {
+    public class EmailChangeTooRecent extends Exception {
+    }
+
+    public class PasswordChangeTooRecent extends Exception {
+    }
+
     //  Take a basic login form and do whatever else we want to new user
     //  Implicitly records legal, cookie and privacy policy versions agreed to
     TwoPhaseActivity setUpNewUser(final AppUser appUser);
@@ -17,7 +23,13 @@ public interface UserHelper {
 
     TwoPhaseActivity generateActivationRequest(final AppUser appUser);
 
-    TwoPhaseActivity requestResetPassword(final AppUser appUser);
+    boolean canChangeEmailAddress(final AppUser appUser);
+
+    boolean canChangePassword(final AppUser appUser);
+
+    TwoPhaseActivity changeEmailAddress(final AppUser appUser, final String newEmailAddress) throws PasswordChangeTooRecent;
+
+    TwoPhaseActivity requestResetPassword(final AppUser appUser) throws EmailChangeTooRecent;
 
     void resetPassword(final TwoPhaseActivity twoPhaseActivity, final String newPassword);
 }

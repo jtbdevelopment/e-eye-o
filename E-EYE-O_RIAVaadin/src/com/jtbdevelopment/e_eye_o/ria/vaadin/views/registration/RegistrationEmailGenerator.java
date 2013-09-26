@@ -21,7 +21,7 @@ public class RegistrationEmailGenerator extends AbstractEmailGenerator {
         final String bodyText = "<html><body>" +
                 "Thank you for registering with E-EYE-O!  To complete your sign-up, please follow this <a href=\"" + urlRoot + "Login#!" + AccountConfirmationView.VIEW_NAME + "/" + activity.getId() + "\">link</a>." +
                 "</body></html>";
-        sendEmail(activity, registrationEmailFrom, bodyText, SUBJECT);
+        sendEmail(activity.getAppUser().getEmailAddress(), registrationEmailFrom, bodyText, SUBJECT);
     }
 
     public String getRegistrationEmailFrom() {

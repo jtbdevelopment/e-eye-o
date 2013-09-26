@@ -188,6 +188,19 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     }
 
     @Override
+    public TwoPhaseActivity updateUserEmailAddress(final TwoPhaseActivity changeRequest, final String newAddress) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        changeRequest.setArchived(true);
+        AppUser wrappedAppUser = wrapperFactory.wrap(changeRequest.getAppUser());
+        wrappedAppUser.setEmailAddress(newAddress);
+        currentSession.update(wrappedAppUser);
+        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(changeRequest);
+        currentSession.saveOrUpdate(wrappedRelatedActivity);
+        publishUpdate(wrappedAppUser);
+        return wrappedRelatedActivity;
+    }
+
+    @Override
     public TwoPhaseActivity resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword) {
         Session currentSession = sessionFactory.getCurrentSession();
         relatedActivity.setArchived(true);

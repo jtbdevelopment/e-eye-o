@@ -17,7 +17,8 @@ public interface TwoPhaseActivity extends AppUserOwnedObject {
 
     public enum Activity {
         ACCOUNT_ACTIVATION,
-        PASSWORD_RESET
+        PASSWORD_RESET,
+        EMAIL_CHANGE  //  Technically, not a two phase activity currently, but might switch
     }
 
     @NotNull(message = ACTIVITY_TYPE_CANNOT_BE_NULL)

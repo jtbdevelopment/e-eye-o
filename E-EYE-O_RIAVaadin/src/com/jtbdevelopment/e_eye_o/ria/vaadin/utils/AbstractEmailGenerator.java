@@ -1,6 +1,5 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.utils;
 
-import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration.RegistrationEmailGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,19 +18,19 @@ public abstract class AbstractEmailGenerator {
     @Autowired
     private JavaMailSender mailSender;
 
-    protected void sendEmail(TwoPhaseActivity activity, String emailFrom, String bodyText, String subject) {
+    protected void sendEmail(final String emailTo, final String emailFrom, final String bodyText, final String subject) {
         try {
             MimeMessage mail = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mail, false);
-            helper.setTo(activity.getAppUser().getEmailAddress());
+            helper.setTo(emailTo);
             helper.setFrom(emailFrom);
             helper.setSubject(subject);
             helper.setText(bodyText, true);
             logger.info(bodyText);
             mailSender.send(mail);
-            logger.info("Sent to " + activity.getAppUser().getEmailAddress() + " an email " + bodyText);
+            logger.info("Sent to " + emailTo + " an email " + bodyText);
         } catch (Exception e) {
-            logger.warn("Unable to generate email to " + activity.getAppUser().getEmailAddress() + " with " + bodyText + " and subject " + subject, e);
+            logger.warn("Unable to generate email to " + emailTo + " with " + bodyText + " and subject " + subject, e);
         }
     }
 }
