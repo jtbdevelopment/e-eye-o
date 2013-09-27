@@ -6,14 +6,12 @@ import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.PasswordResetEmailGenerator;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -46,6 +44,9 @@ public class UserSettings extends CustomComponent {
 
     @Autowired
     private DeactivateAccountEmailGenerator deactivateAccountEmailGenerator;
+
+    @Autowired
+    private ChangePasswordEmailGenerator confirmPasswordEmailGenerator;
 
     @Autowired
     private UserHelper userHelper;
@@ -130,34 +131,8 @@ public class UserSettings extends CustomComponent {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 final AppUser appUser = changePassword.getUI().getSession().getAttribute(AppUser.class);
-                final TwoPhaseActivity twoPhaseActivity;
-                try {
-                    twoPhaseActivity = userHelper.requestResetPassword(appUser);
-                } catch (UserHelper.EmailChangeTooRecent e) {
-                    Notification.show("Email was changed too recently to also change password.", Notification.Type.ERROR_MESSAGE);
-                    return;
-                }
-
-                passwordResetEmailGenerator.generatePasswordResetEmail(twoPhaseActivity);
-                ConfirmDialog.show(changePassword.getUI(),
-                        "Password change requested.",
-                        "A password reset request has been sent to "
-                                + appUser.getEmailAddress()
-                                + " from "
-                                + passwordResetEmailGenerator.getResetEmailFrom() + ".  Follow the directions within it.  Press OK to logout, Cancel to cancel password reset request.",
-                        "OK", "Cancel Request",
-                        new ConfirmDialog.Listener() {
-                            @Override
-                            public void onClose(ConfirmDialog dialog) {
-                                if (!dialog.isConfirmed()) {
-                                    twoPhaseActivity.setExpirationTime(new DateTime());
-                                    readWriteDAO.cancelResetPassword(twoPhaseActivity);
-                                    Notification.show("Request cancelled.  Ignore email.", Notification.Type.ERROR_MESSAGE);
-                                } else {
-                                    eventBus.post(new LogoutEvent(appUser));
-                                }
-                            }
-                        });
+                ConfirmPasswordChange confirmPasswordChange = new ConfirmPasswordChange(appUser, userHelper, authenticationManager, confirmPasswordEmailGenerator);
+                getUI().addWindow(confirmPasswordChange);
             }
         });
         buildRow(grid, null, changeEmail, changePassword);

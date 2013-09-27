@@ -5,8 +5,6 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 
 
 /**
@@ -14,7 +12,7 @@ import org.springframework.security.core.AuthenticationException;
  * Time: 8:02 PM
  */
 
-public class ConfirmEmailChange extends Window {
+public class ConfirmEmailChange extends PasswordConfirmingWindow {
     private final TextField email = new TextField();
     private final PasswordField passwordField = new PasswordField();
 
@@ -77,13 +75,4 @@ public class ConfirmEmailChange extends Window {
         setContent(mainLayout);
     }
 
-    protected boolean reconfirmPassword(final AuthenticationManager authenticationManager, final AppUser appUser, final String password) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(appUser.getEmailAddress(), password));
-        } catch (AuthenticationException e) {
-            Notification.show("Invalid password.");
-            return true;
-        }
-        return false;
-    }
 }
