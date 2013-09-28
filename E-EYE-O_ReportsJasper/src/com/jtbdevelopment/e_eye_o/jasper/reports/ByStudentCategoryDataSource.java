@@ -24,7 +24,7 @@ public class ByStudentCategoryDataSource extends AbstractJasperDataSource {
     }
 
     public void initialize() {
-        List<Student> activeEntitiesForUser = new LinkedList<>(readOnlyDAO.getActiveEntitiesForUser(Student.class, appUser));
+        List<Student> activeEntitiesForUser = new LinkedList<>(readOnlyDAO.getActiveEntitiesForUser(Student.class, appUser, 0, 0));
         Collections.sort(activeEntitiesForUser, new Comparator<Student>() {
             @Override
             public int compare(final Student o1, final Student o2) {
@@ -48,7 +48,7 @@ public class ByStudentCategoryDataSource extends AbstractJasperDataSource {
             }
         }).iterator();
 
-        sortedCategories = new LinkedList<>(readOnlyDAO.getActiveEntitiesForUser(ObservationCategory.class, appUser));
+        sortedCategories = new LinkedList<>(readOnlyDAO.getActiveEntitiesForUser(ObservationCategory.class, appUser, 0, 0));
         Collections.sort(sortedCategories, new Comparator<ObservationCategory>() {
             @Override
             public int compare(final ObservationCategory o1, final ObservationCategory o2) {

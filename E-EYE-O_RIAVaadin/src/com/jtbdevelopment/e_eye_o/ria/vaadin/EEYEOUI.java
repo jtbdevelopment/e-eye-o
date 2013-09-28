@@ -62,7 +62,7 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         if (principalAsObject instanceof AppUserUserDetails) {
             AppUser appUser = ((AppUserUserDetails) principalAsObject).getAppUser();
             getSession().setAttribute(AppUser.class, appUser);
-            Set<AppUserSettings> settings = readWriteDAO.getEntitiesForUser(AppUserSettings.class, appUser);
+            Set<AppUserSettings> settings = readWriteDAO.getEntitiesForUser(AppUserSettings.class, appUser, 0, 0);
             AppUserSettings setting;
             if (settings.isEmpty()) {
                 //  Legacy users

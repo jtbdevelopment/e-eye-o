@@ -166,14 +166,14 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Test
     public void testCreateDefaultCategories() {
         Set<ObservationCategory> initialCategories = observationCategoryHelper.createDefaultCategoriesForUser(testUser2);
-        Set<ObservationCategory> reloaded = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser2);
+        Set<ObservationCategory> reloaded = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser2, 0, 0);
         assertTrue(reloaded.containsAll(initialCategories));
     }
 
     @Test
     public void testAddCategory() {
         ObservationCategory newCategory = rwDAO.create(factory.newObservationCategoryBuilder(testUser1).withShortName("TESTNEW").withDescription("Test New Category").build());
-        Set<ObservationCategory> categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser1);
+        Set<ObservationCategory> categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser1, 0, 0);
         assertTrue(categories.contains(newCategory));
     }
 
@@ -192,17 +192,17 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         assertTrue(exception);
         newTest3 = rwDAO.create(factory.newObservationCategoryBuilder(testUser2).withShortName("TESTDUPE").withDescription("desc 1").build());
 
-        Set<ObservationCategory> categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser1);
+        Set<ObservationCategory> categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser1, 0, 0);
         assertTrue(categories.contains(newTest1));
         assertFalse(categories.contains(newTest2));
-        categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser2);
+        categories = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser2, 0, 0);
         assertTrue(categories.contains(newTest3));
     }
 
     @Test
     public void testCreatePhotoForStudent() {
         Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testStudentForU1).withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build());
-        Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1, 0, 0);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
             if (setPhoto.equals(photo)) {
@@ -214,7 +214,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Test
     public void testCreatePhotoForClassList() {
         Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withTimestamp(new LocalDateTime()).withPhotoFor(testClassList1ForU1).withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build());
-        Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1, 0, 0);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
             if (setPhoto.equals(photo)) {
@@ -226,7 +226,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Test
     public void testCreatePhotoForObservation() {
         Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("Create Test").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).withTimestamp(new LocalDateTime()).withPhotoFor(testObservation1ForU1).build());
-        Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
+        Set<Photo> photos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1, 0, 0);
         assertTrue(photos.contains(photo));
         for (Photo setPhoto : photos) {
             if (setPhoto.equals(photo)) {
@@ -238,8 +238,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Test
     public void testUpdateArchivePhoto() {
         Photo photo = rwDAO.create(factory.newPhotoBuilder(testUser1).withDescription("UpdateTest").withTimestamp(new LocalDateTime()).withPhotoFor(testStudentForU1).withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).build());
-        Set<Photo> activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
-        Set<Photo> archivePhotos = rwDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
+        Set<Photo> activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1, 0, 0);
+        Set<Photo> archivePhotos = rwDAO.getArchivedEntitiesForUser(Photo.class, testUser1, 0, 0);
         assertTrue(activePhotos.contains(photo));
         assertFalse(archivePhotos.contains(photo));
 
@@ -248,8 +248,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         photo.setDescription("Archived");
         photo = rwDAO.update(testUser1, photo);
         assertTrue(originalTS.isBefore(photo.getModificationTimestamp()));
-        activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1);
-        archivePhotos = rwDAO.getArchivedEntitiesForUser(Photo.class, testUser1);
+        activePhotos = rwDAO.getActiveEntitiesForUser(Photo.class, testUser1, 0, 0);
+        archivePhotos = rwDAO.getArchivedEntitiesForUser(Photo.class, testUser1, 0, 0);
         assertFalse(activePhotos.contains(photo));
         assertTrue(archivePhotos.contains(photo));
         photo = rwDAO.get(Photo.class, photo.getId());
@@ -350,8 +350,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         for (AppUserOwnedObject owned : Arrays.asList(oc, cl, s, p, o)) {
             rwDAO.delete(owned);
         }
-        assertFalse(rwDAO.getEntitiesForUser(AppUserOwnedObject.class, deleteUserThings).isEmpty());
-        final Set<DeletedObject> deletedObjects = rwDAO.getEntitiesForUser(DeletedObject.class, deleteUserThings);
+        assertFalse(rwDAO.getEntitiesForUser(AppUserOwnedObject.class, deleteUserThings, 0, 0).isEmpty());
+        final Set<DeletedObject> deletedObjects = rwDAO.getEntitiesForUser(DeletedObject.class, deleteUserThings, 0, 0);
         assertFalse(deletedObjects.isEmpty());
         for (DeletedObject deletedObject : deletedObjects) {
             assertTrue(baseTime.isBefore(deletedObject.getModificationTimestamp()));
@@ -398,7 +398,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     public void testExplicitlyUpdatingADeletedObjectExceptions() {
         ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
         rwDAO.delete(cl);
-        Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
+        Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2, 0, 0);
         assertFalse(deleted.isEmpty());
         DeletedObject dobj = deleted.iterator().next();
         dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));
@@ -409,7 +409,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     public void testExplicitlyDeletingADeletedObjectExceptions() {
         ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
         rwDAO.delete(cl);
-        Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2);
+        Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2, 0, 0);
         assertFalse(deleted.isEmpty());
         DeletedObject dobj = deleted.iterator().next();
         dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));

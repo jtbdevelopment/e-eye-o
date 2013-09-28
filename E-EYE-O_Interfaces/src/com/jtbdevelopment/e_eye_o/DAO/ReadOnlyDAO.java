@@ -21,13 +21,22 @@ public interface ReadOnlyDAO {
 
     public <T extends IdObject> T get(final Class<T> entityType, final String id);
 
-    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser);
 
-    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, final boolean activeFlag);
+    /**
+     * Get results of all, active only or archived only objects
+     *
+     * @param entityType  - entity type, use any of the interface classes
+     * @param appUser     - user for objects
+     * @param firstResult - if using pagination, starting result
+     * @param maxResult   - set to 0 to retrieve all, or any positive number for pagination
+     * @param <T>         - type of entity which will be returned
+     * @return set of T
+     */
+    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResult);
 
-    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(final Class<T> entityType, final AppUser appUser);
+    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResult);
 
-    public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(final Class<T> entityType, final AppUser appUser);
+    public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResult);
 
     /**
      * Generally expected to return an ordered set by modification timestamp ascending of all versions of changes made

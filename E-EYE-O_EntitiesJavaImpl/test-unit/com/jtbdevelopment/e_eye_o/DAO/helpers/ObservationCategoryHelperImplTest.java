@@ -83,7 +83,7 @@ public class ObservationCategoryHelperImplTest {
             will(returnValue(two));
             allowing(oc3).getShortName();
             will(returnValue(three));
-            one(dao).getEntitiesForUser(ObservationCategory.class, user);
+            one(dao).getEntitiesForUser(ObservationCategory.class, user, 0, 0);
             will(returnValue(Sets.newHashSet(oc1, oc2, oc3)));
         }});
 

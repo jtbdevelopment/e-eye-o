@@ -61,19 +61,19 @@ public class ReportsWorkArea extends CustomComponent {
 
     private void refreshLists() {
         BeanItemContainer<ObservationCategory> categories = new BeanItemContainer<>(ObservationCategory.class);
-        categories.addAll(readOnlyDAO.getActiveEntitiesForUser(ObservationCategory.class, appUser));
+        categories.addAll(readOnlyDAO.getActiveEntitiesForUser(ObservationCategory.class, appUser, 0, 0));
         categories.sort(new String[]{CATEGORY_DISPLAY_PROPERTY}, new boolean[]{true});
         categoryListField.setContainerDataSource(categories);
         categoryListField.setRows(categories.size());
 
         BeanItemContainer<ClassList> classes = new BeanItemContainer<>(ClassList.class);
-        classes.addAll(readOnlyDAO.getActiveEntitiesForUser(ClassList.class, appUser));
+        classes.addAll(readOnlyDAO.getActiveEntitiesForUser(ClassList.class, appUser, 0, 0));
         classes.sort(new String[]{CLASS_DISPLAY_PROPERTY}, new boolean[]{true});
         classListField.setContainerDataSource(classes);
         classListField.setRows(classes.size());
 
         BeanItemContainer<Student> students = new BeanItemContainer<>(Student.class);
-        students.addAll(readOnlyDAO.getActiveEntitiesForUser(Student.class, appUser));
+        students.addAll(readOnlyDAO.getActiveEntitiesForUser(Student.class, appUser, 0, 0));
         students.sort(new String[]{STUDENT_DISPLAY_PROPERTY}, new boolean[]{true});
         studentListField.setContainerDataSource(students);
         studentListField.setRows(students.size());

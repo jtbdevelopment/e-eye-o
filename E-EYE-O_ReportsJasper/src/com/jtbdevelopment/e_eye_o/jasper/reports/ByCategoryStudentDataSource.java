@@ -16,6 +16,7 @@ import java.util.*;
  * Time: 6:36 AM
  */
 //  TODO - Photos
+//  TODO - use pagination?
 public class ByCategoryStudentDataSource extends AbstractJasperDataSource {
     private List<Student> sortedStudents;
 
@@ -24,7 +25,7 @@ public class ByCategoryStudentDataSource extends AbstractJasperDataSource {
     }
 
     public void initialize() {
-        List<ObservationCategory> sortedCategories = new LinkedList<>(readOnlyDAO.getActiveEntitiesForUser(ObservationCategory.class, appUser));
+        List<ObservationCategory> sortedCategories = new LinkedList<>(readOnlyDAO.getActiveEntitiesForUser(ObservationCategory.class, appUser, 0, 0));
         Collections.sort(sortedCategories, new Comparator<ObservationCategory>() {
             @Override
             public int compare(final ObservationCategory o1, final ObservationCategory o2) {
@@ -45,7 +46,7 @@ public class ByCategoryStudentDataSource extends AbstractJasperDataSource {
         }));
         categoryIterator = sortedCategories.iterator();
 
-        List<Student> activeEntitiesForUser = new LinkedList<>(readOnlyDAO.getActiveEntitiesForUser(Student.class, appUser));
+        List<Student> activeEntitiesForUser = new LinkedList<>(readOnlyDAO.getActiveEntitiesForUser(Student.class, appUser, 0, 0));
         Collections.sort(activeEntitiesForUser, new Comparator<Student>() {
             @Override
             public int compare(final Student o1, final Student o2) {

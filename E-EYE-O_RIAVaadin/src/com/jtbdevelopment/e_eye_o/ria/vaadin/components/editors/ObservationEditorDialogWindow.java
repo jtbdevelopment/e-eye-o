@@ -34,18 +34,18 @@ public class ObservationEditorDialogWindow extends GeneratedEditorDialogWindow<O
             }
         }
         if (hasArchived) {
-            potentialCategories.addAll(readWriteDAO.getEntitiesForUser(ObservationCategory.class, observation.getAppUser()));
+            potentialCategories.addAll(readWriteDAO.getEntitiesForUser(ObservationCategory.class, observation.getAppUser(), 0, 0));
         } else {
-            potentialCategories.addAll(readWriteDAO.getActiveEntitiesForUser(ObservationCategory.class, observation.getAppUser()));
+            potentialCategories.addAll(readWriteDAO.getActiveEntitiesForUser(ObservationCategory.class, observation.getAppUser(), 0, 0));
         }
         potentialCategories.sort(new String[]{"shortName"}, new boolean[]{true});
 
         potentialSubjects.removeAllItems();
         boolean showArchivedSubjects = observation.getObservationSubject() != null && observation.getObservationSubject().isArchived();
         if (showArchivedSubjects) {
-            potentialSubjects.addAll(readWriteDAO.getEntitiesForUser(Observable.class, observation.getAppUser()));
+            potentialSubjects.addAll(readWriteDAO.getEntitiesForUser(Observable.class, observation.getAppUser(), 0, 0));
         } else {
-            potentialSubjects.addAll(readWriteDAO.getActiveEntitiesForUser(Observable.class, observation.getAppUser()));
+            potentialSubjects.addAll(readWriteDAO.getActiveEntitiesForUser(Observable.class, observation.getAppUser(), 0, 0));
         }
         potentialSubjects.sort(new String[]{"summaryDescription"}, new boolean[]{true});
 

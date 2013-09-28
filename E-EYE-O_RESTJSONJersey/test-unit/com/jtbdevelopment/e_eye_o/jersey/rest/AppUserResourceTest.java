@@ -43,7 +43,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     public void testGetEntitiesForUser() throws Exception {
         AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
         context.checking(new Expectations() {{
-            one(dao).getEntitiesForUser(AppUserOwnedObject.class, user);
+            one(dao).getEntitiesForUser(AppUserOwnedObject.class, user, 0, 0);
             will(returnValue(objects));
         }});
         assertEquals(output, resource.getEntitiesForUser().getEntity());
@@ -60,11 +60,11 @@ public class AppUserResourceTest extends AbstractResourceTest {
         AppUserResource archived = (AppUserResource) resource.getArchived();
         assertNotNull(archived);
         context.checking(new Expectations() {{
-            one(dao).getArchivedEntitiesForUser(AppUserOwnedObject.class, user);
+            one(dao).getArchivedEntitiesForUser(AppUserOwnedObject.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getArchivedEntitiesForUser(Photo.class, user);
+            one(dao).getArchivedEntitiesForUser(Photo.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getArchivedEntitiesForUser(Student.class, user);
+            one(dao).getArchivedEntitiesForUser(Student.class, user, 0, 0);
             will(returnValue(objects));
         }});
         assertEquals(output, archived.getEntitiesForUser().getEntity());
@@ -83,11 +83,11 @@ public class AppUserResourceTest extends AbstractResourceTest {
         AppUserResource active = (AppUserResource) resource.getActive();
         assertNotNull(active);
         context.checking(new Expectations() {{
-            one(dao).getActiveEntitiesForUser(AppUserOwnedObject.class, user);
+            one(dao).getActiveEntitiesForUser(AppUserOwnedObject.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getActiveEntitiesForUser(ClassList.class, user);
+            one(dao).getActiveEntitiesForUser(ClassList.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getActiveEntitiesForUser(Observation.class, user);
+            one(dao).getActiveEntitiesForUser(Observation.class, user, 0, 0);
             will(returnValue(objects));
         }});
         assertEquals(output, active.getEntitiesForUser().getEntity());
@@ -119,11 +119,11 @@ public class AppUserResourceTest extends AbstractResourceTest {
         AppUserResource photos = (AppUserResource) resource.getPhotos();
         assertNotNull(photos);
         context.checking(new Expectations() {{
-            one(dao).getEntitiesForUser(Photo.class, user);
+            one(dao).getEntitiesForUser(Photo.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getActiveEntitiesForUser(Photo.class, user);
+            one(dao).getActiveEntitiesForUser(Photo.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getArchivedEntitiesForUser(Photo.class, user);
+            one(dao).getArchivedEntitiesForUser(Photo.class, user, 0, 0);
             will(returnValue(objects));
         }});
         assertEquals(output, photos.getEntitiesForUser().getEntity());
@@ -142,11 +142,11 @@ public class AppUserResourceTest extends AbstractResourceTest {
         AppUserResource students = (AppUserResource) resource.getStudents();
         assertNotNull(students);
         context.checking(new Expectations() {{
-            one(dao).getEntitiesForUser(Student.class, user);
+            one(dao).getEntitiesForUser(Student.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getActiveEntitiesForUser(Student.class, user);
+            one(dao).getActiveEntitiesForUser(Student.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getArchivedEntitiesForUser(Student.class, user);
+            one(dao).getArchivedEntitiesForUser(Student.class, user, 0, 0);
             will(returnValue(objects));
         }});
         assertEquals(output, students.getEntitiesForUser().getEntity());
@@ -165,11 +165,11 @@ public class AppUserResourceTest extends AbstractResourceTest {
         AppUserResource classLists = (AppUserResource) resource.getClassLists();
         assertNotNull(classLists);
         context.checking(new Expectations() {{
-            one(dao).getEntitiesForUser(ClassList.class, user);
+            one(dao).getEntitiesForUser(ClassList.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getActiveEntitiesForUser(ClassList.class, user);
+            one(dao).getActiveEntitiesForUser(ClassList.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getArchivedEntitiesForUser(ClassList.class, user);
+            one(dao).getArchivedEntitiesForUser(ClassList.class, user, 0, 0);
             will(returnValue(objects));
         }});
         assertEquals(output, classLists.getEntitiesForUser().getEntity());
@@ -189,11 +189,11 @@ public class AppUserResourceTest extends AbstractResourceTest {
         AppUserResource observations = (AppUserResource) resource.getObservations();
         assertNotNull(observations);
         context.checking(new Expectations() {{
-            one(dao).getEntitiesForUser(Observation.class, user);
+            one(dao).getEntitiesForUser(Observation.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getActiveEntitiesForUser(Observation.class, user);
+            one(dao).getActiveEntitiesForUser(Observation.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getArchivedEntitiesForUser(Observation.class, user);
+            one(dao).getArchivedEntitiesForUser(Observation.class, user, 0, 0);
             will(returnValue(objects));
         }});
         assertEquals(output, observations.getEntitiesForUser().getEntity());
@@ -212,11 +212,11 @@ public class AppUserResourceTest extends AbstractResourceTest {
         AppUserResource categories = (AppUserResource) resource.getObservationCategories();
         assertNotNull(categories);
         context.checking(new Expectations() {{
-            one(dao).getEntitiesForUser(ObservationCategory.class, user);
+            one(dao).getEntitiesForUser(ObservationCategory.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getActiveEntitiesForUser(ObservationCategory.class, user);
+            one(dao).getActiveEntitiesForUser(ObservationCategory.class, user, 0, 0);
             will(returnValue(objects));
-            one(dao).getArchivedEntitiesForUser(ObservationCategory.class, user);
+            one(dao).getArchivedEntitiesForUser(ObservationCategory.class, user, 0, 0);
             will(returnValue(objects));
         }});
         assertEquals(output, categories.getEntitiesForUser().getEntity());

@@ -290,7 +290,7 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         entities.removeAllItems();
         if (displayDriver instanceof AppUser) {
             if (displayDriver.equals(this.appUser)) {
-                entities.addAll(readWriteDAO.getEntitiesForUser(entityType, this.appUser));
+                entities.addAll(readWriteDAO.getEntitiesForUser(entityType, this.appUser, 0, 0));
                 refreshSizeAndSort();
             }
         }

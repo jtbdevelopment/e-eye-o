@@ -114,7 +114,7 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
     private boolean hasRecentActivity(final AppUser appUser, final TwoPhaseActivity.Activity activityToCheckFor) {
         //  TODO - make configurable
         final DateTime tooRecent = DateTime.now().minusDays(7);
-        Set<TwoPhaseActivity> activities = readWriteDAO.getEntitiesForUser(TwoPhaseActivity.class, appUser);
+        Set<TwoPhaseActivity> activities = readWriteDAO.getEntitiesForUser(TwoPhaseActivity.class, appUser, 0, 0);
         return !Collections2.filter(activities, new Predicate<TwoPhaseActivity>() {
             @Override
             public boolean apply(@Nullable final TwoPhaseActivity input) {

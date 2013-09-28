@@ -35,9 +35,9 @@ public class StudentEditorDialogWindow extends GeneratedEditorDialogWindow<Stude
     public void setEntity(final Student student) {
         potentialClasses.removeAllItems();
         if (student.getArchivedClassLists().size() > 0) {
-            potentialClasses.addAll(readWriteDAO.getEntitiesForUser(ClassList.class, student.getAppUser()));
+            potentialClasses.addAll(readWriteDAO.getEntitiesForUser(ClassList.class, student.getAppUser(), 0, 0));
         } else {
-            potentialClasses.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, student.getAppUser()));
+            potentialClasses.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, student.getAppUser(), 0, 0));
         }
         potentialClasses.sort(new String[]{"description"}, new boolean[]{true});
         super.setEntity(student);

@@ -121,11 +121,11 @@ public class PhotoEditorDialogWindow extends GeneratedEditorDialogWindow<Photo> 
         }
         potentialPhotoFors.removeAllItems();
         if (entity.isArchived()) {
-            potentialPhotoFors.addAll(readWriteDAO.getEntitiesForUser(Observation.class, entity.getAppUser()));
-            potentialPhotoFors.addAll(readWriteDAO.getEntitiesForUser(ClassList.class, entity.getAppUser()));
+            potentialPhotoFors.addAll(readWriteDAO.getEntitiesForUser(Observation.class, entity.getAppUser(), 0, 0));
+            potentialPhotoFors.addAll(readWriteDAO.getEntitiesForUser(ClassList.class, entity.getAppUser(), 0, 0));
         } else {
-            potentialPhotoFors.addAll(readWriteDAO.getActiveEntitiesForUser(Observation.class, entity.getAppUser()));
-            potentialPhotoFors.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, entity.getAppUser()));
+            potentialPhotoFors.addAll(readWriteDAO.getActiveEntitiesForUser(Observation.class, entity.getAppUser(), 0, 0));
+            potentialPhotoFors.addAll(readWriteDAO.getActiveEntitiesForUser(ClassList.class, entity.getAppUser(), 0, 0));
         }
         potentialPhotoFors.sort(new String[]{"summaryDescription"}, new boolean[]{true});
         super.setEntity(entity);

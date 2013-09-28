@@ -293,21 +293,21 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     @Test
     public void testGetOwnObjects() throws Exception {
-        Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1));
+        Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1, 0, 0));
         String uri = USERS_URI + testUser1.getId() + "/";
         httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
     }
 
     @Test
     public void testGetOwnActiveObjects() throws Exception {
-        Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getActiveEntitiesForUser(AppUserOwnedObject.class, testUser1));
+        Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getActiveEntitiesForUser(AppUserOwnedObject.class, testUser1, 0, 0));
         String uri = USERS_URI + testUser1.getId() + "/active/";
         httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
     }
 
     @Test
     public void testGetOwnArchivedObjects() throws Exception {
-        Set<AppUserOwnedObject> owned = readWriteDAO.getArchivedEntitiesForUser(AppUserOwnedObject.class, testUser1);
+        Set<AppUserOwnedObject> owned = readWriteDAO.getArchivedEntitiesForUser(AppUserOwnedObject.class, testUser1, 0, 0);
         String uri = USERS_URI + testUser1.getId() + "/archived/";
         httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
     }
@@ -320,9 +320,9 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         for (Class<? extends AppUserOwnedObject> entityClass : Arrays.asList(ClassList.class, Student.class, ObservationCategory.class, Observation.class, Photo.class)) {
             final String entityType = entityClass.getAnnotation(IdObjectEntitySettings.class).plural().toLowerCase() + "/";
             String uri = user_uri + entityType;
-            httpHelper.checkJSONVsExpectedResults(uri, userClient1, readWriteDAO.getEntitiesForUser(entityClass, testUser1));
-            final Set<? extends AppUserOwnedObject> activeEntitiesForUser = readWriteDAO.getActiveEntitiesForUser(entityClass, testUser1);
-            final Set<? extends AppUserOwnedObject> archivedEntitiesForUser = readWriteDAO.getArchivedEntitiesForUser(entityClass, testUser1);
+            httpHelper.checkJSONVsExpectedResults(uri, userClient1, readWriteDAO.getEntitiesForUser(entityClass, testUser1, 0, 0));
+            final Set<? extends AppUserOwnedObject> activeEntitiesForUser = readWriteDAO.getActiveEntitiesForUser(entityClass, testUser1, 0, 0);
+            final Set<? extends AppUserOwnedObject> archivedEntitiesForUser = readWriteDAO.getArchivedEntitiesForUser(entityClass, testUser1, 0, 0);
             httpHelper.checkJSONVsExpectedResults(uri + "active/", userClient1, activeEntitiesForUser);
             httpHelper.checkJSONVsExpectedResults(uri + "archived/", userClient1, archivedEntitiesForUser);
             httpHelper.checkJSONVsExpectedResults(user_active_uri + entityType, userClient1, activeEntitiesForUser);
@@ -332,7 +332,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     @Test
     public void testGetOwnObject() throws Exception {
-        List<AppUserOwnedObject> owned = new ArrayList<>(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1));
+        List<AppUserOwnedObject> owned = new ArrayList<>(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1, 0, 0));
         AppUserOwnedObject randomOne = owned.get(new Random().nextInt(owned.size()));
         String uri = USERS_URI + testUser1.getId() + "/" + randomOne.getId() + "/";
         httpHelper.checkJSONVsExpectedResult(uri, userClient1, randomOne);
@@ -349,7 +349,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     @Test
     public void testGetAnotherUsersObjectsAsAdmin() throws Exception {
-        Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1));
+        Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1, 0, 0));
         String uri = USERS_URI + testUser1.getId() + "/";
         httpHelper.checkJSONVsExpectedResults(uri, adminClient, owned);
     }
@@ -430,7 +430,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         EntityUtils.consumeQuietly(response.getEntity());
 
         assertNull(readWriteDAO.get(Student.class, createdStudent.getId()));
-        Collection<DeletedObject> deletedObjects = readWriteDAO.getEntitiesForUser(DeletedObject.class, testUser1);
+        Collection<DeletedObject> deletedObjects = readWriteDAO.getEntitiesForUser(DeletedObject.class, testUser1, 0, 0);
         deletedObjects = Collections2.filter(deletedObjects, new Predicate<DeletedObject>() {
             @Override
             public boolean apply(@Nullable DeletedObject input) {

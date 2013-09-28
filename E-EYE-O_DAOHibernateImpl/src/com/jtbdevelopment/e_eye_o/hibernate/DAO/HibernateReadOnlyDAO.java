@@ -2,7 +2,6 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
@@ -10,8 +9,11 @@ import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateIdObject;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -51,7 +53,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     @SuppressWarnings("unchecked")
     public Set<AppUser> getUsers() {
         Set<AppUser> returnSet = new LinkedHashSet<>();
-        returnSet.addAll((List<AppUser>) sessionFactory.getCurrentSession().createQuery("from AppUser").list());
+        returnSet.addAll((List<AppUser>) sessionFactory.getCurrentSession().createQuery("from AppUser order by id").list());
         return returnSet;
     }
 
@@ -71,28 +73,46 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         return (T) sessionFactory.getCurrentSession().get(entityName, id);
     }
 
+    private <T extends AppUserOwnedObject> Criteria createCriteria(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
+        Criteria criteria = sessionFactory.getCurrentSession()
+                .createCriteria(getHibernateEntityName(entityType))
+                .add(Restrictions.eq("appUser", appUser))
+                .addOrder(Order.asc("id"));
+        if (maxResults > 0) {
+            criteria.setFirstResult(firstResult);
+            criteria.setMaxResults(maxResults);
+        }
+        return criteria;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from " + getHibernateEntityName(entityType) + " where appUser = :user");
-        query.setParameter("user", appUser);
-        return new HashSet<>((List<T>) query.list());
+    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResults) {
+        Criteria criteria = createCriteria(entityType, appUser, firstResult, maxResults);
+        return new HashSet<>((List<T>) criteria.list());
     }
 
     @Override
-    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
-        return getEntitiesForUser(entityType, appUser, false);
+    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResults) {
+        return getEntitiesForUser(entityType, appUser, false, firstResult, maxResults);
     }
 
     @Override
-    public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(final Class<T> entityType, final AppUser appUser) {
-        return getEntitiesForUser(entityType, appUser, true);
+    public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResults) {
+        return getEntitiesForUser(entityType, appUser, true, firstResult, maxResults);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, final boolean archivedFlag, int firstResult, int maxResults) {
+        Criteria criteria = createCriteria(entityType, appUser, firstResult, maxResults);
+        criteria.add(Restrictions.eq("archived", archivedFlag));
+        return new HashSet<>((List<T>) criteria.list());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from HistoricalFeed where appUser = :user and modificationTimestamp > :since");
+        Query query = sessionFactory.getCurrentSession().createQuery("from HistoricalFeed where appUser = :user and modificationTimestamp > :since order by id");
         query.setParameter("user", appUser);
         query.setParameter("since", since.getMillis());   //  See HibernateIdObject getModificationTimestamp
         List<HibernateHistory> results = query.list();
@@ -116,16 +136,6 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         });
 
         return new LinkedList<>(transformedResults);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, final boolean archivedFlag) {
-        return new HashSet<>(Collections2.filter(getEntitiesForUser(entityType, appUser), new Predicate<T>() {
-            @Override
-            public boolean apply(@Nullable final T input) {
-                return (input != null) && (input.isArchived() == archivedFlag);
-            }
-        }));
     }
 
     @Override

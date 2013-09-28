@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.serialization;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Date: 1/26/13
@@ -25,6 +26,8 @@ public interface IdObjectSerializer {
     String writeEntities(final Collection<? extends IdObject> entities);
 
     String writeStrings(final Collection<String> entities);
+
+    String writeMap(final Map<String, String> map);
 
     <T> T read(final String input);
 }

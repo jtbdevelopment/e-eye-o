@@ -112,17 +112,12 @@ public class BaseData {
         }
 
         @Override
-        public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(Class<T> entityType, AppUser appUser) {
+        public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
             return null;
         }
 
         @Override
-        public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(Class<T> entityType, AppUser appUser, boolean activeFlag) {
-            return null;
-        }
-
-        @Override
-        public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(Class<T> entityType, AppUser appUser) {
+        public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
             if (ObservationCategory.class.isAssignableFrom(entityType)) {
                 return (Set<T>) new HashSet<>(Arrays.<ObservationCategory>asList(BaseData.oc1For1, BaseData.oc2For1));
             }
@@ -133,7 +128,7 @@ public class BaseData {
         }
 
         @Override
-        public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(Class<T> entityType, AppUser appUser) {
+        public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
             return null;
         }
 

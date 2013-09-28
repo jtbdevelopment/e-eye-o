@@ -34,7 +34,7 @@ public class ObservationCategoryHelperImpl implements ObservationCategoryHelper 
     }
 
     public Map<String, ObservationCategory> getObservationCategoriesAsMap(final AppUser appUser) {
-        Set<ObservationCategory> ocs = dao.getEntitiesForUser(ObservationCategory.class, appUser);
+        Set<ObservationCategory> ocs = dao.getEntitiesForUser(ObservationCategory.class, appUser, 0, 0);
         Map<String, ObservationCategory> map = new HashMap<>();
         for (ObservationCategory oc : ocs) {
             map.put(oc.getShortName(), oc);

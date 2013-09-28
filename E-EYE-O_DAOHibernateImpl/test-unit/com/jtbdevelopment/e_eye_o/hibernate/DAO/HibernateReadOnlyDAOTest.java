@@ -245,7 +245,7 @@ public class HibernateReadOnlyDAOTest {
             will(returnValue(fromDB));
         }});
         for (Class<? extends LocalInterface> c : Arrays.asList(LocalInterface.class, HibernateWrapper.class)) {
-            Set entitiesForUser = dao.getEntitiesForUser(c, appUser);
+            Set entitiesForUser = dao.getEntitiesForUser(c, appUser, 0, 0);
             assertTrue(entitiesForUser.containsAll(fromDB));
             assertTrue(fromDB.containsAll(entitiesForUser));
         }
@@ -262,7 +262,7 @@ public class HibernateReadOnlyDAOTest {
             allowing(query).list();
             will(returnValue(fromDB));
         }});
-        Set entitiesForUser = dao.getEntitiesForUser(DeletedObject.class, appUser);
+        Set entitiesForUser = dao.getEntitiesForUser(DeletedObject.class, appUser, 0, 0);
         assertTrue(entitiesForUser.containsAll(expected));
         assertTrue(expected.containsAll(entitiesForUser));
     }
@@ -293,7 +293,7 @@ public class HibernateReadOnlyDAOTest {
             will(returnValue(fromDB));
         }});
         for (Class<? extends LocalInterface> c : Arrays.asList(LocalInterface.class, HibernateWrapper.class)) {
-            Set entitiesForUser = archived ? dao.getArchivedEntitiesForUser(c, appUser) : dao.getActiveEntitiesForUser(c, appUser);
+            Set entitiesForUser = archived ? dao.getArchivedEntitiesForUser(c, appUser, 0, 0) : dao.getActiveEntitiesForUser(c, appUser, 0, 0);
             assertTrue(entitiesForUser.containsAll(expected));
             assertTrue(expected.containsAll(entitiesForUser));
 

@@ -72,10 +72,10 @@ public class AppUserResource extends SecurityAwareResource {
     public Response getEntitiesForUser() {
         Set<? extends AppUserOwnedObject> set;
         if (archiveFlag == null)
-            set = readWriteDAO.getEntitiesForUser(entityType, appUser);
+            set = readWriteDAO.getEntitiesForUser(entityType, appUser, 0, 0);
         else {
-            set = archiveFlag ? readWriteDAO.getArchivedEntitiesForUser(entityType, appUser) :
-                    readWriteDAO.getActiveEntitiesForUser(entityType, appUser);
+            set = archiveFlag ? readWriteDAO.getArchivedEntitiesForUser(entityType, appUser, 0, 0) :
+                    readWriteDAO.getActiveEntitiesForUser(entityType, appUser, 0, 0);
         }
         return Response.ok(jsonIdObjectSerializer.writeEntities(set)).build();
     }

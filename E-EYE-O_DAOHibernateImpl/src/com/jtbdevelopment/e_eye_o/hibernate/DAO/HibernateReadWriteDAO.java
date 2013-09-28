@@ -233,7 +233,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     @Override
     public AppUserSettings updateSettings(final AppUser appUser, final Map<String, Object> settings) {
-        AppUserSettings userSettings = getEntitiesForUser(AppUserSettings.class, appUser).iterator().next();
+        AppUserSettings userSettings = getEntitiesForUser(AppUserSettings.class, appUser, 0, 0).iterator().next();
         userSettings.updateSettings(settings);
         sessionFactory.getCurrentSession().update(userSettings);
         saveHistory(userSettings);
@@ -242,6 +242,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     }
 
     //  TODO - mark delete and allow undelete
+    //  TODO - paginate?
     @Override
     @SuppressWarnings("unchecked")
     public void deleteUser(final AppUser appUser) {
@@ -254,12 +255,12 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
 
         for (Class<? extends AppUserOwnedObject> appUserClass : Arrays.asList(Student.class, ClassList.class, ObservationCategory.class, TwoPhaseActivity.class, AppUserSettings.class)) {
-            Collection<? extends AppUserOwnedObject> deleteList = getEntitiesForUser(appUserClass, wrapped);
+            Collection<? extends AppUserOwnedObject> deleteList = getEntitiesForUser(appUserClass, wrapped, 0, 0);
             for (AppUserOwnedObject entity : deleteList) {
                 delete(entity);
             }
         }
-        for (DeletedObject deletedObject : getEntitiesForUser(DeletedObject.class, wrapped)) {
+        for (DeletedObject deletedObject : getEntitiesForUser(DeletedObject.class, wrapped, 0, 0)) {
             currentSession.delete(deletedObject);
         }
         currentSession.flush();

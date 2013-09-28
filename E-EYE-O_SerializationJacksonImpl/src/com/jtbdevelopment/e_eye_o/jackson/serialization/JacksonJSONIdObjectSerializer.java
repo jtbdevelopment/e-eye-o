@@ -16,6 +16,7 @@ import java.io.StringWriter;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Date: 1/26/13
@@ -93,6 +94,20 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
 
         builder.append("\n]");
         return builder.toString();
+    }
+
+    @Override
+    public String writeMap(Map<String, String> map) {
+        try (JsonGenerator generator = createGenerator()) {
+            generator.writeStartObject();
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                generator.writeStringField(entry.getKey(), entry.getValue());
+            }
+            generator.writeEndObject();
+            return completeGeneration(generator);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @SuppressWarnings("unchecked")
