@@ -46,7 +46,7 @@ public class ConfirmEmailChange extends PasswordConfirmingWindow {
         ok.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                if (reconfirmPassword(authenticationManager, appUser, passwordField.getValue())) return;
+                if (!reconfirmPassword(authenticationManager, appUser, passwordField.getValue())) return;
                 try {
                     String oldAddress = appUser.getEmailAddress();
                     userHelper.changeEmailAddress(appUser, email.getValue());

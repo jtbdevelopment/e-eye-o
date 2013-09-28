@@ -158,21 +158,11 @@ public class UserSettings extends CustomComponent {
         });
         Button delete = new Button("Delete Account");
         delete.addClickListener(new Button.ClickListener() {
-
-            //  TODO - password protect this..
             @Override
             public void buttonClick(final Button.ClickEvent event) {
-                ConfirmDialog.show(firstName.getUI(), "Deleting your account is permanent and all your data is deleted immediately.  You can re-register but you will be starting with a blank new account.  Continue?", new ConfirmDialog.Listener() {
-                    @Override
-                    public void onClose(final ConfirmDialog dialog) {
-                        if (dialog.isConfirmed()) {
-                            AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
-                            final String email = user.getEmailAddress();
-                            readWriteDAO.deleteUser(user);
-                            deletedAccountEmailGenerator.generateAccountDeletedEmail(email);
-                        }
-                    }
-                });
+                AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
+                ConfirmDeleteAccount deleteAccount = new ConfirmDeleteAccount(user, readWriteDAO, authenticationManager, deletedAccountEmailGenerator);
+                getUI().addWindow(deleteAccount);
             }
         });
         buildRow(grid, null, deactivate, delete);

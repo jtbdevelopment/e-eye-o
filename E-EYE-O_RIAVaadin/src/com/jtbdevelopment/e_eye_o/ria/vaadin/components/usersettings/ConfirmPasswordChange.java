@@ -54,7 +54,7 @@ public class ConfirmPasswordChange extends PasswordConfirmingWindow {
                     Notification.show("New passwords do not match.", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
-                if (reconfirmPassword(authenticationManager, appUser, existingPassword.getValue())) return;
+                if (!reconfirmPassword(authenticationManager, appUser, existingPassword.getValue())) return;
                 try {
                     TwoPhaseActivity activity = userHelper.requestResetPassword(appUser);
                     userHelper.resetPassword(activity, newPassword1.getValue());
