@@ -8,11 +8,11 @@ import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateIdObject;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -53,16 +53,16 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     @SuppressWarnings("unchecked")
     public Set<AppUser> getUsers() {
         Set<AppUser> returnSet = new LinkedHashSet<>();
-        returnSet.addAll((List<AppUser>) sessionFactory.getCurrentSession().createQuery("from AppUser order by id").list());
+        returnSet.addAll((List<AppUser>) sessionFactory.getCurrentSession().createCriteria(HibernateAppUser.class).addOrder(Order.asc("id")).list());
         return returnSet;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public AppUser getUser(final String emailAddress) {
-        final Query query = sessionFactory.getCurrentSession().createQuery("from AppUser where emailAddress = :emailAddress");
-        query.setParameter("emailAddress", emailAddress);
-        return (AppUser) query.uniqueResult();
+        return (AppUser) sessionFactory.getCurrentSession().createCriteria(HibernateAppUser.class)
+                .add(Restrictions.eq("emailAddress", emailAddress))
+                .uniqueResult();
     }
 
     @Override
@@ -85,6 +85,12 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         return criteria;
     }
 
+    private <T extends AppUserOwnedObject> Criteria getCriteriaWithArchiveFlag(Class<T> entityType, AppUser appUser, boolean archivedFlag, int firstResult, int maxResults) {
+        Criteria criteria = createCriteria(entityType, appUser, firstResult, maxResults);
+        criteria.add(Restrictions.eq("archived", archivedFlag));
+        return criteria;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResults) {
@@ -104,18 +110,46 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @SuppressWarnings("unchecked")
     private <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, final boolean archivedFlag, int firstResult, int maxResults) {
-        Criteria criteria = createCriteria(entityType, appUser, firstResult, maxResults);
-        criteria.add(Restrictions.eq("archived", archivedFlag));
+        Criteria criteria = getCriteriaWithArchiveFlag(entityType, appUser, archivedFlag, firstResult, maxResults);
         return new HashSet<>((List<T>) criteria.list());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from HistoricalFeed where appUser = :user and modificationTimestamp > :since order by id");
-        query.setParameter("user", appUser);
-        query.setParameter("since", since.getMillis());   //  See HibernateIdObject getModificationTimestamp
-        List<HibernateHistory> results = query.list();
+    public <T extends AppUserOwnedObject> long getEntitiesForUserCount(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResults) {
+        Criteria criteria = createCriteria(entityType, appUser, firstResult, maxResults);
+        criteria.setProjection(Projections.rowCount());
+        return ((Number) criteria.uniqueResult()).longValue();
+    }
+
+    @Override
+    public <T extends AppUserOwnedObject> long getActiveEntitiesForUserCount(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResults) {
+        return getEntitiesForUserCount(entityType, appUser, false, firstResult, maxResults);
+    }
+
+    @Override
+    public <T extends AppUserOwnedObject> long getArchivedEntitiesForUserCount(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResults) {
+        return getEntitiesForUserCount(entityType, appUser, true, firstResult, maxResults);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends AppUserOwnedObject> long getEntitiesForUserCount(final Class<T> entityType, final AppUser appUser, final boolean archivedFlag, int firstResult, int maxResults) {
+        Criteria criteria = getCriteriaWithArchiveFlag(entityType, appUser, archivedFlag, firstResult, maxResults);
+        return ((Number) criteria.uniqueResult()).longValue();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since, final int maxResults) {
+        Criteria criteria = sessionFactory.getCurrentSession()
+                .createCriteria(HibernateHistory.class)
+                .add(Restrictions.eq("appUser", appUser))
+                .add(Restrictions.gt("modificationTimestampInstant", since.getMillis()))
+                .addOrder(Order.asc("modificationTimestampInstant"));
+        if (maxResults >= 0) {
+            criteria.setMaxResults(maxResults);
+        }
+        List<HibernateHistory> results = criteria.list();
         List<HibernateHistory> sortedResults = new LinkedList<>(results);
         Collections.sort(sortedResults, new Comparator<HibernateHistory>() {
             @Override
@@ -131,7 +165,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
             @Nullable
             @Override
             public String apply(@Nullable HibernateHistory input) {
-                return input.getSerializedVersion();
+                return input == null ? null : input.getSerializedVersion();
             }
         });
 
@@ -141,63 +175,65 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Photo> getAllPhotosForEntity(final AppUserOwnedObject ownedObject) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from Photo where photoFor = :photoFor");
-        query.setParameter("photoFor", ownedObject);
-        return (List<Photo>) query.list();
+        return sessionFactory.getCurrentSession()
+                .createCriteria(HibernatePhoto.class)
+                .add(Restrictions.eq("photoFor", ownedObject))
+                .list();
     }
 
     @Override
     public LocalDateTime getLastObservationTimestampForEntity(final Observable observable) {
-        Query query = sessionFactory.getCurrentSession().createQuery("select max(observationTimestamp) from Observation where observationSubject = :observationSubject");
-        query.setParameter("observationSubject", observable);
-        LocalDateTime result = (LocalDateTime) query.uniqueResult();
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(HibernateObservation.class)
+                .add(Restrictions.eq("observationSubject", observable))
+                .setProjection(Projections.max("observationTimestamp"));
+        LocalDateTime result = (LocalDateTime) criteria.uniqueResult();
         return result == null ? Observable.NEVER_OBSERVED : result;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Observation> getAllObservationsForEntity(final Observable observable) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from Observation where observationSubject = :observationSubject");
-        query.setParameter("observationSubject", observable);
-        return (List<Observation>) query.list();
+        return sessionFactory.getCurrentSession()
+                .createCriteria(HibernateObservation.class)
+                .add(Restrictions.eq("observationSubject", observable))
+                .list();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Observation> getAllObservationsForObservationCategory(final ObservationCategory observationCategory) {
-        Query query;
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(HibernateObservation.class);
         if (observationCategory != null) {
-            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where :category member of O.categories");
-            query.setParameter("category", observationCategory);
+            criteria.createCriteria("categories").add(Restrictions.eq("id", observationCategory.getId()));
         } else {
-            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where size( O.categories ) = 0");
+            criteria.add(Restrictions.isEmpty("categories"));
         }
-        return (List<Observation>) query.list();
+        return criteria.list();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to) {
-        Query query;
-        if (observationCategory != null) {
-            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where observationSubject = :observationSubject AND :category member of O.categories AND observationTimestamp >= :from and observationTimestamp < :to");
-            query.setParameter("category", observationCategory);
-        } else {
-            query = sessionFactory.getCurrentSession().createQuery("from Observation as O where observationSubject = :observationSubject AND size( O.categories ) = 0 AND observationTimestamp >= :from and observationTimestamp < :to");
-        }
-        query.setParameter("observationSubject", observable);
         LocalTime time = new LocalTime(0, 0, 0, 0);
-        query.setParameter("from", from.toLocalDateTime(time));
-        query.setParameter("to", to.plusDays(1).toLocalDateTime(time));
-
-        return (List<Observation>) query.list();
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(HibernateObservation.class)
+                .add(Restrictions.eq("observationSubject", observable))
+                .add(Restrictions.ge("observationTimestamp", from.toLocalDateTime(time)))
+                .add(Restrictions.lt("observationTimestamp", to.plusDays(1).toLocalDateTime(time)));
+        if (observationCategory != null) {
+            criteria.createCriteria("categories").add(Restrictions.eq("id", observationCategory.getId()));
+        } else {
+            criteria.add(Restrictions.isEmpty("categories"));
+        }
+        return criteria.list();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Student> getAllStudentsForClassList(final ClassList classList) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from Student as S where :classList member of S.classLists");
-        query.setParameter("classList", classList);
-        return (List<Student>) query.list();
+        return sessionFactory.getCurrentSession().createCriteria(HibernateStudent.class)
+                .createCriteria("classLists")
+                .add(Restrictions.eq("id", classList.getId()))
+                .list();
     }
 
     protected <T extends IdObject> String getHibernateEntityName(final Class<T> entityType) {

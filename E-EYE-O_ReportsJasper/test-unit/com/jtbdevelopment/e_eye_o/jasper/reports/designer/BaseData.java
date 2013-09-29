@@ -133,7 +133,22 @@ public class BaseData {
         }
 
         @Override
-        public <T extends AppUserOwnedObject> List<String> getModificationsSince(AppUser appUser, DateTime since) {
+        public <T extends AppUserOwnedObject> long getEntitiesForUserCount(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
+            return 0;
+        }
+
+        @Override
+        public <T extends AppUserOwnedObject> long getActiveEntitiesForUserCount(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
+            return 0;
+        }
+
+        @Override
+        public <T extends AppUserOwnedObject> long getArchivedEntitiesForUserCount(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
+            return 0;
+        }
+
+        @Override
+        public <T extends AppUserOwnedObject> List<String> getModificationsSince(AppUser appUser, DateTime since, int maxResults) {
             return null;
         }
 

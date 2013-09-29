@@ -301,7 +301,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Observation o = rwDAO.create(factory.newObservationBuilder(updateUser).withComment("T").withObservationSubject(cl).build());
         ClassList clV2 = rwDAO.get(ClassList.class, cl.getId());  //  Observation made it dirty need to re-read for compare to work
 
-        List<String> firstSet = rwDAO.getModificationsSince(updateUser, firstTS);
+        List<String> firstSet = rwDAO.getModificationsSince(updateUser, firstTS, 0);
         final List<String> initialList = new LinkedList<>(Collections2.transform(Arrays.asList(oc, cl, s, p, o, clV2), new Function<AppUserOwnedObject, String>() {
             @Nullable
             @Override
@@ -329,7 +329,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
                 return serializer.writeEntity(input);
             }
         });
-        final List<String> secondSet = rwDAO.getModificationsSince(updateUser, secondTS);
+        final List<String> secondSet = rwDAO.getModificationsSince(updateUser, secondTS, 0);
         assertEquals(secondList.size(), secondSet.size());
         assertTrue(secondSet.containsAll(secondList));
     }
