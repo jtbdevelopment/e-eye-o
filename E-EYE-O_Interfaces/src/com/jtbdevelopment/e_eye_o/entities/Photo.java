@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
  * Date: 11/25/12
  * Time: 3:18 PM
  */
-@IdObjectEntitySettings(defaultPageSize = 10, defaultSortField = "timestamp", defaultSortAscending = true, singular = "Photo", plural = "Photos",
+@IdObjectEntitySettings(defaultPageSize = 25, defaultSortField = "timestamp", defaultSortAscending = true, singular = "Photo", plural = "Photos",
         viewFieldOrder = {"description", "photoFo", "timestamp", "modificationTimestamp", "archived"},
         editFieldOrder = {"description", "photoFor", "timestamp", IdObjectEntitySettings.SECTION_BREAK, "imageData"})
 public interface Photo extends AppUserOwnedObject {
