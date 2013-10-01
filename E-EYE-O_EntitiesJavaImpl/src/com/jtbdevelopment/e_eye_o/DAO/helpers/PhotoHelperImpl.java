@@ -77,7 +77,9 @@ public class PhotoHelperImpl implements PhotoHelper {
             }
 
             image = ImageIO.read(new ByteArrayInputStream(photo.getImageData()));
-            resized = Scalr.resize(image, resizeTo);
+            int maxDimension = Math.max(image.getHeight(), image.getWidth());
+            int resize = Math.min(maxDimension, resizeTo);
+            resized = Scalr.resize(image, resize);
 
             String type = getImageWritersByMIMEType(mimeType).next().getOriginatingProvider().getFormatNames()[0];
             ByteArrayOutputStream os = new ByteArrayOutputStream();
