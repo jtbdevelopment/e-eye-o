@@ -32,27 +32,37 @@ public interface ReadOnlyDAO {
      * @param <T>         - type of entity which will be returned
      * @return set of T
      */
-    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResult);
+    public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, final int firstResult, final int maxResult);
 
-    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResult);
+    public <T extends AppUserOwnedObject> Set<T> getActiveEntitiesForUser(final Class<T> entityType, final AppUser appUser, final int firstResult, final int maxResult);
 
-    public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResult);
+    public <T extends AppUserOwnedObject> Set<T> getArchivedEntitiesForUser(final Class<T> entityType, final AppUser appUser, final int firstResult, final int maxResult);
 
     /**
      * Get count of all, active only or archived only objects
      *
-     * @param entityType  - entity type, use any of the interface classes
-     * @param appUser     - user for objects
-     * @param firstResult - if using pagination, starting result
-     * @param maxResult   - set to 0 to retrieve all, or any positive number for pagination
-     * @param <T>         - type of entity which will be returned
+     * @param entityType - entity type, use any of the interface classes
+     * @param appUser    - user for objects
+     * @param <T>        - type of entity which will be returned
      * @return count of T
      */
-    public <T extends AppUserOwnedObject> long getEntitiesForUserCount(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResult);
+    public <T extends AppUserOwnedObject> int getEntitiesForUserCount(final Class<T> entityType, final AppUser appUser);
 
-    public <T extends AppUserOwnedObject> long getActiveEntitiesForUserCount(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResult);
+    public <T extends AppUserOwnedObject> int getActiveEntitiesForUserCount(final Class<T> entityType, final AppUser appUser);
 
-    public <T extends AppUserOwnedObject> long getArchivedEntitiesForUserCount(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResult);
+    public <T extends AppUserOwnedObject> int getArchivedEntitiesForUserCount(final Class<T> entityType, final AppUser appUser);
+
+    public List<Photo> getAllPhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults);
+
+    public List<Photo> getActivePhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults);
+
+    public List<Photo> getArchivedPhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults);
+
+    public int getAllPhotosForEntityCount(final AppUserOwnedObject ownedObject);
+
+    public int getActivePhotosForEntityCount(final AppUserOwnedObject ownedObject);
+
+    public int getArchivedPhotosForEntityCount(final AppUserOwnedObject ownedObject);
 
     /**
      * Generally expected to return an ordered set by modification timestamp ascending of all versions of changes made
@@ -64,8 +74,6 @@ public interface ReadOnlyDAO {
      * @return an ordered set of modified entities, ordered by modification timestamp ascending
      */
     public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since, int maxResults);
-
-    public List<Photo> getAllPhotosForEntity(final AppUserOwnedObject ownedObject);
 
     public LocalDateTime getLastObservationTimestampForEntity(final Observable observable);
 

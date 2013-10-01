@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Date: 6/5/13
  * Time: 10:22 PM
  */
+//  TODO - do we need a bulk archive/unarchive feature?
 public class GeneratedObservationTable extends GeneratedIdObjectTable<Observation> {
     private static final Logger logger = LoggerFactory.getLogger(ObservationWithoutSubjectTable.class);
     public static final String SIGNIFICANTONLY_DEFAULT = ".significantonly.default";
@@ -108,11 +109,9 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         super.addCustomFilters(filterSection);
         Label label = new Label("From");
         filterSection.addComponent(label);
-        filterSection.setComponentAlignment(label, Alignment.BOTTOM_LEFT);
         from.setResolution(Resolution.DAY);
         from.setConverter(localDateTimeDateConverter);
         filterSection.addComponent(from);
-        filterSection.setComponentAlignment(from, Alignment.BOTTOM_LEFT);
         from.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
@@ -122,7 +121,6 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         });
         label = new Label("To");
         filterSection.addComponent(label);
-        filterSection.setComponentAlignment(label, Alignment.BOTTOM_LEFT);
         to.setResolution(Resolution.DAY);
         to.setConverter(localDateTimeDateConverter);
         to.addValueChangeListener(new Property.ValueChangeListener() {
@@ -133,7 +131,6 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
             }
         });
         filterSection.addComponent(to);
-        filterSection.setComponentAlignment(to, Alignment.BOTTOM_LEFT);
 
         significantOnly.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
@@ -148,7 +145,6 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
             }
         });
         filterSection.addComponent(significantOnly);
-        filterSection.setComponentAlignment(significantOnly, Alignment.BOTTOM_LEFT);
     }
 
     private void updateDateRangeFilter() {

@@ -138,7 +138,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             wrapped = (T) get(wrapped.getClass(), wrapped.getId());
         }
 
-        for (Photo photo : getAllPhotosForEntity(wrapped)) {
+        for (Photo photo : getAllPhotosForEntity(wrapped, 0, 0)) {
             if (photo.isArchived() == initialArchivedState) {
                 changeArchiveStatus(photo);
             }
@@ -316,14 +316,14 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 updatedItems.add(student);
             }
         }
-        final List<Photo> allPhotosForEntity = getAllPhotosForEntity(wrapped);
+        final List<Photo> allPhotosForEntity = getAllPhotosForEntity(wrapped, 0, 0);
         for (Photo p : allPhotosForEntity) {
             deletedItems.add(p);
             currentSession.delete(p);
         }
         if (wrapped instanceof Observable) {
             for (Observation o : getAllObservationsForEntity((Observable) wrapped)) {
-                final List<Photo> allPhotosForObservation = getAllPhotosForEntity(o);
+                final List<Photo> allPhotosForObservation = getAllPhotosForEntity(o, 0, 0);
                 for (Photo p : allPhotosForObservation) {
                     deletedItems.add(p);
                     currentSession.delete(p);

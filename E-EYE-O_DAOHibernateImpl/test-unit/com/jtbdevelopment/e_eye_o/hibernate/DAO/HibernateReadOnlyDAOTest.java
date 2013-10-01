@@ -231,7 +231,7 @@ public class HibernateReadOnlyDAOTest {
             allowing(query).list();
             will(returnValue(result));
         }});
-        assertSame(result, dao.getAllPhotosForEntity(o));
+        assertSame(result, dao.getAllPhotosForEntity(o, 0, 0));
     }
 
     @Test

@@ -20,12 +20,12 @@ import com.vaadin.event.FieldEvents;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
-import org.jsoup.helper.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.util.Set;
 
 /**
  * Date: 4/24/13
@@ -41,11 +41,12 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     public static final String DEFAULT_SIZE_SETTING = ".defaultsize";
     public static final String SHOW_ACTIVE_SETTING = ".showActive";
     public static final String SHOW_ARCHIVED_SETTING = ".showArchived";
-    private CheckBox activeCB;
-    private CheckBox archivedCB;
-    private ComboBox showSize;
+    protected CheckBox activeCB;
+    protected CheckBox archivedCB;
+    protected ComboBox showSize;
     protected String baseConfigSetting;
     protected IdObjectEntitySettings entitySettings;
+    private Label searchForLabel;
 
     public interface ClickedOnListener<T> {
         void handleClickEvent(final T entity);
@@ -55,7 +56,6 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     protected IdObjectReflectionHelper idObjectReflectionHelper;
     @Autowired
     protected IdObjectFactory idObjectFactory;
-    private Container.Filter currentFilter;
 
     protected final Class<T> entityType;
     protected final TextField searchFor = new TextField();
@@ -72,9 +72,13 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
 
     public abstract IdObjectEditorDialogWindow<T> showEntityEditor(final T entity);
 
-    protected abstract void refreshSize(final int maxSize);
+    protected abstract void refreshSize();
 
     protected abstract void refreshSort();
+
+    protected abstract void updateSearchFilter(final String searchValue);
+
+    protected abstract void updateActiveArchiveFilters(final boolean active, final boolean archived);
 
     @PostConstruct
     protected void initialize() {
@@ -116,91 +120,64 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
 
     private Layout buildFilterOptions() {
         HorizontalLayout filterSection = new HorizontalLayout();
+        filterSection.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
         filterSection.setWidth(null);
         filterSection.setSpacing(true);
 
-        Label searchForLabel = new Label("Search For:");
-        filterSection.addComponent(searchForLabel);
-        filterSection.setComponentAlignment(searchForLabel, Alignment.BOTTOM_LEFT);
-        searchFor.setWidth(12, Unit.EM);
-        searchFor.addTextChangeListener(new FieldEvents.TextChangeListener() {
-            @Override
-            public void textChange(final FieldEvents.TextChangeEvent event) {
-                if (currentFilter != null) {
-                    entities.removeContainerFilter(currentFilter);
-                }
-
-                final String searchValue = event.getText();
-                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": search text now " + searchValue);
-                if (!StringUtil.isBlank(searchValue)) {
-                    currentFilter = generateFilter(searchValue);
-                    entities.addContainerFilter(currentFilter);
-                }
-                refreshSizeAndSort();
-            }
-        });
-        filterSection.addComponent(searchFor);
-        filterSection.setComponentAlignment(searchFor, Alignment.BOTTOM_LEFT);
+        buildSearchFilter(filterSection);
 
         Label showWhichLabel = new Label("Show:");
         filterSection.addComponent(showWhichLabel);
-        filterSection.setComponentAlignment(showWhichLabel, Alignment.BOTTOM_LEFT);
 
         activeCB = new CheckBox("Active");
         archivedCB = new CheckBox("Archived");
         activeCB.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": changing active/archived to " + activeCB.getValue() + "/" + archivedCB.getValue());
-                setActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
-                refreshSizeAndSort();
+                updateActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
             }
         });
         archivedCB.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                logger.trace(getSession().getAttribute(AppUser.class).getId() + ": changing active/archived to " + activeCB.getValue() + "/" + archivedCB.getValue());
-                setActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
-                refreshSizeAndSort();
+                updateActiveArchiveFilters(activeCB.getValue(), archivedCB.getValue());
             }
         });
         filterSection.addComponent(activeCB);
         filterSection.addComponent(archivedCB);
-        filterSection.setComponentAlignment(activeCB, Alignment.BOTTOM_LEFT);
-        filterSection.setComponentAlignment(archivedCB, Alignment.BOTTOM_LEFT);
 
         addCustomFilters(filterSection);
 
         Label showSizeLabel = new Label("How Many?");
         filterSection.addComponent(showSizeLabel);
-        filterSection.setComponentAlignment(showSizeLabel, Alignment.BOTTOM_LEFT);
 
         showSize = new ComboBox(null, Ints.asList(entitySettings.pageSizes()));
         showSize.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(final Property.ValueChangeEvent event) {
                 logger.trace(getSession().getAttribute(AppUser.class).getId() + ": changing max size to " + showSize.getValue());
-                refreshSize((Integer) showSize.getValue());
+                refreshSize();
             }
         });
         showSize.setWidth(4, Unit.EM);
         showSize.addStyleName("right-align");
         showSize.setNullSelectionAllowed(false);
         filterSection.addComponent(showSize);
-        filterSection.setComponentAlignment(showSize, Alignment.BOTTOM_LEFT);
         return filterSection;
     }
 
-    private void setActiveArchiveFilters(final boolean active, final boolean archived) {
-        entities.removeContainerFilters("archived");
-        if (!(active && archived)) {
-            if (active) {
-                entities.addContainerFilter("archived", "false", false, true);
-            } else {
-                entities.addContainerFilter("archived", "true", false, true);
+    protected void buildSearchFilter(HorizontalLayout filterSection) {
+        searchForLabel = new Label("Search For:");
+        filterSection.addComponent(searchForLabel);
+        searchFor.setWidth(12, Unit.EM);
+        searchFor.addTextChangeListener(new FieldEvents.TextChangeListener() {
+            @Override
+            public void textChange(final FieldEvents.TextChangeEvent event) {
+                final String searchValue = event.getText();
+                updateSearchFilter(searchValue);
             }
-        }
-        refreshSizeAndSort();
+        });
+        filterSection.addComponent(searchFor);
     }
 
     private Layout buildActionButtons() {
@@ -290,14 +267,23 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
         entities.removeAllItems();
         if (displayDriver instanceof AppUser) {
             if (displayDriver.equals(this.appUser)) {
-                entities.addAll(readWriteDAO.getEntitiesForUser(entityType, this.appUser, 0, 0));
+                Set<T> entitiesForUser = readWriteDAO.getEntitiesForUser(entityType, this.appUser, getFirstResult(), getMaxResults());
+                entities.addAll(entitiesForUser);
                 refreshSizeAndSort();
             }
         }
     }
 
+    protected int getMaxResults() {
+        return 0;
+    }
+
+    protected int getFirstResult() {
+        return 0;
+    }
+
     public void refreshSizeAndSort() {
-        refreshSize((Integer) showSize.getValue());
+        refreshSize();
         refreshSort();
     }
 

@@ -133,17 +133,17 @@ public class BaseData {
         }
 
         @Override
-        public <T extends AppUserOwnedObject> long getEntitiesForUserCount(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
+        public <T extends AppUserOwnedObject> int getEntitiesForUserCount(Class<T> entityType, AppUser appUser) {
             return 0;
         }
 
         @Override
-        public <T extends AppUserOwnedObject> long getActiveEntitiesForUserCount(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
+        public <T extends AppUserOwnedObject> int getActiveEntitiesForUserCount(Class<T> entityType, AppUser appUser) {
             return 0;
         }
 
         @Override
-        public <T extends AppUserOwnedObject> long getArchivedEntitiesForUserCount(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
+        public <T extends AppUserOwnedObject> int getArchivedEntitiesForUserCount(Class<T> entityType, AppUser appUser) {
             return 0;
         }
 
@@ -153,8 +153,33 @@ public class BaseData {
         }
 
         @Override
-        public List<Photo> getAllPhotosForEntity(AppUserOwnedObject ownedObject) {
+        public List<Photo> getAllPhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
             return null;
+        }
+
+        @Override
+        public List<Photo> getActivePhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
+            return null;
+        }
+
+        @Override
+        public List<Photo> getArchivedPhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
+            return null;
+        }
+
+        @Override
+        public int getAllPhotosForEntityCount(AppUserOwnedObject ownedObject) {
+            return 0;
+        }
+
+        @Override
+        public int getActivePhotosForEntityCount(AppUserOwnedObject ownedObject) {
+            return 0;
+        }
+
+        @Override
+        public int getArchivedPhotosForEntityCount(AppUserOwnedObject ownedObject) {
+            return 0;
         }
 
         @Override

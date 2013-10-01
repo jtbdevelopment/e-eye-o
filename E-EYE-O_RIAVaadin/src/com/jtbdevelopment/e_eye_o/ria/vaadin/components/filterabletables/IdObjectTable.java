@@ -5,11 +5,13 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtonsGenerator;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.sorter.CompositeItemSorter;
+import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
+import org.jsoup.helper.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,8 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
     private static final Logger logger = LoggerFactory.getLogger(IdObjectTable.class);
     public static final String DEFAULT_SORT_FIELD_SETTING = ".defaultSortField";
     public static final String DEFAULT_SORT_ASCENDING_SETTING = ".defaultSortAscending";
+
+    private Container.Filter currentFilter;
 
     protected final Table entityTable = new Table();
 
@@ -122,13 +126,42 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
     }
 
     @Override
-    protected void refreshSize(final int maxSize) {
-        entityTable.setPageLength(Math.min(maxSize, entities.size()));
+    protected void refreshSize() {
+        entityTable.setPageLength(Math.min((Integer) showSize.getValue(), entities.size()));
     }
 
     @Override
     protected void refreshSort() {
         entityTable.sort();
     }
+
+    @Override
+    protected void updateSearchFilter(final String searchValue) {
+        if (currentFilter != null) {
+            entities.removeContainerFilter(currentFilter);
+        }
+
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": search text now " + searchValue);
+        if (!StringUtil.isBlank(searchValue)) {
+            currentFilter = generateFilter(searchValue);
+            entities.addContainerFilter(currentFilter);
+        }
+        refreshSizeAndSort();
+    }
+
+    @Override
+    protected void updateActiveArchiveFilters(final boolean active, final boolean archived) {
+        logger.trace(getSession().getAttribute(AppUser.class).getId() + ": changing active/archived to " + activeCB.getValue() + "/" + archivedCB.getValue());
+        entities.removeContainerFilters("archived");
+        if (!(active && archived)) {
+            if (active) {
+                entities.addContainerFilter("archived", "false", false, true);
+            } else {
+                entities.addContainerFilter("archived", "true", false, true);
+            }
+        }
+        refreshSizeAndSort();
+    }
+
 
 }

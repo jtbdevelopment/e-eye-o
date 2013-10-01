@@ -12,13 +12,22 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjec
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns.ArchiveAndDeleteButtons;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.PhotoThumbnailResource;
 import com.vaadin.data.Container;
+import com.vaadin.data.Validator;
+import com.vaadin.data.util.converter.StringToIntegerConverter;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.event.MouseEvents;
+import com.vaadin.server.Resource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+
+import java.util.Collection;
 
 /**
  * Date: 3/23/13
@@ -26,16 +35,27 @@ import org.springframework.context.annotation.Scope;
  */
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//  TODO - paginatation
-//  TODO - some sort of ordering
-//  TODO - text filter should go deeper into photo for summary desc perhaps
+//  TODO - no ordering but default for now
+//  TODO - no text search for now
+//  TODO - if any more pagination screens are built, some base functionality here
 public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
+    private static final Logger logger = LoggerFactory.getLogger(PhotoAlbum.class);
+    static final Resource leftArrow = new ThemeResource("../runo/icons/16/arrow-left.png");
+    static final Resource rightArrow = new ThemeResource("../runo/icons/16/arrow-right.png");
+
     private AppUserOwnedObject defaultPhotoFor;
+
+    private int currentPage = 1;
+    private int maxPages = 1;
 
     @Autowired
     private PhotoEditorDialogWindow photoEditorDialogWindow;
 
     private final CssLayout photoLayout = new CssLayout();
+    private Label maxPagesLabel;
+    private TextField currentPageField;
+    private Embedded leftButton;
+    private Embedded rightButton;
 
     public PhotoAlbum() {
         super(Photo.class);
@@ -92,23 +112,205 @@ public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
     }
 
     @Override
-    protected void refreshSize(final int maxSize) {
-        //  TODO
+    protected void refreshSize() {
+        recomputePages();
+        jumpToPage(currentPage);
+        setDisplayDriver(displayDriver);
+        refreshPhotos();
+    }
+
+    private void recomputePages() {
+        int total;
+        int maxSize = ((Integer) showSize.getValue());
+        if (displayDriver == null) {
+            return;
+        }
+        if (displayDriver instanceof AppUserOwnedObject) {
+            if (activeCB.getValue() && archivedCB.getValue()) {
+                total = readWriteDAO.getAllPhotosForEntityCount((AppUserOwnedObject) displayDriver);
+            } else if (activeCB.getValue()) {
+                total = readWriteDAO.getActivePhotosForEntityCount((AppUserOwnedObject) displayDriver);
+            } else {
+                total = readWriteDAO.getArchivedPhotosForEntityCount((AppUserOwnedObject) displayDriver);
+            }
+        } else if (displayDriver instanceof AppUser) {
+            if (activeCB.getValue() && archivedCB.getValue()) {
+                total = readWriteDAO.getEntitiesForUserCount(entityType, this.appUser);
+            } else if (activeCB.getValue()) {
+                total = readWriteDAO.getActiveEntitiesForUserCount(entityType, this.appUser);
+            } else {
+                total = readWriteDAO.getArchivedEntitiesForUserCount(entityType, this.appUser);
+            }
+        } else {
+            return;
+        }
+        int newMaxPages = total / maxSize;
+        if (total % maxSize > 0) {
+            ++newMaxPages;
+        }
+        newMaxPages = Math.max(newMaxPages, 1);
+        int newCurrentPage = currentPage;
+        if (newCurrentPage > newMaxPages) {
+            newCurrentPage = newMaxPages;
+        }
+        currentPage = newCurrentPage;
+        maxPages = newMaxPages;
+        updateCurrentPage();
+        updateMaxPagesLabel();
     }
 
     @Override
     protected void refreshSort() {
-        //  TODO
+    }
+
+    @Override
+    protected void updateSearchFilter(String searchValue) {
+    }
+
+    @Override
+    protected void updateActiveArchiveFilters(boolean active, boolean archived) {
+        refreshSize();
+    }
+
+    @Override
+    protected void buildSearchFilter(HorizontalLayout filterSection) {
     }
 
     @Override
     public void setDisplayDriver(final IdObject driver) {
-        super.setDisplayDriver(driver);
-        if (driver instanceof AppUserOwnedObject) {
-            entities.addAll(readWriteDAO.getAllPhotosForEntity((AppUserOwnedObject) driver));
-            setDefaultPhotoFor((AppUserOwnedObject) driver);
+        if (driver == null) {
+            return;
         }
+        AppUser appUser = getSession().getAttribute(AppUser.class);
+        if (appUser == null) {
+            return;
+        }
+        logger.trace(appUser.getId() + ": display driver changed to " + driver.getId());
+        this.displayDriver = driver;
+        entities.removeAllItems();
+        Collection<Photo> entitiesForUser = java.util.Collections.emptySet();
+        if (displayDriver instanceof AppUser) {
+            if (displayDriver.equals(this.appUser)) {
+                if (activeCB.getValue() && archivedCB.getValue()) {
+                    entitiesForUser = readWriteDAO.getEntitiesForUser(entityType, this.appUser, getFirstResult(), getMaxResults());
+                } else if (activeCB.getValue()) {
+                    entitiesForUser = readWriteDAO.getActiveEntitiesForUser(entityType, this.appUser, getFirstResult(), getMaxResults());
+                } else {
+                    entitiesForUser = readWriteDAO.getArchivedEntitiesForUser(entityType, this.appUser, getFirstResult(), getMaxResults());
+                }
+            }
+        }
+        if (driver instanceof AppUserOwnedObject) {
+            setDefaultPhotoFor((AppUserOwnedObject) driver);
+            AppUserOwnedObject userOwnedObject = (AppUserOwnedObject) driver;
+            if (activeCB.getValue() && archivedCB.getValue()) {
+                entitiesForUser = readWriteDAO.getAllPhotosForEntity(userOwnedObject, getFirstResult(), getMaxResults());
+            } else if (activeCB.getValue()) {
+                entitiesForUser = readWriteDAO.getActivePhotosForEntity(userOwnedObject, getFirstResult(), getMaxResults());
+            } else {
+                entitiesForUser = readWriteDAO.getArchivedPhotosForEntity(userOwnedObject, getFirstResult(), getMaxResults());
+            }
+        }
+        entities.addAll(entitiesForUser);
+        recomputePages();
         refreshPhotos();
+    }
+
+    @Override
+    protected int getMaxResults() {
+        return ((Integer) showSize.getValue());
+    }
+
+    @Override
+    protected int getFirstResult() {
+        return (currentPage - 1) * getMaxResults();
+    }
+
+    @Override
+    protected void addCustomFilters(HorizontalLayout filterSection) {
+        leftButton = new Embedded(null, leftArrow);
+        leftButton.setEnabled(false);
+        leftButton.addClickListener(new MouseEvents.ClickListener() {
+            @Override
+            public void click(MouseEvents.ClickEvent event) {
+                decreasePage();
+            }
+        });
+        filterSection.addComponent(leftButton);
+
+        currentPageField = new TextField();
+        currentPageField.setConverter(new StringToIntegerConverter());
+        currentPageField.addStyleName("right-align");
+        currentPageField.addValidator(new Validator() {
+            @Override
+            public void validate(Object value) throws InvalidValueException {
+                if (value instanceof Integer) {
+                    if (((Integer) value) > 0) {
+                        return;
+                    }
+                }
+                throw new InvalidValueException("Positive Numbers Only.");
+            }
+        });
+        currentPageField.setWidth(2, Unit.EM);
+        currentPageField.addTextChangeListener(new FieldEvents.TextChangeListener() {
+            @Override
+            public void textChange(FieldEvents.TextChangeEvent event) {
+                jumpToPage(Integer.parseInt(event.getText()));
+            }
+        });
+
+        filterSection.addComponent(currentPageField);
+
+        maxPagesLabel = new Label();
+        filterSection.addComponent(maxPagesLabel);
+
+        rightButton = new Embedded(null, rightArrow);
+        rightButton.setEnabled(false);
+        rightButton.addClickListener(new MouseEvents.ClickListener() {
+            @Override
+            public void click(MouseEvents.ClickEvent event) {
+                increasePage();
+            }
+        });
+        filterSection.addComponent(rightButton);
+
+        updateMaxPagesLabel();
+        updateCurrentPage();
+    }
+
+    private void updateCurrentPage() {
+        currentPageField.setValue("" + currentPage);
+        if (currentPage == 1) {
+            leftButton.setEnabled(false);
+        } else {
+            leftButton.setEnabled(true);
+        }
+        if (currentPage == maxPages) {
+            rightButton.setEnabled(false);
+        } else {
+            rightButton.setEnabled(true);
+        }
+    }
+
+    private void updateMaxPagesLabel() {
+        maxPagesLabel.setValue(" of " + maxPages);
+    }
+
+    private void jumpToPage(final int page) {
+        currentPage = page;
+        updateCurrentPage();
+        setDisplayDriver(displayDriver);
+    }
+
+    private void decreasePage() {
+        --currentPage;
+        jumpToPage(currentPage);
+    }
+
+    private void increasePage() {
+        ++currentPage;
+        jumpToPage(currentPage);
     }
 
     private void refreshPhotos() {
