@@ -27,7 +27,9 @@ public interface IdObjectSerializer {
 
     String writeStrings(final Collection<String> entities);
 
-    String writeMap(final Map<String, String> map);
+    String writeMap(final Map<String, Object> map);
+
+    Map<String, Object> readToMap(final String input);
 
     <T> T read(final String input);
 }

@@ -3,8 +3,10 @@ package com.jtbdevelopment.e_eye_o.jackson.serialization;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
@@ -13,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Date: 1/26/13
@@ -97,14 +96,40 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
     }
 
     @Override
-    public String writeMap(Map<String, String> map) {
+    public String writeMap(Map<String, Object> map) {
         try (JsonGenerator generator = createGenerator()) {
             generator.writeStartObject();
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                generator.writeStringField(entry.getKey(), entry.getValue());
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                generator.writeFieldName(entry.getKey());
+                Object value = entry.getValue();
+                if (value instanceof Collection) {
+                    generator.writeStartArray();
+                    for (Object object : (Collection) value) {
+                        if (object instanceof IdObject) {
+                            jacksonIdObjectSerializer.serialize((IdObject) object, generator);
+                        } else {
+                            generator.writeObject(object);
+                        }
+                    }
+                    generator.writeEndArray();
+                } else {
+                    generator.writeObject(value);
+                }
             }
             generator.writeEndObject();
             return completeGeneration(generator);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Map<String, Object> readToMap(final String input) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(input,
+                    new TypeReference<HashMap<String, Object>>() {
+                    }
+            );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
