@@ -7,10 +7,8 @@ import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
-import com.jtbdevelopment.e_eye_o.jersey.rest.SecurityAwareResource;
+import com.jtbdevelopment.e_eye_o.jersey.rest.v2.helpers.SecurityHelper;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 
 import javax.ws.rs.*;
@@ -21,18 +19,23 @@ import javax.ws.rs.core.Response;
  * Date: 2/10/13
  * Time: 7:07 PM
  */
-public class AppUserEntityResourceV2 extends SecurityAwareResource {
-    private final static Logger logger = LoggerFactory.getLogger(AppUserEntityResourceV2.class);
+public class AppUserEntityResourceV2 {
     private final ReadWriteDAO readWriteDAO;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final IdObjectReflectionHelper idObjectReflectionHelper;
+    private final SecurityHelper securityHelper;
     private final String entityId;
 
-    public AppUserEntityResourceV2(final ReadWriteDAO readWriteDAO, final JSONIdObjectSerializer jsonIdObjectSerializer, final IdObjectReflectionHelper idObjectReflectionHelper, final String entityId) {
+    public AppUserEntityResourceV2(final ReadWriteDAO readWriteDAO,
+                                   final JSONIdObjectSerializer jsonIdObjectSerializer,
+                                   final IdObjectReflectionHelper idObjectReflectionHelper,
+                                   final SecurityHelper securityHelper,
+                                   final String entityId) {
         this.readWriteDAO = readWriteDAO;
         this.jsonIdObjectSerializer = jsonIdObjectSerializer;
         this.entityId = entityId;
         this.idObjectReflectionHelper = idObjectReflectionHelper;
+        this.securityHelper = securityHelper;
     }
 
     @GET
@@ -51,68 +54,58 @@ public class AppUserEntityResourceV2 extends SecurityAwareResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response updateEntity(final String appUserOwnedObjectString) {
-        try {
-            AppUser sessionAppUser = getSessionAppUser();
+        AppUser sessionAppUser = securityHelper.getSessionAppUser();
 
-            AppUserOwnedObject updateObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
-            Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(updateObject.getClass());
-            if (!idObjectInterface.getAnnotation(IdObjectEntitySettings.class).editable()) {
-                return Response.status(Response.Status.FORBIDDEN).build();
-            }
-
-            AppUserOwnedObject dbEntity = readWriteDAO.get(updateObject.getClass(), entityId);
-            if (dbEntity == null) {
-                return Response.status(Response.Status.NOT_FOUND).build();
-            }
-            if (!dbEntity.equals(updateObject) || !dbEntity.getId().equals(entityId)) {
-                return Response.status(Response.Status.FORBIDDEN).build();
-            }
-
-            boolean archiveRequested = updateObject.isArchived();
-            if (sessionAppUser.isAdmin() || dbEntity.getAppUser().equals(sessionAppUser)) {
-                updateObject = readWriteDAO.update(sessionAppUser, updateObject);
-                if (updateObject.isArchived() != archiveRequested) {
-                    readWriteDAO.changeArchiveStatus(updateObject);
-                    updateObject = readWriteDAO.get(updateObject.getClass(), updateObject.getId());
-                }
-            } else {
-                if (!dbEntity.getAppUser().equals(sessionAppUser)) {
-                    return Response.status(Response.Status.FORBIDDEN).build();
-                }
-            }
-
-            //  Ignoring any sort of chained updated from archive status change
-            return Response.ok(jsonIdObjectSerializer.writeEntity(updateObject)).build();
-        } catch (Exception e) {
-            logger.error("Error PUTing " + appUserOwnedObjectString, e);
-            return Response.serverError().build();
+        AppUserOwnedObject updateObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
+        Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(updateObject.getClass());
+        if (!idObjectInterface.getAnnotation(IdObjectEntitySettings.class).editable()) {
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
+
+        AppUserOwnedObject dbEntity = readWriteDAO.get(updateObject.getClass(), entityId);
+        if (dbEntity == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        if (!dbEntity.equals(updateObject) || !dbEntity.getId().equals(entityId)) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        boolean archiveRequested = updateObject.isArchived();
+        if (sessionAppUser.isAdmin() || dbEntity.getAppUser().equals(sessionAppUser)) {
+            updateObject = readWriteDAO.update(sessionAppUser, updateObject);
+            if (updateObject.isArchived() != archiveRequested) {
+                readWriteDAO.changeArchiveStatus(updateObject);
+                updateObject = readWriteDAO.get(updateObject.getClass(), updateObject.getId());
+            }
+        } else {
+            if (!dbEntity.getAppUser().equals(sessionAppUser)) {
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
+        }
+
+        //  Ignoring any sort of chained updated from archive status change
+        return Response.ok(jsonIdObjectSerializer.writeEntity(updateObject)).build();
     }
 
     @DELETE
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response deleteEntity() {
-        try {
-            AppUser sessionAppUser = getSessionAppUser();
+        AppUser sessionAppUser = securityHelper.getSessionAppUser();
 
-            AppUserOwnedObject dbObject = readWriteDAO.get(AppUserOwnedObject.class, entityId);
-            if (dbObject == null) {
-                //  Probably OK
-                return Response.ok().build();
-            }
-
-            Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(dbObject.getClass());
-            if (sessionAppUser.isAdmin() || dbObject.getAppUser().equals(sessionAppUser)) {
-                if (!idObjectInterface.getAnnotation(IdObjectEntitySettings.class).editable()) {
-                    return Response.status(Response.Status.FORBIDDEN).build();
-                }
-                readWriteDAO.delete(dbObject);
-                return Response.ok().build();
-            }
-            return Response.status(Response.Status.FORBIDDEN).build();
-        } catch (Exception e) {
-            logger.error("Error DELETEing " + entityId, e);
-            return Response.serverError().build();
+        AppUserOwnedObject dbObject = readWriteDAO.get(AppUserOwnedObject.class, entityId);
+        if (dbObject == null) {
+            //  Probably OK
+            return Response.ok().build();
         }
+
+        Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(dbObject.getClass());
+        if (sessionAppUser.isAdmin() || dbObject.getAppUser().equals(sessionAppUser)) {
+            if (!idObjectInterface.getAnnotation(IdObjectEntitySettings.class).editable()) {
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
+            readWriteDAO.delete(dbObject);
+            return Response.ok().build();
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
     }
 }

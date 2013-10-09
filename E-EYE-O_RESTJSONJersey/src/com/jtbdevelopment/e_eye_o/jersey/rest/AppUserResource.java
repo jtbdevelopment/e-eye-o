@@ -5,6 +5,7 @@ import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
+import com.jtbdevelopment.e_eye_o.jersey.rest.v2.helpers.SecurityHelper;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -21,11 +22,12 @@ import java.util.Set;
  * Date: 2/10/13
  * Time: 12:33 PM
  */
-public class AppUserResource extends SecurityAwareResource {
+public class AppUserResource {
     private final static Logger logger = LoggerFactory.getLogger(AppUserResource.class);
     private final ReadWriteDAO readWriteDAO;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final IdObjectReflectionHelper idObjectReflectionHelper;
+    private final SecurityHelper securityHelper;
     private final AppUser appUser;
     private Boolean archiveFlag;
     private Class<? extends AppUserOwnedObject> entityType;
@@ -33,6 +35,7 @@ public class AppUserResource extends SecurityAwareResource {
     public AppUserResource(final ReadWriteDAO readWriteDAO,
                            final JSONIdObjectSerializer jsonIdObjectSerializer,
                            final IdObjectReflectionHelper idObjectReflectionHelper,
+                           final SecurityHelper securityHelper,
                            final String userId,
                            final Boolean archiveFlag,
                            final Class<? extends AppUserOwnedObject> entityType) {
@@ -41,6 +44,7 @@ public class AppUserResource extends SecurityAwareResource {
         this.appUser = readWriteDAO.get(AppUser.class, userId);
         this.idObjectReflectionHelper = idObjectReflectionHelper;
         this.archiveFlag = archiveFlag;
+        this.securityHelper = securityHelper;
         this.entityType = entityType == null ? AppUserOwnedObject.class : entityType;
     }
 
@@ -49,6 +53,7 @@ public class AppUserResource extends SecurityAwareResource {
         this.jsonIdObjectSerializer = appUserResource.jsonIdObjectSerializer;
         this.idObjectReflectionHelper = appUserResource.idObjectReflectionHelper;
         this.appUser = appUserResource.appUser;
+        this.securityHelper = appUserResource.securityHelper;
     }
 
     private AppUserResource(final AppUserResource appUserResource,
@@ -140,7 +145,7 @@ public class AppUserResource extends SecurityAwareResource {
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response createEntity(final String appUserOwnedObjectString) {
         try {
-            AppUser sessionAppUser = getSessionAppUser();
+            AppUser sessionAppUser = securityHelper.getSessionAppUser();
             AppUserOwnedObject newObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
             if (!sessionAppUser.isAdmin()) {
                 if (!idObjectReflectionHelper.getIdObjectInterfaceForClass(newObject.getClass()).getAnnotation(IdObjectEntitySettings.class).editable()) {
@@ -160,7 +165,7 @@ public class AppUserResource extends SecurityAwareResource {
     @Path("{entityId}")
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getAppUserEntityResource(@PathParam("entityId") final String entityId) {
-        return new AppUserEntityResource(readWriteDAO, jsonIdObjectSerializer, idObjectReflectionHelper, entityId);
+        return new AppUserEntityResource(readWriteDAO, jsonIdObjectSerializer, idObjectReflectionHelper, securityHelper, entityId);
     }
 
     private Object getEntityRefinedResource(final Class<? extends AppUserOwnedObject> entityType) {

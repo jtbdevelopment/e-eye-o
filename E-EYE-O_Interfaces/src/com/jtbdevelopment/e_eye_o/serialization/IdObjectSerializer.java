@@ -29,7 +29,8 @@ public interface IdObjectSerializer {
 
     String writeMap(final Map<String, Object> map);
 
+    <T> T read(final String input);
+
     Map<String, Object> readToMap(final String input);
 
-    <T> T read(final String input);
 }

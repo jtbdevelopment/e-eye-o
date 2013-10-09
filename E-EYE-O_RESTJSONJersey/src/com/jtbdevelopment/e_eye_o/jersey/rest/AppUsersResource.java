@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
+import com.jtbdevelopment.e_eye_o.jersey.rest.v2.helpers.SecurityHelper;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -21,20 +22,22 @@ import javax.ws.rs.core.Response;
 // TODO - delete user
 @Service
 @Path("/users")
-public class AppUsersResource extends SecurityAwareResource {
+public class AppUsersResource {
     @Autowired
     protected ReadWriteDAO readWriteDAO;
     @Autowired
     protected JSONIdObjectSerializer jsonIdObjectSerializer;
     @Autowired
     protected IdObjectReflectionHelper idObjectReflectionHelper;
+    @Autowired
+    protected SecurityHelper securityHelper;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     //  TODO - paging?
     public Response getUsers() {
-        AppUser appUser = getSessionAppUser();
+        AppUser appUser = securityHelper.getSessionAppUser();
 
         if (appUser.isAdmin()) {
             return Response.ok(jsonIdObjectSerializer.writeEntities(readWriteDAO.getUsers())).build();
@@ -48,7 +51,7 @@ public class AppUsersResource extends SecurityAwareResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response updateUser(final String appUserString) {
-        AppUser sessionAppUser = getSessionAppUser();
+        AppUser sessionAppUser = securityHelper.getSessionAppUser();
 
         AppUser updateAppUser = jsonIdObjectSerializer.read(appUserString);
         if (updateAppUser != null) {
@@ -72,9 +75,9 @@ public class AppUsersResource extends SecurityAwareResource {
     @Path("{userId}")
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getUserEntities(@PathParam("userId") final String userId) {
-        AppUser appUser = getSessionAppUser();
+        AppUser appUser = securityHelper.getSessionAppUser();
         if (appUser.isAdmin() || appUser.getId().equals(userId)) {
-            return new AppUserResource(readWriteDAO, jsonIdObjectSerializer, idObjectReflectionHelper, userId, null, null);
+            return new AppUserResource(readWriteDAO, jsonIdObjectSerializer, idObjectReflectionHelper, securityHelper, userId, null, null);
         } else {
             return Response.status(Response.Status.FORBIDDEN).build();
         }

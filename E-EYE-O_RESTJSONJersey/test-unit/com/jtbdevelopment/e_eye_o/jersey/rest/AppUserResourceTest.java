@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.jersey.rest;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.jersey.rest.v2.helpers.SecurityHelper;
 import org.jmock.Expectations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -18,6 +19,7 @@ import static org.testng.Assert.assertNotNull;
  */
 public class AppUserResourceTest extends AbstractResourceTest {
     private static String userId = "user-id";
+    private SecurityHelper securityHelper;
     private AppUser user;
     final Set<AppUserOwnedObject> objects = new HashSet<>();
     final String output = "some-json";
@@ -26,6 +28,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     public void setUp() throws Exception {
         super.setUp();
         user = context.mock(AppUser.class);
+        securityHelper = context.mock(SecurityHelper.class);
         context.checking(new Expectations() {{
             allowing(dao).get(AppUser.class, userId);
             will(returnValue(user));
@@ -41,7 +44,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
 
     @Test
     public void testGetEntitiesForUser() throws Exception {
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         context.checking(new Expectations() {{
             one(dao).getEntitiesForUser(AppUserOwnedObject.class, user, 0, 0);
             will(returnValue(objects));
@@ -56,7 +59,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
 
     @Test
     public void testGetArchived() throws Exception {
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         AppUserResource archived = (AppUserResource) resource.getArchived();
         assertNotNull(archived);
         context.checking(new Expectations() {{
@@ -79,7 +82,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
 
     @Test
     public void testGetActive() throws Exception {
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         AppUserResource active = (AppUserResource) resource.getActive();
         assertNotNull(active);
         context.checking(new Expectations() {{
@@ -97,7 +100,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
 
     @Test
     public void testMultipleLevelsOfActiveArchivedNulls() throws Exception {
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         AppUserResource active = (AppUserResource) resource.getActive();
         assertNotNull(active);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) active.getActive()).getStatus());
@@ -115,7 +118,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
 
     @Test
     public void testGetPhotos() throws Exception {
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         AppUserResource photos = (AppUserResource) resource.getPhotos();
         assertNotNull(photos);
         context.checking(new Expectations() {{
@@ -138,7 +141,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
 
     @Test
     public void testGetStudents() throws Exception {
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         AppUserResource students = (AppUserResource) resource.getStudents();
         assertNotNull(students);
         context.checking(new Expectations() {{
@@ -161,7 +164,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
 
     @Test
     public void testGetClassLists() throws Exception {
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         AppUserResource classLists = (AppUserResource) resource.getClassLists();
         assertNotNull(classLists);
         context.checking(new Expectations() {{
@@ -185,7 +188,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
 
     @Test
     public void testGetObservations() throws Exception {
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         AppUserResource observations = (AppUserResource) resource.getObservations();
         assertNotNull(observations);
         context.checking(new Expectations() {{
@@ -208,7 +211,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
 
     @Test
     public void testGetObservationCategories() throws Exception {
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         AppUserResource categories = (AppUserResource) resource.getObservationCategories();
         assertNotNull(categories);
         context.checking(new Expectations() {{
@@ -227,7 +230,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     @Test
     public void testGettingMultipleEntityTypeDepthsNulls() throws Exception {
         // Not testing every permutation
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) ((AppUserResource) resource.getClassLists()).getObservations()).getStatus());
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) ((AppUserResource) resource.getObservations()).getStudents()).getStatus());
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), ((Response) ((AppUserResource) resource.getPhotos()).getStudents()).getStatus());
@@ -243,7 +246,7 @@ public class AppUserResourceTest extends AbstractResourceTest {
     @Test
     public void testGetAppUserEntityResource() throws Exception {
         final String someEntityId = "entity";
-        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, userId, null, null);
+        AppUserResource resource = new AppUserResource(dao, serializer, reflectionHelper, securityHelper, userId, null, null);
         AppUserEntityResource entityResource = (AppUserEntityResource) resource.getAppUserEntityResource(someEntityId);
         assertNotNull(entityResource);
     }

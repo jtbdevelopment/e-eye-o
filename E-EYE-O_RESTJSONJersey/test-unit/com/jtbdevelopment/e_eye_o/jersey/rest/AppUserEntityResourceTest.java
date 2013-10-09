@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.jersey.rest;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.jersey.rest.v2.helpers.SecurityHelper;
 import org.jmock.Expectations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -26,6 +27,7 @@ public class AppUserEntityResourceTest extends AbstractResourceTest {
     public void testGetEntity() throws Exception {
         final String entityId = "xyz-123";
         final AppUserOwnedObject ownedObject = context.mock(AppUserOwnedObject.class);
+        final SecurityHelper securityHelper = context.mock(SecurityHelper.class);
         final String serialized = "somestring";
         context.checking(new Expectations() {{
             one(dao).get(AppUserOwnedObject.class, entityId);
@@ -33,7 +35,7 @@ public class AppUserEntityResourceTest extends AbstractResourceTest {
             one(serializer).writeEntity(ownedObject);
             will(returnValue(serialized));
         }});
-        AppUserEntityResource resource = new AppUserEntityResource(dao, serializer, reflectionHelper, entityId);
+        AppUserEntityResource resource = new AppUserEntityResource(dao, serializer, reflectionHelper, securityHelper, entityId);
         assertEquals(serialized, resource.getEntity().getEntity());
 
     }

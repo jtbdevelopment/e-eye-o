@@ -7,6 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
+import com.jtbdevelopment.e_eye_o.jersey.rest.v2.helpers.SecurityHelper;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,18 +21,24 @@ import javax.ws.rs.core.Response;
  * Date: 2/10/13
  * Time: 7:07 PM
  */
-public class AppUserEntityResource extends SecurityAwareResource {
+public class AppUserEntityResource {
     private final static Logger logger = LoggerFactory.getLogger(AppUserEntityResource.class);
     private final ReadWriteDAO readWriteDAO;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final IdObjectReflectionHelper idObjectReflectionHelper;
+    private final SecurityHelper securityHelper;
     private final String entityId;
 
-    public AppUserEntityResource(final ReadWriteDAO readWriteDAO, final JSONIdObjectSerializer jsonIdObjectSerializer, final IdObjectReflectionHelper idObjectReflectionHelper, final String entityId) {
+    public AppUserEntityResource(final ReadWriteDAO readWriteDAO,
+                                 final JSONIdObjectSerializer jsonIdObjectSerializer,
+                                 final IdObjectReflectionHelper idObjectReflectionHelper,
+                                 final SecurityHelper securityHelper,
+                                 final String entityId) {
         this.readWriteDAO = readWriteDAO;
         this.jsonIdObjectSerializer = jsonIdObjectSerializer;
         this.entityId = entityId;
         this.idObjectReflectionHelper = idObjectReflectionHelper;
+        this.securityHelper = securityHelper;
     }
 
     @GET
@@ -51,7 +58,7 @@ public class AppUserEntityResource extends SecurityAwareResource {
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response updateEntity(final String appUserOwnedObjectString) {
         try {
-            AppUser sessionAppUser = getSessionAppUser();
+            AppUser sessionAppUser = securityHelper.getSessionAppUser();
 
             AppUserOwnedObject updateObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
             Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(updateObject.getClass());
@@ -92,7 +99,7 @@ public class AppUserEntityResource extends SecurityAwareResource {
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response deleteEntity() {
         try {
-            AppUser sessionAppUser = getSessionAppUser();
+            AppUser sessionAppUser = securityHelper.getSessionAppUser();
 
             AppUserOwnedObject dbObject = readWriteDAO.get(AppUserOwnedObject.class, entityId);
             if (dbObject == null) {
