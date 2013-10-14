@@ -20,7 +20,10 @@ import javax.ws.rs.core.Response;
 /**
  * Date: 2/10/13
  * Time: 7:07 PM
+ * <p/>
+ * TODO - retire
  */
+@Deprecated
 public class AppUserEntityResource {
     private final static Logger logger = LoggerFactory.getLogger(AppUserEntityResource.class);
     private final ReadWriteDAO readWriteDAO;

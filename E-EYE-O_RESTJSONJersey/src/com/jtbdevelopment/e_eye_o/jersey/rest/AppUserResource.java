@@ -21,7 +21,10 @@ import java.util.Set;
 /**
  * Date: 2/10/13
  * Time: 12:33 PM
+ * <p/>
+ * TODO - retire
  */
+@Deprecated
 public class AppUserResource {
     private final static Logger logger = LoggerFactory.getLogger(AppUserResource.class);
     private final ReadWriteDAO readWriteDAO;
@@ -70,7 +73,6 @@ public class AppUserResource {
         this.entityType = entityType;
     }
 
-    //  TODO - paging
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})

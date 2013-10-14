@@ -18,10 +18,12 @@ import javax.ws.rs.core.Response;
 /**
  * Date: 2/10/13
  * Time: 11:57 AM
+ * <p/>
+ * TODO - retire
  */
-// TODO - delete user
 @Service
 @Path("/users")
+@Deprecated
 public class AppUsersResource {
     @Autowired
     protected ReadWriteDAO readWriteDAO;
@@ -35,7 +37,6 @@ public class AppUsersResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
-    //  TODO - paging?
     public Response getUsers() {
         AppUser appUser = securityHelper.getSessionAppUser();
 

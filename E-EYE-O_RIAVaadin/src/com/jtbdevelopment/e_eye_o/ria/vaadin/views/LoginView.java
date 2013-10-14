@@ -41,6 +41,9 @@ import javax.servlet.http.HttpServletRequestWrapper;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class LoginView extends VerticalLayout implements View {
 
+    @Value("${url.root}")
+    private String urlRoot;
+
     public static final String VIEW_NAME = "Login";
 
     private final TextField loginField = new TextField("Email Address");
@@ -149,7 +152,7 @@ public class LoginView extends VerticalLayout implements View {
                 }
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 getParent().getUI().getSession().close();
-                getParent().getUI().getPage().setLocation("/E-EYE-O");
+                getParent().getUI().getPage().setLocation(urlRoot);
                 loginField.setValue("");
                 passwordField.setValue("");
             }

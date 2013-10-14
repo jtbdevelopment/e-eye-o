@@ -95,4 +95,14 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>SecureLogin</web-resource-name>
+            <url-pattern>/E-EYE-O/Login/*</url-pattern>
+            <url-pattern>/REST/v2/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>
