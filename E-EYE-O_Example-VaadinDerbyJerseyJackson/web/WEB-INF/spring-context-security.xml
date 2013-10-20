@@ -14,10 +14,11 @@
         <!-- TODO - below needs to be retired  -->
         <intercept-url pattern="/REST/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any"/>
         <intercept-url pattern="/REST/v2/**" access="ROLE_USER, ROLE_ADMIN" requires-channel="https"/>
+        <intercept-url pattern="/REST/users/**" access="ROLE_USER, ROLE_ADMIN" requires-channel="any"/>
         <intercept-url pattern="/VAADIN/**" access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any"/>
         <intercept-url pattern="/WEB-INF" access="ROLE_USER, ROLE_ADMIN" requires-channel="any"/>
         <intercept-url pattern="/E-EYE-O/**" access="ROLE_USER, ROLE_ADMIN" requires-channel="https"/>
-        <intercept-url pattern="/**" access="ROLE_USER, ROLE_ADMIN" requires-channel="any"/>
+        <intercept-url pattern="/**" access="ROLE_USER, ROLE_ADMIN" requires-channel="https"/>
         <form-login login-page="/E-EYE-O/Login" default-target-url="${url.root}" always-use-default-target="true"/>
         <remember-me services-ref="rememberMeServices" key="EEYEO"/>
     </http>
