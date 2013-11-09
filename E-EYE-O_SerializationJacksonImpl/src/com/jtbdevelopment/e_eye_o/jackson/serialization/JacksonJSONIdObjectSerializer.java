@@ -79,23 +79,6 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
     }
 
     @Override
-    public String writeStrings(final Collection<String> entities) {
-        StringBuilder builder = new StringBuilder("[\n");
-        boolean first = true;
-        for (final String entity : entities) {
-            if (first) {
-                first = false;
-            } else {
-                builder.append(",\n");
-            }
-            builder.append(entity);
-        }
-
-        builder.append("\n]");
-        return builder.toString();
-    }
-
-    @Override
     public String writeMap(Map<String, Object> map) {
         try (JsonGenerator generator = createGenerator()) {
             generator.writeStartObject();

@@ -75,9 +75,8 @@ public class AppUserResourceV2 {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
-    public Response createEntity(final String appUserOwnedObjectString) {
+    public Response createEntity(final AppUserOwnedObject newObject) {
         AppUser sessionAppUser = securityHelper.getSessionAppUser();
-        AppUserOwnedObject newObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
         if (!sessionAppUser.isAdmin()) {
             if (!idObjectReflectionHelper.getIdObjectInterfaceForClass(newObject.getClass()).getAnnotation(IdObjectEntitySettings.class).editable()) {
                 return Response.status(Response.Status.FORBIDDEN).build();
@@ -93,10 +92,9 @@ public class AppUserResourceV2 {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
-    public Response updateUser(final String appUserString) {
+    public Response updateUser(final AppUser updateAppUser) {
         AppUser sessionAppUser = securityHelper.getSessionAppUser();
 
-        AppUser updateAppUser = jsonIdObjectSerializer.read(appUserString);
         if (updateAppUser != null) {
             if (!StringUtils.hasLength(updateAppUser.getId())) {
                 return Response.status(Response.Status.NOT_FOUND).build();
@@ -114,7 +112,7 @@ public class AppUserResourceV2 {
                     }
                     updatedUser = readWriteDAO.get(AppUser.class, updatedUser.getId());
                 }
-                return Response.ok(jsonIdObjectSerializer.writeEntity(updatedUser)).build();
+                return Response.ok(updatedUser).build();
             } else {
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
@@ -148,7 +146,7 @@ public class AppUserResourceV2 {
             set = archiveFlag ? readWriteDAO.getArchivedEntitiesForUser(entityType, appUser, from, PAGE_SIZE) :
                     readWriteDAO.getActiveEntitiesForUser(entityType, appUser, from, PAGE_SIZE);
         }
-        return Response.ok(jsonIdObjectSerializer.writeMap(computePaginatedResults(set, PAGE_SIZE))).build();
+        return Response.ok(computePaginatedResults(set, PAGE_SIZE)).build();
     }
 
     @GET
@@ -165,13 +163,13 @@ public class AppUserResourceV2 {
                 return input != null ? jsonIdObjectSerializer.readToMap(input) : null;
             }
         });
-        return Response.ok(jsonIdObjectSerializer.writeMap(computePaginatedResults(listMap, PAGE_SIZE))).build();
+        return Response.ok(computePaginatedResults(listMap, PAGE_SIZE)).build();
     }
 
     @Path("{entityId}")
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getAppUserEntityResource(@PathParam("entityId") final String entityId) {
-        return new AppUserEntityResourceV2(readWriteDAO, jsonIdObjectSerializer, idObjectReflectionHelper, securityHelper, entityId);
+        return new AppUserEntityResourceV2(readWriteDAO, idObjectReflectionHelper, securityHelper, entityId);
     }
 
     @Path("archived")

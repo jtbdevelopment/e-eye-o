@@ -41,11 +41,9 @@ public class AppUsersResourceV2 {
     public Response getUsers() {
         AppUser appUser = securityHelper.getSessionAppUser();
 
-        if (appUser.isAdmin()) {
-            return Response.ok(jsonIdObjectSerializer.writeEntities(readWriteDAO.getUsers())).build();
-        } else {
-            return Response.ok(jsonIdObjectSerializer.writeEntities(Arrays.asList(readWriteDAO.get(AppUser.class, appUser.getId())))).build();
-        }
+        return Response.ok(
+                appUser.isAdmin() ? readWriteDAO.getUsers() : Arrays.<AppUser>asList(readWriteDAO.get(AppUser.class, appUser.getId())))
+                .build();
     }
 
     @Path("{userId}")

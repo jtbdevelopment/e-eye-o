@@ -8,7 +8,6 @@ import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.jersey.rest.v2.helpers.SecurityHelper;
-import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.springframework.security.access.annotation.Secured;
 
 import javax.ws.rs.*;
@@ -21,18 +20,15 @@ import javax.ws.rs.core.Response;
  */
 public class AppUserEntityResourceV2 {
     private final ReadWriteDAO readWriteDAO;
-    private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final IdObjectReflectionHelper idObjectReflectionHelper;
     private final SecurityHelper securityHelper;
     private final String entityId;
 
     public AppUserEntityResourceV2(final ReadWriteDAO readWriteDAO,
-                                   final JSONIdObjectSerializer jsonIdObjectSerializer,
                                    final IdObjectReflectionHelper idObjectReflectionHelper,
                                    final SecurityHelper securityHelper,
                                    final String entityId) {
         this.readWriteDAO = readWriteDAO;
-        this.jsonIdObjectSerializer = jsonIdObjectSerializer;
         this.entityId = entityId;
         this.idObjectReflectionHelper = idObjectReflectionHelper;
         this.securityHelper = securityHelper;
@@ -46,17 +42,16 @@ public class AppUserEntityResourceV2 {
         if (entity == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(jsonIdObjectSerializer.writeEntity(entity)).build();
+        return Response.ok(entity).build();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
-    public Response updateEntity(final String appUserOwnedObjectString) {
+    public Response updateEntity(AppUserOwnedObject updateObject) {
         AppUser sessionAppUser = securityHelper.getSessionAppUser();
 
-        AppUserOwnedObject updateObject = jsonIdObjectSerializer.read(appUserOwnedObjectString);
         Class<? extends IdObject> idObjectInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(updateObject.getClass());
         if (!idObjectInterface.getAnnotation(IdObjectEntitySettings.class).editable()) {
             return Response.status(Response.Status.FORBIDDEN).build();
@@ -84,7 +79,7 @@ public class AppUserEntityResourceV2 {
         }
 
         //  Ignoring any sort of chained updated from archive status change
-        return Response.ok(jsonIdObjectSerializer.writeEntity(updateObject)).build();
+        return Response.ok(updateObject).build();
     }
 
     @DELETE
