@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers.example;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.AbstractUserHelperImpl;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,8 @@ public class UserHelperImpl extends AbstractUserHelperImpl {
         Observation o2 = readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationTimestamp(new LocalDateTime().minusDays(3)).withObservationSubject(s1).withComment("Observation 2").addCategory(c1).addCategory(c2).build());
         readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withComment("Observation 3").build());
         readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime().minusDays(1)).addCategory(c2).withComment("You can put general class observations too.").build());
+        Semester semester1 = readWriteDAO.create(idObjectFactory.newSemesterBuilder(newUser).withDescription("Semester 1 - Can be used to group observations by time").withEnd(new LocalDate().minusDays(5)).withStart(new LocalDate().minusDays(60)).build());
+        Semester semester2 = readWriteDAO.create(idObjectFactory.newSemesterBuilder(newUser).withDescription("Semester 2 - Can be used to group observations by time").withEnd(new LocalDate().plusDays(65)).withStart(new LocalDate().minusDays(4)).build());
 
 
         for (String string : Arrays.asList(

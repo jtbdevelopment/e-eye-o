@@ -144,6 +144,14 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             }
         }
 
+        if (wrapped instanceof Semester) {
+            for (Observation observation : getAllObservationsForSemester((Semester) wrapped, 0, 0)) {
+                if (observation.isArchived() == initialArchivedState) {
+                    changeArchiveStatus(observation);
+                }
+            }
+        }
+
         if (wrapped instanceof Observable) {
             for (Observation observation : getAllObservationsForEntity((Observable) wrapped)) {
                 if (observation.isArchived() == initialArchivedState) {
@@ -299,6 +307,12 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             //  Already deleted
             return;
         }
+
+        /*
+         *
+         *  Note that deleting a semester does not delete observations for semester
+         *
+         */
 
         if (wrapped instanceof ObservationCategory) {
             for (Observation observation : getAllObservationsForObservationCategory((ObservationCategory) wrapped)) {

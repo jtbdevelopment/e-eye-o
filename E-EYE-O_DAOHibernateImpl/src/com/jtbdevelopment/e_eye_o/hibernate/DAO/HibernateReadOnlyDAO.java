@@ -78,28 +78,54 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         return ((Number) criteria.uniqueResult()).intValue();
     }
 
-    private <T extends AppUserOwnedObject> Criteria createCriteria(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
+    private <T extends AppUserOwnedObject> Criteria createEntityCriteria(Class<T> entityType, AppUser appUser, int firstResult, int maxResults) {
         Criteria criteria = sessionFactory.getCurrentSession()
                 .createCriteria(getHibernateEntityName(entityType))
                 .add(Restrictions.eq("appUser", appUser))
                 .addOrder(Order.asc("id"));
+        addPaginationToCriteria(firstResult, maxResults, criteria);
+        return criteria;
+    }
+
+    private void addPaginationToCriteria(int firstResult, int maxResults, Criteria criteria) {
         if (maxResults > 0) {
             criteria.setFirstResult(firstResult);
             criteria.setMaxResults(maxResults);
         }
+    }
+
+    private <T extends AppUserOwnedObject> Criteria createEntityCriteriaWithArchiveFlag(Class<T> entityType, AppUser appUser, boolean archivedFlag, int firstResult, int maxResults) {
+        Criteria criteria = createEntityCriteria(entityType, appUser, firstResult, maxResults);
+        addArchiveCriteriaToCriteria(archivedFlag, criteria);
         return criteria;
     }
 
-    private <T extends AppUserOwnedObject> Criteria createCriteriaWithArchiveFlag(Class<T> entityType, AppUser appUser, boolean archivedFlag, int firstResult, int maxResults) {
-        Criteria criteria = createCriteria(entityType, appUser, firstResult, maxResults);
+    private void addArchiveCriteriaToCriteria(boolean archivedFlag, Criteria criteria) {
         criteria.add(Restrictions.eq("archived", archivedFlag));
+    }
+
+    private <T extends AppUserOwnedObject> Criteria createSemesterCritera(final Semester semester, int firstResult, int maxResults) {
+        LocalTime time = new LocalTime(0, 0, 0, 0);
+        Criteria criteria = sessionFactory.getCurrentSession()
+                .createCriteria(getHibernateEntityName(Observation.class))
+                .add(Restrictions.eq("appUser", semester.getAppUser()))
+                .add(Restrictions.ge("observationTimestamp", semester.getStart().toLocalDateTime(time)))
+                .add(Restrictions.lt("observationTimestamp", semester.getEnd().plusDays(1).toLocalDateTime(time)))
+                .addOrder(Order.asc("id"));
+        addPaginationToCriteria(firstResult, maxResults, criteria);
+        return criteria;
+    }
+
+    private <T extends AppUserOwnedObject> Criteria createSemesterCriteraWithArchiveFlag(final Semester semester, boolean archivedFlag, int firstResult, int maxResults) {
+        Criteria criteria = createSemesterCritera(semester, firstResult, maxResults);
+        addArchiveCriteriaToCriteria(archivedFlag, criteria);
         return criteria;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, int firstResult, int maxResults) {
-        Criteria criteria = createCriteria(entityType, appUser, firstResult, maxResults);
+        Criteria criteria = createEntityCriteria(entityType, appUser, firstResult, maxResults);
         return new HashSet<>((List<T>) criteria.list());
     }
 
@@ -115,14 +141,14 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @SuppressWarnings("unchecked")
     private <T extends AppUserOwnedObject> Set<T> getEntitiesForUser(final Class<T> entityType, final AppUser appUser, final boolean archivedFlag, int firstResult, int maxResults) {
-        Criteria criteria = createCriteriaWithArchiveFlag(entityType, appUser, archivedFlag, firstResult, maxResults);
+        Criteria criteria = createEntityCriteriaWithArchiveFlag(entityType, appUser, archivedFlag, firstResult, maxResults);
         return new HashSet<>((List<T>) criteria.list());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> int getEntitiesForUserCount(final Class<T> entityType, final AppUser appUser) {
-        Criteria criteria = createCriteria(entityType, appUser, 0, 0);
+        Criteria criteria = createEntityCriteria(entityType, appUser, 0, 0);
         return returnRowCountForCriteria(criteria);
     }
 
@@ -138,7 +164,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @SuppressWarnings("unchecked")
     private <T extends AppUserOwnedObject> int getEntitiesForUserCount(final Class<T> entityType, final AppUser appUser, final boolean archivedFlag) {
-        Criteria criteria = createCriteriaWithArchiveFlag(entityType, appUser, archivedFlag, 0, 0);
+        Criteria criteria = createEntityCriteriaWithArchiveFlag(entityType, appUser, archivedFlag, 0, 0);
         return returnRowCountForCriteria(criteria);
     }
 
@@ -179,41 +205,59 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Photo> getAllPhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults) {
-        Criteria photoFor = addPhotoForCriteria(createCriteria(HibernatePhoto.class, ownedObject.getAppUser(), firstResult, maxResults), ownedObject);
+        Criteria photoFor = addPhotoForCriteria(createEntityCriteria(HibernatePhoto.class, ownedObject.getAppUser(), firstResult, maxResults), ownedObject);
         return photoFor.list();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Photo> getActivePhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
-        Criteria photoFor = addPhotoForCriteria(createCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), false, firstResult, maxResults), ownedObject);
+        Criteria photoFor = addPhotoForCriteria(createEntityCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), false, firstResult, maxResults), ownedObject);
         return photoFor.list();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Photo> getArchivedPhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
-        Criteria photoFor = addPhotoForCriteria(createCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), true, firstResult, maxResults), ownedObject);
+        Criteria photoFor = addPhotoForCriteria(createEntityCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), true, firstResult, maxResults), ownedObject);
         return photoFor.list();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public int getAllPhotosForEntityCount(final AppUserOwnedObject ownedObject) {
-        Criteria photoFor = addPhotoForCriteria(createCriteria(HibernatePhoto.class, ownedObject.getAppUser(), 0, 0), ownedObject);
+        Criteria photoFor = addPhotoForCriteria(createEntityCriteria(HibernatePhoto.class, ownedObject.getAppUser(), 0, 0), ownedObject);
         return returnRowCountForCriteria(photoFor);
     }
 
     @Override
     public int getActivePhotosForEntityCount(AppUserOwnedObject ownedObject) {
-        Criteria photoFor = addPhotoForCriteria(createCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), false, 0, 0), ownedObject);
+        Criteria photoFor = addPhotoForCriteria(createEntityCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), false, 0, 0), ownedObject);
         return returnRowCountForCriteria(photoFor);
     }
 
     @Override
     public int getArchivedPhotosForEntityCount(AppUserOwnedObject ownedObject) {
-        Criteria photoFor = addPhotoForCriteria(createCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), true, 0, 0), ownedObject);
+        Criteria photoFor = addPhotoForCriteria(createEntityCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), true, 0, 0), ownedObject);
         return returnRowCountForCriteria(photoFor);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Set<Observation> getAllObservationsForSemester(final Semester semester, final int firstResult, final int maxResults) {
+        return new HashSet<Observation>(createSemesterCritera(semester, firstResult, maxResults).list());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Set<Observation> getActiveObservationsForSemester(final Semester semester, final int firstResult, final int maxResults) {
+        return new HashSet<Observation>(createSemesterCriteraWithArchiveFlag(semester, false, firstResult, maxResults).list());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Set<Observation> getArchivedObservationsForSemester(final Semester semester, final int firstResult, final int maxResults) {
+        return new HashSet<Observation>(createSemesterCriteraWithArchiveFlag(semester, true, firstResult, maxResults).list());
     }
 
     @Override

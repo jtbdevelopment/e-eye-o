@@ -64,6 +64,12 @@ public interface ReadOnlyDAO {
 
     public int getArchivedPhotosForEntityCount(final AppUserOwnedObject ownedObject);
 
+    public Set<Observation> getAllObservationsForSemester(final Semester semester, final int firstResult, final int maxResults);
+
+    public Set<Observation> getActiveObservationsForSemester(final Semester semester, final int firstResult, final int maxResults);
+
+    public Set<Observation> getArchivedObservationsForSemester(final Semester semester, final int firstResult, final int maxResults);
+
     /**
      * Generally expected to return an ordered set by modification timestamp ascending and id of all versions of changes made
      * Note this function is also expected to include DeletedObjects which are generally filtered out of other queries

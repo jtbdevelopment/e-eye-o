@@ -50,4 +50,8 @@ public interface IdObjectFactory {
     TwoPhaseActivity newTwoPhaseActivity(final AppUser appUser);
 
     TwoPhaseActivityBuilder newTwoPhaseActivityBuilder(final AppUser appUser);
+
+    Semester newSemester(final AppUser appUser);
+
+    SemesterBuilder newSemesterBuilder(final AppUser appUser);
 }

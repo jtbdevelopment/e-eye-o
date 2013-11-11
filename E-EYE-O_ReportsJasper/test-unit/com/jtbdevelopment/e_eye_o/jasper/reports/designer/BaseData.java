@@ -183,6 +183,21 @@ public class BaseData {
         }
 
         @Override
+        public Set<Observation> getAllObservationsForSemester(Semester semester, int firstResult, int maxResults) {
+            return null;
+        }
+
+        @Override
+        public Set<Observation> getActiveObservationsForSemester(Semester semester, int firstResult, int maxResults) {
+            return null;
+        }
+
+        @Override
+        public Set<Observation> getArchivedObservationsForSemester(Semester semester, int firstResult, int maxResults) {
+            return null;
+        }
+
+        @Override
         public LocalDateTime getLastObservationTimestampForEntity(Observable observable) {
             return null;
         }

@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
         singular = "Class", plural = "Classes",
         viewFieldOrder = {"description", "lastObservationTimestamp", "modificationTimestamp", "archived"},
         editFieldOrder = {"description"})
-//  TODO - should we add semesters to this to allow better time periods?
 public interface ClassList extends Observable {
 
     public final static String CLASS_LIST_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL_ERROR = "ClassList.description" + CANNOT_BE_BLANK_OR_NULL_ERROR;

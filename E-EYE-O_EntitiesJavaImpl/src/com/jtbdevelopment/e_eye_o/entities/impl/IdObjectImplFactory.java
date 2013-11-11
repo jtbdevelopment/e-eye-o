@@ -38,6 +38,8 @@ public class IdObjectImplFactory implements IdObjectFactory {
                 return (T) newDeletedObject(null);
             case "TwoPhaseActivity":
                 return (T) newTwoPhaseActivity(null);
+            case "Semester":
+                return (T) newSemester(null);
             default:
                 throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
         }
@@ -65,6 +67,8 @@ public class IdObjectImplFactory implements IdObjectFactory {
                 return (B) newDeletedObjectBuilder(null);
             case "TwoPhaseActivity":
                 return (B) newTwoPhaseActivityBuilder(null);
+            case "Semester":
+                return (B) newSemesterBuilder(null);
             default:
                 throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
         }
@@ -179,5 +183,15 @@ public class IdObjectImplFactory implements IdObjectFactory {
     @Override
     public TwoPhaseActivityBuilder newTwoPhaseActivityBuilder(final AppUser appUser) {
         return new TwoPhaseActivityBuilderImpl(newTwoPhaseActivity(appUser));
+    }
+
+    @Override
+    public Semester newSemester(final AppUser appUser) {
+        return new SemesterImpl(appUser);
+    }
+
+    @Override
+    public SemesterBuilder newSemesterBuilder(final AppUser appUser) {
+        return new SemesterBuilderImpl(newSemester(appUser));
     }
 }

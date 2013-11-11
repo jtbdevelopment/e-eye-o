@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateDateConverter;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.converters.LocalDateTimeDateConverter;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.shared.ui.combobox.FilteringMode;
@@ -122,6 +123,13 @@ public abstract class GeneratedEditorDialogWindow<T extends AppUserOwnedObject> 
                 dateTimeField.setConverter(new LocalDateTimeDateConverter());
                 entityBeanFieldGroup.bind(dateTimeField, fieldName);
                 component = dateTimeField;
+                break;
+            case LOCAL_DATE:
+                DateField dateField = new DateField();
+                dateField.setResolution(Resolution.DAY);
+                dateField.setConverter(new LocalDateDateConverter());
+                entityBeanFieldGroup.bind(dateField, fieldName);
+                component = dateField;
                 break;
             case SINGLE_SELECT_LIST:
                 ComboBox singleSelect = new ComboBox();
