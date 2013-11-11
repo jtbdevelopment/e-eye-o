@@ -359,7 +359,7 @@ public class HibernateReadOnlyDAOTest {
             will(returnValue(Arrays.asList(h3, h1, h2)));
         }});
 
-        List<String> set = dao.getModificationsSince(appUser, since, 0);
+        List<String> set = dao.getModificationsSince(appUser, since, "", 0);
         Iterator<String> iter = set.iterator();
         assertSame(serializedVersion1, iter.next());
         assertSame(serializedVersion2, iter.next());

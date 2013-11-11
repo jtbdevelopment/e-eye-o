@@ -144,12 +144,19 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since, final int maxResults) {
+    public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, final int maxResults) {
         Criteria criteria = sessionFactory.getCurrentSession()
                 .createCriteria(HibernateHistory.class)
                 .add(Restrictions.eq("appUser", appUser))
-                .add(Restrictions.gt("modificationTimestampInstant", since.getMillis()))
-                .addOrder(Order.asc("modificationTimestampInstant"));
+                .add(Restrictions.or(
+                        Restrictions.gt("modificationTimestampInstant", since.getMillis()),
+                        Restrictions.and(
+                                Restrictions.eq("modificationTimestampInstant", since.getMillis()),
+                                Restrictions.gt("id", sinceId)
+                        ))
+                )
+                .addOrder(Order.asc("modificationTimestampInstant"))
+                .addOrder(Order.asc("id"));
         if (maxResults >= 0) {
             criteria.setMaxResults(maxResults);
         }

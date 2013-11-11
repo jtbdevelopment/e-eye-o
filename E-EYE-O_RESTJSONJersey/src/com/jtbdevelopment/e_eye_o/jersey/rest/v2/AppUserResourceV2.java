@@ -153,9 +153,9 @@ public class AppUserResourceV2 {
     @Path("ModifiedSince/{modifiedSince}")
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
-    public Response getModifiedSince(@PathParam("modifiedSince") final String dateTimeString) {
+    public Response getModifiedSince(@PathParam("modifiedSince") final String dateTimeString, @QueryParam("lastIdSeen") final String lastIdSeen) {
         DateTime dateTime = DateTime.parse(dateTimeString);
-        List<String> modificationsSince = readWriteDAO.getModificationsSince(appUser, dateTime, PAGE_SIZE);
+        List<String> modificationsSince = readWriteDAO.getModificationsSince(appUser, dateTime, lastIdSeen != null ? lastIdSeen : "", PAGE_SIZE);
         Collection<Map<String, Object>> listMap = Collections2.transform(modificationsSince, new Function<String, Map<String, Object>>() {
             @Nullable
             @Override

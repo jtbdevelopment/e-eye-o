@@ -65,15 +65,20 @@ public interface ReadOnlyDAO {
     public int getArchivedPhotosForEntityCount(final AppUserOwnedObject ownedObject);
 
     /**
-     * Generally expected to return an ordered set by modification timestamp ascending of all versions of changes made
+     * Generally expected to return an ordered set by modification timestamp ascending and id of all versions of changes made
      * Note this function is also expected to include DeletedObjects which are generally filtered out of other queries
+     * <p/>
+     * Returns items where:
+     * modificationTimestamp > since OR
+     * modificationTimestamp = since && modified id > id
      *
      * @param appUser - the user
-     * @param since   - timestamp
+     * @param since   - timestamp to look since
+     * @param sinceId - last id to use if timestamp same
      * @param <T>     - see entityType
      * @return an ordered set of modified entities, ordered by modification timestamp ascending
      */
-    public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since, int maxResults);
+    public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, int maxResults);
 
     public LocalDateTime getLastObservationTimestampForEntity(final Observable observable);
 
