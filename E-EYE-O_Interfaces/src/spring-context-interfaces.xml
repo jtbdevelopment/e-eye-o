@@ -17,6 +17,7 @@
         <value>com.jtbdevelopment.e_eye_o.entities.Observation</value>
         <value>com.jtbdevelopment.e_eye_o.entities.Photo</value>
         <value>com.jtbdevelopment.e_eye_o.entities.ClassList</value>
+        <value>com.jtbdevelopment.e_eye_o.entities.Semester</value>
         <value>com.jtbdevelopment.e_eye_o.entities.ObservationCategory</value>
     </util:list>
 

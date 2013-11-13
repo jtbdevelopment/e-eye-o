@@ -115,6 +115,9 @@ public class WorkAreaComponent extends CustomComponent implements BeanFactoryAwa
             case "Photos":
                 prepForTabSwitch(beanFactory.getBean(PhotosWorkArea.class));
                 break;
+            case "Semesters":
+                prepForTabSwitch(beanFactory.getBean(SemestersWorkArea.class));
+                break;
             default:
                 logger.warn("Received change data area with unknown entity type " + event.getEntitySettings().plural());
         }

@@ -5,6 +5,8 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.reports.ReportBuilder;
+import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.ConnectorResource;
@@ -37,6 +39,8 @@ public class ReportsWorkArea extends CustomComponent {
     public static final String STUDENT_DISPLAY_PROPERTY = "summaryDescription";
     public static final String CATEGORY_DISPLAY_PROPERTY = "description";
     public static final String CLASS_DISPLAY_PROPERTY = "description";
+    public static final String SEMESTER_DISPLAY_PROPERTY = "description";
+
     private DateField fromField;
     private DateField toField;
     private ListSelect reportTypeField;
@@ -48,6 +52,7 @@ public class ReportsWorkArea extends CustomComponent {
     private ReadOnlyDAO readOnlyDAO;
 
     private AppUser appUser;
+    private ListSelect semesterListField;
     private ListSelect classListField;
     private ListSelect categoryListField;
     private ListSelect studentListField;
@@ -60,6 +65,12 @@ public class ReportsWorkArea extends CustomComponent {
     }
 
     private void refreshLists() {
+        BeanItemContainer<Semester> semesters = new BeanItemContainer<>(Semester.class);
+        semesters.addAll(readOnlyDAO.getActiveEntitiesForUser(Semester.class, appUser, 0, 0));
+        semesters.sort(new String[]{SEMESTER_DISPLAY_PROPERTY}, new boolean[]{true});
+        semesterListField.setContainerDataSource(semesters);
+        semesterListField.setRows(semesters.size());
+
         BeanItemContainer<ObservationCategory> categories = new BeanItemContainer<>(ObservationCategory.class);
         categories.addAll(readOnlyDAO.getActiveEntitiesForUser(ObservationCategory.class, appUser, 0, 0));
         categories.sort(new String[]{CATEGORY_DISPLAY_PROPERTY}, new boolean[]{true});
@@ -105,6 +116,13 @@ public class ReportsWorkArea extends CustomComponent {
         reportTypeField.setRows(3);
         selectionRow.addComponent(reportTypeField);
 
+        semesterListField = new ListSelect("Semester:");
+        semesterListField.setMultiSelect(false);
+        semesterListField.setNullSelectionAllowed(false);
+        semesterListField.setRows(5);
+        semesterListField.setItemCaptionPropertyId(SEMESTER_DISPLAY_PROPERTY);
+        selectionRow.addComponent(semesterListField);
+
         VerticalLayout dates = new VerticalLayout();
         dates.setSpacing(true);
         final LocalDate now = new LocalDate();
@@ -125,6 +143,14 @@ public class ReportsWorkArea extends CustomComponent {
         dates.addComponent(toField);
         selectionRow.addComponent(dates);
 
+        semesterListField.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                Semester semester = (Semester) semesterListField.getValue();
+                fromField.setConvertedValue(semester.getStart().toDate());
+                toField.setConvertedValue(semester.getEnd().toDate());
+            }
+        });
         classListField = new ListSelect("Only Include Classes:");
         classListField.setMultiSelect(true);
         classListField.setItemCaptionPropertyId(CLASS_DISPLAY_PROPERTY);
@@ -231,6 +257,7 @@ public class ReportsWorkArea extends CustomComponent {
         });
         mainLayout.addComponent(selectionRow);
         mainLayout.setComponentAlignment(selectionRow, Alignment.TOP_CENTER);
+        ComponentUtils.setImmediateForAll(this, true);
     }
 
     @Subscribe

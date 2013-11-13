@@ -31,13 +31,13 @@ public interface Semester extends AppUserOwnedObject {
     void setDescription(final String description);
 
     @NotNull(message = SEMESTER_START_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldSettings(label = "Start", alignment = IdObjectFieldSettings.DisplayAlignment.LEFT, fieldType = IdObjectFieldSettings.DisplayFieldType.LOCAL_DATE)
+    @IdObjectFieldSettings(label = "Start", alignment = IdObjectFieldSettings.DisplayAlignment.CENTER, fieldType = IdObjectFieldSettings.DisplayFieldType.LOCAL_DATE)
     LocalDate getStart();
 
     void setStart(final LocalDate start);
 
     @NotNull(message = SEMESTER_END_CANNOT_BE_NULL_ERROR)
-    @IdObjectFieldSettings(label = "End", alignment = IdObjectFieldSettings.DisplayAlignment.LEFT, fieldType = IdObjectFieldSettings.DisplayFieldType.LOCAL_DATE)
+    @IdObjectFieldSettings(label = "End", alignment = IdObjectFieldSettings.DisplayAlignment.CENTER, fieldType = IdObjectFieldSettings.DisplayFieldType.LOCAL_DATE)
     LocalDate getEnd();
 
     void setEnd(final LocalDate end);

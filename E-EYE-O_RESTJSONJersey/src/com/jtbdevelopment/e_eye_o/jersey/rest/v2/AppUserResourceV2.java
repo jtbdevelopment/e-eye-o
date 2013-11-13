@@ -218,6 +218,12 @@ public class AppUserResourceV2 {
         return getEntityRefinedResource(ObservationCategory.class);
     }
 
+    @Path("semesters")
+    @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
+    public Object getSemesters() {
+        return getEntityRefinedResource(Semester.class);
+    }
+
     private Object getEntityRefinedResource(final Class<? extends AppUserOwnedObject> entityType) {
         if (this.entityType.equals(AppUserOwnedObject.class))
             return new AppUserResourceV2(this, entityType);

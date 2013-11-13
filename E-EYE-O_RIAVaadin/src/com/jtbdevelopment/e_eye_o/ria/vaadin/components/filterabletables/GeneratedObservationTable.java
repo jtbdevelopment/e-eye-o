@@ -147,6 +147,14 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         filterSection.addComponent(significantOnly);
     }
 
+    public void setFromFilter(final LocalDateTime from) {
+        this.from.setConvertedValue(from);
+    }
+
+    public void setToFilter(final LocalDateTime to) {
+        this.to.setConvertedValue(to);
+    }
+
     private void updateDateRangeFilter() {
         if (dateRangeFilter != null) {
             entities.removeContainerFilter(dateRangeFilter);
@@ -167,6 +175,9 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
             } else if (tableDriver instanceof Observable) {
                 entities.addAll(readWriteDAO.getAllObservationsForEntity((Observable) tableDriver));
                 setDefaultObservationSubject((Observable) tableDriver);
+            } else if (tableDriver instanceof Semester) {
+                entities.addAll(readWriteDAO.getAllObservationsForSemester((Semester) tableDriver, 0, 0));
+                setDefaultObservationSubject(null);
             }
             refreshSizeAndSort();
         }
