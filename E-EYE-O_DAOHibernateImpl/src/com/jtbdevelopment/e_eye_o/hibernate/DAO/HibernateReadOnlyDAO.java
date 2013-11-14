@@ -105,12 +105,11 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     }
 
     private <T extends AppUserOwnedObject> Criteria createSemesterCritera(final Semester semester, int firstResult, int maxResults) {
-        LocalTime time = new LocalTime(0, 0, 0, 0);
         Criteria criteria = sessionFactory.getCurrentSession()
                 .createCriteria(getHibernateEntityName(Observation.class))
                 .add(Restrictions.eq("appUser", semester.getAppUser()))
-                .add(Restrictions.ge("observationTimestamp", semester.getStart().toLocalDateTime(time)))
-                .add(Restrictions.lt("observationTimestamp", semester.getEnd().plusDays(1).toLocalDateTime(time)))
+                .add(Restrictions.ge("observationTimestamp", semester.getStart().toLocalDateTime(LocalTime.MIDNIGHT)))
+                .add(Restrictions.lt("observationTimestamp", semester.getEnd().plusDays(1).toLocalDateTime(LocalTime.MIDNIGHT)))
                 .addOrder(Order.asc("id"));
         addPaginationToCriteria(firstResult, maxResults, criteria);
         return criteria;
@@ -293,11 +292,10 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to) {
-        LocalTime time = new LocalTime(0, 0, 0, 0);
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(HibernateObservation.class)
                 .add(Restrictions.eq("observationSubject", observable))
-                .add(Restrictions.ge("observationTimestamp", from.toLocalDateTime(time)))
-                .add(Restrictions.lt("observationTimestamp", to.plusDays(1).toLocalDateTime(time)));
+                .add(Restrictions.ge("observationTimestamp", from.toLocalDateTime(LocalTime.MIDNIGHT)))
+                .add(Restrictions.lt("observationTimestamp", to.plusDays(1).toLocalDateTime(LocalTime.MIDNIGHT)));
         if (observationCategory != null) {
             criteria.createCriteria("categories").add(Restrictions.eq("id", observationCategory.getId()));
         } else {

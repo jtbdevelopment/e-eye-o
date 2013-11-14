@@ -7,9 +7,10 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjec
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.ObservationWithSubjectTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.SemesterTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.photoalbum.PhotoAlbum;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SemestersWorkArea extends CustomComponent {
-    static final LocalTime midnight = new LocalTime(0, 0, 0, 0);
     @Autowired
     private SemesterTable semesterTable;
     @Autowired
@@ -35,12 +35,16 @@ public class SemestersWorkArea extends CustomComponent {
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setImmediate(true);
 
+        Label label = new Label("Archiving or activating a semester archives or activates all observations for the time period.  Deleting a semester does NOT delete all observations in the time period.");
+        label.setSizeUndefined();
+        mainLayout.addComponent(label);
+        mainLayout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
         semesterTable.setClickedOnListener(new IdObjectTable.ClickedOnListener<Semester>() {
             @Override
             public void handleClickEvent(final Semester entity) {
                 observationWithSubjectTable.setDisplayDriver(entity);
-                observationWithSubjectTable.setFromFilter(entity.getStart().toLocalDateTime(midnight));
-                observationWithSubjectTable.setToFilter(entity.getEnd().toLocalDateTime(midnight).plusDays(1).minusSeconds(1));
+//                observationWithSubjectTable.setFromFilter(entity.getStart().toLocalDateTime(LocalTime.MIDNIGHT));
+//                observationWithSubjectTable.setToFilter(entity.getEnd().toLocalDateTime(LocalTime.MIDNIGHT).plusDays(1).minusSeconds(1));
             }
         });
         mainLayout.addComponent(semesterTable);

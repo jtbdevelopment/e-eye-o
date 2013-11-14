@@ -8,6 +8,7 @@ import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.convert
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.filters.ObservationCategoryFilter;
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.filter.Between;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
@@ -41,9 +42,11 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
     @Autowired
     private LocalDateTimeDateConverter localDateTimeDateConverter;
 
+    private BeanItemContainer<Semester> semesters;
     private CheckBox significantOnly = new CheckBox("Significant Only");
     private DateField from = new DateField();
     private DateField to = new DateField();
+    private ComboBox semesterList = new ComboBox();
     private Between dateRangeFilter;
 
     public GeneratedObservationTable() {
@@ -107,7 +110,14 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
     @Override
     protected void addCustomFilters(final HorizontalLayout filterSection) {
         super.addCustomFilters(filterSection);
-        Label label = new Label("From");
+        Label label = new Label("Semester");
+        filterSection.addComponent(label);
+        filterSection.addComponent(semesterList);
+        semesterList.setItemCaptionPropertyId("description");
+        semesterList.addStyleName("right-align");
+
+
+        label = new Label("From");
         filterSection.addComponent(label);
         from.setResolution(Resolution.DAY);
         from.setConverter(localDateTimeDateConverter);
@@ -145,14 +155,18 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
             }
         });
         filterSection.addComponent(significantOnly);
+
+        semesterList.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                setDateFiltersFromSemester((Semester) semesterList.getValue());
+            }
+        });
     }
 
-    public void setFromFilter(final LocalDateTime from) {
-        this.from.setConvertedValue(from);
-    }
-
-    public void setToFilter(final LocalDateTime to) {
-        this.to.setConvertedValue(to);
+    private void setDateFiltersFromSemester(final Semester semester) {
+        from.setConvertedValue(semester.getStart().toLocalDateTime(LocalTime.MIDNIGHT));
+        to.setConvertedValue(semester.getEnd().toLocalDateTime(LocalTime.MIDNIGHT));
     }
 
     private void updateDateRangeFilter() {
@@ -161,7 +175,7 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         }
         dateRangeFilter = new Between("observationTimestamp",
                 new LocalDateTime(from.getConvertedValue()),
-                new LocalDate(to.getConvertedValue()).toLocalDateTime(new LocalTime(23, 59, 59)));
+                new LocalDate(to.getConvertedValue()).toLocalDateTime(LocalTime.MIDNIGHT).minusSeconds(1));
         entities.addContainerFilter(dateRangeFilter);
         refreshSizeAndSort();
     }
@@ -176,7 +190,17 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
                 entities.addAll(readWriteDAO.getAllObservationsForEntity((Observable) tableDriver));
                 setDefaultObservationSubject((Observable) tableDriver);
             } else if (tableDriver instanceof Semester) {
-                entities.addAll(readWriteDAO.getAllObservationsForSemester((Semester) tableDriver, 0, 0));
+                Semester semester = (Semester) tableDriver;
+                entities.addAll(readWriteDAO.getAllObservationsForSemester(semester, 0, 0));
+                setDateFiltersFromSemester(semester);
+                if (semester.isArchived()) {
+                    semesters.removeAllItems();
+                    semesters.addAll(readWriteDAO.getEntitiesForUser(Semester.class, appUser, 0, 0));
+                } else {
+                    semesters.removeAllItems();
+                    semesters.addAll(readWriteDAO.getActiveEntitiesForUser(Semester.class, appUser, 0, 0));
+                }
+                semesterList.setValue(semester);
                 setDefaultObservationSubject(null);
             }
             refreshSizeAndSort();
@@ -190,6 +214,9 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         significantOnly.setValue(settings.getSettingAsBoolean(baseConfigSetting + SIGNIFICANTONLY_DEFAULT, DEFAULT_SIGNIFICANT_ONLY));
         from.setConvertedValue(new LocalDateTime().minusMonths(settings.getSettingAsInt(baseConfigSetting + MONTHSBACK_DEFAULT, DEFAULT_FROM_MONTHS_BACK)));
         to.setConvertedValue(new LocalDateTime());
+        semesters = new BeanItemContainer<>(Semester.class, readWriteDAO.getActiveEntitiesForUser(Semester.class, appUser, 0, 0));
+        semesters.sort(new String[]{"description"}, new boolean[]{true});
+        semesterList.setContainerDataSource(semesters);
     }
 
     public void setDefaultObservationSubject(final Observable defaultObservationSubject) {

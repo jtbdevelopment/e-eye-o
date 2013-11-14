@@ -126,15 +126,9 @@ public class ReportsWorkArea extends CustomComponent {
         VerticalLayout dates = new VerticalLayout();
         dates.setSpacing(true);
         final LocalDate now = new LocalDate();
-        final LocalDate lastAugust;
-        if (now.getMonthOfYear() < 8) {
-            lastAugust = new LocalDate(now.getYear() - 1, 8, 1);
-        } else {
-            lastAugust = new LocalDate(now.getYear(), 8, 1);
-        }
         fromField = new DateField("From:");
         fromField.setResolution(Resolution.DAY);
-        fromField.setValue(lastAugust.toDate());
+        fromField.setValue(now.toDate());
         dates.addComponent(fromField);
 
         toField = new DateField("To:");
@@ -250,7 +244,7 @@ public class ReportsWorkArea extends CustomComponent {
                 classListField.setValue(null);
                 studentListField.setValue(null);
                 categoryListField.setValue(null);
-                fromField.setValue(lastAugust.toDate());
+                fromField.setValue(now.toDate());
                 toField.setValue(now.toDate());
                 reportTypeField.setValue(BY_STUDENT_BY_CATEGORY);
             }

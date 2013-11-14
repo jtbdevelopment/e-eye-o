@@ -21,9 +21,11 @@ public class HelpImpl implements Help {
                     "<p>When you archive or delete something, all related items are generally also archived or deleted. For example, if you archive a student, all observations and photos for that student are also archived or deleted.  Specifically:<ul>" +
                     "<li>Archiving a student will archive all observations and observation related photos.</li>" +
                     "<li>Archiving a class list will archive class specific observations and photos as well as all students in the class (and their observations and photos).</li>" +
+                    "<li>Archiving a semester will archive all observations in the semester's time period.</li>" +
                     "<li>Deleting a student will also delete all observations and photos.</li>" +
                     "<li>Deleting a class list will delete class observations and photos but WILL NOT delete students, they will be updated to no longer be in the class.</li>" +
                     "<li>Deleting a category will update any observation on that category to no longer be on that category.</li>" +
+                    "<li>Deleting a semester WILL NOT delete all observations for the semester's time period.</li>" +
                     "</ul>" +
                     "" +
                     "<p><u>Suggesting more help topics</u>" +
