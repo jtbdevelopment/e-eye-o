@@ -46,6 +46,8 @@ public class HibernateAbstractIdObjectTest {
             will(returnValue(TwoPhaseActivity.class));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(with(new IsInstanceOf(AppUserSettings.class)));
             will(returnValue(AppUserSettings.class));
+            allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(with(new IsInstanceOf(Semester.class)));
+            will(returnValue(Semester.class));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(with(new IsInstanceOf(AppUserOwnedObject.class)));
             will(returnValue(AppUserOwnedObject.class));
         }});
