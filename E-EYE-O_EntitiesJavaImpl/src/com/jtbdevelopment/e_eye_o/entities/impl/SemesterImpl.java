@@ -46,4 +46,9 @@ public class SemesterImpl extends AppUserOwnedObjectImpl implements Semester {
     public void setEnd(final LocalDate end) {
         this.end = end;
     }
+
+    @Override
+    public String getSummaryDescription() {
+        return description;
+    }
 }
