@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
  * Time: 4:26 PM
  */
 public class DeletedObjectImpl extends AppUserOwnedObjectImpl implements DeletedObject {
-    private String deleteId = "";
+    private String deletedId = "";
 
     DeletedObjectImpl(final AppUser appUser) {
         super(appUser);
@@ -17,19 +17,19 @@ public class DeletedObjectImpl extends AppUserOwnedObjectImpl implements Deleted
 
     @Override
     public String getDeletedId() {
-        return deleteId;
+        return deletedId;
     }
 
     @Override
     public void setDeletedId(final String deletedId) {
-        if (StringUtils.hasLength(this.deleteId) && !this.deleteId.equals(deletedId)) {
+        if (StringUtils.hasLength(this.deletedId) && !this.deletedId.equals(deletedId)) {
             throw new IllegalStateException("Cannot change deletedId once set, create a new object");
         }
-        this.deleteId = deletedId;
+        this.deletedId = deletedId;
     }
 
     @Override
     public String getSummaryDescription() {
-        return deleteId;
+        return deletedId;
     }
 }

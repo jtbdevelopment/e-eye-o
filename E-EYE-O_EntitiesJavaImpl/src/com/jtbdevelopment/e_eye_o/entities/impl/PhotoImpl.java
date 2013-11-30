@@ -58,11 +58,11 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
     }
 
     public byte[] getImageData() {
-        return imageData;
+        return imageData != null ? imageData.clone() : null;
     }
 
     public void setImageData(final byte[] imageData) {
-        this.imageData = imageData.clone();
+        this.imageData = imageData != null ? imageData.clone() : imageData;
     }
 
     public String getMimeType() {
@@ -74,10 +74,10 @@ public class PhotoImpl extends AppUserOwnedObjectImpl implements Photo {
     }
 
     public byte[] getThumbnailImageData() {
-        return thumbnailImageData;
+        return thumbnailImageData != null ? thumbnailImageData.clone() : null;
     }
 
     public void setThumbnailImageData(final byte[] thumbnailImageData) {
-        this.thumbnailImageData = thumbnailImageData.clone();
+        this.thumbnailImageData = thumbnailImageData != null ? thumbnailImageData.clone() : null;
     }
 }

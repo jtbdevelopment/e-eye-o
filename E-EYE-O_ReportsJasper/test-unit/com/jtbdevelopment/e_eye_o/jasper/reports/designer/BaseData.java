@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.jasper.reports.designer;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
-import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImplFactory;
+import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectFactoryImpl;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -33,7 +33,7 @@ public class BaseData {
     //public static final Photo photo1ForO1For1For1;
 
     static {
-        IdObjectImplFactory factory = new IdObjectImplFactory();
+        IdObjectFactoryImpl factory = new IdObjectFactoryImpl();
 
         appUser1 = factory.newAppUserBuilder().withId("AU1").build();
         classList1For1 = factory.newClassListBuilder(appUser1).withDescription("CL1-1").withId("CL1-1").build();

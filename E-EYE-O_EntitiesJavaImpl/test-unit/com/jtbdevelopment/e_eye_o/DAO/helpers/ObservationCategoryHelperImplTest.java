@@ -5,7 +5,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
-import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImplFactory;
+import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectFactoryImpl;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.testng.annotations.BeforeMethod;
@@ -25,7 +25,7 @@ public class ObservationCategoryHelperImplTest {
     private final Mockery context = new Mockery();
     private final ReadWriteDAO dao = context.mock(ReadWriteDAO.class);
     private final AppUser user = context.mock(AppUser.class);
-    private final IdObjectFactory factory = new IdObjectImplFactory();
+    private final IdObjectFactory factory = new IdObjectFactoryImpl();
     private final ObservationCategoryHelperImpl helper = new ObservationCategoryHelperImpl();
     private final Map<String, String> defaults = new HashMap<String, String>() {{
         put("Category1", "The Category First");

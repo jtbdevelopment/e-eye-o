@@ -23,7 +23,7 @@ public class IdObjectImplFactoryTest {
     public static final List<Class<? extends AppUserOwnedObject>> APP_USER_OWNED_CLASSES_ARRAY = Arrays.asList(ClassList.class, Student.class, DeletedObject.class, Photo.class, Observation.class, ObservationCategory.class, TwoPhaseActivity.class, AppUserSettings.class);
     private static final Mockery context = new Mockery();
     private static final AppUser appUser = context.mock(AppUser.class);
-    private static final IdObjectImplFactory factory = new IdObjectImplFactory();
+    private static final IdObjectFactoryImpl factory = new IdObjectFactoryImpl();
 
     @Test
     public void testNewIdObjectForKnownClasses() throws Exception {

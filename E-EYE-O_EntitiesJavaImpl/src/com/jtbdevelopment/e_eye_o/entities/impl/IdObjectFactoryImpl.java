@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * Time: 7:53 PM
  */
 @Service
-public class IdObjectImplFactory implements IdObjectFactory {
+public class IdObjectFactoryImpl implements IdObjectFactory {
     @Autowired
     private PhotoHelper photoHelper;
 

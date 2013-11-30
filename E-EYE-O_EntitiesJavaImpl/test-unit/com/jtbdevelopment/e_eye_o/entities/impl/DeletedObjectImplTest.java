@@ -34,7 +34,7 @@ public class DeletedObjectImplTest extends AbstractAppUserOwnedObjectTest<Delete
     }
 
     @Test
-    public void testSummaryDesription() {
+    public void testSummaryDescription() {
         DeletedObjectImpl impl = new DeletedObjectImpl(null);
         final String x = "X";
         impl.setDeletedId(x);

@@ -47,6 +47,7 @@ public interface Photo extends AppUserOwnedObject {
 
     void setTimestamp(LocalDateTime timestamp);
 
+    //  TODO - max size
     @NotEmpty(message = PHOTO_MIME_TYPE_CANNOT_BE_BLANK_OR_NULL)
     @IdObjectFieldSettings(editableBy = IdObjectFieldSettings.EditableBy.NONE)
     String getMimeType();

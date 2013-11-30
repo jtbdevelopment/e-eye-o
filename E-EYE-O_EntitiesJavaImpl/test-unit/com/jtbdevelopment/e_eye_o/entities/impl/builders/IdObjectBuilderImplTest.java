@@ -2,8 +2,8 @@ package com.jtbdevelopment.e_eye_o.entities.impl.builders;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectFactoryImpl;
 import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImpl;
-import com.jtbdevelopment.e_eye_o.entities.impl.IdObjectImplFactory;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
@@ -15,10 +15,13 @@ import static org.testng.AssertJUnit.assertSame;
  * Time: 11:39 AM
  */
 public class IdObjectBuilderImplTest {
-    public interface LocalEntity extends IdObject {}
-    public class LocalEntityImpl extends IdObjectImpl implements LocalEntity {}
+    public interface LocalEntity extends IdObject {
+    }
 
-    protected IdObjectFactory factory = new IdObjectImplFactory();
+    public class LocalEntityImpl extends IdObjectImpl implements LocalEntity {
+    }
+
+    protected IdObjectFactory factory = new IdObjectFactoryImpl();
     private final LocalEntityImpl impl = new LocalEntityImpl();
     private final IdObjectBuilderImpl<LocalEntity> builder = new IdObjectBuilderImpl<LocalEntity>(impl);
 
