@@ -9,11 +9,7 @@ import com.jtbdevelopment.e_eye_o.entities.builders.*;
 public interface IdObjectFactory {
     <T extends IdObject> T newIdObject(final Class<T> idObjectType);
 
-    <T extends IdObject, B extends IdObjectBuilder<T>> B newIdObjectBuilder(final Class<T> idObjectType);
-
     <T extends AppUserOwnedObject> T newAppUserOwnedObject(final Class<T> idObjectType, final AppUser appUser);
-
-    <T extends AppUserOwnedObject, B extends AppUserOwnedObjectBuilder<T>> B newAppUserOwnedObjectBuilder(final Class<T> idObjectType, final AppUser appUser);
 
     AppUser newAppUser();
 

@@ -47,35 +47,6 @@ public class IdObjectFactoryImpl implements IdObjectFactory {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends IdObject, B extends IdObjectBuilder<T>> B newIdObjectBuilder(final Class<T> idObjectType) {
-        switch (idObjectType.getSimpleName()) {
-            case "AppUser":
-                return (B) newAppUserBuilder();
-            case "AppUserSettings":
-                return (B) newAppUserSettingsBuilder(null);
-            case "Observation":
-                return (B) newObservationBuilder(null);
-            case "ObservationCategory":
-                return (B) newObservationCategoryBuilder(null);
-            case "Student":
-                return (B) newStudentBuilder(null);
-            case "Photo":
-                return (B) newPhotoBuilder(null);
-            case "ClassList":
-                return (B) newClassListBuilder(null);
-            case "DeletedObject":
-                return (B) newDeletedObjectBuilder(null);
-            case "TwoPhaseActivity":
-                return (B) newTwoPhaseActivityBuilder(null);
-            case "Semester":
-                return (B) newSemesterBuilder(null);
-            default:
-                throw new IllegalArgumentException("Unknown class type " + idObjectType.getSimpleName());
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
     public <T extends AppUserOwnedObject> T newAppUserOwnedObject(final Class<T> idObjectType, final AppUser appUser) {
         if (!AppUserOwnedObject.class.isAssignableFrom(idObjectType)) {
             throw new IllegalArgumentException("You cannot use this method to create non-app user owned objects.");
@@ -83,16 +54,6 @@ public class IdObjectFactoryImpl implements IdObjectFactory {
         T entity = newIdObject(idObjectType);
         entity.setAppUser(appUser);
         return entity;
-    }
-
-    @Override
-    public <T extends AppUserOwnedObject, B extends AppUserOwnedObjectBuilder<T>> B newAppUserOwnedObjectBuilder(final Class<T> idObjectType, final AppUser appUser) {
-        if (!AppUserOwnedObject.class.isAssignableFrom(idObjectType)) {
-            throw new IllegalArgumentException("You cannot use this method to create non-app user owned builder objects.");
-        }
-        B builder = newIdObjectBuilder(idObjectType);
-        builder.withAppUser(appUser);
-        return builder;
     }
 
     @Override

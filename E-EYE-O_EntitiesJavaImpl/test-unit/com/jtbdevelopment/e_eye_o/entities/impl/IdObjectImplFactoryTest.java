@@ -1,7 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.impl.builders.*;
 import org.jmock.Mockery;
 import org.testng.annotations.Test;
 
@@ -39,19 +38,6 @@ public class IdObjectImplFactoryTest {
     }
 
     @Test
-    public void testNewIdObjectBuilderForKnownClasses() throws Exception {
-        assertEquals(AppUserBuilderImpl.class, factory.newIdObjectBuilder(AppUser.class).getClass());
-        assertEquals(ClassListBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(ClassList.class, appUser).getClass());
-        assertEquals(ObservationBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(Observation.class, appUser).getClass());
-        assertEquals(ObservationCategoryBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(ObservationCategory.class, appUser).getClass());
-        assertEquals(PhotoBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(Photo.class, appUser).getClass());
-        assertEquals(StudentBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(Student.class, appUser).getClass());
-        assertEquals(DeletedObjectBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(DeletedObject.class, appUser).getClass());
-        assertEquals(TwoPhaseActivityBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(TwoPhaseActivity.class, appUser).getClass());
-        assertEquals(AppUserSettingsBuilderImpl.class, factory.newAppUserOwnedObjectBuilder(AppUserSettings.class, appUser).getClass());
-    }
-
-    @Test
     @SuppressWarnings("unchecked")
     public void testNewIdObjectForAppUserOwnedObjects() {
         for (Class c : APP_USER_OWNED_CLASSES_ARRAY) {
@@ -77,22 +63,6 @@ public class IdObjectImplFactoryTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testNewIdObjectBuilderForUnknownClasses() throws Exception {
-        boolean exception;
-        for (Class c : NOT_APP_USER_CLASSES_ARRAY) {
-            exception = false;
-            try {
-                factory.newIdObjectBuilder(c);
-            } catch (IllegalArgumentException e) {
-                exception = true;
-                assertEquals("Unknown class type " + c.getSimpleName(), e.getMessage());
-            }
-            assertTrue("Expected exception for " + c.getSimpleName(), exception);
-        }
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
     public void testNewAppUserObjectForNonAppUserOwnedObjects() {
         boolean exception;
         for (Class c : Arrays.asList(AppUser.class)) {
@@ -102,22 +72,6 @@ public class IdObjectImplFactoryTest {
             } catch (IllegalArgumentException e) {
                 exception = true;
                 assertEquals("You cannot use this method to create non-app user owned objects.", e.getMessage());
-            }
-            assertTrue("Expected exception for " + c.getSimpleName(), exception);
-        }
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testNewAppUserObjectBuilderForNonAppUserOwnedObjects() {
-        boolean exception;
-        for (Class c : APP_USER_CLASS_ARRAY) {
-            exception = false;
-            try {
-                factory.newAppUserOwnedObjectBuilder(c, null);
-            } catch (IllegalArgumentException e) {
-                exception = true;
-                assertEquals("You cannot use this method to create non-app user owned builder objects.", e.getMessage());
             }
             assertTrue("Expected exception for " + c.getSimpleName(), exception);
         }
