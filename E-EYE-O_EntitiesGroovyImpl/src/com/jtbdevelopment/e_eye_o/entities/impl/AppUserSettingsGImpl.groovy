@@ -7,16 +7,20 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserSettings
  * Time: 12:27 PM
  */
 class AppUserSettingsGImpl extends AppUserOwnedObjectGImpl implements AppUserSettings {
-    final Map<String, String> settings = [:]
+    Map<String, String> settings = [:]
 
     @Override
     public Map<String, String> getSettings() {
         return settings.asImmutable()
     }
 
+    public void setSettings(final Map<String, String> settings) {
+
+    }
+
     @Override
     public void updateSettings(final Map<String, Object> settings) {
-        settings.each { this.settings.put(it.key, it.value.toString()) }
+        settings.each { key, value -> this.settings += [(key): value.toString()] }
     }
 
     @Override
