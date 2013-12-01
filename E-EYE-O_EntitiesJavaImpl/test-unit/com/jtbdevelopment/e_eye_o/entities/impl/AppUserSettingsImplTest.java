@@ -37,9 +37,9 @@ public class AppUserSettingsImplTest extends AbstractAppUserOwnedObjectTest<AppU
         Map<String, String> valuesAsStrings = new HashMap<>();
         for (Map.Entry<String, Object> entry : SAMPLE_VALUES.entrySet()) {
             valuesAsStrings.put(entry.getKey(), entry.getValue().toString());
+            impl.setSetting(entry.getKey(), entry.getValue());
         }
 
-        impl.setSettings(SAMPLE_VALUES);
         Map<String, String> getResult = impl.getSettings();
         assertEquals(valuesAsStrings.size(), getResult.size());
         for (Map.Entry<String, String> entry : getResult.entrySet()) {

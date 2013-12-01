@@ -23,12 +23,6 @@ public class AppUserSettingsImpl extends AppUserOwnedObjectImpl implements AppUs
     }
 
     @Override
-    public void setSettings(final Map<String, Object> settings) {
-        this.settings.clear();
-        updateSettings(settings);
-    }
-
-    @Override
     public void updateSettings(final Map<String, Object> settings) {
         for (Map.Entry<String, Object> setting : settings.entrySet()) {
             this.settings.put(setting.getKey(), setting.getValue().toString());
