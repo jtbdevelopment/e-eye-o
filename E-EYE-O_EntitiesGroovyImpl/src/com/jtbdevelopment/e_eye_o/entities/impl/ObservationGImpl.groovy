@@ -3,12 +3,14 @@ package com.jtbdevelopment.e_eye_o.entities.impl
 import com.jtbdevelopment.e_eye_o.entities.Observable
 import com.jtbdevelopment.e_eye_o.entities.Observation
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory
+import groovy.transform.CompileStatic
 import org.joda.time.LocalDateTime
 
 /**
  * Date: 11/27/13
  * Time: 6:42 AM
  */
+@CompileStatic
 class ObservationGImpl extends AppUserOwnedObjectGImpl implements Observation {
     Observable observationSubject
     LocalDateTime observationTimestamp = new LocalDateTime()
@@ -44,7 +46,7 @@ class ObservationGImpl extends AppUserOwnedObjectGImpl implements Observation {
 
     @Override
     String getSummaryDescription() {
-        List<String> shortNames = categories.findAll({ it != null && it.shortName != null }).collect { it.shortName.trim() };
+        List<String> shortNames = categories.findAll({ ObservationCategory oc -> oc != null && oc.shortName != null }).collect { ObservationCategory oc -> oc.shortName.trim() };
         String summary = (observationSubject != null ? observationSubject.summaryDescription : "?") +
                 " on " +
                 observationTimestamp.toString("YYY-MM-dd") +

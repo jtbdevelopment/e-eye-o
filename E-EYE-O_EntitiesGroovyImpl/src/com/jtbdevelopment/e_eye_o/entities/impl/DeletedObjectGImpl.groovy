@@ -1,11 +1,13 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
 import com.jtbdevelopment.e_eye_o.entities.DeletedObject
+import groovy.transform.CompileStatic
 
 /**
  * Date: 11/30/13
  * Time: 12:26 PM
  */
+@CompileStatic
 class DeletedObjectGImpl extends AppUserOwnedObjectGImpl implements DeletedObject {
     String deletedId = "";
 

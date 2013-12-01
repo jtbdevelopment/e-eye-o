@@ -2,11 +2,13 @@ package com.jtbdevelopment.e_eye_o.entities.impl
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList
 import com.jtbdevelopment.e_eye_o.entities.Student
+import groovy.transform.CompileStatic
 
 /**
  * Date: 11/26/13
  * Time: 7:07 AM
  */
+@CompileStatic
 class StudentGImpl extends ObservableGImpl implements Student {
     Set<ClassList> classLists = new HashSet<>();
     String firstName = ""
@@ -23,12 +25,12 @@ class StudentGImpl extends ObservableGImpl implements Student {
 
     @Override
     Set<ClassList> getActiveClassLists() {
-        return ((classLists.findAll() { !it.archived }) as Set<ClassList>).asImmutable()
+        return ((classLists.findAll() { ClassList cl -> !cl.archived }) as Set<ClassList>).asImmutable()
     }
 
     @Override
     Set<ClassList> getArchivedClassLists() {
-        return ((classLists.findAll { it.archived }) as Set<ClassList>).asImmutable()
+        return ((classLists.findAll { ClassList cl -> cl.archived }) as Set<ClassList>).asImmutable()
     }
 
     @Override

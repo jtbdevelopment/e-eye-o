@@ -1,12 +1,14 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject
+import groovy.transform.CompileStatic
 import org.joda.time.DateTime
 
 /**
  * Date: 11/18/13
  * Time: 8:52 PM
  */
+@CompileStatic
 abstract class IdObjectGImpl implements IdObject {
     String id = null
     DateTime modificationTimestamp = DateTime.now();
@@ -34,10 +36,10 @@ abstract class IdObjectGImpl implements IdObject {
     }
 
     @Override
-    boolean equals(obj) {
+    boolean equals(def obj) {
         if (this.is(obj)) return true;
         if (obj == null || !(obj instanceof IdObject)) return false;
 
-        return (this.id != null && id.size() > 0 && id.equals(obj.id));
+        return (this.id != null && id.size() > 0 && id.equals(((IdObject) obj).id));
     }
 }

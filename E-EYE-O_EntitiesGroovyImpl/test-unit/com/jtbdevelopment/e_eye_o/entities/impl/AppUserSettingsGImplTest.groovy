@@ -16,11 +16,12 @@ class AppUserSettingsGImplTest extends AppUserOwnedObjectGImplTest {
     }
 
     @Test
-    public void testGetSetSettings() throws Exception {
+    public void testSettings() throws Exception {
         assert objectUnderTest.getSettings().isEmpty();
         Map<String, String> valuesAsStrings = [:]
         SAMPLE_VALUES.each { key, value -> valuesAsStrings += [(key): value.toString()]; objectUnderTest.setSetting(key, value) }
         assert valuesAsStrings == objectUnderTest.getSettings();
+        assert !objectUnderTest.settings.is(objectUnderTest.settings)
     }
 
     @Test

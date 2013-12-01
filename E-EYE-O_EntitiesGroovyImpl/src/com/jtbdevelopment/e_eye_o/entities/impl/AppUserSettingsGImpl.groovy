@@ -1,11 +1,13 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings
+import groovy.transform.CompileStatic
 
 /**
  * Date: 11/30/13
  * Time: 12:27 PM
  */
+@CompileStatic
 class AppUserSettingsGImpl extends AppUserOwnedObjectGImpl implements AppUserSettings {
     Map<String, String> settings = [:]
 
@@ -14,13 +16,9 @@ class AppUserSettingsGImpl extends AppUserOwnedObjectGImpl implements AppUserSet
         return settings.asImmutable()
     }
 
-    public void setSettings(final Map<String, String> settings) {
-
-    }
-
     @Override
     public void updateSettings(final Map<String, Object> settings) {
-        settings.each { key, value -> this.settings += [(key): value.toString()] }
+        settings.each { String key, Object value -> this.settings += [(key): value.toString()] }
     }
 
     @Override

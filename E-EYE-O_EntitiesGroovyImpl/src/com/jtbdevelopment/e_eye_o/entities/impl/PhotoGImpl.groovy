@@ -2,12 +2,14 @@ package com.jtbdevelopment.e_eye_o.entities.impl
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject
 import com.jtbdevelopment.e_eye_o.entities.Photo
+import groovy.transform.CompileStatic
 import org.joda.time.LocalDateTime
 
 /**
  * Date: 11/30/13
  * Time: 12:25 PM
  */
+@CompileStatic
 class PhotoGImpl extends AppUserOwnedObjectGImpl implements Photo {
     AppUserOwnedObject photoFor
     String description = ""
@@ -22,7 +24,7 @@ class PhotoGImpl extends AppUserOwnedObjectGImpl implements Photo {
     }
 
     byte[] getImageData() {
-        return imageData?.clone()
+        return ((byte[]) imageData?.clone())
     }
 
     void setImageData(final byte[] imageData) {
@@ -30,7 +32,7 @@ class PhotoGImpl extends AppUserOwnedObjectGImpl implements Photo {
     }
 
     byte[] getThumbnailImageData() {
-        return thumbnailImageData?.clone()
+        return ((byte[]) thumbnailImageData?.clone())
     }
 
     void setThumbnailImageData(final byte[] thumbnailImageData) {
