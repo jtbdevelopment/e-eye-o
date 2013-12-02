@@ -23,7 +23,7 @@ class SemesterBuilderGImpl extends AppUserOwnedObjectBuilderGImpl<Semester> impl
 
     @Override
     SemesterBuilder withEnd(final LocalDate end) {
-        entity.end = entity
+        entity.end = end
         return this
     }
 }

@@ -1,7 +1,8 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.builders
 
-import com.jtbdevelopment.e_eye_o.entities.impl.AppUserGImpl
+import com.jtbdevelopment.e_eye_o.entities.AppUser
 import com.jtbdevelopment.e_eye_o.entities.impl.AppUserOwnedObjectGImpl
+import groovy.mock.interceptor.MockFor
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
@@ -21,7 +22,7 @@ class AppUserOwnedObjectBuilderGImplTest extends IdObjectBuilderGImplTest {
 
     @Test
     void testWithAppUser() {
-        testField("appUser", new AppUserGImpl())
+        testField("appUser", new MockFor(AppUser.class).proxyInstance())
     }
 
     @Test

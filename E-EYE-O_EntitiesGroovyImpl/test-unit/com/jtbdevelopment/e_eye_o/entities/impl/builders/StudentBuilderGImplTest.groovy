@@ -1,7 +1,8 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.builders
 
-import com.jtbdevelopment.e_eye_o.entities.impl.ClassListGImpl
+import com.jtbdevelopment.e_eye_o.entities.ClassList
 import com.jtbdevelopment.e_eye_o.entities.impl.StudentGImpl
+import groovy.mock.interceptor.MockFor
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
@@ -28,6 +29,6 @@ class StudentBuilderGImplTest extends ObservableBuilderGImplTest {
 
     @Test
     void testClassList() {
-        testSetField("classList", "classLists", new ClassListGImpl(id: "X"))
+        testSetField("classList", "classLists", new MockFor(ClassList.class).proxyInstance())
     }
 }
