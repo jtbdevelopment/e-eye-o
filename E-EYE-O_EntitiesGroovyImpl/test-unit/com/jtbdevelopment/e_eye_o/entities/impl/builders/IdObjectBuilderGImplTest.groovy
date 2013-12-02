@@ -28,6 +28,20 @@ class IdObjectBuilderGImplTest {
         assert entity.is(builder.build())
     }
 
+    protected testSetField(final String singular, def String plural, def value) {
+        String add = "add" + singular[0].toUpperCase() + singular.substring(1)
+        String with = "with" + plural[0].toUpperCase() + plural.substring(1)
+
+        assert entity."$plural".isEmpty()
+        assert builder.is(builder."$add"(value))
+        assert ([value] as Set) == entity."$plural"
+
+        entity."$plural" = [] as Set
+        assert entity."$plural".isEmpty()
+        assert builder.is(builder."$with"([value] as Set))
+        assert ([value] as Set) == entity."$plural"
+    }
+
     protected testStringField(final String field) {
         testField(field, "StringValue")
     }
