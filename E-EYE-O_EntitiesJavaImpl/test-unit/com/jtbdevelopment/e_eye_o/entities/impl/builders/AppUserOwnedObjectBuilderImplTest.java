@@ -35,7 +35,7 @@ public class AppUserOwnedObjectBuilderImplTest extends IdObjectBuilderImplTest {
     @Test
     public void testWithArchiveFlag() throws Exception {
         assertFalse(impl.isArchived());
-        assertSame(builder, builder.withArchiveFlag(true));
+        assertSame(builder, builder.withArchived(true));
         assertTrue(impl.isArchived());
     }
 }

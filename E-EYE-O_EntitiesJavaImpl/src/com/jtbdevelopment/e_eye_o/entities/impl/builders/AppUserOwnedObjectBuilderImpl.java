@@ -20,7 +20,7 @@ public class AppUserOwnedObjectBuilderImpl<T extends AppUserOwnedObject> extends
     }
 
     @Override
-    public AppUserOwnedObjectBuilder<T> withArchiveFlag(final boolean archived) {
+    public AppUserOwnedObjectBuilder<T> withArchived(final boolean archived) {
         entity.setArchived(archived);
         return this;
     }

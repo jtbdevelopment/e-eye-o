@@ -10,5 +10,5 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 public interface AppUserOwnedObjectBuilder<T extends AppUserOwnedObject> extends IdObjectBuilder<T> {
     AppUserOwnedObjectBuilder<T> withAppUser(final AppUser appUser);
 
-    AppUserOwnedObjectBuilder<T> withArchiveFlag(final boolean archived);
+    AppUserOwnedObjectBuilder<T> withArchived(final boolean archived);
 }

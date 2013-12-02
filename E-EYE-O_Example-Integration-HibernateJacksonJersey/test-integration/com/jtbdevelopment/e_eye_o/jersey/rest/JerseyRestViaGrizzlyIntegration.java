@@ -133,7 +133,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
                 readWriteDAO.create(idObjectFactory.newObservationCategoryBuilder(testUser1)
                         .withShortName("ARCHIVE")
                         .withDescription("Archived")
-                        .withArchiveFlag(true).build());
+                        .withArchived(true).build());
             }
         }
 

@@ -90,7 +90,7 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
         if (!canChangeEmailAddress(appUser)) {
             throw new PasswordChangeTooRecent();
         }
-        TwoPhaseActivity changeRequest = idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.EMAIL_CHANGE).withExpirationTime(new DateTime()).withArchiveFlag(true).build();
+        TwoPhaseActivity changeRequest = idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.EMAIL_CHANGE).withExpirationTime(new DateTime()).withArchived(true).build();
         return readWriteDAO.updateUserEmailAddress(changeRequest, newEmailAddress);
     }
 
