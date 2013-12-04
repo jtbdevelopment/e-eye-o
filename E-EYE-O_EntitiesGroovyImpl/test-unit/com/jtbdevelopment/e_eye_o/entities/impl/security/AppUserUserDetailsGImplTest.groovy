@@ -51,9 +51,9 @@ class AppUserUserDetailsGImplTest {
 
     @Test
     void testIsCredentialsNonExpired() {
-        assert appUser.active == details.accountNonExpired
+        assert appUser.active == details.credentialsNonExpired
         appUser.active = !appUser.active
-        assert appUser.active == details.accountNonExpired
+        assert appUser.active == details.credentialsNonExpired
     }
 
     @Test

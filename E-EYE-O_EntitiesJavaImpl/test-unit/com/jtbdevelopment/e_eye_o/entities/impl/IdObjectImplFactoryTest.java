@@ -16,7 +16,6 @@ import static org.testng.AssertJUnit.*;
  * Time: 11:58 AM
  */
 public class IdObjectImplFactoryTest {
-    public static final List<Class<AppUser>> APP_USER_CLASS_ARRAY = Arrays.asList(AppUser.class);
     public static final List<Class<?>> NOT_APP_USER_CLASSES_ARRAY = Arrays.asList(Object.class, List.class, String.class, Integer.class, Set.class, HashMap.class);
     //  TODO - dynamic
     public static final List<Class<? extends AppUserOwnedObject>> APP_USER_OWNED_CLASSES_ARRAY = Arrays.asList(ClassList.class, Student.class, DeletedObject.class, Photo.class, Observation.class, ObservationCategory.class, TwoPhaseActivity.class, AppUserSettings.class);
