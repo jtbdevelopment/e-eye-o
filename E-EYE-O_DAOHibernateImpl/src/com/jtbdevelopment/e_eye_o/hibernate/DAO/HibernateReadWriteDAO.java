@@ -9,7 +9,7 @@ import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.events.EventFactory;
 import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
-import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -49,7 +49,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     private final EventFactory eventFactory;
 
     @Autowired
-    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper) {
+    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper) {
         super(sessionFactory, wrapperFactory, idObjectReflectionHelper);
         this.idObjectUpdateHelper = idObjectUpdateHelper;
         this.eventBus = eventBus;
@@ -61,7 +61,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (entity instanceof DeletedObject) {
             throw new IllegalArgumentException("You cannot explicitly create a DeletedObject.");
         }
-        final T wrapped = wrapperFactory.wrap(entity);
+        final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         sessionFactory.getCurrentSession().save(wrapped);
         dealWithNewObservations(wrapped);
         if (wrapped instanceof AppUserOwnedObject) {
@@ -103,7 +103,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     }
 
     private <T extends IdObject> T internalUpdate(final T entity) {
-        final T wrapped = wrapperFactory.wrap(entity);
+        final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         sessionFactory.getCurrentSession().update(wrapped);
         dealWithObservationUpdatesOrDeletes(wrapped);
         if (entity instanceof AppUserOwnedObject) {
@@ -123,7 +123,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
         Session currentSession = sessionFactory.getCurrentSession();
 
-        T wrapped = wrapperFactory.wrap(entity);
+        T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         wrapped = (T) get(wrapped.getClass(), wrapped.getId());
         if (wrapped == null) {
             return null;  //  Already deleted?
@@ -186,11 +186,11 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     public TwoPhaseActivity activateUser(final TwoPhaseActivity relatedActivity) {
         Session currentSession = sessionFactory.getCurrentSession();
         relatedActivity.setArchived(true);
-        AppUser wrappedAppUser = wrapperFactory.wrap(relatedActivity.getAppUser());
+        AppUser wrappedAppUser = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, relatedActivity.getAppUser());
         wrappedAppUser.setActive(true);
         wrappedAppUser.setActivated(true);
         currentSession.update(wrappedAppUser);
-        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(relatedActivity);
+        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, relatedActivity);
         currentSession.update(wrappedRelatedActivity);
         return wrappedRelatedActivity;
     }
@@ -199,10 +199,10 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     public TwoPhaseActivity updateUserEmailAddress(final TwoPhaseActivity changeRequest, final String newAddress) {
         Session currentSession = sessionFactory.getCurrentSession();
         changeRequest.setArchived(true);
-        AppUser wrappedAppUser = wrapperFactory.wrap(changeRequest.getAppUser());
+        AppUser wrappedAppUser = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, changeRequest.getAppUser());
         wrappedAppUser.setEmailAddress(newAddress);
         currentSession.update(wrappedAppUser);
-        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(changeRequest);
+        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, changeRequest);
         currentSession.saveOrUpdate(wrappedRelatedActivity);
         publishUpdate(wrappedAppUser);
         return wrappedRelatedActivity;
@@ -212,12 +212,12 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     public TwoPhaseActivity resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword) {
         Session currentSession = sessionFactory.getCurrentSession();
         relatedActivity.setArchived(true);
-        AppUser wrappedAppUser = wrapperFactory.wrap(relatedActivity.getAppUser());
+        AppUser wrappedAppUser = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, relatedActivity.getAppUser());
         wrappedAppUser.setActive(true);
         wrappedAppUser.setActivated(true);
         wrappedAppUser.setPassword(newPassword);
         currentSession.update(wrappedAppUser);
-        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(relatedActivity);
+        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, relatedActivity);
         currentSession.update(wrappedRelatedActivity);
         return wrappedRelatedActivity;
     }
@@ -227,7 +227,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         Session currentSession = sessionFactory.getCurrentSession();
         relatedActivity.setArchived(true);
         relatedActivity.setExpirationTime(new DateTime());
-        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(relatedActivity);
+        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, relatedActivity);
         currentSession.update(wrappedRelatedActivity);
         return wrappedRelatedActivity;
     }
@@ -256,7 +256,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     public void deleteUser(final AppUser appUser) {
         Session currentSession = sessionFactory.getCurrentSession();
 
-        AppUser wrapped = wrapperFactory.wrap(appUser);
+        AppUser wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, appUser);
         wrapped = get(AppUser.class, wrapped.getId());
         if (wrapped == null) {
             return;  //  Already deleted?
@@ -284,7 +284,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     @Override
     public void deactivateUser(final AppUser user) {
-        AppUser wrapped = wrapperFactory.wrap(user);
+        AppUser wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, user);
         wrapped.setActive(false);
 
         sessionFactory.getCurrentSession().update(wrapped);
@@ -301,7 +301,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
         Session currentSession = sessionFactory.getCurrentSession();
 
-        T wrapped = wrapperFactory.wrap(entity);
+        T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         wrapped = (T) get(wrapped.getClass(), wrapped.getId());
         if (wrapped == null) {
             //  Already deleted

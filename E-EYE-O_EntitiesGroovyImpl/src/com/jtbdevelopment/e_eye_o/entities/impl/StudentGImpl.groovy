@@ -52,5 +52,4 @@ class StudentGImpl extends ObservableGImpl implements Student {
     String getSummaryDescription() {
         return firstName.trim() + " " + lastName.trim()
     }
-
 }

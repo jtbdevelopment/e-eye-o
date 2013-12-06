@@ -9,12 +9,20 @@ import java.util.Collection;
  * Time: 9:34 PM
  */
 public interface IdObjectWrapperFactory {
-    <W extends IdObject> W wrap(final W entity);
+    enum WrapperKind {
+        DAO
+    }
 
-    <W extends IdObject, C extends Collection<W>> C wrap(final C entities);
+    <T extends IdObjectWrapper> void addBaseClass(final WrapperKind wrapperKind, Class<T> baseClass);
 
-    <T extends IdObject> Class<T> getWrapperForEntity(final Class<T> entityType);
+    <T extends IdObject, W extends T> void addMapping(final WrapperKind wrapperKind, final Class<T> entityType, final Class<W> wrapperType);
 
-    <T extends IdObject> Class<T> getEntityForWrapper(final Class<T> wrapperType);
+    <W extends IdObject> W wrap(final WrapperKind wrapperKind, final W entity);
+
+    <W extends IdObject, C extends Collection<W>> C wrap(final WrapperKind wrapperKind, final C entities);
+
+    <T extends IdObject> Class<T> getWrapperForEntity(final WrapperKind wrapperKind, final Class<T> entityType);
+
+    <T extends IdObject> Class<T> getEntityForWrapper(final WrapperKind wrapperKind, final Class<T> wrapperType);
 
 }

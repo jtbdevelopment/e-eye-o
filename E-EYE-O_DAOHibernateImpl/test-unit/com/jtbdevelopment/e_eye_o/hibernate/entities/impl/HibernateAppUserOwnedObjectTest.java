@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import org.jmock.Expectations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -54,6 +55,8 @@ public class HibernateAppUserOwnedObjectTest extends HibernateAbstractIdObjectTe
         final AppUser au = context.mock(AppUser.class);
         context.checking(new Expectations() {{
             one(impl).setAppUser(with(any(HibernateAppUser.class)));
+            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, au);
+            will(returnValue(au));
         }});
 
         hibernateLocal.setAppUser(au);

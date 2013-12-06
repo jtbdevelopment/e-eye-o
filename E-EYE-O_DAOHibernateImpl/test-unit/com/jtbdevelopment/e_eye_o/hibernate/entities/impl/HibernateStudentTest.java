@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Student;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import org.jmock.Expectations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -87,6 +88,8 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
         final Set<ClassList> cl = new HashSet<>(Arrays.asList(context.mock(ClassList.class)));
         context.checking(new Expectations() {{
             oneOf(implStudent).setClassLists(with(new IsEqualButNotTheSame<>(cl)));
+            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cl);
+            will(returnValue(new HashSet<>(cl)));
         }});
 
         hibernateStudent.setClassLists(cl);
@@ -97,6 +100,8 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
         final ClassList cl = context.mock(ClassList.class);
         context.checking(new Expectations() {{
             one(implStudent).addClassList(with(any(HibernateClassList.class)));
+            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cl);
+            will(returnValue(cl));
         }});
 
         hibernateStudent.addClassList(cl);
@@ -108,6 +113,8 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
         final Set<ClassList> cls = new HashSet<>(Arrays.asList(cl));
         context.checking(new Expectations() {{
             oneOf(implStudent).addClassLists(with(new IsEqualButNotTheSame<>(cls)));
+            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cls);
+            will(returnValue(new HashSet<>(cls)));
         }});
 
         hibernateStudent.addClassLists(cls);
@@ -118,6 +125,8 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
         final ClassList cl = context.mock(ClassList.class);
         context.checking(new Expectations() {{
             one(implStudent).removeClassList(with(any(HibernateClassList.class)));
+            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cl);
+            will(returnValue(cl));
         }});
 
         hibernateStudent.removeClassList(cl);

@@ -7,7 +7,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
-import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
@@ -38,10 +38,10 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     protected final IdObjectReflectionHelper idObjectReflectionHelper;
     protected final SessionFactory sessionFactory;
-    protected final DAOIdObjectWrapperFactory wrapperFactory;
+    protected final IdObjectWrapperFactory wrapperFactory;
 
     @Autowired
-    public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final DAOIdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
+    public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
         this.sessionFactory = sessionFactory;
         this.wrapperFactory = wrapperFactory;
         this.idObjectReflectionHelper = idObjectReflectionHelper;
@@ -317,7 +317,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         Class<T> wrapperFor;
         if (!HibernateIdObject.class.isAssignableFrom(entityType)) {
 
-            wrapperFor = wrapperFactory.getWrapperForEntity(idObjectReflectionHelper.getIdObjectInterfaceForClass(entityType));
+            wrapperFor = wrapperFactory.getWrapperForEntity(IdObjectWrapperFactory.WrapperKind.DAO, idObjectReflectionHelper.getIdObjectInterfaceForClass(entityType));
             if (wrapperFor == null) {
                 throw new IllegalArgumentException("Unknown entity type " + entityType.getSimpleName());
             }

@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.SessionFactory;
 import org.hibernate.event.service.spi.EventListenerRegistry;
@@ -21,14 +21,14 @@ import javax.annotation.PostConstruct;
 @Component
 @SuppressWarnings("unused")
 public class DeletedItemsGenerator implements PreDeleteEventListener {
-    private final DAOIdObjectWrapperFactory daoIdObjectWrapperFactory;
+    private final IdObjectWrapperFactory wrapperFactory;
     private final IdObjectFactory idObjectFactory;
     private final SessionFactory sessionFactory;
     private final IdObjectSerializer idObjectSerializer;
 
     @Autowired
-    public DeletedItemsGenerator(final DAOIdObjectWrapperFactory daoIdObjectWrapperFactory, final IdObjectFactory idObjectFactory, final SessionFactory sessionFactory, final IdObjectSerializer idObjectSerializer) {
-        this.daoIdObjectWrapperFactory = daoIdObjectWrapperFactory;
+    public DeletedItemsGenerator(final IdObjectWrapperFactory wrapperFactory, final IdObjectFactory idObjectFactory, final SessionFactory sessionFactory, final IdObjectSerializer idObjectSerializer) {
+        this.wrapperFactory = wrapperFactory;
         this.idObjectFactory = idObjectFactory;
         this.sessionFactory = sessionFactory;
         this.idObjectSerializer = idObjectSerializer;
@@ -47,7 +47,7 @@ public class DeletedItemsGenerator implements PreDeleteEventListener {
                 !(event.getEntity() instanceof DeletedObject)) {
             AppUserOwnedObject entity = (AppUserOwnedObject) event.getEntity();
             final DeletedObject deletedObject = idObjectFactory.newDeletedObjectBuilder(entity.getAppUser()).withDeletedId(entity.getId()).build();
-            final DeletedObject wrap = daoIdObjectWrapperFactory.wrap(deletedObject);
+            final DeletedObject wrap = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, deletedObject);
             event.getSession().save(wrap);
             //  TODO - logic duped with R/W DAO
             if (!(entity instanceof AppUserSettings) && !(entity instanceof TwoPhaseActivity)) {

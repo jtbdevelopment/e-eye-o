@@ -1,32 +1,46 @@
 package com.jtbdevelopment.e_eye_o.entities.wrapper;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.util.*;
 
-public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
-    private final Map<Class<? extends IdObject>, Class<? extends IdObject>> entityToWrapperMap = new HashMap<>();
-    private final Map<Class<? extends IdObject>, Class<? extends IdObject>> wrapperToEntityMap = new HashMap<>();
+@Service
+public class IdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
+    private final Table<WrapperKind, Class<? extends IdObject>, Class<? extends IdObject>> entityToWrapperTable = HashBasedTable.create();
+    private final Table<WrapperKind, Class<? extends IdObject>, Class<? extends IdObject>> wrapperToEntityTable = HashBasedTable.create();
+    private final Map<WrapperKind, Map<Class<? extends IdObject>, Class<? extends IdObject>>> entityToWrapperMaps = new HashMap<>();
+    private final Map<WrapperKind, Map<Class<? extends IdObject>, Class<? extends IdObject>>> wrapperToEntityMaps = new HashMap<>();
+    private final Map<WrapperKind, Class<? extends IdObjectWrapper>> baseClassMap = new HashMap<>();
     private final IdObjectReflectionHelper idObjectReflectionHelper;
-    private final Class<? extends IdObjectWrapper> baseClass;
 
-    protected AbstractIdObjectWrapperFactoryImpl(final Class<? extends IdObjectWrapper> baseClass, final IdObjectReflectionHelper idObjectReflectionHelper) {
-        this.baseClass = baseClass;
+    @Autowired
+    public IdObjectWrapperFactoryImpl(final IdObjectReflectionHelper idObjectReflectionHelper) {
         this.idObjectReflectionHelper = idObjectReflectionHelper;
+        for (WrapperKind wrapperKind : WrapperKind.values()) {
+            entityToWrapperMaps.put(wrapperKind, new HashMap<Class<? extends IdObject>, Class<? extends IdObject>>());
+            wrapperToEntityMaps.put(wrapperKind, new HashMap<Class<? extends IdObject>, Class<? extends IdObject>>());
+        }
     }
 
-    protected boolean needsWrapping(final Object entity) {
-        return !(baseClass.isAssignableFrom(entity.getClass()));
+    @Override
+    public <T extends IdObjectWrapper> void addBaseClass(final WrapperKind wrapperKind, Class<T> baseClass) {
+        baseClassMap.put(wrapperKind, baseClass);
     }
 
-    protected <T extends IdObject, W extends T> void addMapping(final Class<T> entityType, final Class<W> wrapperType) {
+    @Override
+    public <T extends IdObject, W extends T> void addMapping(final WrapperKind wrapperKind, final Class<T> entityType, final Class<W> wrapperType) {
         if (!entityType.isInterface()) {
             throw new IllegalArgumentException("entityType should be interface not " + entityType.getSimpleName());
         }
+        Class<? extends IdObjectWrapper> baseClass = baseClassMap.get(wrapperKind);
         if (!baseClass.isAssignableFrom(wrapperType)) {
             throw new IllegalArgumentException("wrapperType class of " + wrapperType.getSimpleName() + " must be implement " + baseClass.getSimpleName());
         }
@@ -38,25 +52,25 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
                             + ", wrapperType = "
                             + idObjectInterfaceForWrapper.getSimpleName());
         }
-        entityToWrapperMap.put(entityType, wrapperType);
-        wrapperToEntityMap.put(wrapperType, entityType);
+        entityToWrapperMaps.get(wrapperKind).put(entityType, wrapperType);
+        wrapperToEntityMaps.get(wrapperKind).put(wrapperType, entityType);
     }
 
     @Override
-    public <T extends IdObject> T wrap(final T entity) {
+    public <T extends IdObject> T wrap(final WrapperKind wrapperKind, final T entity) {
         if (entity == null) {
             return entity;
         }
 
-        if (!needsWrapping(entity)) {
+        if (!needsWrapping(wrapperKind, entity)) {
             return entity;
         }
 
-        return newWrapperFor(getEntityToWrap(entity));
+        return newWrapperFor(wrapperKind, getEntityToWrap(entity));
     }
 
     @Override
-    public <T extends IdObject, C extends Collection<T>> C wrap(final C entities) {
+    public <T extends IdObject, C extends Collection<T>> C wrap(final WrapperKind wrapperKind, final C entities) {
         if (entities == null) {
             return entities;
         }
@@ -64,21 +78,21 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         C newCollection = newCollectionFor(entities);
         //  TODO - more efficient to get constructor once but probably not an issue for now
         for (T entity : entities) {
-            newCollection.add(wrap(entity));
+            newCollection.add(wrap(wrapperKind, entity));
         }
         return newCollection;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends IdObject> Class<T> getWrapperForEntity(final Class<T> entityType) {
-        return (Class<T>) entityToWrapperMap.get(entityType);
+    public <T extends IdObject> Class<T> getWrapperForEntity(final WrapperKind wrapperKind, final Class<T> entityType) {
+        return (Class<T>) entityToWrapperMaps.get(wrapperKind).get(entityType);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends IdObject> Class<T> getEntityForWrapper(final Class<T> wrapperType) {
-        return (Class<T>) wrapperToEntityMap.get(wrapperType);
+    public <T extends IdObject> Class<T> getEntityForWrapper(final WrapperKind wrapperKind, final Class<T> wrapperType) {
+        return (Class<T>) wrapperToEntityMaps.get(wrapperKind).get(wrapperType);
     }
 
     //  Can't just clone the collection - hibernate gives you it's own internal types for example
@@ -113,8 +127,13 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
         }
     }
 
-    private <T extends IdObject> T newWrapperFor(final T entityToWrap) {
-        final Constructor<T> constructor = getConstructor(entityToWrap);
+    //  TODO - protected for unit testing - code or test smell
+    protected boolean needsWrapping(final WrapperKind wrapperKind, final Object entity) {
+        return !(baseClassMap.get(wrapperKind).isAssignableFrom(entity.getClass()));
+    }
+
+    private <T extends IdObject> T newWrapperFor(final WrapperKind wrapperKind, final T entityToWrap) {
+        final Constructor<T> constructor = getConstructor(wrapperKind, entityToWrap);
         try {
             return constructor.newInstance(entityToWrap);
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
@@ -123,9 +142,9 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends IdObject> Constructor<T> getConstructor(final T entity) {
+    private <T extends IdObject> Constructor<T> getConstructor(final WrapperKind wrapperKind, final T entity) {
         Class<T> idObjectInterface = (Class<T>) idObjectReflectionHelper.getIdObjectInterfaceForClass(entity.getClass());
-        Class<T> impl = getWrapperForInterface(idObjectInterface);
+        Class<T> impl = getWrapperForInterface(wrapperKind, idObjectInterface);
         try {
             final Constructor<T> declaredConstructor = impl.getDeclaredConstructor(idObjectInterface);
             declaredConstructor.setAccessible(true);
@@ -136,9 +155,10 @@ public abstract class AbstractIdObjectWrapperFactoryImpl implements IdObjectWrap
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends IdObject> Class<T> getWrapperForInterface(final Class<T> idObjectType) {
-        if (entityToWrapperMap.containsKey(idObjectType)) {
-            return (Class<T>) entityToWrapperMap.get(idObjectType);
+    private <T extends IdObject> Class<T> getWrapperForInterface(final WrapperKind wrapperKind, final Class<T> idObjectType) {
+        Map<Class<? extends IdObject>, Class<? extends IdObject>> wrapperMap = entityToWrapperMaps.get(wrapperKind);
+        if (wrapperMap.containsKey(idObjectType)) {
+            return (Class<T>) wrapperMap.get(idObjectType);
         }
         throw new InvalidParameterException("Not able to find wrapperType mapping for " + idObjectType.getSimpleName());
     }

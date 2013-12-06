@@ -4,14 +4,15 @@ import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelper
 import com.jtbdevelopment.e_eye_o.entities.*
 import com.jtbdevelopment.e_eye_o.entities.builders.*
 import com.jtbdevelopment.e_eye_o.entities.impl.builders.*
-import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 
 /**
  * Date: 11/30/13
  * Time: 12:27 PM
  */
-@CompileStatic
+//@CompileStatic
+@Service
 class IdObjectFactoryGImpl implements IdObjectFactory {
     @Autowired
     PhotoHelper photoHelper;

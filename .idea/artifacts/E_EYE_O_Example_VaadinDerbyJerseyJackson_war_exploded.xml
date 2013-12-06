@@ -4,7 +4,7 @@
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="E-EYE-O_Example-VaadinDerbyJerseyJackson" />
+          <element id="module-output" name="E-EYE-O_Example-VaadinJerseyJacksonJava" />
           <element id="module-output" name="E-EYE-O_EntitiesJavaImpl" />
           <element id="module-output" name="E-EYE-O_Interfaces" />
           <element id="module-output" name="E-EYE-O_RESTJSONJersey" />
@@ -44,7 +44,7 @@
           <element id="library" level="project" name="jasperreports-5.1.2" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="E-EYE-O_Example-VaadinDerbyJerseyJackson/web/Web" />
+      <element id="javaee-facet-resources" facet="E-EYE-O_Example-VaadinJerseyJacksonJava/web/Web" />
       <element id="dir-copy" path="$PROJECT_DIR$/E-EYE-O_RIAVaadin/resources" />
     </root>
   </artifact>

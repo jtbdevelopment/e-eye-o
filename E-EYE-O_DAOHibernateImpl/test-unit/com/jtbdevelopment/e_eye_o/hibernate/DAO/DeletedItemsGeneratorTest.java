@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.builders.DeletedObjectBuilder;
-import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.event.spi.EventSource;
 import org.hibernate.event.spi.PreDeleteEvent;
@@ -20,7 +20,7 @@ import static org.testng.AssertJUnit.assertFalse;
  */
 public class DeletedItemsGeneratorTest {
     private Mockery context;
-    private DAOIdObjectWrapperFactory wrapper;
+    private IdObjectWrapperFactory wrapper;
     private IdObjectFactory factory;
     private DeletedItemsGenerator listener;
     private DeletedObject impl, wrapped;
@@ -32,7 +32,7 @@ public class DeletedItemsGeneratorTest {
     @BeforeMethod
     public void setUp() {
         context = new Mockery();
-        wrapper = context.mock(DAOIdObjectWrapperFactory.class);
+        wrapper = context.mock(IdObjectWrapperFactory.class);
         factory = context.mock(IdObjectFactory.class);
         impl = context.mock(DeletedObject.class, "I");
         wrapped = context.mock(DeletedObject.class, "W");
@@ -81,7 +81,7 @@ public class DeletedItemsGeneratorTest {
             will(returnValue(builder));
             one(builder).build();
             will(returnValue(impl));
-            one(wrapper).wrap(impl);
+            one(wrapper).wrap(IdObjectWrapperFactory.WrapperKind.DAO, impl);
             will(returnValue(wrapped));
             one(eventSource).save(wrapped);
             one(wrapped).getAppUser();
@@ -113,7 +113,7 @@ public class DeletedItemsGeneratorTest {
             will(returnValue(builder));
             one(builder).build();
             will(returnValue(impl));
-            one(wrapper).wrap(impl);
+            one(wrapper).wrap(IdObjectWrapperFactory.WrapperKind.DAO, impl);
             will(returnValue(wrapped));
             one(eventSource).save(wrapped);
 

@@ -8,7 +8,6 @@ import org.testng.annotations.Test;
 
 import java.beans.Transient;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import static org.testng.AssertJUnit.assertSame;
@@ -146,33 +145,5 @@ public class IdObjectReflectionHelperImplTest {
     public void testIdObjectDerivedFromOwned() throws Exception {
         assertSame(LocalThree.class, resolver.getIdObjectInterfaceForClass(LocalThreeImpl.class));
     }
-
-    private static class MyEntry implements Map.Entry<String, Class> {
-        private String key;
-        private Class value;
-
-        public MyEntry(final String key, final Class value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-        public String getKey() {
-            return key;
-        }
-
-        @Override
-        public Class getValue() {
-            return value;
-        }
-
-        @Override
-        public Class setValue(final Class value) {
-            Class oldValue = value;
-            this.value = value;
-            return oldValue;
-        }
-    }
-
 }
 

@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
-import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.joda.time.DateTime;
@@ -66,7 +66,7 @@ public class HibernateIdObjectTest {
 
     private Mockery context;
     private IdObjectFactory implFactory;
-    private DAOIdObjectWrapperFactory daoFactory;
+    private IdObjectWrapperFactory daoFactory;
     private LocalIdObject idObjectImpl;
 
     @BeforeMethod
@@ -74,33 +74,33 @@ public class HibernateIdObjectTest {
         context = new Mockery();
         idObjectImpl = context.mock(LocalIdObject.class, "default");
         implFactory = context.mock(IdObjectFactory.class);
-        daoFactory = context.mock(DAOIdObjectWrapperFactory.class);
+        daoFactory = context.mock(IdObjectWrapperFactory.class);
         HibernateIdObject.setImplFactory(implFactory);
-        HibernateIdObject.setDaoFactory(daoFactory);
+        HibernateIdObject.setWrapperFactory(daoFactory);
 
         context.checking(new Expectations() {{
             allowing(implFactory).newIdObject(LocalIdObject.class);
             will(returnValue(idObjectImpl));
-            allowing(daoFactory).getEntityForWrapper(LocalIdObjectWrapper.class);
+            allowing(daoFactory).getEntityForWrapper(IdObjectWrapperFactory.WrapperKind.DAO, LocalIdObjectWrapper.class);
             will(returnValue(LocalIdObject.class));
-            allowing(daoFactory).getWrapperForEntity(LocalIdObject.class);
+            allowing(daoFactory).getWrapperForEntity(IdObjectWrapperFactory.WrapperKind.DAO, LocalIdObject.class);
             will(returnValue(LocalIdObjectWrapper.class));
         }});
     }
 
     @Test
     public void testDefaultConstructorWhenFactoriesAreNull() {
-        HibernateIdObject.setDaoFactory(null);
+        HibernateIdObject.setWrapperFactory(null);
         HibernateIdObject.setImplFactory(null);
 
         assertNull(new LocalIdObjectWrapper().getWrapped());
 
-        HibernateIdObject.setDaoFactory(null);
+        HibernateIdObject.setWrapperFactory(null);
         HibernateIdObject.setImplFactory(implFactory);
 
         assertNull(new LocalIdObjectWrapper().getWrapped());
 
-        HibernateIdObject.setDaoFactory(daoFactory);
+        HibernateIdObject.setWrapperFactory(daoFactory);
         HibernateIdObject.setImplFactory(null);
 
         assertNull(new LocalIdObjectWrapper().getWrapped());
@@ -192,7 +192,7 @@ public class HibernateIdObjectTest {
     public void testWrapObject() {
         final LocalIdObjectWrapper returnObject = new LocalIdObjectWrapper();
         context.checking(new Expectations() {{
-            one(daoFactory).wrap(idObjectImpl);
+            one(daoFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, idObjectImpl);
             will(returnValue(returnObject));
         }});
 
@@ -206,7 +206,7 @@ public class HibernateIdObjectTest {
         final LocalIdObjectWrapper returnedItem = new LocalIdObjectWrapper();
         final List<LocalIdObjectWrapper> returnedList = Arrays.asList(returnedItem);
         context.checking(new Expectations() {{
-            one(daoFactory).wrap(inputList);
+            one(daoFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, inputList);
             will(returnValue(returnedList));
         }});
 

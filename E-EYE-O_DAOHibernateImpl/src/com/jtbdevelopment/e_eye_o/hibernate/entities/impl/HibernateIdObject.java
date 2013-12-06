@@ -2,8 +2,8 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
-import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import org.hibernate.annotations.GenericGenerator;
 import org.joda.time.DateTime;
 
@@ -31,22 +31,22 @@ import java.util.Collection;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class HibernateIdObject<T extends IdObject> implements IdObjectWrapper<T>, IdObject {
     private static IdObjectFactory implFactory;
-    private static DAOIdObjectWrapperFactory daoFactory;
+    private static IdObjectWrapperFactory wrapperFactory;
 
     public static void setImplFactory(final IdObjectFactory implFactory) {
         HibernateIdObject.implFactory = implFactory;
     }
 
-    public static void setDaoFactory(final DAOIdObjectWrapperFactory daoFactory) {
-        HibernateIdObject.daoFactory = daoFactory;
+    public static void setWrapperFactory(final IdObjectWrapperFactory wrapperFactory) {
+        HibernateIdObject.wrapperFactory = wrapperFactory;
     }
 
     protected T wrapped;
 
     @SuppressWarnings("unchecked")
     protected HibernateIdObject() {
-        if (implFactory != null && daoFactory != null) {
-            wrapped = (T) implFactory.newIdObject(daoFactory.getEntityForWrapper(getClass()));
+        if (implFactory != null && wrapperFactory != null) {
+            wrapped = (T) implFactory.newIdObject(wrapperFactory.getEntityForWrapper(IdObjectWrapperFactory.WrapperKind.DAO, getClass()));
         }
     }
 
@@ -133,11 +133,11 @@ public abstract class HibernateIdObject<T extends IdObject> implements IdObjectW
 
     protected static <OO extends IdObject> OO wrap(OO entity) {
         //  TODO - should we be going through and rewrapping its subobjects?
-        return daoFactory.wrap(entity);
+        return wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
     }
 
     protected static <OO extends IdObject, C extends Collection<OO>> C wrap(final C entities) {
         //  TODO - should we be going through and rewrapping its subobjects?
-        return daoFactory.wrap(entities);
+        return wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entities);
     }
 }

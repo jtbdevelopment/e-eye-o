@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.Student;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import org.jmock.Expectations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -61,6 +62,8 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     public void testSetPhotoFor() throws Exception {
         context.checking(new Expectations() {{
             one(implPhoto).setPhotoFor(with(any(HibernateStudent.class)));
+            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, implStudent);
+            will(returnValue(implStudent));
         }});
         hibernatePhoto.setPhotoFor(implStudent);
     }

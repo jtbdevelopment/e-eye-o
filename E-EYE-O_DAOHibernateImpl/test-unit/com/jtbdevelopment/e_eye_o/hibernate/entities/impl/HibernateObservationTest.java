@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.entities.Student;
+import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import org.jmock.Expectations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -119,6 +120,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
         context.checking(new Expectations() {{
             one(implObservation).setCategories(with(new IsEqualButNotTheSame<>(ocs)));
+            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, ocs);
+            will(returnValue(new HashSet<>(ocs)));
         }});
         hibernateObservation.setCategories(ocs);
     }
@@ -128,6 +131,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
         final ObservationCategory ocs = context.mock(ObservationCategory.class);
         context.checking(new Expectations() {{
             one(implObservation).addCategory(with(any(HibernateObservationCategory.class)));
+            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, ocs);
+            will(returnValue(ocs));
         }});
         hibernateObservation.addCategory(ocs);
     }
@@ -137,6 +142,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
         context.checking(new Expectations() {{
             one(implObservation).addCategories(with(new IsEqualButNotTheSame<>(ocs)));
+            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, ocs);
+            will(returnValue(new HashSet<>(ocs)));
         }});
         hibernateObservation.addCategories(ocs);
     }

@@ -1,33 +1,12 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
-import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectUpdateHelper;
-import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.Observable;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
-import com.jtbdevelopment.e_eye_o.entities.wrapper.DAOIdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
-import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.metadata.ClassMetadata;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
-import org.springframework.context.ApplicationContext;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import java.util.*;
-
-import static org.testng.AssertJUnit.*;
-
 /**
  * Date: 1/6/13
  * Time: 3:32 PM
  */
 public class HibernateReadWriteDAOTest {
+    //  TODO - revisit
+    /*
     public static final String TN = "TN";
     public static final String DN = "DN";
     private Mockery context;
@@ -35,7 +14,7 @@ public class HibernateReadWriteDAOTest {
     private IdObjectReflectionHelper idObjectReflectionHelper;
     private IdObjectUpdateHelper idObjectUpdateHelper;
     private Session session;
-    private DAOIdObjectWrapperFactory daoIdObjectWrapperFactory;
+    private IdObjectWrapperFactory daoIdObjectWrapperFactory;
     private HibernateReadWriteDAO dao;
     private ClassMetadata metadata, deletedMetaData;
     private ApplicationContext appContext;
@@ -69,7 +48,7 @@ public class HibernateReadWriteDAOTest {
         idObjectUpdateHelper = context.mock(IdObjectUpdateHelper.class);
         query1 = context.mock(Query.class, "Q1");
         query3 = context.mock(Query.class, "Q3");
-        daoIdObjectWrapperFactory = context.mock(DAOIdObjectWrapperFactory.class);
+        daoIdObjectWrapperFactory = context.mock(IdObjectWrapperFactory.class);
         classListImpl = context.mock(ClassList.class, "CLI");
         classListLoaded = context.mock(ClassList.class, "CLL");
         classListWrapped = context.mock(ClassList.class, "CLW");
@@ -688,4 +667,5 @@ public class HibernateReadWriteDAOTest {
     public void testUdpdateingDeletedObjectExceptions() {
         dao.update(appUserImpl, deletedImpl);
     }
+    */
 }

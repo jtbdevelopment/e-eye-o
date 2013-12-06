@@ -17,7 +17,7 @@ import static org.testng.AssertJUnit.*;
  * Date: 1/5/13
  * Time: 1:34 PM
  */
-public class AbstractIdObjectWrapperFactoryImplTest {
+public class IdObjectWrapperFactoryImplTest {
     public static int idCounter = 0;
 
     public static interface LocalSomeIdObject extends IdObject {
@@ -239,10 +239,11 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
     }
 
-    private static class LocalIdObjectWrapperFactory extends AbstractIdObjectWrapperFactoryImpl {
+    private static class LocalIdObjectWrapperFactory extends IdObjectWrapperFactoryImpl {
         public LocalIdObjectWrapperFactory() {
-            super(LocalIdObjectWrapper.class, new IdObjectReflectionHelperImpl());
-            addMapping(LocalSomeIdObject.class, LocalSomeIdObjectWrapper.class);
+            super(new IdObjectReflectionHelperImpl());
+            addBaseClass(WrapperKind.DAO, LocalSomeIdObjectWrapper.class);
+            addMapping(WrapperKind.DAO, LocalSomeIdObject.class, LocalSomeIdObjectWrapper.class);
         }
     }
 
@@ -256,45 +257,45 @@ public class AbstractIdObjectWrapperFactoryImplTest {
 
     @Test
     public void testNeedsWrapping() throws Exception {
-        assertTrue(wrapperFactory.needsWrapping(impl));
-        assertTrue(wrapperFactory.needsWrapping(implAsInterface));
-        assertFalse(wrapperFactory.needsWrapping(wrapper));
-        assertFalse(wrapperFactory.needsWrapping(wrapperAsInterface));
-        assertTrue(wrapperFactory.needsWrapping(otherWrapper));
-        assertTrue(wrapperFactory.needsWrapping(otherWrapperAsInterface));
+        assertTrue(wrapperFactory.needsWrapping(IdObjectWrapperFactory.WrapperKind.DAO, impl));
+        assertTrue(wrapperFactory.needsWrapping(IdObjectWrapperFactory.WrapperKind.DAO, implAsInterface));
+        assertFalse(wrapperFactory.needsWrapping(IdObjectWrapperFactory.WrapperKind.DAO, wrapper));
+        assertFalse(wrapperFactory.needsWrapping(IdObjectWrapperFactory.WrapperKind.DAO, wrapperAsInterface));
+        assertTrue(wrapperFactory.needsWrapping(IdObjectWrapperFactory.WrapperKind.DAO, otherWrapper));
+        assertTrue(wrapperFactory.needsWrapping(IdObjectWrapperFactory.WrapperKind.DAO, otherWrapperAsInterface));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddMappingBlowsUpWhenEntityIsNotInterface() throws Exception {
         LocalIdObjectWrapperFactory testFactory = new LocalIdObjectWrapperFactory();
-        testFactory.addMapping(LocalSomeIdObjectWrapper.class, LocalSomeIdObjectWrapper.class);
+        testFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, LocalSomeIdObjectWrapper.class, LocalSomeIdObjectWrapper.class);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddMappingBlowsUpWhenMappingNotOfWrapper() throws Exception {
         LocalIdObjectWrapperFactory testFactory = new LocalIdObjectWrapperFactory();
-        testFactory.addMapping(LocalSomeIdObject.class, LocalSomeIdObjectImpl.class);
+        testFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, LocalSomeIdObject.class, LocalSomeIdObjectImpl.class);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddMappingBlowsUpWhenWrapperButNotFromBaseClass() throws Exception {
         LocalIdObjectWrapperFactory testFactory = new LocalIdObjectWrapperFactory();
-        testFactory.addMapping(LocalSomeIdObject.class, SomeOtherWrapperClass.class);
+        testFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, LocalSomeIdObject.class, SomeOtherWrapperClass.class);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddMappingBlowsUpWhenClassesDontMatch() throws Exception {
         LocalIdObjectWrapperFactory testFactory = new LocalIdObjectWrapperFactory();
-        testFactory.addMapping(LocalSomeIdObject.class, LocalBrokenImplements.class);
+        testFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, LocalSomeIdObject.class, LocalBrokenImplements.class);
     }
 
     @Test
     public void testWrapOnImpls() throws Exception {
         LocalSomeIdObject returned;
-        returned = wrapperFactory.wrap(impl);
+        returned = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, impl);
         assertFalse(returned == impl);
         assertTrue(returned instanceof LocalSomeIdObjectWrapper);
-        returned = wrapperFactory.wrap(implAsInterface);
+        returned = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, implAsInterface);
         assertFalse(returned == impl);
         assertTrue(returned instanceof LocalSomeIdObjectWrapper);
     }
@@ -302,10 +303,10 @@ public class AbstractIdObjectWrapperFactoryImplTest {
     @Test
     public void testWrapOnGoodAlternateWrappers() throws Exception {
         LocalSomeIdObject returned;
-        returned = wrapperFactory.wrap(otherWrapper);
+        returned = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, otherWrapper);
         assertFalse(returned == otherWrapper);
         assertTrue(returned instanceof LocalSomeIdObjectWrapper);
-        returned = wrapperFactory.wrap(otherWrapperAsInterface);
+        returned = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, otherWrapperAsInterface);
         assertFalse(returned == otherWrapper);
         assertTrue(returned instanceof LocalSomeIdObjectWrapper);
     }
@@ -313,55 +314,55 @@ public class AbstractIdObjectWrapperFactoryImplTest {
     @Test
     public void testWrapOnGoodCorrectlyWrapped() throws Exception {
         LocalSomeIdObject returned;
-        returned = wrapperFactory.wrap(wrapper);
+        returned = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, wrapper);
         assertTrue(returned == wrapper);
-        returned = wrapperFactory.wrap(wrapperAsInterface);
+        returned = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, wrapperAsInterface);
         assertTrue(returned == wrapper);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testWrapBlowsUpOnOtherWrapperWithNullWrapped() {
         SomeOtherWrapperClass badWrapper = new SomeOtherWrapperClass(null);
-        wrapperFactory.wrap(badWrapper);
+        wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, badWrapper);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testWrapBlowsUpOnOtherWrapperWithInconsistentWrapped() {
         //  forcing a bad cast
         SomeOtherWrapperClass badWrapper = new SomeOtherWrapperClass(new LocalAppUserImpl());
-        wrapperFactory.wrap(badWrapper);
+        wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, badWrapper);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testWrapBlowsUpWhenUnderlyingInterfaceIsUnknown() {
-        wrapperFactory.wrap(new LocalAppUserImpl());
+        wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, new LocalAppUserImpl());
     }
 
     @Test(expectedExceptions = RuntimeException.class)
     public void testWrapBlowsUpIfWrapperHasNoCopyConstructor() {
         LocalIdObjectWrapperFactory factory = new LocalIdObjectWrapperFactory();
-        factory.addMapping(LocalSomeIdObject.class, LocalBrokenNoCCSomeIdObjectWrapper.class);
-        factory.wrap(new LocalSomeIdObjectImpl());
+        factory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, LocalSomeIdObject.class, LocalBrokenNoCCSomeIdObjectWrapper.class);
+        factory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, new LocalSomeIdObjectImpl());
     }
 
     @Test(expectedExceptions = RuntimeException.class)
     public void testWrapBlowsUpIfWrapperHasNoPublicCopyConstructor() {
         LocalIdObjectWrapperFactory factory = new LocalIdObjectWrapperFactory();
-        factory.addMapping(LocalSomeIdObject.class, LocalBrokenNoPublicCSomeIdObjectWrapper.class);
-        factory.wrap(new LocalSomeIdObjectImpl());
+        factory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, LocalSomeIdObject.class, LocalBrokenNoPublicCSomeIdObjectWrapper.class);
+        factory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, new LocalSomeIdObjectImpl());
     }
 
     @Test
     public void testWrapNullObjectReturnsNull() {
-        assertNull(wrapperFactory.wrap((IdObject) null));
-        assertNull(wrapperFactory.wrap((Collection) null));
+        assertNull(wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, (IdObject) null));
+        assertNull(wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, (Collection) null));
     }
 
     @Test
     public void testCollectionReturnedTypes() {
-        List returnList = wrapperFactory.wrap(new LinkedList<LocalSomeIdObject>());
+        List returnList = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, new LinkedList<LocalSomeIdObject>());
         assertTrue(returnList instanceof ArrayList);
-        Set returnSet = wrapperFactory.wrap(new ConcurrentSkipListSet<LocalSomeIdObject>());
+        Set returnSet = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, new ConcurrentSkipListSet<LocalSomeIdObject>());
         assertTrue(returnSet instanceof HashSet);
     }
 
@@ -374,7 +375,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         for (Collection<LocalSomeIdObject> c : collections) {
             boolean exception = false;
             try {
-                wrapperFactory.wrap(c);
+                wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, c);
             } catch (RuntimeException e) {
                 exception = true;
                 assertEquals("Don't know how to construct collection of " + c.getClass().getSimpleName(), e.getMessage());
@@ -391,7 +392,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         final ArrayList<LocalSomeIdObject> listInput = new ArrayList<>(original);
-        List<LocalSomeIdObject> listOutput = wrapperFactory.wrap(listInput);
+        List<LocalSomeIdObject> listOutput = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, listInput);
         assertFalse(listOutput == listInput);
         assertEquals(original.size(), listOutput.size());
         List<LocalSomeIdObject> listWrapped = new ArrayList<>();
@@ -403,7 +404,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         assertTrue(original.containsAll(listWrapped));
 
         final HashSet<LocalSomeIdObject> setInput = new HashSet<>(original);
-        Set<LocalSomeIdObject> setOutput = wrapperFactory.wrap(setInput);
+        Set<LocalSomeIdObject> setOutput = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, setInput);
         assertFalse(setOutput == setInput);
         assertEquals(original.size(), setOutput.size());
         List<LocalSomeIdObject> setWrapped = new ArrayList<>();
@@ -427,7 +428,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         final ArrayList<LocalSomeIdObject> listInput = new ArrayList<>(originalOther);
-        List<LocalSomeIdObject> listOutput = wrapperFactory.wrap(listInput);
+        List<LocalSomeIdObject> listOutput = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, listInput);
         assertFalse(listOutput == listInput);
         assertEquals(originalImpl.size(), listOutput.size());
         List<LocalSomeIdObject> listWrapped = new ArrayList<>();
@@ -439,7 +440,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         assertTrue(originalImpl.containsAll(listWrapped));
 
         final HashSet<LocalSomeIdObject> setInput = new HashSet<>(originalOther);
-        Set<LocalSomeIdObject> setOutput = wrapperFactory.wrap(setInput);
+        Set<LocalSomeIdObject> setOutput = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, setInput);
         assertFalse(setOutput == setInput);
         assertEquals(originalImpl.size(), setOutput.size());
         List<LocalSomeIdObject> setWrapped = new ArrayList<>();
@@ -463,7 +464,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         }
 
         final ArrayList<LocalSomeIdObject> listInput = new ArrayList<>(originalWrapped);
-        List<LocalSomeIdObject> listOutput = wrapperFactory.wrap(listInput);
+        List<LocalSomeIdObject> listOutput = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, listInput);
         assertFalse(listOutput == listInput);
         assertEquals(originalImpl.size(), listOutput.size());
         for (LocalSomeIdObject returned : listOutput) {
@@ -473,7 +474,7 @@ public class AbstractIdObjectWrapperFactoryImplTest {
         assertTrue(originalWrapped.containsAll(listOutput));
 
         final HashSet<LocalSomeIdObject> setInput = new HashSet<>(originalWrapped);
-        Set<LocalSomeIdObject> setOutput = wrapperFactory.wrap(setInput);
+        Set<LocalSomeIdObject> setOutput = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, setInput);
         assertFalse(setOutput == setInput);
         assertEquals(originalImpl.size(), setOutput.size());
         for (LocalSomeIdObject returned : setOutput) {
@@ -485,11 +486,11 @@ public class AbstractIdObjectWrapperFactoryImplTest {
 
     @Test
     public void testGetWrapperForEntity() throws Exception {
-        assertEquals(LocalSomeIdObject.class, wrapperFactory.getEntityForWrapper(LocalSomeIdObjectWrapper.class));
+        assertEquals(LocalSomeIdObject.class, wrapperFactory.getEntityForWrapper(IdObjectWrapperFactory.WrapperKind.DAO, LocalSomeIdObjectWrapper.class));
     }
 
     @Test
     public void testGetEntityForWrapper() throws Exception {
-        assertEquals(LocalSomeIdObjectWrapper.class, wrapperFactory.getWrapperForEntity(LocalSomeIdObject.class));
+        assertEquals(LocalSomeIdObjectWrapper.class, wrapperFactory.getWrapperForEntity(IdObjectWrapperFactory.WrapperKind.DAO, LocalSomeIdObject.class));
     }
 }
