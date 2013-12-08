@@ -16,18 +16,12 @@ import java.util.*;
 public class IdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
     private final Table<WrapperKind, Class<? extends IdObject>, Class<? extends IdObject>> entityToWrapperTable = HashBasedTable.create();
     private final Table<WrapperKind, Class<? extends IdObject>, Class<? extends IdObject>> wrapperToEntityTable = HashBasedTable.create();
-    //    private final Map<WrapperKind, Map<Class<? extends IdObject>, Class<? extends IdObject>>> entityToWrapperMaps = new HashMap<>();
-//    private final Map<WrapperKind, Map<Class<? extends IdObject>, Class<? extends IdObject>>> wrapperToEntityMaps = new HashMap<>();
     private final Map<WrapperKind, Class<? extends IdObjectWrapper>> baseClassMap = new HashMap<>();
     private final IdObjectReflectionHelper idObjectReflectionHelper;
 
     @Autowired
     public IdObjectWrapperFactoryImpl(final IdObjectReflectionHelper idObjectReflectionHelper) {
         this.idObjectReflectionHelper = idObjectReflectionHelper;
-        for (WrapperKind wrapperKind : WrapperKind.values()) {
-//            entityToWrapperMaps.put(wrapperKind, new HashMap<Class<? extends IdObject>, Class<? extends IdObject>>());
-//            wrapperToEntityMaps.put(wrapperKind, new HashMap<Class<? extends IdObject>, Class<? extends IdObject>>());
-        }
     }
 
     @Override
@@ -54,8 +48,6 @@ public class IdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
         }
         entityToWrapperTable.put(wrapperKind, entityType, wrapperType);
         wrapperToEntityTable.put(wrapperKind, wrapperType, entityType);
-//        entityToWrapperMaps.get(wrapperKind).put(entityType, wrapperType);
-//        wrapperToEntityMaps.get(wrapperKind).put(wrapperType, entityType);
     }
 
     @Override
@@ -96,7 +88,6 @@ public class IdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
     @SuppressWarnings("unchecked")
     public <T extends IdObject> Class<T> getEntityForWrapper(final WrapperKind wrapperKind, final Class<T> wrapperType) {
         return (Class<T>) wrapperToEntityTable.get(wrapperKind, wrapperType);
-//        return (Class<T>) wrapperToEntityMaps.get(wrapperKind).get(wrapperType);
     }
 
     //  Can't just clone the collection - hibernate gives you it's own internal types for example
@@ -160,7 +151,6 @@ public class IdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
 
     @SuppressWarnings("unchecked")
     private <T extends IdObject> Class<T> getWrapperForInterface(final WrapperKind wrapperKind, final Class<T> idObjectType) {
-//        Map<Class<? extends IdObject>, Class<? extends IdObject>> wrapperMap = entityToWrapperTable.get(wrapperKind);
         if (entityToWrapperTable.contains(wrapperKind, idObjectType)) {
             return (Class<T>) entityToWrapperTable.get(wrapperKind, idObjectType);
         }
