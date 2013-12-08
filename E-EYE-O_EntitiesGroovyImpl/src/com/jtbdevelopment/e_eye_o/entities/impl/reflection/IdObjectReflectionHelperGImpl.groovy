@@ -28,35 +28,36 @@ class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
     def <T extends IdObject> Map<String, Method> getAllGetMethods(final Class<T> entityType) {
         Closure<Map<String, Method>> getGetter = {
             p ->
-                map += [(p.name): ((CachedMethod) ((MetaBeanProperty) p).getGetter()).getCachedMethod()]
+                [(p.name): ((CachedMethod) ((MetaBeanProperty) p).getGetter())?.getCachedMethod()]
         }
         return traverseInterfaces(entityType, getGetter)
     }
 
     @Override
     def <T extends IdObject> Map<String, Method> getAllSetMethods(final Class<T> entityType) {
-        Closure<Map<String, Method>> getGetter = {
+        Closure<Map<String, Method>> getSetter = {
             p ->
-                map += [(p.name): ((CachedMethod) ((MetaBeanProperty) p).getSetter()).getCachedMethod()]
+                [(p.name): ((CachedMethod) ((MetaBeanProperty) p).getSetter())?.getCachedMethod()]
         }
-        return traverseInterfaces(entityType, getGetter)
+        return traverseInterfaces(entityType, getSetter)
     }
 
     @Override
     def <T extends IdObject> Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<T> entityType) {
-        Closure<Map<String, IdObjectFieldSettings>> getGetter = {
-            p ->
-                map += [(p.name): ((CachedMethod) ((MetaBeanProperty) p).getGetter()).getCachedMethod().getAnnotation(IdObjectFieldSettings.class)]
-        }
-        return traverseInterfaces(entityType, getGetter).findAll { key, value -> value != null }
+        Map<String, Method> gets = getAllGetMethods(entityType)
+        def map = [:]
+        gets.each({ key, value ->
+            map += [(key): value.getAnnotation(IdObjectFieldSettings.class)]
+        })
+        return map;
     }
 
-    private <T extends IdObject> Map<String, Method> traverseInterfaces(Class<T> entityType, Closure<Map<String, ?>> function) {
+    private <T extends IdObject> Map<String, Method> traverseInterfaces(final Class<T> entityType, final Closure<Map<String, ?>> function) {
         Class<T> i = getIdObjectInterfaceForClass(entityType)
         def map = [:] as Map<String, Method>
         while (i != null) {
             List<MetaProperty> ps = i.metaClass.properties
-            ps.each(function)
+            ps.collect(function).each { map += it }
             i = (Class<T>) i.interfaces?.length == 1 ? i.interfaces[0] : null
         }
         Map<String, Method> all = map.findAll({ key, value -> value != null }).findAll { entry ->
