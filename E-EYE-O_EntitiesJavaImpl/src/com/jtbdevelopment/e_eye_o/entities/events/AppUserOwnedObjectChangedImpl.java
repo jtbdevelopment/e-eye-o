@@ -10,9 +10,4 @@ public class AppUserOwnedObjectChangedImpl<T extends AppUserOwnedObject> extends
     public AppUserOwnedObjectChangedImpl(final ChangeType changeType, final T entity) {
         super(changeType, entity);
     }
-
-    @Override
-    public T getEntity() {
-        return super.getEntity();
-    }
 }
