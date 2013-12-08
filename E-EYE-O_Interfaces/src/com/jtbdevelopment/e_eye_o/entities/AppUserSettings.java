@@ -22,6 +22,9 @@ public interface AppUserSettings extends AppUserOwnedObject {
     @IdObjectFieldSettings(viewable = false, editableBy = IdObjectFieldSettings.EditableBy.CONTROLLED, label = "Settings")
     Map<String, String> getSettings();
 
+    //  Used by Hibernate
+    void setSettings(final Map<String, Object> settings);
+
     void updateSettings(final Map<String, Object> settings);
 
     /**
