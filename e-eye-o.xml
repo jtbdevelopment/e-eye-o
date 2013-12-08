@@ -351,6 +351,200 @@
   
   <!-- Global Libraries -->
   
+  <path id="library.grails-2.3.2.classpath">
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-aether-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-async-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-bootstrap-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-core-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-databinding-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-docs-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-logging-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-async-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-codecs-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-controllers-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-converters-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-databinding-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-datasource-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-domain-class-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-filters-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-gsp-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-i18n-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-log4j-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-mimetypes-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-rest-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-services-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-servlets-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-testing-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-url-mappings-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-plugin-validation-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-resources-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-scripts-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-spring-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-test-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-web-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-wrapper-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/dist/grails-wrapper-support-2.3.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/aopalliance/aopalliance/jars/aopalliance-1.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/asm/asm/jars/asm-3.3.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/bouncycastle/bcmail-jdk14/jars/bcmail-jdk14-138.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/bouncycastle/bcprov-jdk14/jars/bcprov-jdk14-138.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/cglib/cglib/jars/cglib-2.2.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/com.google.code.findbugs/jsr305/jars/jsr305-1.3.9.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/com.google.code.gson/gson/jars/gson-2.2.4.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/com.google.guava/guava/jars/guava-10.0.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/com.google.protobuf/protobuf-java/jars/protobuf-java-2.5.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/com.googlecode.concurrentlinkedhashmap/concurrentlinkedhashmap-lru/jars/concurrentlinkedhashmap-lru-1.3.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/com.googlecode.json-simple/json-simple/jars/json-simple-1.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/com.h2database/h2/jars/h2-1.3.173.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/com.lowagie/itext/jars/itext-2.0.8.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/commons-beanutils/commons-beanutils/jars/commons-beanutils-1.8.3.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/commons-cli/commons-cli/jars/commons-cli-1.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/commons-codec/commons-codec/jars/commons-codec-1.6.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/commons-collections/commons-collections/jars/commons-collections-3.2.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/commons-el/commons-el/jars/commons-el-1.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/commons-fileupload/commons-fileupload/jars/commons-fileupload-1.2.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/commons-io/commons-io/jars/commons-io-2.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/commons-lang/commons-lang/jars/commons-lang-2.6.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/commons-validator/commons-validator/jars/commons-validator-1.3.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/hsqldb/hsqldb/jars/hsqldb-1.8.0.10.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/javax.annotation/jsr250-api/jars/jsr250-api-1.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/javax.enterprise/cdi-api/jars/cdi-api-1.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/javax.inject/javax.inject/jars/javax.inject-1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/javax.servlet.jsp/jsp-api/jars/jsp-api-2.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/javax.servlet/javax.servlet-api/jars/javax.servlet-api-3.0.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/javax.servlet/jsp-api/jars/jsp-api-2.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/javax.servlet/jstl/jars/jstl-1.1.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/javax.transaction/jta/jars/jta-1.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/jline/jline/jars/jline-2.11.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/junit/junit/jars/junit-4.11.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/log4j/log4j/jars/log4j-1.2.17.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/net.java.dev.jna/jna/jars/jna-4.0.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/opensymphony/sitemesh/jars/sitemesh-2.4.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.ant/ant-junit/jars/ant-junit-1.8.4.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.ant/ant-launcher/jars/ant-launcher-1.8.4.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.ant/ant-trax/jars/ant-trax-1.7.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.ant/ant/jars/ant-1.8.4.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.httpcomponents/httpclient/jars/httpclient-4.2.5.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.httpcomponents/httpcore/jars/httpcore-4.2.4.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.ivy/ivy/jars/ivy-2.3.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.maven/maven-aether-provider/jars/maven-aether-provider-3.1.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.maven/maven-model-builder/jars/maven-model-builder-3.1.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.maven/maven-model/jars/maven-model-3.1.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.maven/maven-repository-metadata/jars/maven-repository-metadata-3.1.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.maven/maven-settings-builder/jars/maven-settings-builder-3.1.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.maven/maven-settings/jars/maven-settings-3.1.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.tomcat.embed/tomcat-embed-logging-log4j/jars/tomcat-embed-logging-log4j-7.0.42.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.apache.tomcat/tomcat-jdbc/jars/tomcat-jdbc-7.0.42.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.aspectj/aspectjrt/jars/aspectjrt-1.7.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.aspectj/aspectjweaver/jars/aspectjweaver-1.7.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.bouncycastle/bcpg-jdk15/jars/bcpg-jdk15-1.45.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.bouncycastle/bcprov-jdk15/jars/bcprov-jdk15-1.45.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.codehaus.gant/gant_groovy1.8/jars/gant_groovy1.8-1.9.6.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.codehaus.gpars/gpars/jars/gpars-1.1.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.codehaus.groovy/groovy-all/jars/groovy-all-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.codehaus.jsr166-mirror/jsr166y/jars/jsr166y-1.7.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.codehaus.plexus/plexus-classworlds/jars/plexus-classworlds-2.4.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.codehaus.plexus/plexus-component-annotations/jars/plexus-component-annotations-1.5.5.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.codehaus.plexus/plexus-interpolation/jars/plexus-interpolation-1.19.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.codehaus.plexus/plexus-utils/jars/plexus-utils-3.0.15.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.eclipse.aether/aether-api/jars/aether-api-0.9.0.M3.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.eclipse.aether/aether-connector-basic/jars/aether-connector-basic-0.9.0.M3.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.eclipse.aether/aether-connector-file/jars/aether-connector-file-0.9.0.M2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.eclipse.aether/aether-impl/jars/aether-impl-0.9.0.M3.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.eclipse.aether/aether-spi/jars/aether-spi-0.9.0.M3.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.eclipse.aether/aether-transport-file/jars/aether-transport-file-0.9.0.M3.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.eclipse.aether/aether-transport-http/jars/aether-transport-http-0.9.0.M3.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.eclipse.aether/aether-util/jars/aether-util-0.9.0.M3.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.eclipse.sisu/org.eclipse.sisu.inject/jars/org.eclipse.sisu.inject-0.0.0.M5.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.eclipse.sisu/org.eclipse.sisu.plexus/jars/org.eclipse.sisu.plexus-0.0.0.M5.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.fusesource.jansi/jansi/jars/jansi-1.2.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.grails/grails-datastore-core/jars/grails-datastore-core-2.0.3.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.grails/grails-datastore-gorm/jars/grails-datastore-gorm-2.0.3.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.grails/grails-datastore-simple/jars/grails-datastore-simple-2.0.3.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.grails/grails-gdoc-engine/jars/grails-gdoc-engine-1.0.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.hamcrest/hamcrest-core/jars/hamcrest-core-1.3.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.hibernate.javax.persistence/hibernate-jpa-2.0-api/jars/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.javassist/javassist/jars/javassist-3.17.1-GA.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.multiverse/multiverse-core/jars/multiverse-core-0.7.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.objenesis/objenesis/jars/objenesis-1.4.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.slf4j/jcl-over-slf4j/jars/jcl-over-slf4j-1.7.5.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.slf4j/jul-to-slf4j/jars/jul-to-slf4j-1.7.5.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.slf4j/slf4j-api/jars/slf4j-api-1.7.5.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.slf4j/slf4j-simple/jars/slf4j-simple-1.7.5.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.sonatype.plexus/plexus-cipher/jars/plexus-cipher-1.4.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.sonatype.plexus/plexus-sec-dispatcher/jars/plexus-sec-dispatcher-1.3.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.sonatype.sisu/sisu-guice/jars/sisu-guice-3.1.0-no_aop.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.spockframework/spock-core/jars/spock-core-0.7-groovy-2.0.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework.uaa/org.springframework.uaa.client/jars/org.springframework.uaa.client-1.0.1.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-aop/jars/spring-aop-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-aspects/jars/spring-aspects-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-beans/jars/spring-beans-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-context-support/jars/spring-context-support-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-context/jars/spring-context-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-core/jars/spring-core-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-expression/jars/spring-expression-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-jdbc/jars/spring-jdbc-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-jms/jars/spring-jms-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-test/jars/spring-test-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-tx/jars/spring-tx-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-web/jars/spring-web-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springframework/spring-webmvc/jars/spring-webmvc-3.2.4.RELEASE.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.springsource.springloaded/springloaded-core/jars/springloaded-core-1.1.4.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.xhtmlrenderer/core-renderer/jars/core-renderer-R8.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/org.yaml/snakeyaml/jars/snakeyaml-1.8.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/oro/oro/jars/oro-2.0.8.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/taglibs/standard/jars/standard-1.1.2.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/xalan/serializer/jars/serializer-2.7.1.jar"/>
+    <pathelement location="/Users/buscej/grails-2.3.2/lib/xpp3/xpp3_min/jars/xpp3_min-1.1.4c.jar"/>
+  </path>
+  
+  <path id="library.groovy-2.1.9.classpath">
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/ant-1.8.4.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/ant-antlr-1.8.4.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/ant-junit-1.8.4.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/ant-launcher-1.8.4.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/antlr-2.7.7.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/asm-4.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/asm-analysis-4.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/asm-commons-4.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/asm-tree-4.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/asm-util-4.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/bsf-2.4.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/commons-cli-1.2.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/commons-logging-1.1.1.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/gpars-1.0.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-ant-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-bsf-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-console-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-docgenerator-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-groovydoc-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-groovysh-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-jmx-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-json-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-jsr223-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-servlet-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-sql-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-swing-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-templates-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-test-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-testng-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/groovy-xml-2.1.9.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/hamcrest-core-1.3.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/ivy-2.2.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/jansi-1.6.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/jcommander-1.27.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/jline-1.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/jsp-api-2.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/jsr166y-1.7.0.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/junit-4.11.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/qdox-1.12.1.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/servlet-api-2.4.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/testng-6.8.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/xmlpull-1.1.3.1.jar"/>
+    <pathelement location="/Users/buscej/groovy-2.1.9/lib/xstream-1.4.2.jar"/>
+  </path>
+  
   <path id="library.sass-stdlib.classpath"/>
   
   
@@ -360,6 +554,11 @@
     <pathelement location="/usr/local/apache-tomcat-7.0.40/lib/jsp-api.jar"/>
     <pathelement location="/usr/local/apache-tomcat-7.0.40/lib/servlet-api.jar"/>
   </path>
+  <!-- Register Custom Compiler Taskdefs -->
+  <target name="register.custom.compilers">
+    <property name="grooovyc.task.sdk" value="library.grails-2.3.2.classpath"/>
+    <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="${grooovyc.task.sdk}"/>
+  </target>
   
   <!-- Modules -->
   
@@ -504,6 +703,518 @@
   <target name="clean.module.e-eye-o_interfaces" description="cleanup module">
     <delete dir="${e-eye-o_interfaces.output.dir}"/>
     <delete dir="${e-eye-o_interfaces.testoutput.dir}"/>
+  </target>
+  
+  
+  <!-- Module E-EYE-O_RIAGrails -->
+  
+  <dirname property="module.e-eye-o_riagrails.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.e-eye-o_riagrails" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.e-eye-o_riagrails" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.e-eye-o_riagrails" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.e-eye-o_riagrails" value="${compiler.args}"/>
+  
+  <property name="e-eye-o_riagrails.output.dir" value="${module.e-eye-o_riagrails.basedir}/out/production/E-EYE-O_RIAGrails"/>
+  <property name="e-eye-o_riagrails.testoutput.dir" value="${module.e-eye-o_riagrails.basedir}/out/test/E-EYE-O_RIAGrails"/>
+  
+  <path id="e-eye-o_riagrails.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="e-eye-o_riagrails.module.production.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_riagrails}"/>
+    <path refid="library.grails-2.3.2.classpath"/>
+    <fileset dir="${basedir}/E-EYE-O_RIAGrails/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <pathelement location="${path.variable.maven_repository}/antlr/antlr/2.7.7/antlr-2.7.7.jar"/>
+    <pathelement location="${path.variable.maven_repository}/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
+    <pathelement location="${path.variable.maven_repository}/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar"/>
+    <pathelement location="${path.variable.maven_repository}/net/sf/ehcache/ehcache-core/2.4.6/ehcache-core-2.4.6.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/embed/tomcat-embed-core/7.0.42/tomcat-embed-core-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/embed/tomcat-embed-jasper/7.0.42/tomcat-embed-jasper-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/tomcat-catalina-ant/7.0.42/tomcat-catalina-ant-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/eclipse/jdt/core/compiler/ecj/3.7.2/ecj-3.7.2.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-hibernate-core/2.0.3.RELEASE/grails-datastore-gorm-hibernate-core-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-hibernate/2.0.3.RELEASE/grails-datastore-gorm-hibernate-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-plugin-support/2.0.3.RELEASE/grails-datastore-gorm-plugin-support-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-web/2.0.3.RELEASE/grails-datastore-web-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-commons-annotations/3.2.0.Final/hibernate-commons-annotations-3.2.0.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-core/3.6.10.Final/hibernate-core-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-ehcache/3.6.10.Final/hibernate-ehcache-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-entitymanager/3.6.10.Final/hibernate-entitymanager-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-validator/4.1.0.Final/hibernate-validator-4.1.0.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/liquibase/liquibase-core/2.0.5/liquibase-core-2.0.5.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/springframework/spring-orm/3.2.4.RELEASE/spring-orm-3.2.4.RELEASE.jar"/>
+  </path>
+  
+  <path id="e-eye-o_riagrails.runtime.production.module.classpath">
+    <pathelement location="${e-eye-o_riagrails.output.dir}"/>
+    <path refid="library.grails-2.3.2.classpath"/>
+    <fileset dir="${basedir}/E-EYE-O_RIAGrails/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <pathelement location="${path.variable.maven_repository}/antlr/antlr/2.7.7/antlr-2.7.7.jar"/>
+    <pathelement location="${path.variable.maven_repository}/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
+    <pathelement location="${path.variable.maven_repository}/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar"/>
+    <pathelement location="${path.variable.maven_repository}/net/sf/ehcache/ehcache-core/2.4.6/ehcache-core-2.4.6.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/embed/tomcat-embed-core/7.0.42/tomcat-embed-core-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/embed/tomcat-embed-jasper/7.0.42/tomcat-embed-jasper-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/tomcat-catalina-ant/7.0.42/tomcat-catalina-ant-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/eclipse/jdt/core/compiler/ecj/3.7.2/ecj-3.7.2.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-hibernate-core/2.0.3.RELEASE/grails-datastore-gorm-hibernate-core-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-hibernate/2.0.3.RELEASE/grails-datastore-gorm-hibernate-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-plugin-support/2.0.3.RELEASE/grails-datastore-gorm-plugin-support-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-web/2.0.3.RELEASE/grails-datastore-web-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-commons-annotations/3.2.0.Final/hibernate-commons-annotations-3.2.0.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-core/3.6.10.Final/hibernate-core-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-ehcache/3.6.10.Final/hibernate-ehcache-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-entitymanager/3.6.10.Final/hibernate-entitymanager-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-validator/4.1.0.Final/hibernate-validator-4.1.0.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/liquibase/liquibase-core/2.0.5/liquibase-core-2.0.5.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/springframework/spring-orm/3.2.4.RELEASE/spring-orm-3.2.4.RELEASE.jar"/>
+  </path>
+  
+  <path id="e-eye-o_riagrails.module.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_riagrails}"/>
+    <pathelement location="${e-eye-o_riagrails.output.dir}"/>
+    <path refid="library.grails-2.3.2.classpath"/>
+    <fileset dir="${basedir}/E-EYE-O_RIAGrails/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <pathelement location="${path.variable.maven_repository}/antlr/antlr/2.7.7/antlr-2.7.7.jar"/>
+    <pathelement location="${path.variable.maven_repository}/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
+    <pathelement location="${path.variable.maven_repository}/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar"/>
+    <pathelement location="${path.variable.maven_repository}/net/sf/ehcache/ehcache-core/2.4.6/ehcache-core-2.4.6.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/embed/tomcat-embed-core/7.0.42/tomcat-embed-core-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/embed/tomcat-embed-jasper/7.0.42/tomcat-embed-jasper-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/tomcat-catalina-ant/7.0.42/tomcat-catalina-ant-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/eclipse/jdt/core/compiler/ecj/3.7.2/ecj-3.7.2.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-hibernate-core/2.0.3.RELEASE/grails-datastore-gorm-hibernate-core-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-hibernate/2.0.3.RELEASE/grails-datastore-gorm-hibernate-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-plugin-support/2.0.3.RELEASE/grails-datastore-gorm-plugin-support-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-web/2.0.3.RELEASE/grails-datastore-web-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-commons-annotations/3.2.0.Final/hibernate-commons-annotations-3.2.0.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-core/3.6.10.Final/hibernate-core-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-ehcache/3.6.10.Final/hibernate-ehcache-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-entitymanager/3.6.10.Final/hibernate-entitymanager-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-validator/4.1.0.Final/hibernate-validator-4.1.0.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/liquibase/liquibase-core/2.0.5/liquibase-core-2.0.5.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/springframework/spring-orm/3.2.4.RELEASE/spring-orm-3.2.4.RELEASE.jar"/>
+  </path>
+  
+  <path id="e-eye-o_riagrails.runtime.module.classpath">
+    <pathelement location="${e-eye-o_riagrails.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_riagrails.output.dir}"/>
+    <path refid="library.grails-2.3.2.classpath"/>
+    <fileset dir="${basedir}/E-EYE-O_RIAGrails/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <pathelement location="${path.variable.maven_repository}/antlr/antlr/2.7.7/antlr-2.7.7.jar"/>
+    <pathelement location="${path.variable.maven_repository}/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
+    <pathelement location="${path.variable.maven_repository}/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar"/>
+    <pathelement location="${path.variable.maven_repository}/net/sf/ehcache/ehcache-core/2.4.6/ehcache-core-2.4.6.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/embed/tomcat-embed-core/7.0.42/tomcat-embed-core-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/embed/tomcat-embed-jasper/7.0.42/tomcat-embed-jasper-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/apache/tomcat/tomcat-catalina-ant/7.0.42/tomcat-catalina-ant-7.0.42.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/eclipse/jdt/core/compiler/ecj/3.7.2/ecj-3.7.2.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-hibernate-core/2.0.3.RELEASE/grails-datastore-gorm-hibernate-core-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-hibernate/2.0.3.RELEASE/grails-datastore-gorm-hibernate-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-gorm-plugin-support/2.0.3.RELEASE/grails-datastore-gorm-plugin-support-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/grails/grails-datastore-web/2.0.3.RELEASE/grails-datastore-web-2.0.3.RELEASE.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-commons-annotations/3.2.0.Final/hibernate-commons-annotations-3.2.0.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-core/3.6.10.Final/hibernate-core-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-ehcache/3.6.10.Final/hibernate-ehcache-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-entitymanager/3.6.10.Final/hibernate-entitymanager-3.6.10.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/hibernate/hibernate-validator/4.1.0.Final/hibernate-validator-4.1.0.Final.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/liquibase/liquibase-core/2.0.5/liquibase-core-2.0.5.jar"/>
+    <pathelement location="${path.variable.maven_repository}/org/springframework/spring-orm/3.2.4.RELEASE/spring-orm-3.2.4.RELEASE.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.e-eye-o_riagrails">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.e-eye-o_riagrails">
+    <patternset refid="excluded.from.module.e-eye-o_riagrails"/>
+  </patternset>
+  
+  <path id="e-eye-o_riagrails.module.sourcepath">
+    <dirset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails">
+      <include name="src/java"/>
+      <include name="grails-app/utils"/>
+      <include name="src/groovy"/>
+      <include name="grails-app/i18n"/>
+      <include name="grails-app/controllers"/>
+      <include name="grails-app/domain"/>
+      <include name="grails-app/services"/>
+      <include name="grails-app/taglib"/>
+    </dirset>
+  </path>
+  
+  <path id="e-eye-o_riagrails.module.test.sourcepath">
+    <dirset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails">
+      <include name="test/unit"/>
+      <include name="test/integration"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.e-eye-o_riagrails" depends="compile.module.e-eye-o_riagrails.production,compile.module.e-eye-o_riagrails.tests" description="Compile module E-EYE-O_RIAGrails"/>
+  
+  <target name="compile.module.e-eye-o_riagrails.production" description="Compile module E-EYE-O_RIAGrails; production classes">
+    <mkdir dir="${e-eye-o_riagrails.output.dir}"/>
+    <javac destdir="${e-eye-o_riagrails.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_riagrails}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_riagrails}"/>
+      <bootclasspath refid="e-eye-o_riagrails.module.bootclasspath"/>
+      <classpath refid="e-eye-o_riagrails.module.production.classpath"/>
+      <src refid="e-eye-o_riagrails.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_riagrails"/>
+    </javac>
+    
+    <copy todir="${e-eye-o_riagrails.output.dir}">
+      <fileset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails/src/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails/grails-app/utils">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails/src/groovy">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails/grails-app/i18n">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails/grails-app/controllers">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails/grails-app/domain">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails/grails-app/services">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails/grails-app/taglib">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.e-eye-o_riagrails.tests" depends="compile.module.e-eye-o_riagrails.production" description="compile module E-EYE-O_RIAGrails; test classes" unless="skip.tests">
+    <mkdir dir="${e-eye-o_riagrails.testoutput.dir}"/>
+    <javac destdir="${e-eye-o_riagrails.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_riagrails}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_riagrails}"/>
+      <bootclasspath refid="e-eye-o_riagrails.module.bootclasspath"/>
+      <classpath refid="e-eye-o_riagrails.module.classpath"/>
+      <src refid="e-eye-o_riagrails.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_riagrails"/>
+    </javac>
+    
+    <copy todir="${e-eye-o_riagrails.testoutput.dir}">
+      <fileset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails/test/unit">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.e-eye-o_riagrails.basedir}/E-EYE-O_RIAGrails/test/integration">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.e-eye-o_riagrails" description="cleanup module">
+    <delete dir="${e-eye-o_riagrails.output.dir}"/>
+    <delete dir="${e-eye-o_riagrails.testoutput.dir}"/>
+  </target>
+  
+  
+  <!-- Module E-EYE-O_DAOHibernateImpl -->
+  
+  <dirname property="module.e-eye-o_daohibernateimpl.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.e-eye-o_daohibernateimpl" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.e-eye-o_daohibernateimpl" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.e-eye-o_daohibernateimpl" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.e-eye-o_daohibernateimpl" value="${compiler.args}"/>
+  
+  <property name="e-eye-o_daohibernateimpl.output.dir" value="${module.e-eye-o_daohibernateimpl.basedir}/out/production/E-EYE-O_DAOHibernateImpl"/>
+  <property name="e-eye-o_daohibernateimpl.testoutput.dir" value="${module.e-eye-o_daohibernateimpl.basedir}/out/test/E-EYE-O_DAOHibernateImpl"/>
+  
+  <path id="e-eye-o_daohibernateimpl.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="e-eye-o_daohibernateimpl.module.production.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_daohibernateimpl}"/>
+    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
+    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
+    <path refid="library.joda-time:joda-time:2.1.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <path refid="library.com.google.guava:guava:13.0.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_daohibernateimpl.runtime.production.module.classpath">
+    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
+    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
+    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <path refid="library.org.joda:joda-convert:1.2.classpath"/>
+    <path refid="library.org.jadira.usertype:usertype.core:3.0.0.ga.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_daohibernateimpl.module.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_daohibernateimpl}"/>
+    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
+    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
+    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
+    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
+    <path refid="library.joda-time:joda-time:2.1.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <path refid="library.com.google.guava:guava:13.0.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_daohibernateimpl.runtime.module.classpath">
+    <pathelement location="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
+    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
+    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
+    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+    <path refid="library.org.joda:joda-convert:1.2.classpath"/>
+    <path refid="library.org.jadira.usertype:usertype.core:3.0.0.ga.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.e-eye-o_daohibernateimpl">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.e-eye-o_daohibernateimpl">
+    <patternset refid="excluded.from.module.e-eye-o_daohibernateimpl"/>
+  </patternset>
+  
+  <path id="e-eye-o_daohibernateimpl.module.sourcepath">
+    <dirset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  <path id="e-eye-o_daohibernateimpl.module.test.sourcepath">
+    <dirset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl">
+      <include name="test-unit"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.e-eye-o_daohibernateimpl" depends="compile.module.e-eye-o_daohibernateimpl.production,compile.module.e-eye-o_daohibernateimpl.tests" description="Compile module E-EYE-O_DAOHibernateImpl"/>
+  
+  <target name="compile.module.e-eye-o_daohibernateimpl.production" depends="compile.module.e-eye-o_interfaces" description="Compile module E-EYE-O_DAOHibernateImpl; production classes">
+    <mkdir dir="${e-eye-o_daohibernateimpl.output.dir}"/>
+    <javac destdir="${e-eye-o_daohibernateimpl.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_daohibernateimpl}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_daohibernateimpl}"/>
+      <bootclasspath refid="e-eye-o_daohibernateimpl.module.bootclasspath"/>
+      <classpath refid="e-eye-o_daohibernateimpl.module.production.classpath"/>
+      <src refid="e-eye-o_daohibernateimpl.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_daohibernateimpl"/>
+    </javac>
+    
+    <copy todir="${e-eye-o_daohibernateimpl.output.dir}">
+      <fileset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.e-eye-o_daohibernateimpl.tests" depends="compile.module.e-eye-o_daohibernateimpl.production" description="compile module E-EYE-O_DAOHibernateImpl; test classes" unless="skip.tests">
+    <mkdir dir="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
+    <javac destdir="${e-eye-o_daohibernateimpl.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_daohibernateimpl}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_daohibernateimpl}"/>
+      <bootclasspath refid="e-eye-o_daohibernateimpl.module.bootclasspath"/>
+      <classpath refid="e-eye-o_daohibernateimpl.module.classpath"/>
+      <src refid="e-eye-o_daohibernateimpl.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_daohibernateimpl"/>
+    </javac>
+    
+    <copy todir="${e-eye-o_daohibernateimpl.testoutput.dir}">
+      <fileset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl/test-unit">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.e-eye-o_daohibernateimpl" description="cleanup module">
+    <delete dir="${e-eye-o_daohibernateimpl.output.dir}"/>
+    <delete dir="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
+  </target>
+  
+  
+  <!-- Module E-EYE-O_EntitiesGroovyImpl -->
+  
+  <dirname property="module.e-eye-o_entitiesgroovyimpl.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.e-eye-o_entitiesgroovyimpl" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.e-eye-o_entitiesgroovyimpl" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.e-eye-o_entitiesgroovyimpl" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.e-eye-o_entitiesgroovyimpl" value="${compiler.args}"/>
+  
+  <property name="e-eye-o_entitiesgroovyimpl.output.dir" value="${module.e-eye-o_entitiesgroovyimpl.basedir}/out/production/E-EYE-O_EntitiesGroovyImpl"/>
+  <property name="e-eye-o_entitiesgroovyimpl.testoutput.dir" value="${module.e-eye-o_entitiesgroovyimpl.basedir}/out/test/E-EYE-O_EntitiesGroovyImpl"/>
+  
+  <path id="e-eye-o_entitiesgroovyimpl.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="e-eye-o_entitiesgroovyimpl.module.production.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_entitiesgroovyimpl}"/>
+    <path refid="library.groovy-2.1.9.classpath"/>
+    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
+    <path refid="library.joda-time:joda-time:2.1.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <path refid="library.com.google.guava:guava:13.0.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_entitiesgroovyimpl.runtime.production.module.classpath">
+    <pathelement location="${e-eye-o_entitiesgroovyimpl.output.dir}"/>
+    <path refid="library.groovy-2.1.9.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_entitiesgroovyimpl.module.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_entitiesgroovyimpl}"/>
+    <pathelement location="${e-eye-o_entitiesgroovyimpl.output.dir}"/>
+    <path refid="library.groovy-2.1.9.classpath"/>
+    <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
+    <path refid="library.joda-time:joda-time:2.1.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
+    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
+    <path refid="library.com.google.guava:guava:13.0.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_entitiesgroovyimpl.runtime.module.classpath">
+    <pathelement location="${e-eye-o_entitiesgroovyimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_entitiesgroovyimpl.output.dir}"/>
+    <path refid="library.groovy-2.1.9.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.e-eye-o_entitiesgroovyimpl">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.e-eye-o_entitiesgroovyimpl">
+    <patternset refid="excluded.from.module.e-eye-o_entitiesgroovyimpl"/>
+  </patternset>
+  
+  <path id="e-eye-o_entitiesgroovyimpl.module.sourcepath">
+    <dirset dir="${module.e-eye-o_entitiesgroovyimpl.basedir}/E-EYE-O_EntitiesGroovyImpl">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  <path id="e-eye-o_entitiesgroovyimpl.module.test.sourcepath">
+    <dirset dir="${module.e-eye-o_entitiesgroovyimpl.basedir}/E-EYE-O_EntitiesGroovyImpl">
+      <include name="test-unit"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.e-eye-o_entitiesgroovyimpl" depends="compile.module.e-eye-o_entitiesgroovyimpl.production,compile.module.e-eye-o_entitiesgroovyimpl.tests" description="Compile module E-EYE-O_EntitiesGroovyImpl"/>
+  
+  <target name="compile.module.e-eye-o_entitiesgroovyimpl.production" depends="register.custom.compilers,compile.module.e-eye-o_interfaces" description="Compile module E-EYE-O_EntitiesGroovyImpl; production classes">
+    <mkdir dir="${e-eye-o_entitiesgroovyimpl.output.dir}"/>
+    <groovyc destdir="${e-eye-o_entitiesgroovyimpl.output.dir}" fork="yes">
+      <src refid="e-eye-o_entitiesgroovyimpl.module.sourcepath"/>
+      <classpath refid="e-eye-o_entitiesgroovyimpl.module.production.classpath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_entitiesgroovyimpl"/>
+      <javac debug="${compiler.debug}">
+        <compilerarg line="${compiler.args.e-eye-o_entitiesgroovyimpl}"/>
+      </javac>
+    </groovyc>
+    
+    <copy todir="${e-eye-o_entitiesgroovyimpl.output.dir}">
+      <fileset dir="${module.e-eye-o_entitiesgroovyimpl.basedir}/E-EYE-O_EntitiesGroovyImpl/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.e-eye-o_entitiesgroovyimpl.tests" depends="register.custom.compilers,compile.module.e-eye-o_entitiesgroovyimpl.production" description="compile module E-EYE-O_EntitiesGroovyImpl; test classes" unless="skip.tests">
+    <mkdir dir="${e-eye-o_entitiesgroovyimpl.testoutput.dir}"/>
+    <groovyc destdir="${e-eye-o_entitiesgroovyimpl.testoutput.dir}" fork="yes">
+      <src refid="e-eye-o_entitiesgroovyimpl.module.test.sourcepath"/>
+      <classpath refid="e-eye-o_entitiesgroovyimpl.module.classpath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_entitiesgroovyimpl"/>
+      <javac debug="${compiler.debug}">
+        <compilerarg line="${compiler.args.e-eye-o_entitiesgroovyimpl}"/>
+      </javac>
+    </groovyc>
+    
+    <copy todir="${e-eye-o_entitiesgroovyimpl.testoutput.dir}">
+      <fileset dir="${module.e-eye-o_entitiesgroovyimpl.basedir}/E-EYE-O_EntitiesGroovyImpl/test-unit">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.e-eye-o_entitiesgroovyimpl" description="cleanup module">
+    <delete dir="${e-eye-o_entitiesgroovyimpl.output.dir}"/>
+    <delete dir="${e-eye-o_entitiesgroovyimpl.testoutput.dir}"/>
   </target>
   
   
@@ -1062,159 +1773,209 @@
   </target>
   
   
-  <!-- Module E-EYE-O_DAOHibernateImpl -->
+  <!-- Module E-EYE-O_Example-Integration-HibernateJacksonJersey -->
   
-  <dirname property="module.e-eye-o_daohibernateimpl.basedir" file="${ant.file}"/>
+  <dirname property="module.e-eye-o_example-integration-hibernatejacksonjersey.basedir" file="${ant.file}"/>
   
   
-  <property name="module.jdk.home.e-eye-o_daohibernateimpl" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.e-eye-o_daohibernateimpl" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.e-eye-o_daohibernateimpl" value="${project.jdk.classpath}"/>
+  <property name="module.jdk.home.e-eye-o_example-integration-hibernatejacksonjersey" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.e-eye-o_example-integration-hibernatejacksonjersey" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.e-eye-o_example-integration-hibernatejacksonjersey" value="${project.jdk.classpath}"/>
   
-  <property name="compiler.args.e-eye-o_daohibernateimpl" value="${compiler.args}"/>
+  <property name="compiler.args.e-eye-o_example-integration-hibernatejacksonjersey" value="${compiler.args}"/>
   
-  <property name="e-eye-o_daohibernateimpl.output.dir" value="${module.e-eye-o_daohibernateimpl.basedir}/out/production/E-EYE-O_DAOHibernateImpl"/>
-  <property name="e-eye-o_daohibernateimpl.testoutput.dir" value="${module.e-eye-o_daohibernateimpl.basedir}/out/test/E-EYE-O_DAOHibernateImpl"/>
+  <property name="e-eye-o_example-integration-hibernatejacksonjersey.output.dir" value="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/out/production/E-EYE-O_Example-Integration-HibernateJacksonJersey"/>
+  <property name="e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir" value="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/out/test/E-EYE-O_Example-Integration-HibernateJacksonJersey"/>
   
-  <path id="e-eye-o_daohibernateimpl.module.bootclasspath">
+  <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.bootclasspath">
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
-  <path id="e-eye-o_daohibernateimpl.module.production.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_daohibernateimpl}"/>
-    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
-    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
+  <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.production.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_example-integration-hibernatejacksonjersey}"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
     <pathelement location="${e-eye-o_interfaces.output.dir}"/>
     <path refid="library.joda-time:joda-time:2.1.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
     <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    <path refid="library.commons-beanutils-1.8.3.classpath"/>
+    <pathelement location="${e-eye-o_restjsonjersey.output.dir}"/>
+    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
     <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_daohibernateimpl.runtime.production.module.classpath">
-    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
-    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
-    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
-    <path refid="library.org.joda:joda-convert:1.2.classpath"/>
-    <path refid="library.org.jadira.usertype:usertype.core:3.0.0.ga.classpath"/>
-    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_entitiesjavaimpl.runtime.production.module.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_daohibernateimpl.module.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_daohibernateimpl}"/>
     <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
     <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
     <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
     <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
     <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
+    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
+    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
+    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
+    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
+    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
+    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
+    <path refid="library.commons-beanutils-1.8.3.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_example-integration-hibernatejacksonjersey.runtime.production.module.classpath">
+    <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
+    <path refid="e-eye-o_serializationjacksonimpl.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_restjsonjersey.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_daohibernateimpl.runtime.production.module.classpath"/>
+    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
+    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
+    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
+    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
+    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
+    <path refid="e-eye-o_entitiesjavaimpl.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_example-integration-hibernatejacksonjersey}"/>
+    <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
+    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
+    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
     <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
     <pathelement location="${e-eye-o_interfaces.output.dir}"/>
     <path refid="library.joda-time:joda-time:2.1.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
     <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
     <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
     <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
     <path refid="library.com.google.guava:guava:13.0.classpath"/>
     <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    <path refid="library.commons-beanutils-1.8.3.classpath"/>
+    <pathelement location="${e-eye-o_restjsonjersey.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_restjsonjersey.output.dir}"/>
+    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
     <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_daohibernateimpl.runtime.module.classpath">
     <pathelement location="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
     <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
     <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
     <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
     <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
     <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.org.jmock:jmock:2.5.1.classpath"/>
     <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
-    <path refid="library.org.joda:joda-convert:1.2.classpath"/>
-    <path refid="library.org.jadira.usertype:usertype.core:3.0.0.ga.classpath"/>
+    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
+    <path refid="library.mysql-connector-java-5.1.24.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
+    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
+    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
+    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
+    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
+    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
+    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
+    <path refid="library.commons-beanutils-1.8.3.classpath"/>
+  </path>
+  
+  <path id="e-eye-o_example-integration-hibernatejacksonjersey.runtime.module.classpath">
+    <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
+    <path refid="e-eye-o_serializationjacksonimpl.runtime.module.classpath"/>
+    <path refid="e-eye-o_restjsonjersey.runtime.module.classpath"/>
+    <path refid="e-eye-o_daohibernateimpl.runtime.module.classpath"/>
     <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
-    <path refid="e-eye-o_entitiesjavaimpl.runtime.module.classpath"/>
+    <path refid="library.org.testng:testng:6.8.classpath"/>
+    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
+    <path refid="library.com.google.guava:guava:13.0.classpath"/>
+    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
+    <path refid="library.mysql-connector-java-5.1.24.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
+    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
+    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
+    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
+    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
+    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
+    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
+    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
     <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
+    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
+    <path refid="e-eye-o_entitiesjavaimpl.runtime.module.classpath"/>
   </path>
   
   
-  <patternset id="excluded.from.module.e-eye-o_daohibernateimpl">
+  <patternset id="excluded.from.module.e-eye-o_example-integration-hibernatejacksonjersey">
     <patternset refid="ignored.files"/>
   </patternset>
   
-  <patternset id="excluded.from.compilation.e-eye-o_daohibernateimpl">
-    <patternset refid="excluded.from.module.e-eye-o_daohibernateimpl"/>
+  <patternset id="excluded.from.compilation.e-eye-o_example-integration-hibernatejacksonjersey">
+    <patternset refid="excluded.from.module.e-eye-o_example-integration-hibernatejacksonjersey"/>
   </patternset>
   
-  <path id="e-eye-o_daohibernateimpl.module.sourcepath">
-    <dirset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl">
+  <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.sourcepath">
+    <dirset dir="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/E-EYE-O_Example-Integration-HibernateJacksonJersey">
       <include name="src"/>
     </dirset>
   </path>
   
-  <path id="e-eye-o_daohibernateimpl.module.test.sourcepath">
-    <dirset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl">
-      <include name="test-unit"/>
+  <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.test.sourcepath">
+    <dirset dir="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/E-EYE-O_Example-Integration-HibernateJacksonJersey">
+      <include name="test-integration"/>
     </dirset>
   </path>
   
   
-  <target name="compile.module.e-eye-o_daohibernateimpl" depends="compile.module.e-eye-o_daohibernateimpl.production,compile.module.e-eye-o_daohibernateimpl.tests" description="Compile module E-EYE-O_DAOHibernateImpl"/>
+  <target name="compile.module.e-eye-o_example-integration-hibernatejacksonjersey" depends="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.production,compile.module.e-eye-o_example-integration-hibernatejacksonjersey.tests" description="Compile module E-EYE-O_Example-Integration-HibernateJacksonJersey"/>
   
-  <target name="compile.module.e-eye-o_daohibernateimpl.production" depends="compile.module.e-eye-o_interfaces,compile.module.e-eye-o_entitiesjavaimpl" description="Compile module E-EYE-O_DAOHibernateImpl; production classes">
-    <mkdir dir="${e-eye-o_daohibernateimpl.output.dir}"/>
-    <javac destdir="${e-eye-o_daohibernateimpl.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_daohibernateimpl}/javac">
-      <compilerarg line="${compiler.args.e-eye-o_daohibernateimpl}"/>
-      <bootclasspath refid="e-eye-o_daohibernateimpl.module.bootclasspath"/>
-      <classpath refid="e-eye-o_daohibernateimpl.module.production.classpath"/>
-      <src refid="e-eye-o_daohibernateimpl.module.sourcepath"/>
-      <patternset refid="excluded.from.compilation.e-eye-o_daohibernateimpl"/>
+  <target name="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.production" depends="compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_daohibernateimpl,compile.module.e-eye-o_interfaces,compile.module.e-eye-o_entitiesjavaimpl" description="Compile module E-EYE-O_Example-Integration-HibernateJacksonJersey; production classes">
+    <mkdir dir="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
+    <javac destdir="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_example-integration-hibernatejacksonjersey}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_example-integration-hibernatejacksonjersey}"/>
+      <bootclasspath refid="e-eye-o_example-integration-hibernatejacksonjersey.module.bootclasspath"/>
+      <classpath refid="e-eye-o_example-integration-hibernatejacksonjersey.module.production.classpath"/>
+      <src refid="e-eye-o_example-integration-hibernatejacksonjersey.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_example-integration-hibernatejacksonjersey"/>
     </javac>
     
-    <copy todir="${e-eye-o_daohibernateimpl.output.dir}">
-      <fileset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl/src">
+    <copy todir="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}">
+      <fileset dir="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/E-EYE-O_Example-Integration-HibernateJacksonJersey/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
     </copy>
   </target>
   
-  <target name="compile.module.e-eye-o_daohibernateimpl.tests" depends="compile.module.e-eye-o_daohibernateimpl.production" description="compile module E-EYE-O_DAOHibernateImpl; test classes" unless="skip.tests">
-    <mkdir dir="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
-    <javac destdir="${e-eye-o_daohibernateimpl.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_daohibernateimpl}/javac">
-      <compilerarg line="${compiler.args.e-eye-o_daohibernateimpl}"/>
-      <bootclasspath refid="e-eye-o_daohibernateimpl.module.bootclasspath"/>
-      <classpath refid="e-eye-o_daohibernateimpl.module.classpath"/>
-      <src refid="e-eye-o_daohibernateimpl.module.test.sourcepath"/>
-      <patternset refid="excluded.from.compilation.e-eye-o_daohibernateimpl"/>
+  <target name="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.tests" depends="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.production" description="compile module E-EYE-O_Example-Integration-HibernateJacksonJersey; test classes" unless="skip.tests">
+    <mkdir dir="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}"/>
+    <javac destdir="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_example-integration-hibernatejacksonjersey}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_example-integration-hibernatejacksonjersey}"/>
+      <bootclasspath refid="e-eye-o_example-integration-hibernatejacksonjersey.module.bootclasspath"/>
+      <classpath refid="e-eye-o_example-integration-hibernatejacksonjersey.module.classpath"/>
+      <src refid="e-eye-o_example-integration-hibernatejacksonjersey.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_example-integration-hibernatejacksonjersey"/>
     </javac>
     
-    <copy todir="${e-eye-o_daohibernateimpl.testoutput.dir}">
-      <fileset dir="${module.e-eye-o_daohibernateimpl.basedir}/E-EYE-O_DAOHibernateImpl/test-unit">
+    <copy todir="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}">
+      <fileset dir="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/E-EYE-O_Example-Integration-HibernateJacksonJersey/test-integration">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
     </copy>
   </target>
   
-  <target name="clean.module.e-eye-o_daohibernateimpl" description="cleanup module">
-    <delete dir="${e-eye-o_daohibernateimpl.output.dir}"/>
-    <delete dir="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
+  <target name="clean.module.e-eye-o_example-integration-hibernatejacksonjersey" description="cleanup module">
+    <delete dir="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
+    <delete dir="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}"/>
   </target>
   
   
@@ -1358,230 +2119,26 @@
   </target>
   
   
-  <!-- Module E-EYE-O_Example-Integration-HibernateJacksonJersey -->
+  <!-- Module E-EYE-O_Example-VaadinJerseyJacksonJava -->
   
-  <dirname property="module.e-eye-o_example-integration-hibernatejacksonjersey.basedir" file="${ant.file}"/>
+  <dirname property="module.e-eye-o_example-vaadinjerseyjacksonjava.basedir" file="${ant.file}"/>
   
   
-  <property name="module.jdk.home.e-eye-o_example-integration-hibernatejacksonjersey" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.e-eye-o_example-integration-hibernatejacksonjersey" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.e-eye-o_example-integration-hibernatejacksonjersey" value="${project.jdk.classpath}"/>
+  <property name="module.jdk.home.e-eye-o_example-vaadinjerseyjacksonjava" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.e-eye-o_example-vaadinjerseyjacksonjava" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.e-eye-o_example-vaadinjerseyjacksonjava" value="${project.jdk.classpath}"/>
   
-  <property name="compiler.args.e-eye-o_example-integration-hibernatejacksonjersey" value="${compiler.args}"/>
+  <property name="compiler.args.e-eye-o_example-vaadinjerseyjacksonjava" value="${compiler.args}"/>
   
-  <property name="e-eye-o_example-integration-hibernatejacksonjersey.output.dir" value="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/out/production/E-EYE-O_Example-Integration-HibernateJacksonJersey"/>
-  <property name="e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir" value="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/out/test/E-EYE-O_Example-Integration-HibernateJacksonJersey"/>
+  <property name="e-eye-o_example-vaadinjerseyjacksonjava.output.dir" value="${module.e-eye-o_example-vaadinjerseyjacksonjava.basedir}/out/production/E-EYE-O_Example-VaadinJerseyJacksonJava"/>
+  <property name="e-eye-o_example-vaadinjerseyjacksonjava.testoutput.dir" value="${module.e-eye-o_example-vaadinjerseyjacksonjava.basedir}/out/test/E-EYE-O_Example-VaadinJerseyJacksonJava"/>
   
-  <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.bootclasspath">
+  <path id="e-eye-o_example-vaadinjerseyjacksonjava.module.bootclasspath">
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
-  <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.production.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_example-integration-hibernatejacksonjersey}"/>
-    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
-    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
-    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
-    <path refid="library.joda-time:joda-time:2.1.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
-    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
-    <path refid="library.com.google.guava:guava:13.0.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <pathelement location="${e-eye-o_restjsonjersey.output.dir}"/>
-    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
-    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
-    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
-    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    <path refid="library.commons-beanutils-1.8.3.classpath"/>
-    <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
-    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
-    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
-    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
-    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
-    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
-    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
-    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_example-integration-hibernatejacksonjersey.runtime.production.module.classpath">
-    <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
-    <path refid="e-eye-o_serializationjacksonimpl.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_restjsonjersey.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_daohibernateimpl.runtime.production.module.classpath"/>
-    <path refid="e-eye-o_interfaces.runtime.production.module.classpath"/>
-    <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
-    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
-    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
-    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
-    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
-    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
-    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
-    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
-    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
-    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_example-integration-hibernatejacksonjersey}"/>
-    <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
-    <pathelement location="${e-eye-o_serializationjacksonimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_serializationjacksonimpl.output.dir}"/>
-    <path refid="library.org.springframework:org.springframework.beans:3.2.0.release.classpath"/>
-    <path refid="library.com.fasterxml.jackson.core:jackson-databind:2.1.3.classpath"/>
-    <pathelement location="${e-eye-o_interfaces.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_interfaces.output.dir}"/>
-    <path refid="library.joda-time:joda-time:2.1.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator-annotation-processor:4.3.1.final.classpath"/>
-    <path refid="library.org.hibernate:hibernate-validator:4.3.1.final.classpath"/>
-    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
-    <path refid="library.org.springframework:spring-context:3.2.0.release.classpath"/>
-    <path refid="library.com.google.guava:guava:13.0.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <pathelement location="${e-eye-o_restjsonjersey.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_restjsonjersey.output.dir}"/>
-    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
-    <pathelement location="${e-eye-o_daohibernateimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_daohibernateimpl.output.dir}"/>
-    <path refid="library.org.hibernate:hibernate-core:4.1.9.final.classpath"/>
-    <path refid="library.org.springframework:org.springframework.orm:3.2.0.release.classpath"/>
-    <path refid="library.org.springframework:org.springframework.transaction:3.2.0.release.classpath"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
-    <path refid="library.commons-beanutils-1.8.3.classpath"/>
-    <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
-    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
-    <path refid="library.mysql-connector-java-5.1.24.classpath"/>
-    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
-    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
-    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
-    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
-    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
-    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
-    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
-  </path>
-  
-  <path id="e-eye-o_example-integration-hibernatejacksonjersey.runtime.module.classpath">
-    <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
-    <path refid="e-eye-o_serializationjacksonimpl.runtime.module.classpath"/>
-    <path refid="e-eye-o_restjsonjersey.runtime.module.classpath"/>
-    <path refid="e-eye-o_daohibernateimpl.runtime.module.classpath"/>
-    <path refid="e-eye-o_interfaces.runtime.module.classpath"/>
-    <path refid="library.org.testng:testng:6.8.classpath"/>
-    <path refid="library.org.springframework:spring-test:3.2.0.release.classpath"/>
-    <path refid="library.com.google.guava:guava:13.0.classpath"/>
-    <path refid="library.org.apache.derby:derby:10.9.1.0.classpath"/>
-    <path refid="library.mysql-connector-java-5.1.24.classpath"/>
-    <path refid="library.com.sun.jersey:jersey-grizzly2:1.17.classpath"/>
-    <path refid="library.jersey-client-1.17-javadoc.classpath"/>
-    <path refid="library.jersey-grizzly2-servlet-1.17-javadoc.classpath"/>
-    <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
-    <path refid="library.ch.qos.logback:logback-classic:1.0.5.classpath"/>
-    <path refid="library.grizzly-http-servlet-2.3.2-javadoc.classpath"/>
-    <path refid="library.httpcore-4.2.4-javadoc.classpath"/>
-    <path refid="library.httpclient-4.2.5-javadoc.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-config:3.1.3.release.classpath"/>
-    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
-    <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
-  </path>
-  
-  
-  <patternset id="excluded.from.module.e-eye-o_example-integration-hibernatejacksonjersey">
-    <patternset refid="ignored.files"/>
-  </patternset>
-  
-  <patternset id="excluded.from.compilation.e-eye-o_example-integration-hibernatejacksonjersey">
-    <patternset refid="excluded.from.module.e-eye-o_example-integration-hibernatejacksonjersey"/>
-  </patternset>
-  
-  <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.sourcepath">
-    <dirset dir="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/E-EYE-O_Example-Integration-HibernateJacksonJersey">
-      <include name="src"/>
-    </dirset>
-  </path>
-  
-  <path id="e-eye-o_example-integration-hibernatejacksonjersey.module.test.sourcepath">
-    <dirset dir="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/E-EYE-O_Example-Integration-HibernateJacksonJersey">
-      <include name="test-integration"/>
-    </dirset>
-  </path>
-  
-  
-  <target name="compile.module.e-eye-o_example-integration-hibernatejacksonjersey" depends="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.production,compile.module.e-eye-o_example-integration-hibernatejacksonjersey.tests" description="Compile module E-EYE-O_Example-Integration-HibernateJacksonJersey"/>
-  
-  <target name="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.production" depends="compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_daohibernateimpl,compile.module.e-eye-o_interfaces" description="Compile module E-EYE-O_Example-Integration-HibernateJacksonJersey; production classes">
-    <mkdir dir="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
-    <javac destdir="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_example-integration-hibernatejacksonjersey}/javac">
-      <compilerarg line="${compiler.args.e-eye-o_example-integration-hibernatejacksonjersey}"/>
-      <bootclasspath refid="e-eye-o_example-integration-hibernatejacksonjersey.module.bootclasspath"/>
-      <classpath refid="e-eye-o_example-integration-hibernatejacksonjersey.module.production.classpath"/>
-      <src refid="e-eye-o_example-integration-hibernatejacksonjersey.module.sourcepath"/>
-      <patternset refid="excluded.from.compilation.e-eye-o_example-integration-hibernatejacksonjersey"/>
-    </javac>
-    
-    <copy todir="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}">
-      <fileset dir="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/E-EYE-O_Example-Integration-HibernateJacksonJersey/src">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-    </copy>
-  </target>
-  
-  <target name="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.tests" depends="compile.module.e-eye-o_example-integration-hibernatejacksonjersey.production" description="compile module E-EYE-O_Example-Integration-HibernateJacksonJersey; test classes" unless="skip.tests">
-    <mkdir dir="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}"/>
-    <javac destdir="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_example-integration-hibernatejacksonjersey}/javac">
-      <compilerarg line="${compiler.args.e-eye-o_example-integration-hibernatejacksonjersey}"/>
-      <bootclasspath refid="e-eye-o_example-integration-hibernatejacksonjersey.module.bootclasspath"/>
-      <classpath refid="e-eye-o_example-integration-hibernatejacksonjersey.module.classpath"/>
-      <src refid="e-eye-o_example-integration-hibernatejacksonjersey.module.test.sourcepath"/>
-      <patternset refid="excluded.from.compilation.e-eye-o_example-integration-hibernatejacksonjersey"/>
-    </javac>
-    
-    <copy todir="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}">
-      <fileset dir="${module.e-eye-o_example-integration-hibernatejacksonjersey.basedir}/E-EYE-O_Example-Integration-HibernateJacksonJersey/test-integration">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-    </copy>
-  </target>
-  
-  <target name="clean.module.e-eye-o_example-integration-hibernatejacksonjersey" description="cleanup module">
-    <delete dir="${e-eye-o_example-integration-hibernatejacksonjersey.output.dir}"/>
-    <delete dir="${e-eye-o_example-integration-hibernatejacksonjersey.testoutput.dir}"/>
-  </target>
-  
-  
-  <!-- Module E-EYE-O_Example-VaadinDerbyJerseyJackson -->
-  
-  <dirname property="module.e-eye-o_example-vaadinderbyjerseyjackson.basedir" file="${ant.file}"/>
-  
-  
-  <property name="module.jdk.home.e-eye-o_example-vaadinderbyjerseyjackson" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.e-eye-o_example-vaadinderbyjerseyjackson" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson" value="${project.jdk.classpath}"/>
-  
-  <property name="compiler.args.e-eye-o_example-vaadinderbyjerseyjackson" value="${compiler.args}"/>
-  
-  <property name="e-eye-o_example-vaadinderbyjerseyjackson.output.dir" value="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/out/production/E-EYE-O_Example-VaadinDerbyJerseyJackson"/>
-  <property name="e-eye-o_example-vaadinderbyjerseyjackson.testoutput.dir" value="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/out/test/E-EYE-O_Example-VaadinDerbyJerseyJackson"/>
-  
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.bootclasspath">
-    <!-- Paths to be included in compilation bootclasspath -->
-  </path>
-  
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.production.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson}"/>
+  <path id="e-eye-o_example-vaadinjerseyjacksonjava.module.production.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_example-vaadinjerseyjacksonjava}"/>
     <path refid="library.tomcat_7.classpath"/>
     <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
     <pathelement location="${e-eye-o_interfaces.output.dir}"/>
@@ -1599,10 +2156,11 @@
     <pathelement location="${e-eye-o_reportsjasper.output.dir}"/>
     <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
     <path refid="library.jasperreports-5.1.2.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
   </path>
   
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.runtime.production.module.classpath">
-    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
+  <path id="e-eye-o_example-vaadinjerseyjacksonjava.runtime.production.module.classpath">
+    <pathelement location="${e-eye-o_example-vaadinjerseyjacksonjava.output.dir}"/>
     <path refid="e-eye-o_entitiesjavaimpl.runtime.production.module.classpath"/>
     <path refid="e-eye-o_restjsonjersey.runtime.production.module.classpath"/>
     <path refid="e-eye-o_serializationjacksonimpl.runtime.production.module.classpath"/>
@@ -1617,11 +2175,12 @@
     <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
     <path refid="e-eye-o_reportsjasper.runtime.production.module.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
   </path>
   
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.classpath">
-    <path refid="${module.jdk.classpath.e-eye-o_example-vaadinderbyjerseyjackson}"/>
-    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
+  <path id="e-eye-o_example-vaadinjerseyjacksonjava.module.classpath">
+    <path refid="${module.jdk.classpath.e-eye-o_example-vaadinjerseyjacksonjava}"/>
+    <pathelement location="${e-eye-o_example-vaadinjerseyjacksonjava.output.dir}"/>
     <path refid="library.tomcat_7.classpath"/>
     <pathelement location="${e-eye-o_entitiesjavaimpl.testoutput.dir}"/>
     <pathelement location="${e-eye-o_entitiesjavaimpl.output.dir}"/>
@@ -1642,11 +2201,12 @@
     <pathelement location="${e-eye-o_reportsjasper.output.dir}"/>
     <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
     <path refid="library.jasperreports-5.1.2.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
   </path>
   
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.runtime.module.classpath">
-    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.testoutput.dir}"/>
-    <pathelement location="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
+  <path id="e-eye-o_example-vaadinjerseyjacksonjava.runtime.module.classpath">
+    <pathelement location="${e-eye-o_example-vaadinjerseyjacksonjava.testoutput.dir}"/>
+    <pathelement location="${e-eye-o_example-vaadinjerseyjacksonjava.output.dir}"/>
     <path refid="library.tomcat_7.classpath"/>
     <path refid="e-eye-o_entitiesjavaimpl.runtime.module.classpath"/>
     <path refid="e-eye-o_restjsonjersey.runtime.module.classpath"/>
@@ -1662,58 +2222,59 @@
     <path refid="library.org.springframework:spring-web:3.2.0.release.classpath"/>
     <path refid="library.com.sun.jersey:jersey-server:1.17.classpath"/>
     <path refid="e-eye-o_reportsjasper.runtime.module.classpath"/>
+    <path refid="library.org.springframework.security:spring-security-web:3.1.3.release.classpath"/>
   </path>
   
   
-  <patternset id="excluded.from.module.e-eye-o_example-vaadinderbyjerseyjackson">
+  <patternset id="excluded.from.module.e-eye-o_example-vaadinjerseyjacksonjava">
     <patternset refid="ignored.files"/>
   </patternset>
   
-  <patternset id="excluded.from.compilation.e-eye-o_example-vaadinderbyjerseyjackson">
-    <patternset refid="excluded.from.module.e-eye-o_example-vaadinderbyjerseyjackson"/>
+  <patternset id="excluded.from.compilation.e-eye-o_example-vaadinjerseyjacksonjava">
+    <patternset refid="excluded.from.module.e-eye-o_example-vaadinjerseyjacksonjava"/>
   </patternset>
   
-  <path id="e-eye-o_example-vaadinderbyjerseyjackson.module.sourcepath">
-    <dirset dir="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson">
+  <path id="e-eye-o_example-vaadinjerseyjacksonjava.module.sourcepath">
+    <dirset dir="${module.e-eye-o_example-vaadinjerseyjacksonjava.basedir}/E-EYE-O_Example-VaadinJerseyJacksonJava">
       <include name="src"/>
     </dirset>
   </path>
   
   
-  <target name="compile.module.e-eye-o_example-vaadinderbyjerseyjackson" depends="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.production,compile.module.e-eye-o_example-vaadinderbyjerseyjackson.tests" description="Compile module E-EYE-O_Example-VaadinDerbyJerseyJackson"/>
+  <target name="compile.module.e-eye-o_example-vaadinjerseyjacksonjava" depends="compile.module.e-eye-o_example-vaadinjerseyjacksonjava.production,compile.module.e-eye-o_example-vaadinjerseyjacksonjava.tests" description="Compile module E-EYE-O_Example-VaadinJerseyJacksonJava"/>
   
-  <target name="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.production" depends="compile.module.e-eye-o_entitiesjavaimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_riavaadin,compile.module.e-eye-o_interfaces,compile.module.e-eye-o_reportsjasper" description="Compile module E-EYE-O_Example-VaadinDerbyJerseyJackson; production classes">
-    <mkdir dir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
-    <javac destdir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_example-vaadinderbyjerseyjackson}/javac">
-      <compilerarg line="${compiler.args.e-eye-o_example-vaadinderbyjerseyjackson}"/>
-      <bootclasspath refid="e-eye-o_example-vaadinderbyjerseyjackson.module.bootclasspath"/>
-      <classpath refid="e-eye-o_example-vaadinderbyjerseyjackson.module.production.classpath"/>
-      <src refid="e-eye-o_example-vaadinderbyjerseyjackson.module.sourcepath"/>
-      <patternset refid="excluded.from.compilation.e-eye-o_example-vaadinderbyjerseyjackson"/>
+  <target name="compile.module.e-eye-o_example-vaadinjerseyjacksonjava.production" depends="compile.module.e-eye-o_entitiesjavaimpl,compile.module.e-eye-o_restjsonjersey,compile.module.e-eye-o_serializationjacksonimpl,compile.module.e-eye-o_riavaadin,compile.module.e-eye-o_interfaces,compile.module.e-eye-o_reportsjasper" description="Compile module E-EYE-O_Example-VaadinJerseyJacksonJava; production classes">
+    <mkdir dir="${e-eye-o_example-vaadinjerseyjacksonjava.output.dir}"/>
+    <javac destdir="${e-eye-o_example-vaadinjerseyjacksonjava.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.e-eye-o_example-vaadinjerseyjacksonjava}/javac">
+      <compilerarg line="${compiler.args.e-eye-o_example-vaadinjerseyjacksonjava}"/>
+      <bootclasspath refid="e-eye-o_example-vaadinjerseyjacksonjava.module.bootclasspath"/>
+      <classpath refid="e-eye-o_example-vaadinjerseyjacksonjava.module.production.classpath"/>
+      <src refid="e-eye-o_example-vaadinjerseyjacksonjava.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.e-eye-o_example-vaadinjerseyjacksonjava"/>
     </javac>
     
-    <copy todir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}">
-      <fileset dir="${module.e-eye-o_example-vaadinderbyjerseyjackson.basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson/src">
+    <copy todir="${e-eye-o_example-vaadinjerseyjacksonjava.output.dir}">
+      <fileset dir="${module.e-eye-o_example-vaadinjerseyjacksonjava.basedir}/E-EYE-O_Example-VaadinJerseyJacksonJava/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
     </copy>
   </target>
   
-  <target name="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.tests" depends="compile.module.e-eye-o_example-vaadinderbyjerseyjackson.production" description="compile module E-EYE-O_Example-VaadinDerbyJerseyJackson; test classes" unless="skip.tests"/>
+  <target name="compile.module.e-eye-o_example-vaadinjerseyjacksonjava.tests" depends="compile.module.e-eye-o_example-vaadinjerseyjacksonjava.production" description="compile module E-EYE-O_Example-VaadinJerseyJacksonJava; test classes" unless="skip.tests"/>
   
-  <target name="clean.module.e-eye-o_example-vaadinderbyjerseyjackson" description="cleanup module">
-    <delete dir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
-    <delete dir="${e-eye-o_example-vaadinderbyjerseyjackson.testoutput.dir}"/>
+  <target name="clean.module.e-eye-o_example-vaadinjerseyjacksonjava" description="cleanup module">
+    <delete dir="${e-eye-o_example-vaadinjerseyjacksonjava.output.dir}"/>
+    <delete dir="${e-eye-o_example-vaadinjerseyjacksonjava.testoutput.dir}"/>
   </target>
   
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
   </target>
   
-  <target name="clean" depends="clean.module.e-eye-o_interfaces, clean.module.e-eye-o_entitiesjavaimpl, clean.module.e-eye-o_restjsonjersey, clean.module.e-eye-o_riavaadin, clean.module.e-eye-o_serializationjacksonimpl, clean.module.e-eye-o_daohibernateimpl, clean.module.e-eye-o_reportsjasper, clean.module.e-eye-o_example-integration-hibernatejacksonjersey, clean.module.e-eye-o_example-vaadinderbyjerseyjackson, clean.artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded, clean.artifact.e-eye-o_hibernatedaoimpl:ejb_exploded, clean.artifact.e-eye-o_riavaadin:war_exploded" description="cleanup all"/>
+  <target name="clean" depends="clean.module.e-eye-o_interfaces, clean.module.e-eye-o_riagrails, clean.module.e-eye-o_daohibernateimpl, clean.module.e-eye-o_entitiesgroovyimpl, clean.module.e-eye-o_entitiesjavaimpl, clean.module.e-eye-o_restjsonjersey, clean.module.e-eye-o_riavaadin, clean.module.e-eye-o_serializationjacksonimpl, clean.module.e-eye-o_example-integration-hibernatejacksonjersey, clean.module.e-eye-o_reportsjasper, clean.module.e-eye-o_example-vaadinjerseyjacksonjava, clean.artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded, clean.artifact.e-eye-o_hibernatedaoimpl:ejb_exploded, clean.artifact.e-eye-o_riavaadin:war_exploded" description="cleanup all"/>
   
-  <target name="build.modules" depends="init, clean, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_restjsonjersey, compile.module.e-eye-o_riavaadin, compile.module.e-eye-o_serializationjacksonimpl, compile.module.e-eye-o_daohibernateimpl, compile.module.e-eye-o_reportsjasper, compile.module.e-eye-o_example-integration-hibernatejacksonjersey, compile.module.e-eye-o_example-vaadinderbyjerseyjackson" description="build all modules"/>
+  <target name="build.modules" depends="init, clean, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_riagrails, compile.module.e-eye-o_daohibernateimpl, compile.module.e-eye-o_entitiesgroovyimpl, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_restjsonjersey, compile.module.e-eye-o_riavaadin, compile.module.e-eye-o_serializationjacksonimpl, compile.module.e-eye-o_example-integration-hibernatejacksonjersey, compile.module.e-eye-o_reportsjasper, compile.module.e-eye-o_example-vaadinjerseyjacksonjava" description="build all modules"/>
   
   <target name="init.artifacts">
     <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
@@ -1750,12 +2311,12 @@
     <copy file="${temp.jar.path.E-EYE-O_war.war}" tofile="${artifact.temp.output.e-eye-o_example-vaadinderbyjerseyjackson:war}/E-EYE-O_war.war"/>
   </target>
   
-  <target name="artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded" depends="init.artifacts, compile.module.e-eye-o_example-vaadinderbyjerseyjackson, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_restjsonjersey, compile.module.e-eye-o_serializationjacksonimpl, compile.module.e-eye-o_riavaadin, compile.module.e-eye-o_daohibernateimpl, compile.module.e-eye-o_reportsjasper" description="Build &#39;E-EYE-O_Example-VaadinDerbyJerseyJackson:war exploded&#39; artifact">
+  <target name="artifact.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded" depends="init.artifacts, compile.module.e-eye-o_example-vaadinjerseyjacksonjava, compile.module.e-eye-o_entitiesjavaimpl, compile.module.e-eye-o_interfaces, compile.module.e-eye-o_restjsonjersey, compile.module.e-eye-o_serializationjacksonimpl, compile.module.e-eye-o_riavaadin, compile.module.e-eye-o_daohibernateimpl, compile.module.e-eye-o_reportsjasper" description="Build &#39;E-EYE-O_Example-VaadinDerbyJerseyJackson:war exploded&#39; artifact">
     <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}"/>
     <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF"/>
     <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes"/>
     <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes">
-      <fileset dir="${e-eye-o_example-vaadinderbyjerseyjackson.output.dir}"/>
+      <fileset dir="${e-eye-o_example-vaadinjerseyjacksonjava.output.dir}"/>
     </copy>
     <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/classes">
       <fileset dir="${e-eye-o_entitiesjavaimpl.output.dir}"/>
@@ -1887,10 +2448,10 @@
     <copy file="${basedir}/lib/commons-collections-20040616.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/commons-collections-20040616.jar"/>
     <copy file="${basedir}/lib/itext-2.1.7.jar" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/lib/itext-2.1.7.jar"/>
     <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}">
-      <fileset dir="${basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson/web"/>
+      <fileset dir="${basedir}/E-EYE-O_Example-VaadinJerseyJacksonJava/web"/>
     </copy>
     <mkdir dir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF"/>
-    <copy file="${basedir}/E-EYE-O_Example-VaadinDerbyJerseyJackson/web/WEB-INF/web.xml" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/web.xml"/>
+    <copy file="${basedir}/E-EYE-O_Example-VaadinJerseyJacksonJava/web/WEB-INF/web.xml" tofile="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}/WEB-INF/web.xml"/>
     <copy todir="${artifact.output.e-eye-o_example-vaadinderbyjerseyjackson:war_exploded}">
       <fileset dir="${basedir}/E-EYE-O_RIAVaadin/resources"/>
     </copy>
