@@ -21,15 +21,15 @@ public interface IdObjectReflectionHelper {
      * Returns map of getters
      */
     @Cacheable("idObjectGetterMethods")
-    <T extends IdObject> Map<String, Method> getAllGetMethods(final Class<T> entityType);
+    Map<String, Method> getAllGetMethods(final Class<? extends IdObject> entityType);
 
     /**
      * Returns map of getters
      */
     @Cacheable("idObjectSetterMethods")
-    <T extends IdObject> Map<String, Method> getAllSetMethods(final Class<T> entityType);
+    Map<String, Method> getAllSetMethods(final Class<? extends IdObject> entityType);
 
 
     @Cacheable("idObjectFieldPreferences")
-    <T extends IdObject> Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<T> entityType);
+    Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<? extends IdObject> entityType);
 }

@@ -39,7 +39,7 @@ public class IdObjectReflectionHelperImpl implements IdObjectReflectionHelper {
     }
 
     @Override
-    public <T extends IdObject> Map<String, Method> getAllGetMethods(Class<T> entityType) {
+    public Map<String, Method> getAllGetMethods(Class<? extends IdObject> entityType) {
         Function<PropertyDescriptor, Map.Entry<String, Method>> function = new Function<PropertyDescriptor, Map.Entry<String, Method>>() {
             @Nullable
             @Override
@@ -58,7 +58,7 @@ public class IdObjectReflectionHelperImpl implements IdObjectReflectionHelper {
     }
 
     @Override
-    public <T extends IdObject> Map<String, Method> getAllSetMethods(Class<T> entityType) {
+    public Map<String, Method> getAllSetMethods(Class<? extends IdObject> entityType) {
         Function<PropertyDescriptor, Map.Entry<String, Method>> function = new Function<PropertyDescriptor, Map.Entry<String, Method>>() {
             @Nullable
             @Override
@@ -77,7 +77,7 @@ public class IdObjectReflectionHelperImpl implements IdObjectReflectionHelper {
     }
 
     @Override
-    public <T extends IdObject> Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<T> entityType) {
+    public Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<? extends IdObject> entityType) {
         final Function<PropertyDescriptor, Map.Entry<String, IdObjectFieldSettings>> function = new Function<PropertyDescriptor, Map.Entry<String, IdObjectFieldSettings>>() {
             @Nullable
             @Override
