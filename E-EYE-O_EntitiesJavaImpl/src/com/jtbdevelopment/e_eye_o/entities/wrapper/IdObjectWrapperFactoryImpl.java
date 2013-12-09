@@ -36,7 +36,7 @@ public class IdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
         }
         Class<? extends IdObjectWrapper> baseClass = baseClassMap.get(wrapperKind);
         if (!baseClass.isAssignableFrom(wrapperType)) {
-            throw new IllegalArgumentException("wrapperType class of " + wrapperType.getSimpleName() + " must be implement " + baseClass.getSimpleName());
+            throw new IllegalArgumentException("wrapperType class of " + wrapperType.getSimpleName() + " must subclass " + baseClass.getSimpleName());
         }
         final Class<W> idObjectInterfaceForWrapper = idObjectReflectionHelper.getIdObjectInterfaceForClass(wrapperType);
         if (!entityType.equals(idObjectInterfaceForWrapper)) {
@@ -48,6 +48,18 @@ public class IdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
         }
         entityToWrapperTable.put(wrapperKind, entityType, wrapperType);
         wrapperToEntityTable.put(wrapperKind, wrapperType, entityType);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends IdObject> Class<T> getWrapperForEntity(final WrapperKind wrapperKind, final Class<T> entityType) {
+        return (Class<T>) entityToWrapperTable.get(wrapperKind, entityType);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends IdObject> Class<T> getEntityForWrapper(final WrapperKind wrapperKind, final Class<T> wrapperType) {
+        return (Class<T>) wrapperToEntityTable.get(wrapperKind, wrapperType);
     }
 
     @Override
@@ -75,19 +87,6 @@ public class IdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
             newCollection.add(wrap(wrapperKind, entity));
         }
         return newCollection;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends IdObject> Class<T> getWrapperForEntity(final WrapperKind wrapperKind, final Class<T> entityType) {
-        return (Class<T>) entityToWrapperTable.get(wrapperKind, entityType);
-//        return (Class<T>) entityToWrapperMaps.get(wrapperKind).get(entityType);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends IdObject> Class<T> getEntityForWrapper(final WrapperKind wrapperKind, final Class<T> wrapperType) {
-        return (Class<T>) wrapperToEntityTable.get(wrapperKind, wrapperType);
     }
 
     //  Can't just clone the collection - hibernate gives you it's own internal types for example
@@ -156,6 +155,4 @@ public class IdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
         }
         throw new InvalidParameterException("Not able to find wrapperType mapping for " + idObjectType.getSimpleName());
     }
-
-
 }

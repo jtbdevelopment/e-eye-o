@@ -15,7 +15,7 @@ import java.lang.reflect.Method
  */
 
 @Service
-class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
+public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
     @Override
     def <T extends IdObject> Class<T> getIdObjectInterfaceForClass(final Class<T> entityType) {
         if (entityType.interface) {

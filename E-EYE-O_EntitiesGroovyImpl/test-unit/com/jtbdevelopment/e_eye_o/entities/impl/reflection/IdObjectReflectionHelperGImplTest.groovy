@@ -1,19 +1,9 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.reflection
-
-import com.jtbdevelopment.e_eye_o.entities.AppUser
-import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject
-import com.jtbdevelopment.e_eye_o.entities.IdObject
-import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings
-import org.joda.time.DateTime
-import org.testng.annotations.Test
-
-import java.beans.Transient
-import java.lang.reflect.Method
-
 /**
  * Date: 12/3/13
  * Time: 9:31 PM
  */
+/*
 public interface GLocalOne extends IdObject {
     @IdObjectFieldSettings(viewable = true)
     public AppUserOwnedObject getAppUserOwnedObject();
@@ -170,3 +160,4 @@ class IdObjectReflectionHelperGImplTest extends GroovyTestCase {
         methods
     }
 }
+  */

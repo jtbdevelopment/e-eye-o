@@ -35,35 +35,6 @@ class StudentGImplTest extends AppUserOwnedObjectGImplTest {
     public void testClassLists() throws Exception {
         testSetField("classLists", "ClassList", new ClassListGImpl(), new ClassListGImpl(), Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL)
     }
-/*
-    @Test
-    public void checkClassListsAreUnmodifiable() {
-        StudentImpl s = new StudentImpl(USER1);
-        checkCollectionIsUnmodifiable(s.getClassLists());
-        checkCollectionIsUnmodifiable(s.getActiveClassLists());
-        checkCollectionIsUnmodifiable(s.getArchivedClassLists());
-    }
-
-    @Test
-    public void testClassListsValidates() {
-        checkCollectionValidates(ClassListImpl.class, "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
-    }
-
-    @Test
-    public void testAddClassList() throws Exception {
-        checkAddSingleEntityToCollection(ClassListImpl.class, "classList", "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
-    }
-
-    @Test
-    public void testAddClassLists() throws Exception {
-        checkAddManyEntitiesToCollection(ClassListImpl.class, "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
-    }
-
-    @Test
-    public void testRemoveClassLists() throws Exception {
-        checkRemoveSingleEntityToCollection(ClassListImpl.class, "classList", "classLists", Student.STUDENT_CLASS_LISTS_CANNOT_CONTAIN_NULL);
-    }
- */
 
     private ClassList createClassList(final AppUser user, boolean archived) {
         ClassList cl = new ClassListGImpl(appUser: user);
@@ -75,18 +46,14 @@ class StudentGImplTest extends AppUserOwnedObjectGImplTest {
     public void testGetActiveAndArchivedClassLists() {
         AppUser user = new AppUserGImpl()
 
-        Set<ClassList> archived = new HashSet<ClassList>() {
-            {
-                add(createClassList(user, true));
-                add(createClassList(user, true));
-                add(createClassList(user, true));
-            }
-        };
-        Set<ClassList> active = new HashSet<ClassList>() {
-            {
-                add(createClassList(user, false));
-            }
-        };
+        Set<ClassList> archived = [
+                createClassList(user, true),
+                createClassList(user, true),
+                createClassList(user, true)
+        ] as Set;
+        Set<ClassList> active = [
+                createClassList(user, false)
+        ] as Set;
 
         Student student = new StudentGImpl(appUser: user);
         student.addClassLists(archived);

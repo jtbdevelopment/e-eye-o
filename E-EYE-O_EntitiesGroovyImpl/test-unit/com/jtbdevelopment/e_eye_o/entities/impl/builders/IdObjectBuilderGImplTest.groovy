@@ -20,7 +20,7 @@ class IdObjectBuilderGImplTest {
     @BeforeMethod
     def setUp() {
         entity = new LocalEntityImpl()
-        builder = new IdObjectBuilderGImpl<>(entity: entity)
+        builder = new IdObjectBuilderGImpl(entity: entity)
     }
 
     @Test
