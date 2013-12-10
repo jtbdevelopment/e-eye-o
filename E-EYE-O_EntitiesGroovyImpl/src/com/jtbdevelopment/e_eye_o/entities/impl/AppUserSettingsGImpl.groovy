@@ -17,6 +17,12 @@ class AppUserSettingsGImpl extends AppUserOwnedObjectGImpl implements AppUserSet
     }
 
     @Override
+    public void setSettings(final Map<String, Object> settings) {
+        settings.clear()
+        updateSettings(settings)
+    }
+
+    @Override
     public void updateSettings(final Map<String, Object> settings) {
         settings.each { String key, Object value -> this.settings += [(key): value.toString()] }
     }

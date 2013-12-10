@@ -155,6 +155,13 @@ class IdObjectWrapperFactoryImplTest extends GroovyTestCase {
         testFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, new TestOWFInterfaceGImpl());
     }
 
+    @Test(expectedExceptions = RuntimeException.class)
+    public void testWrapBlowsUpIfWrapperConstructorExceptions() {
+        IdObjectWrapperFactory testFactory = makeFactory()
+        testFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, TestOWFInterface.class, TestOWFInterfaceWrapperGImplConstructorExceptions.class);
+        testFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, new TestOWFInterfaceGImpl());
+    }
+
     @Test
     public void testCollectionList() {
         LinkedList<TestOWFInterface> inList = new LinkedList<TestOWFInterface>()
