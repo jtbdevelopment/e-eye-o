@@ -1,15 +1,23 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.reflection
+
+import com.jtbdevelopment.e_eye_o.entities.IdObject
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings
+import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper
+import org.codehaus.groovy.reflection.CachedMethod
+import org.springframework.stereotype.Service
+
+import java.beans.Transient
+import java.lang.reflect.Method
+
 /**
  * Date: 12/3/13
  * Time: 7:08 PM
  */
 
-//@Service
-//@CompileStatic
-/*
+@Service
 public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
     @Override
-     public <T extends IdObject> Class<T> getIdObjectInterfaceForClass(final Class<T> entityType) {
+    public <T extends IdObject> Class<T> getIdObjectInterfaceForClass(final Class<T> entityType) {
         if (entityType.interface) {
             return IdObject.isAssignableFrom(entityType) ? entityType : null
         }
@@ -17,7 +25,7 @@ public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
     }
 
     @Override
-      public Map<String, Method> getAllGetMethods(final Class<? extends IdObject> entityType) {
+    public Map<String, Method> getAllGetMethods(final Class<? extends IdObject> entityType) {
         Closure<Map<String, Method>> getGetter = {
             p ->
                 [(p.name): ((CachedMethod) ((MetaBeanProperty) p).getGetter())?.getCachedMethod()]
@@ -26,7 +34,7 @@ public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
     }
 
     @Override
-     public Map<String, Method> getAllSetMethods(final Class<? extends IdObject> entityType) {
+    public Map<String, Method> getAllSetMethods(final Class<? extends IdObject> entityType) {
         Closure<Map<String, Method>> getSetter = {
             p ->
                 [(p.name): ((CachedMethod) ((MetaBeanProperty) p).getSetter())?.getCachedMethod()]
@@ -35,7 +43,7 @@ public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
     }
 
     @Override
-      public Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<? extends IdObject> entityType) {
+    public Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<? extends IdObject> entityType) {
         Map<String, Method> gets = getAllGetMethods(entityType)
         def map = [:]
         gets.each({ key, value ->
@@ -59,6 +67,5 @@ public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
     }
 
 }
-*/
 
 

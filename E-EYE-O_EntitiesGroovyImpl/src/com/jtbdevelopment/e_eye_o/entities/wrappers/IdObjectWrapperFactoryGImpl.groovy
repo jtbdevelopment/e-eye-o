@@ -1,23 +1,13 @@
 package com.jtbdevelopment.e_eye_o.entities.wrappers
-
-import com.google.common.collect.HashBasedTable
-import com.google.common.collect.Table
-import com.jtbdevelopment.e_eye_o.entities.IdObject
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper
-import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper
-import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
-
-import java.lang.reflect.Constructor
-import java.lang.reflect.InvocationTargetException
-import java.security.InvalidParameterException
-
 /**
  * Date: 12/8/13
  * Time: 12:52 PM
+ *
+ * Couldn't get this to work as a groovy service unfortunately
  */
+/*
 @Component
+@CompileStatic
 class IdObjectWrapperFactoryGImpl implements IdObjectWrapperFactory {
     private final Map<IdObjectWrapperFactory.WrapperKind, Class<? extends IdObjectWrapper>> wrapperKindBaseClassMap = [:]
     private final Table<IdObjectWrapperFactory.WrapperKind, Class<? extends IdObject>, Class<? extends IdObject>> entityToWrapperTable = HashBasedTable.<IdObjectWrapperFactory.WrapperKind, Class<? extends IdObject>, Class<? extends IdObject>> create();
@@ -50,7 +40,7 @@ class IdObjectWrapperFactoryGImpl implements IdObjectWrapperFactory {
         if (!baseClass.isAssignableFrom(wrapperType)) {
             throw new IllegalArgumentException("wrapperType class of " + wrapperType.getSimpleName() + " must subclass " + baseClass.getSimpleName());
         }
-        final Class<W> idObjectInterfaceForWrapper = idObjectReflectionHelper.getIdObjectInterfaceForClass(wrapperType);
+        def idObjectInterfaceForWrapper = idObjectReflectionHelper.getIdObjectInterfaceForClass((Class<? extends IdObject>) wrapperType);
         if (entityType != idObjectInterfaceForWrapper) {
             throw new IllegalArgumentException(
                     "entityType and wrapperType should implement same IdObject interface entityType = "
@@ -84,7 +74,7 @@ class IdObjectWrapperFactoryGImpl implements IdObjectWrapperFactory {
             return entity;
         }
 
-        return newWrapperFor(wrapperKind, (W) getEntityToWrap(entity));
+        return (W) newWrapperFor(wrapperKind, getEntityToWrap((IdObject) entity));
     }
 
     @Override
@@ -95,7 +85,8 @@ class IdObjectWrapperFactoryGImpl implements IdObjectWrapperFactory {
 
         C newCollection = newCollectionFor(entities);
         //  TODO - more efficient to get constructor once but probably not an issue for now
-        entities.each { newCollection.add(wrap(wrapperKind, (W) it)) }
+        List<IdObject> list = ((Collection<IdObject>)entities).collect { wrap(wrapperKind, (IdObject) it) }
+        //newCollection.addAll((List<W>)list)
         return newCollection;
     }
 
@@ -152,3 +143,4 @@ class IdObjectWrapperFactoryGImpl implements IdObjectWrapperFactory {
     }
 }
 
+  */

@@ -1,10 +1,17 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.reflection
-//class IdObjectReflectionHelperGImplTest {
 
-//private static final Set<String> FIELDS = (["objectValue", "booleanValue", "intValue", "stringValues", "appUserOwnedObject", "modificationTimestamp", "id"] as Set)
+import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings
+import com.jtbdevelopment.e_eye_o.entities.impl.reflection.testinterfacesandclasses.*
+import org.testng.annotations.Test
 
-//    IdObjectReflectionHelper r = new IdObjectReflectionHelperGImpl();
-/*
+import java.lang.reflect.Method
+
+class IdObjectReflectionHelperGImplTest {
+
+    private static final Set<String> FIELDS = (["objectValue", "booleanValue", "intValue", "stringValues", "appUserOwnedObject", "modificationTimestamp", "id"] as Set)
+
+    private final IdObjectReflectionHelperGImpl resolver = new IdObjectReflectionHelperGImpl();
+
     @Test
     public void testIdInterface() throws Exception {
         assert TestIORInterface1.class == resolver.getIdObjectInterfaceForClass(TestIORInterface1.class);
@@ -19,6 +26,7 @@ package com.jtbdevelopment.e_eye_o.entities.impl.reflection
     public void testIdObjectDerived() throws Exception {
         assert TestIORInterface2.class == resolver.getIdObjectInterfaceForClass(TestIOR2GImpl.class);
     }
+
     @Test
     public void testIdObjectDerivedFromOwned() throws Exception {
         assert TestIORInterface3.class == resolver.getIdObjectInterfaceForClass(TestIOR3GImpl.class);
@@ -37,6 +45,7 @@ package com.jtbdevelopment.e_eye_o.entities.impl.reflection
         assert FIELDS == lookup.keySet()
         assert expectedGetters() == (lookup.values() as Set)
     }
+
     @Test
     public void testSetMethodsOnInterface() {
         Map<String, Method> lookup = resolver.getAllSetMethods(TestIORInterface1.class)
@@ -82,5 +91,4 @@ package com.jtbdevelopment.e_eye_o.entities.impl.reflection
         methods = methods.findAll({ it.name.startsWith("set") }) as Set
         methods
     }
-*/
-//}
+}

@@ -9,8 +9,8 @@ import org.testng.annotations.Test
 
 import java.util.concurrent.ConcurrentSkipListSet
 
-class IdObjectWrapperFactoryGImplTest extends GroovyTestCase {
-    private static final IdObjectWrapperFactory wrapperFactory = makeFactory();
+class IdObjectWrapperFactoryImplTest extends GroovyTestCase {
+    private final IdObjectWrapperFactory wrapperFactory = makeFactory();
     private final TestOWFInterfaceGImpl impl = new TestOWFInterfaceGImpl();
     private final TestOWFInterface implAsInterface = impl;
     private final TestOWFInterfaceWrapperGImpl wrapper = new TestOWFInterfaceWrapperGImpl(impl);
@@ -19,7 +19,7 @@ class IdObjectWrapperFactoryGImplTest extends GroovyTestCase {
     private final TestOWFInterface otherWrapperAsInterface = otherWrapper;
 
     private static IdObjectWrapperFactory makeFactory() {
-        IdObjectWrapperFactoryGImpl impl = new IdObjectWrapperFactoryGImpl(new IdObjectReflectionHelperGImpl())
+        IdObjectWrapperFactoryImpl impl = new IdObjectWrapperFactoryImpl(new IdObjectReflectionHelperGImpl())
         impl.addBaseClass(IdObjectWrapperFactory.WrapperKind.DAO, TestOWFIdObjectWrapperGImpl.class);
         impl.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, TestOWFInterface.class, TestOWFInterfaceWrapperGImpl.class)
         return impl;
@@ -267,3 +267,4 @@ class IdObjectWrapperFactoryGImplTest extends GroovyTestCase {
         assert (originalWrapped as Set) == setOutput;
     }
 }
+
