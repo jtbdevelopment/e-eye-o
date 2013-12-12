@@ -1,7 +1,6 @@
 package com.jtbdevelopment.e_eye_o.DAO.helpers;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 
 /**
@@ -15,11 +14,17 @@ public interface UserHelper {
     public class PasswordChangeTooRecent extends Exception {
     }
 
-    //  Take a basic login form and do whatever else we want to new user
-    //  Implicitly records legal, cookie and privacy policy versions agreed to
-    TwoPhaseActivity setUpNewUser(final AppUser appUser);
 
-    AppUserSettings createDefaultSettingsForNewUser(final AppUser newUser);
+    /**
+     * Take new user shell and create
+     * Secure password if a password securer is defined
+     * Stored policy agreements on terms, privacy and cookies if defined
+     * Call over to new user helper if defined
+     *
+     * @param appUser new app user
+     * @return two phase activity to activate user
+     */
+    TwoPhaseActivity createNewUser(final AppUser appUser);
 
     TwoPhaseActivity generateActivationRequest(final AppUser appUser);
 

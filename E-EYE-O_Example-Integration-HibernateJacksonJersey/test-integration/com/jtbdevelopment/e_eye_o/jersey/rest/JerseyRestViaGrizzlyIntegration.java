@@ -123,9 +123,9 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
                         .withLastName("rest")
                         .withPassword("user2")
                         .build();
-                userHelper.setUpNewUser(testAdmin);
-                userHelper.setUpNewUser(testUser1);
-                userHelper.setUpNewUser(testUser2);
+                userHelper.createNewUser(testAdmin);
+                userHelper.createNewUser(testUser1);
+                userHelper.createNewUser(testUser2);
                 testAdmin = readWriteDAO.getUser(testAdmin.getEmailAddress());
                 testUser1 = readWriteDAO.getUser(testUser1.getEmailAddress());
                 testUser2 = readWriteDAO.getUser(testUser2.getEmailAddress());

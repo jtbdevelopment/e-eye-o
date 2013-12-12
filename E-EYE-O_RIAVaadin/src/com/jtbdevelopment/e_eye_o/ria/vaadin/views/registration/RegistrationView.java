@@ -107,7 +107,7 @@ public class RegistrationView extends VerticalLayout implements View {
                 }
 
                 AppUser user = beanFieldGroup.getItemDataSource().getBean();
-                TwoPhaseActivity twoPhaseActivity = userHelper.setUpNewUser(user);
+                TwoPhaseActivity twoPhaseActivity = userHelper.createNewUser(user);
                 registrationEmailGenerator.generateEmail(twoPhaseActivity);
                 getSession().setAttribute(TwoPhaseActivity.class, twoPhaseActivity);
                 getSession().getAttribute(Navigator.class).navigateTo(PostRegistrationView.VIEW_NAME);

@@ -13,6 +13,7 @@ import com.jtbdevelopment.e_eye_o.helpandlegal.TermsAndConditions;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -25,7 +26,8 @@ import java.util.Set;
  * You should implement a createSamplesForNewUser routine
  * to create default entries (if any) for new users
  */
-public abstract class AbstractUserHelperImpl implements UserHelper {
+@Component
+public class UserHelperImpl implements UserHelper {
     @Autowired(required = false)
     private TermsAndConditions termsAndConditions;
 
@@ -35,28 +37,30 @@ public abstract class AbstractUserHelperImpl implements UserHelper {
     @Autowired(required = false)
     private CookiesPolicy cookiesPolicy;
 
+    @Autowired(required = false)
+    protected NewUserHelper newUserHelper;
+
+    @Autowired(required = false)
+    protected PasswordEncoder passwordEncoder;
+
     @Autowired
     protected ReadWriteDAO readWriteDAO;
 
     @Autowired
     protected IdObjectFactory idObjectFactory;
 
-    @Autowired(required = false)
-    protected PasswordEncoder passwordEncoder;
-
-    protected abstract void createSamplesForNewUser(final AppUser newUser);
-
     @Override
-    public TwoPhaseActivity setUpNewUser(final AppUser appUser) {
+    public TwoPhaseActivity createNewUser(final AppUser appUser) {
         appUser.setPassword(securePassword(appUser.getPassword()));
         AppUser savedUser = readWriteDAO.create(appUser);
-        createDefaultSettingsForNewUser(savedUser);
-        createSamplesForNewUser(savedUser);
+        recordUserPolicyAgreementsIfPossible(savedUser);
+        if (newUserHelper != null) {
+            newUserHelper.initializeNewUser(savedUser);
+        }
         return generateActivationRequest(savedUser);
     }
 
-    @Override
-    public AppUserSettings createDefaultSettingsForNewUser(final AppUser newUser) {
+    private AppUserSettings recordUserPolicyAgreementsIfPossible(final AppUser newUser) {
         DateTime now = DateTime.now();
         return readWriteDAO.create(
                 idObjectFactory.newAppUserSettingsBuilder(newUser)

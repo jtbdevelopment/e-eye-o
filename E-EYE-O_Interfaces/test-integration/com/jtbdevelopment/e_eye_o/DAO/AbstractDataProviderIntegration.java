@@ -50,6 +50,16 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     private static Student testStudentForU1;
     private static Observation testObservation1ForU1, testObservation2ForU1, testObservation3ForU1;
 
+    private Set<ObservationCategory> createDefaultCategoriesForUser(final AppUser appUser) {
+        Set<ObservationCategory> set = new HashSet<>();
+        set.add(rwDAO.create(factory.newObservationCategoryBuilder(appUser).withShortName("CLL").withDescription("CLL").build()));
+        set.add(rwDAO.create(factory.newObservationCategoryBuilder(appUser).withShortName("KUW").withDescription("KUW").build()));
+        set.add(rwDAO.create(factory.newObservationCategoryBuilder(appUser).withShortName("PSE").withDescription("PSE").build()));
+        set.add(rwDAO.create(factory.newObservationCategoryBuilder(appUser).withShortName("PD").withDescription("PD").build()));
+        set.add(rwDAO.create(factory.newObservationCategoryBuilder(appUser).withShortName("CD").withDescription("CD").build()));
+        return set;
+    }
+
     @BeforeMethod
     public synchronized void initialize() {
         if (rwDAO == null) {
@@ -59,7 +69,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
             return;
         }
         testUser1 = rwDAO.create(factory.newAppUserBuilder().withFirstName("Testy").withLastName("Tester").withEmailAddress("test@test.com").withPassword("pass").build());
-        observationCategoryHelper.createDefaultCategoriesForUser(testUser1);
+        createDefaultCategoriesForUser(testUser1);
         testOCsForU1 = observationCategoryHelper.getObservationCategoriesAsMap(testUser1);
         testClassList1ForU1 = rwDAO.create(factory.newClassListBuilder(testUser1).withDescription("Test Class List1").build());
         testClassList2ForU1 = rwDAO.create(factory.newClassListBuilder(testUser1).withDescription("Test Class List2").build());
@@ -165,7 +175,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
 
     @Test
     public void testCreateDefaultCategories() {
-        Set<ObservationCategory> initialCategories = observationCategoryHelper.createDefaultCategoriesForUser(testUser2);
+        Set<ObservationCategory> initialCategories = createDefaultCategoriesForUser(testUser2);
         Set<ObservationCategory> reloaded = rwDAO.getEntitiesForUser(ObservationCategory.class, testUser2, 0, 0);
         assertTrue(reloaded.containsAll(initialCategories));
     }

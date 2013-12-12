@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.DAO.helpers.example;
 
-import com.jtbdevelopment.e_eye_o.DAO.helpers.AbstractUserHelperImpl;
+import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.NewUserHelper;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.joda.time.LocalDate;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -26,15 +28,34 @@ import java.util.Map;
  */
 @Component
 @SuppressWarnings("unused")
-public class UserHelperImpl extends AbstractUserHelperImpl {
-    private static final Logger logger = LoggerFactory.getLogger(UserHelperImpl.class);
+public class NewUserHelperImpl implements NewUserHelper {
+    private static final Logger logger = LoggerFactory.getLogger(NewUserHelperImpl.class);
 
     @Autowired
     private ObservationCategoryHelper observationCategoryHelper;
 
+    @Autowired
+    protected IdObjectFactory objectFactory;
+
+    @Autowired
+    protected ReadWriteDAO readWriteDAO;
+
+    @Autowired
+    protected IdObjectFactory idObjectFactory;
+
+    @Resource(name = "newUserDefaultObservationCategories")
+    Map<String, String> newUserDefaultObservationCategories;
+
+    private void createDefaultCategoriesForUser(final AppUser appUser) {
+        for (Map.Entry<String, String> entry : newUserDefaultObservationCategories.entrySet()) {
+            readWriteDAO.create(objectFactory.newObservationCategoryBuilder(appUser).withShortName(entry.getKey()).withDescription(entry.getValue()).build());
+        }
+    }
+
     @Override
-    protected void createSamplesForNewUser(final AppUser newUser) {
-        observationCategoryHelper.createDefaultCategoriesForUser(newUser);
+    public void initializeNewUser(final AppUser newUser) {
+        createDefaultCategoriesForUser(newUser);
+
         Map<String, ObservationCategory> map = observationCategoryHelper.getObservationCategoriesAsMap(newUser);
         ClassList cl = readWriteDAO.create(idObjectFactory.newClassListBuilder(newUser).withDescription("Example Class").build());
         Student s1 = readWriteDAO.create(idObjectFactory.newStudentBuilder(newUser).withFirstName("Student").withLastName("A").addClassList(cl).build());
@@ -46,8 +67,8 @@ public class UserHelperImpl extends AbstractUserHelperImpl {
         Observation o2 = readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationTimestamp(new LocalDateTime().minusDays(3)).withObservationSubject(s1).withComment("Observation 2").addCategory(c1).addCategory(c2).build());
         readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationTimestamp(new LocalDateTime().minusDays(10)).withObservationSubject(s2).withComment("Observation 3").build());
         readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime().minusDays(1)).addCategory(c2).withComment("You can put general class observations too.").build());
-        Semester semester1 = readWriteDAO.create(idObjectFactory.newSemesterBuilder(newUser).withDescription("Semester 1 - Can be used to group observations by time").withEnd(new LocalDate().minusDays(5)).withStart(new LocalDate().minusDays(60)).build());
-        Semester semester2 = readWriteDAO.create(idObjectFactory.newSemesterBuilder(newUser).withDescription("Semester 2 - Can be used to group observations by time").withEnd(new LocalDate().plusDays(65)).withStart(new LocalDate().minusDays(4)).build());
+        Semester semester1 = readWriteDAO.create(idObjectFactory.newSemesterBuilder(newUser).withDescription("Semester 1 - Used to group observations by time").withEnd(new LocalDate().minusDays(5)).withStart(new LocalDate().minusDays(60)).build());
+        Semester semester2 = readWriteDAO.create(idObjectFactory.newSemesterBuilder(newUser).withDescription("Semester 2 - Used to group observations by time").withEnd(new LocalDate().plusDays(65)).withStart(new LocalDate().minusDays(4)).build());
 
 
         for (String string : Arrays.asList(
@@ -56,7 +77,7 @@ public class UserHelperImpl extends AbstractUserHelperImpl {
         )) {
             try {
                 final String defaultImage = "newusersamplephotos/" + string;
-                URL url = AbstractUserHelperImpl.class.getClassLoader().getResource(defaultImage);
+                URL url = com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelperImpl.class.getClassLoader().getResource(defaultImage);
                 if (url == null) {
                     logger.warn("Unable to locate default image " + defaultImage);
                     continue;
