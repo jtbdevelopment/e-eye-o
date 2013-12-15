@@ -27,7 +27,7 @@ public class IdObjectUpdateHelperImpl implements IdObjectUpdateHelper {
 
 
     @Override
-    public <T extends IdObject> void validateUpdates(final AppUser updatingUser, final T currentEntity, final T updatedEntity) {
+    public <T extends IdObject> void vetInvalidFieldUpdates(final AppUser updatingUser, final T currentEntity, final T updatedEntity) {
         Class<T> idObjectInterface = reflectionHelper.getIdObjectInterfaceForClass((Class<T>) updatedEntity.getClass());
         Map<String, Method> getters = reflectionHelper.getAllGetMethods(idObjectInterface);
         Map<String, Method> setters = reflectionHelper.getAllSetMethods(idObjectInterface);

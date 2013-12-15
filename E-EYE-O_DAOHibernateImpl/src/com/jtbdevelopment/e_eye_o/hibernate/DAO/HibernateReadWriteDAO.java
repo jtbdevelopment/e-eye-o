@@ -97,7 +97,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             throw new IllegalArgumentException("You cannot explicitly update a " + entity.getClass() + ".");
         }
         final T existing = get((Class<T>) entity.getClass(), entity.getId());
-        idObjectUpdateHelper.validateUpdates(updatingUser, existing, entity);
+        idObjectUpdateHelper.vetInvalidFieldUpdates(updatingUser, existing, entity);
         sessionFactory.getCurrentSession().clear();
         return internalUpdate(entity);
     }

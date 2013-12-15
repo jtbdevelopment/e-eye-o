@@ -19,5 +19,5 @@ public interface IdObjectUpdateHelper {
      * @param updatedEntity - proposed update
      * @param <T>           - entity type
      */
-    <T extends IdObject> void validateUpdates(final AppUser updatingUser, final T currentEntity, final T updatedEntity);
+    <T extends IdObject> void vetInvalidFieldUpdates(final AppUser updatingUser, final T currentEntity, final T updatedEntity);
 }

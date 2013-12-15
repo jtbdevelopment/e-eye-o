@@ -110,7 +110,7 @@ public class HibernateReadWriteDAOTest {
         context.checking(new Expectations() {{
             allowing(appContext).getBean(IdObjectSerializer.class);
             will(returnValue(serializer));
-            allowing(idObjectUpdateHelper).validateUpdates(with(any(AppUser.class)), with(any(IdObject.class)), with(any(IdObject.class)));
+            allowing(idObjectUpdateHelper).vetInvalidFieldUpdates(with(any(AppUser.class)), with(any(IdObject.class)), with(any(IdObject.class)));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(deletedImpl.getClass());
             will(returnValue(DeletedObject.class));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(deletedLoaded.getClass());

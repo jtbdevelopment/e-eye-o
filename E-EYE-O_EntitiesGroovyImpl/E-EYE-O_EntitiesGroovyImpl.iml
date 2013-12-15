@@ -10,6 +10,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
     <orderEntry type="library" exported="" name="groovy-2.1.9" level="application" />
+    <orderEntry type="library" scope="TEST" name="org.jmock:jmock:2.5.1" level="project" />
+    <orderEntry type="library" name="gmock-0.8.3" level="project" />
   </component>
 </module>
 
