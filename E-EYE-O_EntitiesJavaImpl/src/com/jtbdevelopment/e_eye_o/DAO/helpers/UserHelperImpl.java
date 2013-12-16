@@ -22,9 +22,6 @@ import java.util.Set;
  * Date: 4/6/13
  * Time: 6:26 PM
  * <p/>
- * A base implementation you can extend for new user setup
- * You should implement a createSamplesForNewUser routine
- * to create default entries (if any) for new users
  */
 @Component
 public class UserHelperImpl implements UserHelper {
