@@ -73,7 +73,7 @@ class IdObjectFactoryGImplTest extends GroovyTestCase {
                 factory.newAppUserOwnedObject(notIdObject, null);
             } catch (IllegalArgumentException e) {
                 exception = true;
-                assert "You cannot use this method to create non-app userID owned objects." == e.getMessage();
+                assert "You cannot use this method to create non-app user owned objects." == e.getMessage();
             }
             assert exception: "Expected exception for " + notIdObject.getSimpleName();
         }
@@ -89,7 +89,7 @@ class IdObjectFactoryGImplTest extends GroovyTestCase {
                 factory.newAppUserOwnedObject(notAppUserObject, null);
             } catch (IllegalArgumentException e) {
                 exception = true;
-                assert "You cannot use this method to create non-app userID owned objects." == e.getMessage();
+                assert "You cannot use this method to create non-app user owned objects." == e.getMessage();
             }
             assert exception: "Expected exception for " + notAppUserObject.getSimpleName();
         }
