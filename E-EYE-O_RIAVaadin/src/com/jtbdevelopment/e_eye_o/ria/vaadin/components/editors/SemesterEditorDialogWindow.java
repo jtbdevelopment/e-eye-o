@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SemesterEditorDialogWindow extends GeneratedEditorDialogWindow<Semester> {
     public SemesterEditorDialogWindow() {
-        super(Semester.class, 50, 10.5f);
+        super(Semester.class, 50, 11.5f);
     }
 }
 
