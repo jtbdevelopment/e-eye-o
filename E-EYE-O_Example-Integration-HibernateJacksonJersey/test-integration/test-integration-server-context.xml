@@ -12,9 +12,9 @@
     <sec:global-method-security secured-annotations="enabled"/>
 
     <sec:http auto-config="true">
-        <sec:intercept-url pattern="/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <sec:intercept-url pattern="/**" access="ROLE_USER, ROLE_ADMIN"/>
-        <sec:form-login default-target-url="/REST/users/"/>
+        <sec:intercept-url pattern="/REST/v2/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <sec:intercept-url pattern="/REST/v2/**" access="ROLE_USER, ROLE_ADMIN"/>
+        <sec:form-login default-target-url="/REST/v2/users/**"/>
         <sec:remember-me services-ref="rememberMeServices" key="EEYEOTest"/>
     </sec:http>
 

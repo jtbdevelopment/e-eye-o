@@ -67,7 +67,7 @@ public class NewUserHelperImpl implements NewUserHelper {
         readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime().minusDays(1)).addCategory(c2).withComment("You can put general class observations too.").build());
 
         try {
-            URL url = com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelperImpl.class.getClassLoader().getResource("/simple.png");
+            URL url = com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper.class.getClassLoader().getResource("/simple.png");
             if (url == null) {
                 logger.warn("Unable to find simple.png");
                 return;

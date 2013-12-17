@@ -78,8 +78,8 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     private static HttpServer httpServer;
     private static final URI BASE_URI = UriBuilder.fromUri("http://localhost/").port(9998).build();
-    public static final String LOGIN_URI = BASE_URI + "security/login/";
-    public static final String USERS_URI = BASE_URI + "users/";
+    public static final String LOGIN_URI = BASE_URI + "v2/security/login/";
+    public static final String USERS_URI = BASE_URI + "v2/users/";
     private HttpClient adminClient, userClient1, userClient2;
 
     @BeforeMethod
