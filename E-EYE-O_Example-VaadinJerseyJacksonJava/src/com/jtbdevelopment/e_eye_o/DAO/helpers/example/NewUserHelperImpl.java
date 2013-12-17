@@ -77,7 +77,7 @@ public class NewUserHelperImpl implements NewUserHelper {
         )) {
             try {
                 final String defaultImage = "newusersamplephotos/" + string;
-                URL url = com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelperImpl.class.getClassLoader().getResource(defaultImage);
+                URL url = com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper.class.getClassLoader().getResource(defaultImage);
                 if (url == null) {
                     logger.warn("Unable to locate default image " + defaultImage);
                     continue;

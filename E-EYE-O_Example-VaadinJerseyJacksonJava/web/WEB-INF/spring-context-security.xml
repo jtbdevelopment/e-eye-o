@@ -11,10 +11,7 @@
         <!-- TODO - when old rest retired, simplify -->
         <intercept-url pattern="/E-EYE-O/Login/**" access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="https"/>
         <intercept-url pattern="/REST/v2/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="https"/>
-        <!-- TODO - below needs to be retired  -->
-        <intercept-url pattern="/REST/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any"/>
         <intercept-url pattern="/REST/v2/**" access="ROLE_USER, ROLE_ADMIN" requires-channel="https"/>
-        <intercept-url pattern="/REST/users/**" access="ROLE_USER, ROLE_ADMIN" requires-channel="any"/>
         <intercept-url pattern="/VAADIN/**" access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any"/>
         <intercept-url pattern="/WEB-INF" access="ROLE_USER, ROLE_ADMIN" requires-channel="any"/>
         <intercept-url pattern="/E-EYE-O/**" access="ROLE_USER, ROLE_ADMIN" requires-channel="https"/>
