@@ -47,7 +47,7 @@ class ObservationCategoryHelperGImplTest extends GroovyTestCase {
             }
         })
 
-        LinkedHashMap<String, String> map = [(cat1.shortName): cat1.description, (cat2.shortName): cat2.description, (cat3.shortName): cat3.description]
+        LinkedHashMap<String, ObservationCategory> map = [(cat1.shortName): cat1, (cat2.shortName): cat2, (cat3.shortName): cat3]
         assert map == observationCategoryHelper.getObservationCategoriesAsMap((AppUser) user);
     }
 

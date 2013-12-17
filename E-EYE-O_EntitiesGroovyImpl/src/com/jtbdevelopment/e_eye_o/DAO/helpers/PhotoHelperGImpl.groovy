@@ -38,7 +38,7 @@ class PhotoHelperGImpl implements PhotoHelper {
     }
 
     private void resizeWithMimeType(final Photo photo) {
-        if (photo.getMimeType() && photo.getImageData() != null && photo.getImageData().length > 0) {
+        if (photo.getMimeType() && photo.getImageData()) {
             standardizePrimaryImage(photo);
             updateThumbnailImage(photo);
         }

@@ -18,6 +18,6 @@ class ObservationCategoryHelperGImpl implements ObservationCategoryHelper {
     @Override
     Map<String, ObservationCategory> getObservationCategoriesAsMap(final AppUser appUser) {
         Set<ObservationCategory> categories = readOnlyDAO.getEntitiesForUser(ObservationCategory.class, appUser, 0, 0)
-        categories.collectEntries({ [(it.shortName): it.description] })
+        categories.collectEntries({ [(it.shortName): it] })
     }
 }

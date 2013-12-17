@@ -2,11 +2,13 @@ package com.jtbdevelopment.e_eye_o.entities.events
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject
 import com.jtbdevelopment.e_eye_o.entities.IdObject
+import org.springframework.stereotype.Component
 
 /**
  * Date: 12/8/13
  * Time: 8:14 AM
  */
+@Component
 class EventFactoryGImpl implements EventFactory {
     @Override
     def <T extends AppUserOwnedObject> AppUserOwnedObjectChanged<T> newAppUserOwnedObjectChanged(final IdObjectChanged.ChangeType changeType, final T entity) {

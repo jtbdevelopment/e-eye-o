@@ -9,49 +9,49 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class AppUserSettingsGImpl extends AppUserOwnedObjectGImpl implements AppUserSettings {
-    Map<String, String> settings = [:]
+    Map<String, String> settingsMap = [:]
 
     @Override
     public Map<String, String> getSettings() {
-        return settings.asImmutable()
+        return settingsMap.asImmutable()
     }
 
     @Override
     public void setSettings(final Map<String, Object> settings) {
-        settings.clear()
+        this.settingsMap.clear()
         updateSettings(settings)
     }
 
     @Override
-    public void updateSettings(final Map<String, Object> settings) {
-        settings.each { String key, Object value -> this.settings += [(key): value.toString()] }
+    public void updateSettings(final Map<String, Object> s) {
+        s.each { String key, Object value -> this.settingsMap += [(key): value.toString()] }
     }
 
     @Override
     void setSetting(final String name, final Object value) {
-        this.settings.put(name, value.toString())
+        this.settingsMap.put(name, value.toString())
     }
 
     @Override
     String getSettingAsString(final String name, final String defaultValue) {
-        if (settings.containsKey(name)) {
-            return settings[(name)]
+        if (settingsMap.containsKey(name)) {
+            return settingsMap[(name)]
         }
         return defaultValue
     }
 
     @Override
     int getSettingAsInt(final String name, final int defaultValue) {
-        if (settings.containsKey(name)) {
-            return settings[(name)].toInteger()
+        if (settingsMap.containsKey(name)) {
+            return settingsMap[(name)].toInteger()
         }
         return defaultValue
     }
 
     @Override
     boolean getSettingAsBoolean(final String name, final boolean defaultValue) {
-        if (settings.containsKey(name)) {
-            return settings[(name)].toBoolean()
+        if (settingsMap.containsKey(name)) {
+            return settingsMap[(name)].toBoolean()
         }
         return defaultValue
     }

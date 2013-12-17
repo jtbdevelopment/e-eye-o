@@ -61,7 +61,7 @@ public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
             i = (Class<T>) i.interfaces?.length == 1 ? i.interfaces[0] : null
         }
         Map<String, Method> all = map.findAll({ key, value -> value != null }).findAll { entry ->
-            !entry.value.isAnnotationPresent(Transient.class)
+            !entry.value.isAnnotationPresent(Transient.class) && "class" != entry.key
         }
         return all
     }
