@@ -29,6 +29,5 @@ public interface IdObjectSerializer {
 
     <T> T read(final String input);
 
-    Map<String, Object> readToMap(final String input);
-
+    <T> T readNoPOJO(final String input);
 }

@@ -29,7 +29,7 @@ import javax.ws.rs.core.Response;
 public class AccessControlResourceV2 {
     private static final Logger logger = LoggerFactory.getLogger(AccessControlResourceV2.class);
 
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "2.0";
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";
 

@@ -1,15 +1,15 @@
 package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Date: 2/18/13
  * Time: 11:26 AM
  */
-public interface JacksonIdObjectDeserializer {
+public interface JacksonIdObjectDeserializerV2 {
     @SuppressWarnings("unchecked")
-    IdObject deserialize(JsonParser parser) throws IOException;
+    <T extends IdObject> T deserialize(final Map<String, Object> values) throws IOException;
 }

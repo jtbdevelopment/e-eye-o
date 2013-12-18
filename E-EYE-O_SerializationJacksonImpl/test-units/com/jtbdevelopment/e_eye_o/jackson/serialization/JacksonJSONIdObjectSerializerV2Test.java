@@ -25,27 +25,27 @@ import static org.testng.Assert.assertTrue;
  * Date: 2/18/13
  * Time: 5:25 PM
  */
-public class JacksonJSONIdObjectSerializerTest {
+public class JacksonJSONIdObjectSerializerV2Test {
 
     private final String newline = System.getProperty("line.separator");
 
     private Mockery context;
-    private JacksonIdObjectDeserializer deserializer;
+    private JacksonIdObjectDeserializerV2 deserializer;
     private JacksonIdObjectSerializer serializer;
-    private JacksonJSONIdObjectSerializer readWrite;
+    private JacksonJSONIdObjectSerializerV2 readWrite;
 
     @BeforeMethod
     public void setUp() {
         context = new Mockery();
         serializer = context.mock(JacksonIdObjectSerializer.class);
-        deserializer = context.mock(JacksonIdObjectDeserializer.class);
-        readWrite = new JacksonJSONIdObjectSerializer(serializer, deserializer);
+        deserializer = context.mock(JacksonIdObjectDeserializerV2.class);
+        readWrite = new JacksonJSONIdObjectSerializerV2(serializer, deserializer);
     }
 
     @Test
     public void testInterrogateSettings() {
         final LocalDate jodaDT = new LocalDate(2012, 4, 15);
-        readWrite = new JacksonJSONIdObjectSerializer(new JacksonIdObjectSerializer() {
+        readWrite = new JacksonJSONIdObjectSerializerV2(new JacksonIdObjectSerializer() {
             @Override
             public void serialize(final IdObject value, final JsonGenerator generator) throws IOException {
                 //  Confirm JODA module registered

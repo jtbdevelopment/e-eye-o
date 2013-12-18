@@ -57,7 +57,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     private HttpHelper httpHelper;
 
     @Autowired
-    private JSONIdObjectSerializer jsonIdObjectSerializer;
+    private JSONIdObjectSerializer JacksonJSONIdObjectSerializerV2;
 
     @Autowired
     private ReadWriteDAO readWriteDAO;
@@ -193,20 +193,20 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     @Test
     public void testGetVersion() throws Exception {
-        String uri = BASE_URI + "/security/version";
+        String uri = BASE_URI + "/v2/security/version";
         HttpResponse response = httpHelper.httpGet(uri, adminClient);
-        assertEquals("1.0", EntityUtils.toString(response.getEntity()));
+        assertEquals("2.0", EntityUtils.toString(response.getEntity()));
     }
 
     @Test
     public void testGetUserStandard() throws Exception {
         String uri = USERS_URI;
-        httpHelper.checkJSONVsExpectedResult(uri, userClient1, testUser1);
+        httpHelper.checkJSONVsExpectedResults(uri, userClient1, Arrays.asList(testUser1));
     }
 
     @Test
     public void testGetUsersAdmin() throws Exception {
-        String uri = BASE_URI + "users/";
+        String uri = USERS_URI;
         List<AppUser> expectedResults = Arrays.asList(testAdmin, testUser1, testUser2);
         httpHelper.checkJSONVsExpectedResults(uri, adminClient, expectedResults);
     }
@@ -221,7 +221,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         testUser1.setPassword("new"); //  should be ignored
         testUser1.setLastLogout(new DateTime());  // should be ignored
 
-        String s = httpHelper.getJSONFromPut(USERS_URI, userClient1, testUser1);
+        String s = httpHelper.getJSONFromPut(USERS_URI + testUser1.getId() + "/", userClient1, testUser1);
 
         AppUser dbTestUser1 = readWriteDAO.get(AppUser.class, testUser1.getId());
         assertEquals(testUser1.getLastName(), dbTestUser1.getLastName());
@@ -231,7 +231,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertTrue(dbTestUser1.isActive());
         assertEquals(AppUser.NEVER_LOGGED_IN, dbTestUser1.getLastLogout());
 
-        assertEquals(jsonIdObjectSerializer.writeEntity(dbTestUser1), s);
+        assertEquals(JacksonJSONIdObjectSerializerV2.writeEntity(dbTestUser1), s);
 
         JerseyRestViaGrizzlyIntegration.testUser1 = dbTestUser1;
     }
@@ -246,7 +246,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         testUser2.setPassword("new");  //  should be ignored
         testUser2.setLastLogout(new DateTime());  // should be ignored
 
-        String s = httpHelper.getJSONFromPut(USERS_URI, adminClient, testUser2);
+        String s = httpHelper.getJSONFromPut(USERS_URI + testUser2.getId() + "/", adminClient, testUser2);
 
         AppUser dbTestUser2 = readWriteDAO.get(AppUser.class, testUser2.getId());
         assertEquals(testUser2.getFirstName(), dbTestUser2.getFirstName());
@@ -256,7 +256,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertFalse(dbTestUser2.isActive());
         assertEquals(AppUser.NEVER_LOGGED_IN, dbTestUser2.getLastLogout());
 
-        assertEquals(jsonIdObjectSerializer.writeEntity(dbTestUser2), s);
+        assertEquals(JacksonJSONIdObjectSerializerV2.writeEntity(dbTestUser2), s);
         JerseyRestViaGrizzlyIntegration.testUser2 = dbTestUser2;
     }
 
@@ -265,9 +265,9 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         AppUser user2 = httpHelper.easyClone(testUser2);
         user2.setLastName("Won't change");
 
-        HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, user2);
+        HttpResponse response = httpHelper.httpPut(USERS_URI + testUser2.getId() + "/", userClient1, user2);
         EntityUtils.consumeQuietly(response.getEntity());
-        assertEquals(javax.ws.rs.core.Response.Status.FORBIDDEN.getStatusCode(), response.getStatusLine().getStatusCode());
+        assertEquals(405, response.getStatusLine().getStatusCode());
 
         AppUser dbTestUser2 = readWriteDAO.get(AppUser.class, testUser2.getId());
         assertFalse(dbTestUser2.getLastName().equals(user2.getLastName()));
@@ -279,7 +279,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
         HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, newUser);
         EntityUtils.consumeQuietly(response.getEntity());
-        assertEquals(javax.ws.rs.core.Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine().getStatusCode());
+        assertEquals(405, response.getStatusLine().getStatusCode());
     }
 
     @Test
@@ -288,28 +288,28 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
         HttpResponse response = httpHelper.httpPut(USERS_URI, userClient1, newUser);
         EntityUtils.consumeQuietly(response.getEntity());
-        assertEquals(javax.ws.rs.core.Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine().getStatusCode());
+        assertEquals(405, response.getStatusLine().getStatusCode());
     }
 
     @Test
     public void testGetOwnObjects() throws Exception {
         Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1, 0, 0));
         String uri = USERS_URI + testUser1.getId() + "/";
-        httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
+        httpHelper.checkPaginatedJSONVsExpectedResults(uri, userClient1, owned);
     }
 
     @Test
     public void testGetOwnActiveObjects() throws Exception {
         Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getActiveEntitiesForUser(AppUserOwnedObject.class, testUser1, 0, 0));
         String uri = USERS_URI + testUser1.getId() + "/active/";
-        httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
+        httpHelper.checkPaginatedJSONVsExpectedResults(uri, userClient1, owned);
     }
 
     @Test
     public void testGetOwnArchivedObjects() throws Exception {
         Set<AppUserOwnedObject> owned = readWriteDAO.getArchivedEntitiesForUser(AppUserOwnedObject.class, testUser1, 0, 0);
         String uri = USERS_URI + testUser1.getId() + "/archived/";
-        httpHelper.checkJSONVsExpectedResults(uri, userClient1, owned);
+        httpHelper.checkPaginatedJSONVsExpectedResults(uri, userClient1, owned);
     }
 
     @Test
@@ -320,13 +320,13 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         for (Class<? extends AppUserOwnedObject> entityClass : Arrays.asList(ClassList.class, Student.class, ObservationCategory.class, Observation.class, Photo.class)) {
             final String entityType = entityClass.getAnnotation(IdObjectEntitySettings.class).plural().toLowerCase() + "/";
             String uri = user_uri + entityType;
-            httpHelper.checkJSONVsExpectedResults(uri, userClient1, readWriteDAO.getEntitiesForUser(entityClass, testUser1, 0, 0));
+            httpHelper.checkPaginatedJSONVsExpectedResults(uri, userClient1, readWriteDAO.getEntitiesForUser(entityClass, testUser1, 0, 0));
             final Set<? extends AppUserOwnedObject> activeEntitiesForUser = readWriteDAO.getActiveEntitiesForUser(entityClass, testUser1, 0, 0);
             final Set<? extends AppUserOwnedObject> archivedEntitiesForUser = readWriteDAO.getArchivedEntitiesForUser(entityClass, testUser1, 0, 0);
-            httpHelper.checkJSONVsExpectedResults(uri + "active/", userClient1, activeEntitiesForUser);
-            httpHelper.checkJSONVsExpectedResults(uri + "archived/", userClient1, archivedEntitiesForUser);
-            httpHelper.checkJSONVsExpectedResults(user_active_uri + entityType, userClient1, activeEntitiesForUser);
-            httpHelper.checkJSONVsExpectedResults(user_archived_uri + entityType, userClient1, archivedEntitiesForUser);
+            httpHelper.checkPaginatedJSONVsExpectedResults(uri + "active/", userClient1, activeEntitiesForUser);
+            httpHelper.checkPaginatedJSONVsExpectedResults(uri + "archived/", userClient1, archivedEntitiesForUser);
+            httpHelper.checkPaginatedJSONVsExpectedResults(user_active_uri + entityType, userClient1, activeEntitiesForUser);
+            httpHelper.checkPaginatedJSONVsExpectedResults(user_archived_uri + entityType, userClient1, archivedEntitiesForUser);
         }
     }
 
@@ -351,7 +351,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
     public void testGetAnotherUsersObjectsAsAdmin() throws Exception {
         Collection<AppUserOwnedObject> owned = filterUnreadableItems(readWriteDAO.getEntitiesForUser(AppUserOwnedObject.class, testUser1, 0, 0));
         String uri = USERS_URI + testUser1.getId() + "/";
-        httpHelper.checkJSONVsExpectedResults(uri, adminClient, owned);
+        httpHelper.checkPaginatedJSONVsExpectedResults(uri, adminClient, owned);
     }
 
     private <T extends AppUserOwnedObject> Collection<T> filterUnreadableItems(final Set<T> results) {
@@ -382,7 +382,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
         uri = headers[0].getValue();
         String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
-        ObservationCategory readCategory = jsonIdObjectSerializer.read(newJson);
+        ObservationCategory readCategory = JacksonJSONIdObjectSerializerV2.read(newJson);
         assertEquals(category.getDescription(), readCategory.getDescription());
         assertEquals(category.getShortName(), readCategory.getShortName());
         assertTrue(readCategory.getModificationTimestamp().isAfter(now));
@@ -399,12 +399,12 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertEquals(1, headers.length);
         uri = headers[0].getValue();
         String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
-        ClassList createdClassList = jsonIdObjectSerializer.read(newJson);
+        ClassList createdClassList = JacksonJSONIdObjectSerializerV2.read(newJson);
 
         String newDescription = "Modified Class";
         createdClassList.setDescription(newDescription);
         newJson = httpHelper.getJSONFromPut(uri, userClient1, createdClassList);
-        ClassList modifiedClassList = jsonIdObjectSerializer.read(newJson);
+        ClassList modifiedClassList = JacksonJSONIdObjectSerializerV2.read(newJson);
         assertTrue(modifiedClassList.equals(createdClassList));
         assertEquals(newDescription, modifiedClassList.getDescription());
         assertTrue(modifiedClassList.getModificationTimestamp().isAfter(createdClassList.getModificationTimestamp()));
@@ -421,7 +421,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertEquals(1, headers.length);
         uri = headers[0].getValue();
         String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
-        final Student createdStudent = jsonIdObjectSerializer.read(newJson);
+        final Student createdStudent = JacksonJSONIdObjectSerializerV2.read(newJson);
 
         DateTime now = DateTime.now();
 

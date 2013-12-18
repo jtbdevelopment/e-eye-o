@@ -15,8 +15,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObjectSerializer.ENTITY_TYPE_FIELD;
-import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObjectSerializer.ID_FIELD;
+import static com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer.ENTITY_TYPE_FIELD;
+import static com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer.ID_FIELD;
 
 /**
  * Date: 1/27/13
@@ -57,6 +57,7 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
             } else if (Set.class.isAssignableFrom(valueType)) {
                 writeSet(generator, (Set) fieldValue);
             } else if (valueType.isArray()) {
+                //  Photo data only user right now
                 String base64 = new String(Base64.encode((byte[]) fieldValue));
                 generator.writeObject(base64);
             } else {

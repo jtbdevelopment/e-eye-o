@@ -1,8 +1,6 @@
 package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
@@ -21,7 +19,7 @@ import java.util.*;
  * Date: 1/26/13
  * Time: 10:35 PM
  * <p/>
- * The intent of this customization is to provide two features:
+ * The intent of this customization is to provide four features:
  * 1)  clearly identify entity type on serialization
  * 2)  automatic type detection on deserialization from 1)
  * 3)  only shallow serialize to other entities - if a photo refers to a student, do not serialize out all the student details, just the entity type and id
@@ -29,18 +27,17 @@ import java.util.*;
  * <p/>
  */
 @Service
-public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
-    public static final String ENTITY_TYPE_FIELD = "entityType";
-    public static final String ID_FIELD = "id";
-
+public class JacksonJSONIdObjectSerializerV2 implements JSONIdObjectSerializer {
     private final MappingJsonFactory jsonFactory;
     private final JacksonIdObjectSerializer jacksonIdObjectSerializer;
-    private final JacksonIdObjectDeserializer jacksonIdObjectDeserializer;
+    private final JacksonIdObjectDeserializerV2 jacksonIdObjectDeserializer;
+    private final ObjectMapper mapper;
 
     @Autowired
-    public JacksonJSONIdObjectSerializer(final JacksonIdObjectSerializer jacksonIdObjectSerializer, final JacksonIdObjectDeserializer jacksonIdObjectDeserializer) {
+    public JacksonJSONIdObjectSerializerV2(final JacksonIdObjectSerializer jacksonIdObjectSerializer, final JacksonIdObjectDeserializerV2 jacksonIdObjectDeserializer) {
         jsonFactory = new MappingJsonFactory();
         jsonFactory.getCodec().registerModule(new JodaModule());
+        mapper = new ObjectMapper();
         this.jacksonIdObjectSerializer = jacksonIdObjectSerializer;
         this.jacksonIdObjectDeserializer = jacksonIdObjectDeserializer;
     }
@@ -108,7 +105,6 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
 
     public Map<String, Object> readToMap(final String input) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(input,
                     new TypeReference<HashMap<String, Object>>() {
                     }
@@ -118,24 +114,52 @@ public class JacksonJSONIdObjectSerializer implements JSONIdObjectSerializer {
         }
     }
 
+    private boolean isPaginatedList(final Map<String, Object> valueMap) {
+        return valueMap.size() == 2 && valueMap.containsKey(MORE_FIELD) && valueMap.containsKey(ENTITIES_FIELD);
+    }
+
+    private <T extends IdObject> T readMap(final Map<String, Object> valueMap) throws IOException {
+        return jacksonIdObjectDeserializer.deserialize(valueMap);
+    }
+
+    private <T extends IdObject> List<T> readList(final List<Map<String, Object>> valueArray) throws IOException {
+        final List<T> returnList = new LinkedList<>();
+        for (Map<String, Object> valueMap : valueArray) {
+            returnList.add((T) readMap(valueMap));
+        }
+        return returnList;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
+    public <T> T readNoPOJO(final String input) {
+        try {
+            return (T) mapper.readValue(input, Object.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public <T> T read(final String input) {
-        try (final JsonParser parser = jsonFactory.createJsonParser(input)) {
-            JsonToken token = parser.nextToken();
-            switch (token) {
-                case START_OBJECT:
-                    final T deserialized = (T) jacksonIdObjectDeserializer.deserialize(parser);
-                    parser.close();
-                    return deserialized;
-                case START_ARRAY:
-                    final List<IdObject> returnList = new LinkedList<>();
-                    while (parser.nextToken() != JsonToken.END_ARRAY) {
-                        returnList.add(jacksonIdObjectDeserializer.deserialize(parser));
-                    }
-                    parser.close();
-                    return (T) returnList;
-                default:
-                    throw new IllegalArgumentException("Invalid json input - does not start with array or object.");
+        try {
+            Object values = readNoPOJO(input);
+            if (values instanceof Map) {
+                Map<String, Object> valueMap = (Map<String, Object>) values;
+                if (isPaginatedList(valueMap)) {
+                    Map<String, Object> paginatedResult = new HashMap<>();
+                    paginatedResult.put(MORE_FIELD, valueMap.get(MORE_FIELD));
+                    paginatedResult.put(ENTITIES_FIELD, readList((List<Map<String, Object>>) valueMap.get(ENTITIES_FIELD)));
+                    return (T) paginatedResult;
+                } else {
+                    return (T) readMap(valueMap);
+                }
+            } else if (values instanceof List) {
+                return (T) readList((List<Map<String, Object>>) values);
+
+            } else {
+                throw new RuntimeException("readValue produced non-list/non-map object " + values.getClass().getName());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

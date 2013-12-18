@@ -160,7 +160,7 @@ public class AppUserResourceV2 {
             @Nullable
             @Override
             public Map<String, Object> apply(@Nullable String input) {
-                return input != null ? jsonIdObjectSerializer.readToMap(input) : null;
+                return input != null ? (Map<String, Object>) jsonIdObjectSerializer.readNoPOJO(input) : null;
             }
         });
         return Response.ok(computePaginatedResults(listMap, PAGE_SIZE)).build();

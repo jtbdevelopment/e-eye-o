@@ -28,7 +28,7 @@ public class JacksonJSONIdObjectSerializerIntegration extends AbstractTestNGSpri
     private final static String newline = System.getProperty("line.separator");
 
     @Autowired
-    private JacksonJSONIdObjectSerializer serializer;
+    private JacksonJSONIdObjectSerializerV2 serializer;
 
     @Autowired
     private ReadWriteDAO readWriteDAO;

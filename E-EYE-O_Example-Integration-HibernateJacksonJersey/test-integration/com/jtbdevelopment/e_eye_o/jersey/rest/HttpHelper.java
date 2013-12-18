@@ -19,7 +19,9 @@ import org.testng.AssertJUnit;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class HttpHelper {
@@ -76,6 +78,21 @@ public class HttpHelper {
     <T extends IdObject> void checkJSONVsExpectedResults(final String uri, final HttpClient client, final Collection<T> expectedResults) throws IOException {
         String json = getJSONFromHttpGet(uri, client);
         List<T> results = jsonIdObjectSerializer.read(json);
+        AssertJUnit.assertTrue(results.containsAll(expectedResults));
+    }
+
+    <T extends IdObject> void checkPaginatedJSONVsExpectedResults(final String uri, final HttpClient client, final Collection<T> expectedResults) throws IOException {
+        int page = 1;
+        boolean more = true;
+        List<T> results = new LinkedList<>();
+        while (more) {
+            String pageURI = uri + "?page=" + page;
+            String json = getJSONFromHttpGet(pageURI, client);
+            Map<String, Object> pageResults = jsonIdObjectSerializer.read(json);
+            more = (Boolean) pageResults.get("more");
+            results.addAll((List<T>) pageResults.get("entities"));
+            ++page;
+        }
         AssertJUnit.assertTrue(results.containsAll(expectedResults));
     }
 
