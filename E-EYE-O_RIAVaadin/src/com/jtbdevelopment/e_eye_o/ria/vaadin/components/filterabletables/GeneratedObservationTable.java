@@ -175,7 +175,7 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         }
         dateRangeFilter = new Between("observationTimestamp",
                 new LocalDateTime(from.getConvertedValue()),
-                new LocalDate(to.getConvertedValue()).toLocalDateTime(LocalTime.MIDNIGHT).minusSeconds(1));
+                new LocalDate(to.getConvertedValue()).plusDays(1).toLocalDateTime(LocalTime.MIDNIGHT).minusSeconds(1));
         entities.addContainerFilter(dateRangeFilter);
         refreshSizeAndSort();
     }
