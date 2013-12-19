@@ -76,7 +76,7 @@ public class JacksonJSONIdObjectSerializerV2 implements JSONIdObjectSerializer {
     }
 
     @Override
-    public String writeMap(Map<String, Object> map) {
+    public String writeMap(final Map<String, Object> map) {
         try (JsonGenerator generator = createGenerator()) {
             generator.writeStartObject();
             for (Map.Entry<String, Object> entry : map.entrySet()) {
