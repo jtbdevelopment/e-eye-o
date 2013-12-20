@@ -7,8 +7,6 @@
       <root url="jar://$PROJECT_DIR$/lib/itext-2.1.7.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$USER_HOME$/.ideaLibSources/jasperreports-5.1.0-sources.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

@@ -26,8 +26,8 @@ public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
 
     @Override
     public Map<String, Method> getAllGetMethods(final Class<? extends IdObject> entityType) {
-        Closure<Map<String, Method>> getGetter = {
-            p ->
+        Closure getGetter = {
+            MetaProperty p ->
                 [(p.name): ((CachedMethod) ((MetaBeanProperty) p).getGetter())?.getCachedMethod()]
         }
         return traverseInterfaces(entityType, getGetter)
@@ -35,8 +35,8 @@ public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
 
     @Override
     public Map<String, Method> getAllSetMethods(final Class<? extends IdObject> entityType) {
-        Closure<Map<String, Method>> getSetter = {
-            p ->
+        Closure getSetter = {
+            MetaProperty p ->
                 [(p.name): ((CachedMethod) ((MetaBeanProperty) p).getSetter())?.getCachedMethod()]
         }
         return traverseInterfaces(entityType, getSetter)
@@ -45,14 +45,14 @@ public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
     @Override
     public Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<? extends IdObject> entityType) {
         Map<String, Method> gets = getAllGetMethods(entityType)
-        def map = [:]
+        Map<String, IdObjectFieldSettings> map = [:]
         gets.each({ key, value ->
             map += [(key): value.getAnnotation(IdObjectFieldSettings.class)]
         })
         return map;
     }
 
-    private <T extends IdObject> Map<String, Method> traverseInterfaces(final Class<T> entityType, final Closure<Map<String, ?>> function) {
+    private <T extends IdObject> Map<String, Method> traverseInterfaces(final Class<T> entityType, final Closure function) {
         Class<T> i = getIdObjectInterfaceForClass(entityType)
         def map = [:] as Map<String, Method>
         while (i != null) {
