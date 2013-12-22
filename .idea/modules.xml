@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_RIAGrails/E-EYE-O_RIAGrails.iml" filepath="$PROJECT_DIR$/E-EYE-O_RIAGrails/E-EYE-O_RIAGrails.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_RIAVaadin/E-EYE-O_RIAVaadin.iml" filepath="$PROJECT_DIR$/E-EYE-O_RIAVaadin/E-EYE-O_RIAVaadin.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_ReportsJasper/E-EYE-O_ReportsJasper.iml" filepath="$PROJECT_DIR$/E-EYE-O_ReportsJasper/E-EYE-O_ReportsJasper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_SerializationGroovy/E-EYE-O_SerializationGroovy.iml" filepath="$PROJECT_DIR$/E-EYE-O_SerializationGroovy/E-EYE-O_SerializationGroovy.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_SerializationJacksonImpl/E-EYE-O_SerializationJacksonImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_SerializationJacksonImpl/E-EYE-O_SerializationJacksonImpl.iml" />
     </modules>
   </component>

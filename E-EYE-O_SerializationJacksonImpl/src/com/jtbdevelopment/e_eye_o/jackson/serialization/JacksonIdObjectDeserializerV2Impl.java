@@ -75,7 +75,7 @@ public class JacksonIdObjectDeserializerV2Impl implements JacksonIdObjectDeseria
                     handleString(returnObject, fieldType, fieldName, (String) value);
                 } else if (value instanceof Boolean) {
                     handleBoolean(returnObject, fieldName, (Boolean) value);
-                } else if (value instanceof Float) {
+                } else if (value instanceof Float) {   //  TODO - any use cases?
                     handleFloat(returnObject, fieldType, fieldName, (Float) value);
                 } else if (value instanceof Number) {
                     handleInteger(returnObject, fieldType, fieldName, (Number) value);

@@ -1,10 +1,5 @@
 package com.jtbdevelopment.e_eye_o.serialization;
 
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
-
-import java.util.Collection;
-import java.util.Map;
-
 /**
  * Date: 1/26/13
  * Time: 10:29 PM
@@ -21,13 +16,17 @@ import java.util.Map;
  * So for
  */
 public interface IdObjectSerializer {
-    String writeEntity(final IdObject entity);
+    /**
+     * @param entity accepts:
+     *               IdObject -> single entity json
+     *               Collection<? extends IdObject> -> array of json
+     *               PaginatedIdObjectList -> entity with fields + internal array of objects
+     *               Everything else is an exception
+     * @return json string
+     */
+    String write(final Object entity);
 
-    String writeEntities(final Collection<? extends IdObject> entities);
+    <T> T readAsObjects(final String input);
 
-    String writeMap(final Map<String, Object> map);
-
-    <T> T read(final String input);
-
-    <T> T readNoPOJO(final String input);
+    <T> T readRaw(final String input);
 }

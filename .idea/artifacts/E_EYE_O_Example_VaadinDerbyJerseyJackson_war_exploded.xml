@@ -12,6 +12,7 @@
           <element id="module-output" name="E-EYE-O_RIAVaadin" />
           <element id="module-output" name="E-EYE-O_DAOHibernateImpl" />
           <element id="module-output" name="E-EYE-O_ReportsJasper" />
+          <element id="module-output" name="E-EYE-O_EntitiesGroovyImpl" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="joda-time:joda-time:2.1" />

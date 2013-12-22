@@ -30,7 +30,7 @@ public class HttpHelper {
 
 
     public <T extends IdObject> T easyClone(final T entity) {
-        return jsonIdObjectSerializer.read(jsonIdObjectSerializer.writeEntity(entity));
+        return jsonIdObjectSerializer.readAsObjects(jsonIdObjectSerializer.write(entity));
     }
 
     HttpResponse httpGet(final String uri, final HttpClient client) throws IOException {
@@ -44,7 +44,7 @@ public class HttpHelper {
     }
 
     <T extends IdObject> HttpResponse httpPost(final String uri, final HttpClient httpClient, final String paramName, final T paramValue) throws IOException {
-        return httpPostJson(uri, httpClient, jsonIdObjectSerializer.writeEntity(paramValue));
+        return httpPostJson(uri, httpClient, jsonIdObjectSerializer.write(paramValue));
     }
 
     public HttpResponse httpPostJson(String uri, HttpClient httpClient, final String json) throws IOException {
@@ -63,7 +63,7 @@ public class HttpHelper {
     }
 
     <T extends IdObject> HttpResponse httpPut(final String uri, final HttpClient httpClient, final T entity) throws IOException {
-        StringEntity stringEntity = new StringEntity(jsonIdObjectSerializer.writeEntity(entity));
+        StringEntity stringEntity = new StringEntity(jsonIdObjectSerializer.write(entity));
         HttpPut httpPut = new HttpPut(uri);
         httpPut.setHeader("Content-Type", "application/json");
         httpPut.setEntity(stringEntity);
@@ -72,12 +72,12 @@ public class HttpHelper {
 
     <T extends IdObject> void checkJSONVsExpectedResult(final String uri, final HttpClient client, final T expectedResult) throws IOException {
         String json = getJSONFromHttpGet(uri, client);
-        AssertJUnit.assertEquals(json, jsonIdObjectSerializer.writeEntity(expectedResult));
+        AssertJUnit.assertEquals(json, jsonIdObjectSerializer.write(expectedResult));
     }
 
     <T extends IdObject> void checkJSONVsExpectedResults(final String uri, final HttpClient client, final Collection<T> expectedResults) throws IOException {
         String json = getJSONFromHttpGet(uri, client);
-        List<T> results = jsonIdObjectSerializer.read(json);
+        List<T> results = jsonIdObjectSerializer.readAsObjects(json);
         AssertJUnit.assertTrue(results.containsAll(expectedResults));
     }
 
@@ -88,7 +88,7 @@ public class HttpHelper {
         while (more) {
             String pageURI = uri + "?page=" + page;
             String json = getJSONFromHttpGet(pageURI, client);
-            Map<String, Object> pageResults = jsonIdObjectSerializer.read(json);
+            Map<String, Object> pageResults = jsonIdObjectSerializer.readAsObjects(json);
             more = (Boolean) pageResults.get("more");
             results.addAll((List<T>) pageResults.get("entities"));
             ++page;

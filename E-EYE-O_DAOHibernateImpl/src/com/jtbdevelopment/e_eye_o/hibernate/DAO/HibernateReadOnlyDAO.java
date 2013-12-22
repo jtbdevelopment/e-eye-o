@@ -9,6 +9,8 @@ import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
+import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -20,7 +22,10 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,12 +38,20 @@ import java.util.*;
  */
 @SuppressWarnings("unused")
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class HibernateReadOnlyDAO implements ReadOnlyDAO {
+public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAware {
     private final static Logger logger = LoggerFactory.getLogger(HibernateReadOnlyDAO.class);
 
     protected final IdObjectReflectionHelper idObjectReflectionHelper;
     protected final SessionFactory sessionFactory;
     protected final IdObjectWrapperFactory wrapperFactory;
+    private JSONIdObjectSerializer jsonIdObjectSerializer;
+
+    protected ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
     @Autowired
     public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
@@ -169,7 +182,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, final int maxResults) {
+    public List<? extends AppUserOwnedObject> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, final int maxResults) {
         Criteria criteria = sessionFactory.getCurrentSession()
                 .createCriteria(HibernateHistory.class)
                 .add(Restrictions.eq("appUser", appUser))
@@ -186,11 +199,12 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
             criteria.setMaxResults(maxResults);
         }
         List<HibernateHistory> results = criteria.list();
-        Collection<String> transformedResults = Collections2.transform(results, new Function<HibernateHistory, String>() {
+        final IdObjectSerializer idObjectSerializer = getJSONIdObjectSerializer();
+        Collection<? extends AppUserOwnedObject> transformedResults = Collections2.transform(results, new Function<HibernateHistory, AppUserOwnedObject>() {
             @Nullable
             @Override
-            public String apply(@Nullable HibernateHistory input) {
-                return input == null ? null : input.getSerializedVersion();
+            public AppUserOwnedObject apply(@Nullable HibernateHistory input) {
+                return (AppUserOwnedObject) (input == null ? null : idObjectSerializer.readAsObjects(input.getSerializedVersion()));
             }
         });
 
@@ -326,5 +340,12 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         }
 
         return sessionFactory.getClassMetadata(wrapperFor).getEntityName();
+    }
+
+    protected JSONIdObjectSerializer getJSONIdObjectSerializer() {
+        if (jsonIdObjectSerializer == null) {
+            jsonIdObjectSerializer = applicationContext.getBean(JSONIdObjectSerializer.class);
+        }
+        return jsonIdObjectSerializer;
     }
 }

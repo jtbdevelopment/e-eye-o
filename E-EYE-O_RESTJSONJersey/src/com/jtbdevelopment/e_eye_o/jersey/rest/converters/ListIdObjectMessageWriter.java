@@ -34,6 +34,6 @@ public class ListIdObjectMessageWriter extends AbstractMessageBodyWriter<Collect
 
     @Override
     public void writeTo(Collection<? extends IdObject> idObjects, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
-        writeStringToStreamAsUTF8(idObjectSerializer.writeEntities(idObjects), entityStream);
+        writeStringToStreamAsUTF8(idObjectSerializer.write(idObjects), entityStream);
     }
 }

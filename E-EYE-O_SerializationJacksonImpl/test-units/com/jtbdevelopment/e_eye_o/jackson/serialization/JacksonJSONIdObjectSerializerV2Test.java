@@ -2,10 +2,7 @@ package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.entities.Observation;
-import com.jtbdevelopment.e_eye_o.entities.Student;
+import com.jtbdevelopment.e_eye_o.entities.*;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.joda.time.LocalDate;
@@ -33,13 +30,15 @@ public class JacksonJSONIdObjectSerializerV2Test {
     private JacksonIdObjectDeserializerV2 deserializer;
     private JacksonIdObjectSerializer serializer;
     private JacksonJSONIdObjectSerializerV2 readWrite;
+    private IdObjectFactory idObjectFactory;
 
     @BeforeMethod
     public void setUp() {
         context = new Mockery();
         serializer = context.mock(JacksonIdObjectSerializer.class);
         deserializer = context.mock(JacksonIdObjectDeserializerV2.class);
-        readWrite = new JacksonJSONIdObjectSerializerV2(serializer, deserializer);
+        idObjectFactory = context.mock(IdObjectFactory.class);
+        readWrite = new JacksonJSONIdObjectSerializerV2(serializer, deserializer, idObjectFactory);
     }
 
     @Test
@@ -57,8 +56,8 @@ public class JacksonJSONIdObjectSerializerV2Test {
                 //  Confirm Pretty Printer and Indentation
                 assertTrue(generator.getPrettyPrinter() instanceof DefaultPrettyPrinter);
             }
-        }, null);
-        assertEquals("{" + newline + "  \"jodaTest\" : [ 2012, 4, 15 ]" + newline + "}", readWrite.writeEntity(context.mock(AppUser.class)));
+        }, null, null);
+        assertEquals("{" + newline + "  \"jodaTest\" : [ 2012, 4, 15 ]" + newline + "}", readWrite.write(context.mock(AppUser.class)));
     }
 
     @Test
@@ -71,7 +70,7 @@ public class JacksonJSONIdObjectSerializerV2Test {
             context.checking(new Expectations() {{
                 one(serializer).serialize(with(object), with(any(JsonGenerator.class)));
             }});
-            Assert.assertEquals("", readWrite.writeEntity(object));
+            Assert.assertEquals("", readWrite.write(object));
         }
     }
 
@@ -86,7 +85,7 @@ public class JacksonJSONIdObjectSerializerV2Test {
                 one(serializer).serialize(with(object), with(any(JsonGenerator.class)));
             }});
         }
-        assertEquals("[ ]", readWrite.writeEntities(objects));
+        assertEquals("[ ]", readWrite.write(objects));
     }
 
     @Test

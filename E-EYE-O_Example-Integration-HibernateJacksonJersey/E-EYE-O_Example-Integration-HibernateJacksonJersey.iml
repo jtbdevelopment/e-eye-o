@@ -17,7 +17,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="E-EYE-O_SerializationJacksonImpl" exported="" />
     <orderEntry type="module" module-name="E-EYE-O_RESTJSONJersey" exported="" />
     <orderEntry type="module" module-name="E-EYE-O_DAOHibernateImpl" exported="" />
     <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
@@ -38,6 +37,7 @@
     <orderEntry type="library" exported="" name="org.springframework.security:spring-security-web:3.1.3.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="org.springframework:spring-web:3.2.0.RELEASE" level="project" />
     <orderEntry type="module" module-name="E-EYE-O_EntitiesGroovyImpl" exported="" />
+    <orderEntry type="module" module-name="E-EYE-O_SerializationGroovy" />
   </component>
 </module>
 

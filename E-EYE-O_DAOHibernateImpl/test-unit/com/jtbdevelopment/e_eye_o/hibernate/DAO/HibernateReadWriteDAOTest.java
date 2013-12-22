@@ -338,12 +338,12 @@ public class HibernateReadWriteDAOTest {
                 will(returnValue(id2));
                 exactly(2).of(session).get(TN, id2);
                 will(returnValue(studentWrapped));
-                one(serializer).writeEntity(studentWrapped);
+                one(serializer).write(studentWrapped);
                 will(returnValue(content));
             }
             one(session).save(wrapped);
             if (!(wrapped instanceof AppUser) && !(wrapped instanceof AppUserSettings) && !(wrapped instanceof TwoPhaseActivity)) {
-                one(serializer).writeEntity(wrapped);
+                one(serializer).write(wrapped);
                 will(returnValue(content));
             }
             allowing(session).save(with(any(HibernateHistory.class)));
@@ -399,15 +399,15 @@ public class HibernateReadWriteDAOTest {
                 will(returnValue(studentWrapped));
             }
             allowing(session).flush();
-            one(serializer).writeEntity(classListWrapped);
+            one(serializer).write(classListWrapped);
             will(returnValue(content));
-            allowing(serializer).writeEntity(studentWrapped);
+            allowing(serializer).write(studentWrapped);
             will(returnValue(content));
-            one(serializer).writeEntity(photoWrapped);
+            one(serializer).write(photoWrapped);
             will(returnValue(content));
-            one(serializer).writeEntity(observationWrapped);
+            one(serializer).write(observationWrapped);
             will(returnValue(content));
-            one(serializer).writeEntity(observationCategoryWrapped);
+            one(serializer).write(observationCategoryWrapped);
             will(returnValue(content));
             allowing(session).save(with(any(HibernateHistory.class)));
         }});
@@ -499,7 +499,7 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(appUserWrapped));
             one(observationLoaded).getModificationTimestamp();
             will(returnValue(new DateTime()));
-            one(serializer).writeEntity(observationLoaded);
+            one(serializer).write(observationLoaded);
             will(returnValue("X"));
             one(session).save(with(any(HibernateHistory.class)));
         }});
@@ -535,7 +535,7 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(appUserWrapped));
             one(studentLoaded).getModificationTimestamp();
             will(returnValue(new DateTime()));
-            one(serializer).writeEntity(studentLoaded);
+            one(serializer).write(studentLoaded);
             will(returnValue("X"));
             one(session).save(with(any(HibernateHistory.class)));
         }});
@@ -566,7 +566,7 @@ public class HibernateReadWriteDAOTest {
             will(returnValue(appUserWrapped));
             one(studentWrapped).getModificationTimestamp();
             will(returnValue(new DateTime()));
-            one(serializer).writeEntity(studentWrapped);
+            one(serializer).write(studentWrapped);
             will(returnValue("X"));
             one(session).save(with(any(HibernateHistory.class)));
             allowing(session).flush();

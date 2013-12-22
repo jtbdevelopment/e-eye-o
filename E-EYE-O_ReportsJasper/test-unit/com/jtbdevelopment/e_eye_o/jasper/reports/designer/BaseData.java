@@ -148,7 +148,7 @@ public class BaseData {
         }
 
         @Override
-        public <T extends AppUserOwnedObject> List<String> getModificationsSince(AppUser appUser, DateTime since, String id, int maxResults) {
+        public List<? extends AppUserOwnedObject> getModificationsSince(AppUser appUser, DateTime since, String id, int maxResults) {
             return null;
         }
 

@@ -81,10 +81,9 @@ public interface ReadOnlyDAO {
      * @param appUser - the user
      * @param since   - timestamp to look since
      * @param sinceId - last id to use if timestamp same
-     * @param <T>     - see entityType
      * @return an ordered set of modified entities, ordered by modification timestamp ascending
      */
-    public <T extends AppUserOwnedObject> List<String> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, int maxResults);
+    public List<? extends AppUserOwnedObject> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, int maxResults);
 
     public LocalDateTime getLastObservationTimestampForEntity(final Observable observable);
 

@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.jersey.rest.v2;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.jersey.rest.v2.helpers.SecurityHelper;
@@ -33,6 +34,8 @@ public class AppUsersResourceV2 {
     protected IdObjectReflectionHelper idObjectReflectionHelper;
     @Autowired
     protected SecurityHelper securityHelper;
+    @Autowired
+    protected IdObjectFactory idObjectFactory;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,7 +54,7 @@ public class AppUsersResourceV2 {
     public Object getUserEntities(@PathParam("userId") final String userId) {
         AppUser appUser = securityHelper.getSessionAppUser();
         if (appUser.isAdmin() || appUser.getId().equals(userId)) {
-            return new AppUserResourceV2(readWriteDAO, jsonIdObjectSerializer, idObjectReflectionHelper, securityHelper, userId, null, null);
+            return new AppUserResourceV2(readWriteDAO, jsonIdObjectSerializer, idObjectReflectionHelper, idObjectFactory, securityHelper, userId, null, null);
         } else {
             return Response.status(Response.Status.FORBIDDEN).build();
         }

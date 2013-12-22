@@ -4,6 +4,7 @@
             xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
     <info organisation="com.jtbdevelopment" module="e_eye_o"/>
     <dependencies>
+        <dependency org="javax.inject" name="javax.inject" rev="1"/>
         <dependency org="org.springframework" name="org.springframework.core" rev="3.2.0.RELEASE"/>
         <dependency org="org.springframework" name="org.springframework.transaction" rev="3.2.0.RELEASE" transitive="false"/>
         <dependency org="org.springframework" name="org.springframework.beans" rev="3.2.0.RELEASE"/>

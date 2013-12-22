@@ -60,7 +60,8 @@ class PhotoHelperGImpl implements PhotoHelper {
                 throw new RuntimeException("Error with mimeType on photo" + mimeType);
             }
 
-            image = ImageIO.read(new ByteArrayInputStream(photo.getImageData()));
+            byte[] data = photo.getImageData()
+            image = ImageIO.read(new ByteArrayInputStream(data));
             int maxDimension = Math.max(image.getHeight(), image.getWidth());
             int resize = Math.min(maxDimension, resizeTo);
             resized = Scalr.resize(image, resize);

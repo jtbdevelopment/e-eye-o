@@ -16,10 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,16 +30,7 @@ import java.util.*;
 @Repository
 @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 @SuppressWarnings("unused")
-public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadWriteDAO, ApplicationContextAware {
-
-    //  TODO - eliminate need for this - circular issue
-    protected ApplicationContext applicationContext;
-    protected IdObjectSerializer idObjectSerializer;
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadWriteDAO {
 
     private final IdObjectUpdateHelper idObjectUpdateHelper;
     private final EventBus eventBus;
@@ -78,16 +66,14 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (appUserOwnedObject instanceof AppUserSettings || appUserOwnedObject instanceof TwoPhaseActivity) {
             return;
         }
-        if (idObjectSerializer == null) {
-            idObjectSerializer = applicationContext.getBean(IdObjectSerializer.class);
-        }
+        IdObjectSerializer idObjectSerializer = getJSONIdObjectSerializer();
         sessionFactory.getCurrentSession().flush();  // Force update so timestamp is updated
         sessionFactory.getCurrentSession().clear();  // Force update so timestamp is updated
         AppUserOwnedObject reloaded = get(AppUserOwnedObject.class, appUserOwnedObject.getId());
         HibernateHistory hibernateHistory = new HibernateHistory();
         hibernateHistory.setAppUser(reloaded.getAppUser());
         hibernateHistory.setModificationTimestamp(reloaded.getModificationTimestamp());
-        hibernateHistory.setSerializedVersion(idObjectSerializer.writeEntity(reloaded));
+        hibernateHistory.setSerializedVersion(idObjectSerializer.write(reloaded));
         sessionFactory.getCurrentSession().save(hibernateHistory);
     }
 

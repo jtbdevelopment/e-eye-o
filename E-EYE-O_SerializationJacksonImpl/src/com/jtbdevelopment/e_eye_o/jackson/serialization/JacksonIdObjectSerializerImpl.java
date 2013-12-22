@@ -95,5 +95,4 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
         jgen.writeStringField(ID_FIELD, entity == null ? null : entity.getId());
         jgen.writeEndObject();
     }
-
 }

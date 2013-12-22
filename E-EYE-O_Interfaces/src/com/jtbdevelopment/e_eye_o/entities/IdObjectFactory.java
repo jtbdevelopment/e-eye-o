@@ -15,6 +15,10 @@ public interface IdObjectFactory {
 
     AppUserBuilder newAppUserBuilder();
 
+    PaginatedIdObjectList newPaginatedIdObjectList();
+
+    PaginatedIdObjectListBuilder newPaginatedIdObjectListBuilder();
+
     AppUserSettings newAppUserSettings(final AppUser appUser);
 
     AppUserSettingsBuilder newAppUserSettingsBuilder(final AppUser appUser);

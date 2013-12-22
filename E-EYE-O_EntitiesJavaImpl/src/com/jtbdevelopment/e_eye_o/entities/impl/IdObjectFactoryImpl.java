@@ -67,6 +67,16 @@ public class IdObjectFactoryImpl implements IdObjectFactory {
     }
 
     @Override
+    public PaginatedIdObjectList newPaginatedIdObjectList() {
+        return new PaginatedIdObjectListImpl();
+    }
+
+    @Override
+    public PaginatedIdObjectListBuilder newPaginatedIdObjectListBuilder() {
+        return new PaginatedIdObjectListBuilderImpl();
+    }
+
+    @Override
     public AppUserSettings newAppUserSettings(final AppUser appUser) {
         return new AppUserSettingsImpl(appUser);
     }

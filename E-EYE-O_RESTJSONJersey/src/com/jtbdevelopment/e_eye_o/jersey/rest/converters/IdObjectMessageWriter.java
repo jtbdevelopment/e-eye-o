@@ -33,6 +33,6 @@ public class IdObjectMessageWriter<T extends IdObject> extends AbstractMessageBo
 
     @Override
     public void writeTo(final T t, final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType, final MultivaluedMap<String, Object> httpHeaders, final OutputStream entityStream) throws IOException, WebApplicationException {
-        writeStringToStreamAsUTF8(idObjectSerializer.writeEntity(t), entityStream);
+        writeStringToStreamAsUTF8(idObjectSerializer.write(t), entityStream);
     }
 }

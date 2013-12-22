@@ -36,7 +36,7 @@ public class IdObjectMessageReader<T extends IdObject> implements MessageBodyRea
 
     @Override
     public T readFrom(final Class<T> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType, final MultivaluedMap<String, String> httpHeaders, final InputStream entityStream) throws IOException, WebApplicationException {
-        Object read = idObjectSerializer.read(CharStreams.toString(new InputStreamReader(entityStream)));
+        Object read = idObjectSerializer.readAsObjects(CharStreams.toString(new InputStreamReader(entityStream)));
         if (type.isAssignableFrom(read.getClass())) {
             return (T) read;
         }

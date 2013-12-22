@@ -4,7 +4,6 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/jersey-grizzly2-1.17.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jersey-server-1.17.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/asm-3.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/grizzly-http-2.3.2.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/grizzly-framework-2.3.2.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/grizzly-http-server-2.3.2.jar!/" />

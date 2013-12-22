@@ -1,10 +1,9 @@
 package com.jtbdevelopment.e_eye_o.jersey.rest.v2;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
+import com.jtbdevelopment.e_eye_o.entities.builders.PaginatedIdObjectListBuilder;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.jersey.rest.v2.helpers.SecurityHelper;
@@ -13,12 +12,13 @@ import org.joda.time.DateTime;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nullable;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Date: 2/10/13
@@ -29,6 +29,7 @@ public class AppUserResourceV2 {
     private final ReadWriteDAO readWriteDAO;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final IdObjectReflectionHelper idObjectReflectionHelper;
+    private final IdObjectFactory idObjectFactory;
     private final AppUser appUser;
     private final SecurityHelper securityHelper;
     private Boolean archiveFlag;
@@ -37,12 +38,14 @@ public class AppUserResourceV2 {
     public AppUserResourceV2(final ReadWriteDAO readWriteDAO,
                              final JSONIdObjectSerializer jsonIdObjectSerializer,
                              final IdObjectReflectionHelper idObjectReflectionHelper,
+                             final IdObjectFactory idObjectFactory,
                              final SecurityHelper securityHelper,
                              final String userId,
                              final Boolean archiveFlag,
                              final Class<? extends AppUserOwnedObject> entityType) {
         this.readWriteDAO = readWriteDAO;
         this.securityHelper = securityHelper;
+        this.idObjectFactory = idObjectFactory;
         this.jsonIdObjectSerializer = jsonIdObjectSerializer;
         this.appUser = readWriteDAO.get(AppUser.class, userId);
         this.idObjectReflectionHelper = idObjectReflectionHelper;
@@ -56,6 +59,7 @@ public class AppUserResourceV2 {
         this.idObjectReflectionHelper = appUserResource.idObjectReflectionHelper;
         this.appUser = appUserResource.appUser;
         this.securityHelper = appUserResource.securityHelper;
+        this.idObjectFactory = appUserResource.idObjectFactory;
     }
 
     private AppUserResourceV2(final AppUserResourceV2 appUserResource,
@@ -146,7 +150,7 @@ public class AppUserResourceV2 {
             set = archiveFlag ? readWriteDAO.getArchivedEntitiesForUser(entityType, appUser, from, PAGE_SIZE) :
                     readWriteDAO.getActiveEntitiesForUser(entityType, appUser, from, PAGE_SIZE);
         }
-        return Response.ok(computePaginatedResults(set, PAGE_SIZE)).build();
+        return Response.ok(computePaginatedResults(set, PAGE_SIZE, fromPage == null ? 0 : fromPage)).build();
     }
 
     @GET
@@ -155,15 +159,8 @@ public class AppUserResourceV2 {
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Response getModifiedSince(@PathParam("modifiedSince") final String dateTimeString, @QueryParam("lastIdSeen") final String lastIdSeen) {
         DateTime dateTime = DateTime.parse(dateTimeString);
-        List<String> modificationsSince = readWriteDAO.getModificationsSince(appUser, dateTime, lastIdSeen != null ? lastIdSeen : "", PAGE_SIZE);
-        Collection<Map<String, Object>> listMap = Collections2.transform(modificationsSince, new Function<String, Map<String, Object>>() {
-            @Nullable
-            @Override
-            public Map<String, Object> apply(@Nullable String input) {
-                return input != null ? (Map<String, Object>) jsonIdObjectSerializer.readNoPOJO(input) : null;
-            }
-        });
-        return Response.ok(computePaginatedResults(listMap, PAGE_SIZE)).build();
+        List<? extends IdObject> modificationsSince = readWriteDAO.getModificationsSince(appUser, dateTime, lastIdSeen != null ? lastIdSeen : "", PAGE_SIZE);
+        return Response.ok(computePaginatedResults(modificationsSince, PAGE_SIZE, 0)).build();
     }
 
     @Path("{entityId}")
@@ -230,11 +227,9 @@ public class AppUserResourceV2 {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
-    private Map<String, Object> computePaginatedResults(final Collection<?> set, final int pageSize) {
-        Map<String, Object> results = new HashMap<>();
-        results.put("entities", set);
-        results.put("more", set.size() == pageSize);
-        return results;
+    private PaginatedIdObjectList computePaginatedResults(final Collection<? extends IdObject> set, final int pageSize, final int currentPage) {
+        PaginatedIdObjectListBuilder builder = idObjectFactory.newPaginatedIdObjectListBuilder();
+        return builder.withEntities(set).withPageSize(pageSize).withMoreAvailable(set.size() == pageSize).withCurrentPage(currentPage).build();
     }
 
     private int computePage(final Integer fromPage) {

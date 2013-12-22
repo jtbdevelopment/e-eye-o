@@ -231,7 +231,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertTrue(dbTestUser1.isActive());
         assertEquals(AppUser.NEVER_LOGGED_IN, dbTestUser1.getLastLogout());
 
-        assertEquals(JacksonJSONIdObjectSerializerV2.writeEntity(dbTestUser1), s);
+        assertEquals(JacksonJSONIdObjectSerializerV2.write(dbTestUser1), s);
 
         JerseyRestViaGrizzlyIntegration.testUser1 = dbTestUser1;
     }
@@ -256,7 +256,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertFalse(dbTestUser2.isActive());
         assertEquals(AppUser.NEVER_LOGGED_IN, dbTestUser2.getLastLogout());
 
-        assertEquals(JacksonJSONIdObjectSerializerV2.writeEntity(dbTestUser2), s);
+        assertEquals(JacksonJSONIdObjectSerializerV2.write(dbTestUser2), s);
         JerseyRestViaGrizzlyIntegration.testUser2 = dbTestUser2;
     }
 
@@ -382,7 +382,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
         uri = headers[0].getValue();
         String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
-        ObservationCategory readCategory = JacksonJSONIdObjectSerializerV2.read(newJson);
+        ObservationCategory readCategory = JacksonJSONIdObjectSerializerV2.readAsObjects(newJson);
         assertEquals(category.getDescription(), readCategory.getDescription());
         assertEquals(category.getShortName(), readCategory.getShortName());
         assertTrue(readCategory.getModificationTimestamp().isAfter(now));
@@ -399,12 +399,12 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertEquals(1, headers.length);
         uri = headers[0].getValue();
         String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
-        ClassList createdClassList = JacksonJSONIdObjectSerializerV2.read(newJson);
+        ClassList createdClassList = JacksonJSONIdObjectSerializerV2.readAsObjects(newJson);
 
         String newDescription = "Modified Class";
         createdClassList.setDescription(newDescription);
         newJson = httpHelper.getJSONFromPut(uri, userClient1, createdClassList);
-        ClassList modifiedClassList = JacksonJSONIdObjectSerializerV2.read(newJson);
+        ClassList modifiedClassList = JacksonJSONIdObjectSerializerV2.readAsObjects(newJson);
         assertTrue(modifiedClassList.equals(createdClassList));
         assertEquals(newDescription, modifiedClassList.getDescription());
         assertTrue(modifiedClassList.getModificationTimestamp().isAfter(createdClassList.getModificationTimestamp()));
@@ -421,7 +421,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertEquals(1, headers.length);
         uri = headers[0].getValue();
         String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
-        final Student createdStudent = JacksonJSONIdObjectSerializerV2.read(newJson);
+        final Student createdStudent = JacksonJSONIdObjectSerializerV2.readAsObjects(newJson);
 
         DateTime now = DateTime.now();
 

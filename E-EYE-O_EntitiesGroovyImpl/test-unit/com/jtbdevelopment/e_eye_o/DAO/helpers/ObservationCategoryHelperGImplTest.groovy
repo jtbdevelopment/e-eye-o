@@ -5,6 +5,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory
 import org.jmock.Expectations
 import org.jmock.Mockery
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 /**
@@ -12,16 +13,24 @@ import org.testng.annotations.Test
  * Time: 9:38 PM
  */
 class ObservationCategoryHelperGImplTest extends GroovyTestCase {
-    ObservationCategoryHelperGImpl observationCategoryHelper = new ObservationCategoryHelperGImpl()
+    ObservationCategoryHelperGImpl observationCategoryHelper
 
     //  TODO - better mock?
-    private final Mockery context = new Mockery();
-    private final ReadWriteDAO dao = context.mock(ReadWriteDAO.class);
-    private final AppUser user = context.mock(AppUser.class);
+    private Mockery context;
+    private ReadWriteDAO dao;
+    private AppUser user;
+
+    @BeforeMethod
+    public void setUp() {
+        observationCategoryHelper = new ObservationCategoryHelperGImpl()
+        context = new Mockery();
+        dao = context.mock(ReadWriteDAO.class);
+        user = context.mock(AppUser.class);
+        observationCategoryHelper.readOnlyDAO = dao
+    }
 
     @Test
     void testNoCategoriesReturnsEmptyMap() {
-        observationCategoryHelper.readOnlyDAO = dao
         context.checking(new Expectations() {
             {
                 one(dao).getEntitiesForUser(ObservationCategory.class, user, 0, 0)
@@ -39,7 +48,6 @@ class ObservationCategoryHelperGImplTest extends GroovyTestCase {
         ObservationCategory cat2 = createCateogry("CAT2", "Cat 2 D");
         ObservationCategory cat3 = createCateogry("CAT3", "3")
 
-        observationCategoryHelper.readOnlyDAO = dao
         context.checking(new Expectations() {
             {
                 one(dao).getEntitiesForUser(ObservationCategory.class, user, 0, 0)

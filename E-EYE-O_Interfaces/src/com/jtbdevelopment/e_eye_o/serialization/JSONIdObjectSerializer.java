@@ -11,4 +11,6 @@ public interface JSONIdObjectSerializer extends IdObjectSerializer {
     public static final String ID_FIELD = "id";
     public static final String ENTITIES_FIELD = "entities";
     public static final String MORE_FIELD = "more";
+    public static final String PAGE_SIZE = "pageSize";
+    public static final String CURRENT_PAGE = "currentPage";
 }

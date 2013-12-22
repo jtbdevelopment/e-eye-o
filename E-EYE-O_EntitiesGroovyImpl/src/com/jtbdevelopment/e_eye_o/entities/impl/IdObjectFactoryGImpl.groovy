@@ -65,6 +65,16 @@ class IdObjectFactoryGImpl implements IdObjectFactory {
     }
 
     @Override
+    PaginatedIdObjectList newPaginatedIdObjectList() {
+        return new PaginatedIdObjectListGImpl()
+    }
+
+    @Override
+    PaginatedIdObjectListBuilder newPaginatedIdObjectListBuilder() {
+        return new PaginatedIdObjectListBuilderGImpl()
+    }
+
+    @Override
     AppUserSettings newAppUserSettings(final AppUser appUser) {
         return new AppUserSettingsGImpl(appUser: appUser)
     }
