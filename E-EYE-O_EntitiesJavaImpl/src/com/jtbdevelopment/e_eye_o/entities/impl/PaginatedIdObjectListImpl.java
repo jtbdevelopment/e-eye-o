@@ -57,27 +57,4 @@ public class PaginatedIdObjectListImpl implements PaginatedIdObjectList {
     public void setEntities(final Collection<? extends IdObject> entities) {
         this.entities = new LinkedList<>(entities);
     }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof PaginatedIdObjectList)) return false;
-
-        final PaginatedIdObjectList that = (PaginatedIdObjectList) o;
-
-        if (currentPage != that.getCurrentPage()) return false;
-        if (moreAvailable != that.isMoreAvailable()) return false;
-        if (pageSize != that.getPageSize()) return false;
-        Collection<? extends IdObject> thatEntities = that.getEntities();
-        return entities.size() == thatEntities.size() && thatEntities.containsAll(entities);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (moreAvailable ? 1 : 0);
-        result = 31 * result + currentPage;
-        result = 31 * result + pageSize;
-        result = 31 * result + entities.hashCode();
-        return result;
-    }
 }

@@ -71,7 +71,7 @@ class IdObjectFactoryGImpl implements IdObjectFactory {
 
     @Override
     PaginatedIdObjectListBuilder newPaginatedIdObjectListBuilder() {
-        return new PaginatedIdObjectListBuilderGImpl()
+        return new PaginatedIdObjectListBuilderGImpl(entity: newPaginatedIdObjectList())
     }
 
     @Override

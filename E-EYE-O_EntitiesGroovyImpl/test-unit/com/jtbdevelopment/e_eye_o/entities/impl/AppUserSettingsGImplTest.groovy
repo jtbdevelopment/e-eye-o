@@ -25,6 +25,17 @@ class AppUserSettingsGImplTest extends AppUserOwnedObjectGImplTest {
     }
 
     @Test
+    public void testSetSettings() throws Exception {
+        assert objectUnderTest.getSettings().isEmpty();
+        objectUnderTest.setSetting("initialValue", "lose me");  // will be lost
+        objectUnderTest.setSetting("boolean", false); //  will be lost
+        assert 2 == objectUnderTest.getSettings().size()
+        def valuesAsStrings = SAMPLE_VALUES.collectEntries { key, value -> [(key): value.toString()]; }
+        objectUnderTest.setSettings(SAMPLE_VALUES)
+        assert valuesAsStrings == objectUnderTest.getSettings();
+    }
+
+    @Test
     public void testUpdateSettings() throws Exception {
         assert objectUnderTest.getSettings().isEmpty();
         objectUnderTest.setSetting("initialValue", "don't lose me");

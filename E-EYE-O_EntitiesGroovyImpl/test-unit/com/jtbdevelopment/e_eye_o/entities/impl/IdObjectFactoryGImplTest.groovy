@@ -29,7 +29,10 @@ class IdObjectFactoryGImplTest extends GroovyTestCase {
     @Test
     public void testNewFactoryForKnownClasses() throws Exception {
         assert getExpectedImplClassName("AppUser") == factory.newIdObject(AppUser.class).class.simpleName;
+        assert getExpectedImplClassName("AppUser") == factory.newAppUser().class.simpleName;
         assert getExpectedBuilderClassName("AppUser") == factory.newAppUserBuilder().class.simpleName
+        assert getExpectedImplClassName("PaginatedIdObjectList") == factory.newPaginatedIdObjectList().class.simpleName;
+        assert getExpectedBuilderClassName("PaginatedIdObjectList") == factory.newPaginatedIdObjectListBuilder().class.simpleName
         APP_USER_OWNED_CLASSES_ARRAY.each { classType ->
             String name = classType.simpleName
             String expectedType = getExpectedImplClassName(name)

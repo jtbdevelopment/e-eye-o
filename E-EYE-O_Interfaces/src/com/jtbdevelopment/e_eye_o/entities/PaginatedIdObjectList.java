@@ -5,6 +5,9 @@ import java.util.Collection;
 /**
  * Date: 12/21/13
  * Time: 3:45 PM
+ * <p/>
+ * A data class for serialization of paginated results
+ * Is not expected to be stored or validated
  */
 public interface PaginatedIdObjectList {
     boolean isMoreAvailable();

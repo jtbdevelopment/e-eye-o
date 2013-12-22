@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.entities.impl.builders
 import com.jtbdevelopment.e_eye_o.entities.IdObject
 import com.jtbdevelopment.e_eye_o.entities.PaginatedIdObjectList
 import com.jtbdevelopment.e_eye_o.entities.builders.PaginatedIdObjectListBuilder
-import com.jtbdevelopment.e_eye_o.entities.impl.PaginatedIdObjectListGImpl
 import groovy.transform.CompileStatic
 
 /**
@@ -12,34 +11,34 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class PaginatedIdObjectListBuilderGImpl implements PaginatedIdObjectListBuilder {
-    private PaginatedIdObjectListGImpl impl = new PaginatedIdObjectListGImpl()
+    PaginatedIdObjectList entity
 
     @Override
     PaginatedIdObjectListBuilder withMoreAvailable(final boolean moreAvailable) {
-        impl.moreAvailable = moreAvailable
+        entity.moreAvailable = moreAvailable
         return this
     }
 
     @Override
     PaginatedIdObjectListBuilder withCurrentPage(final int currentPage) {
-        impl.currentPage = currentPage
+        entity.currentPage = currentPage
         return this
     }
 
     @Override
     PaginatedIdObjectListBuilder withPageSize(final int pageSize) {
-        impl.pageSize = pageSize
+        entity.pageSize = pageSize
         return this
     }
 
     @Override
     PaginatedIdObjectListBuilder withEntities(final Collection<? extends IdObject> entities) {
-        impl.setEntities(entities)
+        entity.setEntities(entities)
         return this
     }
 
     @Override
     PaginatedIdObjectList build() {
-        return impl
+        return entity
     }
 }
