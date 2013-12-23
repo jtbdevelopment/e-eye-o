@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.DAO.helpers;
 
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ import java.util.Set;
 @Component
 public class ObservationCategoryHelperImpl implements ObservationCategoryHelper {
     @Autowired
-    protected ReadWriteDAO dao;
+    protected ReadOnlyDAO readOnlyDAO;
 
     public Map<String, ObservationCategory> getObservationCategoriesAsMap(final AppUser appUser) {
-        Set<ObservationCategory> ocs = dao.getEntitiesForUser(ObservationCategory.class, appUser, 0, 0);
+        Set<ObservationCategory> ocs = readOnlyDAO.getEntitiesForUser(ObservationCategory.class, appUser, 0, 0);
         Map<String, ObservationCategory> map = new HashMap<>();
         for (ObservationCategory oc : ocs) {
             map.put(oc.getShortName(), oc);

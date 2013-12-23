@@ -4,13 +4,13 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -23,24 +23,22 @@ public class IdObjectUpdateHelperImpl implements IdObjectUpdateHelper {
     private static Logger logger = LoggerFactory.getLogger(IdObjectUpdateHelperImpl.class);
 
     @Autowired
-    private IdObjectReflectionHelper reflectionHelper;
+    protected IdObjectReflectionHelper reflectionHelper;
 
 
     @Override
     public <T extends IdObject> void vetInvalidFieldUpdates(final AppUser updatingUser, final T currentEntity, final T updatedEntity) {
-        Class<T> idObjectInterface = reflectionHelper.getIdObjectInterfaceForClass((Class<T>) updatedEntity.getClass());
-        Map<String, Method> getters = reflectionHelper.getAllGetMethods(idObjectInterface);
-        Map<String, Method> setters = reflectionHelper.getAllSetMethods(idObjectInterface);
-        for (Map.Entry<String, Method> getter : getters.entrySet()) {
-            String fieldName = getter.getKey();
-            switch (getter.getValue().getAnnotation(IdObjectFieldSettings.class).editableBy()) {
+        Map<String, IdObjectFieldSettings> settings = reflectionHelper.getAllFieldPreferences(updatedEntity.getClass());
+        for (Map.Entry<String, IdObjectFieldSettings> setting : settings.entrySet()) {
+            String fieldName = setting.getKey();
+            switch (setting.getValue().editableBy()) {
                 case NONE:
                 case CONTROLLED:
-                    removeFieldUpdate(fieldName, currentEntity, updatedEntity, getter.getValue(), setters.get(fieldName));
+                    removeFieldUpdate(fieldName, currentEntity, updatedEntity);
                     break;
                 case ADMIN:
                     if (!updatingUser.isAdmin()) {
-                        removeFieldUpdate(fieldName, currentEntity, updatedEntity, getter.getValue(), setters.get(fieldName));
+                        removeFieldUpdate(fieldName, currentEntity, updatedEntity);
                     }
                     break;
                 case USER:
@@ -49,10 +47,10 @@ public class IdObjectUpdateHelperImpl implements IdObjectUpdateHelper {
         }
     }
 
-    private <T extends IdObject> void removeFieldUpdate(final String fieldName, final T currentEntity, final T updatedEntity, final Method get, final Method set) {
+    private <T extends IdObject> void removeFieldUpdate(final String fieldName, final T currentEntity, final T updatedEntity) {
         try {
-            set.invoke(updatedEntity, get.invoke(currentEntity));
-        } catch (IllegalAccessException | InvocationTargetException e) {
+            PropertyUtils.setProperty(updatedEntity, fieldName, PropertyUtils.getProperty(currentEntity, fieldName));
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             logger.warn("Unable to override " + fieldName, e);
             throw new RuntimeException("Unable to override " + fieldName, e);
         }
