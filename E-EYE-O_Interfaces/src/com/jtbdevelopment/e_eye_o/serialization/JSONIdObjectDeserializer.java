@@ -6,5 +6,5 @@ package com.jtbdevelopment.e_eye_o.serialization;
  * <p/>
  * Useful marker interface
  */
-public interface JSONIdObjectSerializer extends IdObjectSerializer {
+public interface JSONIdObjectDeserializer extends IdObjectDeserializer {
 }

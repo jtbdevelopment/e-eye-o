@@ -1,6 +1,8 @@
 package com.jtbdevelopment.e_eye_o.jersey.rest;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.PaginatedIdObjectList;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectDeserializer;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -21,16 +23,17 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class HttpHelper {
     @Autowired
     private JSONIdObjectSerializer jsonIdObjectSerializer;
 
+    @Autowired
+    private JSONIdObjectDeserializer jsonIdObjectDeserializer;
 
     public <T extends IdObject> T easyClone(final T entity) {
-        return jsonIdObjectSerializer.readAsObjects(jsonIdObjectSerializer.write(entity));
+        return jsonIdObjectDeserializer.readAsObjects(jsonIdObjectSerializer.write(entity));
     }
 
     HttpResponse httpGet(final String uri, final HttpClient client) throws IOException {
@@ -77,7 +80,7 @@ public class HttpHelper {
 
     <T extends IdObject> void checkJSONVsExpectedResults(final String uri, final HttpClient client, final Collection<T> expectedResults) throws IOException {
         String json = getJSONFromHttpGet(uri, client);
-        List<T> results = jsonIdObjectSerializer.readAsObjects(json);
+        List<T> results = jsonIdObjectDeserializer.readAsObjects(json);
         AssertJUnit.assertTrue(results.containsAll(expectedResults));
     }
 
@@ -88,9 +91,9 @@ public class HttpHelper {
         while (more) {
             String pageURI = uri + "?page=" + page;
             String json = getJSONFromHttpGet(pageURI, client);
-            Map<String, Object> pageResults = jsonIdObjectSerializer.readAsObjects(json);
-            more = (Boolean) pageResults.get("more");
-            results.addAll((List<T>) pageResults.get("entities"));
+            PaginatedIdObjectList paginatedIdObjectList = jsonIdObjectDeserializer.readAsObjects(json);
+            more = paginatedIdObjectList.isMoreAvailable();
+            results.addAll((Collection<T>) paginatedIdObjectList.getEntities());
             ++page;
         }
         AssertJUnit.assertTrue(results.containsAll(expectedResults));

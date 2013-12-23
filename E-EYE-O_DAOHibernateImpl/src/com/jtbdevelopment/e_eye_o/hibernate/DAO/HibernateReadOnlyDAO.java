@@ -9,8 +9,7 @@ import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
-import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
-import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectDeserializer;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -44,7 +43,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAwar
     protected final IdObjectReflectionHelper idObjectReflectionHelper;
     protected final SessionFactory sessionFactory;
     protected final IdObjectWrapperFactory wrapperFactory;
-    private JSONIdObjectSerializer jsonIdObjectSerializer;
+    private JSONIdObjectDeserializer jsonIdObjectDeserializer;
 
     protected ApplicationContext applicationContext;
 
@@ -199,12 +198,12 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAwar
             criteria.setMaxResults(maxResults);
         }
         List<HibernateHistory> results = criteria.list();
-        final IdObjectSerializer idObjectSerializer = getJSONIdObjectSerializer();
+        final JSONIdObjectDeserializer jsonIdObjectDeserializer = getJSONIdObjectDeserializer();
         Collection<? extends AppUserOwnedObject> transformedResults = Collections2.transform(results, new Function<HibernateHistory, AppUserOwnedObject>() {
             @Nullable
             @Override
             public AppUserOwnedObject apply(@Nullable HibernateHistory input) {
-                return (AppUserOwnedObject) (input == null ? null : idObjectSerializer.readAsObjects(input.getSerializedVersion()));
+                return (AppUserOwnedObject) (input == null ? null : jsonIdObjectDeserializer.readAsObjects(input.getSerializedVersion()));
             }
         });
 
@@ -342,10 +341,10 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAwar
         return sessionFactory.getClassMetadata(wrapperFor).getEntityName();
     }
 
-    protected JSONIdObjectSerializer getJSONIdObjectSerializer() {
-        if (jsonIdObjectSerializer == null) {
-            jsonIdObjectSerializer = applicationContext.getBean(JSONIdObjectSerializer.class);
+    protected JSONIdObjectDeserializer getJSONIdObjectDeserializer() {
+        if (jsonIdObjectDeserializer == null) {
+            jsonIdObjectDeserializer = applicationContext.getBean(JSONIdObjectDeserializer.class);
         }
-        return jsonIdObjectSerializer;
+        return jsonIdObjectDeserializer;
     }
 }

@@ -10,7 +10,7 @@ import com.jtbdevelopment.e_eye_o.entities.events.EventFactory;
 import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -35,13 +35,15 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     private final IdObjectUpdateHelper idObjectUpdateHelper;
     private final EventBus eventBus;
     private final EventFactory eventFactory;
+    private final JSONIdObjectSerializer jsonIdObjectSerializer;
 
     @Autowired
-    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper) {
+    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper, final JSONIdObjectSerializer jsonIdObjectSerializer) {
         super(sessionFactory, wrapperFactory, idObjectReflectionHelper);
         this.idObjectUpdateHelper = idObjectUpdateHelper;
         this.eventBus = eventBus;
         this.eventFactory = eventFactory;
+        this.jsonIdObjectSerializer = jsonIdObjectSerializer;
     }
 
     @Override
@@ -66,14 +68,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (appUserOwnedObject instanceof AppUserSettings || appUserOwnedObject instanceof TwoPhaseActivity) {
             return;
         }
-        IdObjectSerializer idObjectSerializer = getJSONIdObjectSerializer();
         sessionFactory.getCurrentSession().flush();  // Force update so timestamp is updated
         sessionFactory.getCurrentSession().clear();  // Force update so timestamp is updated
         AppUserOwnedObject reloaded = get(AppUserOwnedObject.class, appUserOwnedObject.getId());
         HibernateHistory hibernateHistory = new HibernateHistory();
         hibernateHistory.setAppUser(reloaded.getAppUser());
         hibernateHistory.setModificationTimestamp(reloaded.getModificationTimestamp());
-        hibernateHistory.setSerializedVersion(idObjectSerializer.write(reloaded));
+        hibernateHistory.setSerializedVersion(jsonIdObjectSerializer.write(reloaded));
         sessionFactory.getCurrentSession().save(hibernateHistory);
     }
 

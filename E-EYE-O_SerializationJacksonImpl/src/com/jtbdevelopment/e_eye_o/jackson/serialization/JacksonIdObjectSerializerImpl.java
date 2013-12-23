@@ -1,22 +1,26 @@
 package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.MappingJsonFactory;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
+import com.jtbdevelopment.e_eye_o.entities.PaginatedIdObjectList;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectConstants;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-
-import static com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer.ENTITY_TYPE_FIELD;
-import static com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer.ID_FIELD;
 
 /**
  * Date: 1/27/13
@@ -24,12 +28,58 @@ import static com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer.ID
  */
 @Service
 @SuppressWarnings("unused")
-public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer {
+public class JacksonIdObjectSerializerImpl implements JSONIdObjectSerializer, JSONIdObjectConstants {
     @Autowired
     private IdObjectReflectionHelper idObjectReflectionHelper;
 
+    private final MappingJsonFactory jsonFactory;
+
+    public JacksonIdObjectSerializerImpl() {
+        jsonFactory = new MappingJsonFactory();
+        jsonFactory.getCodec().registerModule(new JodaModule());
+    }
+
     @Override
-    public void serialize(final IdObject value, final JsonGenerator generator) throws IOException {
+    public String write(final Object entity) {
+        try (final JsonGenerator generator = createGenerator()) {
+            if (entity instanceof IdObject) {
+                serialize((IdObject) entity, generator);
+            } else if (entity instanceof PaginatedIdObjectList) {
+                writePaginatedIdObjectList(generator, (PaginatedIdObjectList) entity);
+            } else if (entity instanceof Collection) {
+                writeListOfIdObjects(generator, (Collection) entity);
+            } else {
+                throw new IllegalArgumentException("Don't know how to handle entity of type " + entity.getClass().getCanonicalName());
+            }
+            return completeGeneration(generator);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void writePaginatedIdObjectList(final JsonGenerator generator, final PaginatedIdObjectList paginatedIdObjectList) throws IOException {
+        generator.writeStartObject();
+        generator.writeBooleanField(MORE_FIELD, paginatedIdObjectList.isMoreAvailable());
+        generator.writeNumberField(PAGE_SIZE, paginatedIdObjectList.getPageSize());
+        generator.writeNumberField(CURRENT_PAGE, paginatedIdObjectList.getCurrentPage());
+        generator.writeFieldName(ENTITIES_FIELD);
+        writeListOfIdObjects(generator, paginatedIdObjectList.getEntities());
+        generator.writeEndObject();
+    }
+
+    private void writeListOfIdObjects(final JsonGenerator generator, final Collection entities) throws IOException {
+        generator.writeStartArray();
+        for (Object entity : entities) {
+            if (entity instanceof IdObject) {
+                serialize((IdObject) entity, generator);
+            } else {
+                throw new IllegalArgumentException("Can only write IdObject items in collection not " + entity.getClass().getCanonicalName());
+            }
+        }
+        generator.writeEndArray();
+    }
+
+    private void serialize(final IdObject value, final JsonGenerator generator) throws IOException {
         Class<? extends IdObject> valueInterface = idObjectReflectionHelper.getIdObjectInterfaceForClass(value.getClass());
         if (valueInterface == null) {
             throw new RuntimeException("Cannot resolve IdObjectInterface for object");
@@ -95,4 +145,14 @@ public class JacksonIdObjectSerializerImpl implements JacksonIdObjectSerializer 
         jgen.writeStringField(ID_FIELD, entity == null ? null : entity.getId());
         jgen.writeEndObject();
     }
+
+    private JsonGenerator createGenerator() throws IOException {
+        return jsonFactory.createGenerator(new StringWriter()).setPrettyPrinter(new DefaultPrettyPrinter());
+    }
+
+    private String completeGeneration(final JsonGenerator generator) throws IOException {
+        generator.close();
+        return generator.getOutputTarget().toString();
+    }
+
 }

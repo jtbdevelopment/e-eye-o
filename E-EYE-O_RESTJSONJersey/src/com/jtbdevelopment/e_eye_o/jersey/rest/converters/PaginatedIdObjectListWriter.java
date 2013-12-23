@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.jersey.rest.converters;
 
 import com.jtbdevelopment.e_eye_o.entities.PaginatedIdObjectList;
-import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ import java.lang.reflect.Type;
 @Produces(MediaType.APPLICATION_JSON)
 public class PaginatedIdObjectListWriter extends AbstractMessageBodyWriter<PaginatedIdObjectList> {
     @Autowired
-    private IdObjectSerializer idObjectSerializer;
+    private JSONIdObjectSerializer jsonIdObjectSerializer;
 
     @Override
     public boolean isWriteable(final Class<?> type, Type genericType, final Annotation[] annotations, final MediaType mediaType) {
@@ -39,7 +39,7 @@ public class PaginatedIdObjectListWriter extends AbstractMessageBodyWriter<Pagin
                         final MediaType mediaType,
                         final MultivaluedMap<String, Object> httpHeaders,
                         final OutputStream entityStream) throws IOException, WebApplicationException {
-        writeStringToStreamAsUTF8(idObjectSerializer.write(paginatedIdObjectList), entityStream);
+        writeStringToStreamAsUTF8(jsonIdObjectSerializer.write(paginatedIdObjectList), entityStream);
     }
 }
 

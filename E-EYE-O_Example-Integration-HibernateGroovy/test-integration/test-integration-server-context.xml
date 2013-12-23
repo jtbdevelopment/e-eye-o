@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <!--  TODO - clean this up for this version of integration tests -->
+
+    <import resource="classpath*:test-integration-common-context.xml"/>
+
+    <sec:global-method-security secured-annotations="enabled"/>
+
+    <sec:http auto-config="true">
+        <sec:intercept-url pattern="/REST/v2/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <sec:intercept-url pattern="/REST/v2/**" access="ROLE_USER, ROLE_ADMIN"/>
+        <sec:form-login default-target-url="/REST/v2/users/**"/>
+        <sec:remember-me services-ref="rememberMeServices" key="EEYEOTest"/>
+    </sec:http>
+
+    <!-- Recreate the integration DB each time - make sure to use a disposable DB for it  -->
+    <util:properties id="hibernateOverrideProperties">
+        <!--prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.DerbyUniqueNonNull</prop-->
+        <prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.MySQL5InnoFixes</prop>
+    </util:properties>
+</beans>

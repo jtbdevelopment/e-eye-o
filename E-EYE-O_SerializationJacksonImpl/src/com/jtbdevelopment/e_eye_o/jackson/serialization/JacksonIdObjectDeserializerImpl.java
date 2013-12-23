@@ -1,10 +1,14 @@
 package com.jtbdevelopment.e_eye_o.jackson.serialization;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.PhotoHelper;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
+import com.jtbdevelopment.e_eye_o.entities.PaginatedIdObjectList;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectConstants;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectDeserializer;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -17,13 +21,7 @@ import org.springframework.stereotype.Component;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObjectSerializerV2.ENTITY_TYPE_FIELD;
-import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObjectSerializerV2.ID_FIELD;
+import java.util.*;
 
 /**
  * Date: 12/17/13
@@ -31,21 +29,85 @@ import static com.jtbdevelopment.e_eye_o.jackson.serialization.JacksonJSONIdObje
  */
 @Component
 @SuppressWarnings("unused")
-public class JacksonIdObjectDeserializerV2Impl implements JacksonIdObjectDeserializerV2 {
-    private static final Logger logger = LoggerFactory.getLogger(JacksonIdObjectDeserializerV2Impl.class);
+public class JacksonIdObjectDeserializerImpl implements JSONIdObjectDeserializer, JSONIdObjectConstants {
+    private static final Logger logger = LoggerFactory.getLogger(JacksonIdObjectDeserializerImpl.class);
     private final ReadOnlyDAO readOnlyDAO;
     private final IdObjectFactory idObjectFactory;
     private final PhotoHelper photoHelper;
 
+    private final ObjectMapper mapper;
+
     @Autowired
-    public JacksonIdObjectDeserializerV2Impl(final ReadOnlyDAO readOnlyDAO, final IdObjectFactory idObjectFactory, final PhotoHelper photoHelper) {
+    public JacksonIdObjectDeserializerImpl(final ReadOnlyDAO readOnlyDAO, final IdObjectFactory idObjectFactory, final PhotoHelper photoHelper) {
         this.readOnlyDAO = readOnlyDAO;
         this.idObjectFactory = idObjectFactory;
         this.photoHelper = photoHelper;
+        mapper = new ObjectMapper();
     }
 
     @Override
-    public <T extends IdObject> T deserialize(final Map<String, Object> values) throws IOException {
+    @SuppressWarnings("unchecked")
+    public <T> T readRaw(final String input) {
+        try {
+            return (T) mapper.readValue(input, Object.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T readAsObjects(final String input) {
+        try {
+            Object values = readRaw(input);
+            if (values instanceof Map) {
+                Map<String, Object> valueMap = (Map<String, Object>) values;
+                if (isPaginatedList(valueMap)) {
+                    return (T) readPaginatedIdObjectList(valueMap);
+                } else {
+                    return (T) readMap(valueMap);
+                }
+            } else if (values instanceof List) {
+                return (T) readList((List<Map<String, Object>>) values);
+
+            } else {
+                throw new RuntimeException("readValue produced non-list/non-map object " + values.getClass().getName());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean isPaginatedList(final Map<String, Object> valueMap) {
+        return valueMap.containsKey(MORE_FIELD) && valueMap.containsKey(ENTITIES_FIELD);
+    }
+
+    private <T extends IdObject> T readMap(final Map<String, Object> valueMap) throws IOException {
+        return deserialize(valueMap);
+    }
+
+    private <T extends IdObject> List<T> readList(final List<Map<String, Object>> valueArray) throws IOException {
+        final List<T> returnList = new LinkedList<>();
+        for (Map<String, Object> valueMap : valueArray) {
+            returnList.add((T) readMap(valueMap));
+        }
+        return returnList;
+    }
+
+    private PaginatedIdObjectList readPaginatedIdObjectList(final Map<String, Object> valueMap) throws IOException {
+        PaginatedIdObjectList paginatedIdObjectList = idObjectFactory.newPaginatedIdObjectList();
+        paginatedIdObjectList.setMoreAvailable((Boolean) valueMap.get(MORE_FIELD));
+        paginatedIdObjectList.setEntities(readList((List<Map<String, Object>>) valueMap.get(ENTITIES_FIELD)));
+        if (valueMap.containsKey(PAGE_SIZE)) {
+            paginatedIdObjectList.setPageSize((Integer) valueMap.get(PAGE_SIZE));
+        }
+        if (valueMap.containsKey(CURRENT_PAGE)) {
+            paginatedIdObjectList.setCurrentPage((Integer) valueMap.get(CURRENT_PAGE));
+        }
+        return paginatedIdObjectList;
+    }
+
+    private <T extends IdObject> T deserialize(final Map<String, Object> values) throws IOException {
         try {
             T returnObject;
             if (values.containsKey(ENTITY_TYPE_FIELD)) {

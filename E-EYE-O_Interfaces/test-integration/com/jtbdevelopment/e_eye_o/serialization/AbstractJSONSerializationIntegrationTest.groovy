@@ -1,16 +1,14 @@
-package com.jtbdevelopment.e_eye_o.jackson.serialization
+package com.jtbdevelopment.e_eye_o.serialization
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO
 import com.jtbdevelopment.e_eye_o.TestingPhotoHelper
 import com.jtbdevelopment.e_eye_o.entities.*
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper
-import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -19,10 +17,12 @@ import org.testng.annotations.Test
  * Date: 12/20/13
  * Time: 3:47 PM
  */
-@ContextConfiguration("/test-integration-context.xml")
-class SerializationIntegrationTest extends AbstractTestNGSpringContextTests {
+abstract class AbstractJSONSerializationIntegrationTest extends AbstractTestNGSpringContextTests {
     @Autowired
     private JSONIdObjectSerializer serializer;
+
+    @Autowired
+    private JSONIdObjectDeserializer deserializer
 
     @Autowired
     private ReadWriteDAO readWriteDAO;
@@ -101,7 +101,7 @@ class SerializationIntegrationTest extends AbstractTestNGSpringContextTests {
     public void testReadSingleEntities() throws Exception {
         jsonValues.each {
             IdObject key, Map value ->
-                final IdObject object = serializer.readAsObjects(new JsonBuilder(value).toString());
+                final IdObject object = deserializer.readAsObjects(new JsonBuilder(value).toString());
                 IdObject wrapped = ((IdObjectWrapper) key).wrapped
                 assert key == object;
                 compareObjects(wrapped, object)
@@ -120,7 +120,7 @@ class SerializationIntegrationTest extends AbstractTestNGSpringContextTests {
     public void testReadCollection() throws Exception {
         final List<? extends IdObject> entities = jsonValues.collect { it.key };
         String json = "[" + jsonValues.collect { new JsonBuilder(it.value).toString() }.join(", ") + "]"
-        List<? extends IdObject> objects = serializer.readAsObjects(json);
+        List<? extends IdObject> objects = deserializer.readAsObjects(json);
         assert entities == objects
         entities.each { compareObjects(((IdObjectWrapper) it).wrapped, objects.get(objects.indexOf(it))) }
     }
@@ -129,7 +129,7 @@ class SerializationIntegrationTest extends AbstractTestNGSpringContextTests {
     public void testWriteCollection() throws Exception {
         List<Map<String, Object>> values = jsonValues.collect { it.value }
         List<? extends IdObject> entities = jsonValues.collect { it.key }
-        String output = serializer.writeEntities(entities);
+        String output = serializer.write(entities);
         assert values == new JsonSlurper().parseText(output)
     }
 

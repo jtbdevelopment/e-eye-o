@@ -7,6 +7,7 @@ import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectDeserializer;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.ClassNamesResourceConfig;
@@ -47,17 +48,22 @@ import static org.testng.AssertJUnit.*;
 /**
  * Date: 2/10/13
  * Time: 4:05 PM
+ * <p/>
+ * TODO - turn this into abstract test
  */
 @ContextConfiguration("/test-integration-context.xml")
 @Test(groups = {"integration"})
-public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContextTests {
+public class HibernateJacksonJerseryRESTIntegretion extends AbstractTestNGSpringContextTests {
 
     public static final String APP_USER_OWNED_OBJECT = "appUserOwnedObject";
     @Autowired
     private HttpHelper httpHelper;
 
     @Autowired
-    private JSONIdObjectSerializer JacksonJSONIdObjectSerializerV2;
+    private JSONIdObjectSerializer jsonIdObjectSerializer;
+
+    @Autowired
+    private JSONIdObjectDeserializer jsonIdObjectDeserializer;
 
     @Autowired
     private ReadWriteDAO readWriteDAO;
@@ -213,7 +219,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
     @Test
     public void testModifyUserAsSelf() throws Exception {
-        AppUser testUser1 = httpHelper.easyClone(JerseyRestViaGrizzlyIntegration.testUser1);
+        AppUser testUser1 = httpHelper.easyClone(HibernateJacksonJerseryRESTIntegretion.testUser1);
         testUser1.setLastName("New Last");
         testUser1.setAdmin(true);  // should be ignored
         testUser1.setActive(false);  // should be ignored
@@ -231,14 +237,14 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertTrue(dbTestUser1.isActive());
         assertEquals(AppUser.NEVER_LOGGED_IN, dbTestUser1.getLastLogout());
 
-        assertEquals(JacksonJSONIdObjectSerializerV2.write(dbTestUser1), s);
+        assertEquals(jsonIdObjectSerializer.write(dbTestUser1), s);
 
-        JerseyRestViaGrizzlyIntegration.testUser1 = dbTestUser1;
+        HibernateJacksonJerseryRESTIntegretion.testUser1 = dbTestUser1;
     }
 
     @Test
     public void testModifyUserAsAdmin() throws Exception {
-        AppUser testUser2 = httpHelper.easyClone(JerseyRestViaGrizzlyIntegration.testUser2);
+        AppUser testUser2 = httpHelper.easyClone(HibernateJacksonJerseryRESTIntegretion.testUser2);
         testUser2.setFirstName("newfirst");
         testUser2.setAdmin(true);
         testUser2.setActive(true);     //  should be ignored
@@ -256,8 +262,8 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertFalse(dbTestUser2.isActive());
         assertEquals(AppUser.NEVER_LOGGED_IN, dbTestUser2.getLastLogout());
 
-        assertEquals(JacksonJSONIdObjectSerializerV2.write(dbTestUser2), s);
-        JerseyRestViaGrizzlyIntegration.testUser2 = dbTestUser2;
+        assertEquals(jsonIdObjectSerializer.write(dbTestUser2), s);
+        HibernateJacksonJerseryRESTIntegretion.testUser2 = dbTestUser2;
     }
 
     @Test
@@ -382,7 +388,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
 
         uri = headers[0].getValue();
         String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
-        ObservationCategory readCategory = JacksonJSONIdObjectSerializerV2.readAsObjects(newJson);
+        ObservationCategory readCategory = jsonIdObjectDeserializer.readAsObjects(newJson);
         assertEquals(category.getDescription(), readCategory.getDescription());
         assertEquals(category.getShortName(), readCategory.getShortName());
         assertTrue(readCategory.getModificationTimestamp().isAfter(now));
@@ -399,12 +405,12 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertEquals(1, headers.length);
         uri = headers[0].getValue();
         String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
-        ClassList createdClassList = JacksonJSONIdObjectSerializerV2.readAsObjects(newJson);
+        ClassList createdClassList = jsonIdObjectDeserializer.readAsObjects(newJson);
 
         String newDescription = "Modified Class";
         createdClassList.setDescription(newDescription);
         newJson = httpHelper.getJSONFromPut(uri, userClient1, createdClassList);
-        ClassList modifiedClassList = JacksonJSONIdObjectSerializerV2.readAsObjects(newJson);
+        ClassList modifiedClassList = jsonIdObjectDeserializer.readAsObjects(newJson);
         assertTrue(modifiedClassList.equals(createdClassList));
         assertEquals(newDescription, modifiedClassList.getDescription());
         assertTrue(modifiedClassList.getModificationTimestamp().isAfter(createdClassList.getModificationTimestamp()));
@@ -421,7 +427,7 @@ public class JerseyRestViaGrizzlyIntegration extends AbstractTestNGSpringContext
         assertEquals(1, headers.length);
         uri = headers[0].getValue();
         String newJson = httpHelper.getJSONFromHttpGet(uri, userClient1);
-        final Student createdStudent = JacksonJSONIdObjectSerializerV2.readAsObjects(newJson);
+        final Student createdStudent = jsonIdObjectDeserializer.readAsObjects(newJson);
 
         DateTime now = DateTime.now();
 

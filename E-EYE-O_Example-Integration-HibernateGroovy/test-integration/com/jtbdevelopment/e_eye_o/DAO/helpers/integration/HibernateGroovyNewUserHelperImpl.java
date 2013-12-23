@@ -26,8 +26,8 @@ import java.util.Map;
  */
 @Component
 @SuppressWarnings("unused")
-public class NewUserHelperImpl implements NewUserHelper {
-    private static final Logger logger = LoggerFactory.getLogger(NewUserHelperImpl.class);
+public class HibernateGroovyNewUserHelperImpl implements NewUserHelper {
+    private static final Logger logger = LoggerFactory.getLogger(HibernateGroovyNewUserHelperImpl.class);
 
     @Autowired
     private ObservationCategoryHelper observationCategoryHelper;

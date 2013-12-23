@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.jersey.rest.converters;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ import java.util.Collection;
 @Service
 public class ListIdObjectMessageWriter extends AbstractMessageBodyWriter<Collection<? extends IdObject>> {
     @Autowired
-    private IdObjectSerializer idObjectSerializer;
+    private JSONIdObjectSerializer jsonIdObjectSerializer;
 
     @Override
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
@@ -34,6 +34,6 @@ public class ListIdObjectMessageWriter extends AbstractMessageBodyWriter<Collect
 
     @Override
     public void writeTo(Collection<? extends IdObject> idObjects, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
-        writeStringToStreamAsUTF8(idObjectSerializer.write(idObjects), entityStream);
+        writeStringToStreamAsUTF8(jsonIdObjectSerializer.write(idObjects), entityStream);
     }
 }

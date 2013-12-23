@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.jersey.rest.converters;
 
 import com.google.common.io.CharStreams;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
-import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ import java.lang.reflect.Type;
 @Service
 public class IdObjectMessageReader<T extends IdObject> implements MessageBodyReader<T> {
     @Autowired
-    IdObjectSerializer idObjectSerializer;
+    JSONIdObjectDeserializer idObjectDeserializer;
 
     @Override
     public boolean isReadable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
@@ -36,7 +36,7 @@ public class IdObjectMessageReader<T extends IdObject> implements MessageBodyRea
 
     @Override
     public T readFrom(final Class<T> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType, final MultivaluedMap<String, String> httpHeaders, final InputStream entityStream) throws IOException, WebApplicationException {
-        Object read = idObjectSerializer.readAsObjects(CharStreams.toString(new InputStreamReader(entityStream)));
+        Object read = idObjectDeserializer.readAsObjects(CharStreams.toString(new InputStreamReader(entityStream)));
         if (type.isAssignableFrom(read.getClass())) {
             return (T) read;
         }
