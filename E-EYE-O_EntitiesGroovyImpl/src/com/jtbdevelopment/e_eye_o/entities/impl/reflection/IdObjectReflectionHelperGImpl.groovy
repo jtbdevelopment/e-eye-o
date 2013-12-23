@@ -45,11 +45,10 @@ public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
     @Override
     public Map<String, IdObjectFieldSettings> getAllFieldPreferences(final Class<? extends IdObject> entityType) {
         Map<String, Method> gets = getAllGetMethods(entityType)
-        Map<String, IdObjectFieldSettings> map = [:]
-        gets.each({ key, value ->
-            map += [(key): value.getAnnotation(IdObjectFieldSettings.class)]
-        })
-        return map;
+        Map<String, IdObjectFieldSettings> map = (Map<String, IdObjectFieldSettings>) gets.collectEntries { key, value ->
+            [(key): value.getAnnotation(IdObjectFieldSettings.class)]
+        }
+        return map.findAll { it.value != null };
     }
 
     private <T extends IdObject> Map<String, Method> traverseInterfaces(final Class<T> entityType, final Closure function) {
@@ -57,7 +56,7 @@ public class IdObjectReflectionHelperGImpl implements IdObjectReflectionHelper {
         def map = [:] as Map<String, Method>
         while (i != null) {
             List<MetaProperty> ps = i.metaClass.properties
-            ps.collect(function).each { map += it }
+            map += ps.collectEntries(function)
             i = (Class<T>) i.interfaces?.length == 1 ? i.interfaces[0] : null
         }
         Map<String, Method> all = map.findAll({ key, value -> value != null }).findAll { entry ->

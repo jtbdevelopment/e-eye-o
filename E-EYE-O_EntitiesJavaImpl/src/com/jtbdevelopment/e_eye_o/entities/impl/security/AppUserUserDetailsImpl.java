@@ -3,10 +3,8 @@ package com.jtbdevelopment.e_eye_o.entities.impl.security;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  * Date: 4/5/13
@@ -23,12 +21,11 @@ class AppUserUserDetailsImpl implements AppUserUserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        LinkedList<GrantedAuthority> roles = new LinkedList<>();
-        roles.add(new SimpleGrantedAuthority(ROLE_USER));
         if (appUser.isAdmin()) {
-            roles.add(new SimpleGrantedAuthority(ROLE_ADMIN));
+            return ADMIN_ROLES;
+        } else {
+            return USER_ROLES;
         }
-        return roles;
     }
 
     @Override

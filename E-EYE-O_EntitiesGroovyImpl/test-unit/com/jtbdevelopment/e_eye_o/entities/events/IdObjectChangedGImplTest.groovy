@@ -1,36 +1,22 @@
 package com.jtbdevelopment.e_eye_o.entities.events
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser
+import com.jtbdevelopment.e_eye_o.entities.IdObject
 import com.jtbdevelopment.e_eye_o.entities.impl.AppUserGImpl
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
 
 /**
  * Date: 12/7/13
  * Time: 9:35 PM
  */
-class IdObjectChangedGImplTest {
-    def objectUnderTest
-    def user
+class IdObjectChangedGImplTest extends AbstractIdObjectChangedTest {
 
-    @BeforeMethod
-    def setUp() {
-        user = new AppUserGImpl()
-        objectUnderTest = new IdObjectChangedGImpl<AppUser>(entity: user, changeType: IdObjectChanged.ChangeType.MODIFIED)
+    @Override
+    IdObjectChanged createIdObjectChanged(final IdObject idObject, final IdObjectChanged.ChangeType changeType) {
+        return new IdObjectChangedGImpl<AppUser>(entity: idObject, changeType: changeType)
     }
 
-    @Test
-    void testGetEntityType() {
-        assert user.class == objectUnderTest.getEntityType()
-    }
-
-    @Test
-    void testGetChangeType() {
-        assert IdObjectChanged.ChangeType.MODIFIED == objectUnderTest.changeType
-    }
-
-    @Test
-    void testGetEntity() {
-        assert user == objectUnderTest.entity
+    @Override
+    AppUser createAppUser() {
+        return new AppUserGImpl()
     }
 }

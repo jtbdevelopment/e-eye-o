@@ -1,34 +1,19 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.builders
 
-import com.jtbdevelopment.e_eye_o.entities.ClassList
 import com.jtbdevelopment.e_eye_o.entities.impl.StudentGImpl
-import groovy.mock.interceptor.MockFor
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
 
 /**
  * Date: 12/1/13
  * Time: 9:18 PM
  */
-class StudentBuilderGImplTest extends ObservableBuilderGImplTest {
-    @BeforeMethod
-    def setUp() {
-        entity = new StudentGImpl()
-        builder = new StudentBuilderGImpl(entity: entity)
+class StudentBuilderGImplTest extends AbstractStudentBuilderTest {
+    @Override
+    def createEntity() {
+        return new StudentGImpl()
     }
 
-    @Test
-    void testWithFirstName() {
-        testStringField("firstName")
-    }
-
-    @Test
-    void testWithLastName() {
-        testStringField("lastName")
-    }
-
-    @Test
-    void testClassList() {
-        testSetField("classList", "classLists", new MockFor(ClassList.class).proxyInstance())
+    @Override
+    def createBuilder(final entity) {
+        return new StudentBuilderGImpl(entity: entity)
     }
 }

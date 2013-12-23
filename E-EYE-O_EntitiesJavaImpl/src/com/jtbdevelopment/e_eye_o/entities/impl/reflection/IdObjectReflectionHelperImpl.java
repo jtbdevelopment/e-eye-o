@@ -90,6 +90,7 @@ public class IdObjectReflectionHelperImpl implements IdObjectReflectionHelper {
                     return null;
                 }
                 IdObjectFieldSettings preferences = read.getAnnotation(IdObjectFieldSettings.class);
+
                 if (preferences != null) {
                     return new AbstractMap.SimpleEntry<>(property.getName(), preferences);
                 }
@@ -128,6 +129,11 @@ public class IdObjectReflectionHelperImpl implements IdObjectReflectionHelper {
                 idObjectInterface = null;
             }
         }
-        return traversalResults;
+        return new LinkedList<>(Collections2.filter(traversalResults, new Predicate<F>() {
+            @Override
+            public boolean apply(@Nullable final F input) {
+                return input != null;
+            }
+        }));
     }
 }

@@ -1,38 +1,20 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
-import com.jtbdevelopment.e_eye_o.entities.DeletedObject
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
-
-import static org.testng.Assert.assertEquals
+import com.jtbdevelopment.e_eye_o.entities.AppUser
+import com.jtbdevelopment.e_eye_o.entities.IdObject
 
 /**
  * Date: 11/30/13
  * Time: 4:16 PM
  */
-class DeletedObjectGImplTest extends AppUserOwnedObjectGImplTest {
-    @BeforeMethod
-    def setUp() {
-        objectUnderTest = new DeletedObjectGImpl()
+class DeletedObjectGImplTest extends AbstractDeletedObjectTest {
+    @Override
+    AppUser createAppUser() {
+        return new AppUserGImpl()
     }
 
-    @Test
-    public void testDeletedId() {
-        testStringFieldExpectingErrorForNullOrBlank("deletedId", "", DeletedObject.DELETED_OBJECT_DELETED_ID_CANNOT_BE_BLANK_OR_NULL_ERROR)
-    }
-
-    @Test(expectedExceptions = IllegalStateException.class)
-    public void testCannotSetNewDeletedId() {
-        final String x = "X";
-        objectUnderTest.setDeletedId(x);
-        assert x == objectUnderTest.deletedId;
-        objectUnderTest.setDeletedId("Y");
-    }
-
-    @Test
-    public void testSummaryDescription() {
-        final String x = "X";
-        objectUnderTest.setDeletedId(x);
-        assertEquals(x, objectUnderTest.getSummaryDescription());
+    @Override
+    def <T extends IdObject> T createObjectUnderTest() {
+        return new DeletedObjectGImpl()
     }
 }

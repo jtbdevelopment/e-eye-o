@@ -1,18 +1,23 @@
 package com.jtbdevelopment.e_eye_o.entities.impl.security
 
+import com.jtbdevelopment.e_eye_o.entities.AppUser
 import com.jtbdevelopment.e_eye_o.entities.impl.AppUserGImpl
-import org.testng.annotations.Test
+import com.jtbdevelopment.e_eye_o.entities.security.SecurityObjectFactory
 
 /**
  * Date: 12/3/13
  * Time: 6:40 AM
  */
-class SecurityObjectFactoryGImplTest extends GroovyTestCase {
+class SecurityObjectFactoryGImplTest extends AbstractSecurityObjectFactoryTest {
 
-    @Test
-    void testNewAppUserDetails() {
-        AppUserGImpl user = new AppUserGImpl()
-        SecurityObjectFactoryGImpl impl = new SecurityObjectFactoryGImpl()
-        assert user.is(impl.newAppUserDetails(user).appUser)
+    @Override
+    AppUser createAppUser() {
+        return new AppUserGImpl()
     }
+
+    @Override
+    SecurityObjectFactory createFactory() {
+        return new SecurityObjectFactoryGImpl()
+    }
+
 }

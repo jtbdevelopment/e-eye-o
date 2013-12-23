@@ -50,6 +50,6 @@ class StudentGImpl extends ObservableGImpl implements Student {
 
     @Override
     String getSummaryDescription() {
-        return firstName.trim() + " " + lastName.trim()
+        return (firstName.trim() + " " + lastName.trim()).trim()
     }
 }

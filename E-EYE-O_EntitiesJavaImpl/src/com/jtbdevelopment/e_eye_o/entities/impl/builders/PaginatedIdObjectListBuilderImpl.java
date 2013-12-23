@@ -12,34 +12,38 @@ import java.util.Collection;
  * Time: 6:41 PM
  */
 public class PaginatedIdObjectListBuilderImpl implements PaginatedIdObjectListBuilder {
-    private PaginatedIdObjectListImpl impl = new PaginatedIdObjectListImpl();
+    private PaginatedIdObjectList entity = new PaginatedIdObjectListImpl();
+
+    public PaginatedIdObjectListBuilderImpl(final PaginatedIdObjectList entity) {
+        this.entity = entity;
+    }
 
     @Override
     public PaginatedIdObjectListBuilder withMoreAvailable(final boolean moreAvailable) {
-        impl.setMoreAvailable(moreAvailable);
+        entity.setMoreAvailable(moreAvailable);
         return this;
     }
 
     @Override
     public PaginatedIdObjectListBuilder withCurrentPage(final int currentPage) {
-        impl.setCurrentPage(currentPage);
+        entity.setCurrentPage(currentPage);
         return this;
     }
 
     @Override
     public PaginatedIdObjectListBuilder withPageSize(final int pageSize) {
-        impl.setPageSize(pageSize);
+        entity.setPageSize(pageSize);
         return this;
     }
 
     @Override
     public PaginatedIdObjectListBuilder withEntities(final Collection<? extends IdObject> entities) {
-        impl.setEntities(entities);
+        entity.setEntities(entities);
         return this;
     }
 
     @Override
     public PaginatedIdObjectList build() {
-        return impl;
+        return entity;
     }
 }

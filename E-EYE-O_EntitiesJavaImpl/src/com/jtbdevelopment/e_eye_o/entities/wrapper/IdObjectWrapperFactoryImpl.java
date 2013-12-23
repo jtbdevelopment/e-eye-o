@@ -35,6 +35,9 @@ public class IdObjectWrapperFactoryImpl implements IdObjectWrapperFactory {
             throw new IllegalArgumentException("entityType should be interface not " + entityType.getSimpleName());
         }
         Class<? extends IdObjectWrapper> baseClass = baseClassMap.get(wrapperKind);
+        if (baseClass == null) {
+            throw new IllegalStateException("base class for type " + wrapperKind + " is not set");
+        }
         if (!baseClass.isAssignableFrom(wrapperType)) {
             throw new IllegalArgumentException("wrapperType class of " + wrapperType.getSimpleName() + " must subclass " + baseClass.getSimpleName());
         }

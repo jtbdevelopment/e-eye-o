@@ -1,30 +1,20 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
-import com.jtbdevelopment.e_eye_o.entities.ClassList
+import com.jtbdevelopment.e_eye_o.entities.AppUser
 import com.jtbdevelopment.e_eye_o.entities.IdObject
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
 
 /**
  * Date: 11/26/13
  * Time: 6:52 AM
  */
-class ClassListGImplTest extends ObservableGImplTest {
-
-    @BeforeMethod
-    def setUp() {
-        objectUnderTest = new ClassListGImpl()
+class ClassListGImplTest extends AbstractClassListTest {
+    @Override
+    def <T extends IdObject> T createObjectUnderTest() {
+        return new ClassListGImpl()
     }
 
-    @Test
-    public void testDescription() {
-        testStringFieldExpectingErrorForNullOrBlank("description", "", ClassList.CLASS_LIST_DESCRIPTION_CANNOT_BE_BLANK_OR_NULL_ERROR)
-        testStringFieldSize("description", IdObject.MAX_DESCRIPTION_SIZE, ClassList.CLASS_LIST_DESCRIPTION_SIZE_ERROR)
-    }
-
-    @Test
-    public void testSummaryDescription() {
-        objectUnderTest.description = "DESCRipTIOn"
-        assert objectUnderTest.description == objectUnderTest.summaryDescription
+    @Override
+    AppUser createAppUser() {
+        return new AppUserGImpl()
     }
 }

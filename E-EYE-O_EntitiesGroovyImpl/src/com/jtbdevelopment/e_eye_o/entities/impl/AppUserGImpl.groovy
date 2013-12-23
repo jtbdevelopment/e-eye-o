@@ -21,7 +21,7 @@ class AppUserGImpl extends IdObjectGImpl implements AppUser {
 
     @Override
     String getSummaryDescription() {
-        return firstName.trim() + " " + lastName.trim()
+        return (firstName.trim() + " " + lastName.trim()).trim()
     }
 
 }

@@ -4,7 +4,6 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails
 import groovy.transform.CompileStatic
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 
 /**
  * Date: 12/2/13
@@ -12,12 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
  */
 @CompileStatic
 class AppUserUserDetailsGImpl implements AppUserUserDetails {
-    static protected List<GrantedAuthority> USER_ROLES = [
-            new SimpleGrantedAuthority(AppUserUserDetails.ROLE_USER)].asImmutable()
-
-    static protected List<GrantedAuthority> ADMIN_ROLES = [
-            new SimpleGrantedAuthority(AppUserUserDetails.ROLE_USER),
-            new SimpleGrantedAuthority(AppUserUserDetails.ROLE_ADMIN)].asImmutable()
     AppUser appUser;
 
     @Override

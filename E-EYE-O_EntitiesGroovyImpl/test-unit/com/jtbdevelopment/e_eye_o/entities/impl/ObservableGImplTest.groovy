@@ -1,25 +1,23 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
-import com.jtbdevelopment.e_eye_o.entities.Observable
-import org.joda.time.LocalDateTime
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
+import com.jtbdevelopment.e_eye_o.entities.AppUser
+import com.jtbdevelopment.e_eye_o.entities.IdObject
 
 /**
  * Date: 11/26/13
  * Time: 6:49 AM
  */
-class ObservableGImplTest extends AppUserOwnedObjectGImplTest {
+class ObservableGImplTest extends AbstractObservableTest {
     class LocalEntity extends ObservableGImpl {
     }
 
-    @BeforeMethod
-    def setUp() {
-        objectUnderTest = new LocalEntity()
+    @Override
+    AppUser createAppUser() {
+        return new AppUserGImpl()
     }
 
-    @Test
-    void testLastObservationTimestamp() {
-        testNonStringFieldWithNullValidationError("lastObservationTimestamp", Observable.NEVER_OBSERVED, new LocalDateTime(), Observable.LAST_OBSERVATION_TIME_CANNOT_BE_NULL)
+    @Override
+    def <T extends IdObject> T createObjectUnderTest() {
+        return new LocalEntity()
     }
 }
