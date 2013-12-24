@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.DAO.groovy.serialization
+package com.jtbdevelopment.e_eye_o.groovy.serialization
 
 import com.jtbdevelopment.e_eye_o.serialization.AbstractJSONSerializationIntegrationTest
 import org.springframework.test.context.ContextConfiguration

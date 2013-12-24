@@ -133,6 +133,42 @@ abstract class AbstractJSONSerializationIntegrationTest extends AbstractTestNGSp
         assert values == new JsonSlurper().parseText(output)
     }
 
+    @Test(groups = ["integration"])
+    public void testWritePaginatedList() throws Exception {
+        List<Map<String, Object>> values = jsonValues.collect { it.value }
+        List<? extends IdObject> entities = jsonValues.collect { it.key }
+        Map<String, Object> expected = [
+                "more": true,
+                "currentPage": 5,
+                "pageSize": 21,
+                "entities": values
+        ]
+        PaginatedIdObjectList paginatedIdObjectList = factory.newPaginatedIdObjectList();
+        paginatedIdObjectList.setMoreAvailable(true)
+        paginatedIdObjectList.currentPage = 5
+        paginatedIdObjectList.pageSize = 21
+        paginatedIdObjectList.entities = entities
+        String output = serializer.write(paginatedIdObjectList);
+        assert expected == new JsonSlurper().parseText(output)
+    }
+
+    @Test(groups = ["integration"])
+    public void testReadPaginatedList() throws Exception {
+        List<Map<String, Object>> values = jsonValues.collect { it.value }
+        List<? extends IdObject> entities = jsonValues.collect { it.key }
+        Map<String, Object> input = [
+                "more": true,
+                "currentPage": 5,
+                "pageSize": 21,
+                "entities": values
+        ]
+        PaginatedIdObjectList output = deserializer.readAsObjects(new JsonBuilder(input).toString());
+        assert entities == output.entities
+        assert 5 == output.currentPage
+        assert 21 == output.pageSize
+        assert output.moreAvailable
+    }
+
     private void compareObjects(IdObject expected, IdObject compareTo) {
         expected.metaClass.properties.each { MetaProperty property ->
             String name = property.name
