@@ -312,6 +312,13 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         ClassList clV2 = rwDAO.get(ClassList.class, cl.getId());  //  Observation made it dirty need to re-readAsObjects for compare to work
 
         List<? extends IdObject> firstSet = rwDAO.getModificationsSince(updateUser, firstTS, "", 0);
+        final List<String> firstSetAsString = new LinkedList<>(Collections2.transform(firstSet, new Function<IdObject, String>() {
+            @Nullable
+            @Override
+            public String apply(@Nullable final IdObject input) {
+                return serializer.write(input);
+            }
+        }));
         final List<String> initialList = new LinkedList<>(Collections2.transform(Arrays.asList(oc, cl, s, p, o, clV2), new Function<AppUserOwnedObject, String>() {
             @Nullable
             @Override
@@ -320,13 +327,9 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
             }
         }));
         assertEquals(initialList.size(), firstSet.size());
-        int counter = 0;
-
-        //  TODO - fixme
-//        for (final String received : firstSet) {
-//            assertEquals(initialList.get(counter++), received);
-//        }
-        assertTrue(firstSet.containsAll(initialList));
+        for (int counter = 0; counter < firstSet.size(); ++counter) {
+            assertEquals(initialList.get(counter), firstSetAsString.get(counter));
+        }
 
         DateTime secondTS = new DateTime();
         Thread.sleep(1);
@@ -342,8 +345,15 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
             }
         });
         final List<? extends IdObject> secondSet = rwDAO.getModificationsSince(updateUser, secondTS, "", 0);
+        final List<String> secondSetAsString = new LinkedList<>(Collections2.transform(secondSet, new Function<IdObject, String>() {
+            @Nullable
+            @Override
+            public String apply(@Nullable final IdObject input) {
+                return serializer.write(input);
+            }
+        }));
         assertEquals(secondList.size(), secondSet.size());
-        assertTrue(secondSet.containsAll(secondList));
+        assertTrue(secondSetAsString.containsAll(secondList));
     }
 
     @Test
