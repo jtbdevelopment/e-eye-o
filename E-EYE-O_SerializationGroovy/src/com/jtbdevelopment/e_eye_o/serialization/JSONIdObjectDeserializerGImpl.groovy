@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component
  * Time: 7:58 AM
  */
 @Component
+@SuppressWarnings("unused")
 class JSONIdObjectDeserializerGImpl implements JSONIdObjectDeserializer, JSONIdObjectConstants {
 
     @Autowired
@@ -34,14 +35,21 @@ class JSONIdObjectDeserializerGImpl implements JSONIdObjectDeserializer, JSONIdO
         def returnValue;
         switch (parsed) {
             case { isPaginatedMap(parsed) }:
-                returnValue = [(MORE_FIELD): parsed[MORE_FIELD]]
-                returnValue.put(ENTITIES_FIELD, readList(parsed[ENTITIES_FIELD]))
+                returnValue = idObjectFactory.newPaginatedIdObjectList()
+                returnValue.moreAvailable = parsed[MORE_FIELD];
+                returnValue.setEntities(readList((List) parsed[ENTITIES_FIELD]));
+                if (parsed[PAGE_SIZE]) {
+                    returnValue.pageSize = (int) parsed[PAGE_SIZE]
+                }
+                if (parsed[CURRENT_PAGE]) {
+                    returnValue.currentPage = (int) parsed[CURRENT_PAGE]
+                }
                 break;
             case Map:
-                returnValue = readMap(parsed)
+                returnValue = readMap((Map) parsed)
                 break;
             case List:
-                returnValue = readList(parsed)
+                returnValue = readList((List) parsed)
                 break;
             default:
                 throw new RuntimeException("Unknown object type " + parsed.class.canonicalName)
@@ -96,7 +104,7 @@ class JSONIdObjectDeserializerGImpl implements JSONIdObjectDeserializer, JSONIdO
         return returnValue
     }
 
-    private IdObject readSubObject(value) {
+    private IdObject readSubObject(final Map<String, Object> value) {
         String id = value.get(ID_FIELD)
         Class<? extends IdObject> type = (Class<? extends IdObject>) Class.forName((String) value.get(ENTITY_TYPE_FIELD));
         IdObject loaded = readOnlyDAO.get(type, id)
@@ -104,6 +112,6 @@ class JSONIdObjectDeserializerGImpl implements JSONIdObjectDeserializer, JSONIdO
     }
 
     private List<? extends IdObject> readList(final List<Map<String, Object>> values) {
-        values.collect({ readMap(it) })
+        values.collect({ Map<String, Object> it -> readMap(it) })
     }
 }

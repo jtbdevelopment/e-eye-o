@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
  * Time: 7:58 AM
  */
 @Component
-
+@SuppressWarnings("unused")
 class JSONIdObjectSerializerGImpl implements JSONIdObjectSerializer, JSONIdObjectConstants {
 
     @Autowired
