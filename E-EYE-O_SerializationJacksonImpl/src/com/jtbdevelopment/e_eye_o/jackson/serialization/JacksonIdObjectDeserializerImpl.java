@@ -137,8 +137,6 @@ public class JacksonIdObjectDeserializerImpl implements JSONIdObjectDeserializer
                     handleString(returnObject, fieldType, fieldName, (String) value);
                 } else if (value instanceof Boolean) {
                     handleBoolean(returnObject, fieldName, (Boolean) value);
-                } else if (value instanceof Float) {   //  TODO - any use cases?
-                    handleFloat(returnObject, fieldType, fieldName, (Float) value);
                 } else if (value instanceof Number) {
                     handleInteger(returnObject, fieldType, fieldName, (Number) value);
                 }
@@ -162,18 +160,10 @@ public class JacksonIdObjectDeserializerImpl implements JSONIdObjectDeserializer
                 return;
             }
         }
-        if (Enum.class.isAssignableFrom(fieldType)) {
-            assignValue(returnObject, fieldName, Enum.valueOf(fieldType, value));
-            return;
-        }
         assignValue(returnObject, fieldName, value);
         if ("mimeType".equals(fieldName) && returnObject instanceof Photo) {
             photoHelper.reprocessForMimeType((Photo) returnObject);
         }
-    }
-
-    private void handleFloat(final IdObject returnObject, final Class fieldType, final String fieldName, final Float value) throws IllegalAccessException, InvocationTargetException, IOException, NoSuchMethodException {
-        assignValue(returnObject, fieldName, value);
     }
 
     private void handleBoolean(final IdObject returnObject, final String fieldName, final Boolean value) throws IllegalAccessException, InvocationTargetException, IOException, NoSuchMethodException {
