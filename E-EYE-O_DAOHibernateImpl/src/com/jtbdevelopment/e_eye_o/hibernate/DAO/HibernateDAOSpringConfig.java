@@ -1,6 +1,5 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
-import org.hibernate.Interceptor;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,19 +21,13 @@ import java.util.Properties;
 public class HibernateDAOSpringConfig {
 
     @Bean
-    public Interceptor timestampInterceptor() {
-        return new ModificationTimestampGenerator();
-    }
-
-    @Bean
     @Autowired
     public LocalSessionFactoryBean sessionFactory(final javax.sql.DataSource dataSource,
                                                   final @Qualifier("hibernateDefaultProperties") Properties hibernateDefaultProperties,
-                                                  final @Qualifier("hibernateOverrideProperties") Properties hibernateOverrideProperties, final Interceptor timestampInterceptor) {
+                                                  final @Qualifier("hibernateOverrideProperties") Properties hibernateOverrideProperties) {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
         sessionFactoryBean.setHibernateProperties(buildHibernateProperties(hibernateDefaultProperties, hibernateOverrideProperties));
         sessionFactoryBean.setDataSource(dataSource);
-        sessionFactoryBean.setEntityInterceptor(timestampInterceptor);
         sessionFactoryBean.setPackagesToScan("com.jtbdevelopment");
         return sessionFactoryBean;
     }

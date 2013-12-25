@@ -1,7 +1,9 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.Semester;
+import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.LocalDate;
 
 import javax.persistence.Column;
@@ -12,6 +14,8 @@ import javax.persistence.Entity;
  * Time: 5:55 PM
  */
 @Entity(name = "Semester")
+@Audited
+@Proxy(lazy = false)
 public class HibernateSemester extends HibernateAppUserOwnedObject<Semester> implements Semester {
     @SuppressWarnings("unused")
     public HibernateSemester() {
@@ -25,35 +29,35 @@ public class HibernateSemester extends HibernateAppUserOwnedObject<Semester> imp
     @Override
     @Column(nullable = false)
     public String getDescription() {
-        return getWrapped().getDescription();
+        return wrapped.getDescription();
     }
 
     @Override
     public void setDescription(final String description) {
-        getWrapped().setDescription(description);
+        wrapped.setDescription(description);
     }
 
     @Override
     @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     public LocalDate getStart() {
-        return getWrapped().getStart();
+        return wrapped.getStart();
     }
 
     @Override
     public void setStart(final LocalDate start) {
-        getWrapped().setStart(start);
+        wrapped.setStart(start);
     }
 
     @Override
     @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     public LocalDate getEnd() {
-        return getWrapped().getEnd();
+        return wrapped.getEnd();
     }
 
     @Override
     public void setEnd(final LocalDate end) {
-        getWrapped().setEnd(end);
+        wrapped.setEnd(end);
     }
 }

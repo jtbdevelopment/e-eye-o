@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.entities.wrappers.testinginterfacesandclasses
+package com.jtbdevelopment.e_eye_o.entities.wrapper.testinginterfacesandclasses
 
 /**
  * Date: 12/8/13

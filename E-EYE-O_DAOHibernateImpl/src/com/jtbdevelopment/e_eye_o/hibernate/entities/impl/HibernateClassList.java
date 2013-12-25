@@ -1,6 +1,8 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
+import org.hibernate.annotations.Proxy;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,8 @@ import javax.persistence.Entity;
  * Time: 2:05 PM
  */
 @Entity(name = "ClassList")
+@Audited
+@Proxy(lazy = false)
 public class HibernateClassList extends HibernateObservable<ClassList> implements ClassList {
     @SuppressWarnings("unused")    // Hibernate
     protected HibernateClassList() {

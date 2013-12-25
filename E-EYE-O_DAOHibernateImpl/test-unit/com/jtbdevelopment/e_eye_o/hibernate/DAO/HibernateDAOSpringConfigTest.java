@@ -24,14 +24,9 @@ public class HibernateDAOSpringConfigTest {
     private final DataSource dataSource = context.mock(DataSource.class);
 
     @Test
-    public void testTimestampIntercepter() {
-        assertTrue(config.timestampInterceptor() instanceof ModificationTimestampGenerator);
-    }
-
-    @Test
     public void testSessionFactory() throws Exception {
         Properties props = new Properties();
-        LocalSessionFactoryBean sf = config.sessionFactory(dataSource, props, null, null);
+        LocalSessionFactoryBean sf = config.sessionFactory(dataSource, props, null);
         assertEquals(props, sf.getHibernateProperties());
         //  Can't currently verify packages to scan or data source
     }

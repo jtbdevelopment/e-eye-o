@@ -1,7 +1,9 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 
 import javax.persistence.Column;
@@ -12,6 +14,8 @@ import javax.persistence.Entity;
  * Time: 10:17 PM
  */
 @Entity(name = "AppUser")
+@Audited
+@Proxy(lazy = false)
 public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppUser {
     @SuppressWarnings("unused")  //  Hibernate
     protected HibernateAppUser() {
@@ -70,12 +74,12 @@ public class HibernateAppUser extends HibernateIdObject<AppUser> implements AppU
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(nullable = false)
     public DateTime getLastLogout() {
-        return wrapped.getLastLogout();
+        return wrapped.getLastLogout().withMillisOfSecond(0);
     }
 
     @Override
     public void setLastLogout(final DateTime lastLogout) {
-        wrapped.setLastLogout(lastLogout);
+        wrapped.setLastLogout(lastLogout.withMillisOfSecond(0));
     }
 
     @Override

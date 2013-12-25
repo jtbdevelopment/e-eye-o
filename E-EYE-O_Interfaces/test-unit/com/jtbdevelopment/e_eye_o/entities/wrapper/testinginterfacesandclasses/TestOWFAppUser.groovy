@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.entities.wrappers.testinginterfacesandclasses
+package com.jtbdevelopment.e_eye_o.entities.wrapper.testinginterfacesandclasses
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser
 import org.joda.time.DateTime

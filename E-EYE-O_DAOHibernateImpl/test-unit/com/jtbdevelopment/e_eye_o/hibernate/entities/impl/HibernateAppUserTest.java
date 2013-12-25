@@ -100,15 +100,15 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     public void testGetLastLogin() throws Exception {
         context.checking(new Expectations() {{
             one(implAppUser).getLastLogout();
-            will(returnValue(DATETIME_VALUE));
+            will(returnValue(DATETIME_VALUE.withMillisOfSecond(0)));
         }});
-        assertEquals(DATETIME_VALUE, hibernateAppUser.getLastLogout());
+        assertEquals(DATETIME_VALUE.withMillisOfSecond(0), hibernateAppUser.getLastLogout());
     }
 
     @Test
     public void testSetLastLogin() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).setLastLogout(DATETIME_VALUE);
+            one(implAppUser).setLastLogout(DATETIME_VALUE.withMillisOfSecond(0));
         }});
         hibernateAppUser.setLastLogout(DATETIME_VALUE);
     }

@@ -2,6 +2,9 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Student;
+import org.hibernate.annotations.Proxy;
+import org.hibernate.envers.AuditJoinTable;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +18,8 @@ import java.util.Set;
  * Time: 7:24 PM
  */
 @Entity(name = "Student")
+@Audited
+@Proxy(lazy = false)
 public class HibernateStudent extends HibernateObservable<Student> implements Student {
     @SuppressWarnings("unused")    // Hibernate
     protected HibernateStudent() {
@@ -27,6 +32,7 @@ public class HibernateStudent extends HibernateObservable<Student> implements St
 
     @Override
     @ManyToMany(targetEntity = HibernateClassList.class)
+    @AuditJoinTable()
     public Set<ClassList> getClassLists() {
         return wrapped.getClassLists();
     }

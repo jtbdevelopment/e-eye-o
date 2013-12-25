@@ -89,15 +89,15 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     public void testGetTimestamp() throws Exception {
         context.checking(new Expectations() {{
             one(implPhoto).getTimestamp();
-            will(returnValue(LOCALDATETIME_VALUE));
+            will(returnValue(LOCALDATETIME_VALUE.withMillisOfSecond(0)));
         }});
-        assertEquals(LOCALDATETIME_VALUE, hibernatePhoto.getTimestamp());
+        assertEquals(LOCALDATETIME_VALUE.withMillisOfSecond(0), hibernatePhoto.getTimestamp());
     }
 
     @Test
     public void testSetTimestamp() throws Exception {
         context.checking(new Expectations() {{
-            one(implPhoto).setTimestamp(LOCALDATETIME_VALUE);
+            one(implPhoto).setTimestamp(LOCALDATETIME_VALUE.withMillisOfSecond(0));
         }});
         hibernatePhoto.setTimestamp(LOCALDATETIME_VALUE);
     }

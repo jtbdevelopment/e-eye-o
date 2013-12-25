@@ -5,6 +5,8 @@ import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Proxy;
+import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -29,6 +31,8 @@ import java.util.Collection;
  */
 @Entity(name = "IdObject")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Audited
+@Proxy(lazy = false)
 public abstract class HibernateIdObject<T extends IdObject> implements IdObjectWrapper<T>, IdObject {
     private static IdObjectFactory implFactory;
     private static IdObjectWrapperFactory wrapperFactory;

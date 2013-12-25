@@ -1,9 +1,8 @@
-package com.jtbdevelopment.e_eye_o.entities.wrappers
+package com.jtbdevelopment.e_eye_o.entities.wrapper
 
 import com.google.common.collect.LinkedHashMultiset
 import com.jtbdevelopment.e_eye_o.entities.IdObject
-import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory
-import com.jtbdevelopment.e_eye_o.entities.wrappers.testinginterfacesandclasses.*
+import com.jtbdevelopment.e_eye_o.entities.wrapper.testinginterfacesandclasses.*
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 

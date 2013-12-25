@@ -10,8 +10,6 @@ import com.jtbdevelopment.e_eye_o.entities.events.EventFactory;
 import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
@@ -35,15 +33,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     private final IdObjectUpdateHelper idObjectUpdateHelper;
     private final EventBus eventBus;
     private final EventFactory eventFactory;
-    private final JSONIdObjectSerializer jsonIdObjectSerializer;
 
     @Autowired
-    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper, final JSONIdObjectSerializer jsonIdObjectSerializer) {
+    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper) {
         super(sessionFactory, wrapperFactory, idObjectReflectionHelper);
         this.idObjectUpdateHelper = idObjectUpdateHelper;
         this.eventBus = eventBus;
         this.eventFactory = eventFactory;
-        this.jsonIdObjectSerializer = jsonIdObjectSerializer;
     }
 
     @Override
@@ -52,30 +48,11 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             throw new IllegalArgumentException("You cannot explicitly create a DeletedObject.");
         }
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
+        wrapped.setModificationTimestamp(DateTime.now());
         sessionFactory.getCurrentSession().save(wrapped);
         dealWithNewObservations(wrapped);
-        if (wrapped instanceof AppUserOwnedObject) {
-            saveHistory((AppUserOwnedObject) wrapped);
-        }
-
         publishCreate(wrapped);
-        sessionFactory.getCurrentSession().flush();
-        sessionFactory.getCurrentSession().clear();
         return (T) get(wrapped.getClass(), wrapped.getId());
-    }
-
-    private void saveHistory(final AppUserOwnedObject appUserOwnedObject) {
-        if (appUserOwnedObject instanceof AppUserSettings || appUserOwnedObject instanceof TwoPhaseActivity) {
-            return;
-        }
-        sessionFactory.getCurrentSession().flush();  // Force update so timestamp is updated
-        sessionFactory.getCurrentSession().clear();  // Force update so timestamp is updated
-        AppUserOwnedObject reloaded = get(AppUserOwnedObject.class, appUserOwnedObject.getId());
-        HibernateHistory hibernateHistory = new HibernateHistory();
-        hibernateHistory.setAppUser(reloaded.getAppUser());
-        hibernateHistory.setModificationTimestamp(reloaded.getModificationTimestamp());
-        hibernateHistory.setSerializedVersion(jsonIdObjectSerializer.write(reloaded));
-        sessionFactory.getCurrentSession().save(hibernateHistory);
     }
 
     @Override
@@ -91,15 +68,10 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     private <T extends IdObject> T internalUpdate(final T entity) {
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
+        entity.setModificationTimestamp(DateTime.now());
         sessionFactory.getCurrentSession().update(wrapped);
         dealWithObservationUpdatesOrDeletes(wrapped);
-        if (entity instanceof AppUserOwnedObject) {
-            sessionFactory.getCurrentSession().flush();
-            saveHistory((AppUserOwnedObject) wrapped);
-        }
         publishUpdate(wrapped);
-        sessionFactory.getCurrentSession().flush();
-        sessionFactory.getCurrentSession().clear();
         return (T) get(wrapped.getClass(), wrapped.getId());
     }
 
@@ -120,8 +92,6 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             //  If un-archiving, un-archive this one first
             wrapped.setArchived(newArchivedState);
             wrapped = internalUpdate(wrapped);
-            currentSession.flush();
-            currentSession.clear();
             wrapped = (T) get(wrapped.getClass(), wrapped.getId());
         }
 
@@ -157,9 +127,6 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             }
         }
 
-        currentSession.flush();
-        currentSession.clear();
-
         if (newArchivedState) {
             wrapped = (T) get(wrapped.getClass(), wrapped.getId());
             //  If un-archiving, un-archive this one last
@@ -171,52 +138,37 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
     @Override
     public TwoPhaseActivity activateUser(final TwoPhaseActivity relatedActivity) {
-        Session currentSession = sessionFactory.getCurrentSession();
+        AppUser appUser = get(AppUser.class, relatedActivity.getAppUser().getId());
+        appUser.setActive(true);
+        appUser.setActivated(true);
+        internalUpdate(appUser);
         relatedActivity.setArchived(true);
-        AppUser wrappedAppUser = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, relatedActivity.getAppUser());
-        wrappedAppUser.setActive(true);
-        wrappedAppUser.setActivated(true);
-        currentSession.update(wrappedAppUser);
-        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, relatedActivity);
-        currentSession.update(wrappedRelatedActivity);
-        return wrappedRelatedActivity;
+        return internalUpdate(relatedActivity);
     }
 
     @Override
     public TwoPhaseActivity updateUserEmailAddress(final TwoPhaseActivity changeRequest, final String newAddress) {
-        Session currentSession = sessionFactory.getCurrentSession();
+        AppUser appUser = get(AppUser.class, changeRequest.getAppUser().getId());
+        appUser.setEmailAddress(newAddress);
+        internalUpdate(appUser);
         changeRequest.setArchived(true);
-        AppUser wrappedAppUser = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, changeRequest.getAppUser());
-        wrappedAppUser.setEmailAddress(newAddress);
-        currentSession.update(wrappedAppUser);
-        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, changeRequest);
-        currentSession.saveOrUpdate(wrappedRelatedActivity);
-        publishUpdate(wrappedAppUser);
-        return wrappedRelatedActivity;
+        return internalUpdate(changeRequest);
     }
 
     @Override
     public TwoPhaseActivity resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword) {
-        Session currentSession = sessionFactory.getCurrentSession();
+        AppUser appUser = get(AppUser.class, relatedActivity.getAppUser().getId());
+        appUser.setPassword(newPassword);
+        internalUpdate(appUser);
         relatedActivity.setArchived(true);
-        AppUser wrappedAppUser = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, relatedActivity.getAppUser());
-        wrappedAppUser.setActive(true);
-        wrappedAppUser.setActivated(true);
-        wrappedAppUser.setPassword(newPassword);
-        currentSession.update(wrappedAppUser);
-        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, relatedActivity);
-        currentSession.update(wrappedRelatedActivity);
-        return wrappedRelatedActivity;
+        return internalUpdate(relatedActivity);
     }
 
     @Override
     public TwoPhaseActivity cancelResetPassword(final TwoPhaseActivity relatedActivity) {
-        Session currentSession = sessionFactory.getCurrentSession();
         relatedActivity.setArchived(true);
         relatedActivity.setExpirationTime(new DateTime());
-        TwoPhaseActivity wrappedRelatedActivity = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, relatedActivity);
-        currentSession.update(wrappedRelatedActivity);
-        return wrappedRelatedActivity;
+        return internalUpdate(relatedActivity);
     }
 
     @Override
@@ -227,17 +179,20 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     }
 
     @Override
+    public void deactivateUser(final AppUser user) {
+        AppUser loaded = get(AppUser.class, user.getId());
+        loaded.setActive(false);
+        internalUpdate(loaded);
+    }
+
+    @Override
     public AppUserSettings updateSettings(final AppUser appUser, final Map<String, Object> settings) {
         AppUserSettings userSettings = getEntitiesForUser(AppUserSettings.class, appUser, 0, 0).iterator().next();
         userSettings.updateSettings(settings);
-        sessionFactory.getCurrentSession().update(userSettings);
-        saveHistory(userSettings);
-        publishUpdate(userSettings);
-        return userSettings;
+        return internalUpdate(userSettings);
     }
 
-    //  TODO - mark delete and allow undelete
-    //  TODO - paginate?
+    //  TODO - allow undelete - feasible now with envers
     @Override
     @SuppressWarnings("unchecked")
     public void deleteUser(final AppUser appUser) {
@@ -249,7 +204,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             return;  //  Already deleted?
         }
 
-        for (Class<? extends AppUserOwnedObject> appUserClass : Arrays.asList(Student.class, ClassList.class, ObservationCategory.class, TwoPhaseActivity.class, AppUserSettings.class)) {
+        for (Class<? extends AppUserOwnedObject> appUserClass : Arrays.asList(Student.class, ClassList.class, ObservationCategory.class, Semester.class, TwoPhaseActivity.class, AppUserSettings.class)) {
             Collection<? extends AppUserOwnedObject> deleteList = getEntitiesForUser(appUserClass, wrapped, 0, 0);
             for (AppUserOwnedObject entity : deleteList) {
                 delete(entity);
@@ -260,26 +215,15 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
         currentSession.flush();
 
-        Query query = sessionFactory.getCurrentSession().createQuery("delete " + sessionFactory.getClassMetadata(HibernateHistory.class).getEntityName() + " where appUser = :appUser");
-        query.setParameter("appUser", wrapped);
-        query.executeUpdate();
-        currentSession.flush();
+        //  TODO - delete audit tables
 
         currentSession.delete(wrapped);
         publishDelete(wrapped);
     }
 
     @Override
-    public void deactivateUser(final AppUser user) {
-        AppUser wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, user);
-        wrapped.setActive(false);
-
-        sessionFactory.getCurrentSession().update(wrapped);
-        publishUpdate(wrapped);
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
+    //  TODO - allow undelete - feasible now with envers
     public <T extends AppUserOwnedObject> void delete(final T entity) {
         Set<AppUserOwnedObject> updatedItems = new HashSet<>();
         Set<AppUserOwnedObject> deletedItems = new HashSet<>();
@@ -304,17 +248,13 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (wrapped instanceof ObservationCategory) {
             for (Observation observation : getAllObservationsForObservationCategory((ObservationCategory) wrapped)) {
                 observation.removeCategory((ObservationCategory) wrapped);
-                currentSession.update(observation);
-                saveHistory(observation);
-                updatedItems.add(observation);
+                updatedItems.add(internalUpdate(observation));
             }
         }
         if (wrapped instanceof ClassList) {
             for (Student student : getAllStudentsForClassList((ClassList) wrapped)) {
                 student.removeClassList((ClassList) wrapped);
-                currentSession.update(student);
-                saveHistory(student);
-                updatedItems.add(student);
+                updatedItems.add(internalUpdate(student));
             }
         }
         final List<Photo> allPhotosForEntity = getAllPhotosForEntity(wrapped, 0, 0);

@@ -12,7 +12,6 @@
           <element id="module-output" name="E-EYE-O_RIAVaadin" />
           <element id="module-output" name="E-EYE-O_DAOHibernateImpl" />
           <element id="module-output" name="E-EYE-O_ReportsJasper" />
-          <element id="module-output" name="E-EYE-O_EntitiesGroovyImpl" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="joda-time:joda-time:2.1" />
@@ -37,12 +36,13 @@
           <element id="library" level="project" name="com.vaadin:vaadin-server:7.1.3" />
           <element id="library" level="project" name="org.springframework.security:spring-security-config:3.1.3.RELEASE" />
           <element id="library" level="project" name="org.springframework.security:spring-security-web:3.1.3.RELEASE" />
-          <element id="library" level="project" name="org.hibernate:hibernate-core:4.1.9.Final" />
+          <element id="library" level="project" name="org.hibernate:hibernate-core:4.2.8.Final" />
           <element id="library" level="project" name="org.springframework:org.springframework.orm:3.2.0.RELEASE" />
           <element id="library" level="project" name="org.springframework:org.springframework.transaction:3.2.0.RELEASE" />
           <element id="library" level="project" name="org.joda:joda-convert:1.2" />
           <element id="library" level="project" name="org.jadira.usertype:usertype.core:3.0.0.GA" />
           <element id="library" level="project" name="jasperreports-5.1.2" />
+          <element id="library" level="project" name="hibernate-envers-4.2.8.Final-sources" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="E-EYE-O_Example-VaadinJerseyJacksonJava/web/Web" />

@@ -2,7 +2,9 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
+import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -15,6 +17,8 @@ import javax.persistence.ManyToOne;
  * Time: 12:56 AM
  */
 @Entity(name = "Photo")
+@Audited
+@Proxy(lazy = false)
 public class HibernatePhoto extends HibernateAppUserOwnedObject<Photo> implements Photo {
     @SuppressWarnings("unused")    // Hibernate
     protected HibernatePhoto() {
@@ -51,12 +55,12 @@ public class HibernatePhoto extends HibernateAppUserOwnedObject<Photo> implement
     @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     public LocalDateTime getTimestamp() {
-        return wrapped.getTimestamp();
+        return wrapped.getTimestamp().withMillisOfSecond(0);
     }
 
     @Override
     public void setTimestamp(final LocalDateTime timestamp) {
-        wrapped.setTimestamp(timestamp);
+        wrapped.setTimestamp(timestamp.withMillisOfSecond(0));
     }
 
     @Override

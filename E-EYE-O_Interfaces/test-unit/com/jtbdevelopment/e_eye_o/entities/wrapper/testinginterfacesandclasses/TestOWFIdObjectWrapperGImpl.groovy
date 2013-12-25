@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.entities.wrappers.testinginterfacesandclasses
+package com.jtbdevelopment.e_eye_o.entities.wrapper.testinginterfacesandclasses
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper
@@ -6,19 +6,13 @@ import org.joda.time.DateTime
 
 /**
  * Date: 12/8/13
- * Time: 4:00 PM
+ * Time: 3:59 PM
  */
-//  Oddly defined to allow some bad injections
-public class TestOWFAlternateWrapper implements IdObjectWrapper<IdObject>, TestOWFInterface {
-    protected IdObject wrapped;
+public class TestOWFIdObjectWrapperGImpl<T extends IdObject> implements IdObjectWrapper<T>, IdObject {
+    T wrapped;
 
-    public TestOWFAlternateWrapper(final IdObject entityToWrap) {
+    public TestOWFIdObjectWrapperGImpl(final T entityToWrap) {
         wrapped = entityToWrap;
-    }
-
-    @Override
-    public IdObject getWrapped() {
-        return wrapped;
     }
 
     @Override

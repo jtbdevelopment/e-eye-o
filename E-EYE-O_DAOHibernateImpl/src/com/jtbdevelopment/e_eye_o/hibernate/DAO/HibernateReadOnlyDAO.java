@@ -1,35 +1,34 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
-import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectDeserializer;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Date: 11/18/12
@@ -37,20 +36,12 @@ import java.util.*;
  */
 @SuppressWarnings("unused")
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAware {
+public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     private final static Logger logger = LoggerFactory.getLogger(HibernateReadOnlyDAO.class);
 
     protected final IdObjectReflectionHelper idObjectReflectionHelper;
     protected final SessionFactory sessionFactory;
     protected final IdObjectWrapperFactory wrapperFactory;
-    private JSONIdObjectDeserializer jsonIdObjectDeserializer;
-
-    protected ApplicationContext applicationContext;
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
 
     @Autowired
     public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
@@ -182,32 +173,24 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAwar
     @Override
     @SuppressWarnings("unchecked")
     public List<? extends AppUserOwnedObject> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, final int maxResults) {
-        Criteria criteria = sessionFactory.getCurrentSession()
-                .createCriteria(HibernateHistory.class)
-                .add(Restrictions.eq("appUser", appUser))
-                .add(Restrictions.or(
-                        Restrictions.gt("modificationTimestampInstant", since.getMillis()),
-                        Restrictions.and(
-                                Restrictions.eq("modificationTimestampInstant", since.getMillis()),
-                                Restrictions.gt("id", sinceId)
-                        ))
+        AuditReader reader = AuditReaderFactory.get(sessionFactory.getCurrentSession());
+        AuditQuery query = reader.createQuery().forRevisionsOfEntity(HibernateAppUserOwnedObject.class, true, false);
+        query.add(AuditEntity.property("appUser").eq(appUser))
+                .add(
+                        AuditEntity.or(
+                                AuditEntity.property("modificationTimestampInstant").gt(since.getMillis())
+                                ,
+                                AuditEntity.and(
+                                        AuditEntity.property("modificationTimestampInstant").eq(since.getMillis()),
+                                        AuditEntity.id().gt(sinceId)
+                                ))
                 )
-                .addOrder(Order.asc("modificationTimestampInstant"))
-                .addOrder(Order.asc("id"));
+                .addOrder(AuditEntity.property("modificationTimestampInstant").asc())
+                .addOrder(AuditEntity.id().asc());
         if (maxResults >= 0) {
-            criteria.setMaxResults(maxResults);
+            query.setMaxResults(maxResults);
         }
-        List<HibernateHistory> results = criteria.list();
-        final JSONIdObjectDeserializer jsonIdObjectDeserializer = getJSONIdObjectDeserializer();
-        Collection<? extends AppUserOwnedObject> transformedResults = Collections2.transform(results, new Function<HibernateHistory, AppUserOwnedObject>() {
-            @Nullable
-            @Override
-            public AppUserOwnedObject apply(@Nullable HibernateHistory input) {
-                return (AppUserOwnedObject) (input == null ? null : jsonIdObjectDeserializer.readAsObjects(input.getSerializedVersion()));
-            }
-        });
-
-        return new LinkedList<>(transformedResults);
+        return query.getResultList();
     }
 
     private Criteria addPhotoForCriteria(final Criteria criteria, final AppUserOwnedObject ownedObject) {
@@ -339,12 +322,5 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO, ApplicationContextAwar
         }
 
         return sessionFactory.getClassMetadata(wrapperFor).getEntityName();
-    }
-
-    protected JSONIdObjectDeserializer getJSONIdObjectDeserializer() {
-        if (jsonIdObjectDeserializer == null) {
-            jsonIdObjectDeserializer = applicationContext.getBean(JSONIdObjectDeserializer.class);
-        }
-        return jsonIdObjectDeserializer;
     }
 }

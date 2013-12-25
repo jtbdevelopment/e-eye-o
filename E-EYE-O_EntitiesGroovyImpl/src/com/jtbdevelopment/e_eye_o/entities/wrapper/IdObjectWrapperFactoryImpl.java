@@ -1,11 +1,9 @@
-package com.jtbdevelopment.e_eye_o.entities.wrappers;
+package com.jtbdevelopment.e_eye_o.entities.wrapper;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
-import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapper;
-import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -2,6 +2,8 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
+import org.hibernate.annotations.Proxy;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,8 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity(name = "ObservationCategory")
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"appUserID", "shortName"}))
+@Audited
+@Proxy(lazy = false)
 public class HibernateObservationCategory extends HibernateAppUserOwnedObject<ObservationCategory> implements ObservationCategory {
     @SuppressWarnings("unused")    // Hibernate
     protected HibernateObservationCategory() {

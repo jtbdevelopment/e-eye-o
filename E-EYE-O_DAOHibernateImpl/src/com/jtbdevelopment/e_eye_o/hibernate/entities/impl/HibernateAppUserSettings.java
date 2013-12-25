@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map;
  * Time: 7:17 PM
  */
 @Entity(name = "AppUserSettings")
+@Proxy(lazy = false)
 public class HibernateAppUserSettings extends HibernateAppUserOwnedObject<AppUserSettings> implements AppUserSettings {
     public HibernateAppUserSettings() {
     }

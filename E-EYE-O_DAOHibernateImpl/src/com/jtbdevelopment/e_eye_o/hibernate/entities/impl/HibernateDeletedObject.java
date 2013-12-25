@@ -1,6 +1,8 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 
 import com.jtbdevelopment.e_eye_o.entities.DeletedObject;
+import org.hibernate.annotations.Proxy;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,8 @@ import javax.persistence.Entity;
  * Time: 1:14 PM
  */
 @Entity(name = "DeletedObject")
+@Proxy(lazy = false)
+@Audited
 public class HibernateDeletedObject extends HibernateAppUserOwnedObject<DeletedObject> implements DeletedObject {
     @SuppressWarnings("unused")    // Hibernate
     protected HibernateDeletedObject() {

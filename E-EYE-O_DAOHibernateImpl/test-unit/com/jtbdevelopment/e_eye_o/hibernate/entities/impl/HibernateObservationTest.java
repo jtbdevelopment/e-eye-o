@@ -75,15 +75,15 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testGetObservationTimestamp() throws Exception {
         context.checking(new Expectations() {{
             one(implObservation).getObservationTimestamp();
-            will(returnValue(LOCALDATETIME_VALUE));
+            will(returnValue(LOCALDATETIME_VALUE.withMillisOfSecond(0)));
         }});
-        assertEquals(LOCALDATETIME_VALUE, hibernateObservation.getObservationTimestamp());
+        assertEquals(LOCALDATETIME_VALUE.withMillisOfSecond(0), hibernateObservation.getObservationTimestamp());
     }
 
     @Test
     public void testSetObservationTimestamp() throws Exception {
         context.checking(new Expectations() {{
-            one(implObservation).setObservationTimestamp(LOCALDATETIME_VALUE);
+            one(implObservation).setObservationTimestamp(LOCALDATETIME_VALUE.withMillisOfSecond(0));
         }});
         hibernateObservation.setObservationTimestamp(LOCALDATETIME_VALUE);
     }

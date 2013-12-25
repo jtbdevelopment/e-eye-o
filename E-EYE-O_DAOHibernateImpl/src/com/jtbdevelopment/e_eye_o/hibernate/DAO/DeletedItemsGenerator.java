@@ -1,6 +1,8 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
-import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
+import com.jtbdevelopment.e_eye_o.entities.DeletedObject;
+import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.serialization.IdObjectSerializer;
 import org.hibernate.SessionFactory;
@@ -50,6 +52,7 @@ public class DeletedItemsGenerator implements PreDeleteEventListener {
             final DeletedObject wrap = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, deletedObject);
             event.getSession().save(wrap);
             //  TODO - logic duped with R/W DAO
+/*
             if (!(entity instanceof AppUserSettings) && !(entity instanceof TwoPhaseActivity)) {
                 final HibernateHistory hibernateHistory = new HibernateHistory();
                 hibernateHistory.setAppUser(wrap.getAppUser());
@@ -57,6 +60,7 @@ public class DeletedItemsGenerator implements PreDeleteEventListener {
                 hibernateHistory.setModificationTimestamp(wrap.getModificationTimestamp());
                 event.getSession().save(hibernateHistory);
             }
+*/
         }
         return false;
     }

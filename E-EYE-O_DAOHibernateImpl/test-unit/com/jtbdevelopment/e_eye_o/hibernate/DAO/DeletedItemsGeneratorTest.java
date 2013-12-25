@@ -90,7 +90,6 @@ public class DeletedItemsGeneratorTest {
             will(returnValue("Content"));
             one(wrapped).getModificationTimestamp();
             will(returnValue(new DateTime()));
-            one(eventSource).save(with(any(HibernateHistory.class)));
         }});
 
         PreDeleteEvent pde = new PreDeleteEvent(local, null, null, null, eventSource);

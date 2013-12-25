@@ -3,7 +3,9 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
+import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -18,6 +20,8 @@ import java.util.Set;
  * Time: 7:26 PM
  */
 @Entity(name = "Observation")
+@Audited
+@Proxy(lazy = false)
 public class HibernateObservation extends HibernateAppUserOwnedObject<Observation> implements Observation {
     @SuppressWarnings("unused")    // Hibernate
     protected HibernateObservation() {
@@ -43,12 +47,12 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
     @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     public LocalDateTime getObservationTimestamp() {
-        return wrapped.getObservationTimestamp();
+        return wrapped.getObservationTimestamp().withMillisOfSecond(0);
     }
 
     @Override
     public void setObservationTimestamp(final LocalDateTime observationDate) {
-        wrapped.setObservationTimestamp(observationDate);
+        wrapped.setObservationTimestamp(observationDate.withMillisOfSecond(0));
     }
 
     @Override
