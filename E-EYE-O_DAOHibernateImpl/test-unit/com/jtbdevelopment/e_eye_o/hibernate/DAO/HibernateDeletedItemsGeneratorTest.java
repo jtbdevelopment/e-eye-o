@@ -18,11 +18,11 @@ import static org.testng.AssertJUnit.assertFalse;
  * Date: 2/17/13
  * Time: 9:45 PM
  */
-public class DeletedItemsGeneratorTest {
+public class HibernateDeletedItemsGeneratorTest {
     private Mockery context;
     private IdObjectWrapperFactory wrapper;
     private IdObjectFactory factory;
-    private DeletedItemsGenerator listener;
+    private HibernateDeletedItemsGenerator listener;
     private DeletedObject impl, wrapped;
     private DeletedObjectBuilder builder;
     private AppUser appUser;
@@ -38,7 +38,7 @@ public class DeletedItemsGeneratorTest {
         wrapped = context.mock(DeletedObject.class, "W");
         appUser = context.mock(AppUser.class);
         serializer = context.mock(IdObjectSerializer.class);
-        listener = new DeletedItemsGenerator(wrapper, factory, null, serializer);
+        listener = new HibernateDeletedItemsGenerator(wrapper, factory, null, serializer);
         eventSource = context.mock(EventSource.class);
         builder = context.mock(DeletedObjectBuilder.class);
         context.checking(new Expectations() {{
