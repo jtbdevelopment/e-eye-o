@@ -35,8 +35,8 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     private final EventFactory eventFactory;
 
     @Autowired
-    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper) {
-        super(sessionFactory, wrapperFactory, idObjectReflectionHelper);
+    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectUpdateHelper idObjectUpdateHelper, final IdObjectFactory idObjectFactory) {
+        super(sessionFactory, wrapperFactory, idObjectReflectionHelper, idObjectFactory);
         this.idObjectUpdateHelper = idObjectUpdateHelper;
         this.eventBus = eventBus;
         this.eventFactory = eventFactory;
@@ -50,7 +50,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         wrapped.setModificationTimestamp(DateTime.now());
         sessionFactory.getCurrentSession().save(wrapped);
-        dealWithNewObservations(wrapped);
+        dealWithObservationChanges(wrapped, false);
         publishCreate(wrapped);
         return (T) get(wrapped.getClass(), wrapped.getId());
     }
@@ -70,7 +70,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         entity.setModificationTimestamp(DateTime.now());
         sessionFactory.getCurrentSession().update(wrapped);
-        dealWithObservationUpdatesOrDeletes(wrapped);
+        dealWithObservationChanges(entity, false);
         publishUpdate(wrapped);
         return (T) get(wrapped.getClass(), wrapped.getId());
     }
@@ -210,10 +210,6 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 delete(entity);
             }
         }
-        for (DeletedObject deletedObject : getEntitiesForUser(DeletedObject.class, wrapped, 0, 0)) {
-            currentSession.delete(deletedObject);
-        }
-        currentSession.flush();
 
         //  TODO - delete audit tables
 
@@ -276,46 +272,35 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
 
         deletedItems.add(wrapped);
         currentSession.delete(wrapped);
-        Observable observable = dealWithObservationUpdatesOrDeletes(wrapped);
+        Observable observable = dealWithObservationChanges(entity, true);
         if (observable != null) {
             updatedItems.add(observable);  //  Flush forced internally
         }
-        currentSession.flush();   //  Force any delete object generations inside this session
         publishChanges(updatedItems, deletedItems);
     }
 
-    private void dealWithNewObservations(final IdObject idObject) {
-        if (idObject instanceof Observation) {
-            sessionFactory.getCurrentSession().flush();
-            sessionFactory.getCurrentSession().clear();
-            Observation observation = get(Observation.class, idObject.getId());
-            if (observation.getObservationSubject() == null) {
-                throw new RuntimeException("observationSubject is null");
+    private Observable dealWithObservationChanges(final IdObject entity, final boolean isDelete) {
+        if (entity instanceof Observation) {
+            Observation observation = (Observation) entity;
+            Observable observable = get(Observable.class, ((Observation) entity).getObservationSubject().getId());
+            if (observable == null) {
+                return null;
             }
-            Observable observable = observation.getObservationSubject();
-            if (observation.getObservationTimestamp() == null) {
-                throw new RuntimeException("observationTimeStamp is null");
+            Set<Observation> observationSet = getEntitiesForUser(Observation.class, observation.getAppUser(), 0, 0);
+            if (isDelete) {
+                observationSet.remove(observation);
+            } else {
+                observationSet.add(observation);
             }
-            if (observable.getLastObservationTimestamp() == null) {
-                throw new RuntimeException("lastObservationTimestamp is null");
+            LocalDateTime last = Observable.NEVER_OBSERVED;
+            for (Observation o : observationSet) {
+                if (last.compareTo(o.getObservationTimestamp()) < 0) {
+                    last = o.getObservationTimestamp();
+                }
             }
-            if (observation.getObservationTimestamp().compareTo(observable.getLastObservationTimestamp()) > 0) {
-                observable.setLastObservationTimestamp(observation.getObservationTimestamp());
-                internalUpdate(observable);
-            }
-        }
-    }
-
-    //  TODO - not efficient, but easy to code
-    private Observable dealWithObservationUpdatesOrDeletes(final IdObject idObject) {
-        if (idObject instanceof Observation) {
-            Observation observation = (Observation) idObject;
-            Observable observable = observation.getObservationSubject();
-            LocalDateTime lastObservationTimestamp = getLastObservationTimestampForEntity(observable);
-            if (lastObservationTimestamp.compareTo(observable.getLastObservationTimestamp()) != 0) {
-                observable.setLastObservationTimestamp(lastObservationTimestamp);
-                internalUpdate(observable);
-                return observable;
+            if (!observable.getLastObservationTimestamp().equals(last)) {
+                observable.setLastObservationTimestamp(last);
+                return internalUpdate(observable);
             }
         }
         return null;

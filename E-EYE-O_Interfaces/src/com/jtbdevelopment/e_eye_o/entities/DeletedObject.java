@@ -9,16 +9,13 @@ import org.hibernate.validator.constraints.NotEmpty;
  * Time: 4:23 PM
  * <p/>
  * Represents a record of a deleted object
- * Useful for ATOM/RSS style listing for knowing something has changed about an object which no longer exits
+ * Useful for ATOM/RSS style listing for knowing something has changed about an object which no longer exists
  * <p/>
  * It is generally expected that
- * a)  these will automatically be created by DAO service as appropriate
- * b)  DAO service will prevent updates on deletedobject
- * c)  DAO service will prevent deletes of deletedobject
- * d)  DAO service will automatically remove these if user is deleted
- * c)  DAO service will filter out of query results unless
- * i)  explicitly called for
- * ii) looking for a time based change list
+ * a)  these objects cannot be created or modified or deleted directly via ReadWriteDAO.create/update/delete.  These calls will exception in these cases
+ * b)  these will be provided as part of result listings of #ReadOnlyDAO.getModifiedSince
+ * <p/>
+ * The DAO can model this object in the store or generate on the fly as desired
  */
 @IdObjectEntitySettings(viewable = true, editable = false, defaultSortField = "deletedId", singular = "Deleted Item", plural = "Deleted Items")
 public interface DeletedObject extends AppUserOwnedObject {

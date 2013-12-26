@@ -18,7 +18,6 @@ public class HibernateIdObjectWrapperConfig {
         wrapperFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, ObservationCategory.class, HibernateObservationCategory.class);
         wrapperFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Observation.class, HibernateObservation.class);
         wrapperFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, ClassList.class, HibernateClassList.class);
-        wrapperFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, DeletedObject.class, HibernateDeletedObject.class);
         wrapperFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Observable.class, HibernateObservable.class);
         wrapperFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, TwoPhaseActivity.class, HibernateTwoPhaseActivity.class);
         wrapperFactory.addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Semester.class, HibernateSemester.class);

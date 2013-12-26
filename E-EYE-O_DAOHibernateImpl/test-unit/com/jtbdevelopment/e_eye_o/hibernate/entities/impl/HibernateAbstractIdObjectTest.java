@@ -35,7 +35,6 @@ public class HibernateAbstractIdObjectTest {
             one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Observation.class, HibernateObservation.class);
             one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, ObservationCategory.class, HibernateObservationCategory.class);
             one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, TwoPhaseActivity.class, HibernateTwoPhaseActivity.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, DeletedObject.class, HibernateDeletedObject.class);
             one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Observable.class, HibernateObservable.class);
             one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, AppUserSettings.class, HibernateAppUserSettings.class);
             one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, AppUserOwnedObject.class, HibernateAppUserOwnedObject.class);
@@ -49,8 +48,6 @@ public class HibernateAbstractIdObjectTest {
             allowing(idObjectWrapperFactory).getEntityForWrapper(IdObjectWrapperFactory.WrapperKind.DAO, HibernateClassList.class);
             will(returnValue(ClassList.class));
             allowing(idObjectWrapperFactory).getEntityForWrapper(IdObjectWrapperFactory.WrapperKind.DAO, DeletedObject.class);
-            will(returnValue(DeletedObject.class));
-            allowing(idObjectWrapperFactory).getEntityForWrapper(IdObjectWrapperFactory.WrapperKind.DAO, HibernateDeletedObject.class);
             will(returnValue(DeletedObject.class));
             allowing(idObjectWrapperFactory).getEntityForWrapper(IdObjectWrapperFactory.WrapperKind.DAO, Student.class);
             will(returnValue(Student.class));

@@ -1,8 +1,11 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
@@ -13,6 +16,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.joda.time.DateTime;
@@ -25,10 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Date: 11/18/12
@@ -42,12 +45,14 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     protected final IdObjectReflectionHelper idObjectReflectionHelper;
     protected final SessionFactory sessionFactory;
     protected final IdObjectWrapperFactory wrapperFactory;
+    protected final IdObjectFactory idObjectFactory;
 
     @Autowired
-    public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper) {
+    public HibernateReadOnlyDAO(final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectFactory idObjectFactory) {
         this.sessionFactory = sessionFactory;
         this.wrapperFactory = wrapperFactory;
         this.idObjectReflectionHelper = idObjectReflectionHelper;
+        this.idObjectFactory = idObjectFactory;
     }
 
 
@@ -174,7 +179,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     @SuppressWarnings("unchecked")
     public List<? extends AppUserOwnedObject> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, final int maxResults) {
         AuditReader reader = AuditReaderFactory.get(sessionFactory.getCurrentSession());
-        AuditQuery query = reader.createQuery().forRevisionsOfEntity(HibernateAppUserOwnedObject.class, true, false);
+        AuditQuery query = reader.createQuery().forRevisionsOfEntity(HibernateAppUserOwnedObject.class, false, true);
         query.add(AuditEntity.property("appUser").eq(appUser))
                 .add(
                         AuditEntity.or(
@@ -190,7 +195,28 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         if (maxResults >= 0) {
             query.setMaxResults(maxResults);
         }
-        return query.getResultList();
+        List<Object[]> resultSets = query.getResultList();
+        List<AppUserOwnedObject> results = new LinkedList<>();
+        results.addAll(Collections2.transform(resultSets, new Function<Object[], AppUserOwnedObject>() {
+            @Nullable
+            @Override
+            public AppUserOwnedObject apply(@Nullable final Object[] input) {
+                if (input != null) {
+                    AppUserOwnedObject owned = (AppUserOwnedObject) input[0];
+                    if (RevisionType.DEL.equals(input[2])) {
+                        return idObjectFactory.
+                                newDeletedObjectBuilder(owned.getAppUser()).
+                                withDeletedId(owned.getId()).
+                                withModificationTimestamp(new DateTime(((DefaultRevisionEntity) input[1]).getRevisionDate())).
+                                build();
+                    } else {
+                        return owned;
+                    }
+                }
+                return null;
+            }
+        }));
+        return results;
     }
 
     private Criteria addPhotoForCriteria(final Criteria criteria, final AppUserOwnedObject ownedObject) {
@@ -206,14 +232,14 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Photo> getActivePhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
+    public List<Photo> getActivePhotosForEntity(final AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
         Criteria photoFor = addPhotoForCriteria(createEntityCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), false, firstResult, maxResults), ownedObject);
         return photoFor.list();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Photo> getArchivedPhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
+    public List<Photo> getArchivedPhotosForEntity(final AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
         Criteria photoFor = addPhotoForCriteria(createEntityCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), true, firstResult, maxResults), ownedObject);
         return photoFor.list();
     }
@@ -226,13 +252,13 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     }
 
     @Override
-    public int getActivePhotosForEntityCount(AppUserOwnedObject ownedObject) {
+    public int getActivePhotosForEntityCount(final AppUserOwnedObject ownedObject) {
         Criteria photoFor = addPhotoForCriteria(createEntityCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), false, 0, 0), ownedObject);
         return returnRowCountForCriteria(photoFor);
     }
 
     @Override
-    public int getArchivedPhotosForEntityCount(AppUserOwnedObject ownedObject) {
+    public int getArchivedPhotosForEntityCount(final AppUserOwnedObject ownedObject) {
         Criteria photoFor = addPhotoForCriteria(createEntityCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), true, 0, 0), ownedObject);
         return returnRowCountForCriteria(photoFor);
     }

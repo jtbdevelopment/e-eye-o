@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.Entity;
 @Entity(name = "TwoPhaseActivity")
 @SuppressWarnings("unused")
 @Proxy(lazy = false)
+@Audited
 public class HibernateTwoPhaseActivity extends HibernateAppUserOwnedObject<TwoPhaseActivity> implements TwoPhaseActivity {
 
     public HibernateTwoPhaseActivity() {

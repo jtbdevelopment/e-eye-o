@@ -331,19 +331,19 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
             assertEquals(initialList.get(counter), firstSetAsString.get(counter));
         }
 
+        Thread.sleep(1000);
         DateTime secondTS = new DateTime();
-        Thread.sleep(1);
         p.setDescription("P2");
         s.addClassList(clV2);
         p = rwDAO.update(updateUser, p);
         s = rwDAO.update(updateUser, s);
-        final Collection<String> secondList = Collections2.transform(Arrays.asList(s, p), new Function<AppUserOwnedObject, String>() {
+        final List<String> secondList = new LinkedList<>(Collections2.transform(Arrays.asList(s, p), new Function<AppUserOwnedObject, String>() {
             @Nullable
             @Override
             public String apply(@Nullable final AppUserOwnedObject input) {
                 return serializer.write(input);
             }
-        });
+        }));
         final List<? extends IdObject> secondSet = rwDAO.getModificationsSince(updateUser, secondTS, "", 0);
         final List<String> secondSetAsString = new LinkedList<>(Collections2.transform(secondSet, new Function<IdObject, String>() {
             @Nullable
