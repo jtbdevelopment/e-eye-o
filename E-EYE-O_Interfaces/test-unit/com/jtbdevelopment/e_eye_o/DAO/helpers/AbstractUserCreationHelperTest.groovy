@@ -106,6 +106,35 @@ abstract class AbstractUserCreationHelperTest {
         assert twoPhaseActivityDAO.is(userHelper.generateActivationRequest(userDAO))
     }
 
+    @Test
+    public void testActivateUser() {
+        TwoPhaseActivity activity = context.mock(TwoPhaseActivity.class, "TPID")
+        TwoPhaseActivity activityUpdate = context.mock(TwoPhaseActivity.class, "TPDAOUP")
+        AppUser userID = context.mock(AppUser.class, "ID")
+        AppUser userDAO = context.mock(AppUser.class, "DAO");
+        AppUser userUpdate = context.mock(AppUser.class, "DAOUP");
+        context.checking(new Expectations() {
+            {
+                one(activity).getAppUser()
+                will(returnValue(userID));
+                one(userID).getId()
+                will(returnValue("2"))
+                one(userDAO).getId()
+                will(returnValue("2"))
+                one(readWriteDAO).get(AppUser.class, "2")
+                will(returnValue(userDAO))
+                one(readWriteDAO).get(AppUser.class, "2")
+                will(returnValue(userUpdate))
+                one(userDAO).setActivated(true)
+                one(userDAO).setActive(true)
+                one(activity).setArchived(true)
+                one(readWriteDAO).trustedUpdates([userDAO, activity])
+                will(returnValue([userUpdate, activityUpdate]))
+            }
+        })
+        assert userUpdate == userHelper.activateUser(activity)
+    }
+
     private TwoPhaseActivity setupForActivationRequest() {
         TwoPhaseActivity twoPhaseActivityID = context.mock(TwoPhaseActivity.class, "TPAID")
         TwoPhaseActivity twoPhaseActivityDAO = context.mock(TwoPhaseActivity.class, "TPADAO")

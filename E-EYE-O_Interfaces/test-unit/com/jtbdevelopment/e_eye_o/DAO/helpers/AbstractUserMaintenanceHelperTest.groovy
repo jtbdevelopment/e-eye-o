@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO
 import com.jtbdevelopment.e_eye_o.entities.AppUser
+import com.jtbdevelopment.e_eye_o.entities.AppUserSettings
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity
 import com.jtbdevelopment.e_eye_o.entities.builders.TwoPhaseActivityBuilder
@@ -256,39 +257,43 @@ abstract class AbstractUserMaintenanceHelperTest {
         assert !userHelper.canChangePassword(userID)
     }
 
-    private TwoPhaseActivity createActivity(final TwoPhaseActivity.Activity activity, final DateTime modificationTime, final DateTime expiry = null) {
+    @Test
+    public void testUpdatingAppUserSettings() {
+        Map<String, Object> settings = ["x": 1, "s": "s"]
+        AppUserSettings settingsDAO = context.mock(AppUserSettings.class, "DAO");
+        AppUserSettings settingsUpDAO = context.mock(AppUserSettings.class, "DAOUP");
+        context.checking(new Expectations() {
+            {
+                one(readWriteDAO).getEntitiesForUser(AppUserSettings.class, userID, 0, 0)
+                will(returnValue([settingsDAO] as Set))
+                one(settingsDAO).updateSettings(settings)
+                one(readWriteDAO).trustedUpdate(settingsDAO)
+                will(returnValue(settingsUpDAO))
+            }
+        })
+        assert settingsUpDAO == userHelper.updateSettings(userID, settings)
+    }
+
+    @Test(expectedExceptions = [IllegalStateException])
+    public void testUpdatingAppUserSettingsInBadState() {
+        Map<String, Object> settings = ["x": 1, "s": "s"]
+        AppUserSettings settingsDAO1 = context.mock(AppUserSettings.class, "DAO1");
+        AppUserSettings settingsDAO2 = context.mock(AppUserSettings.class, "DAO2");
+        context.checking(new Expectations() {
+            {
+                one(readWriteDAO).getEntitiesForUser(AppUserSettings.class, userID, 0, 0)
+                will(returnValue([settingsDAO1, settingsDAO2] as Set))
+            }
+        })
+        userHelper.updateSettings(userID, settings)
+    }
+
+    private static TwoPhaseActivity createActivity(final TwoPhaseActivity.Activity activity, final DateTime modificationTime, final DateTime expiry = null) {
         [
                 getModificationTimestamp: { return modificationTime },
                 getActivityType: { return activity },
                 getExpirationTime: { return expiry }
         ] as TwoPhaseActivity
-    }
-
-    private TwoPhaseActivity setupForActivationRequest() {
-        TwoPhaseActivity twoPhaseActivityID = context.mock(TwoPhaseActivity.class, "TPAID")
-        TwoPhaseActivity twoPhaseActivityDAO = context.mock(TwoPhaseActivity.class, "TPADAO")
-        Map activityBuilder = [:]
-        DateTime before = DateTime.now().plusDays(1)
-        activityBuilder += [withExpirationTime: {
-            DateTime dt ->
-                assert before.compareTo(dt) <= 0 && dt.compareTo(DateTime.now().plusDays(1)) <= 0
-                return activityBuilder as TwoPhaseActivityBuilder;
-        }]
-        activityBuilder += [withActivityType: {
-            TwoPhaseActivity.Activity a ->
-                assert TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION == a
-                return activityBuilder as TwoPhaseActivityBuilder
-        }]
-        activityBuilder += [build: { return twoPhaseActivityID }]
-        context.checking(new Expectations() {
-            {
-                one(idObjectFactory).newTwoPhaseActivityBuilder(userDAO)
-                will(returnValue(activityBuilder as TwoPhaseActivityBuilder))
-                one(readWriteDAO).create(twoPhaseActivityID)
-                will(returnValue(twoPhaseActivityDAO))
-            }
-        })
-        twoPhaseActivityDAO
     }
 
     private void setPasswordEncodingExpectations() {
