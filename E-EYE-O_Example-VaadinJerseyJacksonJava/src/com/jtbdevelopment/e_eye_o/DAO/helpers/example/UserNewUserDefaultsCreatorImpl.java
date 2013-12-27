@@ -1,8 +1,8 @@
 package com.jtbdevelopment.e_eye_o.DAO.helpers.example;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.NewUserHelper;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserNewUserDefaultsCreator;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -28,8 +28,8 @@ import java.util.Map;
  */
 @Component
 @SuppressWarnings("unused")
-public class NewUserHelperImpl implements NewUserHelper {
-    private static final Logger logger = LoggerFactory.getLogger(NewUserHelperImpl.class);
+public class UserNewUserDefaultsCreatorImpl implements UserNewUserDefaultsCreator {
+    private static final Logger logger = LoggerFactory.getLogger(UserNewUserDefaultsCreatorImpl.class);
 
     @Autowired
     private ObservationCategoryHelper observationCategoryHelper;
@@ -77,7 +77,7 @@ public class NewUserHelperImpl implements NewUserHelper {
         )) {
             try {
                 final String defaultImage = "newusersamplephotos/" + string;
-                URL url = com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper.class.getClassLoader().getResource(defaultImage);
+                URL url = UserNewUserDefaultsCreatorImpl.class.getClassLoader().getResource(defaultImage);
                 if (url == null) {
                     logger.warn("Unable to locate default image " + defaultImage);
                     continue;

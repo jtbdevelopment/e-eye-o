@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.DAO;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ArchiveHelper;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectDeletionHelper;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
 import com.jtbdevelopment.e_eye_o.TestingPhotoHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
@@ -45,7 +45,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Autowired
     private ArchiveHelper archiveHelper;
     @Autowired
-    private DeletionHelper deletionHelper;
+    private IdObjectDeletionHelper idObjectDeletionHelper;
 
     private static AppUser testUser1;
     private static AppUser testUser2;
@@ -376,7 +376,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Thread.sleep(1);
 
         for (AppUserOwnedObject owned : Arrays.asList(oc, cl, s, p, o)) {
-            deletionHelper.delete(owned);
+            idObjectDeletionHelper.delete(owned);
         }
         assertFalse(rwDAO.getEntitiesForUser(AppUserOwnedObject.class, deleteUserThings, 0, 0).isEmpty());
         final Set<DeletedObject> deletedObjects = rwDAO.getEntitiesForUser(DeletedObject.class, deleteUserThings, 0, 0);
@@ -393,8 +393,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     public void testDeletingUserTwiceOK() {
         AppUser appUser = rwDAO.create(factory.newAppUserBuilder().withPassword("pass").withFirstName("Double").withLastName("Delete").withEmailAddress("delete@double.com").build());
         String id = appUser.getId();
-        deletionHelper.deleteUser(appUser);
-        deletionHelper.deleteUser(appUser);
+        idObjectDeletionHelper.deleteUser(appUser);
+        idObjectDeletionHelper.deleteUser(appUser);
         assertNull(rwDAO.get(AppUser.class, id));
     }
 
@@ -425,7 +425,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExplicitlyUpdatingADeletedObjectExceptions() {
         ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
-        deletionHelper.delete(cl);
+        idObjectDeletionHelper.delete(cl);
         Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2, 0, 0);
         assertFalse(deleted.isEmpty());
         DeletedObject dobj = deleted.iterator().next();
@@ -436,11 +436,11 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExplicitlyDeletingADeletedObjectExceptions() {
         ClassList cl = rwDAO.create(factory.newClassListBuilder(testUser2).withDescription("CLTODELETE1").build());
-        deletionHelper.delete(cl);
+        idObjectDeletionHelper.delete(cl);
         Set<DeletedObject> deleted = rwDAO.getEntitiesForUser(DeletedObject.class, testUser2, 0, 0);
         assertFalse(deleted.isEmpty());
         DeletedObject dobj = deleted.iterator().next();
         dobj.setModificationTimestamp(dobj.getModificationTimestamp().plusMillis(1));
-        deletionHelper.delete(dobj);
+        idObjectDeletionHelper.delete(dobj);
     }
 }

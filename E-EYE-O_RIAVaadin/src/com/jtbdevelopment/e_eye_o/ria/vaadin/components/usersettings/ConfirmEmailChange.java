@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings;
 
-import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserMaintenanceHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
@@ -16,7 +16,7 @@ public class ConfirmEmailChange extends PasswordConfirmingWindow {
     private final TextField email = new TextField();
     private final PasswordField passwordField = new PasswordField();
 
-    public ConfirmEmailChange(final AppUser appUser, final UserHelper userHelper, final AuthenticationManager authenticationManager, final ChangeEmailAddressEmailGenerator changeEmailAddressEmailGenerator) {
+    public ConfirmEmailChange(final AppUser appUser, final UserMaintenanceHelper userMaintenanceHelper, final AuthenticationManager authenticationManager, final ChangeEmailAddressEmailGenerator changeEmailAddressEmailGenerator) {
         super("Confirm email address change");
 
         VerticalLayout mainLayout = new VerticalLayout();
@@ -49,9 +49,9 @@ public class ConfirmEmailChange extends PasswordConfirmingWindow {
                 if (!reconfirmPassword(authenticationManager, appUser, passwordField.getValue())) return;
                 try {
                     String oldAddress = appUser.getEmailAddress();
-                    userHelper.changeEmailAddress(appUser, email.getValue());
+                    userMaintenanceHelper.changeEmailAddress(appUser, email.getValue());
                     changeEmailAddressEmailGenerator.generateEmailAddressChangeEmail(oldAddress, email.getValue());
-                } catch (UserHelper.PasswordChangeTooRecent passwordChangeTooRecent) {
+                } catch (UserMaintenanceHelper.PasswordChangeTooRecent passwordChangeTooRecent) {
                     Notification.show("Password was changed too recently to also change email address.");
                 }
                 getUI().removeWindow(ConfirmEmailChange.this);

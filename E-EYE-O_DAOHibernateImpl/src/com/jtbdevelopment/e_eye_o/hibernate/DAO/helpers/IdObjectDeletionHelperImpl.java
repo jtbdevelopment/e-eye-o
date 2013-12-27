@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO.helpers;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectDeletionHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,9 +17,16 @@ import java.util.List;
  */
 @Component
 @Transactional(readOnly = false)
-public class DeletionHelperImpl implements DeletionHelper {
+public class IdObjectDeletionHelperImpl implements IdObjectDeletionHelper {
     @Autowired
     protected ReadWriteDAO readWriteDAO;
+
+    @Override
+    public void deactivateUser(final AppUser user) {
+        AppUser loaded = readWriteDAO.get(AppUser.class, user.getId());
+        loaded.setActive(false);
+        readWriteDAO.trustedUpdate(loaded);
+    }
 
     //  TODO - allow undelete - feasible now with envers
 

@@ -8,7 +8,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
  * <p/>
  * This is an optional interface.  If you want to create any objects for new users this is where to do it
  */
-public interface NewUserHelper {
+public interface UserNewUserDefaultsCreator {
 
     void initializeNewUser(final AppUser newUser);
 }

@@ -5,9 +5,6 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity
-import com.jtbdevelopment.e_eye_o.helpandlegal.CookiesPolicy
-import com.jtbdevelopment.e_eye_o.helpandlegal.PrivacyPolicy
-import com.jtbdevelopment.e_eye_o.helpandlegal.TermsAndConditions
 import groovy.transform.CompileStatic
 import org.joda.time.DateTime
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,51 +17,15 @@ import org.springframework.stereotype.Component
  */
 @CompileStatic
 @Component
-class UserHelperGImpl implements UserHelper {
+class UserMaintenanceHelperGImpl implements UserMaintenanceHelper {
     @Autowired(required = false)
     PasswordEncoder passwordEncoder
-
-    @Autowired(required = false)
-    NewUserHelper newUserHelper
-
-    @Autowired(required = false)
-    TermsAndConditions termsAndConditions
-
-    @Autowired(required = false)
-    CookiesPolicy cookiesPolicy
-
-    @Autowired(required = false)
-    PrivacyPolicy privacyPolicy
 
     @Autowired
     ReadWriteDAO readWriteDAO
 
     @Autowired
     IdObjectFactory idObjectFactory
-
-    @Override
-    TwoPhaseActivity createNewUser(final AppUser appUser) {
-        appUser.password = encryptPassword(appUser.getPassword());
-        AppUser savedUser = (AppUser) readWriteDAO.create(appUser);
-        recordUserPolicyAgreementsIfPossible(savedUser);
-        newUserCustomizationIfPossible(savedUser)
-        return generateActivationRequest(savedUser);
-    }
-
-    @Override
-    TwoPhaseActivity generateActivationRequest(final AppUser appUser) {
-        //  TODO - configurable time
-        return (TwoPhaseActivity) readWriteDAO.create(
-                idObjectFactory.newTwoPhaseActivityBuilder(appUser).
-                        withActivityType(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION).
-                        withExpirationTime(new DateTime().plusDays(1)).
-                        build());
-    }
-
-    @Override
-    AppUser activateUser(final TwoPhaseActivity appUser) {
-        return null
-    }
 
     @Override
     boolean canChangeEmailAddress(final AppUser appUser) {
@@ -77,9 +38,9 @@ class UserHelperGImpl implements UserHelper {
     }
 
     @Override
-    TwoPhaseActivity changeEmailAddress(final AppUser appUser, final String newEmailAddress) throws UserHelper.PasswordChangeTooRecent {
+    TwoPhaseActivity changeEmailAddress(final AppUser appUser, final String newEmailAddress) throws UserMaintenanceHelper.PasswordChangeTooRecent {
         if (!canChangeEmailAddress(appUser)) {
-            throw new UserHelper.PasswordChangeTooRecent();
+            throw new UserMaintenanceHelper.PasswordChangeTooRecent();
         }
         AppUser loadedUser = readWriteDAO.get(AppUser.class, appUser.getId());
         TwoPhaseActivity changeRequest = idObjectFactory.newTwoPhaseActivityBuilder(loadedUser).withActivityType(TwoPhaseActivity.Activity.EMAIL_CHANGE).withExpirationTime(new DateTime()).build();
@@ -91,9 +52,9 @@ class UserHelperGImpl implements UserHelper {
     }
 
     @Override
-    TwoPhaseActivity requestResetPassword(final AppUser appUser) throws UserHelper.EmailChangeTooRecent {
+    TwoPhaseActivity requestResetPassword(final AppUser appUser) throws UserMaintenanceHelper.EmailChangeTooRecent {
         if (!canChangePassword(appUser)) {
-            throw new UserHelper.EmailChangeTooRecent();
+            throw new UserMaintenanceHelper.EmailChangeTooRecent();
         }
         //  TODO - configurable
         TwoPhaseActivity requestReset = idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.PASSWORD_RESET).withExpirationTime(new DateTime().plusDays(1)).build();
@@ -103,16 +64,9 @@ class UserHelperGImpl implements UserHelper {
     @Override
     void resetPassword(final TwoPhaseActivity twoPhaseActivity, final String newPassword) {
         AppUser appUser = readWriteDAO.get(AppUser.class, twoPhaseActivity.getAppUser().getId());
-        appUser.password = newPassword;
+        appUser.password = encryptPassword(newPassword);
         twoPhaseActivity.archived = true;
         readWriteDAO.trustedUpdates(Arrays.asList(appUser, twoPhaseActivity));
-    }
-
-    @Override
-    void deactivateUser(final AppUser user) {
-        AppUser loaded = readWriteDAO.get(AppUser.class, user.getId());
-        loaded.active = false;
-        readWriteDAO.trustedUpdate(loaded);
     }
 
     @Override
@@ -138,25 +92,5 @@ class UserHelperGImpl implements UserHelper {
         final DateTime tooRecent = DateTime.now().minusDays(7);
         Set<TwoPhaseActivity> activities = readWriteDAO.getEntitiesForUser(TwoPhaseActivity.class, appUser, 0, 0);
         activities.find({ TwoPhaseActivity activity -> activity.activityType == activityToCheckFor && activity.modificationTimestamp.compareTo(tooRecent) > 0 }) != null
-    }
-
-    private void newUserCustomizationIfPossible(final AppUser appUser) {
-        if (newUserHelper != null) {
-            newUserHelper.initializeNewUser(appUser);
-        }
-    }
-
-    private AppUserSettings recordUserPolicyAgreementsIfPossible(final AppUser newUser) {
-        DateTime now = DateTime.now();
-        return (AppUserSettings) readWriteDAO.create(
-                idObjectFactory.newAppUserSettingsBuilder(newUser).
-                        withSetting(AppUserSettings.COOKIES_POLICY_VERSION, cookiesPolicy == null ? 0 : cookiesPolicy.getVersion()).
-                        withSetting(AppUserSettings.COOKIES_POLICY_TIMESTAMP, now.getMillis()).
-                        withSetting(AppUserSettings.PRIVACY_POLICY_VERSION, privacyPolicy == null ? 0 : privacyPolicy.getVersion()).
-                        withSetting(AppUserSettings.PRIVACY_POLICY_TIMESTAMP, now.getMillis()).
-                        withSetting(AppUserSettings.TERMS_AND_CONDITIONS_VERSION, termsAndConditions == null ? 0 : termsAndConditions.getVersion()).
-                        withSetting(AppUserSettings.TERMS_AND_CONDITIONS_TIMESTAMP, now.getMillis()).
-                        build()
-        );
     }
 }

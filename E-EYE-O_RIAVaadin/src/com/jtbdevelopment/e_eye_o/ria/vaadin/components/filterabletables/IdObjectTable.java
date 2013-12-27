@@ -122,7 +122,7 @@ public abstract class IdObjectTable<T extends AppUserOwnedObject> extends IdObje
                 return embedded;
             }
         });
-        entityTable.addGeneratedColumn("actions", new ArchiveAndDeleteButtonsGenerator<>(archiveHelper, deletionHelper, entities));
+        entityTable.addGeneratedColumn("actions", new ArchiveAndDeleteButtonsGenerator<>(archiveHelper, idObjectDeletionHelper, entities));
     }
 
     @Override

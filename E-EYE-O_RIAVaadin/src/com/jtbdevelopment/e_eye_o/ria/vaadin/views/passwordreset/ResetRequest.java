@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserMaintenanceHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
@@ -37,7 +37,7 @@ public class ResetRequest extends VerticalLayout implements View {
     private ReadOnlyDAO readOnlyDAO;
 
     @Autowired
-    private UserHelper userHelper;
+    private UserMaintenanceHelper userMaintenanceHelper;
 
     @PostConstruct
     public void setUp() {
@@ -77,8 +77,8 @@ public class ResetRequest extends VerticalLayout implements View {
 
                 TwoPhaseActivity twoPhaseActivity;
                 try {
-                    twoPhaseActivity = userHelper.requestResetPassword(appUser);
-                } catch (UserHelper.EmailChangeTooRecent e) {
+                    twoPhaseActivity = userMaintenanceHelper.requestResetPassword(appUser);
+                } catch (UserMaintenanceHelper.EmailChangeTooRecent e) {
                     Notification.show("Email was changed too recently to also change password.", Notification.Type.ERROR_MESSAGE);
                     return;
                 }

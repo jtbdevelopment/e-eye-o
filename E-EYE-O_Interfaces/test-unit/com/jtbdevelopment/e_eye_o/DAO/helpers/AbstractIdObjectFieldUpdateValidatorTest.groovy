@@ -14,7 +14,7 @@ import org.testng.annotations.Test
  * Date: 12/13/13
  * Time: 11:29 PM
  */
-abstract class AbstractIdObjectUpdateHelperTest {
+abstract class AbstractIdObjectFieldUpdateValidatorTest {
     abstract IdObjectFieldUpdateValidator createHelper();
 
     private static final String ORIGINAL_VALUE = "A"

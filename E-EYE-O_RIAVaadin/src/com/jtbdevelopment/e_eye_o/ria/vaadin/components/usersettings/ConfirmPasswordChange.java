@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings;
 
-import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserMaintenanceHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.vaadin.server.Sizeable;
@@ -17,7 +17,7 @@ public class ConfirmPasswordChange extends PasswordConfirmingWindow {
     private final PasswordField newPassword1 = new PasswordField();
     private final PasswordField newPassword2 = new PasswordField();
 
-    public ConfirmPasswordChange(final AppUser appUser, final UserHelper userHelper, final AuthenticationManager authenticationManager, final ChangePasswordEmailGenerator confirmPasswordChangeoldAddress) {
+    public ConfirmPasswordChange(final AppUser appUser, final UserMaintenanceHelper userMaintenanceHelper, final AuthenticationManager authenticationManager, final ChangePasswordEmailGenerator confirmPasswordChangeoldAddress) {
         super("Confirm password change");
 
         VerticalLayout mainLayout = new VerticalLayout();
@@ -56,10 +56,10 @@ public class ConfirmPasswordChange extends PasswordConfirmingWindow {
                 }
                 if (!reconfirmPassword(authenticationManager, appUser, existingPassword.getValue())) return;
                 try {
-                    TwoPhaseActivity activity = userHelper.requestResetPassword(appUser);
-                    userHelper.resetPassword(activity, newPassword1.getValue());
+                    TwoPhaseActivity activity = userMaintenanceHelper.requestResetPassword(appUser);
+                    userMaintenanceHelper.resetPassword(activity, newPassword1.getValue());
                     confirmPasswordChangeoldAddress.generatePasswordChangeEmail(appUser);
-                } catch (UserHelper.EmailChangeTooRecent passwordChangeTooRecent) {
+                } catch (UserMaintenanceHelper.EmailChangeTooRecent passwordChangeTooRecent) {
                     Notification.show("Email was changed too recently to also change password.");
                 }
                 getUI().removeWindow(ConfirmPasswordChange.this);

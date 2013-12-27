@@ -4,8 +4,8 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectDeletionHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserMaintenanceHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
@@ -34,7 +34,7 @@ public class UserSettings extends CustomComponent {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private DeletionHelper deletionHelper;
+    private IdObjectDeletionHelper idObjectDeletionHelper;
 
     @Autowired
     private ChangeEmailAddressEmailGenerator changeEmailAddressEmailGenerator;
@@ -49,7 +49,7 @@ public class UserSettings extends CustomComponent {
     private ChangePasswordEmailGenerator confirmPasswordEmailGenerator;
 
     @Autowired
-    private UserHelper userHelper;
+    private UserMaintenanceHelper userMaintenanceHelper;
 
     @Autowired
     private ReadWriteDAO readWriteDAO;
@@ -120,7 +120,7 @@ public class UserSettings extends CustomComponent {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 final AppUser appUser = getUI().getSession().getAttribute(AppUser.class);
-                ConfirmEmailChange confirmEmailChange = new ConfirmEmailChange(appUser, userHelper, authenticationManager, changeEmailAddressEmailGenerator);
+                ConfirmEmailChange confirmEmailChange = new ConfirmEmailChange(appUser, userMaintenanceHelper, authenticationManager, changeEmailAddressEmailGenerator);
                 getUI().addWindow(confirmEmailChange);
                 initForUser();
             }
@@ -131,7 +131,7 @@ public class UserSettings extends CustomComponent {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 final AppUser appUser = changePassword.getUI().getSession().getAttribute(AppUser.class);
-                ConfirmPasswordChange confirmPasswordChange = new ConfirmPasswordChange(appUser, userHelper, authenticationManager, confirmPasswordEmailGenerator);
+                ConfirmPasswordChange confirmPasswordChange = new ConfirmPasswordChange(appUser, userMaintenanceHelper, authenticationManager, confirmPasswordEmailGenerator);
                 getUI().addWindow(confirmPasswordChange);
             }
         });
@@ -147,7 +147,7 @@ public class UserSettings extends CustomComponent {
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
-                            userHelper.deactivateUser(user);
+                            idObjectDeletionHelper.deactivateUser(user);
                             LogoutEvent logoutEvent = new LogoutEvent(user);
                             deactivateAccountEmailGenerator.generateAccountDeactivatedEmail(user);
                             eventBus.post(logoutEvent);
@@ -161,7 +161,7 @@ public class UserSettings extends CustomComponent {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
-                ConfirmDeleteAccount deleteAccount = new ConfirmDeleteAccount(user, deletionHelper, authenticationManager, deletedAccountEmailGenerator);
+                ConfirmDeleteAccount deleteAccount = new ConfirmDeleteAccount(user, idObjectDeletionHelper, authenticationManager, deletedAccountEmailGenerator);
                 getUI().addWindow(deleteAccount);
             }
         });
@@ -214,14 +214,14 @@ public class UserSettings extends CustomComponent {
         lastName.setValue(user.getLastName());
         email.setValue(user.getEmailAddress());
         warning.setVisible(false);
-        if (userHelper.canChangeEmailAddress(user)) {
+        if (userMaintenanceHelper.canChangeEmailAddress(user)) {
             changeEmail.setEnabled(true);
         } else {
             changeEmail.setEnabled(false);
             warning.setVisible(true);
         }
 
-        if (userHelper.canChangePassword(user)) {
+        if (userMaintenanceHelper.canChangePassword(user)) {
             changePassword.setEnabled(true);
         } else {
             changePassword.setEnabled(false);

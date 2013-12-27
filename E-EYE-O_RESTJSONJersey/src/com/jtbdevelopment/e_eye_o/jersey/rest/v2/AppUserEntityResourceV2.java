@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.jersey.rest.v2;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ArchiveHelper;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectDeletionHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
@@ -23,21 +23,21 @@ import javax.ws.rs.core.Response;
 public class AppUserEntityResourceV2 {
     private final ReadWriteDAO readWriteDAO;
     private final ArchiveHelper archiveHelper;
-    private final DeletionHelper deletionHelper;
+    private final IdObjectDeletionHelper idObjectDeletionHelper;
     private final IdObjectReflectionHelper idObjectReflectionHelper;
     private final SecurityHelper securityHelper;
     private final String entityId;
 
     public AppUserEntityResourceV2(final ReadWriteDAO readWriteDAO,
                                    final ArchiveHelper archiveHelper,
-                                   final DeletionHelper deletionHelper,
+                                   final IdObjectDeletionHelper idObjectDeletionHelper,
                                    final IdObjectReflectionHelper idObjectReflectionHelper,
                                    final SecurityHelper securityHelper,
                                    final String entityId) {
         this.readWriteDAO = readWriteDAO;
         this.entityId = entityId;
         this.archiveHelper = archiveHelper;
-        this.deletionHelper = deletionHelper;
+        this.idObjectDeletionHelper = idObjectDeletionHelper;
         this.idObjectReflectionHelper = idObjectReflectionHelper;
         this.securityHelper = securityHelper;
     }
@@ -106,7 +106,7 @@ public class AppUserEntityResourceV2 {
             if (!idObjectInterface.getAnnotation(IdObjectEntitySettings.class).editable()) {
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
-            deletionHelper.delete(dbObject);
+            idObjectDeletionHelper.delete(dbObject);
             return Response.ok().build();
         }
         return Response.status(Response.Status.FORBIDDEN).build();

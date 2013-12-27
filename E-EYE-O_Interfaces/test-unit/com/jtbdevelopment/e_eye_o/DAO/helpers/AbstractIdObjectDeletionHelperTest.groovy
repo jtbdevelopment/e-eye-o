@@ -20,34 +20,34 @@ import org.testng.annotations.Test
  * Date: 12/15/13
  * Time: 5:52 PM
  */
-abstract class AbstractUserHelperTest {
+abstract class AbstractIdObjectDeletionHelperTest {
     static final String CLEAR_PASSWORD = "CLEAR"
     static final String SECURE_PASSWORD = "SECURE"
     static final String NEW_EMAIL = "new@new.com"
     Mockery context
     protected ReadWriteDAO readWriteDAO
     protected IdObjectFactory idObjectFactory
-    protected UserHelper userHelper
+    protected IdObjectDeletionHelper deletionHelper
     protected AppUser userID
     protected AppUser userDAO
 
-    abstract UserHelper createUserHelper();
+    abstract IdObjectDeletionHelper createIdObjectDeletionHelper();
 
     @BeforeMethod
     public void setUp() {
-        userHelper = createUserHelper()
+        deletionHelper = createIdObjectDeletionHelper()
         context = new Mockery()
         readWriteDAO = context.mock(ReadWriteDAO.class)
         idObjectFactory = context.mock(IdObjectFactory.class)
         userID = context.mock(AppUser.class, "UID")
         userDAO = context.mock(AppUser.class, "UDAO")
-        userHelper.readWriteDAO = readWriteDAO
-        userHelper.idObjectFactory = idObjectFactory
-        userHelper.newUserHelper = null
-        userHelper.cookiesPolicy = null
-        userHelper.privacyPolicy = null
-        userHelper.termsAndConditions = null
-        userHelper.passwordEncoder = null
+        deletionHelper.readWriteDAO = readWriteDAO
+        deletionHelper.idObjectFactory = idObjectFactory
+        deletionHelper.newUserHelper = null
+        deletionHelper.cookiesPolicy = null
+        deletionHelper.privacyPolicy = null
+        deletionHelper.termsAndConditions = null
+        deletionHelper.passwordEncoder = null
     }
 
     @Test
@@ -72,8 +72,8 @@ abstract class AbstractUserHelperTest {
         int expectedCookieVersion = 0
         int expectedPrivacyVersion = 0
         int expectedTermsVersion = 0
-        NewUserHelper helper = context.mock(NewUserHelper.class)
-        userHelper.newUserHelper = helper
+        UserNewUserDefaultsCreator helper = context.mock(UserNewUserDefaultsCreator.class)
+        deletionHelper.newUserHelper = helper
         context.checking(new Expectations() {
             {
                 one(helper).initializeNewUser(userDAO)
@@ -84,17 +84,17 @@ abstract class AbstractUserHelperTest {
 
     @Test
     public void testNewUserWithSomeAgreementsRecorded() {
-        userHelper.privacyPolicy = context.mock(PrivacyPolicy.class)
-        userHelper.termsAndConditions = context.mock(TermsAndConditions.class)
+        deletionHelper.privacyPolicy = context.mock(PrivacyPolicy.class)
+        deletionHelper.termsAndConditions = context.mock(TermsAndConditions.class)
 
         int expectedCookieVersion = 0
         int expectedPrivacyVersion = 4
         int expectedTermsVersion = 2
         context.checking(new Expectations() {
             {
-                one(userHelper.privacyPolicy).getVersion()
+                one(deletionHelper.privacyPolicy).getVersion()
                 will(returnValue(expectedPrivacyVersion))
-                one(userHelper.termsAndConditions).getVersion()
+                one(deletionHelper.termsAndConditions).getVersion()
                 will(returnValue(expectedTermsVersion))
             }
         })
@@ -104,7 +104,7 @@ abstract class AbstractUserHelperTest {
     @Test
     public void testGenerateActivationRequest() {
         TwoPhaseActivity twoPhaseActivityDAO = setupForActivationRequest()
-        assert twoPhaseActivityDAO.is(userHelper.generateActivationRequest(userDAO))
+        assert twoPhaseActivityDAO.is(deletionHelper.generateActivationRequest(userDAO))
     }
 
     @Test
@@ -116,7 +116,7 @@ abstract class AbstractUserHelperTest {
                 will(returnValue(activity))
             }
         })
-        userHelper.resetPassword(activity, CLEAR_PASSWORD)
+        deletionHelper.resetPassword(activity, CLEAR_PASSWORD)
     }
 
     @Test
@@ -129,7 +129,7 @@ abstract class AbstractUserHelperTest {
             }
         })
         setPasswordEncodingExpectations()
-        userHelper.resetPassword(activity, CLEAR_PASSWORD)
+        deletionHelper.resetPassword(activity, CLEAR_PASSWORD)
     }
 
     @Test
@@ -164,23 +164,7 @@ abstract class AbstractUserHelperTest {
                 will(returnValue(twoPhaseActivityDAO))
             }
         })
-        userHelper.changeEmailAddress(userDAO, NEW_EMAIL)
-    }
-
-    @Test(expectedExceptions = [UserHelper.PasswordChangeTooRecent])
-    public void testChangeEmailRequestWithException() {
-        TwoPhaseActivity twoPhaseActivityDAO = context.mock(TwoPhaseActivity.class, "TPADAO")
-        context.checking(new Expectations() {
-            {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
-                will(returnValue([twoPhaseActivityDAO] as Set))
-                one(twoPhaseActivityDAO).getActivityType()
-                will(returnValue(TwoPhaseActivity.Activity.PASSWORD_RESET))
-                one(twoPhaseActivityDAO).getModificationTimestamp()
-                will(returnValue(DateTime.now().minusDays(1)))
-            }
-        })
-        userHelper.changeEmailAddress(userDAO, NEW_EMAIL)
+        deletionHelper.changeEmailAddress(userDAO, NEW_EMAIL)
     }
 
     @Test
@@ -210,24 +194,9 @@ abstract class AbstractUserHelperTest {
                 will(returnValue(twoPhaseActivityDAO))
             }
         })
-        assert twoPhaseActivityDAO.is(userHelper.requestResetPassword(userDAO))
+        assert twoPhaseActivityDAO.is(deletionHelper.requestResetPassword(userDAO))
     }
 
-    @Test(expectedExceptions = [UserHelper.EmailChangeTooRecent])
-    public void testPasswordResetRequestWithIssue() {
-        TwoPhaseActivity twoPhaseActivityDAO = context.mock(TwoPhaseActivity.class, "TPADAO")
-        context.checking(new Expectations() {
-            {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
-                will(returnValue([twoPhaseActivityDAO] as Set))
-                one(twoPhaseActivityDAO).getActivityType()
-                will(returnValue(TwoPhaseActivity.Activity.EMAIL_CHANGE))
-                one(twoPhaseActivityDAO).getModificationTimestamp()
-                will(returnValue(DateTime.now().minusDays(1)))
-            }
-        })
-        userHelper.requestResetPassword(userDAO)
-    }
 
     @Test
     public void testCanChangeEmailAddressWithNoRecentPasswordChanges() {
@@ -242,7 +211,7 @@ abstract class AbstractUserHelperTest {
             }
         })
 
-        assert userHelper.canChangeEmailAddress(userID)
+        assert deletionHelper.canChangeEmailAddress(userID)
     }
 
     @Test
@@ -258,7 +227,7 @@ abstract class AbstractUserHelperTest {
             }
         })
 
-        assert !userHelper.canChangeEmailAddress(userID)
+        assert !deletionHelper.canChangeEmailAddress(userID)
     }
 
     @Test
@@ -274,7 +243,7 @@ abstract class AbstractUserHelperTest {
             }
         })
 
-        assert userHelper.canChangePassword(userID)
+        assert deletionHelper.canChangePassword(userID)
     }
 
     @Test
@@ -290,7 +259,7 @@ abstract class AbstractUserHelperTest {
             }
         })
 
-        assert !userHelper.canChangePassword(userID)
+        assert !deletionHelper.canChangePassword(userID)
     }
 
     private TwoPhaseActivity createActivity(final TwoPhaseActivity.Activity activity, final DateTime modificationTime, final DateTime expiry = null) {
@@ -372,14 +341,14 @@ abstract class AbstractUserHelperTest {
             }
         })
         TwoPhaseActivity activity = setupForActivationRequest()
-        assert activity.is(userHelper.createNewUser(userID))
+        assert activity.is(deletionHelper.createNewUser(userID))
         assert [AppUserSettings.COOKIES_POLICY_TIMESTAMP, AppUserSettings.COOKIES_POLICY_VERSION, AppUserSettings.TERMS_AND_CONDITIONS_TIMESTAMP, AppUserSettings.TERMS_AND_CONDITIONS_VERSION, AppUserSettings.PRIVACY_POLICY_TIMESTAMP, AppUserSettings.PRIVACY_POLICY_VERSION] as Set ==
                 settingsSaved.keySet()
     }
 
     private void setPasswordEncodingExpectations() {
         PasswordEncoder encoder = context.mock(PasswordEncoder.class)
-        userHelper.passwordEncoder = encoder
+        deletionHelper.passwordEncoder = encoder
         context.checking(new Expectations() {
             {
                 one(encoder).encode(CLEAR_PASSWORD)

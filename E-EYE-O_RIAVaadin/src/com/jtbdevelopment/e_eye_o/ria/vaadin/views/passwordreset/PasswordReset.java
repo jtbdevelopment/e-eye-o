@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserMaintenanceHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
@@ -39,7 +39,7 @@ public class PasswordReset extends VerticalLayout implements View {
     private ReadOnlyDAO readOnlyDAO;
 
     @Autowired
-    private UserHelper userHelper;
+    private UserMaintenanceHelper userMaintenanceHelper;
     private TextField emailField;
     private FormLayout formLayout;
     private Button resetButton;
@@ -93,7 +93,7 @@ public class PasswordReset extends VerticalLayout implements View {
                     return;
                 }
 
-                userHelper.resetPassword(getSession().getAttribute(TwoPhaseActivity.class), pass);
+                userMaintenanceHelper.resetPassword(getSession().getAttribute(TwoPhaseActivity.class), pass);
                 getSession().getAttribute(Navigator.class).navigateTo(LoginView.VIEW_NAME);
                 Notification.show("Password reset and account activated.", Notification.Type.WARNING_MESSAGE);
             }
@@ -105,8 +105,8 @@ public class PasswordReset extends VerticalLayout implements View {
                 if (appUserForRequest != null) {
                     TwoPhaseActivity twoPhaseActivity;
                     try {
-                        twoPhaseActivity = userHelper.requestResetPassword(appUserForRequest);
-                    } catch (UserHelper.EmailChangeTooRecent e) {
+                        twoPhaseActivity = userMaintenanceHelper.requestResetPassword(appUserForRequest);
+                    } catch (UserMaintenanceHelper.EmailChangeTooRecent e) {
                         Notification.show("Email was changed too recently to also change password.", Notification.Type.ERROR_MESSAGE);
                         return;
                     }

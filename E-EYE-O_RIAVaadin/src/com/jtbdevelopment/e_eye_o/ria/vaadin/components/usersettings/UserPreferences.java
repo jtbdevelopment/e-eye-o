@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.primitives.Ints;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserMaintenanceHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
@@ -45,7 +45,7 @@ public class UserPreferences extends CustomComponent {
     private ReadOnlyDAO readOnlyDAO;
 
     @Autowired
-    private UserHelper userHelper;
+    private UserMaintenanceHelper userMaintenanceHelper;
 
     @Autowired
     private IdObjectReflectionHelper reflectionHelper;
@@ -208,7 +208,7 @@ public class UserPreferences extends CustomComponent {
             SettingData settingData = (SettingData) field.getData();
             settings.put(settingData.setting, field.getValue());
         }
-        userHelper.updateSettings(getSession().getAttribute(AppUser.class), settings);
+        userMaintenanceHelper.updateSettings(getSession().getAttribute(AppUser.class), settings);
         Notification.show("Preferences saved.", Notification.Type.HUMANIZED_MESSAGE);
     }
 }

@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserCreationHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.Logo;
@@ -37,7 +37,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
     private ReadOnlyDAO readOnlyDAO;
 
     @Autowired
-    private UserHelper userHelper;
+    private UserCreationHelper userCreationHelper;
     private AppUser appUserWithExpiredRequest;
 
     @Autowired
@@ -75,7 +75,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
             public void buttonClick(final Button.ClickEvent event) {
                 newEmailButton.setEnabled(false);
                 if (appUserWithExpiredRequest != null) {
-                    TwoPhaseActivity activity = userHelper.generateActivationRequest(appUserWithExpiredRequest);
+                    TwoPhaseActivity activity = userCreationHelper.generateActivationRequest(appUserWithExpiredRequest);
                     registrationEmailGenerator.generateEmail(activity);
                     appUserWithExpiredRequest = null;
                     getSession().setAttribute(TwoPhaseActivity.class, activity);
@@ -137,7 +137,7 @@ public class AccountConfirmationView extends VerticalLayout implements View {
             return;
         }
 
-        userHelper.activateUser(activity);
+        userCreationHelper.activateUser(activity);
 
         messageText.setValue("Congratulations.  " + activity.getAppUser().getEmailAddress() + " has been activated.  Try logging in now.");
         link.setEnabled(true);

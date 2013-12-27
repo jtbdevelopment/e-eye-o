@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.jersey.rest;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserCreationHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
@@ -69,7 +69,7 @@ public class HibernateJacksonJerseryRESTIntegretion extends AbstractTestNGSpring
     private ReadWriteDAO readWriteDAO;
 
     @Autowired
-    private UserHelper userHelper;
+    private UserCreationHelper userCreationHelper;
 
     @Autowired
     private IdObjectFactory idObjectFactory;
@@ -90,7 +90,7 @@ public class HibernateJacksonJerseryRESTIntegretion extends AbstractTestNGSpring
 
     @BeforeMethod
     public synchronized void setup() throws Exception {
-        if (readWriteDAO != null && idObjectFactory != null && userHelper != null) {
+        if (readWriteDAO != null && idObjectFactory != null && userCreationHelper != null) {
 
             String user1EmailAddress = "user1@rest.com";
             String user2EmailAddress = "user2@rest.com";
@@ -129,9 +129,9 @@ public class HibernateJacksonJerseryRESTIntegretion extends AbstractTestNGSpring
                         .withLastName("rest")
                         .withPassword("user2")
                         .build();
-                userHelper.createNewUser(testAdmin);
-                userHelper.createNewUser(testUser1);
-                userHelper.createNewUser(testUser2);
+                userCreationHelper.createNewUser(testAdmin);
+                userCreationHelper.createNewUser(testUser1);
+                userCreationHelper.createNewUser(testUser2);
                 testAdmin = readWriteDAO.getUser(testAdmin.getEmailAddress());
                 testUser1 = readWriteDAO.getUser(testUser1.getEmailAddress());
                 testUser2 = readWriteDAO.getUser(testUser2.getEmailAddress());

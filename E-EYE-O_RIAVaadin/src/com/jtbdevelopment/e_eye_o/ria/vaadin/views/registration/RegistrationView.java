@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.views.registration;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserCreationHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
@@ -37,7 +37,7 @@ public class RegistrationView extends VerticalLayout implements View {
     private IdObjectFactory idObjectFactory;
 
     @Autowired
-    private UserHelper userHelper;
+    private UserCreationHelper userCreationHelper;
 
     @Autowired
     private ReadWriteDAO readOnlyDAO;
@@ -107,7 +107,7 @@ public class RegistrationView extends VerticalLayout implements View {
                 }
 
                 AppUser user = beanFieldGroup.getItemDataSource().getBean();
-                TwoPhaseActivity twoPhaseActivity = userHelper.createNewUser(user);
+                TwoPhaseActivity twoPhaseActivity = userCreationHelper.createNewUser(user);
                 registrationEmailGenerator.generateEmail(twoPhaseActivity);
                 getSession().setAttribute(TwoPhaseActivity.class, twoPhaseActivity);
                 getSession().getAttribute(Navigator.class).navigateTo(PostRegistrationView.VIEW_NAME);

@@ -1,8 +1,9 @@
 package com.jtbdevelopment.e_eye_o.DAO.helpers.integration;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.NewUserHelper;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ObservationCategoryHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserCreationHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserNewUserDefaultsCreator;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
@@ -26,8 +27,8 @@ import java.util.Map;
  */
 @Component
 @SuppressWarnings("unused")
-public class HibernateJacksonJerseyNewUserHelperImpl implements NewUserHelper {
-    private static final Logger logger = LoggerFactory.getLogger(HibernateJacksonJerseyNewUserHelperImpl.class);
+public class HibernateJacksonJerseyUserNewUserDefaultsCreatorImpl implements UserNewUserDefaultsCreator {
+    private static final Logger logger = LoggerFactory.getLogger(HibernateJacksonJerseyUserNewUserDefaultsCreatorImpl.class);
 
     @Autowired
     private ObservationCategoryHelper observationCategoryHelper;
@@ -67,7 +68,7 @@ public class HibernateJacksonJerseyNewUserHelperImpl implements NewUserHelper {
         readWriteDAO.create(idObjectFactory.newObservationBuilder(newUser).withObservationSubject(cl).withObservationTimestamp(new LocalDateTime().minusDays(1)).addCategory(c2).withComment("You can put general class observations too.").build());
 
         try {
-            URL url = com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper.class.getClassLoader().getResource("/simple.png");
+            URL url = UserCreationHelper.class.getClassLoader().getResource("/simple.png");
             if (url == null) {
                 logger.warn("Unable to find simple.png");
                 return;

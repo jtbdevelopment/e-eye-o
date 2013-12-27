@@ -339,7 +339,7 @@ public class PhotoAlbum extends IdObjectFilterableDisplay<Photo> {
             });
             buttons.addComponent(editButton);
             buttons.addComponent(new Embedded(null, p.isArchived() ? NOT_X : IS_X));
-            ArchiveAndDeleteButtons<Photo> actionButtons = new ArchiveAndDeleteButtons<>(archiveHelper, deletionHelper, p);
+            ArchiveAndDeleteButtons<Photo> actionButtons = new ArchiveAndDeleteButtons<>(archiveHelper, idObjectDeletionHelper, p);
             buttons.addComponent(actionButtons);
             buttons.setSpacing(true);
             photoAndText.addComponent(buttons);
