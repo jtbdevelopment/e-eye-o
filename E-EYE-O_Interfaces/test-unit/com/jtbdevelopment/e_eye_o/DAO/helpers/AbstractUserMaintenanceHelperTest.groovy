@@ -2,10 +2,8 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO
 import com.jtbdevelopment.e_eye_o.entities.AppUser
-import com.jtbdevelopment.e_eye_o.entities.AppUserSettings
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity
-import com.jtbdevelopment.e_eye_o.entities.builders.AppUserSettingsBuilder
 import com.jtbdevelopment.e_eye_o.entities.builders.TwoPhaseActivityBuilder
 import org.jmock.Expectations
 import org.jmock.Mockery
@@ -41,10 +39,6 @@ abstract class AbstractUserMaintenanceHelperTest {
         userDAO = context.mock(AppUser.class, "UDAO")
         userHelper.readWriteDAO = readWriteDAO
         userHelper.idObjectFactory = idObjectFactory
-        userHelper.newUserHelper = null
-        userHelper.cookiesPolicy = null
-        userHelper.privacyPolicy = null
-        userHelper.termsAndConditions = null
         userHelper.passwordEncoder = null
     }
 
@@ -53,8 +47,16 @@ abstract class AbstractUserMaintenanceHelperTest {
         TwoPhaseActivity activity = context.mock(TwoPhaseActivity.class)
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).resetUserPassword(activity, CLEAR_PASSWORD)
-                will(returnValue(activity))
+                one(activity).getAppUser();
+                will(returnValue(userID));
+                one(userID).getId()
+                will(returnValue("ID"));
+                one(readWriteDAO).get(AppUser.class, "ID");
+                will(returnValue(userDAO))
+                one(userDAO).setPassword(CLEAR_PASSWORD);
+                one(activity).setArchived(true);
+                one(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, activity));
+                will(returnValue(Arrays.asList(activity, userDAO)));
             }
         })
         userHelper.resetPassword(activity, CLEAR_PASSWORD)
@@ -65,8 +67,16 @@ abstract class AbstractUserMaintenanceHelperTest {
         TwoPhaseActivity activity = context.mock(TwoPhaseActivity.class)
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).resetUserPassword(activity, SECURE_PASSWORD)
-                will(returnValue(activity))
+                one(activity).getAppUser();
+                will(returnValue(userID));
+                one(userID).getId()
+                will(returnValue("ID"));
+                one(readWriteDAO).get(AppUser.class, "ID");
+                will(returnValue(userDAO))
+                one(userDAO).setPassword(SECURE_PASSWORD);
+                one(activity).setArchived(true);
+                one(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, activity));
+                will(returnValue(Arrays.asList(activity, userDAO)));
             }
         })
         setPasswordEncodingExpectations()
@@ -97,15 +107,27 @@ abstract class AbstractUserMaintenanceHelperTest {
         activityBuilder += [build: { return twoPhaseActivityID }]
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
+                one(userID).getId();
+                will(returnValue("ID"))
+                one(readWriteDAO).get(AppUser.class, "ID");
+                will(returnValue(userDAO));
+                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
                 will(returnValue([] as Set))
                 one(idObjectFactory).newTwoPhaseActivityBuilder(userDAO)
                 will(returnValue(activityBuilder as TwoPhaseActivityBuilder))
-                one(readWriteDAO).updateUserEmailAddress(twoPhaseActivityID, NEW_EMAIL)
+                one(readWriteDAO).create(twoPhaseActivityID)
+                will(returnValue(twoPhaseActivityDAO))
+                one(twoPhaseActivityDAO).setArchived(true);
+                one(userDAO).setEmailAddress(NEW_EMAIL);
+                one(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, twoPhaseActivityDAO))
+                will(returnValue(Arrays.asList(twoPhaseActivityDAO, userDAO)))
+                one(twoPhaseActivityDAO).getId()
+                will(returnValue("TID"))
+                one(readWriteDAO).get(TwoPhaseActivity.class, "TID");
                 will(returnValue(twoPhaseActivityDAO))
             }
         })
-        userHelper.changeEmailAddress(userDAO, NEW_EMAIL)
+        userHelper.changeEmailAddress(userID, NEW_EMAIL)
     }
 
     @Test(expectedExceptions = [UserMaintenanceHelper.PasswordChangeTooRecent])
@@ -267,55 +289,6 @@ abstract class AbstractUserMaintenanceHelperTest {
             }
         })
         twoPhaseActivityDAO
-    }
-
-    private void setupNewUserExpectations(int expectedCookieVersion, int expectedPrivacyVersion, int expectedTermsVersion) {
-        AppUserSettings settingsID = context.mock(AppUserSettings.class, "AUSID")
-        AppUserSettings settingsDAO = context.mock(AppUserSettings.class, "AUSDAO")
-        Map settingsBuilder = [:]
-        DateTime before = DateTime.now()
-        Map settingsSaved = [:]
-        settingsBuilder += [withSetting: {
-            String name, Object o ->
-                settingsSaved += [(name): o.toString()]
-                switch (name) {
-                    case AppUserSettings.COOKIES_POLICY_VERSION:
-                        assert expectedCookieVersion == o
-                        break;
-                    case AppUserSettings.PRIVACY_POLICY_VERSION:
-                        assert expectedPrivacyVersion == o
-                        break
-                    case AppUserSettings.TERMS_AND_CONDITIONS_VERSION:
-                        assert expectedTermsVersion == o
-                        break;
-                    case AppUserSettings.COOKIES_POLICY_TIMESTAMP:
-                    case AppUserSettings.TERMS_AND_CONDITIONS_TIMESTAMP:
-                    case AppUserSettings.PRIVACY_POLICY_TIMESTAMP:
-                        DateTime recorded = new DateTime(o)
-                        assert before.compareTo(recorded) <= 0 && DateTime.now().compareTo(recorded) >= 0
-                        break;
-                }
-                return settingsBuilder as AppUserSettingsBuilder
-        }]
-        settingsBuilder += [build: { return settingsID }]
-
-        context.checking(new Expectations() {
-            {
-                one(userID).getPassword()
-                will(returnValue(CLEAR_PASSWORD))
-                one(userID).setPassword(CLEAR_PASSWORD)
-                one(readWriteDAO).create(userID)
-                will(returnValue(userDAO))
-                one(idObjectFactory).newAppUserSettingsBuilder(userDAO)
-                will(returnValue(settingsBuilder as AppUserSettingsBuilder))
-                one(readWriteDAO).create(settingsID)
-                will(returnValue(settingsDAO))
-            }
-        })
-        TwoPhaseActivity activity = setupForActivationRequest()
-        assert activity.is(userHelper.createNewUser(userID))
-        assert [AppUserSettings.COOKIES_POLICY_TIMESTAMP, AppUserSettings.COOKIES_POLICY_VERSION, AppUserSettings.TERMS_AND_CONDITIONS_TIMESTAMP, AppUserSettings.TERMS_AND_CONDITIONS_VERSION, AppUserSettings.PRIVACY_POLICY_TIMESTAMP, AppUserSettings.PRIVACY_POLICY_VERSION] as Set ==
-                settingsSaved.keySet()
     }
 
     private void setPasswordEncodingExpectations() {

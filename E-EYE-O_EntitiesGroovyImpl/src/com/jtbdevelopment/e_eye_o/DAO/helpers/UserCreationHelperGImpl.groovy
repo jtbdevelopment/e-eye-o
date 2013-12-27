@@ -25,7 +25,7 @@ class UserCreationHelperGImpl implements UserCreationHelper {
     PasswordEncoder passwordEncoder
 
     @Autowired(required = false)
-    UserNewUserDefaultsCreator newUserHelper
+    UserNewUserDefaultsCreator userNewUserDefaultsCreator
 
     @Autowired(required = false)
     TermsAndConditions termsAndConditions
@@ -79,8 +79,8 @@ class UserCreationHelperGImpl implements UserCreationHelper {
     }
 
     private void newUserCustomizationIfPossible(final AppUser appUser) {
-        if (newUserHelper != null) {
-            newUserHelper.initializeNewUser(appUser);
+        if (userNewUserDefaultsCreator != null) {
+            userNewUserDefaultsCreator.initializeNewUser(appUser);
         }
     }
 

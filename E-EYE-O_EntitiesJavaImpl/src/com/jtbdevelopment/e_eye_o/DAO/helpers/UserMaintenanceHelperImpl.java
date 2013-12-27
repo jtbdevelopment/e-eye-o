@@ -24,9 +24,6 @@ public class UserMaintenanceHelperImpl implements UserMaintenanceHelper {
     @Autowired
     protected IdObjectFactory idObjectFactory;
 
-    public UserMaintenanceHelperImpl() {
-    }
-
     @Override
     public boolean canChangeEmailAddress(final AppUser appUser) {
         return !hasRecentActivity(appUser, TwoPhaseActivity.Activity.PASSWORD_RESET);

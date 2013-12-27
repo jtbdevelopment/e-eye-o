@@ -23,7 +23,6 @@ import org.testng.annotations.Test
 abstract class AbstractUserCreationHelperTest {
     static final String CLEAR_PASSWORD = "CLEAR"
     static final String SECURE_PASSWORD = "SECURE"
-    static final String NEW_EMAIL = "new@new.com"
     Mockery context
     protected ReadWriteDAO readWriteDAO
     protected IdObjectFactory idObjectFactory
@@ -43,7 +42,7 @@ abstract class AbstractUserCreationHelperTest {
         userDAO = context.mock(AppUser.class, "UDAO")
         userHelper.readWriteDAO = readWriteDAO
         userHelper.idObjectFactory = idObjectFactory
-        userHelper.newUserHelper = null
+        userHelper.userNewUserDefaultsCreator = null
         userHelper.cookiesPolicy = null
         userHelper.privacyPolicy = null
         userHelper.termsAndConditions = null
@@ -73,7 +72,7 @@ abstract class AbstractUserCreationHelperTest {
         int expectedPrivacyVersion = 0
         int expectedTermsVersion = 0
         UserNewUserDefaultsCreator helper = context.mock(UserNewUserDefaultsCreator.class)
-        userHelper.newUserHelper = helper
+        userHelper.userNewUserDefaultsCreator = helper
         context.checking(new Expectations() {
             {
                 one(helper).initializeNewUser(userDAO)
@@ -105,168 +104,6 @@ abstract class AbstractUserCreationHelperTest {
     public void testGenerateActivationRequest() {
         TwoPhaseActivity twoPhaseActivityDAO = setupForActivationRequest()
         assert twoPhaseActivityDAO.is(userHelper.generateActivationRequest(userDAO))
-    }
-
-    @Test
-    public void testResetPasswordNoEncoder() {
-        TwoPhaseActivity activity = context.mock(TwoPhaseActivity.class)
-        context.checking(new Expectations() {
-            {
-                one(readWriteDAO).resetUserPassword(activity, CLEAR_PASSWORD)
-                will(returnValue(activity))
-            }
-        })
-        userHelper.resetPassword(activity, CLEAR_PASSWORD)
-    }
-
-    @Test
-    public void testResetPasswordWithEncoder() {
-        TwoPhaseActivity activity = context.mock(TwoPhaseActivity.class)
-        context.checking(new Expectations() {
-            {
-                one(readWriteDAO).resetUserPassword(activity, SECURE_PASSWORD)
-                will(returnValue(activity))
-            }
-        })
-        setPasswordEncodingExpectations()
-        userHelper.resetPassword(activity, CLEAR_PASSWORD)
-    }
-
-    @Test
-    public void testChangeEmailRequestWithNoIssues() {
-        TwoPhaseActivity twoPhaseActivityID = context.mock(TwoPhaseActivity.class, "TPAID")
-        TwoPhaseActivity twoPhaseActivityDAO = context.mock(TwoPhaseActivity.class, "TPADAO")
-        Map activityBuilder = [:]
-        DateTime before = DateTime.now()
-        activityBuilder += [withExpirationTime: {
-            DateTime dt ->
-                assert before.compareTo(dt) <= 0 && dt.compareTo(DateTime.now()) <= 0
-                return activityBuilder as TwoPhaseActivityBuilder;
-        }]
-        activityBuilder += [withActivityType: {
-            TwoPhaseActivity.Activity a ->
-                assert TwoPhaseActivity.Activity.EMAIL_CHANGE == a
-                return activityBuilder as TwoPhaseActivityBuilder
-        }]
-        activityBuilder += [withArchived: {
-            boolean b ->
-                assert b;
-                return activityBuilder as TwoPhaseActivityBuilder
-        }]
-        activityBuilder += [build: { return twoPhaseActivityID }]
-        context.checking(new Expectations() {
-            {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
-                will(returnValue([] as Set))
-                one(idObjectFactory).newTwoPhaseActivityBuilder(userDAO)
-                will(returnValue(activityBuilder as TwoPhaseActivityBuilder))
-                one(readWriteDAO).updateUserEmailAddress(twoPhaseActivityID, NEW_EMAIL)
-                will(returnValue(twoPhaseActivityDAO))
-            }
-        })
-        userHelper.changeEmailAddress(userDAO, NEW_EMAIL)
-    }
-
-    @Test
-    public void testPasswordResetRequestNoIssues() {
-        TwoPhaseActivity twoPhaseActivityID = context.mock(TwoPhaseActivity.class, "TPAID")
-        TwoPhaseActivity twoPhaseActivityDAO = context.mock(TwoPhaseActivity.class, "TPADAO")
-        Map activityBuilder = [:]
-        DateTime before = DateTime.now()
-        activityBuilder += [withExpirationTime: {
-            DateTime dt ->
-                assert before.compareTo(dt) < 0 && dt.compareTo(DateTime.now().plusDays(1)) <= 0
-                return activityBuilder as TwoPhaseActivityBuilder;
-        }]
-        activityBuilder += [withActivityType: {
-            TwoPhaseActivity.Activity a ->
-                assert TwoPhaseActivity.Activity.PASSWORD_RESET == a
-                return activityBuilder as TwoPhaseActivityBuilder
-        }]
-        activityBuilder += [build: { return twoPhaseActivityID }]
-        context.checking(new Expectations() {
-            {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
-                will(returnValue([] as Set))
-                one(idObjectFactory).newTwoPhaseActivityBuilder(userDAO)
-                will(returnValue(activityBuilder as TwoPhaseActivityBuilder))
-                one(readWriteDAO).create(twoPhaseActivityID)
-                will(returnValue(twoPhaseActivityDAO))
-            }
-        })
-        assert twoPhaseActivityDAO.is(userHelper.requestResetPassword(userDAO))
-    }
-
-    @Test
-    public void testCanChangeEmailAddressWithNoRecentPasswordChanges() {
-        TwoPhaseActivity recentEmailChange = createActivity(TwoPhaseActivity.Activity.EMAIL_CHANGE, DateTime.now())
-        TwoPhaseActivity oldPasswordChange = createActivity(TwoPhaseActivity.Activity.PASSWORD_RESET, DateTime.now().minusDays(10))
-        TwoPhaseActivity olderPasswordChange = createActivity(TwoPhaseActivity.Activity.PASSWORD_RESET, DateTime.now().minusDays(15))
-        TwoPhaseActivity accountActivation = createActivity(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION, DateTime.now().minusDays(20))
-        context.checking(new Expectations() {
-            {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
-                will(returnValue([recentEmailChange, olderPasswordChange, oldPasswordChange, accountActivation] as Set))
-            }
-        })
-
-        assert userHelper.canChangeEmailAddress(userID)
-    }
-
-    @Test
-    public void testCannotChangeEmailAddressWithRecentPasswordChanges() {
-        TwoPhaseActivity recentEmailChange = createActivity(TwoPhaseActivity.Activity.EMAIL_CHANGE, DateTime.now())
-        TwoPhaseActivity oldPasswordChange = createActivity(TwoPhaseActivity.Activity.PASSWORD_RESET, DateTime.now().minusDays(5))
-        TwoPhaseActivity olderPasswordChange = createActivity(TwoPhaseActivity.Activity.PASSWORD_RESET, DateTime.now().minusDays(15))
-        TwoPhaseActivity accountActivation = createActivity(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION, DateTime.now().minusDays(20))
-        context.checking(new Expectations() {
-            {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
-                will(returnValue([recentEmailChange, olderPasswordChange, oldPasswordChange, accountActivation] as Set))
-            }
-        })
-
-        assert !userHelper.canChangeEmailAddress(userID)
-    }
-
-    @Test
-    public void testCanChangePasswordWithNoRecentEmailChanges() {
-        TwoPhaseActivity recentEmailChange = createActivity(TwoPhaseActivity.Activity.EMAIL_CHANGE, DateTime.now().minusDays(8))
-        TwoPhaseActivity oldPasswordChange = createActivity(TwoPhaseActivity.Activity.PASSWORD_RESET, DateTime.now())
-        TwoPhaseActivity olderPasswordChange = createActivity(TwoPhaseActivity.Activity.PASSWORD_RESET, DateTime.now().minusDays(15))
-        TwoPhaseActivity accountActivation = createActivity(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION, DateTime.now().minusDays(20))
-        context.checking(new Expectations() {
-            {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
-                will(returnValue([recentEmailChange, olderPasswordChange, oldPasswordChange, accountActivation] as Set))
-            }
-        })
-
-        assert userHelper.canChangePassword(userID)
-    }
-
-    @Test
-    public void testCannotChangePasswordWithRecentEmailChanges() {
-        TwoPhaseActivity recentEmailChange = createActivity(TwoPhaseActivity.Activity.EMAIL_CHANGE, DateTime.now().minusDays(5))
-        TwoPhaseActivity oldPasswordChange = createActivity(TwoPhaseActivity.Activity.PASSWORD_RESET, DateTime.now())
-        TwoPhaseActivity olderPasswordChange = createActivity(TwoPhaseActivity.Activity.PASSWORD_RESET, DateTime.now().minusDays(15))
-        TwoPhaseActivity accountActivation = createActivity(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION, DateTime.now().minusDays(20))
-        context.checking(new Expectations() {
-            {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
-                will(returnValue([recentEmailChange, olderPasswordChange, oldPasswordChange, accountActivation] as Set))
-            }
-        })
-
-        assert !userHelper.canChangePassword(userID)
-    }
-
-    private TwoPhaseActivity createActivity(final TwoPhaseActivity.Activity activity, final DateTime modificationTime, final DateTime expiry = null) {
-        [
-                getModificationTimestamp: { return modificationTime },
-                getActivityType: { return activity },
-                getExpirationTime: { return expiry }
-        ] as TwoPhaseActivity
     }
 
     private TwoPhaseActivity setupForActivationRequest() {
