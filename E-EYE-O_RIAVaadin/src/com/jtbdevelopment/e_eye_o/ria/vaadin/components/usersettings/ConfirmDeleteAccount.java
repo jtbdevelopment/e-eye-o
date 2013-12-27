@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings;
 
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
@@ -13,7 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 public class ConfirmDeleteAccount extends PasswordConfirmingWindow {
     private final PasswordField passwordField = new PasswordField();
 
-    public ConfirmDeleteAccount(final AppUser appUser, final ReadWriteDAO readWriteDAO, final AuthenticationManager authenticationManager, final DeletedAccountEmailGenerator deletedAccountEmailGenerator) {
+    public ConfirmDeleteAccount(final AppUser appUser, final DeletionHelper deletionHelper, final AuthenticationManager authenticationManager, final DeletedAccountEmailGenerator deletedAccountEmailGenerator) {
         super("Confirm delete account");
 
         VerticalLayout mainLayout = new VerticalLayout();
@@ -38,7 +38,7 @@ public class ConfirmDeleteAccount extends PasswordConfirmingWindow {
             public void buttonClick(Button.ClickEvent event) {
                 if (!reconfirmPassword(authenticationManager, appUser, passwordField.getValue())) return;
                 final String email = appUser.getEmailAddress();
-                readWriteDAO.deleteUser(appUser);
+                deletionHelper.deleteUser(appUser);
                 deletedAccountEmailGenerator.generateAccountDeletedEmail(email);
                 getUI().removeWindow(ConfirmDeleteAccount.this);
                 Notification.show("Password changed.");

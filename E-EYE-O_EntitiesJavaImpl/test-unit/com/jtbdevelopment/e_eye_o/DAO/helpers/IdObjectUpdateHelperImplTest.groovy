@@ -5,8 +5,8 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers
  */
 class IdObjectUpdateHelperImplTest extends AbstractIdObjectUpdateHelperTest {
     @Override
-    IdObjectUpdateHelper createHelper() {
-        IdObjectUpdateHelperImpl impl = new IdObjectUpdateHelperImpl()
+    IdObjectFieldUpdateValidator createHelper() {
+        IdObjectFieldUpdateValidatorImpl impl = new IdObjectFieldUpdateValidatorImpl()
         impl.reflectionHelper = helper
         return impl
     }

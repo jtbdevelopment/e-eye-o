@@ -62,6 +62,11 @@ class UserHelperGImpl implements UserHelper {
     }
 
     @Override
+    AppUser activateUser(final TwoPhaseActivity appUser) {
+        return null
+    }
+
+    @Override
     boolean canChangeEmailAddress(final AppUser appUser) {
         return !hasRecentActivity(appUser, TwoPhaseActivity.Activity.PASSWORD_RESET);
     }
@@ -76,8 +81,13 @@ class UserHelperGImpl implements UserHelper {
         if (!canChangeEmailAddress(appUser)) {
             throw new UserHelper.PasswordChangeTooRecent();
         }
-        TwoPhaseActivity changeRequest = idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.EMAIL_CHANGE).withExpirationTime(new DateTime()).withArchived(true).build();
-        return readWriteDAO.updateUserEmailAddress(changeRequest, newEmailAddress);
+        AppUser loadedUser = readWriteDAO.get(AppUser.class, appUser.getId());
+        TwoPhaseActivity changeRequest = idObjectFactory.newTwoPhaseActivityBuilder(loadedUser).withActivityType(TwoPhaseActivity.Activity.EMAIL_CHANGE).withExpirationTime(new DateTime()).build();
+        changeRequest = (TwoPhaseActivity) readWriteDAO.create(changeRequest);
+        changeRequest.archived = true;
+        loadedUser.emailAddress = newEmailAddress;
+        readWriteDAO.trustedUpdates(Arrays.asList(loadedUser, changeRequest));
+        return readWriteDAO.get(TwoPhaseActivity.class, changeRequest.getId());
     }
 
     @Override
@@ -85,13 +95,35 @@ class UserHelperGImpl implements UserHelper {
         if (!canChangePassword(appUser)) {
             throw new UserHelper.EmailChangeTooRecent();
         }
+        //  TODO - configurable
         TwoPhaseActivity requestReset = idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.PASSWORD_RESET).withExpirationTime(new DateTime().plusDays(1)).build();
         (TwoPhaseActivity) readWriteDAO.create(requestReset);
     }
 
     @Override
     void resetPassword(final TwoPhaseActivity twoPhaseActivity, final String newPassword) {
-        readWriteDAO.resetUserPassword(twoPhaseActivity, encryptPassword(newPassword))
+        AppUser appUser = readWriteDAO.get(AppUser.class, twoPhaseActivity.getAppUser().getId());
+        appUser.password = newPassword;
+        twoPhaseActivity.archived = true;
+        readWriteDAO.trustedUpdates(Arrays.asList(appUser, twoPhaseActivity));
+    }
+
+    @Override
+    void deactivateUser(final AppUser user) {
+        AppUser loaded = readWriteDAO.get(AppUser.class, user.getId());
+        loaded.active = false;
+        readWriteDAO.trustedUpdate(loaded);
+    }
+
+    @Override
+    AppUserSettings updateSettings(final AppUser appUser, final Map<String, Object> settings) {
+        Set<AppUserSettings> entitiesForUser = readWriteDAO.getEntitiesForUser(AppUserSettings.class, appUser, 0, 0);
+        if (entitiesForUser.size() != 1) {
+            throw new IllegalStateException("Somehow more than 1 app settings");
+        }
+        AppUserSettings userSettings = entitiesForUser.iterator().next();
+        userSettings.updateSettings(settings);
+        return (AppUserSettings) readWriteDAO.trustedUpdate(userSettings);
     }
 
     private String encryptPassword(final String password) {

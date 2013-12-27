@@ -19,15 +19,15 @@ import java.util.Map;
  */
 @Component
 @SuppressWarnings("unused")
-public class IdObjectUpdateHelperImpl implements IdObjectUpdateHelper {
-    private static Logger logger = LoggerFactory.getLogger(IdObjectUpdateHelperImpl.class);
+public class IdObjectFieldUpdateValidatorImpl implements IdObjectFieldUpdateValidator {
+    private static Logger logger = LoggerFactory.getLogger(IdObjectFieldUpdateValidatorImpl.class);
 
     @Autowired
     protected IdObjectReflectionHelper reflectionHelper;
 
 
     @Override
-    public <T extends IdObject> void vetInvalidFieldUpdates(final AppUser updatingUser, final T currentEntity, final T updatedEntity) {
+    public <T extends IdObject> void removeInvalidFieldUpdates(final AppUser updatingUser, final T currentEntity, final T updatedEntity) {
         Map<String, IdObjectFieldSettings> settings = reflectionHelper.getAllFieldPreferences(updatedEntity.getClass());
         for (Map.Entry<String, IdObjectFieldSettings> setting : settings.entrySet()) {
             String fieldName = setting.getKey();

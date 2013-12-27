@@ -4,6 +4,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.primitives.Ints;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.ArchiveHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.events.AppUserOwnedObjectChanged;
@@ -63,6 +65,11 @@ public abstract class IdObjectFilterableDisplay<T extends AppUserOwnedObject> ex
     protected EventBus eventBus;
     @Autowired
     protected ReadWriteDAO readWriteDAO;
+    @Autowired
+    protected ArchiveHelper archiveHelper;
+    @Autowired
+    protected DeletionHelper deletionHelper;
+
     protected ClickedOnListener clickedOnListener;
     protected AllItemsBeanItemContainer<T> entities;
     protected AppUser appUser;

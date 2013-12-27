@@ -4,12 +4,12 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
-import com.jtbdevelopment.e_eye_o.ria.vaadin.views.passwordreset.PasswordResetEmailGenerator;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Runo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class UserSettings extends CustomComponent {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private PasswordResetEmailGenerator passwordResetEmailGenerator;
+    private DeletionHelper deletionHelper;
 
     @Autowired
     private ChangeEmailAddressEmailGenerator changeEmailAddressEmailGenerator;
@@ -147,7 +147,7 @@ public class UserSettings extends CustomComponent {
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
-                            readWriteDAO.deactivateUser(user);
+                            userHelper.deactivateUser(user);
                             LogoutEvent logoutEvent = new LogoutEvent(user);
                             deactivateAccountEmailGenerator.generateAccountDeactivatedEmail(user);
                             eventBus.post(logoutEvent);
@@ -161,7 +161,7 @@ public class UserSettings extends CustomComponent {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
-                ConfirmDeleteAccount deleteAccount = new ConfirmDeleteAccount(user, readWriteDAO, authenticationManager, deletedAccountEmailGenerator);
+                ConfirmDeleteAccount deleteAccount = new ConfirmDeleteAccount(user, deletionHelper, authenticationManager, deletedAccountEmailGenerator);
                 getUI().addWindow(deleteAccount);
             }
         });

@@ -1,8 +1,10 @@
 package com.jtbdevelopment.e_eye_o.DAO;
 
-import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.IdObject;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Date: 11/19/12
@@ -26,37 +28,27 @@ public interface ReadWriteDAO extends ReadOnlyDAO {
      */
     <T extends IdObject> T update(final AppUser updatingAppUser, final T entity);
 
-    <T extends AppUserOwnedObject> T changeArchiveStatus(final T entity);
+    /**
+     * Similar to update, however this version does not vet the update fields for inappropriate changes
+     * primarily to be used by helpers
+     *
+     * @param entity
+     * @param <T>
+     * @return
+     */
+    <T extends IdObject> T trustedUpdate(final T entity);
 
-    TwoPhaseActivity activateUser(final TwoPhaseActivity relatedActivity);
+    <T extends IdObject> List<T> trustedUpdates(final Collection<T> entity);
 
-    TwoPhaseActivity updateUserEmailAddress(final TwoPhaseActivity changeRequest, final String newAddress);
-
-    TwoPhaseActivity resetUserPassword(final TwoPhaseActivity relatedActivity, final String newPassword);
-
-    TwoPhaseActivity cancelResetPassword(final TwoPhaseActivity relatedActivity);
+    /**
+     * Similar to trustedUpdate(s) to be used by helpers
+     * <p/>
+     * Will delete entity without checking or logic
+     *
+     * @param entity
+     * @param <T>
+     */
+    <T extends IdObject> void trustedDelete(final T entity);
 
     AppUser updateAppUserLogout(final AppUser appUser);
-
-    AppUserSettings updateSettings(final AppUser appUser, Map<String, Object> settings);
-
-    /**
-     * Similar to delete, will return all app user owned objects that were deleted as part of this.
-     *
-     * @param user user to delete
-     */
-    void deleteUser(final AppUser user);
-
-    void deactivateUser(final AppUser user);
-
-    /**
-     * Will return the set of items which were deleted along with the requested item
-     * <p/>
-     * For example, deleting a student will delete all observations on that student.
-     *
-     * @param entity - entity to delete
-     * @param <T>    - their type
-     */
-    <T extends AppUserOwnedObject> void delete(final T entity);
-
 }

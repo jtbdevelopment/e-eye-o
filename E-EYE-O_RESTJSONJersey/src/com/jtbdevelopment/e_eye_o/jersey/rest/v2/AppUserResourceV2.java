@@ -1,6 +1,9 @@
 package com.jtbdevelopment.e_eye_o.jersey.rest.v2;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.ArchiveHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.builders.PaginatedIdObjectListBuilder;
@@ -27,6 +30,9 @@ import java.util.Set;
 public class AppUserResourceV2 {
     private final static int PAGE_SIZE = 10;
     private final ReadWriteDAO readWriteDAO;
+    private final ArchiveHelper archiveHelper;
+    private final DeletionHelper deletionHelper;
+    private final UserHelper userHelper;
     private final JSONIdObjectSerializer jsonIdObjectSerializer;
     private final IdObjectReflectionHelper idObjectReflectionHelper;
     private final IdObjectFactory idObjectFactory;
@@ -36,6 +42,9 @@ public class AppUserResourceV2 {
     private Class<? extends AppUserOwnedObject> entityType;
 
     public AppUserResourceV2(final ReadWriteDAO readWriteDAO,
+                             final ArchiveHelper archiveHelper,
+                             final DeletionHelper deletionHelper,
+                             final UserHelper userHelper,
                              final JSONIdObjectSerializer jsonIdObjectSerializer,
                              final IdObjectReflectionHelper idObjectReflectionHelper,
                              final IdObjectFactory idObjectFactory,
@@ -44,6 +53,9 @@ public class AppUserResourceV2 {
                              final Boolean archiveFlag,
                              final Class<? extends AppUserOwnedObject> entityType) {
         this.readWriteDAO = readWriteDAO;
+        this.archiveHelper = archiveHelper;
+        this.deletionHelper = deletionHelper;
+        this.userHelper = userHelper;
         this.securityHelper = securityHelper;
         this.idObjectFactory = idObjectFactory;
         this.jsonIdObjectSerializer = jsonIdObjectSerializer;
@@ -60,6 +72,9 @@ public class AppUserResourceV2 {
         this.appUser = appUserResource.appUser;
         this.securityHelper = appUserResource.securityHelper;
         this.idObjectFactory = appUserResource.idObjectFactory;
+        this.archiveHelper = appUserResource.archiveHelper;
+        this.deletionHelper = appUserResource.deletionHelper;
+        this.userHelper = appUserResource.userHelper;
     }
 
     private AppUserResourceV2(final AppUserResourceV2 appUserResource,
@@ -112,7 +127,7 @@ public class AppUserResourceV2 {
                     if (updateAppUser.isActive()) {
                         //  Not allowed currently
                     } else {
-                        readWriteDAO.deactivateUser(updatedUser);
+                        userHelper.deactivateUser(updatedUser);
                     }
                     updatedUser = readWriteDAO.get(AppUser.class, updatedUser.getId());
                 }
@@ -133,7 +148,7 @@ public class AppUserResourceV2 {
         AppUser sessionAppUser = securityHelper.getSessionAppUser();
 
         if (sessionAppUser.isAdmin() || sessionAppUser.equals(appUser)) {
-            readWriteDAO.deleteUser(appUser);
+            deletionHelper.deleteUser(appUser);
         }
         return Response.ok().build();
     }
@@ -166,7 +181,7 @@ public class AppUserResourceV2 {
     @Path("{entityId}")
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
     public Object getAppUserEntityResource(@PathParam("entityId") final String entityId) {
-        return new AppUserEntityResourceV2(readWriteDAO, idObjectReflectionHelper, securityHelper, entityId);
+        return new AppUserEntityResourceV2(readWriteDAO, archiveHelper, deletionHelper, idObjectReflectionHelper, securityHelper, entityId);
     }
 
     @Path("archived")

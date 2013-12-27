@@ -12,7 +12,7 @@ public class HibernateReadWriteDAOTest {
     private Mockery context;
     private SessionFactory sessionFactory;
     private IdObjectReflectionHelper idObjectReflectionHelper;
-    private IdObjectUpdateHelper idObjectUpdateHelper;
+    private IdObjectFieldUpdateValidator idObjectUpdateHelper;
     private Session session;
     private IdObjectWrapperFactory daoIdObjectWrapperFactory;
     private HibernateReadWriteDAO dao;
@@ -45,7 +45,7 @@ public class HibernateReadWriteDAOTest {
         sessionFactory = context.mock(SessionFactory.class);
         idObjectReflectionHelper = context.mock(IdObjectReflectionHelper.class);
         session = context.mock(Session.class);
-        idObjectUpdateHelper = context.mock(IdObjectUpdateHelper.class);
+        idObjectUpdateHelper = context.mock(IdObjectFieldUpdateValidator.class);
         query1 = context.mock(Query.class, "Q1");
         query3 = context.mock(Query.class, "Q3");
         daoIdObjectWrapperFactory = context.mock(IdObjectWrapperFactory.class);
@@ -110,7 +110,7 @@ public class HibernateReadWriteDAOTest {
         context.checking(new Expectations() {{
             allowing(appContext).getBean(IdObjectSerializer.class);
             will(returnValue(serializer));
-            allowing(idObjectUpdateHelper).vetInvalidFieldUpdates(with(any(AppUser.class)), with(any(IdObject.class)), with(any(IdObject.class)));
+            allowing(idObjectUpdateHelper).removeInvalidFieldUpdates(with(any(AppUser.class)), with(any(IdObject.class)), with(any(IdObject.class)));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(deletedImpl.getClass());
             will(returnValue(DeletedObject.class));
             allowing(idObjectReflectionHelper).getIdObjectInterfaceForClass(deletedLoaded.getClass());

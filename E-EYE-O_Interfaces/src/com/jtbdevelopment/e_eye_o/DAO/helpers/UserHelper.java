@@ -1,7 +1,10 @@
 package com.jtbdevelopment.e_eye_o.DAO.helpers;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
+import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
 import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
+
+import java.util.Map;
 
 /**
  * Date: 4/6/13
@@ -13,7 +16,6 @@ public interface UserHelper {
 
     public class PasswordChangeTooRecent extends Exception {
     }
-
 
     /**
      * Take new user shell and create
@@ -28,6 +30,8 @@ public interface UserHelper {
 
     TwoPhaseActivity generateActivationRequest(final AppUser appUser);
 
+    AppUser activateUser(final TwoPhaseActivity appUser);
+
     boolean canChangeEmailAddress(final AppUser appUser);
 
     boolean canChangePassword(final AppUser appUser);
@@ -37,4 +41,8 @@ public interface UserHelper {
     TwoPhaseActivity requestResetPassword(final AppUser appUser) throws EmailChangeTooRecent;
 
     void resetPassword(final TwoPhaseActivity twoPhaseActivity, final String newPassword);
+
+    void deactivateUser(final AppUser user);
+
+    AppUserSettings updateSettings(final AppUser appUser, final Map<String, Object> settings);
 }

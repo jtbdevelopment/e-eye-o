@@ -2,9 +2,9 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.google.common.eventbus.EventBus;
 import com.google.common.primitives.Ints;
-import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
@@ -42,13 +42,13 @@ public class UserPreferences extends CustomComponent {
     @Resource(name = "primaryAppUserObjects")
     private List<Class<? extends AppUserOwnedObject>> entityTypes;
     @Autowired
-    private ReadWriteDAO readWriteDAO;
+    private ReadOnlyDAO readOnlyDAO;
+
+    @Autowired
+    private UserHelper userHelper;
 
     @Autowired
     private IdObjectReflectionHelper reflectionHelper;
-
-    @Autowired
-    private EventBus eventBus;
 
     private static class SettingData<T> {
         private String setting;
@@ -187,7 +187,7 @@ public class UserPreferences extends CustomComponent {
 
     @SuppressWarnings("unchecked")
     private void resetToCurrentValues() {
-        AppUserSettings fresh = readWriteDAO.get(AppUserSettings.class, getSession().getAttribute(AppUserSettings.class).getId());
+        AppUserSettings fresh = readOnlyDAO.get(AppUserSettings.class, getSession().getAttribute(AppUserSettings.class).getId());
         for (AbstractField field : optionFields) {
             SettingData settingData = (SettingData) field.getData();
             if (settingData.defaultValue instanceof String) {
@@ -208,7 +208,7 @@ public class UserPreferences extends CustomComponent {
             SettingData settingData = (SettingData) field.getData();
             settings.put(settingData.setting, field.getValue());
         }
-        readWriteDAO.updateSettings(getSession().getAttribute(AppUser.class), settings);
+        userHelper.updateSettings(getSession().getAttribute(AppUser.class), settings);
         Notification.show("Preferences saved.", Notification.Type.HUMANIZED_MESSAGE);
     }
 }

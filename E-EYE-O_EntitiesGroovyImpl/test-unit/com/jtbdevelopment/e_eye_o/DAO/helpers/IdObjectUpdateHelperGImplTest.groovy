@@ -5,7 +5,7 @@ package com.jtbdevelopment.e_eye_o.DAO.helpers
  */
 class IdObjectUpdateHelperGImplTest extends AbstractIdObjectUpdateHelperTest {
     @Override
-    IdObjectUpdateHelper createHelper() {
-        return new IdObjectUpdateHelperGImpl(reflectionHelper: helper)
+    IdObjectFieldUpdateValidator createHelper() {
+        return new IdObjectFieldUpdateValidatorGImpl(reflectionHelper: helper)
     }
 }

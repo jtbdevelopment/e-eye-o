@@ -15,7 +15,7 @@ import org.testng.annotations.Test
  * Time: 11:29 PM
  */
 abstract class AbstractIdObjectUpdateHelperTest {
-    abstract IdObjectUpdateHelper createHelper();
+    abstract IdObjectFieldUpdateValidator createHelper();
 
     private static final String ORIGINAL_VALUE = "A"
     private static final String UPDATED_VALUE = "B"
@@ -36,7 +36,7 @@ abstract class AbstractIdObjectUpdateHelperTest {
     protected IdObjectReflectionHelper helper = context.mock(IdObjectReflectionHelper.class)
     private AppUser user = [isAdmin: { false }] as AppUser;
     private AppUser admin = [isAdmin: { true }] as AppUser;
-    private IdObjectUpdateHelper updateHelperGImpl
+    private IdObjectFieldUpdateValidator updateHelperGImpl
 
     @BeforeMethod
     public void setUp() {
@@ -94,7 +94,7 @@ abstract class AbstractIdObjectUpdateHelperTest {
                 will(returnValue([(field): setting]))
             }
         })
-        updateHelperGImpl.vetInvalidFieldUpdates(user, original, update)
+        updateHelperGImpl.removeInvalidFieldUpdates(user, original, update)
         assert original."$field" == ORIGINAL_VALUE
         assert update."$field" == expectedValue
     }

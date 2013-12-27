@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component
  * Time: 11:17 PM
  */
 @Component
-class IdObjectUpdateHelperGImpl implements IdObjectUpdateHelper {
+class IdObjectFieldUpdateValidatorGImpl implements IdObjectFieldUpdateValidator {
     @Autowired
     IdObjectReflectionHelper reflectionHelper
 
     @Override
-    def <T extends IdObject> void vetInvalidFieldUpdates(final AppUser updatingUser, final T currentEntity, final T updatedEntity) {
+    def <T extends IdObject> void removeInvalidFieldUpdates(final AppUser updatingUser, final T currentEntity, final T updatedEntity) {
         Map<String, IdObjectFieldSettings> settings = reflectionHelper.getAllFieldPreferences(currentEntity.class);
         settings.each { String key, IdObjectFieldSettings value ->
             switch (value.editableBy()) {
