@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.generatedcolumns;
 
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ArchiveHelper;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectDeletionHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.vaadin.event.MouseEvents;
@@ -22,7 +22,7 @@ public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> extends Custo
     private static final ThemeResource ACTIVATE_ICON = new ThemeResource("icons/16/power_on.png");
     private static final ThemeResource DELETE_ICON = new ThemeResource("icons/16/delete.png");
 
-    public ArchiveAndDeleteButtons(final ArchiveHelper archiveHelper, final IdObjectDeletionHelper idObjectDeletionHelper, final T entity) {
+    public ArchiveAndDeleteButtons(final ArchiveHelper archiveHelper, final DeletionHelper deletionHelper, final T entity) {
         setSizeUndefined();
         final GridLayout layout;
         layout = new GridLayout(2, 1);
@@ -54,7 +54,7 @@ public class ArchiveAndDeleteButtons<T extends AppUserOwnedObject> extends Custo
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             logger.trace(UI.getCurrent().getSession().getAttribute(AppUser.class).getId() + ": delete dialog confirmed on " + entity.getId());
-                            idObjectDeletionHelper.delete(entity);
+                            deletionHelper.delete(entity);
                         }
                     }
                 });

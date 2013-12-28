@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.DAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Set;
@@ -84,8 +83,6 @@ public interface ReadOnlyDAO {
      * @return an ordered set of modified entities, ordered by modification timestamp ascending
      */
     public List<? extends AppUserOwnedObject> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, int maxResults);
-
-    public LocalDateTime getLastObservationTimestampForEntity(final Observable observable);
 
     public List<Observation> getAllObservationsForEntity(final Observable observable);
 

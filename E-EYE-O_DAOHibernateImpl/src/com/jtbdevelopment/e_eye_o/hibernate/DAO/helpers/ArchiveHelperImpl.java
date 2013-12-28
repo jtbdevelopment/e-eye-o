@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
  * Time: 7:25 PM
  */
 @Component
+@Transactional(readOnly = false)
 public class ArchiveHelperImpl implements ArchiveHelper {
     @Autowired
     protected ReadWriteDAO readWriteDAO;
 
-    @Transactional(readOnly = false)
     @Override
     public <T extends AppUserOwnedObject> T flipArchiveStatus(final T entity) {
         T loaded = readWriteDAO.get((Class<T>) entity.getClass(), entity.getId());

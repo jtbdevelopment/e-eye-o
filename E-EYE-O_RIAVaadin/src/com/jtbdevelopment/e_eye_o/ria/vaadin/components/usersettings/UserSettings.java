@@ -4,7 +4,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.usersettings;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectDeletionHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserMaintenanceHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
@@ -34,7 +34,7 @@ public class UserSettings extends CustomComponent {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private IdObjectDeletionHelper idObjectDeletionHelper;
+    private DeletionHelper deletionHelper;
 
     @Autowired
     private ChangeEmailAddressEmailGenerator changeEmailAddressEmailGenerator;
@@ -147,7 +147,7 @@ public class UserSettings extends CustomComponent {
                     public void onClose(final ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
-                            idObjectDeletionHelper.deactivateUser(user);
+                            deletionHelper.deactivateUser(user);
                             LogoutEvent logoutEvent = new LogoutEvent(user);
                             deactivateAccountEmailGenerator.generateAccountDeactivatedEmail(user);
                             eventBus.post(logoutEvent);
@@ -161,7 +161,7 @@ public class UserSettings extends CustomComponent {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 AppUser user = readWriteDAO.get(AppUser.class, getSession().getAttribute(AppUser.class).getId());
-                ConfirmDeleteAccount deleteAccount = new ConfirmDeleteAccount(user, idObjectDeletionHelper, authenticationManager, deletedAccountEmailGenerator);
+                ConfirmDeleteAccount deleteAccount = new ConfirmDeleteAccount(user, deletionHelper, authenticationManager, deletedAccountEmailGenerator);
                 getUI().addWindow(deleteAccount);
             }
         });

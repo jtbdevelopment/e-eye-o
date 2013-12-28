@@ -198,11 +198,6 @@ public class BaseData {
         }
 
         @Override
-        public LocalDateTime getLastObservationTimestampForEntity(Observable observable) {
-            return null;
-        }
-
-        @Override
         public List<Observation> getAllObservationsForEntity(Observable observable) {
             return null;
         }

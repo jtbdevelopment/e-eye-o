@@ -22,7 +22,6 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -281,6 +280,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         return new HashSet<Observation>(createSemesterCriteraWithArchiveFlag(semester, true, firstResult, maxResults).list());
     }
 
+    /*
     @Override
     public LocalDateTime getLastObservationTimestampForEntity(final Observable observable) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(HibernateObservation.class)
@@ -289,6 +289,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         LocalDateTime result = (LocalDateTime) criteria.uniqueResult();
         return result == null ? Observable.NEVER_OBSERVED : result;
     }
+    */
 
     @Override
     @SuppressWarnings("unchecked")

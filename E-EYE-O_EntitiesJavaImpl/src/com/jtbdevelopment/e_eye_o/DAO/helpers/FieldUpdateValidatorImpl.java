@@ -19,8 +19,8 @@ import java.util.Map;
  */
 @Component
 @SuppressWarnings("unused")
-public class IdObjectFieldUpdateValidatorImpl implements IdObjectFieldUpdateValidator {
-    private static Logger logger = LoggerFactory.getLogger(IdObjectFieldUpdateValidatorImpl.class);
+public class FieldUpdateValidatorImpl implements FieldUpdateValidator {
+    private static Logger logger = LoggerFactory.getLogger(FieldUpdateValidatorImpl.class);
 
     @Autowired
     protected IdObjectReflectionHelper reflectionHelper;

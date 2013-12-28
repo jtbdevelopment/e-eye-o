@@ -12,7 +12,7 @@ public class HibernateReadWriteDAOTest {
     private Mockery context;
     private SessionFactory sessionFactory;
     private IdObjectReflectionHelper idObjectReflectionHelper;
-    private IdObjectFieldUpdateValidator idObjectUpdateHelper;
+    private FieldUpdateValidator idObjectUpdateHelper;
     private Session session;
     private IdObjectWrapperFactory daoIdObjectWrapperFactory;
     private HibernateReadWriteDAO dao;
@@ -45,7 +45,7 @@ public class HibernateReadWriteDAOTest {
         sessionFactory = context.mock(SessionFactory.class);
         idObjectReflectionHelper = context.mock(IdObjectReflectionHelper.class);
         session = context.mock(Session.class);
-        idObjectUpdateHelper = context.mock(IdObjectFieldUpdateValidator.class);
+        idObjectUpdateHelper = context.mock(FieldUpdateValidator.class);
         query1 = context.mock(Query.class, "Q1");
         query3 = context.mock(Query.class, "Q3");
         daoIdObjectWrapperFactory = context.mock(IdObjectWrapperFactory.class);

@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
 import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectFieldUpdateValidator;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.FieldUpdateValidator;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.events.EventFactory;
@@ -31,19 +31,20 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadWriteDAO {
 
-    private final IdObjectFieldUpdateValidator idObjectFieldUpdateValidator;
+    private final FieldUpdateValidator fieldUpdateValidator;
     private final EventBus eventBus;
     private final EventFactory eventFactory;
 
     @Autowired
-    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final IdObjectFieldUpdateValidator idObjectFieldUpdateValidator, final IdObjectFactory idObjectFactory) {
+    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final FieldUpdateValidator fieldUpdateValidator, final IdObjectFactory idObjectFactory) {
         super(sessionFactory, wrapperFactory, idObjectReflectionHelper, idObjectFactory);
-        this.idObjectFieldUpdateValidator = idObjectFieldUpdateValidator;
+        this.fieldUpdateValidator = fieldUpdateValidator;
         this.eventBus = eventBus;
         this.eventFactory = eventFactory;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends IdObject> T create(final T entity) {
         if (entity instanceof DeletedObject) {
             throw new IllegalArgumentException("You cannot explicitly create a DeletedObject.");
@@ -61,8 +62,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         if (!idObjectReflectionHelper.getIdObjectInterfaceForClass(entity.getClass()).getAnnotation(IdObjectEntitySettings.class).editable()) {
             throw new IllegalArgumentException("You cannot explicitly update a " + entity.getClass() + ".");
         }
+        @SuppressWarnings("unchecked")
         final T existing = get((Class<T>) entity.getClass(), entity.getId());
-        idObjectFieldUpdateValidator.removeInvalidFieldUpdates(updatingUser, existing, entity);
+        fieldUpdateValidator.removeInvalidFieldUpdates(updatingUser, existing, entity);
         sessionFactory.getCurrentSession().clear();
         T saved = trustedUpdate(entity);
         dealWithObservationChanges(saved, false);
@@ -70,6 +72,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends IdObject> T trustedUpdate(final T entity) {
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         entity.setModificationTimestamp(DateTime.now());
@@ -105,7 +108,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     private Observable dealWithObservationChanges(final IdObject entity, final boolean isDelete) {
         if (entity instanceof Observation) {
             Observation observation = (Observation) entity;
-            Observable observable = get(Observable.class, ((Observation) entity).getObservationSubject().getId());
+            Observable observable = get(Observable.class, observation.getObservationSubject().getId());
             if (observable == null) {
                 return null;
             }
@@ -145,17 +148,6 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                 eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, (AppUserOwnedObject) wrapped));
             } else {
                 eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
-            }
-        }
-    }
-
-    private void publishChanges(Set<AppUserOwnedObject> updatedItems, Set<AppUserOwnedObject> deletedItems) {
-        if (eventBus != null) {
-            for (AppUserOwnedObject updatedItem : updatedItems) {
-                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, updatedItem));
-            }
-            for (AppUserOwnedObject deletedItem : deletedItems) {
-                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, deletedItem));
             }
         }
     }

@@ -7,7 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.IdObject;
  * Date: 6/8/13
  * Time: 4:23 PM
  */
-public interface IdObjectFieldUpdateValidator {
+public interface FieldUpdateValidator {
     /**
      * Based on IdObjectFieldSettings annotation and the updating user, will undo changes on updatedEntity
      * not permissioned for the user

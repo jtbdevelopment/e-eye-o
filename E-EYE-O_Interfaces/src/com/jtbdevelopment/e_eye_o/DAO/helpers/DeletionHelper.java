@@ -7,7 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
  * Date: 12/26/13
  * Time: 8:36 PM
  */
-public interface IdObjectDeletionHelper {
+public interface DeletionHelper {
     void deactivateUser(final AppUser user);
 
     void deleteUser(final AppUser user);

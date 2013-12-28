@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
  * Time: 11:17 PM
  */
 @Component
-class IdObjectFieldUpdateValidatorGImpl implements IdObjectFieldUpdateValidator {
+class FieldUpdateValidatorGImpl implements FieldUpdateValidator {
     @Autowired
     IdObjectReflectionHelper reflectionHelper
 

@@ -1,7 +1,7 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO.helpers;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
-import com.jtbdevelopment.e_eye_o.DAO.helpers.IdObjectDeletionHelper;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Component
 @Transactional(readOnly = false)
-public class IdObjectDeletionHelperImpl implements IdObjectDeletionHelper {
+public class DeletionHelperImpl implements DeletionHelper {
     @Autowired
     protected ReadWriteDAO readWriteDAO;
 
@@ -71,7 +71,7 @@ public class IdObjectDeletionHelperImpl implements IdObjectDeletionHelper {
     private <T extends AppUserOwnedObject> void deleteObservationsForEntity(final T loaded) {
         if (loaded instanceof Observable) {
             for (Observation o : readWriteDAO.getAllObservationsForEntity((Observable) loaded)) {
-                deletePhotosForEntity((T) o);
+                deletePhotosForEntity(o);
                 readWriteDAO.trustedDelete(o);
             }
         }
