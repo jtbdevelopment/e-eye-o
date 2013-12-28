@@ -12,7 +12,7 @@ import org.testng.annotations.Test
  * Time: 5:52 PM
  */
 abstract class AbstractDeletionHelperTest {
-    Mockery context
+    public Mockery context
     protected ReadWriteDAO readWriteDAO
     protected DeletionHelper deletionHelper
     protected AppUser userID
@@ -28,7 +28,7 @@ abstract class AbstractDeletionHelperTest {
         readWriteDAO = context.mock(ReadWriteDAO.class)
         userID = context.mock(AppUser.class, "UID")
         userDAO = context.mock(AppUser.class, "UDAO")
-        userDAO = context.mock(AppUser.class, "UDAOUP")
+        userDAOUP = context.mock(AppUser.class, "UDAOUP")
         deletionHelper.readWriteDAO = readWriteDAO
     }
 
@@ -74,6 +74,22 @@ abstract class AbstractDeletionHelperTest {
         Photo photoDAO = context.mock(Photo, "PDAO")
         setBaseDeleteExpectations(photoID, photoDAO, "PID", [:])
         deletionHelper.delete(photoID)
+    }
+
+    @Test
+    public void testTwoPhaseActivityDeletion() {
+        TwoPhaseActivity activityID = context.mock(TwoPhaseActivity.class, "ID")
+        TwoPhaseActivity activityDAO = context.mock(TwoPhaseActivity, "DAO")
+        setBaseDeleteExpectations(activityID, activityDAO, "AID", [:])
+        deletionHelper.delete(activityID)
+    }
+
+    @Test
+    public void testAppUserSetttingsDeletion() {
+        AppUserSettings settingsID = context.mock(AppUserSettings.class, "ID")
+        AppUserSettings settingsDAO = context.mock(AppUserSettings, "DAO")
+        setBaseDeleteExpectations(settingsID, settingsDAO, "AID", [:])
+        deletionHelper.delete(settingsID)
     }
 
     @Test
@@ -170,6 +186,93 @@ abstract class AbstractDeletionHelperTest {
         setBaseDeleteExpectations(categoryID, categoryDAO, "OCID", [:])
         setObservationCategoryExpectations(categoryDAO, [context.mock(Observation, "O1"), context.mock(Observation, "O2")])
         deletionHelper.delete(categoryID)
+    }
+
+    @Test
+    public void testDeletingDeletedUser() {
+        context.checking(new Expectations() {
+            {
+                one(userID).getId()
+                will(returnValue("U"))
+                one(readWriteDAO).get(AppUser.class, "U")
+                will(returnValue(null))
+            }
+        })
+        deletionHelper.deleteUser(userID)
+    }
+
+    @Test
+    public void testDeleteUser() {
+        Map<String, Student> students = ["S1": context.mock(Student, "S1"), "S2": context.mock(Student, "S2")]
+        Map<String, ClassList> classes = ["C1": context.mock(ClassList, "C1")]
+        Map<String, ObservationCategory> ocs = ["OC1": context.mock(ObservationCategory, "OC1"), "OC2": context.mock(ObservationCategory.class, "OC2")]
+        Map<String, Semester> semesters = ["SE1": context.mock(Semester.class, "SE1"), "SE2": context.mock(Semester.class, "SE2")]
+        Map<String, TwoPhaseActivity> activities = ["A1": context.mock(TwoPhaseActivity.class, "A1"), "A2": context.mock(TwoPhaseActivity, "A2")]
+        Map<String, AppUserSettings> settings = ["AUS": context.mock(AppUserSettings)]
+
+        context.checking(new Expectations() {
+            {
+                one(userID).getId()
+                will(returnValue("U"))
+                one(readWriteDAO).get(AppUser.class, "U")
+                will(returnValue(userDAO))
+                one(readWriteDAO).trustedDelete(userDAO)
+
+                int counter
+
+
+                one(readWriteDAO).getEntitiesForUser(Student, userDAO, 0, 0)
+                will(returnValue(students.values().toSet()))
+                counter = 0
+                students.each {
+                    counter++
+                    setBaseDeleteExpectations(it.value, it.value, it.key, [:])
+                    String oid = "SO" + counter
+                    Observation observation = context.mock(Observation, oid)
+                    String pid = "SOP" + counter
+                    setObservableExpectations(it.value, [(oid): observation], [(observation): [(pid): context.mock(Photo, pid)]])
+                }
+
+                one(readWriteDAO).getEntitiesForUser(ClassList, userDAO, 0, 0)
+                will(returnValue(classes.values().toSet()))
+                counter = 0
+                classes.each {
+                    counter++
+                    setBaseDeleteExpectations(it.value, it.value, it.key, [:])
+                    String oid = "CLO" + counter
+                    Observation observation = context.mock(Observation, oid)
+                    String pid = "CLOP" + counter
+                    setObservableExpectations(it.value, [(oid): observation], [(observation): [(pid): context.mock(Photo, pid)]])
+                    setClassListExpectations(it.value, [])
+                }
+
+                one(readWriteDAO).getEntitiesForUser(ObservationCategory, userDAO, 0, 0)
+                will(returnValue(ocs.values().toSet()))
+                ocs.each {
+                    setBaseDeleteExpectations(it.value, it.value, it.key, [:])
+                    setObservationCategoryExpectations(it.value, [])
+                }
+
+                one(readWriteDAO).getEntitiesForUser(AppUserSettings, userDAO, 0, 0)
+                will(returnValue(settings.values().toSet()))
+                settings.each {
+                    setBaseDeleteExpectations(it.value, it.value, it.key, [:])
+                }
+
+                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity, userDAO, 0, 0)
+                will(returnValue(activities.values().toSet()))
+                activities.each {
+                    setBaseDeleteExpectations(it.value, it.value, it.key, [:])
+                }
+
+                one(readWriteDAO).getEntitiesForUser(Semester, userDAO, 0, 0)
+                will(returnValue(semesters.values().toSet()))
+                semesters.each {
+                    setBaseDeleteExpectations(it.value, it.value, it.key, [:])
+                }
+            }
+        })
+        deletionHelper.deleteUser(userID)
     }
 
     private void setObservationCategoryExpectations(ObservationCategory category, List<Observation> obs) {
