@@ -44,6 +44,7 @@ public class PhotoBuilderImpl extends AppUserOwnedObjectBuilderImpl<Photo> imple
     @Override
     public PhotoBuilder withMimeType(final String mimeType) {
         entity.setMimeType(mimeType);
+        photoHelper.reprocessForMimeType(entity);
         return this;
     }
 

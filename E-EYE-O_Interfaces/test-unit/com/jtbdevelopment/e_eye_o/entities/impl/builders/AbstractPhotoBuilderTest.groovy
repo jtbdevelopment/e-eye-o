@@ -12,7 +12,6 @@ import org.testng.annotations.Test
  * Time: 6:52 AM
  */
 abstract class AbstractPhotoBuilderTest extends AbstractAppUserOwnedObjectBuilderTest {
-    MockFor photoHelperMockContext;
     PhotoHelper photoHelper
     static byte[] SOME_BYTES = [0x1, 0x2]
     boolean photoHelperCalled
@@ -21,10 +20,10 @@ abstract class AbstractPhotoBuilderTest extends AbstractAppUserOwnedObjectBuilde
     @Override
     def setUp() {
         photoHelperCalled = false
-        photoHelperMockContext = new MockFor(PhotoHelper)
-        photoHelperMockContext.demand.setPhotoImages { a, b -> assert a.is(entity); assert b == SOME_BYTES }
-        photoHelper = (PhotoHelper) photoHelperMockContext.proxyInstance()
-        photoHelper = [setPhotoImages: { a, b -> assert a.is(entity); assert b == SOME_BYTES; photoHelperCalled = true }] as PhotoHelper
+        photoHelper = [
+                setPhotoImages: { a, b -> assert a.is(entity); assert b == SOME_BYTES; photoHelperCalled = true },
+                reprocessForMimeType: { a -> assert a.is(entity); photoHelperCalled = true }
+        ] as PhotoHelper
         super.setUp()
     }
 
@@ -46,6 +45,7 @@ abstract class AbstractPhotoBuilderTest extends AbstractAppUserOwnedObjectBuilde
     @Test
     void testWithMimeType() {
         testStringField("mimeType")
+        assert photoHelperCalled
     }
 
     @Test

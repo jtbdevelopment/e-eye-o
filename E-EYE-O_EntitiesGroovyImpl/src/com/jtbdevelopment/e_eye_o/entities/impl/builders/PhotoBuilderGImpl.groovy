@@ -34,6 +34,7 @@ class PhotoBuilderGImpl extends AppUserOwnedObjectBuilderGImpl<Photo> implements
     @Override
     PhotoBuilder withMimeType(final String mimeType) {
         entity.mimeType = mimeType
+        photoHelper.reprocessForMimeType(entity)
         return this
     }
 
