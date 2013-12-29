@@ -18,14 +18,14 @@ public class ArchiveHelperImpl implements ArchiveHelper {
     protected ReadWriteDAO readWriteDAO;
 
     @Override
-    public <T extends AppUserOwnedObject> T flipArchiveStatus(final T entity) {
+    public <T extends AppUserOwnedObject> void flipArchiveStatus(final T entity) {
         T loaded = readWriteDAO.get((Class<T>) entity.getClass(), entity.getId());
+        if (loaded == null) {
+            return;  //  Already deleted?
+        }
+
         boolean initialArchiveStatus = loaded.isArchived();
         boolean terminalArchiveStatus = !initialArchiveStatus;
-
-        if (loaded == null) {
-            return null;  //  Already deleted?
-        }
 
         if (initialArchiveStatus) {
             //  If un-archiving, un-archive this one first
@@ -41,9 +41,8 @@ public class ArchiveHelperImpl implements ArchiveHelper {
         if (terminalArchiveStatus) {
             //  If archiving, archive this one last
             loaded.setArchived(terminalArchiveStatus);
-            loaded = readWriteDAO.trustedUpdate(loaded);
+            readWriteDAO.trustedUpdate(loaded);
         }
-        return loaded;
     }
 
     private <T extends AppUserOwnedObject> void flipStatusForStudentsIfClassList(final T loaded, final boolean initialArchiveStatus, final boolean terminalArchiveStatus) {

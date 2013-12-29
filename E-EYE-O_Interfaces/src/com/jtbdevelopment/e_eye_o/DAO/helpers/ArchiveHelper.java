@@ -31,5 +31,5 @@ public interface ArchiveHelper {
      * @param <T>
      * @return
      */
-    <T extends AppUserOwnedObject> T flipArchiveStatus(final T entity);
+    <T extends AppUserOwnedObject> void flipArchiveStatus(final T entity);
 }

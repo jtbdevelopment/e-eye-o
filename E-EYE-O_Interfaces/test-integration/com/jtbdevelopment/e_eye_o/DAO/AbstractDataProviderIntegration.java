@@ -260,7 +260,8 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         assertFalse(archivePhotos.contains(photo));
 
         DateTime originalTS = photo.getModificationTimestamp();
-        photo = archiveHelper.flipArchiveStatus(photo);
+        archiveHelper.flipArchiveStatus(photo);
+        photo = rwDAO.get(Photo.class, photo.getId());
         photo.setDescription("Archived");
         photo = rwDAO.update(testUser1, photo);
         assertTrue(originalTS.isBefore(photo.getModificationTimestamp()));
