@@ -7,11 +7,15 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <util:properties id="hibernateDefaultProperties">
-        <prop key="hibernate.dialect">UNDEFINED</prop>
+
         <!-- You must provide value in overrides  -->
+        <prop key="hibernate.dialect">UNDEFINED</prop>
+
         <prop key="hibernate.show_sql">true</prop>
         <prop key="hibernate.format_sql">false</prop>
         <prop key="hibernate.hbm2ddl.auto">validate</prop>
+
+        <prop key="org.hibernate.envers.store_data_at_delete">true</prop>
     </util:properties>
 
     <!-- You can override only the defaults you want to with this  -->
