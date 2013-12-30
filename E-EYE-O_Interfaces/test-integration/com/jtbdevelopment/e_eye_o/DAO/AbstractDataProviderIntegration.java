@@ -326,7 +326,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
                 return serializer.write(input);
             }
         }));
-        final List<String> initialList = new LinkedList<>(Collections2.transform(Arrays.asList(oc, cl, s, p, o, clV2), new Function<AppUserOwnedObject, String>() {
+        final List<String> initialList = new LinkedList<>(Collections2.transform(Arrays.asList(oc, cl, s, p, clV2, o), new Function<AppUserOwnedObject, String>() {
             @Nullable
             @Override
             public String apply(@Nullable final AppUserOwnedObject input) {
