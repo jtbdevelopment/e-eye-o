@@ -26,7 +26,7 @@ class ObservationGImpl extends AppUserOwnedObjectGImpl implements Observation {
 
     @Override
     Set<ObservationCategory> getCategories() {
-        return categories.asImmutable()
+        return new HashSet<>(categories)
     }
 
     @Override

@@ -19,7 +19,7 @@
     <orderEntry type="library" exported="" name="org.hibernate:hibernate-validator:4.3.1.Final" level="project" />
     <orderEntry type="library" exported="" name="org.springframework:org.springframework.beans:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="org.jmock:jmock:2.5.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="org.testng:testng:6.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.testng:testng:6.8.7" level="project" />
     <orderEntry type="library" exported="" name="ch.qos.logback:logback-classic:1.0.5" level="project" />
     <orderEntry type="library" exported="" name="org.springframework:spring-context:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="com.google.guava:guava:13.0" level="project" />

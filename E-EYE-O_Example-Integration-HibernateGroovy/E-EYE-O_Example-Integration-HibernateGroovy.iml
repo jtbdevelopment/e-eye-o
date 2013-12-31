@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Spring" name="Spring">
+      <configuration>
+        <fileset id="fileset" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/test-integration/test-integration-server-context.xml</file>
+          <file>file://$MODULE_DIR$/test-integration/test-integration-context.xml</file>
+          <file>file://$MODULE_DIR$/test-integration/test-integration-common-context.xml</file>
+          <file>file://$MODULE_DIR$/../E-EYE-O_DAOHibernateImpl/src/spring-context-hibernate.xml</file>
+        </fileset>
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -12,7 +24,7 @@
     <orderEntry type="module" module-name="E-EYE-O_EntitiesGroovyImpl" />
     <orderEntry type="module" module-name="E-EYE-O_DAOHibernateImpl" />
     <orderEntry type="module" module-name="E-EYE-O_SerializationGroovy" />
-    <orderEntry type="library" name="org.testng:testng:6.8" level="project" />
+    <orderEntry type="library" name="org.testng:testng:6.8.7" level="project" />
     <orderEntry type="library" name="org.springframework:spring-context:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" name="org.springframework:spring-test:3.2.0.RELEASE" level="project" />
   </component>

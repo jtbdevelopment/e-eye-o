@@ -20,7 +20,7 @@ class StudentGImpl extends ObservableGImpl implements Student {
     }
 
     Set<ClassList> getClassLists() {
-        return classLists.asImmutable()
+        return new HashSet<>(classLists)
     }
 
     @Override

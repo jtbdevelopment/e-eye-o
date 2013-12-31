@@ -3,7 +3,10 @@
   <component name="FacetManager">
     <facet type="hibernate" name="Hibernate">
       <configuration>
-        <datasource-map />
+        <datasource-map>
+          <unit-entry name="sessionFactory" />
+        </datasource-map>
+        <naming-strategy-map />
       </configuration>
     </facet>
     <facet type="ejb" name="EJB">
@@ -29,7 +32,7 @@
     <orderEntry type="library" exported="" name="org.hibernate:hibernate-core:4.2.8.Final" level="project" />
     <orderEntry type="library" exported="" name="org.springframework:org.springframework.orm:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="org.springframework:org.springframework.transaction:3.2.0.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="org.testng:testng:6.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.testng:testng:6.8.7" level="project" />
     <orderEntry type="library" scope="TEST" name="org.jmock:jmock:2.5.1" level="project" />
     <orderEntry type="library" scope="TEST" name="org.springframework:spring-test:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="org.joda:joda-convert:1.2" level="project" />

@@ -23,7 +23,7 @@ class PaginatedIdObjectListGImpl implements PaginatedIdObjectList {
 
     @Override
     List<? extends IdObject> getEntities() {
-        entities.asImmutable();
+        new LinkedList<>(entities);
     }
 }
 

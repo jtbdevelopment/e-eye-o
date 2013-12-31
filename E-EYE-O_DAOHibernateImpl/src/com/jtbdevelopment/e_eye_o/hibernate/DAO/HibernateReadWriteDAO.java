@@ -51,8 +51,8 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         wrapped.setModificationTimestamp(DateTime.now());
-        sessionFactory.getCurrentSession().save(wrapped);
         dealWithObservationChanges(wrapped, false);
+        sessionFactory.getCurrentSession().save(wrapped);
         publishCreate(wrapped);
         return (T) get(wrapped.getClass(), wrapped.getId());
     }
@@ -65,9 +65,9 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         @SuppressWarnings("unchecked")
         final T existing = get((Class<T>) entity.getClass(), entity.getId());
         fieldUpdateValidator.removeInvalidFieldUpdates(updatingUser, existing, entity);
-        sessionFactory.getCurrentSession().clear();
+//        sessionFactory.getCurrentSession().clear();
+        dealWithObservationChanges(entity, false);
         T saved = trustedUpdate(entity);
-        dealWithObservationChanges(saved, false);
         return saved;
     }
 
@@ -76,7 +76,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
     public <T extends IdObject> T trustedUpdate(final T entity) {
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         entity.setModificationTimestamp(DateTime.now());
-        sessionFactory.getCurrentSession().update(wrapped);
+        sessionFactory.getCurrentSession().merge(wrapped);
         publishUpdate(wrapped);
         return (T) get(wrapped.getClass(), wrapped.getId());
     }

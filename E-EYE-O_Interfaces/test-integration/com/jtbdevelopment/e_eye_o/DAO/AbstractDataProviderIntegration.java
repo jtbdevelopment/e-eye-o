@@ -313,7 +313,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
         Thread.sleep(1);
         ObservationCategory oc = rwDAO.create(factory.newObservationCategoryBuilder(updateUser).withShortName("X").withDescription("X").build());
         ClassList cl = rwDAO.create(factory.newClassListBuilder(updateUser).withDescription("CL").build());
-        Student s = rwDAO.create(factory.newStudentBuilder(updateUser).withFirstName("A").withLastName("B").build());
+        Student s = rwDAO.create(factory.newStudentBuilder(updateUser).withFirstName("A").withLastName("B").addClassList(cl).build());
         Photo p = rwDAO.create(factory.newPhotoBuilder(updateUser).withDescription("D").withMimeType(TestingPhotoHelper.PNG).withImageData(TestingPhotoHelper.simpleImageBytes).withPhotoFor(s).build());
         Observation o = rwDAO.create(factory.newObservationBuilder(updateUser).withComment("T").withObservationSubject(cl).build());
         ClassList clV2 = rwDAO.get(ClassList.class, cl.getId());  //  Observation made it dirty need to re-readAsObjects for compare to work
@@ -326,7 +326,7 @@ public abstract class AbstractDataProviderIntegration extends AbstractTestNGSpri
                 return serializer.write(input);
             }
         }));
-        final List<String> initialList = new LinkedList<>(Collections2.transform(Arrays.asList(oc, cl, s, p, clV2, o), new Function<AppUserOwnedObject, String>() {
+        final List<String> initialList = new LinkedList<>(Collections2.transform(Arrays.asList(oc, cl, s, p, o, clV2), new Function<AppUserOwnedObject, String>() {
             @Nullable
             @Override
             public String apply(@Nullable final AppUserOwnedObject input) {

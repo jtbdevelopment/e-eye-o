@@ -4,7 +4,6 @@ import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.PaginatedIdObjectList;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class PaginatedIdObjectListImpl implements PaginatedIdObjectList {
 
     @Override
     public Collection<? extends IdObject> getEntities() {
-        return Collections.unmodifiableList(entities);
+        return new LinkedList<>(entities);
     }
 
     @Override

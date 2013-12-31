@@ -7,7 +7,6 @@ import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.Student;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,12 +25,12 @@ public class StudentImpl extends ObservableImpl implements Student {
 
     @Override
     public Set<ClassList> getClassLists() {
-        return Collections.unmodifiableSet(classLists);
+        return new HashSet<>(classLists);
     }
 
     @Override
     public Set<ClassList> getActiveClassLists() {
-        return Collections.unmodifiableSet(new HashSet<>(
+        return new HashSet<>(new HashSet<>(
                 Collections2.filter(classLists, new Predicate<ClassList>() {
                     @Override
                     public boolean apply(final ClassList classList) {
@@ -42,7 +41,7 @@ public class StudentImpl extends ObservableImpl implements Student {
 
     @Override
     public Set<ClassList> getArchivedClassLists() {
-        return Collections.unmodifiableSet(new HashSet<>(
+        return new HashSet<>(new HashSet<>(
                 Collections2.filter(classLists, new Predicate<ClassList>() {
                     @Override
                     public boolean apply(final ClassList classList) {

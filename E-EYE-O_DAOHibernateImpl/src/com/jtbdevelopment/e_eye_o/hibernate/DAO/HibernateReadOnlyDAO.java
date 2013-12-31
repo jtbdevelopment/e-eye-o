@@ -182,14 +182,28 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         query.add(AuditEntity.property("appUser").eq(appUser))
                 .add(
                         AuditEntity.or(
-                                AuditEntity.revisionProperty("timestamp").gt(since.getMillis())
-                                ,
                                 AuditEntity.and(
-                                        AuditEntity.revisionProperty("timestamp").eq(since.getMillis()),
-                                        AuditEntity.id().gt(sinceId)
-                                ))
+                                        AuditEntity.revisionType().ne(RevisionType.DEL),
+                                        AuditEntity.or(
+                                                AuditEntity.property("modificationTimestampInstant").gt(since.getMillis()),
+                                                AuditEntity.and(
+                                                        AuditEntity.property("modificationTimestampInstant").eq(since.getMillis()),
+                                                        AuditEntity.id().gt(sinceId)
+                                                ))
+                                ),
+                                AuditEntity.and(
+                                        AuditEntity.revisionType().eq(RevisionType.DEL),
+                                        AuditEntity.or(
+                                                AuditEntity.revisionProperty("timestamp").gt(since.getMillis()),
+                                                AuditEntity.and(
+                                                        AuditEntity.revisionProperty("timestamp").eq(since.getMillis()),
+                                                        AuditEntity.id().gt(sinceId)
+                                                ))
+                                )
+                        )
                 )
                 .addOrder(AuditEntity.revisionProperty("timestamp").asc())
+                .addOrder(AuditEntity.property("modificationTimestampInstant").asc())
                 .addOrder(AuditEntity.id().asc());
         if (maxResults >= 0) {
             query.setMaxResults(maxResults);

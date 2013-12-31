@@ -19,10 +19,9 @@ abstract class AbstractPaginatedIdObjectListTest {
         impl = createPaginatedIdObjectList()
     }
 
-    @Test(expectedExceptions = [UnsupportedOperationException])
-    public void testGetEntitiesImmutable() {
-        impl.entities.clear()
-        assert false, "Should not have passed"
+    @Test
+    public void testGetEntitiesProtected() {
+        assert !impl.entities.is(impl.entities)
     }
 
     @Test

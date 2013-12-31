@@ -11,7 +11,6 @@ import org.joda.time.LocalDateTime;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,7 +64,7 @@ public class ObservationImpl extends AppUserOwnedObjectImpl implements Observati
 
     @Override
     public Set<ObservationCategory> getCategories() {
-        return Collections.unmodifiableSet(categories);
+        return new HashSet<>(categories);
     }
 
     @Override
