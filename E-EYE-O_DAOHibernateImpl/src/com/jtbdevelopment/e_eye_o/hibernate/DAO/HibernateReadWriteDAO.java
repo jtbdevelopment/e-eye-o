@@ -4,11 +4,14 @@ import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.FieldUpdateValidator;
 import com.jtbdevelopment.e_eye_o.entities.*;
+import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.events.EventFactory;
 import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateObservation;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -17,10 +20,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Date: 11/19/12
@@ -65,7 +65,6 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         @SuppressWarnings("unchecked")
         final T existing = get((Class<T>) entity.getClass(), entity.getId());
         fieldUpdateValidator.removeInvalidFieldUpdates(updatingUser, existing, entity);
-//        sessionFactory.getCurrentSession().clear();
         dealWithObservationChanges(entity, false);
         T saved = trustedUpdate(entity);
         return saved;
@@ -112,18 +111,29 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             if (observable == null) {
                 return null;
             }
-            Set<Observation> observationSet = getEntitiesForUser(Observation.class, observation.getAppUser(), 0, 0);
-            if (isDelete) {
-                observationSet.remove(observation);
-            } else {
-                observationSet.add(observation);
+            Query query = sessionFactory.
+                    getCurrentSession().createQuery(
+                    "select id, observationTimestamp from " +
+                            getHibernateEntityName(HibernateObservation.class) +
+                            " where observationSubject = :observationSubject");
+            query.setParameter("observationSubject", observable);
+            List<Object[]> result = query.list();
+            Map<String, LocalDateTime> dates = new HashMap<>();
+
+            for (Object[] o : result) {
+                dates.put((String) o[0], (LocalDateTime) o[1]);
+            }
+            dates.remove(observable.getId());
+            if (!isDelete) {
+                dates.put(observation.getId(), observation.getObservationTimestamp());
             }
             LocalDateTime last = Observable.NEVER_OBSERVED;
-            for (Observation o : observationSet) {
-                if (last.compareTo(o.getObservationTimestamp()) < 0) {
-                    last = o.getObservationTimestamp();
+            for (LocalDateTime dateTime : dates.values()) {
+                if (last.compareTo(dateTime) < 0) {
+                    last = dateTime;
                 }
             }
+
             if (!observable.getLastObservationTimestamp().equals(last)) {
                 observable.setLastObservationTimestamp(last);
                 return trustedUpdate(observable);
