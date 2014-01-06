@@ -57,6 +57,14 @@ public class AppUserSettingsImpl extends AppUserOwnedObjectImpl implements AppUs
     }
 
     @Override
+    public long getSettingAsLong(String name, long defaultValue) {
+        if (settings.containsKey(name)) {
+            return Long.parseLong(settings.get(name));
+        }
+        return defaultValue;
+    }
+
+    @Override
     public boolean getSettingAsBoolean(String name, boolean defaultValue) {
         if (settings.containsKey(name)) {
             return Boolean.parseBoolean(settings.get(name));

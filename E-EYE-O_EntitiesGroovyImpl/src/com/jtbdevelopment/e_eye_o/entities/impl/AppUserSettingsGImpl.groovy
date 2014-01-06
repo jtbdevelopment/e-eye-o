@@ -49,6 +49,14 @@ class AppUserSettingsGImpl extends AppUserOwnedObjectGImpl implements AppUserSet
     }
 
     @Override
+    long getSettingAsLong(final String name, final long defaultValue) {
+        if (settings.containsKey(name)) {
+            return settingsMap[(name)].toLong()
+        }
+        return defaultValue
+    }
+
+    @Override
     boolean getSettingAsBoolean(final String name, final boolean defaultValue) {
         if (settingsMap.containsKey(name)) {
             return settingsMap[(name)].toBoolean()

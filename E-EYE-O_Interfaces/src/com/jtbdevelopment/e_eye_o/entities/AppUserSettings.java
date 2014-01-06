@@ -42,6 +42,9 @@ public interface AppUserSettings extends AppUserOwnedObject {
     int getSettingAsInt(final String name, final int defaultValue);
 
     @Transient
+    long getSettingAsLong(final String name, final long defaultValue);
+
+    @Transient
     boolean getSettingAsBoolean(final String name, final boolean defaultValue);
 
 }
