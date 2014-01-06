@@ -3,9 +3,9 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
+import com.jtbdevelopment.e_eye_o.DAO.helpers.UserMaintenanceHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
-import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory;
 import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
@@ -23,8 +23,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
-import java.util.Set;
 
 /**
  * Date: 3/3/13
@@ -51,7 +49,7 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
     private TitleBarComposite titleBarComposite;
 
     @Autowired
-    private IdObjectFactory idObjectFactory;
+    private UserMaintenanceHelper userMaintenanceHelper;
 
     // TODO - determine if new legal info needs to be shown
     @Override
@@ -62,14 +60,7 @@ public class EEYEOUI extends EEYEOErrorHandlingUI {
         if (principalAsObject instanceof AppUserUserDetails) {
             AppUser appUser = ((AppUserUserDetails) principalAsObject).getAppUser();
             getSession().setAttribute(AppUser.class, appUser);
-            Set<AppUserSettings> settings = readWriteDAO.getEntitiesForUser(AppUserSettings.class, appUser, 0, 0);
-            AppUserSettings setting;
-            if (settings.isEmpty()) {
-                //  Legacy users
-                setting = readWriteDAO.create(idObjectFactory.newAppUserSettings(appUser));
-            } else {
-                setting = settings.iterator().next();
-            }
+            AppUserSettings setting = userMaintenanceHelper.getUserSettings(appUser);
             getSession().setAttribute(AppUserSettings.class, setting);
         } else {
             throw new RuntimeException("Invalid Principal Object");

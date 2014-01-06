@@ -10,12 +10,14 @@ import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivity;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
+@Component
 public class UserMaintenanceHelperImpl implements UserMaintenanceHelper {
     @Autowired(required = false)
     protected PasswordEncoder passwordEncoder;
@@ -23,6 +25,16 @@ public class UserMaintenanceHelperImpl implements UserMaintenanceHelper {
     protected ReadWriteDAO readWriteDAO;
     @Autowired
     protected IdObjectFactory idObjectFactory;
+
+    @Override
+    public AppUserSettings getUserSettings(final AppUser appUser) {
+        Set<AppUserSettings> entitiesForUser = readWriteDAO.getEntitiesForUser(AppUserSettings.class, appUser, 0, 0);
+        if (entitiesForUser.isEmpty()) {
+            return readWriteDAO.create(idObjectFactory.newAppUserSettings(readWriteDAO.get(AppUser.class, appUser.getId())));
+        }
+
+        return entitiesForUser.iterator().next();
+    }
 
     @Override
     public boolean canChangeEmailAddress(final AppUser appUser) {
@@ -40,7 +52,7 @@ public class UserMaintenanceHelperImpl implements UserMaintenanceHelper {
             throw new UserMaintenanceHelper.PasswordChangeTooRecent();
         }
         AppUser loadedUser = readWriteDAO.get(AppUser.class, appUser.getId());
-        TwoPhaseActivity changeRequest = idObjectFactory.newTwoPhaseActivityBuilder(loadedUser).withActivityType(TwoPhaseActivity.Activity.EMAIL_CHANGE).withExpirationTime(new DateTime()).build();
+        TwoPhaseActivity changeRequest = idObjectFactory.newTwoPhaseActivityBuilder(loadedUser).withActivityType(TwoPhaseActivity.Activity.EMAIL_CHANGE).withExpirationTime(DateTime.now()).build();
         changeRequest = readWriteDAO.create(changeRequest);
         changeRequest.setArchived(true);
         loadedUser.setEmailAddress(newEmailAddress);
@@ -53,7 +65,8 @@ public class UserMaintenanceHelperImpl implements UserMaintenanceHelper {
         if (!canChangePassword(appUser)) {
             throw new UserMaintenanceHelper.EmailChangeTooRecent();
         }
-        TwoPhaseActivity requestReset = idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.PASSWORD_RESET).withExpirationTime(new DateTime().plusDays(1)).build();
+        //  TODO - make 1 day configurable
+        TwoPhaseActivity requestReset = idObjectFactory.newTwoPhaseActivityBuilder(appUser).withActivityType(TwoPhaseActivity.Activity.PASSWORD_RESET).withExpirationTime(DateTime.now().plusDays(1)).build();
         requestReset = readWriteDAO.create(requestReset);
         return requestReset;
     }
@@ -68,11 +81,7 @@ public class UserMaintenanceHelperImpl implements UserMaintenanceHelper {
 
     @Override
     public AppUserSettings updateSettings(final AppUser appUser, final Map<String, Object> settings) {
-        Set<AppUserSettings> entitiesForUser = readWriteDAO.getEntitiesForUser(AppUserSettings.class, appUser, 0, 0);
-        if (entitiesForUser.size() != 1) {
-            throw new IllegalStateException("Somehow more than 1 app settings");
-        }
-        AppUserSettings userSettings = entitiesForUser.iterator().next();
+        AppUserSettings userSettings = getUserSettings(appUser);
         userSettings.updateSettings(settings);
         return readWriteDAO.trustedUpdate(userSettings);
     }

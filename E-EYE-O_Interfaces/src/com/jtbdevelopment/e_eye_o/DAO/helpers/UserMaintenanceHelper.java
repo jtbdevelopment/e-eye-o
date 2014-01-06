@@ -11,6 +11,14 @@ import java.util.Map;
  * Time: 10:57 PM
  */
 public interface UserMaintenanceHelper {
+    /**
+     * Gets existing settings or creates empty settings
+     *
+     * @param appUser user
+     * @return app settings
+     */
+    AppUserSettings getUserSettings(final AppUser appUser);
+
     boolean canChangeEmailAddress(AppUser appUser);
 
     boolean canChangePassword(AppUser appUser);

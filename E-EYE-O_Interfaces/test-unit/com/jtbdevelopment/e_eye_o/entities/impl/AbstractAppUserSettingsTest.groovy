@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
+import org.joda.time.DateTime
 import org.testng.annotations.Test
 
 /**
@@ -54,16 +55,26 @@ abstract class AbstractAppUserSettingsTest extends AbstractAppUserOwnedObjectTes
     public void testGetSettingAsInt() throws Exception {
         assert objectUnderTest.getSettings().isEmpty();
         objectUnderTest.setSetting("int", 11);
-        assert "11", objectUnderTest.getSettingAsString("int", "");
+        assert "11" == objectUnderTest.getSettingAsString("int", "");
         assert 11 == objectUnderTest.getSettingAsInt("int", 12);
         assert 12 == objectUnderTest.getSettingAsInt("default", 12);
+    }
+
+    @Test
+    public void testGetSettingAsLong() throws Exception {
+        assert objectUnderTest.getSettings().isEmpty();
+        DateTime now = DateTime.now()
+        objectUnderTest.setSetting("long", now.millis);
+        assert now.millis.toString() == objectUnderTest.getSettingAsString("long", "");
+        assert now.millis == objectUnderTest.getSettingAsLong("long", Long.MAX_VALUE);
+        assert Long.MAX_VALUE == objectUnderTest.getSettingAsLong("default", Long.MAX_VALUE);
     }
 
     @Test
     public void testGetSettingAsBoolean() throws Exception {
         assert objectUnderTest.getSettings().isEmpty();
         objectUnderTest.setSetting("boolean", false);
-        assert "false", objectUnderTest.getSettingAsString("boolean", "true");
+        assert "false" == objectUnderTest.getSettingAsString("boolean", "true");
         assert false == objectUnderTest.getSettingAsBoolean("boolean", true);
         assert true == objectUnderTest.getSettingAsBoolean("default", true);
     }

@@ -28,6 +28,15 @@ class UserMaintenanceHelperGImpl implements UserMaintenanceHelper {
     IdObjectFactory idObjectFactory
 
     @Override
+    AppUserSettings getUserSettings(final AppUser appUser) {
+        Set<AppUserSettings> entitiesForUser = readWriteDAO.getEntitiesForUser(AppUserSettings.class, appUser, 0, 0);
+        if (entitiesForUser.empty) {
+            return (AppUserSettings) readWriteDAO.create(idObjectFactory.newAppUserSettings(readWriteDAO.get(AppUser, appUser.id)))
+        }
+        entitiesForUser.iterator().next();
+    }
+
+    @Override
     boolean canChangeEmailAddress(final AppUser appUser) {
         return !hasRecentActivity(appUser, TwoPhaseActivity.Activity.PASSWORD_RESET);
     }
@@ -71,11 +80,7 @@ class UserMaintenanceHelperGImpl implements UserMaintenanceHelper {
 
     @Override
     AppUserSettings updateSettings(final AppUser appUser, final Map<String, Object> settings) {
-        Set<AppUserSettings> entitiesForUser = readWriteDAO.getEntitiesForUser(AppUserSettings.class, appUser, 0, 0);
-        if (entitiesForUser.size() != 1) {
-            throw new IllegalStateException("Somehow more than 1 app settings");
-        }
-        AppUserSettings userSettings = entitiesForUser.iterator().next();
+        AppUserSettings userSettings = getUserSettings(appUser)
         userSettings.updateSettings(settings);
         return (AppUserSettings) readWriteDAO.trustedUpdate(userSettings);
     }
