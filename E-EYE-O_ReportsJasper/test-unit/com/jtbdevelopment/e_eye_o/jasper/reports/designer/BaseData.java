@@ -183,17 +183,7 @@ public class BaseData {
         }
 
         @Override
-        public Set<Observation> getAllObservationsForSemester(Semester semester, int firstResult, int maxResults) {
-            return null;
-        }
-
-        @Override
-        public Set<Observation> getActiveObservationsForSemester(Semester semester, int firstResult, int maxResults) {
-            return null;
-        }
-
-        @Override
-        public Set<Observation> getArchivedObservationsForSemester(Semester semester, int firstResult, int maxResults) {
+        public Set<Observation> getAllObservationsForSemester(Semester semester) {
             return null;
         }
 
@@ -203,7 +193,7 @@ public class BaseData {
         }
 
         @Override
-        public List<Observation> getAllObservationsForObservationCategory(ObservationCategory observationCategory) {
+        public List<Observation> getAllObservationsForObservationCategory(AppUser user, ObservationCategory observationCategory) {
             return null;
         }
 

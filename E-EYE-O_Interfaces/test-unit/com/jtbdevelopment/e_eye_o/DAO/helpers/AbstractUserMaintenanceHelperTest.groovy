@@ -274,21 +274,41 @@ abstract class AbstractUserMaintenanceHelperTest {
         assert settingsUpDAO == userHelper.updateSettings(userID, settings)
     }
 
-    @Test(expectedExceptions = [IllegalStateException])
-    public void testUpdatingAppUserSettingsInBadState() {
-        Map<String, Object> settings = ["x": 1, "s": "s"]
-        AppUserSettings settingsDAO1 = context.mock(AppUserSettings.class, "DAO1");
-        AppUserSettings settingsDAO2 = context.mock(AppUserSettings.class, "DAO2");
+    @Test
+    public void testGetUserSettingsWhereExist() {
+        AppUserSettings settingsDAO = context.mock(AppUserSettings.class, "DAO");
         context.checking(new Expectations() {
             {
                 one(readWriteDAO).getEntitiesForUser(AppUserSettings.class, userID, 0, 0)
-                will(returnValue([settingsDAO1, settingsDAO2] as Set))
+                will(returnValue([settingsDAO] as Set))
             }
         })
-        userHelper.updateSettings(userID, settings)
+        assert settingsDAO == userHelper.getUserSettings(userID)
     }
 
-    private static TwoPhaseActivity createActivity(final TwoPhaseActivity.Activity activity, final DateTime modificationTime, final DateTime expiry = null) {
+    @Test
+    public void testGetUserSettingsCreatedIfNotPreset() {
+        AppUserSettings settingsID = context.mock(AppUserSettings.class, "ID");
+        AppUserSettings settingsDAO = context.mock(AppUserSettings.class, "DAO");
+        context.checking(new Expectations() {
+            {
+                one(readWriteDAO).getEntitiesForUser(AppUserSettings.class, userID, 0, 0)
+                will(returnValue([] as Set))
+                one(userID).getId()
+                will(returnValue("ID"));
+                one(readWriteDAO).get(AppUser, "ID")
+                will(returnValue(userDAO))
+                one(idObjectFactory).newAppUserSettings(userDAO)
+                will(returnValue(settingsID))
+                one(readWriteDAO).create(settingsID)
+                will(returnValue(settingsDAO))
+            }
+        })
+        assert settingsDAO == userHelper.getUserSettings(userID)
+    }
+
+    private static TwoPhaseActivity createActivity(
+            final TwoPhaseActivity.Activity activity, final DateTime modificationTime, final DateTime expiry = null) {
         [
                 getModificationTimestamp: { return modificationTime },
                 getActivityType: { return activity },

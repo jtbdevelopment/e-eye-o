@@ -100,8 +100,9 @@ public class DeletionHelperImpl implements DeletionHelper {
      *
      */
         if (loaded instanceof ObservationCategory) {
-            for (Observation observation : readWriteDAO.getAllObservationsForObservationCategory((ObservationCategory) loaded)) {
-                observation.removeCategory((ObservationCategory) loaded);
+            ObservationCategory category = (ObservationCategory) loaded;
+            for (Observation observation : readWriteDAO.getAllObservationsForObservationCategory(category.getAppUser(), category)) {
+                observation.removeCategory(category);
                 readWriteDAO.trustedUpdate(observation);
             }
         }

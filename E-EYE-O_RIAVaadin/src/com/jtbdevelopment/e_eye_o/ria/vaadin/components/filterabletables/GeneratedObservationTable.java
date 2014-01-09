@@ -185,13 +185,14 @@ public class GeneratedObservationTable extends GeneratedIdObjectTable<Observatio
         super.setDisplayDriver(tableDriver);
         if (tableDriver instanceof AppUserOwnedObject) {
             if (tableDriver instanceof ObservationCategory) {
-                entities.addAll(readWriteDAO.getAllObservationsForObservationCategory((ObservationCategory) tableDriver));
+                ObservationCategory observationCategory = (ObservationCategory) tableDriver;
+                entities.addAll(readWriteDAO.getAllObservationsForObservationCategory(observationCategory.getAppUser(), observationCategory));
             } else if (tableDriver instanceof Observable) {
                 entities.addAll(readWriteDAO.getAllObservationsForEntity((Observable) tableDriver));
                 setDefaultObservationSubject((Observable) tableDriver);
             } else if (tableDriver instanceof Semester) {
                 Semester semester = (Semester) tableDriver;
-                entities.addAll(readWriteDAO.getAllObservationsForSemester(semester, 0, 0));
+                entities.addAll(readWriteDAO.getAllObservationsForSemester(semester));
                 setDateFiltersFromSemester(semester);
                 if (semester.isArchived()) {
                     semesters.removeAllItems();

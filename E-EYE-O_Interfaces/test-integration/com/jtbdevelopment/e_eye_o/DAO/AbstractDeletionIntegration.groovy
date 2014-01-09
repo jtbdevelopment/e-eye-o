@@ -86,7 +86,7 @@ abstract class AbstractDeletionIntegration extends AbstractIntegration {
         Semester semester = createSemester(user, baseName, LocalDate.now().minusDays(365), LocalDate.now())
         Observation observation = createObservation(user, null, student, baseName, false, semester.start.plusDays(1).toLocalDateTime(LocalTime.now()))
         assert [student, semester, observation] as Set == rwDAO.getEntitiesForUser(AppUserOwnedObject, user, 0, 0)
-        assert [observation] as Set == rwDAO.getAllObservationsForSemester(semester, 0, 0)
+        assert [observation] as Set == rwDAO.getAllObservationsForSemester(semester)
         deleteAndAssert(semester, user, [], [semester.id], [student, observation] as Set)
     }
 
@@ -159,8 +159,8 @@ abstract class AbstractDeletionIntegration extends AbstractIntegration {
         Photo s1o2p1 = createPhoto(user, s1o2, baseName)
         Photo s2o1p1 = createPhoto(user, s2o1, baseName)
         assert [student1, student2, s1o1, s1o2, s1o1p1, s1o2p1, s2o1p1, s2o1, category2, category1] as Set == rwDAO.getEntitiesForUser(AppUserOwnedObject, user, 0, 0)
-        assert [s1o1, s2o1] == rwDAO.getAllObservationsForObservationCategory(category1)
-        assert [s1o2] == rwDAO.getAllObservationsForObservationCategory(category2)
+        assert [s1o1, s2o1] == rwDAO.getAllObservationsForObservationCategory(user, category1)
+        assert [s1o2] == rwDAO.getAllObservationsForObservationCategory(user, category2)
         deleteAndAssert(category1, user, [s1o1, s2o1], [category1.id], [student1, student2, s1o1, s1o2, s1o1p1, s1o2p1, s2o1p1, s2o1, category2] as Set)
     }
 

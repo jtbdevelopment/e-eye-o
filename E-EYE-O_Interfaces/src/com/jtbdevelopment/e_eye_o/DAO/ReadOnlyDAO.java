@@ -20,7 +20,6 @@ public interface ReadOnlyDAO {
 
     public <T extends IdObject> T get(final Class<T> entityType, final String id);
 
-
     /**
      * Get results of all, active only or archived only objects
      *
@@ -63,11 +62,7 @@ public interface ReadOnlyDAO {
 
     public int getArchivedPhotosForEntityCount(final AppUserOwnedObject ownedObject);
 
-    public Set<Observation> getAllObservationsForSemester(final Semester semester, final int firstResult, final int maxResults);
-
-    public Set<Observation> getActiveObservationsForSemester(final Semester semester, final int firstResult, final int maxResults);
-
-    public Set<Observation> getArchivedObservationsForSemester(final Semester semester, final int firstResult, final int maxResults);
+    public Set<Observation> getAllObservationsForSemester(final Semester semester);
 
     /**
      * Generally expected to return an ordered set by modification timestamp ascending and id of all versions of changes made
@@ -86,7 +81,7 @@ public interface ReadOnlyDAO {
 
     public List<Observation> getAllObservationsForEntity(final Observable observable);
 
-    public List<Observation> getAllObservationsForObservationCategory(final ObservationCategory observationCategory);
+    public List<Observation> getAllObservationsForObservationCategory(final AppUser user, final ObservationCategory observationCategory);
 
     public List<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to);
 

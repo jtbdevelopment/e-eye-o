@@ -73,7 +73,7 @@ public class ArchiveHelperImpl implements ArchiveHelper {
 
     private <T extends AppUserOwnedObject> void flipStatusForObservationsIfSemester(final T loaded, final boolean initialArchiveStatus) {
         if (loaded instanceof Semester) {
-            for (Observation observation : readWriteDAO.getAllObservationsForSemester((Semester) loaded, 0, 0)) {
+            for (Observation observation : readWriteDAO.getAllObservationsForSemester((Semester) loaded)) {
                 if (observation.isArchived() == initialArchiveStatus) {
                     flipArchiveStatus(observation);
                 }

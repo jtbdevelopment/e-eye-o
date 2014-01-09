@@ -131,7 +131,7 @@ abstract class AbstractArchiveHelperTest {
 
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getAllObservationsForSemester(semesterDAO, 0, 0)
+                one(readWriteDAO).getAllObservationsForSemester(semesterDAO)
                 will(returnValue((toFlip.values().toList() + noFlip.values().toList()).toSet()))
                 toFlip.each {
                     one(it.value).isArchived()

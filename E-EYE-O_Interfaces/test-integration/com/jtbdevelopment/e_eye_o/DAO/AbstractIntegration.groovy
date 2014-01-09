@@ -3,6 +3,7 @@ package com.jtbdevelopment.e_eye_o.DAO
 import com.jtbdevelopment.e_eye_o.TestingPhotoHelper
 import com.jtbdevelopment.e_eye_o.entities.*
 import com.jtbdevelopment.e_eye_o.entities.builders.ObservationBuilder
+import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
@@ -18,6 +19,8 @@ abstract class AbstractIntegration extends AbstractTestNGSpringContextTests {
     protected ReadWriteDAO rwDAO;
     @Autowired
     protected IdObjectFactory factory;
+    @Autowired
+    JSONIdObjectSerializer serializer
 
     protected ClassList createClassList(AppUser user, String baseName, boolean archived = false) {
         rwDAO.create(
@@ -41,7 +44,7 @@ abstract class AbstractIntegration extends AbstractTestNGSpringContextTests {
 
     protected Observation createObservation(AppUser user,
                                             ObservationCategory category,
-                                            com.jtbdevelopment.e_eye_o.entities.Observable observable,
+                                            Observable observable,
                                             String baseName,
                                             boolean archived = false,
                                             LocalDateTime time = LocalDateTime.now()) {
@@ -110,6 +113,61 @@ abstract class AbstractIntegration extends AbstractTestNGSpringContextTests {
         String email = baseName + "@test.com"
         rwDAO.create(factory.newAppUserBuilder().withFirstName(baseName).withEmailAddress(email).withPassword("X").build())
         rwDAO.getUser(email)
+    }
+
+    //  Var args of lists and sets making up total results that should come back
+    //  List where order is expected, set where order is unimportant
+    //  However each collection is still order dependent
+    protected void deepCompare(List actuals, Collection... expecteds) {
+        int expectedSize = 0;
+        expecteds.each { expectedSize += it.size() }
+        //  Shallow check compares id orders and sizes but not fields
+        assert expectedSize == actuals.size()
+
+        //  Break up actuals into lists and sets
+        ArrayList actualList = breakupActuals(actuals, expecteds)
+
+        int index = -1;
+        expecteds.each {
+            expected ->
+                ++index
+                def actual = actualList.get(index)
+                if (expected in Set) {
+                    expected.each {
+                        e ->
+                            def a = actual.find { it == e }
+                            compareObjects(e, a)
+                    }
+                } else {
+                    int subIndex = -1
+                    expected.each {
+                        e ->
+                            ++subIndex
+                            def a = ((List) actual).get(subIndex)
+                            compareObjects(e, a)
+                    }
+                }
+        }
+    }
+
+    protected ArrayList breakupActuals(delObjFixed, Collection... expecteds) {
+        def actuals = [];
+        int start = 0;
+        expecteds.each {
+            actuals.add(delObjFixed.subList(start, start + it.size()))
+            start += it.size()
+        }
+        actuals
+    }
+
+    protected Map compareObjects(e, a) {
+        e.properties.each {
+            String key, Object value ->
+                if (e in DeletedObject && key == "modificationTimestamp") {
+                    return
+                }
+                assert e."$key" == a."$key", "Failure on $key object " + serializer.write(e) + " vs. " + serializer.write(a)
+        }
     }
 
 }

@@ -60,7 +60,11 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
     @SuppressWarnings("unchecked")
     public Set<AppUser> getUsers() {
         Set<AppUser> returnSet = new LinkedHashSet<>();
-        returnSet.addAll((List<AppUser>) sessionFactory.getCurrentSession().createCriteria(HibernateAppUser.class).addOrder(Order.asc("id")).list());
+        returnSet.addAll(
+                (List<AppUser>) sessionFactory.getCurrentSession().
+                        createCriteria(HibernateAppUser.class).
+                        addOrder(Order.asc("id")).
+                        list());
         return returnSet;
     }
 
@@ -111,21 +115,13 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         criteria.add(Restrictions.eq("archived", archivedFlag));
     }
 
-    private <T extends AppUserOwnedObject> Criteria createSemesterCritera(final Semester semester, int firstResult, int maxResults) {
-        Criteria criteria = sessionFactory.getCurrentSession()
+    private <T extends AppUserOwnedObject> Criteria createSemesterCriteria(final Semester semester) {
+        return sessionFactory.getCurrentSession()
                 .createCriteria(getHibernateEntityName(Observation.class))
                 .add(Restrictions.eq("appUser", semester.getAppUser()))
                 .add(Restrictions.ge("observationTimestamp", semester.getStart().toLocalDateTime(LocalTime.MIDNIGHT)))
                 .add(Restrictions.lt("observationTimestamp", semester.getEnd().plusDays(1).toLocalDateTime(LocalTime.MIDNIGHT)))
                 .addOrder(Order.asc("id"));
-        addPaginationToCriteria(firstResult, maxResults, criteria);
-        return criteria;
-    }
-
-    private <T extends AppUserOwnedObject> Criteria createSemesterCriteraWithArchiveFlag(final Semester semester, boolean archivedFlag, int firstResult, int maxResults) {
-        Criteria criteria = createSemesterCritera(semester, firstResult, maxResults);
-        addArchiveCriteriaToCriteria(archivedFlag, criteria);
-        return criteria;
     }
 
     @Override
@@ -278,32 +274,9 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Set<Observation> getAllObservationsForSemester(final Semester semester, final int firstResult, final int maxResults) {
-        return new HashSet<Observation>(createSemesterCritera(semester, firstResult, maxResults).list());
+    public Set<Observation> getAllObservationsForSemester(final Semester semester) {
+        return new HashSet<Observation>(createSemesterCriteria(semester).list());
     }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public Set<Observation> getActiveObservationsForSemester(final Semester semester, final int firstResult, final int maxResults) {
-        return new HashSet<Observation>(createSemesterCriteraWithArchiveFlag(semester, false, firstResult, maxResults).list());
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public Set<Observation> getArchivedObservationsForSemester(final Semester semester, final int firstResult, final int maxResults) {
-        return new HashSet<Observation>(createSemesterCriteraWithArchiveFlag(semester, true, firstResult, maxResults).list());
-    }
-
-    /*
-    @Override
-    public LocalDateTime getLastObservationTimestampForEntity(final Observable observable) {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(HibernateObservation.class)
-                .add(Restrictions.eq("observationSubject", observable))
-                .setProjection(Projections.max("observationTimestamp"));
-        LocalDateTime result = (LocalDateTime) criteria.uniqueResult();
-        return result == null ? Observable.NEVER_OBSERVED : result;
-    }
-    */
 
     @Override
     @SuppressWarnings("unchecked")
@@ -316,8 +289,9 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Observation> getAllObservationsForObservationCategory(final ObservationCategory observationCategory) {
+    public List<Observation> getAllObservationsForObservationCategory(final AppUser user, final ObservationCategory observationCategory) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(HibernateObservation.class);
+        criteria.add(Restrictions.eq("appUser", user));
         if (observationCategory != null) {
             criteria.createCriteria("categories").add(Restrictions.eq("id", observationCategory.getId()));
         } else {

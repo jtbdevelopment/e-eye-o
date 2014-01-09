@@ -3,7 +3,6 @@ package com.jtbdevelopment.e_eye_o.DAO
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ArchiveHelper
 import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper
 import com.jtbdevelopment.e_eye_o.entities.*
-import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
@@ -23,9 +22,6 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
     @Autowired
     ArchiveHelper archiveHelper
 
-    @Autowired
-    JSONIdObjectSerializer serializer
-
     @Test(groups = ["integration"])
     public void testBasicCreates() {
         String baseName = "BasicCreate"
@@ -39,7 +35,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         Semester semester = createSemester(user, baseName, LocalDate.now().minusYears(1), LocalDate.now())
         createAppUserSettings(user) //  Not in history
 
-        deepCompare(user, since, [cl, student, category, photo, semester])
+        deepCompare(getHistory(user, since), [cl, student, category, photo, semester])
     }
 
     @Test(groups = ["integration"])
@@ -59,7 +55,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         ClassList v4 = rwDAO.get(ClassList, v2.id)
         deletionHelper.delete(v4)
 
-        deepCompare(user, since, [v1, v2, v3, v4, fakeDeleted(user, v4.id)])
+        deepCompare(getHistory(user, since), [v1, v2, v3, v4, fakeDeleted(user, v4.id)])
     }
 
     @Test(groups = ["integration"])
@@ -83,7 +79,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         Semester v5 = rwDAO.update(user, update)
         deletionHelper.delete(v5)
 
-        deepCompare(user, since, [v1, v2, v3, v4, v5, fakeDeleted(user, v5.id)])
+        deepCompare(getHistory(user, since), [v1, v2, v3, v4, v5, fakeDeleted(user, v5.id)])
     }
 
     @Test(groups = ["integration"])
@@ -106,7 +102,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         ObservationCategory v5 = rwDAO.update(user, update)
         deletionHelper.delete(v5)
 
-        deepCompare(user, since, [v1, v2, v3, v4, v5, fakeDeleted(user, v5.id)])
+        deepCompare(getHistory(user, since), [v1, v2, v3, v4, v5, fakeDeleted(user, v5.id)])
     }
 
     @Test(groups = ["integration"])
@@ -134,7 +130,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         Student v6 = rwDAO.update(user, update)
         deletionHelper.delete(v6)
 
-        deepCompare(user, since, [v1, v2, v3, v4, v5, v6, fakeDeleted(user, v1.id)])
+        deepCompare(getHistory(user, since), [v1, v2, v3, v4, v5, v6, fakeDeleted(user, v1.id)])
     }
 
     @Test(groups = ["integration"])
@@ -168,7 +164,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         Observation v6 = rwDAO.update(user, update)
         deletionHelper.delete(v6)
 
-        deepCompare(user, since, [v1, v2, v3, v4, v5, v6, fakeDeleted(user, v1.id)])
+        deepCompare(getHistory(user, since), [v1, v2, v3, v4, v5, v6, fakeDeleted(user, v1.id)])
     }
 
     @Test(groups = ["integration"])
@@ -190,7 +186,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         Photo v4 = rwDAO.get(Photo, v2.id)
         deletionHelper.delete(v4)
 
-        deepCompare(user, since, [v1, v2, v3, v4, fakeDeleted(user, v1.id)])
+        deepCompare(getHistory(user, since), [v1, v2, v3, v4, fakeDeleted(user, v1.id)])
     }
 
     @Test(groups = ["integration"])
@@ -217,8 +213,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         deletionHelper.delete(o23)
         Student st4 = rwDAO.get(Student, st1.id)
 
-        deepCompare(user,
-                since,
+        deepCompare(getHistory(user, since),
                 [cl1, st1, cat1, p1, sem1],
                 [o11, st2] as Set,
                 [o21, o31],
@@ -228,10 +223,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         )
     }
 
-    //  Var args of lists and sets making up total results that should come back
-    //  List where order is expected, set where order is unimportant
-    //  However each collection is still order dependent
-    private void deepCompare(AppUser user, DateTime since, Collection... expecteds) {
+    private List<Object> getHistory(AppUser user, DateTime since) {
         List queried = rwDAO.getModificationsSince(user, since, "", 0)
 
         //  DeletedObjects may or may not be real depending on DAO - strip ID out
@@ -242,56 +234,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
                 it
             }
         }.toList()
-
-        int expectedSize = 0;
-        expecteds.each { expectedSize += it.size() }
-        //  Shallow check compares id orders and sizes but not fields
-        assert expectedSize == delObjFixed.size()
-
-        //  Break up actuals into lists and sets
-        ArrayList actuals = breakupActuals(delObjFixed, expecteds)
-
-        int index = -1;
-        expecteds.each {
-            expected ->
-                ++index
-                def actual = actuals.get(index)
-                if (expected in Set) {
-                    expected.each {
-                        e ->
-                            def a = actual.find { it == e }
-                            compareObjects(e, a)
-                    }
-                } else {
-                    int subIndex = -1
-                    expected.each {
-                        e ->
-                            ++subIndex
-                            def a = ((List) actual).get(subIndex)
-                            compareObjects(e, a)
-                    }
-                }
-        }
-    }
-
-    ArrayList breakupActuals(delObjFixed, Collection... expecteds) {
-        def actuals = [];
-        int start = 0;
-        expecteds.each {
-            actuals.add(delObjFixed.subList(start, start + it.size()))
-            start += it.size()
-        }
-        actuals
-    }
-
-    Map compareObjects(e, a) {
-        e.properties.each {
-            String key, Object value ->
-                if (e in DeletedObject && key == "modificationTimestamp") {
-                    return
-                }
-                assert e."$key" == a."$key", "Failure on $key object " + serializer.write(e) + " vs. " + serializer.write(a)
-        }
+        delObjFixed
     }
 
     private DeletedObject fakeDeleted(final AppUser user, final String delId) {
