@@ -13,7 +13,7 @@ class AppUserSettingsGImpl extends AppUserOwnedObjectGImpl implements AppUserSet
 
     @Override
     public Map<String, String> getSettings() {
-        return settingsMap.asImmutable()
+        return new HashMap<String, String>(settingsMap)
     }
 
     @Override

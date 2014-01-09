@@ -25,12 +25,12 @@ class StudentGImpl extends ObservableGImpl implements Student {
 
     @Override
     Set<ClassList> getActiveClassLists() {
-        return ((classLists.findAll() { ClassList cl -> !cl.archived }) as Set<ClassList>).asImmutable()
+        return ((classLists.findAll() { ClassList cl -> !cl.archived }) as Set<ClassList>)
     }
 
     @Override
     Set<ClassList> getArchivedClassLists() {
-        return ((classLists.findAll { ClassList cl -> cl.archived }) as Set<ClassList>).asImmutable()
+        return ((classLists.findAll { ClassList cl -> cl.archived }) as Set<ClassList>)
     }
 
     @Override

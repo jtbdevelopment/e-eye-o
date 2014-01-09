@@ -278,7 +278,9 @@ abstract class AbstractDeletionHelperTest {
     private void setObservationCategoryExpectations(ObservationCategory category, List<Observation> obs) {
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getAllObservationsForObservationCategory(category)
+                one(category).getAppUser();
+                will(returnValue(userDAO))
+                one(readWriteDAO).getAllObservationsForObservationCategory(userDAO, category)
                 will(returnValue(obs))
                 obs.each {
                     one(it).removeCategory(category)
