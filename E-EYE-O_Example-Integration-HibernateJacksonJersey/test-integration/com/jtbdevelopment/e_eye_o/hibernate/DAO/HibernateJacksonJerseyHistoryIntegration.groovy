@@ -8,5 +8,5 @@ import org.springframework.test.context.ContextConfiguration
  * Time: 9:16 PM
  */
 @ContextConfiguration("/test-integration-context.xml")
-class HibernateJacksonJerseryHistoryIntegration extends AbstractHistoryIntegration {
+class HibernateJacksonJerseyHistoryIntegration extends AbstractHistoryIntegration {
 }
