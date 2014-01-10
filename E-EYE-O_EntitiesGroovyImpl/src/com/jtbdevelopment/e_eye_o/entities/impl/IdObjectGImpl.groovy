@@ -40,6 +40,6 @@ abstract class IdObjectGImpl implements IdObject {
         if (this.is(obj)) return true;
         if (obj == null || !(obj instanceof IdObject)) return false;
 
-        return (this.id != null && id.size() > 0 && id.equals(((IdObject) obj).id));
+        return (this.id != null && id.equals(((IdObject) obj).id));
     }
 }
