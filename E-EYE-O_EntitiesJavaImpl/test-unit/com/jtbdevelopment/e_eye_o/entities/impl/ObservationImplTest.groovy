@@ -1,9 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
-import com.jtbdevelopment.e_eye_o.entities.AppUser
-import com.jtbdevelopment.e_eye_o.entities.IdObject
-import com.jtbdevelopment.e_eye_o.entities.ObservationCategory
-import com.jtbdevelopment.e_eye_o.entities.Student
+import com.jtbdevelopment.e_eye_o.entities.*
 
 /**
  * Date: 11/27/13

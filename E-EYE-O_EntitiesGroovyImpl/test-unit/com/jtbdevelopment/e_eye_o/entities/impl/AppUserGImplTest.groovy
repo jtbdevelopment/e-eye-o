@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
+import com.jtbdevelopment.e_eye_o.entities.AppUserGImpl
 import com.jtbdevelopment.e_eye_o.entities.IdObject
 
 /**

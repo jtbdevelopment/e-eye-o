@@ -11,7 +11,7 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserSettings;
 import com.jtbdevelopment.e_eye_o.entities.Observation;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.TabComponent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.GeneratedObservationTable;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.components.filterabletables.IdObjectFilterableDisplay;

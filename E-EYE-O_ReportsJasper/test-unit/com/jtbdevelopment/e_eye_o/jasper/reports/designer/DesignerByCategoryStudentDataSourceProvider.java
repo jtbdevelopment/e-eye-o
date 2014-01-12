@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.jasper.reports.designer;
 import com.jtbdevelopment.e_eye_o.entities.ClassList;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
 import com.jtbdevelopment.e_eye_o.entities.Student;
-import com.jtbdevelopment.e_eye_o.entities.impl.reflection.IdObjectReflectionHelperImpl;
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelperImpl;
 
 import java.util.Collections;
 

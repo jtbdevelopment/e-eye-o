@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
 import com.jtbdevelopment.e_eye_o.entities.IdObjectFactory
+import com.jtbdevelopment.e_eye_o.entities.IdObjectFactoryGImpl
 
 /**
  * Date: 12/3/13

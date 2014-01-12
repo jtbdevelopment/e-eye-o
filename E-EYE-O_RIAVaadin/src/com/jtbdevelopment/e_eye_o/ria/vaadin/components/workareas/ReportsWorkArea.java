@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.ria.vaadin.components.workareas;
 import com.google.common.eventbus.Subscribe;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.events.AppUserOwnedObjectChanged;
+import com.jtbdevelopment.e_eye_o.events.AppUserOwnedObjectChanged;
 import com.jtbdevelopment.e_eye_o.reports.ReportBuilder;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.data.Property;

@@ -1,7 +1,9 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser
+import com.jtbdevelopment.e_eye_o.entities.AppUserGImpl
 import com.jtbdevelopment.e_eye_o.entities.IdObject
+import com.jtbdevelopment.e_eye_o.entities.TwoPhaseActivityGImpl
 
 /**
  * Date: 11/30/13

@@ -2,8 +2,8 @@ package com.jtbdevelopment.e_eye_o.jasper.reports.designer;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.jasper.reports.ByCategoryStudentDataSource;
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;

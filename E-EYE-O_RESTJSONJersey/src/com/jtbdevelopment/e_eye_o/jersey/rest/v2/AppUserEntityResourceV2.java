@@ -7,9 +7,9 @@ import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
-import com.jtbdevelopment.e_eye_o.entities.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.jersey.rest.v2.helpers.SecurityHelper;
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
+import com.jtbdevelopment.e_eye_o.security.AppUserUserDetails;
 import org.springframework.security.access.annotation.Secured;
 
 import javax.ws.rs.*;

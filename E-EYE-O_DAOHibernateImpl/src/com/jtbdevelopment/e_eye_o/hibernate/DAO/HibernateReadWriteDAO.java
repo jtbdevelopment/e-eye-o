@@ -6,11 +6,11 @@ import com.jtbdevelopment.e_eye_o.DAO.helpers.FieldUpdateValidator;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
-import com.jtbdevelopment.e_eye_o.entities.events.EventFactory;
-import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
+import com.jtbdevelopment.e_eye_o.events.EventFactory;
+import com.jtbdevelopment.e_eye_o.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateObservation;
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
@@ -142,7 +142,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         return null;
     }
 
-    private <T extends IdObject> void publishCreate(T wrapped) {
+    public <T extends IdObject> void publishCreate(T wrapped) {
         if (eventBus != null) {
             if (wrapped instanceof AppUserOwnedObject) {
                 eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.ADDED, (AppUserOwnedObject) wrapped));
@@ -152,17 +152,17 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         }
     }
 
-    private <T extends IdObject> void publishUpdate(T wrapped) {
+    public <T extends IdObject> void publishUpdate(T wrapped) {
         if (eventBus != null) {
             if (wrapped instanceof AppUserOwnedObject) {
-                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.MODIFIED, (AppUserOwnedObject) wrapped));
+                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.UPDATED, (AppUserOwnedObject) wrapped));
             } else {
-                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.MODIFIED, wrapped));
+                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.UPDATED, wrapped));
             }
         }
     }
 
-    private <T extends IdObject> void publishDelete(final T wrapped) {
+    public <T extends IdObject> void publishDelete(final T wrapped) {
         if (eventBus != null) {
             if (wrapped instanceof AppUserOwnedObject) {
                 eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, (AppUserOwnedObject) wrapped));

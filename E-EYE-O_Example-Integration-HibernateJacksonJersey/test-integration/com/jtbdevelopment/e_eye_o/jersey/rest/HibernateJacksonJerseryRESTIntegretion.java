@@ -6,7 +6,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserCreationHelper;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectDeserializer;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
@@ -430,13 +430,21 @@ public class HibernateJacksonJerseryRESTIntegretion extends AbstractTestNGSpring
         final Student createdStudent = jsonIdObjectDeserializer.readAsObjects(newJson);
 
         DateTime now = DateTime.now();
+        Thread.sleep(1000);
 
         response = httpHelper.httpDelete(uri, userClient1);
         assertEquals(javax.ws.rs.core.Response.Status.OK.getStatusCode(), response.getStatusLine().getStatusCode());
         EntityUtils.consumeQuietly(response.getEntity());
 
         assertNull(readWriteDAO.get(Student.class, createdStudent.getId()));
-        Collection<DeletedObject> deletedObjects = readWriteDAO.getEntitiesForUser(DeletedObject.class, testUser1, 0, 0);
+        @SuppressWarnings("unchecked")
+        Collection<DeletedObject> deletedObjects = (Collection<DeletedObject>) Collections2.filter(readWriteDAO.getModificationsSince(testUser1, now, "", 0), new Predicate<AppUserOwnedObject>() {
+            @Override
+            public boolean apply(@Nullable final AppUserOwnedObject input) {
+                return input != null && input instanceof DeletedObject;
+            }
+        }
+        );
         deletedObjects = Collections2.filter(deletedObjects, new Predicate<DeletedObject>() {
             @Override
             public boolean apply(@Nullable DeletedObject input) {

@@ -7,7 +7,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.UserMaintenanceHelper;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.entities.events.IdObjectChanged;
+import com.jtbdevelopment.e_eye_o.events.IdObjectChanged;
 import com.jtbdevelopment.e_eye_o.ria.events.LogoutEvent;
 import com.jtbdevelopment.e_eye_o.ria.vaadin.utils.ComponentUtils;
 import com.vaadin.ui.*;
@@ -199,7 +199,7 @@ public class UserSettings extends CustomComponent {
     @SuppressWarnings("unused")
     public void handleUpdate(final IdObjectChanged idObjectChanged) {
         if (AppUser.class.isAssignableFrom(idObjectChanged.getEntityType())) {
-            if (idObjectChanged.getChangeType().equals(IdObjectChanged.ChangeType.MODIFIED)) {
+            if (idObjectChanged.getChangeType().equals(IdObjectChanged.ChangeType.UPDATED)) {
                 if (idObjectChanged.getEntity().equals(getSession().getAttribute(AppUser.class))) {
                     getSession().setAttribute(AppUser.class, (AppUser) idObjectChanged.getEntity());
                     initForUser();

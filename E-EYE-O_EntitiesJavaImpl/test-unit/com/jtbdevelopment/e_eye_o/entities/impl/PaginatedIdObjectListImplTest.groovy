@@ -1,6 +1,7 @@
 package com.jtbdevelopment.e_eye_o.entities.impl
 
 import com.jtbdevelopment.e_eye_o.entities.PaginatedIdObjectList
+import com.jtbdevelopment.e_eye_o.entities.PaginatedIdObjectListImpl
 
 /**
  * Date: 12/22/13

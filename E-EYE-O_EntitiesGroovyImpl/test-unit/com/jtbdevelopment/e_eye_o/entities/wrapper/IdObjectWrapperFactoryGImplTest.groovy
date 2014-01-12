@@ -1,9 +1,9 @@
 package com.jtbdevelopment.e_eye_o.entities.wrapper
 
-import com.jtbdevelopment.e_eye_o.entities.impl.reflection.IdObjectReflectionHelperGImpl
 import com.jtbdevelopment.e_eye_o.entities.wrapper.testinginterfacesandclasses.TestOWFIdObjectWrapperGImpl
 import com.jtbdevelopment.e_eye_o.entities.wrapper.testinginterfacesandclasses.TestOWFInterface
 import com.jtbdevelopment.e_eye_o.entities.wrapper.testinginterfacesandclasses.TestOWFInterfaceWrapperGImpl
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelperGImpl
 
 class IdObjectWrapperFactoryGImplTest extends AbstractIdObjectWrapperFactoryTest {
 

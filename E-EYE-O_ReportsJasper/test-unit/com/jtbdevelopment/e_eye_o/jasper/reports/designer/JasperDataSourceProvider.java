@@ -4,8 +4,8 @@ import com.jtbdevelopment.e_eye_o.entities.AppUserOwnedObject;
 import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.Photo;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.jasper.reports.JasperField;
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import net.sf.jasperreports.engine.*;
 
 import java.lang.reflect.Array;

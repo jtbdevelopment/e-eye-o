@@ -3,7 +3,7 @@ package com.jtbdevelopment.e_eye_o.serialization
 import com.jtbdevelopment.e_eye_o.entities.IdObject
 import com.jtbdevelopment.e_eye_o.entities.PaginatedIdObjectList
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper
 import groovy.json.JsonBuilder
 import org.joda.time.DateTime
 import org.joda.time.LocalDateTime

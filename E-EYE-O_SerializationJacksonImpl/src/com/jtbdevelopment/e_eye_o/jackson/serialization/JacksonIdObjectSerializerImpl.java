@@ -8,7 +8,7 @@ import com.jtbdevelopment.e_eye_o.entities.IdObject;
 import com.jtbdevelopment.e_eye_o.entities.PaginatedIdObjectList;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectFieldSettings;
-import com.jtbdevelopment.e_eye_o.entities.reflection.IdObjectReflectionHelper;
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectConstants;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.apache.commons.beanutils.PropertyUtils;
