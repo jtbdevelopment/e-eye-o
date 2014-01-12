@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.DAO.hibernate.DAO
 
-import com.jtbdevelopment.e_eye_o.DAO.AbstractHistoryIntegration
+import com.jtbdevelopment.e_eye_o.DAO.AbstractHistoryAndPublicationIntegration
 import org.springframework.test.context.ContextConfiguration
 
 /**
@@ -8,5 +8,5 @@ import org.springframework.test.context.ContextConfiguration
  * Time: 10:41 PM
  */
 @ContextConfiguration("/test-integration-context.xml")
-class HibernateGroovyHistoryIntegration extends AbstractHistoryIntegration {
+class HibernateGroovyHistoryAndPublicationIntegration extends AbstractHistoryAndPublicationIntegration {
 }

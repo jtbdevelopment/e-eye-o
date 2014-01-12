@@ -31,4 +31,24 @@ public class IdObjectChangedImpl<T extends IdObject> implements IdObjectChanged<
     public T getEntity() {
         return entity;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IdObjectChangedImpl)) return false;
+
+        final IdObjectChangedImpl that = (IdObjectChangedImpl) o;
+
+        if (changeType != that.changeType) return false;
+        if (!entity.equals(that.entity)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = changeType.hashCode();
+        result = 31 * result + entity.hashCode();
+        return result;
+    }
 }

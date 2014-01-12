@@ -1,12 +1,18 @@
 package com.jtbdevelopment.e_eye_o.DAO
 
+import com.google.common.eventbus.EventBus
+import com.google.common.eventbus.Subscribe
 import com.jtbdevelopment.e_eye_o.DAO.helpers.ArchiveHelper
 import com.jtbdevelopment.e_eye_o.DAO.helpers.DeletionHelper
 import com.jtbdevelopment.e_eye_o.entities.*
+import com.jtbdevelopment.e_eye_o.events.EventFactory
+import com.jtbdevelopment.e_eye_o.events.IdObjectChanged
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
+import org.testng.annotations.AfterMethod
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 /**
@@ -15,12 +21,39 @@ import org.testng.annotations.Test
  *
  * This is a more detailed test of the getModifiedSince feature
  */
-abstract class AbstractHistoryIntegration extends AbstractIntegration {
+abstract class AbstractHistoryAndPublicationIntegration extends AbstractIntegration {
     @Autowired
     DeletionHelper deletionHelper
 
     @Autowired
+    EventFactory eventFactory;
+
+    @Autowired
     ArchiveHelper archiveHelper
+
+    @Autowired
+    EventBus eventBus
+
+    List<IdObjectChanged> changes;
+    Set<String> seenIds = [] as Set;
+
+    @BeforeMethod
+    public void setUp() {
+        changes = [];
+        seenIds = [] as Set;
+        eventBus.register(this)
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        eventBus.unregister(this)
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void event(final IdObjectChanged event) {
+        changes.add(event)
+    }
 
     @Test(groups = ["integration"])
     public void testBasicCreates() {
@@ -33,9 +66,10 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         ObservationCategory category = createCategory(user, baseName, "OC1")
         Photo photo = createPhoto(user, cl, baseName)
         Semester semester = createSemester(user, baseName, LocalDate.now().minusYears(1), LocalDate.now())
-        createAppUserSettings(user) //  Not in history
+        AppUserSettings settings = createAppUserSettings(user) //  Not in history
 
         deepCompare(getHistory(user, since), [cl, student, category, photo, semester])
+        deepCompare(changes, createEvents([user, cl, student, category, photo, semester, settings]))
     }
 
     @Test(groups = ["integration"])
@@ -56,6 +90,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         deletionHelper.delete(v4)
 
         deepCompare(getHistory(user, since), [v1, v2, v3, v4, fakeDeleted(user, v4.id)])
+        deepCompare(changes, createEvents([user, v1, v2, v3, v4, fakeDeleted(user, v4.id)], [v4]))
     }
 
     @Test(groups = ["integration"])
@@ -80,6 +115,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         deletionHelper.delete(v5)
 
         deepCompare(getHistory(user, since), [v1, v2, v3, v4, v5, fakeDeleted(user, v5.id)])
+        deepCompare(changes, createEvents([user, v1, v2, v3, v4, v5, fakeDeleted(user, v5.id)], [v5]))
     }
 
     @Test(groups = ["integration"])
@@ -103,6 +139,7 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         deletionHelper.delete(v5)
 
         deepCompare(getHistory(user, since), [v1, v2, v3, v4, v5, fakeDeleted(user, v5.id)])
+        deepCompare(changes, createEvents([user, v1, v2, v3, v4, v5, fakeDeleted(user, v5.id)], [v5]))
     }
 
     @Test(groups = ["integration"])
@@ -130,7 +167,8 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         Student v6 = rwDAO.update(user, update)
         deletionHelper.delete(v6)
 
-        deepCompare(getHistory(user, since), [v1, v2, v3, v4, v5, v6, fakeDeleted(user, v1.id)])
+        deepCompare(getHistory(user, since), [v1, v2, v3, v4, v5, v6, fakeDeleted(user, v6.id)])
+        deepCompare(changes, createEvents([user, class1, class2, v1, v2, v3, v4, v5, v6, fakeDeleted(user, v6.id)], [v6]))
     }
 
     @Test(groups = ["integration"])
@@ -141,11 +179,12 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         ObservationCategory cat1 = createCategory(user, baseName, "SH1")
         ObservationCategory cat2 = createCategory(user, baseName, "SH2")
         //  future obs keeps out updates on student
-        createObservation(user, null, student, baseName, false, LocalDateTime.now().plusYears(1))
+        Observation originalObs = createObservation(user, null, student, baseName, false, LocalDateTime.now().plusYears(1))
         DateTime since = DateTime.now()
         Thread.sleep(1000)
         Observation update
         Observation v1 = createObservation(user, cat1, student, baseName)
+        Student studentV2 = rwDAO.get(Student, student.id)
         update = rwDAO.get(Observation, v1.id)
         update.comment = "new comments"
         update.observationTimestamp = LocalDateTime.now().minusMonths(3).minusDays(1)
@@ -165,6 +204,10 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         deletionHelper.delete(v6)
 
         deepCompare(getHistory(user, since), [v1, v2, v3, v4, v5, v6, fakeDeleted(user, v1.id)])
+        deepCompare(changes,
+                createEvents([user, student, cat1, cat2]),
+                createEvents([studentV2, originalObs]) as Set,
+                createEvents([v1, v2, v3, v4, v5, v6, fakeDeleted(user, v6.id)], [v6]))
     }
 
     @Test(groups = ["integration"])
@@ -186,7 +229,8 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         Photo v4 = rwDAO.get(Photo, v2.id)
         deletionHelper.delete(v4)
 
-        deepCompare(getHistory(user, since), [v1, v2, v3, v4, fakeDeleted(user, v1.id)])
+        deepCompare(getHistory(user, since), [v1, v2, v3, v4, fakeDeleted(user, v4.id)])
+        deepCompare(changes, createEvents([user, classList, v1, v2, v3, v4, fakeDeleted(user, v4.id)], [v4]))
     }
 
     @Test(groups = ["integration"])
@@ -221,6 +265,14 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
                 [o23],
                 [fakeDeleted(user, o23.id), st4] as Set
         )
+        deepCompare(changes,
+                createEvents([user, cl1, st1, cat1, p1, sem1]),
+                createEvents([o11, st2]) as Set,
+                createEvents([o21, o31]),
+                createEvents([st3, o22]) as Set,
+                createEvents([o23]),
+                createEvents([fakeDeleted(user, o23.id), st4], [o23]) as Set,
+        )
     }
 
     private List<Object> getHistory(AppUser user, DateTime since) {
@@ -241,4 +293,25 @@ abstract class AbstractHistoryIntegration extends AbstractIntegration {
         factory.newDeletedObjectBuilder(user).withDeletedId(delId).withId("").build()
     }
 
+    private List<IdObjectChanged> createEvents(final List<IdObject> objects, final List<IdObject> deleteds = []) {
+        List<IdObjectChanged> events = [];
+        Iterator<IdObject> delIter = deleteds.iterator()
+        objects.each {
+            IdObjectChanged.ChangeType changeType
+            IdObject idObject = it
+            if (it in DeletedObject) {
+                idObject = delIter.next()
+                changeType = IdObjectChanged.ChangeType.DELETED
+            } else {
+                changeType = seenIds.contains(it.id) ? IdObjectChanged.ChangeType.UPDATED : IdObjectChanged.ChangeType.CREATED
+                seenIds.add(it.id)
+            }
+            if (idObject in AppUserOwnedObject) {
+                events.add(eventFactory.newAppUserOwnedObjectChanged(changeType, idObject))
+            } else {
+                events.add(eventFactory.newIdObjectChanged(changeType, idObject))
+            }
+        }
+        return events;
+    }
 }

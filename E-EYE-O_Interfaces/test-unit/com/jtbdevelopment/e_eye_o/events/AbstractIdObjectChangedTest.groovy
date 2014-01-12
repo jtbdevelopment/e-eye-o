@@ -38,4 +38,26 @@ abstract class AbstractIdObjectChangedTest {
     void testGetEntity() {
         assert user == objectUnderTest.entity
     }
+
+    @Test
+    void testTwoWithSameChangeTypeAndObjectAreEqual() {
+        def secondObject = createIdObjectChanged(user, IdObjectChanged.ChangeType.UPDATED);
+        assert objectUnderTest == secondObject
+    }
+
+    @Test
+    void testTwoWithSameObjectButDiffTypesAreNotEqual() {
+        def created = createIdObjectChanged(user, IdObjectChanged.ChangeType.CREATED);
+        def deleted = createIdObjectChanged(user, IdObjectChanged.ChangeType.DELETED);
+        assert objectUnderTest != created
+        assert objectUnderTest != deleted
+    }
+
+    @Test
+    void testTwoWithDiffObjectsButSameTypesAreNotEqual() {
+        AppUser user2 = createAppUser()
+        user2.setId("SECOND")
+        def second = createIdObjectChanged(user2, IdObjectChanged.ChangeType.UPDATED);
+        assert objectUnderTest != second
+    }
 }
