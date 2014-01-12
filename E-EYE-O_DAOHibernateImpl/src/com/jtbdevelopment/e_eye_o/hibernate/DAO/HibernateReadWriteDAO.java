@@ -1,14 +1,12 @@
 package com.jtbdevelopment.e_eye_o.hibernate.DAO;
 
-import com.google.common.eventbus.EventBus;
 import com.jtbdevelopment.e_eye_o.DAO.ReadWriteDAO;
 import com.jtbdevelopment.e_eye_o.DAO.helpers.FieldUpdateValidator;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.events.EventFactory;
-import com.jtbdevelopment.e_eye_o.events.IdObjectChanged;
+import com.jtbdevelopment.e_eye_o.events.IdObjectChangedPublisher;
 import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateObservation;
 import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import org.hibernate.Query;
@@ -32,15 +30,13 @@ import java.util.*;
 public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadWriteDAO {
 
     private final FieldUpdateValidator fieldUpdateValidator;
-    private final EventBus eventBus;
-    private final EventFactory eventFactory;
+    private final IdObjectChangedPublisher idObjectChangedPublisher;
 
     @Autowired
-    public HibernateReadWriteDAO(final EventBus eventBus, final EventFactory eventFactory, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final FieldUpdateValidator fieldUpdateValidator, final IdObjectFactory idObjectFactory) {
+    public HibernateReadWriteDAO(final IdObjectChangedPublisher idObjectChangedPublisher, final SessionFactory sessionFactory, final IdObjectWrapperFactory wrapperFactory, final IdObjectReflectionHelper idObjectReflectionHelper, final FieldUpdateValidator fieldUpdateValidator, final IdObjectFactory idObjectFactory) {
         super(sessionFactory, wrapperFactory, idObjectReflectionHelper, idObjectFactory);
         this.fieldUpdateValidator = fieldUpdateValidator;
-        this.eventBus = eventBus;
-        this.eventFactory = eventFactory;
+        this.idObjectChangedPublisher = idObjectChangedPublisher;
     }
 
     @Override
@@ -53,7 +49,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         wrapped.setModificationTimestamp(DateTime.now());
         dealWithObservationChanges(wrapped, false);
         sessionFactory.getCurrentSession().save(wrapped);
-        publishCreate(wrapped);
+        idObjectChangedPublisher.publishCreate(wrapped);
         return (T) get(wrapped.getClass(), wrapped.getId());
     }
 
@@ -76,7 +72,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         entity.setModificationTimestamp(DateTime.now());
         sessionFactory.getCurrentSession().merge(wrapped);
-        publishUpdate(wrapped);
+        idObjectChangedPublisher.publishUpdate(wrapped);
         return (T) get(wrapped.getClass(), wrapped.getId());
     }
 
@@ -94,7 +90,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         sessionFactory.getCurrentSession().delete(wrapped);
         dealWithObservationChanges(wrapped, true);
-        publishDelete(wrapped);
+        idObjectChangedPublisher.publishDelete(wrapped);
     }
 
     @Override
@@ -140,35 +136,5 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
             }
         }
         return null;
-    }
-
-    public <T extends IdObject> void publishCreate(T wrapped) {
-        if (eventBus != null) {
-            if (wrapped instanceof AppUserOwnedObject) {
-                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.ADDED, (AppUserOwnedObject) wrapped));
-            } else {
-                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.ADDED, wrapped));
-            }
-        }
-    }
-
-    public <T extends IdObject> void publishUpdate(T wrapped) {
-        if (eventBus != null) {
-            if (wrapped instanceof AppUserOwnedObject) {
-                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.UPDATED, (AppUserOwnedObject) wrapped));
-            } else {
-                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.UPDATED, wrapped));
-            }
-        }
-    }
-
-    public <T extends IdObject> void publishDelete(final T wrapped) {
-        if (eventBus != null) {
-            if (wrapped instanceof AppUserOwnedObject) {
-                eventBus.post(eventFactory.newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, (AppUserOwnedObject) wrapped));
-            } else {
-                eventBus.post(eventFactory.newIdObjectChanged(IdObjectChanged.ChangeType.DELETED, wrapped));
-            }
-        }
     }
 }

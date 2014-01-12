@@ -15,7 +15,7 @@ public interface IdObjectChanged<T extends IdObject> {
     T getEntity();
 
     public enum ChangeType {
-        ADDED,
+        CREATED,
         UPDATED,
         DELETED
     }

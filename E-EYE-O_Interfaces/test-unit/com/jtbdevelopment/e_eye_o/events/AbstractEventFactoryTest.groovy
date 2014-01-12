@@ -24,7 +24,7 @@ abstract class AbstractEventFactoryTest {
     public void testNewIdObject() {
         MockFor context = new MockFor(AppUser.class)
         AppUser user = context.proxyInstance()
-        IdObjectChanged.ChangeType changeType = IdObjectChanged.ChangeType.ADDED
+        IdObjectChanged.ChangeType changeType = IdObjectChanged.ChangeType.CREATED
 
         IdObjectChanged<AppUser> event = eventFactory.newIdObjectChanged(changeType, user)
         assert user == event.getEntity()
