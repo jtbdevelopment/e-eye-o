@@ -37,7 +37,7 @@ abstract class AbstractHistoryAndPublicationIntegration extends AbstractIntegrat
     List<IdObjectChanged> changes;
     Set<String> seenIds = [] as Set;
 
-    @BeforeMethod
+    @BeforeMethod(groups = ["integration"])
     public void setUp() {
         changes = [];
         seenIds = [] as Set;

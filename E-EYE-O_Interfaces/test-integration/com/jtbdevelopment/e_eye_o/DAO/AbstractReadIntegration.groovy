@@ -4,6 +4,7 @@ import com.jtbdevelopment.e_eye_o.entities.*
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 /**
@@ -14,9 +15,13 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
     public static AppUser user
     public static List<AppUserOwnedObject> objects = []
 
+    @BeforeMethod(groups = ["integration"])
+    public void setUp() {
+        initData()
+    }
+
     @Test(groups = ["integration"])
     public void testGetStudentsForClassList() {
-        initData()
         Map<ClassList, List<Student>> studentByClass = createEmptyMap(ClassList, { [(it): (List<Student>) []] })
         objects.findAll { it in Student }.each {
             Student student ->
@@ -30,7 +35,6 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
 
     @Test(groups = ["integration"])
     public void testGetObservationsForSemester() {
-        initData()
         Map<Semester, List<Observation>> obsBySemester = createEmptyMap(Semester, { [(it): []] })
         objects.findAll { it in Observation }.each {
             Observation obs ->
@@ -49,7 +53,6 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
 
     @Test(groups = ["integration"])
     public void testGetObservationsForCategory() {
-        initData()
         Map<ObservationCategory, List<Observation>> obsByCategory = createEmptyMap(ObservationCategory, { [(it): []] })
         obsByCategory.put(null, [])
         objects.findAll { it in Observation }.each {
@@ -67,7 +70,6 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
 
     @Test(groups = ["integration"])
     public void testGetObservationsForEntity() {
-        initData()
         Map<Observable, List<Observation>> obsBySubject = createEmptyMap(Observable, { [(it): []] })
         objects.findAll { it in Observation }.each {
             Observation obs ->
@@ -81,7 +83,6 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
 
     @Test(groups = ["integration"])
     public void testGetObservationsForEntityAndCategory() {
-        initData()
         Map<ObservationCategory, Map<Observable, List<Observation>>> obsByCatAndEntity = createEmptyMap(ObservationCategory, {
             [(it): [:]]
         })
@@ -111,7 +112,6 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
 
     @Test(groups = ["integration"])
     public void testGetPhotosForEntity() {
-        initData()
         Map<AppUserOwnedObject, List<Photo>> photosBySubject = createEmptyMap(AppUserOwnedObject, { [(it): []] })
         objects.findAll { it in Photo }.each {
             Photo photo ->
@@ -133,7 +133,6 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
 
     @Test(groups = ["integration"])
     public void testGetPhotosForEntityPaginated() {
-        initData()
         Map<AppUserOwnedObject, List<Photo>> photosBySubject = createEmptyMap(AppUserOwnedObject, { [(it): []] })
         objects.findAll { it in Photo }.each {
             Photo photo ->
@@ -162,7 +161,6 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
 
     @Test(groups = ["integration"])
     public void testReadEntitiesByType() {
-        initData()
         List<Class<? extends AppUserOwnedObject>> classes = [AppUserOwnedObject, Semester, Observation, Semester, Photo, Student, Observable, ClassList, AppUserSettings, TwoPhaseActivity]
         //  TODO optional tests on deleted objects
         for (Class<? extends AppUserOwnedObject> c : classes) {
