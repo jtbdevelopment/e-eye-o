@@ -35,9 +35,9 @@ abstract class AbstractArchiveHelperTest {
         Student student = context.mock(Student.class)
         context.checking(new Expectations() {
             {
-                one(student).getId()
+                oneOf(student).getId()
                 will(returnValue("X"))
-                one(readWriteDAO).get(student.getClass(), "X");
+                oneOf(readWriteDAO).get(student.getClass(), "X");
                 will(returnValue(null))
             }
         })
@@ -131,17 +131,17 @@ abstract class AbstractArchiveHelperTest {
 
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getAllObservationsForSemester(semesterDAO)
+                oneOf(readWriteDAO).getAllObservationsForSemester(semesterDAO)
                 will(returnValue((toFlip.values().toList() + noFlip.values().toList()).toSet()))
                 toFlip.each {
-                    one(it.value).isArchived()
+                    oneOf(it.value).isArchived()
                     will(returnValue(initial))
                     Photo pFlip = context.mock(Photo, it.key + "P1")
                     Photo pNoFlip = context.mock(Photo, it.key + "P2")
                     setBaseArchiveExpectations(initial, it.value, it.value, it.key, [(it.key + "P1"): pFlip], [(it.key + "P2"): pNoFlip])
                 }
                 noFlip.each {
-                    one(it.value).isArchived()
+                    oneOf(it.value).isArchived()
                     will(returnValue(!initial))
                 }
             }
@@ -195,25 +195,25 @@ abstract class AbstractArchiveHelperTest {
         ]
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getAllStudentsForClassList(classListDAO)
+                oneOf(readWriteDAO).getAllStudentsForClassList(classListDAO)
                 will(returnValue(flip.values().toList() + noFlipSize.values().toList() + noFlipStatus.values().toList()))
                 flip.each {
-                    one(it.value).isArchived()
+                    oneOf(it.value).isArchived()
                     will(returnValue(initial))
-                    one(it.value).getActiveClassLists()
+                    oneOf(it.value).getActiveClassLists()
                     will(returnValue([classListDAO] as Set))
                     setBaseArchiveExpectations(initial, it.value, it.value, it.key, [:], [:])
                     setObservableExpectations(initial, it.key, it.value)
                 }
                 noFlipStatus.each {
-                    one(it.value).isArchived()
+                    oneOf(it.value).isArchived()
                     will(returnValue(!initial))
                 }
                 noFlipSize.each {
-                    one(it.value).isArchived()
+                    oneOf(it.value).isArchived()
                     will(returnValue(initial))
                     if (!initial) {
-                        one(it.value).getActiveClassLists()
+                        oneOf(it.value).getActiveClassLists()
                         will(returnValue([] as Set))
                     } else {
                         setBaseArchiveExpectations(initial, it.value, it.value, it.key, [:], [:])
@@ -237,17 +237,17 @@ abstract class AbstractArchiveHelperTest {
         ]
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getAllObservationsForEntity(observable)
+                oneOf(readWriteDAO).getAllObservationsForEntity(observable)
                 will(returnValue(toFlip.values().toList() + noFlip.values().toList()))
                 toFlip.each {
-                    one(it.value).isArchived()
+                    oneOf(it.value).isArchived()
                     will(returnValue(initial))
                     Photo pFlip = context.mock(Photo, it.key + "P1")
                     Photo pNoFlip = context.mock(Photo, it.key + "P2")
                     setBaseArchiveExpectations(initial, it.value, it.value, it.key, [(it.key + "P1"): pFlip], [(it.key + "P2"): pNoFlip])
                 }
                 noFlip.each {
-                    one(it.value).isArchived()
+                    oneOf(it.value).isArchived()
                     will(returnValue(!initial))
                 }
             }
@@ -293,25 +293,25 @@ abstract class AbstractArchiveHelperTest {
             Map<String, Photo> photosToLeave) {
         context.checking(new Expectations() {
             {
-                one(idObjectDAO).isArchived()
+                oneOf(idObjectDAO).isArchived()
                 will(returnValue(initialValue))
-                one(idObjectDAO).setArchived(!initialValue)
-                one(idObject).getId()
+                oneOf(idObjectDAO).setArchived(!initialValue)
+                oneOf(idObject).getId()
                 will(returnValue(id))
-                one(readWriteDAO).get(idObject.getClass(), id)
+                oneOf(readWriteDAO).get(idObject.getClass(), id)
                 will(returnValue(idObjectDAO))
-                one(readWriteDAO).getAllPhotosForEntity(idObjectDAO, 0, 0)
+                oneOf(readWriteDAO).getAllPhotosForEntity(idObjectDAO, 0, 0)
                 will(returnValue(photosToFlip.values().toList() + photosToLeave.values().toList()))
                 photosToFlip.each {
-                    one(it.value).isArchived()
+                    oneOf(it.value).isArchived()
                     will(returnValue(initialValue))
                     setBaseArchiveExpectations(initialValue, it.value, it.value, it.key, [:], [:])
                 }
                 photosToLeave.each {
-                    one(it.value).isArchived()
+                    oneOf(it.value).isArchived()
                     will(returnValue(!initialValue))
                 }
-                one(readWriteDAO).trustedUpdate(idObjectDAO)
+                oneOf(readWriteDAO).trustedUpdate(idObjectDAO)
                 will(returnValue(idObjectDAO))
             }
         })

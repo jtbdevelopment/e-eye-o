@@ -47,7 +47,7 @@ public class HibernateClassListTest extends HibernateAbstractIdObjectTest {
     public void testGetDescription() throws Exception {
         final String desc = "desc";
         context.checking(new Expectations() {{
-            one(implClassList).getDescription();
+            oneOf(implClassList).getDescription();
             will(returnValue(desc));
         }});
 
@@ -58,7 +58,7 @@ public class HibernateClassListTest extends HibernateAbstractIdObjectTest {
     public void testSetDescription() throws Exception {
         final String desc = "desc";
         context.checking(new Expectations() {{
-            one(implClassList).setDescription(desc);
+            oneOf(implClassList).setDescription(desc);
         }});
 
         hibernateClassList.setDescription(desc);

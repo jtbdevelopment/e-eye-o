@@ -10,7 +10,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="groovy-2.1.9" level="application" />
     <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
-    <orderEntry type="library" scope="TEST" name="org.jmock:jmock:2.5.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.jmock:jmock:2.6.0" level="project" />
   </component>
 </module>
 

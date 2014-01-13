@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="tomcat-jdbc-7.0.39">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/tomcat-jdbc-7.0.39.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/tomcat-juli-7.0.39.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/tomcat-jdbc-7.0.47.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/tomcat-juli-7.0.47.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$PROJECT_DIR$/lib/tomcat-jdbc-7.0.39-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/tomcat-jdbc-7.0.47-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

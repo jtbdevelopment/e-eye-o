@@ -79,7 +79,7 @@ abstract class AbstractIdObjectChangedPublisherTest {
         IdObject idObject = (IdObject) new MockFor(IdObject.class).proxyInstance()
         context.checking(new Expectations() {
             {
-                one(eventFactory).newIdObjectChanged(IdObjectChanged.ChangeType.CREATED, idObject)
+                oneOf(eventFactory).newIdObjectChanged(IdObjectChanged.ChangeType.CREATED, idObject)
                 will(returnValue(createIdObject))
             }
         })
@@ -92,7 +92,7 @@ abstract class AbstractIdObjectChangedPublisherTest {
         IdObject idObject = (IdObject) new MockFor(IdObject.class).proxyInstance()
         context.checking(new Expectations() {
             {
-                one(eventFactory).newIdObjectChanged(IdObjectChanged.ChangeType.UPDATED, idObject)
+                oneOf(eventFactory).newIdObjectChanged(IdObjectChanged.ChangeType.UPDATED, idObject)
                 will(returnValue(updateIdObject))
             }
         })
@@ -105,7 +105,7 @@ abstract class AbstractIdObjectChangedPublisherTest {
         IdObject idObject = (IdObject) new MockFor(IdObject.class).proxyInstance()
         context.checking(new Expectations() {
             {
-                one(eventFactory).newIdObjectChanged(IdObjectChanged.ChangeType.DELETED, idObject)
+                oneOf(eventFactory).newIdObjectChanged(IdObjectChanged.ChangeType.DELETED, idObject)
                 will(returnValue(deleteIdObject))
             }
         })
@@ -118,7 +118,7 @@ abstract class AbstractIdObjectChangedPublisherTest {
         AppUserOwnedObject owned = (AppUserOwnedObject) new MockFor(AppUserOwnedObject.class).proxyInstance()
         context.checking(new Expectations() {
             {
-                one(eventFactory).newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.CREATED, owned)
+                oneOf(eventFactory).newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.CREATED, owned)
                 will(returnValue(createAUOC))
             }
         })
@@ -131,7 +131,7 @@ abstract class AbstractIdObjectChangedPublisherTest {
         AppUserOwnedObject owned = (AppUserOwnedObject) new MockFor(AppUserOwnedObject.class).proxyInstance()
         context.checking(new Expectations() {
             {
-                one(eventFactory).newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.UPDATED, owned)
+                oneOf(eventFactory).newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.UPDATED, owned)
                 will(returnValue(updateAUOC))
             }
         })
@@ -144,7 +144,7 @@ abstract class AbstractIdObjectChangedPublisherTest {
         AppUserOwnedObject owned = (IdObject) new MockFor(AppUserOwnedObject.class).proxyInstance()
         context.checking(new Expectations() {
             {
-                one(eventFactory).newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, owned)
+                oneOf(eventFactory).newAppUserOwnedObjectChanged(IdObjectChanged.ChangeType.DELETED, owned)
                 will(returnValue(deleteAOUC))
             }
         })

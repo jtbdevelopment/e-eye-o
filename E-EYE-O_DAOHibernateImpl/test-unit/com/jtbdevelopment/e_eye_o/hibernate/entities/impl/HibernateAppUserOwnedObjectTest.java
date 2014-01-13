@@ -43,7 +43,7 @@ public class HibernateAppUserOwnedObjectTest extends HibernateAbstractIdObjectTe
     public void testGetAppUser() throws Exception {
         final AppUser au = context.mock(AppUser.class);
         context.checking(new Expectations() {{
-            one(impl).getAppUser();
+            oneOf(impl).getAppUser();
             will(returnValue(au));
         }});
 
@@ -54,8 +54,8 @@ public class HibernateAppUserOwnedObjectTest extends HibernateAbstractIdObjectTe
     public void testSetAppUser() throws Exception {
         final AppUser au = context.mock(AppUser.class);
         context.checking(new Expectations() {{
-            one(impl).setAppUser(with(any(HibernateAppUser.class)));
-            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, au);
+            oneOf(impl).setAppUser(au);
+            oneOf(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, au);
             will(returnValue(au));
         }});
 
@@ -65,7 +65,7 @@ public class HibernateAppUserOwnedObjectTest extends HibernateAbstractIdObjectTe
     @Test
     public void testIsArchived() throws Exception {
         context.checking(new Expectations() {{
-            one(impl).isArchived();
+            oneOf(impl).isArchived();
             will(returnValue(true));
         }});
         assertTrue(hibernateLocal.isArchived());
@@ -74,7 +74,7 @@ public class HibernateAppUserOwnedObjectTest extends HibernateAbstractIdObjectTe
     @Test
     public void testSetArchived() throws Exception {
         context.checking(new Expectations() {{
-            one(impl).setArchived(false);
+            oneOf(impl).setArchived(false);
         }});
         hibernateLocal.setArchived(false);
     }

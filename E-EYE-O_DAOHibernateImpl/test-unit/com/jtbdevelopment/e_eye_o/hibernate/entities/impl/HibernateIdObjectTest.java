@@ -146,7 +146,7 @@ public class HibernateIdObjectTest {
     public void testGetModificationTimestamp() {
         final DateTime time = new DateTime();
         context.checking(new Expectations() {{
-            one(idObjectImpl).getModificationTimestamp();
+            oneOf(idObjectImpl).getModificationTimestamp();
             will(returnValue(time));
         }});
         assertSame(time, new LocalIdObjectWrapper(idObjectImpl).getModificationTimestamp());
@@ -156,7 +156,7 @@ public class HibernateIdObjectTest {
     public void tesSetModificationTimestamp() {
         final DateTime time = new DateTime();
         context.checking(new Expectations() {{
-            one(idObjectImpl).setModificationTimestamp(time);
+            oneOf(idObjectImpl).setModificationTimestamp(time);
         }});
 
         final LocalIdObjectWrapper localIdObjectWrapper = new LocalIdObjectWrapper(idObjectImpl);
@@ -167,7 +167,7 @@ public class HibernateIdObjectTest {
     public void testGetId() {
         final String id = "123";
         context.checking(new Expectations() {{
-            one(idObjectImpl).getId();
+            oneOf(idObjectImpl).getId();
             will(returnValue(id));
         }});
         assertEquals(id, new LocalIdObjectWrapper(idObjectImpl).getId());
@@ -183,7 +183,7 @@ public class HibernateIdObjectTest {
     public void testSetId() {
         final String id = "123";
         context.checking(new Expectations() {{
-            one(idObjectImpl).setId(id);
+            oneOf(idObjectImpl).setId(id);
         }});
         new LocalIdObjectWrapper(idObjectImpl).setId(id);
     }
@@ -192,7 +192,7 @@ public class HibernateIdObjectTest {
     public void testWrapObject() {
         final LocalIdObjectWrapper returnObject = new LocalIdObjectWrapper();
         context.checking(new Expectations() {{
-            one(daoFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, idObjectImpl);
+            oneOf(daoFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, idObjectImpl);
             will(returnValue(returnObject));
         }});
 
@@ -206,7 +206,7 @@ public class HibernateIdObjectTest {
         final LocalIdObjectWrapper returnedItem = new LocalIdObjectWrapper();
         final List<LocalIdObjectWrapper> returnedList = Arrays.asList(returnedItem);
         context.checking(new Expectations() {{
-            one(daoFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, inputList);
+            oneOf(daoFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, inputList);
             will(returnValue(returnedList));
         }});
 

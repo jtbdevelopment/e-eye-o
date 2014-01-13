@@ -92,7 +92,7 @@ abstract class AbstractFieldUpdateValidatorTest {
 
         context.checking(new Expectations() {
             {
-                one(helper).getAllFieldPreferences(LocalClass.class)
+                oneOf(helper).getAllFieldPreferences(LocalClass.class)
                 will(returnValue([(field): setting]))
             }
         })

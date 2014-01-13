@@ -52,7 +52,7 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetPhotoFor() throws Exception {
         context.checking(new Expectations() {{
-            one(implPhoto).getPhotoFor();
+            oneOf(implPhoto).getPhotoFor();
             will(returnValue(implStudent));
         }});
         assertSame(implStudent, hibernatePhoto.getPhotoFor());
@@ -61,8 +61,8 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetPhotoFor() throws Exception {
         context.checking(new Expectations() {{
-            one(implPhoto).setPhotoFor(with(any(HibernateStudent.class)));
-            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, implStudent);
+            oneOf(implPhoto).setPhotoFor(implStudent);
+            oneOf(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, implStudent);
             will(returnValue(implStudent));
         }});
         hibernatePhoto.setPhotoFor(implStudent);
@@ -71,7 +71,7 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetDescription() throws Exception {
         context.checking(new Expectations() {{
-            one(implPhoto).getDescription();
+            oneOf(implPhoto).getDescription();
             will(returnValue(STRING_VALUE));
         }});
         assertEquals(STRING_VALUE, hibernatePhoto.getDescription());
@@ -80,7 +80,7 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetDescription() throws Exception {
         context.checking(new Expectations() {{
-            one(implPhoto).setDescription(STRING_VALUE);
+            oneOf(implPhoto).setDescription(STRING_VALUE);
         }});
         hibernatePhoto.setDescription(STRING_VALUE);
     }
@@ -88,7 +88,7 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetTimestamp() throws Exception {
         context.checking(new Expectations() {{
-            one(implPhoto).getTimestamp();
+            oneOf(implPhoto).getTimestamp();
             will(returnValue(LOCALDATETIME_VALUE.withMillisOfSecond(0)));
         }});
         assertEquals(LOCALDATETIME_VALUE.withMillisOfSecond(0), hibernatePhoto.getTimestamp());
@@ -97,7 +97,7 @@ public class HibernatePhotoTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetTimestamp() throws Exception {
         context.checking(new Expectations() {{
-            one(implPhoto).setTimestamp(LOCALDATETIME_VALUE.withMillisOfSecond(0));
+            oneOf(implPhoto).setTimestamp(LOCALDATETIME_VALUE.withMillisOfSecond(0));
         }});
         hibernatePhoto.setTimestamp(LOCALDATETIME_VALUE);
     }

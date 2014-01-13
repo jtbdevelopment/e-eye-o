@@ -66,7 +66,7 @@ public class HibernateObservationCategoryTest extends HibernateAbstractIdObjectT
     @Test
     public void testGetShortName() throws Exception {
         context.checking(new Expectations() {{
-            one(implOC).getShortName();
+            oneOf(implOC).getShortName();
             will(returnValue(STRING_VALUE));
         }});
         assertEquals(STRING_VALUE, hibernateOC.getShortName());
@@ -75,7 +75,7 @@ public class HibernateObservationCategoryTest extends HibernateAbstractIdObjectT
     @Test
     public void testSetShortName() throws Exception {
         context.checking(new Expectations() {{
-            one(implOC).setShortName(STRING_VALUE);
+            oneOf(implOC).setShortName(STRING_VALUE);
         }});
         hibernateOC.setShortName(STRING_VALUE);
     }
@@ -83,7 +83,7 @@ public class HibernateObservationCategoryTest extends HibernateAbstractIdObjectT
     @Test
     public void testGetDescription() throws Exception {
         context.checking(new Expectations() {{
-            one(implOC).getDescription();
+            oneOf(implOC).getDescription();
             will(returnValue(STRING_VALUE));
         }});
         assertEquals(STRING_VALUE, hibernateOC.getDescription());
@@ -92,7 +92,7 @@ public class HibernateObservationCategoryTest extends HibernateAbstractIdObjectT
     @Test
     public void testSetDescription() throws Exception {
         context.checking(new Expectations() {{
-            one(implOC).setDescription(STRING_VALUE);
+            oneOf(implOC).setDescription(STRING_VALUE);
         }});
         hibernateOC.setDescription(STRING_VALUE);
     }

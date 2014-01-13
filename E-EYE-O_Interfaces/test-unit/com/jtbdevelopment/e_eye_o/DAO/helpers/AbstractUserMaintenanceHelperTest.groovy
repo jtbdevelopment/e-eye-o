@@ -48,15 +48,15 @@ abstract class AbstractUserMaintenanceHelperTest {
         TwoPhaseActivity activity = context.mock(TwoPhaseActivity.class)
         context.checking(new Expectations() {
             {
-                one(activity).getAppUser();
+                oneOf(activity).getAppUser();
                 will(returnValue(userID));
-                one(userID).getId()
+                oneOf(userID).getId()
                 will(returnValue("ID"));
-                one(readWriteDAO).get(AppUser.class, "ID");
+                oneOf(readWriteDAO).get(AppUser.class, "ID");
                 will(returnValue(userDAO))
-                one(userDAO).setPassword(CLEAR_PASSWORD);
-                one(activity).setArchived(true);
-                one(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, activity));
+                oneOf(userDAO).setPassword(CLEAR_PASSWORD);
+                oneOf(activity).setArchived(true);
+                oneOf(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, activity));
                 will(returnValue(Arrays.asList(activity, userDAO)));
             }
         })
@@ -68,15 +68,15 @@ abstract class AbstractUserMaintenanceHelperTest {
         TwoPhaseActivity activity = context.mock(TwoPhaseActivity.class)
         context.checking(new Expectations() {
             {
-                one(activity).getAppUser();
+                oneOf(activity).getAppUser();
                 will(returnValue(userID));
-                one(userID).getId()
+                oneOf(userID).getId()
                 will(returnValue("ID"));
-                one(readWriteDAO).get(AppUser.class, "ID");
+                oneOf(readWriteDAO).get(AppUser.class, "ID");
                 will(returnValue(userDAO))
-                one(userDAO).setPassword(SECURE_PASSWORD);
-                one(activity).setArchived(true);
-                one(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, activity));
+                oneOf(userDAO).setPassword(SECURE_PASSWORD);
+                oneOf(activity).setArchived(true);
+                oneOf(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, activity));
                 will(returnValue(Arrays.asList(activity, userDAO)));
             }
         })
@@ -108,23 +108,23 @@ abstract class AbstractUserMaintenanceHelperTest {
         activityBuilder += [build: { return twoPhaseActivityID }]
         context.checking(new Expectations() {
             {
-                one(userID).getId();
+                oneOf(userID).getId();
                 will(returnValue("ID"))
-                one(readWriteDAO).get(AppUser.class, "ID");
+                oneOf(readWriteDAO).get(AppUser.class, "ID");
                 will(returnValue(userDAO));
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
                 will(returnValue([] as Set))
-                one(idObjectFactory).newTwoPhaseActivityBuilder(userDAO)
+                oneOf(idObjectFactory).newTwoPhaseActivityBuilder(userDAO)
                 will(returnValue(activityBuilder as TwoPhaseActivityBuilder))
-                one(readWriteDAO).create(twoPhaseActivityID)
+                oneOf(readWriteDAO).create(twoPhaseActivityID)
                 will(returnValue(twoPhaseActivityDAO))
-                one(twoPhaseActivityDAO).setArchived(true);
-                one(userDAO).setEmailAddress(NEW_EMAIL);
-                one(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, twoPhaseActivityDAO))
+                oneOf(twoPhaseActivityDAO).setArchived(true);
+                oneOf(userDAO).setEmailAddress(NEW_EMAIL);
+                oneOf(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, twoPhaseActivityDAO))
                 will(returnValue(Arrays.asList(twoPhaseActivityDAO, userDAO)))
-                one(twoPhaseActivityDAO).getId()
+                oneOf(twoPhaseActivityDAO).getId()
                 will(returnValue("TID"))
-                one(readWriteDAO).get(TwoPhaseActivity.class, "TID");
+                oneOf(readWriteDAO).get(TwoPhaseActivity.class, "TID");
                 will(returnValue(twoPhaseActivityDAO))
             }
         })
@@ -136,11 +136,11 @@ abstract class AbstractUserMaintenanceHelperTest {
         TwoPhaseActivity twoPhaseActivityDAO = context.mock(TwoPhaseActivity.class, "TPADAO")
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
                 will(returnValue([twoPhaseActivityDAO] as Set))
-                one(twoPhaseActivityDAO).getActivityType()
+                oneOf(twoPhaseActivityDAO).getActivityType()
                 will(returnValue(TwoPhaseActivity.Activity.PASSWORD_RESET))
-                one(twoPhaseActivityDAO).getModificationTimestamp()
+                oneOf(twoPhaseActivityDAO).getModificationTimestamp()
                 will(returnValue(DateTime.now().minusDays(1)))
             }
         })
@@ -166,11 +166,11 @@ abstract class AbstractUserMaintenanceHelperTest {
         activityBuilder += [build: { return twoPhaseActivityID }]
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
                 will(returnValue([] as Set))
-                one(idObjectFactory).newTwoPhaseActivityBuilder(userDAO)
+                oneOf(idObjectFactory).newTwoPhaseActivityBuilder(userDAO)
                 will(returnValue(activityBuilder as TwoPhaseActivityBuilder))
-                one(readWriteDAO).create(twoPhaseActivityID)
+                oneOf(readWriteDAO).create(twoPhaseActivityID)
                 will(returnValue(twoPhaseActivityDAO))
             }
         })
@@ -182,11 +182,11 @@ abstract class AbstractUserMaintenanceHelperTest {
         TwoPhaseActivity twoPhaseActivityDAO = context.mock(TwoPhaseActivity.class, "TPADAO")
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userDAO, 0, 0)
                 will(returnValue([twoPhaseActivityDAO] as Set))
-                one(twoPhaseActivityDAO).getActivityType()
+                oneOf(twoPhaseActivityDAO).getActivityType()
                 will(returnValue(TwoPhaseActivity.Activity.EMAIL_CHANGE))
-                one(twoPhaseActivityDAO).getModificationTimestamp()
+                oneOf(twoPhaseActivityDAO).getModificationTimestamp()
                 will(returnValue(DateTime.now().minusDays(1)))
             }
         })
@@ -201,7 +201,7 @@ abstract class AbstractUserMaintenanceHelperTest {
         TwoPhaseActivity accountActivation = createActivity(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION, DateTime.now().minusDays(20))
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
                 will(returnValue([recentEmailChange, olderPasswordChange, oldPasswordChange, accountActivation] as Set))
             }
         })
@@ -217,7 +217,7 @@ abstract class AbstractUserMaintenanceHelperTest {
         TwoPhaseActivity accountActivation = createActivity(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION, DateTime.now().minusDays(20))
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
                 will(returnValue([recentEmailChange, olderPasswordChange, oldPasswordChange, accountActivation] as Set))
             }
         })
@@ -233,7 +233,7 @@ abstract class AbstractUserMaintenanceHelperTest {
         TwoPhaseActivity accountActivation = createActivity(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION, DateTime.now().minusDays(20))
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
                 will(returnValue([recentEmailChange, olderPasswordChange, oldPasswordChange, accountActivation] as Set))
             }
         })
@@ -249,7 +249,7 @@ abstract class AbstractUserMaintenanceHelperTest {
         TwoPhaseActivity accountActivation = createActivity(TwoPhaseActivity.Activity.ACCOUNT_ACTIVATION, DateTime.now().minusDays(20))
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(TwoPhaseActivity.class, userID, 0, 0)
                 will(returnValue([recentEmailChange, olderPasswordChange, oldPasswordChange, accountActivation] as Set))
             }
         })
@@ -264,10 +264,10 @@ abstract class AbstractUserMaintenanceHelperTest {
         AppUserSettings settingsUpDAO = context.mock(AppUserSettings.class, "DAOUP");
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(AppUserSettings.class, userID, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(AppUserSettings.class, userID, 0, 0)
                 will(returnValue([settingsDAO] as Set))
-                one(settingsDAO).updateSettings(settings)
-                one(readWriteDAO).trustedUpdate(settingsDAO)
+                oneOf(settingsDAO).updateSettings(settings)
+                oneOf(readWriteDAO).trustedUpdate(settingsDAO)
                 will(returnValue(settingsUpDAO))
             }
         })
@@ -279,7 +279,7 @@ abstract class AbstractUserMaintenanceHelperTest {
         AppUserSettings settingsDAO = context.mock(AppUserSettings.class, "DAO");
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(AppUserSettings.class, userID, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(AppUserSettings.class, userID, 0, 0)
                 will(returnValue([settingsDAO] as Set))
             }
         })
@@ -292,15 +292,15 @@ abstract class AbstractUserMaintenanceHelperTest {
         AppUserSettings settingsDAO = context.mock(AppUserSettings.class, "DAO");
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getEntitiesForUser(AppUserSettings.class, userID, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(AppUserSettings.class, userID, 0, 0)
                 will(returnValue([] as Set))
-                one(userID).getId()
+                oneOf(userID).getId()
                 will(returnValue("ID"));
-                one(readWriteDAO).get(AppUser, "ID")
+                oneOf(readWriteDAO).get(AppUser, "ID")
                 will(returnValue(userDAO))
-                one(idObjectFactory).newAppUserSettings(userDAO)
+                oneOf(idObjectFactory).newAppUserSettings(userDAO)
                 will(returnValue(settingsID))
-                one(readWriteDAO).create(settingsID)
+                oneOf(readWriteDAO).create(settingsID)
                 will(returnValue(settingsDAO))
             }
         })
@@ -321,9 +321,9 @@ abstract class AbstractUserMaintenanceHelperTest {
         userHelper.passwordEncoder = encoder
         context.checking(new Expectations() {
             {
-                one(encoder).encode(CLEAR_PASSWORD)
+                oneOf(encoder).encode(CLEAR_PASSWORD)
                 will(returnValue(SECURE_PASSWORD))
-                one(userID).setPassword(SECURE_PASSWORD)
+                oneOf(userID).setPassword(SECURE_PASSWORD)
             }
         })
     }

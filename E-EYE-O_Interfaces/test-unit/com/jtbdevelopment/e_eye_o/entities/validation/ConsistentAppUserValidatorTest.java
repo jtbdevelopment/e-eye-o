@@ -220,7 +220,7 @@ public class ConsistentAppUserValidatorTest {
     public void testACompletelyValidObject() {
         final LocalEntity le = LocalEntity.createValidLE(USER1);
         context.checking(new Expectations() {{
-            one(validatorContext).disableDefaultConstraintViolation();
+            oneOf(validatorContext).disableDefaultConstraintViolation();
         }});
 
         assertTrue(check.isValid(le, validatorContext));
@@ -233,10 +233,10 @@ public class ConsistentAppUserValidatorTest {
         le.item2.setAppUser(USER2);
 
         context.checking(new Expectations() {{
-            one(validatorContext).disableDefaultConstraintViolation();
-            one(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getGeneralErrorMessage(le))));
+            oneOf(validatorContext).disableDefaultConstraintViolation();
+            oneOf(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getGeneralErrorMessage(le))));
             will(returnValue(builder));
-            one(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getSpecificErrorMessage(le, le.item2))));
+            oneOf(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getSpecificErrorMessage(le, le.item2))));
             will(returnValue(builder));
             allowing(builder).addConstraintViolation();
         }});
@@ -252,12 +252,12 @@ public class ConsistentAppUserValidatorTest {
         le.item1.setAppUser(USER2);
 
         context.checking(new Expectations() {{
-            one(validatorContext).disableDefaultConstraintViolation();
-            one(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getGeneralErrorMessage(le))));
+            oneOf(validatorContext).disableDefaultConstraintViolation();
+            oneOf(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getGeneralErrorMessage(le))));
             will(returnValue(builder));
-            one(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getSpecificErrorMessage(le, le.item1))));
+            oneOf(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getSpecificErrorMessage(le, le.item1))));
             will(returnValue(builder));
-            one(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getSpecificErrorMessage(le, le.item2))));
+            oneOf(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getSpecificErrorMessage(le, le.item2))));
             will(returnValue(builder));
             allowing(builder).addConstraintViolation();
         }});
@@ -272,10 +272,10 @@ public class ConsistentAppUserValidatorTest {
         le.collection1.add(le3);
 
         context.checking(new Expectations() {{
-            one(validatorContext).disableDefaultConstraintViolation();
-            one(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getGeneralErrorMessage(le))));
+            oneOf(validatorContext).disableDefaultConstraintViolation();
+            oneOf(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getGeneralErrorMessage(le))));
             will(returnValue(builder));
-            one(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getSpecificErrorMessage(le, le3))));
+            oneOf(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getSpecificErrorMessage(le, le3))));
             will(returnValue(builder));
             allowing(builder).addConstraintViolation();
         }});
@@ -291,12 +291,12 @@ public class ConsistentAppUserValidatorTest {
         le.collection1.add(le3);
         final RuntimeException re = new RuntimeException();
         context.checking(new Expectations() {{
-            one(USER3).getId();
+            oneOf(USER3).getId();
             will(throwException(re));
-            one(validatorContext).disableDefaultConstraintViolation();
-            one(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getGeneralErrorMessage(le))));
+            oneOf(validatorContext).disableDefaultConstraintViolation();
+            oneOf(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getGeneralErrorMessage(le))));
             will(returnValue(builder));
-            one(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getExceptionErrorMessage(le, re))));
+            oneOf(validatorContext).buildConstraintViolationWithTemplate(with(equal(ConsistentAppUserValidator.getExceptionErrorMessage(le, re))));
             will(returnValue(builder));
             allowing(builder).addConstraintViolation();
         }});

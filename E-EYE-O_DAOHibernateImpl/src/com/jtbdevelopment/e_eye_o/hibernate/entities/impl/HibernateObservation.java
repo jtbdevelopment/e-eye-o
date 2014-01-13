@@ -40,7 +40,7 @@ public class HibernateObservation extends HibernateAppUserOwnedObject<Observatio
 
     @Override
     public void setObservationSubject(final Observable observationSubject) {
-        wrapped.setObservationSubject(observationSubject);
+        wrapped.setObservationSubject(wrap(observationSubject));
     }
 
     @Override

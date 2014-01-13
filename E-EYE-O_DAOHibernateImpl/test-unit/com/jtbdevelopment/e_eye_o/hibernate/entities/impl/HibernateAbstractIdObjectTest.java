@@ -26,18 +26,18 @@ public class HibernateAbstractIdObjectTest {
         implFactory = context.mock(IdObjectFactory.class);
         idObjectWrapperFactory = context.mock(IdObjectWrapperFactory.class);
         context.checking(new Expectations() {{
-            one(idObjectWrapperFactory).addBaseClass(IdObjectWrapperFactory.WrapperKind.DAO, HibernateIdObject.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, AppUser.class, HibernateAppUser.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, ClassList.class, HibernateClassList.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Semester.class, HibernateSemester.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Student.class, HibernateStudent.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Photo.class, HibernatePhoto.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Observation.class, HibernateObservation.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, ObservationCategory.class, HibernateObservationCategory.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, TwoPhaseActivity.class, HibernateTwoPhaseActivity.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Observable.class, HibernateObservable.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, AppUserSettings.class, HibernateAppUserSettings.class);
-            one(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, AppUserOwnedObject.class, HibernateAppUserOwnedObject.class);
+            oneOf(idObjectWrapperFactory).addBaseClass(IdObjectWrapperFactory.WrapperKind.DAO, HibernateIdObject.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, AppUser.class, HibernateAppUser.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, ClassList.class, HibernateClassList.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Semester.class, HibernateSemester.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Student.class, HibernateStudent.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Photo.class, HibernatePhoto.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Observation.class, HibernateObservation.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, ObservationCategory.class, HibernateObservationCategory.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, TwoPhaseActivity.class, HibernateTwoPhaseActivity.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, Observable.class, HibernateObservable.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, AppUserSettings.class, HibernateAppUserSettings.class);
+            oneOf(idObjectWrapperFactory).addMapping(IdObjectWrapperFactory.WrapperKind.DAO, AppUserOwnedObject.class, HibernateAppUserOwnedObject.class);
 
             allowing(idObjectWrapperFactory).getEntityForWrapper(IdObjectWrapperFactory.WrapperKind.DAO, AppUser.class);
             will(returnValue(AppUser.class));

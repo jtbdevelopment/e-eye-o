@@ -18,12 +18,13 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="E-EYE-O_Interfaces" exported="" />
-    <orderEntry type="library" exported="" name="com.google.guava:guava:13.0" level="project" />
-    <orderEntry type="library" exported="" name="org.springframework:spring-context:3.2.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="com.google.guava:guava:15.0" level="project" />
+    <orderEntry type="library" exported="" name="org.springframework:spring-context:4.0.0.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="org.testng:testng:6.8.7" level="project" />
-    <orderEntry type="library" scope="TEST" name="org.jmock:jmock:2.5.1" level="project" />
-    <orderEntry type="library" exported="" name="commons-beanutils-1.8.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.jmock:jmock:2.6.0" level="project" />
+    <orderEntry type="library" exported="" name="commons-beanutils-1.9.0" level="project" />
     <orderEntry type="library" exported="" name="imgscalr-lib-4.2-javadoc" level="project" />
+    <orderEntry type="library" exported="" name="jsr305-2.0.2" level="project" />
   </component>
 </module>
 

@@ -11,7 +11,7 @@
     <option name="GROUP_NAME" value="" />
     <option name="TEST_OBJECT" value="PACKAGE" />
     <option name="VM_PARAMETERS" value="-ea" />
-    <option name="PARAMETERS" value="-groups integration -parallel classes" />
+    <option name="PARAMETERS" value="-groups integration " />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="OUTPUT_DIRECTORY" value="" />
     <option name="ANNOTATION_TYPE" />

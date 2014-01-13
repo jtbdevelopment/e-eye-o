@@ -48,7 +48,7 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetFirstName() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).getFirstName();
+            oneOf(implAppUser).getFirstName();
             will(returnValue(STRING_VALUE));
         }});
         assertEquals(STRING_VALUE, hibernateAppUser.getFirstName());
@@ -57,7 +57,7 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetFirstName() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).setFirstName(STRING_VALUE);
+            oneOf(implAppUser).setFirstName(STRING_VALUE);
         }});
         hibernateAppUser.setFirstName(STRING_VALUE);
     }
@@ -65,7 +65,7 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetLastName() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).getLastName();
+            oneOf(implAppUser).getLastName();
             will(returnValue(STRING_VALUE));
         }});
         assertEquals(STRING_VALUE, hibernateAppUser.getLastName());
@@ -74,7 +74,7 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetLastName() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).setLastName(STRING_VALUE);
+            oneOf(implAppUser).setLastName(STRING_VALUE);
         }});
         hibernateAppUser.setLastName(STRING_VALUE);
     }
@@ -82,7 +82,7 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetEmailAddress() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).getEmailAddress();
+            oneOf(implAppUser).getEmailAddress();
             will(returnValue(STRING_VALUE));
         }});
         assertEquals(STRING_VALUE, hibernateAppUser.getEmailAddress());
@@ -91,7 +91,7 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetEmailAddress() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).setEmailAddress(STRING_VALUE);
+            oneOf(implAppUser).setEmailAddress(STRING_VALUE);
         }});
         hibernateAppUser.setEmailAddress(STRING_VALUE);
     }
@@ -99,7 +99,7 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetLastLogin() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).getLastLogout();
+            oneOf(implAppUser).getLastLogout();
             will(returnValue(DATETIME_VALUE.withMillisOfSecond(0)));
         }});
         assertEquals(DATETIME_VALUE.withMillisOfSecond(0), hibernateAppUser.getLastLogout());
@@ -108,7 +108,7 @@ public class HibernateAppUserTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetLastLogin() throws Exception {
         context.checking(new Expectations() {{
-            one(implAppUser).setLastLogout(DATETIME_VALUE.withMillisOfSecond(0));
+            oneOf(implAppUser).setLastLogout(DATETIME_VALUE.withMillisOfSecond(0));
         }});
         hibernateAppUser.setLastLogout(DATETIME_VALUE);
     }

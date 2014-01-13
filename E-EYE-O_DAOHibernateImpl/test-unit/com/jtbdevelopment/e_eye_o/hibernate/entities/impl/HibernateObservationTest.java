@@ -56,7 +56,7 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testGetObservationSubject() throws Exception {
         final Student s = context.mock(Student.class);
         context.checking(new Expectations() {{
-            one(implObservation).getObservationSubject();
+            oneOf(implObservation).getObservationSubject();
             will(returnValue(s));
         }});
         assertSame(s, hibernateObservation.getObservationSubject());
@@ -66,7 +66,9 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testSetObservationSubject() throws Exception {
         final ClassList cl = context.mock(ClassList.class);
         context.checking(new Expectations() {{
-            one(implObservation).setObservationSubject(with(any(HibernateClassList.class)));
+            oneOf(implObservation).setObservationSubject(cl);
+            oneOf(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cl);
+            will(returnValue(cl));
         }});
         hibernateObservation.setObservationSubject(cl);
     }
@@ -74,7 +76,7 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetObservationTimestamp() throws Exception {
         context.checking(new Expectations() {{
-            one(implObservation).getObservationTimestamp();
+            oneOf(implObservation).getObservationTimestamp();
             will(returnValue(LOCALDATETIME_VALUE.withMillisOfSecond(0)));
         }});
         assertEquals(LOCALDATETIME_VALUE.withMillisOfSecond(0), hibernateObservation.getObservationTimestamp());
@@ -83,7 +85,7 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetObservationTimestamp() throws Exception {
         context.checking(new Expectations() {{
-            one(implObservation).setObservationTimestamp(LOCALDATETIME_VALUE.withMillisOfSecond(0));
+            oneOf(implObservation).setObservationTimestamp(LOCALDATETIME_VALUE.withMillisOfSecond(0));
         }});
         hibernateObservation.setObservationTimestamp(LOCALDATETIME_VALUE);
     }
@@ -91,7 +93,7 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testIsSignificant() throws Exception {
         context.checking(new Expectations() {{
-            one(implObservation).isSignificant();
+            oneOf(implObservation).isSignificant();
             will(returnValue(true));
         }});
         assertEquals(true, hibernateObservation.isSignificant());
@@ -100,7 +102,7 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetSignificant() throws Exception {
         context.checking(new Expectations() {{
-            one(implObservation).setSignificant(false);
+            oneOf(implObservation).setSignificant(false);
         }});
         hibernateObservation.setSignificant(false);
     }
@@ -109,7 +111,7 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testGetCategories() throws Exception {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
         context.checking(new Expectations() {{
-            one(implObservation).getCategories();
+            oneOf(implObservation).getCategories();
             will(returnValue(ocs));
         }});
         assertSame(ocs, hibernateObservation.getCategories());
@@ -119,8 +121,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testSetCategories() throws Exception {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
         context.checking(new Expectations() {{
-            one(implObservation).setCategories(with(new IsEqualButNotTheSame<>(ocs)));
-            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, ocs);
+            oneOf(implObservation).setCategories(with(new IsEqualButNotTheSame<>(ocs)));
+            oneOf(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, ocs);
             will(returnValue(new HashSet<>(ocs)));
         }});
         hibernateObservation.setCategories(ocs);
@@ -130,9 +132,9 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testAddCategory() throws Exception {
         final ObservationCategory ocs = context.mock(ObservationCategory.class);
         context.checking(new Expectations() {{
-            one(implObservation).addCategory(with(any(HibernateObservationCategory.class)));
-            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, ocs);
+            exactly(1).of(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, ocs);
             will(returnValue(ocs));
+            exactly(1).of(implObservation).addCategory(ocs);
         }});
         hibernateObservation.addCategory(ocs);
     }
@@ -141,8 +143,8 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testAddCategories() throws Exception {
         final Set<ObservationCategory> ocs = new HashSet<>(Arrays.asList(context.mock(ObservationCategory.class)));
         context.checking(new Expectations() {{
-            one(implObservation).addCategories(with(new IsEqualButNotTheSame<>(ocs)));
-            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, ocs);
+            oneOf(implObservation).addCategories(with(new IsEqualButNotTheSame<>(ocs)));
+            oneOf(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, ocs);
             will(returnValue(new HashSet<>(ocs)));
         }});
         hibernateObservation.addCategories(ocs);
@@ -152,7 +154,7 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     public void testRemoveCategory() throws Exception {
         final ObservationCategory ocs = context.mock(ObservationCategory.class);
         context.checking(new Expectations() {{
-            one(implObservation).removeCategory(ocs);
+            oneOf(implObservation).removeCategory(ocs);
         }});
         hibernateObservation.removeCategory(ocs);
     }
@@ -160,7 +162,7 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetComment() throws Exception {
         context.checking(new Expectations() {{
-            one(implObservation).getComment();
+            oneOf(implObservation).getComment();
             will(returnValue(STRING_VALUE));
         }});
         assertEquals(STRING_VALUE, hibernateObservation.getComment());
@@ -169,7 +171,7 @@ public class HibernateObservationTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetComment() throws Exception {
         context.checking(new Expectations() {{
-            one(implObservation).setComment(STRING_VALUE);
+            oneOf(implObservation).setComment(STRING_VALUE);
         }});
         hibernateObservation.setComment(STRING_VALUE);
     }

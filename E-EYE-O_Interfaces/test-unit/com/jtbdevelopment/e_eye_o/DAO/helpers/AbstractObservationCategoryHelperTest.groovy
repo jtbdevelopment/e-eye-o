@@ -35,7 +35,7 @@ abstract class AbstractObservationCategoryHelperTest {
     void testNoCategoriesReturnsEmptyMap() {
         context.checking(new Expectations() {
             {
-                one(dao).getEntitiesForUser(ObservationCategory.class, user, 0, 0)
+                oneOf(dao).getEntitiesForUser(ObservationCategory.class, user, 0, 0)
                 will(returnValue([] as Set))
             }
         })
@@ -52,7 +52,7 @@ abstract class AbstractObservationCategoryHelperTest {
 
         context.checking(new Expectations() {
             {
-                one(dao).getEntitiesForUser(ObservationCategory.class, user, 0, 0)
+                oneOf(dao).getEntitiesForUser(ObservationCategory.class, user, 0, 0)
                 will(returnValue([cat1, cat2, cat3] as Set))
             }
         })

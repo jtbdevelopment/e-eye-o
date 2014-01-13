@@ -54,7 +54,7 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     public void testGetClassLists() throws Exception {
         final Set<ClassList> cl = new HashSet<>(Arrays.asList(context.mock(ClassList.class)));
         context.checking(new Expectations() {{
-            one(implStudent).getClassLists();
+            oneOf(implStudent).getClassLists();
             will(returnValue(cl));
         }});
 
@@ -65,7 +65,7 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     public void testGetActiveClassLists() throws Exception {
         final Set<ClassList> cl = new HashSet<>(Arrays.asList(context.mock(ClassList.class)));
         context.checking(new Expectations() {{
-            one(implStudent).getActiveClassLists();
+            oneOf(implStudent).getActiveClassLists();
             will(returnValue(cl));
         }});
 
@@ -76,7 +76,7 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     public void testGetArchivedClassLists() throws Exception {
         final Set<ClassList> cl = new HashSet<>(Arrays.asList(context.mock(ClassList.class)));
         context.checking(new Expectations() {{
-            one(implStudent).getArchivedClassLists();
+            oneOf(implStudent).getArchivedClassLists();
             will(returnValue(cl));
         }});
 
@@ -88,7 +88,7 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
         final Set<ClassList> cl = new HashSet<>(Arrays.asList(context.mock(ClassList.class)));
         context.checking(new Expectations() {{
             oneOf(implStudent).setClassLists(with(new IsEqualButNotTheSame<>(cl)));
-            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cl);
+            oneOf(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cl);
             will(returnValue(new HashSet<>(cl)));
         }});
 
@@ -99,8 +99,8 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     public void testAddClassList() throws Exception {
         final ClassList cl = context.mock(ClassList.class);
         context.checking(new Expectations() {{
-            one(implStudent).addClassList(with(any(HibernateClassList.class)));
-            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cl);
+            oneOf(implStudent).addClassList(cl);
+            oneOf(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cl);
             will(returnValue(cl));
         }});
 
@@ -113,7 +113,7 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
         final Set<ClassList> cls = new HashSet<>(Arrays.asList(cl));
         context.checking(new Expectations() {{
             oneOf(implStudent).addClassLists(with(new IsEqualButNotTheSame<>(cls)));
-            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cls);
+            oneOf(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cls);
             will(returnValue(new HashSet<>(cls)));
         }});
 
@@ -124,8 +124,8 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     public void testRemoveClassList() throws Exception {
         final ClassList cl = context.mock(ClassList.class);
         context.checking(new Expectations() {{
-            one(implStudent).removeClassList(with(any(HibernateClassList.class)));
-            one(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cl);
+            oneOf(implStudent).removeClassList(cl);
+            oneOf(idObjectWrapperFactory).wrap(IdObjectWrapperFactory.WrapperKind.DAO, cl);
             will(returnValue(cl));
         }});
 
@@ -135,7 +135,7 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetFirstName() throws Exception {
         context.checking(new Expectations() {{
-            one(implStudent).getFirstName();
+            oneOf(implStudent).getFirstName();
             will(returnValue(STRING_VALUE));
         }});
 
@@ -145,7 +145,7 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetFirstName() throws Exception {
         context.checking(new Expectations() {{
-            one(implStudent).setFirstName(STRING_VALUE);
+            oneOf(implStudent).setFirstName(STRING_VALUE);
         }});
 
         hibernateStudent.setFirstName(STRING_VALUE);
@@ -154,7 +154,7 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testGetLastName() throws Exception {
         context.checking(new Expectations() {{
-            one(implStudent).getLastName();
+            oneOf(implStudent).getLastName();
             will(returnValue(STRING_VALUE));
         }});
 
@@ -164,7 +164,7 @@ public class HibernateStudentTest extends HibernateAbstractIdObjectTest {
     @Test
     public void testSetLastName() throws Exception {
         context.checking(new Expectations() {{
-            one(implStudent).setLastName(STRING_VALUE);
+            oneOf(implStudent).setLastName(STRING_VALUE);
         }});
 
         hibernateStudent.setLastName(STRING_VALUE);

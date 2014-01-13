@@ -75,7 +75,7 @@ abstract class AbstractUserCreationHelperTest {
         userHelper.userNewUserDefaultsCreator = helper
         context.checking(new Expectations() {
             {
-                one(helper).initializeNewUser(userDAO)
+                oneOf(helper).initializeNewUser(userDAO)
             }
         })
         setupNewUserExpectations(expectedCookieVersion, expectedPrivacyVersion, expectedTermsVersion)
@@ -91,9 +91,9 @@ abstract class AbstractUserCreationHelperTest {
         int expectedTermsVersion = 2
         context.checking(new Expectations() {
             {
-                one(userHelper.privacyPolicy).getVersion()
+                oneOf(userHelper.privacyPolicy).getVersion()
                 will(returnValue(expectedPrivacyVersion))
-                one(userHelper.termsAndConditions).getVersion()
+                oneOf(userHelper.termsAndConditions).getVersion()
                 will(returnValue(expectedTermsVersion))
             }
         })
@@ -115,20 +115,20 @@ abstract class AbstractUserCreationHelperTest {
         AppUser userUpdate = context.mock(AppUser.class, "DAOUP");
         context.checking(new Expectations() {
             {
-                one(activity).getAppUser()
+                oneOf(activity).getAppUser()
                 will(returnValue(userID));
-                one(userID).getId()
+                oneOf(userID).getId()
                 will(returnValue("2"))
-                one(userDAO).getId()
+                oneOf(userDAO).getId()
                 will(returnValue("2"))
-                one(readWriteDAO).get(AppUser.class, "2")
+                oneOf(readWriteDAO).get(AppUser.class, "2")
                 will(returnValue(userDAO))
-                one(readWriteDAO).get(AppUser.class, "2")
+                oneOf(readWriteDAO).get(AppUser.class, "2")
                 will(returnValue(userUpdate))
-                one(userDAO).setActivated(true)
-                one(userDAO).setActive(true)
-                one(activity).setArchived(true)
-                one(readWriteDAO).trustedUpdates([userDAO, activity])
+                oneOf(userDAO).setActivated(true)
+                oneOf(userDAO).setActive(true)
+                oneOf(activity).setArchived(true)
+                oneOf(readWriteDAO).trustedUpdates([userDAO, activity])
                 will(returnValue([userUpdate, activityUpdate]))
             }
         })
@@ -153,9 +153,9 @@ abstract class AbstractUserCreationHelperTest {
         activityBuilder += [build: { return twoPhaseActivityID }]
         context.checking(new Expectations() {
             {
-                one(idObjectFactory).newTwoPhaseActivityBuilder(userDAO)
+                oneOf(idObjectFactory).newTwoPhaseActivityBuilder(userDAO)
                 will(returnValue(activityBuilder as TwoPhaseActivityBuilder))
-                one(readWriteDAO).create(twoPhaseActivityID)
+                oneOf(readWriteDAO).create(twoPhaseActivityID)
                 will(returnValue(twoPhaseActivityDAO))
             }
         })
@@ -194,14 +194,14 @@ abstract class AbstractUserCreationHelperTest {
 
         context.checking(new Expectations() {
             {
-                one(userID).getPassword()
+                oneOf(userID).getPassword()
                 will(returnValue(CLEAR_PASSWORD))
-                one(userID).setPassword(CLEAR_PASSWORD)
-                one(readWriteDAO).create(userID)
+                oneOf(userID).setPassword(CLEAR_PASSWORD)
+                oneOf(readWriteDAO).create(userID)
                 will(returnValue(userDAO))
-                one(idObjectFactory).newAppUserSettingsBuilder(userDAO)
+                oneOf(idObjectFactory).newAppUserSettingsBuilder(userDAO)
                 will(returnValue(settingsBuilder as AppUserSettingsBuilder))
-                one(readWriteDAO).create(settingsID)
+                oneOf(readWriteDAO).create(settingsID)
                 will(returnValue(settingsDAO))
             }
         })
@@ -216,9 +216,9 @@ abstract class AbstractUserCreationHelperTest {
         userHelper.passwordEncoder = encoder
         context.checking(new Expectations() {
             {
-                one(encoder).encode(CLEAR_PASSWORD)
+                oneOf(encoder).encode(CLEAR_PASSWORD)
                 will(returnValue(SECURE_PASSWORD))
-                one(userID).setPassword(SECURE_PASSWORD)
+                oneOf(userID).setPassword(SECURE_PASSWORD)
             }
         })
     }

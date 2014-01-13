@@ -36,12 +36,12 @@ abstract class AbstractDeletionHelperTest {
     public void testDeactivateUser() {
         context.checking(new Expectations() {
             {
-                one(userID).getId()
+                oneOf(userID).getId()
                 will(returnValue("7"))
-                one(readWriteDAO).get(AppUser.class, "7")
+                oneOf(readWriteDAO).get(AppUser.class, "7")
                 will(returnValue(userDAO))
-                one(userDAO).setActive(false)
-                one(readWriteDAO).trustedUpdate(userDAO)
+                oneOf(userDAO).setActive(false)
+                oneOf(readWriteDAO).trustedUpdate(userDAO)
                 will(returnValue(userDAOUP))
             }
         })
@@ -59,9 +59,9 @@ abstract class AbstractDeletionHelperTest {
         Student student = context.mock(Student.class)
         context.checking(new Expectations() {
             {
-                one(student).getId()
+                oneOf(student).getId()
                 will(returnValue("X"))
-                one(readWriteDAO).get(student.getClass(), "X");
+                oneOf(readWriteDAO).get(student.getClass(), "X");
                 will(returnValue(null))
             }
         })
@@ -192,9 +192,9 @@ abstract class AbstractDeletionHelperTest {
     public void testDeletingDeletedUser() {
         context.checking(new Expectations() {
             {
-                one(userID).getId()
+                oneOf(userID).getId()
                 will(returnValue("U"))
-                one(readWriteDAO).get(AppUser.class, "U")
+                oneOf(readWriteDAO).get(AppUser.class, "U")
                 will(returnValue(null))
             }
         })
@@ -212,16 +212,16 @@ abstract class AbstractDeletionHelperTest {
 
         context.checking(new Expectations() {
             {
-                one(userID).getId()
+                oneOf(userID).getId()
                 will(returnValue("U"))
-                one(readWriteDAO).get(AppUser.class, "U")
+                oneOf(readWriteDAO).get(AppUser.class, "U")
                 will(returnValue(userDAO))
-                one(readWriteDAO).trustedDelete(userDAO)
+                oneOf(readWriteDAO).trustedDelete(userDAO)
 
                 int counter
 
 
-                one(readWriteDAO).getEntitiesForUser(Student, userDAO, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(Student, userDAO, 0, 0)
                 will(returnValue(students.values().toSet()))
                 counter = 0
                 students.each {
@@ -233,7 +233,7 @@ abstract class AbstractDeletionHelperTest {
                     setObservableExpectations(it.value, [(oid): observation], [(observation): [(pid): context.mock(Photo, pid)]])
                 }
 
-                one(readWriteDAO).getEntitiesForUser(ClassList, userDAO, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(ClassList, userDAO, 0, 0)
                 will(returnValue(classes.values().toSet()))
                 counter = 0
                 classes.each {
@@ -246,26 +246,26 @@ abstract class AbstractDeletionHelperTest {
                     setClassListExpectations(it.value, [])
                 }
 
-                one(readWriteDAO).getEntitiesForUser(ObservationCategory, userDAO, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(ObservationCategory, userDAO, 0, 0)
                 will(returnValue(ocs.values().toSet()))
                 ocs.each {
                     setBaseDeleteExpectations(it.value, it.value, it.key, [:])
                     setObservationCategoryExpectations(it.value, [])
                 }
 
-                one(readWriteDAO).getEntitiesForUser(AppUserSettings, userDAO, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(AppUserSettings, userDAO, 0, 0)
                 will(returnValue(settings.values().toSet()))
                 settings.each {
                     setBaseDeleteExpectations(it.value, it.value, it.key, [:])
                 }
 
-                one(readWriteDAO).getEntitiesForUser(TwoPhaseActivity, userDAO, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(TwoPhaseActivity, userDAO, 0, 0)
                 will(returnValue(activities.values().toSet()))
                 activities.each {
                     setBaseDeleteExpectations(it.value, it.value, it.key, [:])
                 }
 
-                one(readWriteDAO).getEntitiesForUser(Semester, userDAO, 0, 0)
+                oneOf(readWriteDAO).getEntitiesForUser(Semester, userDAO, 0, 0)
                 will(returnValue(semesters.values().toSet()))
                 semesters.each {
                     setBaseDeleteExpectations(it.value, it.value, it.key, [:])
@@ -278,13 +278,13 @@ abstract class AbstractDeletionHelperTest {
     private void setObservationCategoryExpectations(ObservationCategory category, List<Observation> obs) {
         context.checking(new Expectations() {
             {
-                one(category).getAppUser();
+                oneOf(category).getAppUser();
                 will(returnValue(userDAO))
-                one(readWriteDAO).getAllObservationsForObservationCategory(userDAO, category)
+                oneOf(readWriteDAO).getAllObservationsForObservationCategory(userDAO, category)
                 will(returnValue(obs))
                 obs.each {
-                    one(it).removeCategory(category)
-                    one(readWriteDAO).trustedUpdate(it)
+                    oneOf(it).removeCategory(category)
+                    oneOf(readWriteDAO).trustedUpdate(it)
                 }
             }
         })
@@ -293,11 +293,11 @@ abstract class AbstractDeletionHelperTest {
     private void setClassListExpectations(ClassList classList, List<Student> students) {
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getAllStudentsForClassList(classList)
+                oneOf(readWriteDAO).getAllStudentsForClassList(classList)
                 will(returnValue(students))
                 students.each {
-                    one(it).removeClassList(classList)
-                    one(readWriteDAO).trustedUpdate(it)
+                    oneOf(it).removeClassList(classList)
+                    oneOf(readWriteDAO).trustedUpdate(it)
                 }
             }
         })
@@ -306,7 +306,7 @@ abstract class AbstractDeletionHelperTest {
     private void setObservableExpectations(Observable daoObject, Map<String, Observation> obs, Map<Observation, Map<String, Photo>> obsPhotos) {
         context.checking(new Expectations() {
             {
-                one(readWriteDAO).getAllObservationsForEntity(daoObject)
+                oneOf(readWriteDAO).getAllObservationsForEntity(daoObject)
                 will(returnValue(obs.values().toList()))
                 obs.each { setBaseDeleteExpectations(it.value, it.value, it.key, obsPhotos.get(it.value)) }
             }
@@ -317,14 +317,14 @@ abstract class AbstractDeletionHelperTest {
     private void setBaseDeleteExpectations(AppUserOwnedObject idObject, AppUserOwnedObject idObjectDAO, String id, Map<String, Photo> photosFor) {
         context.checking(new Expectations() {
             {
-                one(idObject).getId()
+                oneOf(idObject).getId()
                 will(returnValue(id))
-                one(readWriteDAO).get(idObject.getClass(), id)
+                oneOf(readWriteDAO).get(idObject.getClass(), id)
                 will(returnValue(idObjectDAO))
-                one(readWriteDAO).getAllPhotosForEntity(idObjectDAO, 0, 0)
+                oneOf(readWriteDAO).getAllPhotosForEntity(idObjectDAO, 0, 0)
                 will(returnValue(photosFor.values().toList()))
                 photosFor.each { setBaseDeleteExpectations(it.value, it.value, it.key, [:]) }
-                one(readWriteDAO).trustedDelete(idObjectDAO)
+                oneOf(readWriteDAO).trustedDelete(idObjectDAO)
             }
         })
     }
