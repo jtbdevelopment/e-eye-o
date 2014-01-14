@@ -7,7 +7,7 @@ import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
 import com.jtbdevelopment.e_eye_o.events.IdObjectChangedPublisher;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateObservation;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.HibernateObservation;
 import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;

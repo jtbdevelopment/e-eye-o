@@ -2,7 +2,7 @@ package com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper;
 
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

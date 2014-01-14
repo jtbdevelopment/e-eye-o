@@ -7,7 +7,7 @@ import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.wrapper.IdObjectWrapperFactory;
-import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.*;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.*;
 import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;

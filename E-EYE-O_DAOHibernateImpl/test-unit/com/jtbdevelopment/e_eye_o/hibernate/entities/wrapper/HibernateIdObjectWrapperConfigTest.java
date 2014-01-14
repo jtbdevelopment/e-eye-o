@@ -1,6 +1,6 @@
 package com.jtbdevelopment.e_eye_o.hibernate.entities.wrapper;
 
-import com.jtbdevelopment.e_eye_o.hibernate.entities.impl.HibernateAbstractIdObjectTest;
+import com.jtbdevelopment.e_eye_o.hibernate.entities.HibernateAbstractIdObjectTest;
 import org.testng.annotations.Test;
 
 /**

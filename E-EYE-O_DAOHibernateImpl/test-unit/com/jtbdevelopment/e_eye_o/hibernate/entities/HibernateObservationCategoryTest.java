@@ -1,4 +1,4 @@
-package com.jtbdevelopment.e_eye_o.hibernate.entities.impl;
+package com.jtbdevelopment.e_eye_o.hibernate.entities;
 
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
 import com.jtbdevelopment.e_eye_o.entities.ObservationCategory;
