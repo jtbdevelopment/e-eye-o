@@ -9,6 +9,8 @@
           <element id="library" level="project" name="jsr305-2.0.2" />
           <element id="library" level="project" name="el-api-2.2-javadoc" />
           <element id="library" level="project" name="el-ri-1.0" />
+          <element id="library" level="project" name="jersey-servlet-1.18-javadoc" />
+          <element id="library" level="project" name="jersey-spring-1.18-javadoc" />
         </element>
       </element>
     </root>

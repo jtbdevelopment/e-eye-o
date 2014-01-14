@@ -5,7 +5,6 @@
       <root url="jar://$PROJECT_DIR$/lib/spring-security-config-3.2.0.RELEASE.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/aopalliance-1.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/spring-security-core-3.2.0.RELEASE.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/tomcat-servlet-api-7.0.33.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/lib/spring-security-config-3.2.0.RELEASE-javadoc.jar!/" />

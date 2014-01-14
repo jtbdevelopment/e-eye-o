@@ -49,6 +49,8 @@
           <element id="library" level="project" name="javax.servlet-api-3.1.0-javadoc" />
           <element id="library" level="project" name="vaadin-client-compiled-7.1.9" />
           <element id="library" level="project" name="vaadin-themes-7.1.9" />
+          <element id="library" level="project" name="jersey-servlet-1.18-javadoc" />
+          <element id="library" level="project" name="jersey-spring-1.18-javadoc" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="E-EYE-O_Example-VaadinJerseyJacksonJava/web/Web" />

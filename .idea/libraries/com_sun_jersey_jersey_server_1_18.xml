@@ -3,10 +3,7 @@
     <properties maven-id="com.sun.jersey:jersey-server:1.18" />
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/jersey-server-1.18.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/asm-3.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/activation-1.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/jaxb-api-2.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/jsr250-api-1.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jersey-core-1.18.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jsr311-api-1.1.1.jar!/" />
     </CLASSES>
@@ -17,6 +14,7 @@
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/lib/jersey-server-1.18-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jsr311-api-1.1.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/jersey-core-1.18-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
