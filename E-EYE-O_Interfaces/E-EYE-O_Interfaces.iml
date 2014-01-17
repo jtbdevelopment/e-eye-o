@@ -26,6 +26,7 @@
     <orderEntry type="library" exported="" name="org.springframework.security:spring-security-config:3.2.0.RELEASE" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="groovy-2.1.9" level="application" />
     <orderEntry type="library" exported="" scope="TEST" name="org.springframework:spring-test:4.0.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="org.springframework.security:spring-security-web:3.2.0.RELEASE" level="project" />
   </component>
 </module>
 

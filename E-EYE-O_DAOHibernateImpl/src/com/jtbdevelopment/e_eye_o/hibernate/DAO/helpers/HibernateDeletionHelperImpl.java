@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Component
 @Transactional(readOnly = false)
-public class DeletionHelperImpl implements DeletionHelper {
+public class HibernateDeletionHelperImpl implements DeletionHelper {
     @Autowired
     protected ReadWriteDAO readWriteDAO;
 

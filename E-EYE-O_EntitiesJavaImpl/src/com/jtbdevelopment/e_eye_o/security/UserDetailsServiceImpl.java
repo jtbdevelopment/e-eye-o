@@ -1,8 +1,7 @@
-package com.jtbdevelopment.e_eye_o.hibernate.security;
+package com.jtbdevelopment.e_eye_o.security;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.AppUser;
-import com.jtbdevelopment.e_eye_o.security.SecurityObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("userDetailsService")
 @SuppressWarnings("unused")
-public class HibernateUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private ReadOnlyDAO readOnlyDAO;
 

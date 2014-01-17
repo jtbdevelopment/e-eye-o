@@ -7,9 +7,9 @@ import com.jtbdevelopment.e_eye_o.DAO.helpers.ArchiveHelper
  * Date: 12/28/13
  * Time: 6:36 PM
  */
-class ArchiveHelperImplTest extends AbstractArchiveHelperTest {
+class HibernateArchiveHelperImplTest extends AbstractArchiveHelperTest {
     @Override
     ArchiveHelper createArchiveHelper() {
-        return new ArchiveHelperImpl()
+        return new HibernateArchiveHelperImpl()
     }
 }

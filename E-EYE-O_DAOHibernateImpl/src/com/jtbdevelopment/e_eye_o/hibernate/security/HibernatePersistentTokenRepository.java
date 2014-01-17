@@ -35,6 +35,9 @@ public class HibernatePersistentTokenRepository implements PersistentTokenReposi
     @Override
     public void updateToken(final String series, final String tokenValue, final Date lastUsed) {
         HibernatePersistentToken hToken = getHibernatePersistentToken(series);
+        if (hToken == null) {
+            throw new IllegalStateException("Can't update what doesnt exist");
+        }
         hToken.setToken(tokenValue);
         hToken.setTimestamp(lastUsed);
         sessionFactory.getCurrentSession().update(hToken);
@@ -52,7 +55,7 @@ public class HibernatePersistentTokenRepository implements PersistentTokenReposi
         if (hToken == null) {
             return null;
         }
-        return new PersistentRememberMeToken(hToken.getUsername(), hToken.getSeries(), hToken.getToken(), hToken.getTimestamp());
+        return new PersistentRememberMeToken(hToken.getUsername(), hToken.getSeries(), hToken.getToken(), new Date(hToken.getTimestamp().getTime()));
     }
 
     //  TODO - logging out seems to log you out on all devices

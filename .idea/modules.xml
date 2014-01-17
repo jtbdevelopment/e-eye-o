@@ -3,10 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DAOHibernateImpl/E-EYE-O_DAOHibernateImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_DAOHibernateImpl/E-EYE-O_DAOHibernateImpl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_DAOMongoImpl/E-EYE-O_DAOMongoImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_DAOMongoImpl/E-EYE-O_DAOMongoImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_EntitiesGroovyImpl/E-EYE-O_EntitiesGroovyImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_EntitiesGroovyImpl/E-EYE-O_EntitiesGroovyImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_EntitiesJavaImpl/E-EYE-O_EntitiesJavaImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_EntitiesJavaImpl/E-EYE-O_EntitiesJavaImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Example-Integration-HibernateGroovy/E-EYE-O_Example-Integration-HibernateGroovy.iml" filepath="$PROJECT_DIR$/E-EYE-O_Example-Integration-HibernateGroovy/E-EYE-O_Example-Integration-HibernateGroovy.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Example-Integration-HibernateJacksonJersey/E-EYE-O_Example-Integration-HibernateJacksonJersey.iml" filepath="$PROJECT_DIR$/E-EYE-O_Example-Integration-HibernateJacksonJersey/E-EYE-O_Example-Integration-HibernateJacksonJersey.iml" />
+      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Example-Integration-MongoJava/E-EYE-O_Example-Integration-MongoJava.iml" filepath="$PROJECT_DIR$/E-EYE-O_Example-Integration-MongoJava/E-EYE-O_Example-Integration-MongoJava.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Example-VaadinJerseyJacksonJava/E-EYE-O_Example-VaadinJerseyJacksonJava.iml" filepath="$PROJECT_DIR$/E-EYE-O_Example-VaadinJerseyJacksonJava/E-EYE-O_Example-VaadinJerseyJacksonJava.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Interfaces/E-EYE-O_Interfaces.iml" filepath="$PROJECT_DIR$/E-EYE-O_Interfaces/E-EYE-O_Interfaces.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_RESTJSONJersey/E-EYE-O_RESTJSONJersey.iml" filepath="$PROJECT_DIR$/E-EYE-O_RESTJSONJersey/E-EYE-O_RESTJSONJersey.iml" />

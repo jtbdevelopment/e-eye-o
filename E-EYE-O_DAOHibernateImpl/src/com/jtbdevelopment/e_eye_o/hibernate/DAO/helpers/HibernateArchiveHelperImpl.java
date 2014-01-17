@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @Transactional(readOnly = false)
-public class ArchiveHelperImpl implements ArchiveHelper {
+public class HibernateArchiveHelperImpl implements ArchiveHelper {
     @Autowired
     protected ReadWriteDAO readWriteDAO;
 
