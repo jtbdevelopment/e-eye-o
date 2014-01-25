@@ -69,6 +69,7 @@ public class HibernateAppUserSettings extends HibernateAppUserOwnedObject<AppUse
     }
 
     @Override
+    @Transient
     public long getSettingAsLong(final String name, final long defaultValue) {
         return wrapped.getSettingAsLong(name, defaultValue);
     }
