@@ -50,11 +50,11 @@ public interface ReadOnlyDAO {
 
     public <T extends AppUserOwnedObject> int getArchivedEntitiesForUserCount(final Class<T> entityType, final AppUser appUser);
 
-    public List<Photo> getAllPhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults);
+    public Set<Photo> getAllPhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults);
 
-    public List<Photo> getActivePhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults);
+    public Set<Photo> getActivePhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults);
 
-    public List<Photo> getArchivedPhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults);
+    public Set<Photo> getArchivedPhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults);
 
     public int getAllPhotosForEntityCount(final AppUserOwnedObject ownedObject);
 
@@ -63,6 +63,14 @@ public interface ReadOnlyDAO {
     public int getArchivedPhotosForEntityCount(final AppUserOwnedObject ownedObject);
 
     public Set<Observation> getAllObservationsForSemester(final Semester semester);
+
+    public Set<Observation> getAllObservationsForEntity(final Observable observable);
+
+    public Set<Observation> getAllObservationsForObservationCategory(final AppUser user, final ObservationCategory observationCategory);
+
+    public Set<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to);
+
+    public Set<Student> getAllStudentsForClassList(final ClassList classList);
 
     /**
      * Generally expected to return an ordered set by modification timestamp ascending and id of all versions of changes made
@@ -78,13 +86,5 @@ public interface ReadOnlyDAO {
      * @return an ordered set of modified entities, ordered by modification timestamp ascending
      */
     public List<? extends AppUserOwnedObject> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, int maxResults);
-
-    public List<Observation> getAllObservationsForEntity(final Observable observable);
-
-    public List<Observation> getAllObservationsForObservationCategory(final AppUser user, final ObservationCategory observationCategory);
-
-    public List<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to);
-
-    public List<Student> getAllStudentsForClassList(final ClassList classList);
 }
 

@@ -234,23 +234,23 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Photo> getAllPhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults) {
+    public Set<Photo> getAllPhotosForEntity(final AppUserOwnedObject ownedObject, final int firstResult, final int maxResults) {
         Criteria photoFor = addPhotoForCriteria(createEntityCriteria(HibernatePhoto.class, ownedObject.getAppUser(), firstResult, maxResults), ownedObject);
-        return photoFor.list();
+        return new HashSet<Photo>(photoFor.list());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Photo> getActivePhotosForEntity(final AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
+    public Set<Photo> getActivePhotosForEntity(final AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
         Criteria photoFor = addPhotoForCriteria(createEntityCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), false, firstResult, maxResults), ownedObject);
-        return photoFor.list();
+        return new HashSet<Photo>(photoFor.list());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Photo> getArchivedPhotosForEntity(final AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
+    public Set<Photo> getArchivedPhotosForEntity(final AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
         Criteria photoFor = addPhotoForCriteria(createEntityCriteriaWithArchiveFlag(HibernatePhoto.class, ownedObject.getAppUser(), true, firstResult, maxResults), ownedObject);
-        return photoFor.list();
+        return new HashSet<Photo>(photoFor.list());
     }
 
     @Override
@@ -280,16 +280,16 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Observation> getAllObservationsForEntity(final Observable observable) {
-        return sessionFactory.getCurrentSession()
+    public Set<Observation> getAllObservationsForEntity(final Observable observable) {
+        return new HashSet<Observation>(sessionFactory.getCurrentSession()
                 .createCriteria(HibernateObservation.class)
                 .add(Restrictions.eq("observationSubject", observable))
-                .list();
+                .list());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Observation> getAllObservationsForObservationCategory(final AppUser user, final ObservationCategory observationCategory) {
+    public Set<Observation> getAllObservationsForObservationCategory(final AppUser user, final ObservationCategory observationCategory) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(HibernateObservation.class);
         criteria.add(Restrictions.eq("appUser", user));
         if (observationCategory != null) {
@@ -297,12 +297,12 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         } else {
             criteria.add(Restrictions.isEmpty("categories"));
         }
-        return criteria.list();
+        return new HashSet<Observation>(criteria.list());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to) {
+    public Set<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(HibernateObservation.class)
                 .add(Restrictions.eq("observationSubject", observable))
                 .add(Restrictions.ge("observationTimestamp", from.toLocalDateTime(LocalTime.MIDNIGHT)))
@@ -312,16 +312,16 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
         } else {
             criteria.add(Restrictions.isEmpty("categories"));
         }
-        return criteria.list();
+        return new HashSet<Observation>(criteria.list());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Student> getAllStudentsForClassList(final ClassList classList) {
-        return sessionFactory.getCurrentSession().createCriteria(HibernateStudent.class)
+    public Set<Student> getAllStudentsForClassList(final ClassList classList) {
+        return new HashSet<Student>(sessionFactory.getCurrentSession().createCriteria(HibernateStudent.class)
                 .createCriteria("classLists")
                 .add(Restrictions.eq("id", classList.getId()))
-                .list();
+                .list());
     }
 
     protected <T extends IdObject> String getHibernateEntityName(final Class<T> entityType) {

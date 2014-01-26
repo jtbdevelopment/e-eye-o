@@ -29,7 +29,7 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
         }
         studentByClass.each {
             ClassList classList, List<Student> students ->
-                deepCompare(rwDAO.getAllStudentsForClassList(classList), students as Set)
+                deepCompare(rwDAO.getAllStudentsForClassList(classList).toList(), students as Set)
         }
     }
 
@@ -64,7 +64,7 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
         }
         obsByCategory.each {
             ObservationCategory cat, List<Observation> obs ->
-                deepCompare(rwDAO.getAllObservationsForObservationCategory(user, cat), obs as Set)
+                deepCompare(rwDAO.getAllObservationsForObservationCategory(user, cat).toList(), obs as Set)
         }
     }
 
@@ -77,7 +77,7 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
         }
         obsBySubject.each {
             Observable subject, List<Observation> obs ->
-                deepCompare(rwDAO.getAllObservationsForEntity(subject), obs as Set)
+                deepCompare(rwDAO.getAllObservationsForEntity(subject).toList(), obs as Set)
         }
     }
 
@@ -105,7 +105,7 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
             ObservationCategory cat, Map<Observable, List<Observation>> observables ->
                 observables.each {
                     Observable observable, List<Observation> obs ->
-                        deepCompare(rwDAO.getAllObservationsForEntityAndCategory(observable, cat, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100)), obs as Set)
+                        deepCompare(rwDAO.getAllObservationsForEntityAndCategory(observable, cat, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100)).toList(), obs as Set)
                 }
         }
     }
@@ -123,11 +123,11 @@ abstract class AbstractReadIntegration extends AbstractIntegration {
                 List archived = photos.findAll { it.archived }
 
                 assert photos.size() == rwDAO.getAllPhotosForEntityCount(subject)
-                deepCompare(rwDAO.getAllPhotosForEntity(subject, 0, 0), photos as Set)
+                deepCompare(rwDAO.getAllPhotosForEntity(subject, 0, 0).toList(), photos as Set)
                 assert active.size() == rwDAO.getActivePhotosForEntityCount(subject)
-                deepCompare(rwDAO.getActivePhotosForEntity(subject, 0, 0), active as Set)
+                deepCompare(rwDAO.getActivePhotosForEntity(subject, 0, 0).toList(), active as Set)
                 assert archived.size() == rwDAO.getArchivedPhotosForEntityCount(subject)
-                deepCompare(rwDAO.getArchivedPhotosForEntity(subject, 0, 0), archived as Set)
+                deepCompare(rwDAO.getArchivedPhotosForEntity(subject, 0, 0).toList(), archived as Set)
         }
     }
 

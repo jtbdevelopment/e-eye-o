@@ -1,5 +1,6 @@
 package com.jtbdevelopment.e_eye_o.jasper.reports.designer;
 
+import com.google.common.collect.Sets;
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
 import com.jtbdevelopment.e_eye_o.entities.Observable;
@@ -152,17 +153,17 @@ public class BaseData {
         }
 
         @Override
-        public List<Photo> getAllPhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
+        public Set<Photo> getAllPhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
             return null;
         }
 
         @Override
-        public List<Photo> getActivePhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
+        public Set<Photo> getActivePhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
             return null;
         }
 
         @Override
-        public List<Photo> getArchivedPhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
+        public Set<Photo> getArchivedPhotosForEntity(AppUserOwnedObject ownedObject, int firstResult, int maxResults) {
             return null;
         }
 
@@ -187,46 +188,46 @@ public class BaseData {
         }
 
         @Override
-        public List<Observation> getAllObservationsForEntity(Observable observable) {
+        public Set<Observation> getAllObservationsForEntity(Observable observable) {
             return null;
         }
 
         @Override
-        public List<Observation> getAllObservationsForObservationCategory(AppUser user, ObservationCategory observationCategory) {
+        public Set<Observation> getAllObservationsForObservationCategory(AppUser user, ObservationCategory observationCategory) {
             return null;
         }
 
         @Override
-        public List<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to) {
+        public Set<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to) {
             if (observable.equals(BaseData.student1For1)) {
                 if (BaseData.oc1For1.equals(observationCategory)) {
-                    return Arrays.asList(BaseData.observation1For1For1, BaseData.observation3For1For1);
+                    return Sets.newHashSet(BaseData.observation1For1For1, BaseData.observation3For1For1);
                 }
                 if (BaseData.oc2For1.equals(observationCategory)) {
-                    return Arrays.asList(BaseData.observation2For1For1, BaseData.observation3For1For1);
+                    return Sets.newHashSet(BaseData.observation2For1For1, BaseData.observation3For1For1);
                 }
             }
             if (observable.equals(BaseData.student2For1)) {
                 if (BaseData.oc1For1.equals(observationCategory)) {
-                    return Arrays.asList(BaseData.observation1For2For1);
+                    return Sets.newHashSet(BaseData.observation1For2For1);
                 }
                 if (BaseData.oc2For1.equals(observationCategory)) {
-                    return Arrays.asList(BaseData.observation2For2For1);
+                    return Sets.newHashSet(BaseData.observation2For2For1);
                 }
             }
             if (observable.equals(BaseData.student3For1)) {
                 if (BaseData.oc1For1.equals(observationCategory)) {
-                    return Arrays.asList(BaseData.observation1For3For1);
+                    return Sets.newHashSet(BaseData.observation1For3For1);
                 }
                 if (observationCategory == null) {
-                    return Arrays.asList(BaseData.observation2For3For1);
+                    return Sets.newHashSet(BaseData.observation2For3For1);
                 }
             }
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
 
         @Override
-        public List<Student> getAllStudentsForClassList(ClassList classList) {
+        public Set<Student> getAllStudentsForClassList(ClassList classList) {
             return null;
         }
     }

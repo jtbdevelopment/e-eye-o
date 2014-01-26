@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Date: 12/26/13
@@ -78,7 +78,7 @@ public class HibernateDeletionHelperImpl implements DeletionHelper {
     }
 
     private <T extends AppUserOwnedObject> void deletePhotosForEntity(final T loaded) {
-        final List<Photo> allPhotosForEntity = readWriteDAO.getAllPhotosForEntity(loaded, 0, 0);
+        final Set<Photo> allPhotosForEntity = readWriteDAO.getAllPhotosForEntity(loaded, 0, 0);
         for (Photo p : allPhotosForEntity) {
             readWriteDAO.trustedDelete(p);
         }

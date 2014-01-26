@@ -78,10 +78,10 @@ public class ByCategoryStudentDataSource extends AbstractJasperDataSource {
 
     private boolean rollStudent() {
         if (studentIterator != null && studentIterator.hasNext()) {
-            List<Observation> observations = Collections.emptyList();
+            List<Observation> observations = new LinkedList<>();
             while (observations.isEmpty() && studentIterator.hasNext()) {
                 currentStudent = studentIterator.next();
-                observations = readOnlyDAO.getAllObservationsForEntityAndCategory(currentStudent, currentCategory, fromDate, toDate);
+                observations.addAll(readOnlyDAO.getAllObservationsForEntityAndCategory(currentStudent, currentCategory, fromDate, toDate));
             }
             if (!observations.isEmpty()) {
                 Collections.sort(observations, new Comparator<Observation>() {

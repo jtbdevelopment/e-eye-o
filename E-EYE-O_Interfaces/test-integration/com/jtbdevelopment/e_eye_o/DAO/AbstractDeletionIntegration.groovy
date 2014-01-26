@@ -54,7 +54,7 @@ abstract class AbstractDeletionIntegration extends AbstractIntegration {
         AppUser user = createUser(baseName)
         Student student = createStudent(user, baseName)
         Photo photo = createPhoto(user, student, baseName)
-        assert [photo] == rwDAO.getAllPhotosForEntity(student, 0, 0)
+        assert [photo] as Set == rwDAO.getAllPhotosForEntity(student, 0, 0)
         assert [photo, student] as Set == rwDAO.getEntitiesForUser(AppUserOwnedObject, user, 0, 0)
         deleteAndAssert(photo, user, [], [photo.id], [student] as Set)
     }
@@ -100,7 +100,7 @@ abstract class AbstractDeletionIntegration extends AbstractIntegration {
         Photo photo1 = createPhoto(user, observation1, baseName)
         Photo photo2 = createPhoto(user, observation2, baseName)
         assert [student, observation1, observation2, photo1, photo2] as Set == rwDAO.getEntitiesForUser(AppUserOwnedObject, user, 0, 0)
-        assert [observation1, observation2] == rwDAO.getAllObservationsForEntity(student)
+        assert [observation1, observation2] as Set == rwDAO.getAllObservationsForEntity(student)
         deleteAndAssert(observation1, user, [student], [observation1.id, photo1.id], [student, observation2, photo2] as Set)
     }
 
@@ -117,8 +117,8 @@ abstract class AbstractDeletionIntegration extends AbstractIntegration {
         Photo photo2 = createPhoto(user, observation2, baseName)
         Photo photoKeep = createPhoto(user, observationKeep, baseName)
         assert [student, studentKeep, observation1, observation2, photo1, photo2, photoKeep, observationKeep] as Set == rwDAO.getEntitiesForUser(AppUserOwnedObject, user, 0, 0)
-        assert [observation1, observation2] == rwDAO.getAllObservationsForEntity(student)
-        assert [observationKeep] == rwDAO.getAllObservationsForEntity(studentKeep)
+        assert [observation1, observation2] as Set == rwDAO.getAllObservationsForEntity(student)
+        assert [observationKeep] as Set == rwDAO.getAllObservationsForEntity(studentKeep)
         deleteAndAssert(student, user, [], [observation1.id, photo1.id, observation2.id, photo2.id, student.id], [studentKeep, observationKeep, photoKeep] as Set)
     }
 
@@ -159,8 +159,8 @@ abstract class AbstractDeletionIntegration extends AbstractIntegration {
         Photo s1o2p1 = createPhoto(user, s1o2, baseName)
         Photo s2o1p1 = createPhoto(user, s2o1, baseName)
         assert [student1, student2, s1o1, s1o2, s1o1p1, s1o2p1, s2o1p1, s2o1, category2, category1] as Set == rwDAO.getEntitiesForUser(AppUserOwnedObject, user, 0, 0)
-        assert [s1o1, s2o1] == rwDAO.getAllObservationsForObservationCategory(user, category1)
-        assert [s1o2] == rwDAO.getAllObservationsForObservationCategory(user, category2)
+        assert [s1o1, s2o1] as Set == rwDAO.getAllObservationsForObservationCategory(user, category1)
+        assert [s1o2] as Set == rwDAO.getAllObservationsForObservationCategory(user, category2)
         deleteAndAssert(category1, user, [s1o1, s2o1], [category1.id], [student1, student2, s1o1, s1o2, s1o1p1, s1o2p1, s2o1p1, s2o1, category2] as Set)
     }
 
