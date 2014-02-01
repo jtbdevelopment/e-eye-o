@@ -6,8 +6,6 @@
         <element id="directory" name="classes">
           <element id="module-output" name="E-EYE-O_RIAVaadin" />
           <element id="module-output" name="E-EYE-O_Interfaces" />
-          <element id="module-output" name="E-EYE-O_EntitiesJavaImpl" />
-          <element id="module-output" name="E-EYE-O_DAOHibernateImpl" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="joda-time:joda-time:2.1" />

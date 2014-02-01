@@ -2,6 +2,7 @@ package com.jtbdevelopment.e_eye_o.mongo.DAO;
 
 import com.mongodb.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.ImportResource;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.util.Properties;
 
 /**
  * Date: 1/13/14
@@ -20,27 +22,24 @@ public class MongoDAOSpringConfig {
 
     private static BasicDBObject UNIQUE = new BasicDBObject("unique", Boolean.TRUE);
 
-    protected String getDatabaseName() {
-        //  TODO - db + credentials
-        String dbName = "eeyeodbtest";
-        return dbName;
-    }
-
     @Bean
-    public Mongo mongo() throws Exception {
+    public Mongo mongo(final @Qualifier("mongoProperties") Properties mongoProperties) throws Exception {
         //  TODO
-        return new MongoClient("localhost");
+        return new MongoClient(mongoProperties.getProperty("connection", "localhost"));
     }
 
     @Bean
     @Autowired
-    public DB mongoDatabase(final Mongo mongo) {
-        String databaseName = getDatabaseName();
-        try {
-            mongo().dropDatabase(databaseName);
-        } catch (Exception e) {
-            //
+    public DB mongoDatabase(final Mongo mongo, final @Qualifier("mongoProperties") Properties mongoProperties) {
+        String databaseName = mongoProperties.getProperty("databaseName", "eeyeodb");
+        if (Boolean.parseBoolean(mongoProperties.getProperty("recreateDatabase", "false"))) {
+            try {
+                mongo.dropDatabase(databaseName);
+            } catch (Exception e) {
+                //
+            }
         }
+        mongo.setWriteConcern(WriteConcern.JOURNALED);
         return mongo.getDB(databaseName);
     }
 

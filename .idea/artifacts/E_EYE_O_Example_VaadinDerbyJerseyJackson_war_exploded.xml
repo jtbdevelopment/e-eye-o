@@ -10,8 +10,8 @@
           <element id="module-output" name="E-EYE-O_RESTJSONJersey" />
           <element id="module-output" name="E-EYE-O_SerializationJacksonImpl" />
           <element id="module-output" name="E-EYE-O_RIAVaadin" />
-          <element id="module-output" name="E-EYE-O_DAOHibernateImpl" />
           <element id="module-output" name="E-EYE-O_ReportsJasper" />
+          <element id="module-output" name="E-EYE-O_DAOMongoImpl" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="joda-time:joda-time:2.1" />
@@ -51,6 +51,7 @@
           <element id="library" level="project" name="vaadin-themes-7.1.9" />
           <element id="library" level="project" name="jersey-servlet-1.18-javadoc" />
           <element id="library" level="project" name="jersey-spring-1.18-javadoc" />
+          <element id="library" level="project" name="mongo-java-driver-2.11.3" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="E-EYE-O_Example-VaadinJerseyJacksonJava/web/Web" />
