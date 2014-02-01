@@ -206,8 +206,16 @@ abstract class AbstractDeletionIntegration extends AbstractIntegration {
         Thread.sleep(1000) //  for DBs not promising sub-second accuracy
         deletionHelper.delete(toDelete)
         expectedModifiedSince +=
-            requeryAndExpect.collect { rwDAO.get(it.getClass(), it.id) }
-        assert expectedModifiedSince as Set == getModified(user, since) as Set
+                requeryAndExpect.collect { rwDAO.get(it.getClass(), it.id) }
+
+        //  DAO may choose to generate interim updates on objects are deleted but which will also be deleted as part of this same action
+        //  either way OK - so ignore them if they come in
+        //  Primary case is deleting Observable - will delete Observations which may trigger updates on Observable to change last observation time
+        List<Object> modifiedSince = getModified(user, since)
+        List<Object> filtered = modifiedSince.findAll {
+            it != null && toDelete != it
+        }
+        assert expectedModifiedSince as Set == filtered as Set
         assert expectedRemainingObjects == rwDAO.getEntitiesForUser(AppUserOwnedObject, user, 0, 0)
     }
 
