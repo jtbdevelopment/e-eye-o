@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <import resource="classpath*:test-integration-common-context.xml"/>
+
+    <!-- Recreate the integration DB each time - make sure to use a disposable DB for it  -->
+    <util:properties id="hibernateOverrideProperties">
+        <prop key="hibernate.hbm2ddl.auto">create</prop>
+        <!--prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.DerbyUniqueNonNull</prop-->
+        <prop key="hibernate.dialect">com.jtbdevelopment.e_eye_o.hibernate.DAO.misc.MySQL5InnoFixes</prop>
+    </util:properties>
+</beans>
