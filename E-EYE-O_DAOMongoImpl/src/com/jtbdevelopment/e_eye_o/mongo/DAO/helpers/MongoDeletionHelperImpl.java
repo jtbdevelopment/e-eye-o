@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
  * Date: 1/14/14
  * Time: 12:17 PM
  */
+//  NOT transactional
 @Component
 public class MongoDeletionHelperImpl extends AbstractDeletionHelperImpl {
+    //  Could have implemented same logic with findAndModify but need to generate audit records means
+    //  using base method good enough
 }

@@ -8,9 +8,8 @@
     <import resource="classpath*:test-integration-common-context.xml"/>
 
     <!-- Recreate the integration DB each time - make sure to use a disposable DB for it  -->
-    <util:properties id="mongoProperties">
-        <prop key="databaseName">eeyeodbtest</prop>
-        <prop key="connection">localhost</prop>
+    <util:properties id="mongoOverrideProperties">
+    <prop key="databaseName">eeyeodbtest</prop>
         <prop key="recreateDatabase">true</prop>
     </util:properties>
 </beans>

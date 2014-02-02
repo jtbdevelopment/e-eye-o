@@ -44,13 +44,6 @@ public class MongoReadWriteDAO extends MongoReadOnlyDAO implements ReadWriteDAO 
     protected IdObjectFactory idObjectFactory;
 
 
-    private <T extends IdObject> void validate(final T entity) {
-        Set<ConstraintViolation<T>> violations = validator.validate(entity);
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
-        }
-    }
-
     @Override
     public <T extends IdObject> T create(final T entity) {
         if (entity instanceof DeletedObject) {
@@ -60,13 +53,10 @@ public class MongoReadWriteDAO extends MongoReadOnlyDAO implements ReadWriteDAO 
         entity.setModificationTimestamp(DateTime.now());
         validate(entity);
         DBObject convert = writeConverter.convert(entity);
-        WriteResult result = collectionForEntity(entity.getClass()).insert(convert);
-        if (result.getLastError().get("err") != null) {
-
-        }
-        IdObject created = (T) readConverter.convert((BasicDBObject) convert);
-        if (entity instanceof AppUserOwnedObject && !(entity instanceof AppUserSettings)) {
-            historyCollection.insert(new BasicDBObject("item", convert));
+        checkForErrors(collectionForEntity(entity.getClass()).insert(convert));
+        IdObject created = readConverter.convert((BasicDBObject) convert);
+        if (shouldUpdateAudit(entity)) {
+            checkForErrors(historyCollection.insert(new BasicDBObject("item", convert)));
         }
         dealWithObservationChanges(created);
         idObjectChangedPublisher.publishCreate(created);
@@ -91,17 +81,84 @@ public class MongoReadWriteDAO extends MongoReadOnlyDAO implements ReadWriteDAO 
         entity.setModificationTimestamp(DateTime.now());
         validate(entity);
         DBObject convert = writeConverter.convert(entity);
-        WriteResult result;
-        result = collectionForEntity(entity.getClass()).update(createIdQuery(entity.getId()), convert);
-        if (entity instanceof AppUserOwnedObject && !(entity instanceof AppUserSettings)) {
-            historyCollection.insert(new BasicDBObject("item", convert));
+        checkForErrors(collectionForEntity(entity.getClass()).update(createIdQuery(entity.getId()), convert));
+        if (shouldUpdateAudit(entity)) {
+            checkForErrors(historyCollection.insert(new BasicDBObject("item", convert)));
         }
         updateCopies(entity, convert);
-        if (result.getLastError().get("err") != null) {
-        }
-        IdObject created = (T) readConverter.convert((BasicDBObject) convert);
+        IdObject created = readConverter.convert((BasicDBObject) convert);
         idObjectChangedPublisher.publishUpdate(created);
         return (T) created;
+    }
+
+    @Override
+    public <T extends IdObject> List<T> trustedUpdates(final Collection<T> entities) {
+        List<T> results = new ArrayList<>(entities.size());
+        for (T entity : entities) {
+            results.add(trustedUpdate(entity));
+        }
+        return results;
+    }
+
+    @Override
+    public <T extends IdObject> void trustedDelete(final T entity) {
+        collectionForEntity(entity.getClass()).remove(new BasicDBObject("_id", new ObjectId(entity.getId())));
+        if (shouldUpdateAudit(entity)) {
+            checkForErrors(historyCollection.insert(new BasicDBObject("item",
+                    writeConverter.convert(
+                            idObjectFactory.newDeletedObjectBuilder(((AppUserOwnedObject) entity).getAppUser())
+                                    .withDeletedId(entity.getId())
+                                    .build()
+                    ))));
+        }
+        dealWithObservationChanges(entity);
+        idObjectChangedPublisher.publishDelete(entity);
+    }
+
+    @Override
+    public AppUser updateAppUserLogout(final AppUser appUser) {
+        return (AppUser) readConverter.convert(
+                (BasicDBObject) collectionForEntity(AppUser.class).findAndModify(
+                        new BasicDBObject("_id", new ObjectId(appUser.getId())),
+                        new BasicDBObject("$set", new BasicDBObject("lastLogout", DateTime.now().toDate()))));
+    }
+
+    private <T extends IdObject> void dealWithObservationChanges(final T entity) {
+        if (entity instanceof Observation) {
+            Observable observed = get(Observable.class, ((Observation) entity).getObservationSubject().getId());
+            BasicDBObject result = (BasicDBObject) collectionForEntity(Observation.class).findOne(
+                    new BasicDBObject("observationSubject._id", new ObjectId(observed.getId())),
+                    new BasicDBObject("observationTimestamp", 1),
+                    new BasicDBObject("observationTimestamp", 0)
+            );
+            LocalDateTime lastObservation;
+            if (result == null) {
+                lastObservation = Observable.NEVER_OBSERVED;
+            } else {
+                lastObservation = new LocalDateTime(result.getDate("observationTimestamp"));
+            }
+            if (observed.getLastObservationTimestamp().compareTo(lastObservation) != 0) {
+                observed.setLastObservationTimestamp(lastObservation);
+                trustedUpdate(observed);
+            }
+        }
+    }
+
+    private <T extends IdObject> void validate(final T entity) {
+        Set<ConstraintViolation<T>> violations = validator.validate(entity);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+    }
+
+    protected <T extends IdObject> boolean shouldUpdateAudit(final T entity) {
+        return entity instanceof AppUserOwnedObject && !(entity instanceof AppUserSettings);
+    }
+
+    protected void checkForErrors(final WriteResult result) {
+        if (result.getLastError().get("err") != null) {
+            throw new RuntimeException("Failed to write to mongo " + result.getLastError().get("err"));
+        }
     }
 
     /*
@@ -157,59 +214,6 @@ public class MongoReadWriteDAO extends MongoReadOnlyDAO implements ReadWriteDAO 
                             false, true
                     );
                 }
-            }
-        }
-    }
-
-    @Override
-    public <T extends IdObject> List<T> trustedUpdates(final Collection<T> entities) {
-        List<T> results = new ArrayList<>(entities.size());
-        for (T entity : entities) {
-            results.add(trustedUpdate(entity));
-        }
-        return results;
-    }
-
-    @Override
-    public <T extends IdObject> void trustedDelete(final T entity) {
-        collectionForEntity(entity.getClass()).remove(new BasicDBObject("_id", new ObjectId(entity.getId())));
-        if (entity instanceof AppUserOwnedObject && !(entity instanceof AppUserSettings)) {
-            historyCollection.insert(new BasicDBObject("item",
-                    writeConverter.convert(
-                            idObjectFactory.newDeletedObjectBuilder(((AppUserOwnedObject) entity).getAppUser())
-                                    .withDeletedId(entity.getId())
-                                    .build()
-                    )));
-        }
-        dealWithObservationChanges(entity);
-        idObjectChangedPublisher.publishDelete(entity);
-    }
-
-    @Override
-    public AppUser updateAppUserLogout(final AppUser appUser) {
-        return (AppUser) readConverter.convert(
-                (BasicDBObject) collectionForEntity(AppUser.class).findAndModify(
-                        new BasicDBObject("_id", new ObjectId(appUser.getId())),
-                        new BasicDBObject("$set", new BasicDBObject("lastLogout", DateTime.now().toDate()))));
-    }
-
-    private <T extends IdObject> void dealWithObservationChanges(final T entity) {
-        if (entity instanceof Observation) {
-            Observable observed = get(Observable.class, ((Observation) entity).getObservationSubject().getId());
-            BasicDBObject result = (BasicDBObject) collectionForEntity(Observation.class).findOne(
-                    new BasicDBObject("observationSubject._id", new ObjectId(observed.getId())),
-                    new BasicDBObject("observationTimestamp", 1),
-                    new BasicDBObject("observationTimestamp", 0)
-            );
-            LocalDateTime lastObservation;
-            if (result == null) {
-                lastObservation = Observable.NEVER_OBSERVED;
-            } else {
-                lastObservation = new LocalDateTime(result.getDate("observationTimestamp"));
-            }
-            if (observed.getLastObservationTimestamp().compareTo(lastObservation) != 0) {
-                observed.setLastObservationTimestamp(lastObservation);
-                trustedUpdate(observed);
             }
         }
     }

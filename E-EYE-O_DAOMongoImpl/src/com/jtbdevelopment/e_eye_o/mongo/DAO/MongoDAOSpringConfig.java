@@ -23,16 +23,28 @@ public class MongoDAOSpringConfig {
     private static BasicDBObject UNIQUE = new BasicDBObject("unique", Boolean.TRUE);
 
     @Bean
-    public Mongo mongo(final @Qualifier("mongoProperties") Properties mongoProperties) throws Exception {
-        //  TODO
-        return new MongoClient(mongoProperties.getProperty("connection", "localhost"));
+    public Mongo mongo(final @Qualifier("mongoProperties") Properties mongoProperties,
+                       final @Qualifier("mongoOverrideProperties") Properties mongoOverrideProperties) throws Exception {
+        String connectionPropName = "connection";
+        String defaultConnection = "localhost";
+        return new MongoClient(
+                mongoOverrideProperties.getProperty(connectionPropName,
+                        mongoProperties.getProperty(connectionPropName, defaultConnection)));
     }
 
     @Bean
     @Autowired
-    public DB mongoDatabase(final Mongo mongo, final @Qualifier("mongoProperties") Properties mongoProperties) {
-        String databaseName = mongoProperties.getProperty("databaseName", "eeyeodb");
-        if (Boolean.parseBoolean(mongoProperties.getProperty("recreateDatabase", "false"))) {
+    public DB mongoDatabase(final Mongo mongo, final @Qualifier("mongoProperties") Properties mongoProperties,
+                            final @Qualifier("mongoOverrideProperties") Properties mongoOverrideProperties) {
+        String dbNameProp = "databaseName";
+        String defaultDbName = "eeyeodb";
+        String recreatePropName = "recreateDatabase";
+        String defaultRecreate = "false";
+        String databaseName = mongoOverrideProperties.getProperty(dbNameProp, mongoProperties.getProperty(dbNameProp, defaultDbName));
+        if (Boolean.parseBoolean(
+                mongoOverrideProperties.getProperty(recreatePropName,
+                        mongoProperties.getProperty(recreatePropName, defaultRecreate)))
+                ) {
             try {
                 mongo.dropDatabase(databaseName);
             } catch (Exception e) {
