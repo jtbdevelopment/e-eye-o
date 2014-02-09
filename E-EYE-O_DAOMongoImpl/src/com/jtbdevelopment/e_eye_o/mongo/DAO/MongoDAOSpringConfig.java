@@ -27,6 +27,7 @@ public class MongoDAOSpringConfig {
                        final @Qualifier("mongoOverrideProperties") Properties mongoOverrideProperties) throws Exception {
         String connectionPropName = "connection";
         String defaultConnection = "localhost";
+        //  TODO - user
         return new MongoClient(
                 mongoOverrideProperties.getProperty(connectionPropName,
                         mongoProperties.getProperty(connectionPropName, defaultConnection)));
@@ -60,16 +61,28 @@ public class MongoDAOSpringConfig {
     public DBCollection usersCollection(final DB db) {
         DBCollection users = db.getCollection("users");
         BasicDBObject index;
-        index = new BasicDBObject("emailAddress", 1);
+        index = new BasicDBObject("AppUser.emailAddress", 1);
         users.ensureIndex(index, UNIQUE);
         return users;
     }
 
     @Bean
     @Autowired
+    public DBCollection ownedCollection(final DB db) {
+        DBCollection objects = db.getCollection("owned");
+
+        DBObject index = new BasicDBObject("Semester.appUser._id", 1);
+        index.put("Semester.archived", 1);
+        objects.ensureIndex(index);
+
+        return objects;
+    }
+
+    @Bean
+    @Autowired
     public DBCollection settingsCollection(final DB db) {
         DBCollection settings = db.getCollection("settings");
-        BasicDBObject index = new BasicDBObject("appUser._id", 1);
+        BasicDBObject index = new BasicDBObject("AppUserSettings.appUser._id", 1);
         settings.ensureIndex(index, UNIQUE);
         return settings;
     }
@@ -78,9 +91,12 @@ public class MongoDAOSpringConfig {
     @Autowired
     public DBCollection categoriesCollection(final DB db) {
         DBCollection categories = db.getCollection("categories");
-        BasicDBObject index = new BasicDBObject("appUser._id", 1);
-        index.put("shortName", 1);
+        BasicDBObject index = new BasicDBObject("ObservationCategory.appUser._id", 1);
+        index.put("ObservationCategory.shortName", 1);
         categories.ensureIndex(index, UNIQUE);
+        index = new BasicDBObject("ObservationCategory.appUser._id", 1);
+        index.put("ObservationCategory.archived", 1);
+        categories.ensureIndex(index);
         return categories;
     }
 
@@ -88,10 +104,14 @@ public class MongoDAOSpringConfig {
     @Autowired
     public DBCollection observablesCollection(final DB db) {
         DBCollection observables = db.getCollection("observables");
-        DBObject index = new BasicDBObject("appUser._id", 1);
+        DBObject index = new BasicDBObject("ClassList.appUser._id", 1);
+        index.put("ClassList.archived", 1);
         observables.ensureIndex(index);
-        index = new BasicDBObject("classLists._id", 1);
-        index = new BasicDBObject("_id", 1);
+        index = new BasicDBObject("Student.appUser._id", 1);
+        index.put("Student.archived", 1);
+        observables.ensureIndex(index);
+        index = new BasicDBObject("Student.classLists._id", 1);
+        index.put("_id", 1);
         observables.ensureIndex(index, UNIQUE);
         return observables;
     }
@@ -100,37 +120,42 @@ public class MongoDAOSpringConfig {
     @Autowired
     public DBCollection observationsCollection(final DB db) {
         DBCollection observations = db.getCollection("observations");
-        DBObject index = new BasicDBObject("appUser._id", 1);
-        index.put("categories._id", 1);
+        DBObject index = new BasicDBObject("Observation.appUser._id", 1);
+        index.put("Observation.categories._id", 1);
         index.put("_id", 1);
         observations.ensureIndex(index, UNIQUE);
-        index = new BasicDBObject("observationSubject._id", 1);
-        index.put("observationTimestamp", 1);
-        index.put("categories._id", 1);
+
+        //  getAllObservationsForSubject, getAllObservationsForEntityAndCategory
+        index = new BasicDBObject("Observation.observationSubject._id", 1);
+        index.put("Observation.observationTimestamp", 1);
+        index.put("Observation.categories._id", 1);
         observations.ensureIndex(index);
-        index = new BasicDBObject("categories._id", 1);
+
+        //  getObservationsForCategory
+        index = new BasicDBObject("Observation.categories._id", 1);
         observations.ensureIndex(index);
-        index = new BasicDBObject("observationTimestamp", 1);
+
+        //  getObservationsForSemester
+        index = new BasicDBObject("Observation.appUser._id", 1);
+        index.put("Observation.observationTimestamp", 1);
+        observations.ensureIndex(index);
+
+        //  get for AppUser
+        index = new BasicDBObject("Observation.appUser._id", 1);
+        index.put("Observation.archived", 1);
         observations.ensureIndex(index);
         return observations;
     }
 
     @Bean
     @Autowired
-    public DBCollection semestersCollection(final DB db) {
-        DBCollection semesters = db.getCollection("semesters");
-        DBObject index = new BasicDBObject("appUser._id", 1);
-        semesters.ensureIndex(index);
-        return semesters;
-    }
-
-    @Bean
-    @Autowired
     public DBCollection photosCollection(final DB db) {
         DBCollection photos = db.getCollection("photos");
-        DBObject index = new BasicDBObject("appUser._id", 1);
+        DBObject index = new BasicDBObject("Photo.appUser._id", 1);
+        index.put("Photo.archived", 1);
         photos.ensureIndex(index);
-        index = new BasicDBObject("photoFor._id", 1);
+        index = new BasicDBObject("Photo.photoFor._id", 1);
+        index.put("Photo.archived", 1);
         photos.ensureIndex(index);
         return photos;
     }
@@ -139,7 +164,8 @@ public class MongoDAOSpringConfig {
     @Autowired
     public DBCollection activitiesCollection(final DB db) {
         DBCollection activities = db.getCollection("activities");
-        DBObject index = new BasicDBObject("appUser._id", 1);
+        DBObject index = new BasicDBObject("TwoPhaseActivity.appUser._id", 1);
+        index.put("TwoPhaseActivity.archived", 1);
         activities.ensureIndex(index);
         return activities;
     }
@@ -162,7 +188,7 @@ public class MongoDAOSpringConfig {
     public DBCollection historyCollection(final DB db) {
         DBCollection history = db.getCollection("history");
         DBObject index = new BasicDBObject();
-        index.put("item.appUser._id", 1);
+        index.put("item.appUserId", 1);
         index.put("item.modificationTimestamp", 1);
         index.put("_id", 1);
         history.ensureIndex(index);

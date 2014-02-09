@@ -108,6 +108,7 @@ public class MongoReadWriteDAO extends MongoReadOnlyDAO implements ReadWriteDAO 
                     writeConverter.convert(
                             idObjectFactory.newDeletedObjectBuilder(((AppUserOwnedObject) entity).getAppUser())
                                     .withDeletedId(entity.getId())
+                                    .withId(new ObjectId().toString())
                                     .build()
                     ))));
         }
@@ -120,22 +121,22 @@ public class MongoReadWriteDAO extends MongoReadOnlyDAO implements ReadWriteDAO 
         return (AppUser) readConverter.convert(
                 (BasicDBObject) collectionForEntity(AppUser.class).findAndModify(
                         new BasicDBObject("_id", new ObjectId(appUser.getId())),
-                        new BasicDBObject("$set", new BasicDBObject("lastLogout", DateTime.now().toDate()))));
+                        new BasicDBObject("$set", new BasicDBObject("AppUser.lastLogout", DateTime.now().toDate()))));
     }
 
     private <T extends IdObject> void dealWithObservationChanges(final T entity) {
         if (entity instanceof Observation) {
             Observable observed = get(Observable.class, ((Observation) entity).getObservationSubject().getId());
             BasicDBObject result = (BasicDBObject) collectionForEntity(Observation.class).findOne(
-                    new BasicDBObject("observationSubject._id", new ObjectId(observed.getId())),
-                    new BasicDBObject("observationTimestamp", 1),
-                    new BasicDBObject("observationTimestamp", 0)
+                    new BasicDBObject("Observation.observationSubject._id", new ObjectId(observed.getId())),
+                    new BasicDBObject("Observation.observationTimestamp", 1),
+                    new BasicDBObject("Observation.observationTimestamp", 0)
             );
             LocalDateTime lastObservation;
             if (result == null) {
                 lastObservation = Observable.NEVER_OBSERVED;
             } else {
-                lastObservation = new LocalDateTime(result.getDate("observationTimestamp"));
+                lastObservation = new LocalDateTime(((BasicDBObject) result.get("Observation")).getDate("observationTimestamp"));
             }
             if (observed.getLastObservationTimestamp().compareTo(lastObservation) != 0) {
                 observed.setLastObservationTimestamp(lastObservation);
@@ -181,36 +182,36 @@ public class MongoReadWriteDAO extends MongoReadOnlyDAO implements ReadWriteDAO 
             for (Class<? extends AppUserOwnedObject> updates : contains.get(iFace)) {
                 if (entity instanceof AppUser) {
                     collectionForEntity(updates).update(
-                            new BasicDBObject("appUser._id", new ObjectId(entity.getId())),
-                            new BasicDBObject("$set", new BasicDBObject("appUser", convert)),
+                            new BasicDBObject(updates.getSimpleName() + ".appUser._id", new ObjectId(entity.getId())),
+                            new BasicDBObject("$set", new BasicDBObject(updates.getSimpleName() + ".appUser", convert)),
                             false, true
                     );
                 }
                 if ((Photo.class.isAssignableFrom(updates)) && (entity instanceof AppUserOwnedObject)) {
                     collectionForEntity(updates).update(
-                            new BasicDBObject("photoFor._id", new ObjectId(entity.getId())),
-                            new BasicDBObject("$set", new BasicDBObject("photoFor", convert)),
+                            new BasicDBObject("Photo.photoFor._id", new ObjectId(entity.getId())),
+                            new BasicDBObject("$set", new BasicDBObject("Photo.photoFor", convert)),
                             false, true
                     );
                 }
                 if ((Observation.class.isAssignableFrom(updates)) && (entity instanceof Observable)) {
                     collectionForEntity(updates).update(
-                            new BasicDBObject("observationSubject._id", new ObjectId(entity.getId())),
-                            new BasicDBObject("$set", new BasicDBObject("observationSubject", convert)),
+                            new BasicDBObject("Observation.observationSubject._id", new ObjectId(entity.getId())),
+                            new BasicDBObject("$set", new BasicDBObject("Observation.observationSubject", convert)),
                             false, true
                     );
                 }
                 if ((Student.class.isAssignableFrom(updates)) && (entity instanceof ClassList)) {
                     collectionForEntity(updates).update(
-                            new BasicDBObject("classList._id", new ObjectId(entity.getId())),
-                            new BasicDBObject("$set", new BasicDBObject("classList.$", convert)),
+                            new BasicDBObject("Student.classList._id", new ObjectId(entity.getId())),
+                            new BasicDBObject("$set", new BasicDBObject("Student.classList.$", convert)),
                             false, true
                     );
                 }
                 if ((Observation.class.isAssignableFrom(updates)) && (entity instanceof ObservationCategory)) {
                     collectionForEntity(updates).update(
-                            new BasicDBObject("categories._id", new ObjectId(entity.getId())),
-                            new BasicDBObject("$set", new BasicDBObject("categories.$", convert)),
+                            new BasicDBObject("Observation.categories._id", new ObjectId(entity.getId())),
+                            new BasicDBObject("$set", new BasicDBObject("Observation.categories.$", convert)),
                             false, true
                     );
                 }

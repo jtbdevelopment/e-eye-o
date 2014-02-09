@@ -203,7 +203,9 @@ abstract class AbstractHistoryAndPublicationIntegration extends AbstractIntegrat
         Observation v6 = rwDAO.update(user, update)
         deletionHelper.delete(v6)
 
-        deepCompare(getHistory(user, since), [v1, v2, v3, v4, v5, v6, fakeDeleted(user, v1.id)])
+
+        List<Object> history = getHistory(user, since)
+        deepCompare(history, [v1, v2, v3, v4, v5, v6, fakeDeleted(user, v1.id)])
         deepCompare(changes,
                 createEvents([user, student, cat1, cat2]),
                 createEvents([studentV2, originalObs]) as Set,

@@ -34,9 +34,6 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
     protected DBCollection observationsCollection;
 
     @Autowired
-    protected DBCollection semestersCollection;
-
-    @Autowired
     protected DBCollection photosCollection;
 
     @Autowired
@@ -47,6 +44,9 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
 
     @Autowired
     protected DBCollection settingsCollection;
+
+    @Autowired
+    protected DBCollection ownedCollection;
 
     @Autowired
     protected DBCollection historyCollection;
@@ -64,7 +64,7 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     public AppUser getUser(final String emailAddress) {
-        DBObject result = usersCollection.findOne(new BasicDBObject("emailAddress", emailAddress));
+        DBObject result = usersCollection.findOne(new BasicDBObject("AppUser.emailAddress", emailAddress));
         return (AppUser) readConverter.convert((BasicDBObject) result);
     }
 
@@ -142,57 +142,43 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
     @Override
     public Set<Observation> getAllObservationsForSemester(final Semester semester) {
         BasicDBObject q = new BasicDBObject();
-        q.put("appUser._id", new ObjectId(semester.getAppUser().getId()));
-        BasicDBList range = new BasicDBList();
-        range.add(new BasicDBObject("observationTimestamp", new BasicDBObject("$gte", semester.getStart().toDate())));
-        range.add(new BasicDBObject("observationTimestamp", new BasicDBObject("$lt", semester.getEnd().plusDays(1).toDate())));
-        q.put("$and", range);
+        q.put("Observation.appUser._id", new ObjectId(semester.getAppUser().getId()));
+        LocalDate from = semester.getStart();
+        LocalDate to = semester.getEnd();
+        addObservationRangeCondition(q, from, to);
         return processCursorResults(collectionForEntity(Observation.class).find(q), 0, 0);
     }
 
     @Override
     public Set<Observation> getAllObservationsForEntity(final Observable observable) {
-        BasicDBObject q = new BasicDBObject("observationSubject._id", new ObjectId(observable.getId()));
+        BasicDBObject q = new BasicDBObject("Observation.observationSubject._id", new ObjectId(observable.getId()));
         return processCursorResults(collectionForEntity(Observation.class).find(q), 0, 0);
     }
 
     @Override
     public Set<Observation> getAllObservationsForObservationCategory(final AppUser user, final ObservationCategory observationCategory) {
-        BasicDBObject q;
-        if (observationCategory == null) {
-            q = new BasicDBObject("categories", new BasicDBObject("$size", 0));
-            q.put("appUser._id", new ObjectId(user.getId()));
-        } else {
-            q = new BasicDBObject("categories._id", new ObjectId(observationCategory.getId()));
-        }
+        BasicDBObject q = new BasicDBObject();
+        addCategoryCondition(q, observationCategory, user);
         return processCursorResults(collectionForEntity(Observation.class).find(q), 0, 0);
     }
 
     @Override
     public Set<Observation> getAllObservationsForEntityAndCategory(final Observable observable, final ObservationCategory observationCategory, final LocalDate from, final LocalDate to) {
-        BasicDBObject q = new BasicDBObject("observationSubject._id", new ObjectId(observable.getId()));
-        if (observationCategory == null) {
-            q.put("categories", new BasicDBObject("$size", 0));
-            q.put("appUser._id", new ObjectId(observable.getAppUser().getId()));
-        } else {
-            q.put("categories._id", new ObjectId(observationCategory.getId()));
-        }
-        BasicDBList range = new BasicDBList();
-        range.add(new BasicDBObject("observationTimestamp", new BasicDBObject("$gte", from.toDate())));
-        range.add(new BasicDBObject("observationTimestamp", new BasicDBObject("$lt", to.plusDays(1).toDate())));
-        q.put("$and", range);
+        BasicDBObject q = new BasicDBObject("Observation.observationSubject._id", new ObjectId(observable.getId()));
+        addCategoryCondition(q, observationCategory, observable.getAppUser());
+        addObservationRangeCondition(q, from, to);
         return processCursorResults(collectionForEntity(Observation.class).find(q), 0, 0);
     }
 
     @Override
     public Set<Student> getAllStudentsForClassList(final ClassList classList) {
-        BasicDBObject q = new BasicDBObject("classLists._id", new ObjectId(classList.getId()));
+        BasicDBObject q = new BasicDBObject("Student.classLists._id", new ObjectId(classList.getId()));
         return processCursorResults(collectionForEntity(Student.class).find(q), 0, 0);
     }
 
     @Override
     public List<? extends AppUserOwnedObject> getModificationsSince(final AppUser appUser, final DateTime since, final String sinceId, final int maxResults) {
-        BasicDBObject q = new BasicDBObject("item.appUser._id", new ObjectId(appUser.getId()));
+        BasicDBObject q = new BasicDBObject("item.appUserId", new ObjectId(appUser.getId()));
         if (StringUtils.hasLength(sinceId)) {
             BasicDBList or = new BasicDBList();
             or.add(new BasicDBObject("item.modificationTimestamp", new BasicDBObject("$gt", since.toDate())));
@@ -220,6 +206,22 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
             events.add((AppUserOwnedObject) readConverter.convert((BasicDBObject) cursor.next().get("item")));
         }
         return events;
+    }
+
+    protected void addCategoryCondition(final BasicDBObject q, final ObservationCategory observationCategory, final AppUser user) {
+        if (observationCategory == null) {
+            q.put("Observation.categories", new BasicDBObject("$size", 0));
+            q.put("Observation.appUser._id", new ObjectId(user.getId()));
+        } else {
+            q.put("Observation.categories._id", new ObjectId(observationCategory.getId()));
+        }
+    }
+
+    protected void addObservationRangeCondition(final BasicDBObject q, final LocalDate from, final LocalDate to) {
+        BasicDBList range = new BasicDBList();
+        range.add(new BasicDBObject("Observation.observationTimestamp", new BasicDBObject("$gte", from.toDate())));
+        range.add(new BasicDBObject("Observation.observationTimestamp", new BasicDBObject("$lt", to.plusDays(1).toDate())));
+        q.put("$and", range);
     }
 
     protected <T extends AppUserOwnedObject> Set<T> getPaginatedResults(final List<DBCursor> cursors, final int firstResult, final int maxResult) {
@@ -270,12 +272,9 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
             if (ownedGeneric ||
                     loop.isAssignableFrom(entityType) ||
                     (Observable.class.isAssignableFrom(loop) && observableGeneric && !ownedGeneric)) {
-                BasicDBObject dbObject = new BasicDBObject("appUser._id", new ObjectId(appUser.getId()));
-                if (ClassList.class.isAssignableFrom(loop) || Student.class.isAssignableFrom(loop)) {
-                    dbObject.put("class", loop.getCanonicalName());
-                }
+                BasicDBObject dbObject = new BasicDBObject(loop.getSimpleName() + ".appUser._id", new ObjectId(appUser.getId()));
                 if (archived != null) {
-                    dbObject.put("archived", archived);
+                    dbObject.put(loop.getSimpleName() + ".archived", archived);
                 }
                 DBCursor cursor = collectionForEntity(loop).find(dbObject);
                 cursor.sort(new BasicDBObject("_id", 1));
@@ -300,9 +299,9 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
     }
 
     protected DBCursor getPhotos(final AppUserOwnedObject ownedObject, final Boolean archived) {
-        BasicDBObject q = new BasicDBObject("photoFor._id", new ObjectId(ownedObject.getId()));
+        BasicDBObject q = new BasicDBObject("Photo.photoFor._id", new ObjectId(ownedObject.getId()));
         if (archived != null) {
-            q.put("archived", archived);
+            q.put("Photo.archived", archived);
         }
         return photosCollection.find(q);
     }
@@ -321,7 +320,7 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
             return photosCollection;
         }
         if (Semester.class.isAssignableFrom(entityType)) {
-            return semestersCollection;
+            return ownedCollection;
         }
         if (TwoPhaseActivity.class.isAssignableFrom(entityType)) {
             return activitiesCollection;
