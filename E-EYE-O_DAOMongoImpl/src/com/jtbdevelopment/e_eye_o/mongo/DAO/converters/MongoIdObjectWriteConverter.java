@@ -38,7 +38,9 @@ public class MongoIdObjectWriteConverter implements Converter<IdObject, DBObject
             wrapper.put("_id", new ObjectId(source.getId()));
             wrapper.put("modificationTimestamp", source.getModificationTimestamp().toDate());
             if (source instanceof AppUserOwnedObject) {
-                wrapper.put("appUserId", new ObjectId(((AppUserOwnedObject) source).getAppUser().getId()));
+                AppUserOwnedObject owned = (AppUserOwnedObject) source;
+                wrapper.put("appUserId", new ObjectId(owned.getAppUser().getId()));
+                wrapper.put("archived", owned.isArchived());
             }
             BasicDBObject dbObject = new BasicDBObject();
             wrapper.put(idObjectInterface.getSimpleName(), dbObject);

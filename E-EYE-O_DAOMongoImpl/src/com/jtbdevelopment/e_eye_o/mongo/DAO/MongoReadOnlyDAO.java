@@ -2,8 +2,8 @@ package com.jtbdevelopment.e_eye_o.mongo.DAO;
 
 import com.jtbdevelopment.e_eye_o.DAO.ReadOnlyDAO;
 import com.jtbdevelopment.e_eye_o.entities.*;
-import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.mongo.DAO.converters.MongoIdObjectReadConverter;
+import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
@@ -11,7 +11,10 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Date: 1/14/14
@@ -25,25 +28,10 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
     protected MongoIdObjectReadConverter readConverter;
 
     @Autowired
+    protected IdObjectReflectionHelper idObjectReflectionHelper;
+
+    @Autowired
     protected DBCollection usersCollection;
-
-    @Autowired
-    protected DBCollection observablesCollection;
-
-    @Autowired
-    protected DBCollection observationsCollection;
-
-    @Autowired
-    protected DBCollection photosCollection;
-
-    @Autowired
-    protected DBCollection activitiesCollection;
-
-    @Autowired
-    protected DBCollection categoriesCollection;
-
-    @Autowired
-    protected DBCollection settingsCollection;
 
     @Autowired
     protected DBCollection ownedCollection;
@@ -53,7 +41,7 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
 
     @Override
     public Set<AppUser> getUsers() {
-        DBCursor cursor = collectionForEntity(AppUser.class).find();
+        DBCursor cursor = usersCollection.find();
         cursor.sort(new BasicDBObject("_id", 1));
         HashSet<AppUser> users = new HashSet<>();
         while (cursor.hasNext()) {
@@ -146,20 +134,20 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
         LocalDate from = semester.getStart();
         LocalDate to = semester.getEnd();
         addObservationRangeCondition(q, from, to);
-        return processCursorResults(collectionForEntity(Observation.class).find(q), 0, 0);
+        return processCursorResults(ownedCollection.find(q), 0, 0);
     }
 
     @Override
     public Set<Observation> getAllObservationsForEntity(final Observable observable) {
         BasicDBObject q = new BasicDBObject("Observation.observationSubject._id", new ObjectId(observable.getId()));
-        return processCursorResults(collectionForEntity(Observation.class).find(q), 0, 0);
+        return processCursorResults(ownedCollection.find(q), 0, 0);
     }
 
     @Override
     public Set<Observation> getAllObservationsForObservationCategory(final AppUser user, final ObservationCategory observationCategory) {
         BasicDBObject q = new BasicDBObject();
         addCategoryCondition(q, observationCategory, user);
-        return processCursorResults(collectionForEntity(Observation.class).find(q), 0, 0);
+        return processCursorResults(ownedCollection.find(q), 0, 0);
     }
 
     @Override
@@ -167,13 +155,13 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
         BasicDBObject q = new BasicDBObject("Observation.observationSubject._id", new ObjectId(observable.getId()));
         addCategoryCondition(q, observationCategory, observable.getAppUser());
         addObservationRangeCondition(q, from, to);
-        return processCursorResults(collectionForEntity(Observation.class).find(q), 0, 0);
+        return processCursorResults(ownedCollection.find(q), 0, 0);
     }
 
     @Override
     public Set<Student> getAllStudentsForClassList(final ClassList classList) {
         BasicDBObject q = new BasicDBObject("Student.classLists._id", new ObjectId(classList.getId()));
-        return processCursorResults(collectionForEntity(Student.class).find(q), 0, 0);
+        return processCursorResults(ownedCollection.find(q), 0, 0);
     }
 
     @Override
@@ -268,19 +256,25 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
         List<DBCursor> cursors = new LinkedList<>();
         boolean ownedGeneric = AppUserOwnedObject.class.getSimpleName().equals(entityType.getSimpleName());
         boolean observableGeneric = Observable.class.getSimpleName().equals(entityType.getSimpleName());
-        for (Class<? extends AppUserOwnedObject> loop : Arrays.asList(Semester.class, ClassList.class, Student.class, Observation.class, Photo.class, TwoPhaseActivity.class, AppUserSettings.class, ObservationCategory.class)) {
-            if (ownedGeneric ||
-                    loop.isAssignableFrom(entityType) ||
-                    (Observable.class.isAssignableFrom(loop) && observableGeneric && !ownedGeneric)) {
-                BasicDBObject dbObject = new BasicDBObject(loop.getSimpleName() + ".appUser._id", new ObjectId(appUser.getId()));
-                if (archived != null) {
-                    dbObject.put(loop.getSimpleName() + ".archived", archived);
-                }
-                DBCursor cursor = collectionForEntity(loop).find(dbObject);
-                cursor.sort(new BasicDBObject("_id", 1));
-                cursors.add(cursor);
+        BasicDBObject q = new BasicDBObject();
+        q.put("appUserId", new ObjectId(appUser.getId()));
+        if (archived != null) {
+            q.put("archived", archived);
+        }
+        if (!ownedGeneric) {
+            if (observableGeneric) {
+                BasicDBList in = new BasicDBList();
+                in.add(Student.class.getCanonicalName());
+                in.add(ClassList.class.getCanonicalName());
+                q.put("class", new BasicDBObject("$in", in));
+            } else {
+                Class<T> iFace = idObjectReflectionHelper.getIdObjectInterfaceForClass(entityType);
+                q.put("class", iFace.getCanonicalName());
             }
         }
+        DBCursor cursor = ownedCollection.find(q);
+        cursor.sort(new BasicDBObject("_id", 1));
+        cursors.add(cursor);
         return cursors;
     }
 
@@ -303,35 +297,14 @@ public class MongoReadOnlyDAO implements ReadOnlyDAO {
         if (archived != null) {
             q.put("Photo.archived", archived);
         }
-        return photosCollection.find(q);
+        return ownedCollection.find(q);
     }
 
     protected DBCollection collectionForEntity(final Class<? extends IdObject> entityType) {
         if (AppUser.class.isAssignableFrom(entityType)) {
             return usersCollection;
         }
-        if (Observable.class.isAssignableFrom(entityType)) {
-            return observablesCollection;
-        }
-        if (Observation.class.isAssignableFrom(entityType)) {
-            return observationsCollection;
-        }
-        if (Photo.class.isAssignableFrom(entityType)) {
-            return photosCollection;
-        }
-        if (Semester.class.isAssignableFrom(entityType)) {
-            return ownedCollection;
-        }
-        if (TwoPhaseActivity.class.isAssignableFrom(entityType)) {
-            return activitiesCollection;
-        }
-        if (AppUserSettings.class.isAssignableFrom(entityType)) {
-            return settingsCollection;
-        }
-        if (ObservationCategory.class.isAssignableFrom(entityType)) {
-            return categoriesCollection;
-        }
-        throw new RuntimeException("Unknown entityType " + entityType.getCanonicalName());
+        return ownedCollection;
     }
 
     protected BasicDBObject createIdQuery(final String id) {

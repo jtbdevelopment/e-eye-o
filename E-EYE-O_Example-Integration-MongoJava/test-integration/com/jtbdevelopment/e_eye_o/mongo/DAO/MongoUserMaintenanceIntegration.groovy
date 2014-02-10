@@ -14,13 +14,13 @@ import org.springframework.test.context.ContextConfiguration
 @ContextConfiguration("/test-integration-context.xml")
 class MongoUserMaintenanceIntegration extends AbstractUserMaintenanceIntegration {
     @Autowired
-    private DBCollection activitiesCollection;
+    private DBCollection ownedCollection;
 
     @Autowired
     private MongoIdObjectWriteConverter writeConverter;
 
     @Override
     void saveDirectly(final IdObject entity) {
-        activitiesCollection.save(writeConverter.convert(entity));
+        ownedCollection.save(writeConverter.convert(entity));
     }
 }

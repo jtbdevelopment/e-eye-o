@@ -7,7 +7,6 @@ import com.jtbdevelopment.e_eye_o.entities.Observable;
 import com.jtbdevelopment.e_eye_o.entities.annotations.IdObjectEntitySettings;
 import com.jtbdevelopment.e_eye_o.events.IdObjectChangedPublisher;
 import com.jtbdevelopment.e_eye_o.mongo.DAO.converters.MongoIdObjectWriteConverter;
-import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
@@ -36,8 +35,6 @@ public class MongoReadWriteDAO extends MongoReadOnlyDAO implements ReadWriteDAO 
     protected MongoIdObjectWriteConverter writeConverter;
     @Autowired
     protected IdObjectChangedPublisher idObjectChangedPublisher;
-    @Autowired
-    protected IdObjectReflectionHelper idObjectReflectionHelper;
     @Autowired
     private FieldUpdateValidator fieldUpdateValidator;
     @Autowired
@@ -119,7 +116,7 @@ public class MongoReadWriteDAO extends MongoReadOnlyDAO implements ReadWriteDAO 
     @Override
     public AppUser updateAppUserLogout(final AppUser appUser) {
         return (AppUser) readConverter.convert(
-                (BasicDBObject) collectionForEntity(AppUser.class).findAndModify(
+                (BasicDBObject) usersCollection.findAndModify(
                         new BasicDBObject("_id", new ObjectId(appUser.getId())),
                         new BasicDBObject("$set", new BasicDBObject("AppUser.lastLogout", DateTime.now().toDate()))));
     }
@@ -127,7 +124,7 @@ public class MongoReadWriteDAO extends MongoReadOnlyDAO implements ReadWriteDAO 
     private <T extends IdObject> void dealWithObservationChanges(final T entity) {
         if (entity instanceof Observation) {
             Observable observed = get(Observable.class, ((Observation) entity).getObservationSubject().getId());
-            BasicDBObject result = (BasicDBObject) collectionForEntity(Observation.class).findOne(
+            BasicDBObject result = (BasicDBObject) ownedCollection.findOne(
                     new BasicDBObject("Observation.observationSubject._id", new ObjectId(observed.getId())),
                     new BasicDBObject("Observation.observationTimestamp", 1),
                     new BasicDBObject("Observation.observationTimestamp", 0)
