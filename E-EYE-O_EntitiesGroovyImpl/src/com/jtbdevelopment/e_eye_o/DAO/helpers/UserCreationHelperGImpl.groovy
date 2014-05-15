@@ -67,6 +67,7 @@ class UserCreationHelperGImpl implements UserCreationHelper {
         appUser.active = true;
         appUser.activated = true;
         activity.archived = true;
+        activity.appUser = appUser
         readWriteDAO.trustedUpdates(Arrays.asList(appUser, activity));
         return readWriteDAO.get(AppUser.class, appUser.getId());
     }

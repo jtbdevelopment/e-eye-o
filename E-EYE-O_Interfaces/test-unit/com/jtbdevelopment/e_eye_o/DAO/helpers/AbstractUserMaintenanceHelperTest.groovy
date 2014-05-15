@@ -56,6 +56,7 @@ abstract class AbstractUserMaintenanceHelperTest {
                 will(returnValue(userDAO))
                 oneOf(userDAO).setPassword(CLEAR_PASSWORD);
                 oneOf(activity).setArchived(true);
+                oneOf(activity).setAppUser(userDAO)
                 oneOf(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, activity));
                 will(returnValue(Arrays.asList(activity, userDAO)));
             }
@@ -76,6 +77,7 @@ abstract class AbstractUserMaintenanceHelperTest {
                 will(returnValue(userDAO))
                 oneOf(userDAO).setPassword(SECURE_PASSWORD);
                 oneOf(activity).setArchived(true);
+                oneOf(activity).setAppUser(userDAO)
                 oneOf(readWriteDAO).trustedUpdates(Arrays.asList(userDAO, activity));
                 will(returnValue(Arrays.asList(activity, userDAO)));
             }
@@ -311,7 +313,7 @@ abstract class AbstractUserMaintenanceHelperTest {
             final TwoPhaseActivity.Activity activity, final DateTime modificationTime, final DateTime expiry = null) {
         [
                 getModificationTimestamp: { return modificationTime },
-                getActivityType: { return activity },
+                getActivityType  : { return activity },
                 getExpirationTime: { return expiry }
         ] as TwoPhaseActivity
     }

@@ -76,6 +76,7 @@ public class UserMaintenanceHelperImpl implements UserMaintenanceHelper {
         AppUser appUser = readWriteDAO.get(AppUser.class, twoPhaseActivity.getAppUser().getId());
         appUser.setPassword(securePassword(newPassword));
         twoPhaseActivity.setArchived(true);
+        twoPhaseActivity.setAppUser(appUser);
         readWriteDAO.trustedUpdates(Arrays.asList(appUser, twoPhaseActivity));
     }
 

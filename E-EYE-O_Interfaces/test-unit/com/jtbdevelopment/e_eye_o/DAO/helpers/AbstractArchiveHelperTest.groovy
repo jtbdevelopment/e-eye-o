@@ -196,7 +196,7 @@ abstract class AbstractArchiveHelperTest {
         context.checking(new Expectations() {
             {
                 oneOf(readWriteDAO).getAllStudentsForClassList(classListDAO)
-                will(returnValue(flip.values().toList() + noFlipSize.values().toList() + noFlipStatus.values().toList()))
+                will(returnValue(flip.values().toSet() + noFlipSize.values().toSet() + noFlipStatus.values().toSet()))
                 flip.each {
                     oneOf(it.value).isArchived()
                     will(returnValue(initial))
@@ -238,7 +238,7 @@ abstract class AbstractArchiveHelperTest {
         context.checking(new Expectations() {
             {
                 oneOf(readWriteDAO).getAllObservationsForEntity(observable)
-                will(returnValue(toFlip.values().toList() + noFlip.values().toList()))
+                will(returnValue(toFlip.values().toSet() + noFlip.values().toSet()))
                 toFlip.each {
                     oneOf(it.value).isArchived()
                     will(returnValue(initial))
@@ -301,7 +301,7 @@ abstract class AbstractArchiveHelperTest {
                 oneOf(readWriteDAO).get(idObject.getClass(), id)
                 will(returnValue(idObjectDAO))
                 oneOf(readWriteDAO).getAllPhotosForEntity(idObjectDAO, 0, 0)
-                will(returnValue(photosToFlip.values().toList() + photosToLeave.values().toList()))
+                will(returnValue(photosToFlip.values().toSet() + photosToLeave.values().toSet()))
                 photosToFlip.each {
                     oneOf(it.value).isArchived()
                     will(returnValue(initialValue))

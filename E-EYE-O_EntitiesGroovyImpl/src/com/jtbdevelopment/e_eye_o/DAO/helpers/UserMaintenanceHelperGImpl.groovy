@@ -47,7 +47,8 @@ class UserMaintenanceHelperGImpl implements UserMaintenanceHelper {
     }
 
     @Override
-    TwoPhaseActivity changeEmailAddress(final AppUser appUser, final String newEmailAddress) throws UserMaintenanceHelper.PasswordChangeTooRecent {
+    TwoPhaseActivity changeEmailAddress(
+            final AppUser appUser, final String newEmailAddress) throws UserMaintenanceHelper.PasswordChangeTooRecent {
         if (!canChangeEmailAddress(appUser)) {
             throw new UserMaintenanceHelper.PasswordChangeTooRecent();
         }
@@ -75,6 +76,7 @@ class UserMaintenanceHelperGImpl implements UserMaintenanceHelper {
         AppUser appUser = readWriteDAO.get(AppUser.class, twoPhaseActivity.getAppUser().getId());
         appUser.password = encryptPassword(newPassword);
         twoPhaseActivity.archived = true;
+        twoPhaseActivity.appUser = appUser
         readWriteDAO.trustedUpdates(Arrays.asList(appUser, twoPhaseActivity));
     }
 

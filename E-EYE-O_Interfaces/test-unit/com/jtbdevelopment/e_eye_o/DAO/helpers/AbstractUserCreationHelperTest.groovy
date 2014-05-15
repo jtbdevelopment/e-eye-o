@@ -128,6 +128,7 @@ abstract class AbstractUserCreationHelperTest {
                 oneOf(userDAO).setActivated(true)
                 oneOf(userDAO).setActive(true)
                 oneOf(activity).setArchived(true)
+                oneOf(activity).setAppUser(userDAO)
                 oneOf(readWriteDAO).trustedUpdates([userDAO, activity])
                 will(returnValue([userUpdate, activityUpdate]))
             }

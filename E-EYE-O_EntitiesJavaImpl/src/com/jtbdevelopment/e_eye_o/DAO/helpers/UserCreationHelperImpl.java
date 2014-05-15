@@ -66,6 +66,7 @@ public class UserCreationHelperImpl implements UserCreationHelper {
         appUser.setActive(true);
         appUser.setActivated(true);
         activity.setArchived(true);
+        activity.setAppUser(appUser);
         readWriteDAO.trustedUpdates(Arrays.asList(appUser, activity));
         return readWriteDAO.get(AppUser.class, appUser.getId());
     }

@@ -49,6 +49,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         wrapped.setModificationTimestamp(DateTime.now());
         dealWithObservationChanges(wrapped, false);
         sessionFactory.getCurrentSession().save(wrapped);
+        ensureAuditIncludesOwner(wrapped);
         idObjectChangedPublisher.publishCreate(wrapped);
         return (T) get(wrapped.getClass(), wrapped.getId());
     }
@@ -72,6 +73,7 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         entity.setModificationTimestamp(DateTime.now());
         sessionFactory.getCurrentSession().merge(wrapped);
+        ensureAuditIncludesOwner(wrapped);
         idObjectChangedPublisher.publishUpdate(wrapped);
         return (T) get(wrapped.getClass(), wrapped.getId());
     }
@@ -90,7 +92,17 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
         final T wrapped = wrapperFactory.wrap(IdObjectWrapperFactory.WrapperKind.DAO, entity);
         sessionFactory.getCurrentSession().delete(wrapped);
         dealWithObservationChanges(wrapped, true);
+        ensureAuditIncludesOwner(wrapped);
         idObjectChangedPublisher.publishDelete(wrapped);
+    }
+
+    protected <T extends IdObject> void ensureAuditIncludesOwner(final T wrapped) {
+        //  Is necessary to get it into envers
+        if (wrapped instanceof AppUserOwnedObject) {
+            AppUser appUser = ((AppUserOwnedObject) wrapped).getAppUser();
+            appUser = (AppUser) sessionFactory.getCurrentSession().merge(appUser);
+            sessionFactory.getCurrentSession().update(appUser);
+        }
     }
 
     @Override
@@ -111,7 +123,8 @@ public class HibernateReadWriteDAO extends HibernateReadOnlyDAO implements ReadW
                     getCurrentSession().createQuery(
                     "select id, observationTimestamp from " +
                             getHibernateEntityName(HibernateObservation.class) +
-                            " where observationSubject = :observationSubject");
+                            " where observationSubject = :observationSubject"
+            );
             query.setParameter("observationSubject", observable);
             List<Object[]> result = query.list();
             Map<String, LocalDateTime> dates = new HashMap<>();
