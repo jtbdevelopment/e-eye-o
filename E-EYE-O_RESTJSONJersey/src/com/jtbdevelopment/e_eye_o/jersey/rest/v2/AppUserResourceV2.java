@@ -11,6 +11,8 @@ import com.jtbdevelopment.e_eye_o.reflection.IdObjectReflectionHelper;
 import com.jtbdevelopment.e_eye_o.security.AppUserUserDetails;
 import com.jtbdevelopment.e_eye_o.serialization.JSONIdObjectSerializer;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 
@@ -27,7 +29,9 @@ import java.util.Set;
  * Time: 12:33 PM
  */
 public class AppUserResourceV2 {
-    private final static int PAGE_SIZE = 10;
+    static final Logger LOGGER = LoggerFactory.getLogger(AppUserResourceV2.class);
+
+    private final static int DEFAULT_PAGE_SIZE = 200;
     private final ReadWriteDAO readWriteDAO;
     private final ArchiveHelper archiveHelper;
     private final DeletionHelper deletionHelper;
@@ -151,26 +155,41 @@ public class AppUserResourceV2 {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
-    public Response getEntitiesForUser(@QueryParam("page") final Integer fromPage) {
-        int from = computePage(fromPage);
+    public Response getEntitiesForUser(
+            @QueryParam("page") final Integer fromPage,
+            @QueryParam("pageSize") final String pageSizeString
+    ) {
+        int pageSize = getPageSize(pageSizeString);
+        int from = computePage(fromPage, pageSize);
         Set<? extends AppUserOwnedObject> set;
         if (archiveFlag == null)
-            set = readWriteDAO.getEntitiesForUser(entityType, appUser, from, PAGE_SIZE);
+            set = readWriteDAO.getEntitiesForUser(entityType, appUser, from, pageSize);
         else {
-            set = archiveFlag ? readWriteDAO.getArchivedEntitiesForUser(entityType, appUser, from, PAGE_SIZE) :
-                    readWriteDAO.getActiveEntitiesForUser(entityType, appUser, from, PAGE_SIZE);
+            set = archiveFlag ? readWriteDAO.getArchivedEntitiesForUser(entityType, appUser, from, pageSize) :
+                    readWriteDAO.getActiveEntitiesForUser(entityType, appUser, from, pageSize);
         }
-        return Response.ok(computePaginatedResults(set, PAGE_SIZE, fromPage == null ? 0 : fromPage)).build();
+        return Response.ok(computePaginatedResults(set, pageSize, fromPage == null ? 0 : fromPage)).build();
     }
 
     @GET
     @Path("ModifiedSince/{modifiedSince}")
     @Produces(MediaType.APPLICATION_JSON)
     @Secured({AppUserUserDetails.ROLE_USER, AppUserUserDetails.ROLE_ADMIN})
-    public Response getModifiedSince(@PathParam("modifiedSince") final String dateTimeString, @QueryParam("lastIdSeen") final String lastIdSeen) {
+    public Response getModifiedSince(
+            @PathParam("modifiedSince") final String dateTimeString,
+            @QueryParam("lastIdSeen") final String lastIdSeen,
+            @QueryParam("pageSize") final String pageSizeString) {
+        LOGGER.warn("Modified Since Params RAW:  modifiedSince =" + dateTimeString + ", lasIdSeen=" + lastIdSeen + ", pageSize=" + pageSizeString);
         DateTime dateTime = DateTime.parse(dateTimeString);
-        List<? extends IdObject> modificationsSince = readWriteDAO.getModificationsSince(appUser, dateTime, lastIdSeen != null ? lastIdSeen : "", PAGE_SIZE);
-        return Response.ok(computePaginatedResults(modificationsSince, PAGE_SIZE, 0)).build();
+        int pageSize = getPageSize(pageSizeString);
+        final String sinceId = lastIdSeen != null ? lastIdSeen : "";
+        LOGGER.warn("Modified Since Params READ:  modifiedSince =" + dateTime + ", lasIdSeen=" + sinceId + ", pageSize=" + pageSize);
+        List<? extends IdObject> modificationsSince = readWriteDAO.getModificationsSince(appUser, dateTime, sinceId, pageSize);
+        return Response.ok(computePaginatedResults(modificationsSince, pageSize, 0)).build();
+    }
+
+    private int getPageSize(final String pageSizeString) {
+        return pageSizeString != null ? Integer.parseInt(pageSizeString) : DEFAULT_PAGE_SIZE;
     }
 
     @Path("{entityId}")
@@ -242,7 +261,7 @@ public class AppUserResourceV2 {
         return builder.withEntities(set).withPageSize(pageSize).withMoreAvailable(set.size() == pageSize).withCurrentPage(currentPage).build();
     }
 
-    private int computePage(final Integer fromPage) {
-        return (Math.max(fromPage == null ? 0 : fromPage, 1) - 1) * PAGE_SIZE;
+    private int computePage(final Integer fromPage, int pageSize) {
+        return (Math.max(fromPage == null ? 0 : fromPage, 1) - 1) * pageSize;
     }
 }
