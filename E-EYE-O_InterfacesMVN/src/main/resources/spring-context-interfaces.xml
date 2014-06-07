@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/cache
+       http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <cache:annotation-driven/>
+
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <util:list id="primaryAppUserObjects" value-type="java.lang.Class">
+        <value>com.jtbdevelopment.e_eye_o.entities.Student</value>
+        <value>com.jtbdevelopment.e_eye_o.entities.Observation</value>
+        <value>com.jtbdevelopment.e_eye_o.entities.Photo</value>
+        <value>com.jtbdevelopment.e_eye_o.entities.ClassList</value>
+        <value>com.jtbdevelopment.e_eye_o.entities.Semester</value>
+        <value>com.jtbdevelopment.e_eye_o.entities.ObservationCategory</value>
+    </util:list>
+
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
+                    <property name="name" value="default"/>
+                </bean>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
+                    <property name="name" value="idObjectGetterMethods"/>
+                </bean>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
+                    <property name="name" value="idObjectSetterMethods"/>
+                </bean>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
+                    <property name="name" value="idObjectFieldPreferences"/>
+                </bean>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
+                    <property name="name" value="idObjectInterfaceForImpl"/>
+                </bean>
+            </set>
+        </property>
+    </bean>
+
+</beans>

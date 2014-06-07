@@ -1,0 +1,2 @@
+Due to inconsistent handling of millis at DB level, either zero out the millis at both get/set level (see most objects)
+or declare field transient and store as long epoch time (see id object modification timestamp)
