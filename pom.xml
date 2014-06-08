@@ -18,6 +18,8 @@
         <module>E-EYE-O_ReportsJasperImpl</module>
         <module>E-EYE-O_RIAVaadinImpl</module>
         <module>E-EYE-O_Example-VaadinJerseyJacksonJavaMVN</module>
+        <module>E-EYE-O_DAOMongoImplMVN</module>
+        <module>E-EYE-O_EntitiesGroovyImplMVN</module>
     </modules>
     <build>
         <pluginManagement>

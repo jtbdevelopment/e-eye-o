@@ -26,6 +26,8 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="E-EYE-O_DAOHibernateImplMVN" />
+        <module name="E-EYE-O_DAOMongoImplMVN" />
+        <module name="E-EYE-O_EntitiesGroovyImplMVN" />
         <module name="E-EYE-O_EntitiesJavaImplMVN" />
         <module name="E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN" />
         <module name="E-EYE-O_Example-VaadinJerseyJacksonJavaMVN" />
@@ -39,6 +41,8 @@
     <bytecodeTargetLevel>
       <module name="E-EYE-O" target="1.7" />
       <module name="E-EYE-O_DAOHibernateImplMVN" target="1.7" />
+      <module name="E-EYE-O_DAOMongoImplMVN" target="1.7" />
+      <module name="E-EYE-O_EntitiesGroovyImplMVN" target="1.7" />
       <module name="E-EYE-O_EntitiesJavaImplMVN" target="1.7" />
       <module name="E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN" target="1.7" />
       <module name="E-EYE-O_Example-VaadinJerseyJacksonJavaMVN" target="1.7" />
