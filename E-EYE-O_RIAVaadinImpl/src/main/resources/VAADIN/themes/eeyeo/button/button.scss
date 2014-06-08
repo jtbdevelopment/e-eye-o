@@ -1,0 +1,27 @@
+@mixin eeyeo-button {
+  .v-button .v-button-wrap, .v-disabled.v-button .v-button-wrap {
+    background-image: none;
+    background-image: linear-gradient(bottom, rgb(242, 227, 185) 12%, rgb(224, 166, 116) 55%);
+    background-image: -o-linear-gradient(bottom, rgb(242, 227, 185) 12%, rgb(224, 166, 116) 55%);
+    background-image: -moz-linear-gradient(bottom, rgb(242, 227, 185) 12%, rgb(224, 166, 116) 55%);
+    background-image: -webkit-linear-gradient(bottom, rgb(242, 227, 185) 12%, rgb(224, 166, 116) 55%);
+    background-image: -ms-linear-gradient(bottom, rgb(242, 227, 185) 12%, rgb(224, 166, 116) 55%);
+
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.09, rgb(242, 227, 185)), color-stop(0.55, rgb(224, 166, 116)));
+    color: black;
+    text-shadow: $forestGreen 0 2px 2px;
+  }
+
+  .v-button-default .v-button-wrap, .v-disabled.v-button-default .v-button-wrap {
+    background-image: none;
+    background-image: linear-gradient(bottom, rgb(242, 227, 185) 12%, rgb(197, 116, 75) 55%);
+    background-image: -o-linear-gradient(bottom, rgb(242, 227, 185) 12%, rgb(197, 116, 75) 55%);
+    background-image: -moz-linear-gradient(bottom, rgb(242, 227, 185) 12%, rgb(197, 116, 75) 55%);
+    background-image: -webkit-linear-gradient(bottom, rgb(242, 227, 185) 12%, rgb(197, 116, 75) 55%);
+    background-image: -ms-linear-gradient(bottom, rgb(242, 227, 185) 12%, rgb(197, 116, 75) 55%);
+
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.12, rgb(242, 227, 185)), color-stop(0.55, rgb(197, 116, 75)));
+    color: black;
+    text-shadow: $forestGreen 0 2px 2px;
+  }
+}

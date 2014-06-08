@@ -28,9 +28,11 @@
         <module name="E-EYE-O_DAOHibernateImplMVN" />
         <module name="E-EYE-O_EntitiesJavaImplMVN" />
         <module name="E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN" />
+        <module name="E-EYE-O_Example-VaadinJerseyJacksonJavaMVN" />
         <module name="E-EYE-O_InterfacesMVN" />
         <module name="E-EYE-O_ReportsJasperImpl" />
         <module name="E-EYE-O_RESTJSONJerseyImpl" />
+        <module name="E-EYE-O_RIAVaadinImpl" />
         <module name="E-EYE-O_SerializationJacksonImplMVN" />
       </profile>
     </annotationProcessing>
@@ -39,8 +41,10 @@
       <module name="E-EYE-O_DAOHibernateImplMVN" target="1.7" />
       <module name="E-EYE-O_EntitiesJavaImplMVN" target="1.7" />
       <module name="E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN" target="1.7" />
+      <module name="E-EYE-O_Example-VaadinJerseyJacksonJavaMVN" target="1.7" />
       <module name="E-EYE-O_InterfacesMVN" target="1.7" />
       <module name="E-EYE-O_ReportsJasperImpl" target="1.7" />
+      <module name="E-EYE-O_RIAVaadinImpl" target="1.7" />
       <module name="E-EYE-O_SerializationJacksonImplMVN" target="1.7" />
     </bytecodeTargetLevel>
   </component>

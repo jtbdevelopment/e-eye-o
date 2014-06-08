@@ -14,11 +14,13 @@
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN/E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN.iml" filepath="$PROJECT_DIR$/E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN/E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Example-Integration-MongoJava/E-EYE-O_Example-Integration-MongoJava.iml" filepath="$PROJECT_DIR$/E-EYE-O_Example-Integration-MongoJava/E-EYE-O_Example-Integration-MongoJava.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Example-VaadinJerseyJacksonJava/E-EYE-O_Example-VaadinJerseyJacksonJava.iml" filepath="$PROJECT_DIR$/E-EYE-O_Example-VaadinJerseyJacksonJava/E-EYE-O_Example-VaadinJerseyJacksonJava.iml" />
+      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Example-VaadinJerseyJacksonJavaMVN/E-EYE-O_Example-VaadinJerseyJacksonJavaMVN.iml" filepath="$PROJECT_DIR$/E-EYE-O_Example-VaadinJerseyJacksonJavaMVN/E-EYE-O_Example-VaadinJerseyJacksonJavaMVN.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_Interfaces/E-EYE-O_Interfaces.iml" filepath="$PROJECT_DIR$/E-EYE-O_Interfaces/E-EYE-O_Interfaces.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_InterfacesMVN/E-EYE-O_InterfacesMVN.iml" filepath="$PROJECT_DIR$/E-EYE-O_InterfacesMVN/E-EYE-O_InterfacesMVN.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_RESTJSONJersey/E-EYE-O_RESTJSONJersey.iml" filepath="$PROJECT_DIR$/E-EYE-O_RESTJSONJersey/E-EYE-O_RESTJSONJersey.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_RESTJSONJerseyImpl/E-EYE-O_RESTJSONJerseyImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_RESTJSONJerseyImpl/E-EYE-O_RESTJSONJerseyImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_RIAVaadin/E-EYE-O_RIAVaadin.iml" filepath="$PROJECT_DIR$/E-EYE-O_RIAVaadin/E-EYE-O_RIAVaadin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/E-EYE-O_RIAVaadinImpl/E-EYE-O_RIAVaadinImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_RIAVaadinImpl/E-EYE-O_RIAVaadinImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_ReportsJasper/E-EYE-O_ReportsJasper.iml" filepath="$PROJECT_DIR$/E-EYE-O_ReportsJasper/E-EYE-O_ReportsJasper.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_ReportsJasperImpl/E-EYE-O_ReportsJasperImpl.iml" filepath="$PROJECT_DIR$/E-EYE-O_ReportsJasperImpl/E-EYE-O_ReportsJasperImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/E-EYE-O_SerializationGroovy/E-EYE-O_SerializationGroovy.iml" filepath="$PROJECT_DIR$/E-EYE-O_SerializationGroovy/E-EYE-O_SerializationGroovy.iml" />

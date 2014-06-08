@@ -3,6 +3,9 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/E-EYE-O_Example-VaadinJerseyJacksonJavaMVN" />
+  </component>
   <component name="IdProvider" IDEtalkID="D5D9F4BEDFEC2D5A7704A5E27232A2E7" />
   <component name="IvyIDEA.ProjectSettings">
     <option name="artifactTypeSettings">
