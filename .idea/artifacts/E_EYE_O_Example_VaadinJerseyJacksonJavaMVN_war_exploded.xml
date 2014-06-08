@@ -30,6 +30,7 @@
           <element id="library" level="project" name="Maven: javax.validation:validation-api:1.1.0.Final" />
           <element id="library" level="project" name="Maven: org.jboss.logging:jboss-logging:3.1.1.GA" />
           <element id="library" level="project" name="Maven: com.fasterxml:classmate:1.0.0" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator-annotation-processor:5.0.2.Final" />
           <element id="library" level="project" name="Maven: com.google.code.findbugs:jsr305:2.0.2" />
           <element id="library" level="project" name="Maven: com.google.guava:guava:15.0" />
           <element id="library" level="project" name="Maven: com.vaadin:vaadin-server:7.1.9" />
@@ -111,8 +112,17 @@
           <element id="library" level="project" name="Maven: jfree:jfreechart:1.0.12" />
           <element id="library" level="project" name="Maven: eclipse:jdtcore:3.1.0" />
           <element id="library" level="project" name="Maven: org.codehaus.castor:castor:1.2" />
+          <element id="archive" name="EntitiesJavaImpl-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="E-EYE-O_EntitiesJavaImplMVN" />
+          </element>
+          <element id="library" level="project" name="Maven: org.imgscalr:imgscalr-lib:4.2" />
+          <element id="library" level="project" name="Maven: javax.el:javax.el-api:2.2.4" />
+          <element id="library" level="project" name="Maven: org.glassfish.web:javax.el:2.2.4" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.28" />
-          <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator-annotation-processor:5.0.2.Final" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jdbc:7.0.47" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-juli:7.0.47" />
+          <element id="library" level="project" name="Maven: com.sun.jersey.contribs:jersey-spring:1.18" />
+          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-servlet:1.18" />
         </element>
       </element>
     </root>
