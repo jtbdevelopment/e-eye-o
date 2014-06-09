@@ -10,18 +10,18 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>E-EYE-O_InterfacesMVN</module>
-        <module>E-EYE-O_EntitiesJavaImplMVN</module>
-        <module>E-EYE-O_DAOHibernateImplMVN</module>
-        <module>E-EYE-O_SerializationJacksonImplMVN</module>
+        <module>E-EYE-O_Interfaces</module>
+        <module>E-EYE-O_EntitiesJavaImpl</module>
+        <module>E-EYE-O_DAOHibernateImpl</module>
+        <module>E-EYE-O_SerializationJacksonImpl</module>
         <module>E-EYE-O_RESTJSONJerseyImpl</module>
         <module>E-EYE-O_ReportsJasperImpl</module>
         <module>E-EYE-O_RIAVaadinImpl</module>
-        <module>E-EYE-O_DAOMongoImplMVN</module>
-        <module>E-EYE-O_EntitiesGroovyImplMVN</module>
-        <module>E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN</module>
-        <module>E-EYE-O_Example-VaadinJerseyJacksonJavaMVN</module>
+        <module>E-EYE-O_DAOMongoImpl</module>
+        <module>E-EYE-O_EntitiesGroovyImpl</module>
         <module>E-EYE-O_SerializationGroovyImpl</module>
+        <module>E-EYE-O_Example-Integration-HibernateJacksonJersey</module>
+        <module>E-EYE-O_Example-VaadinJerseyJacksonJava</module>
         <module>E-EYE-O_Example-Integration-MongoGroovy</module>
     </modules>
     <build>

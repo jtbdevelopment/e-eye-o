@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="E-EYE-O_Example-VaadinJerseyJacksonJavaMVN:war">
-    <output-path>$PROJECT_DIR$/E-EYE-O_Example-VaadinJerseyJacksonJavaMVN/target</output-path>
-    <root id="archive" name="Example-VaadinJerseyJacksonJavaMVN-1.0-SNAPSHOT.war">
-      <element id="artifact" artifact-name="E-EYE-O_Example-VaadinJerseyJacksonJavaMVN:war exploded" />
-    </root>
-  </artifact>
-</component>

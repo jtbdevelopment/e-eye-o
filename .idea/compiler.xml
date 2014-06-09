@@ -25,35 +25,51 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="E-EYE-O_DAOHibernateImpl" />
         <module name="E-EYE-O_DAOHibernateImplMVN" />
+        <module name="E-EYE-O_DAOMongoImpl" />
         <module name="E-EYE-O_DAOMongoImplMVN" />
+        <module name="E-EYE-O_EntitiesGroovyImpl" />
         <module name="E-EYE-O_EntitiesGroovyImplMVN" />
+        <module name="E-EYE-O_EntitiesJavaImpl" />
         <module name="E-EYE-O_EntitiesJavaImplMVN" />
+        <module name="E-EYE-O_Example-Integration-HibernateJacksonJersey" />
         <module name="E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN" />
         <module name="E-EYE-O_Example-Integration-MongoGroovy" />
+        <module name="E-EYE-O_Example-VaadinJerseyJacksonJava" />
         <module name="E-EYE-O_Example-VaadinJerseyJacksonJavaMVN" />
+        <module name="E-EYE-O_Interfaces" />
         <module name="E-EYE-O_InterfacesMVN" />
         <module name="E-EYE-O_ReportsJasperImpl" />
         <module name="E-EYE-O_RESTJSONJerseyImpl" />
         <module name="E-EYE-O_RIAVaadinImpl" />
         <module name="E-EYE-O_SerializationGroovyImpl" />
+        <module name="E-EYE-O_SerializationJacksonImpl" />
         <module name="E-EYE-O_SerializationJacksonImplMVN" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="E-EYE-O" target="1.7" />
+      <module name="E-EYE-O_DAOHibernateImpl" target="1.7" />
       <module name="E-EYE-O_DAOHibernateImplMVN" target="1.7" />
+      <module name="E-EYE-O_DAOMongoImpl" target="1.7" />
       <module name="E-EYE-O_DAOMongoImplMVN" target="1.7" />
+      <module name="E-EYE-O_EntitiesGroovyImpl" target="1.7" />
       <module name="E-EYE-O_EntitiesGroovyImplMVN" target="1.7" />
+      <module name="E-EYE-O_EntitiesJavaImpl" target="1.7" />
       <module name="E-EYE-O_EntitiesJavaImplMVN" target="1.7" />
+      <module name="E-EYE-O_Example-Integration-HibernateJacksonJersey" target="1.7" />
       <module name="E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN" target="1.7" />
       <module name="E-EYE-O_Example-Integration-MongoGroovy" target="1.7" />
+      <module name="E-EYE-O_Example-VaadinJerseyJacksonJava" target="1.7" />
       <module name="E-EYE-O_Example-VaadinJerseyJacksonJavaMVN" target="1.7" />
+      <module name="E-EYE-O_Interfaces" target="1.7" />
       <module name="E-EYE-O_InterfacesMVN" target="1.7" />
       <module name="E-EYE-O_ReportsJasperImpl" target="1.7" />
       <module name="E-EYE-O_RESTJSONJerseyImpl" target="1.7" />
       <module name="E-EYE-O_RIAVaadinImpl" target="1.7" />
       <module name="E-EYE-O_SerializationGroovyImpl" target="1.7" />
+      <module name="E-EYE-O_SerializationJacksonImpl" target="1.7" />
       <module name="E-EYE-O_SerializationJacksonImplMVN" target="1.7" />
     </bytecodeTargetLevel>
   </component>

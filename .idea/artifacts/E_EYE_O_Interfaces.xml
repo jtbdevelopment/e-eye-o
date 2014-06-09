@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="E-EYE-O_Interfaces">
-    <output-path>$PROJECT_DIR$/out/artifacts/E_EYE_O_Interfaces</output-path>
-    <root id="archive" name="E-EYE-O_Interfaces.jar">
-      <element id="module-output" name="E-EYE-O_Interfaces" />
-    </root>
-  </artifact>
-</component>
