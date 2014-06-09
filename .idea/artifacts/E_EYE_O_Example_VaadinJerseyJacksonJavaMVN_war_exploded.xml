@@ -26,13 +26,13 @@
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.0.13" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.5" />
           <element id="library" level="project" name="Maven: joda-time:joda-time:2.3" />
+          <element id="library" level="project" name="Maven: com.google.guava:guava:15.0" />
           <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator:5.0.2.Final" />
           <element id="library" level="project" name="Maven: javax.validation:validation-api:1.1.0.Final" />
           <element id="library" level="project" name="Maven: org.jboss.logging:jboss-logging:3.1.1.GA" />
           <element id="library" level="project" name="Maven: com.fasterxml:classmate:1.0.0" />
           <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator-annotation-processor:5.0.2.Final" />
           <element id="library" level="project" name="Maven: com.google.code.findbugs:jsr305:2.0.2" />
-          <element id="library" level="project" name="Maven: com.google.guava:guava:15.0" />
           <element id="library" level="project" name="Maven: com.vaadin:vaadin-server:7.1.9" />
           <element id="library" level="project" name="Maven: com.vaadin:vaadin-shared:7.1.9" />
           <element id="library" level="project" name="Maven: com.vaadin:vaadin-shared-deps:1.0.2" />
@@ -65,7 +65,8 @@
           <element id="library" level="project" name="Maven: com.sun.jersey:jersey-server:1.18" />
           <element id="library" level="project" name="Maven: asm:asm:3.1" />
           <element id="library" level="project" name="Maven: com.sun.jersey:jersey-core:1.18" />
-          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
+          <element id="library" level="project" name="Maven: com.sun.jersey.contribs:jersey-spring:1.18" />
+          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-servlet:1.18" />
           <element id="archive" name="DAOHibernateImpl-1.0-SNAPSHOT.jar">
             <element id="module-output" name="E-EYE-O_DAOHibernateImplMVN" />
           </element>
@@ -121,8 +122,6 @@
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.28" />
           <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jdbc:7.0.47" />
           <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-juli:7.0.47" />
-          <element id="library" level="project" name="Maven: com.sun.jersey.contribs:jersey-spring:1.18" />
-          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-servlet:1.18" />
         </element>
       </element>
     </root>

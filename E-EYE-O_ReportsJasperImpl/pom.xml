@@ -23,11 +23,6 @@
             <artifactId>jasperreports</artifactId>
             <version>5.5.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>15.0</version>
-        </dependency>
 
         <dependency>
             <groupId>com.jtbdevelopment.e_eye_o</groupId>

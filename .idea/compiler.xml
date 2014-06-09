@@ -48,6 +48,7 @@
       <module name="E-EYE-O_Example-VaadinJerseyJacksonJavaMVN" target="1.7" />
       <module name="E-EYE-O_InterfacesMVN" target="1.7" />
       <module name="E-EYE-O_ReportsJasperImpl" target="1.7" />
+      <module name="E-EYE-O_RESTJSONJerseyImpl" target="1.7" />
       <module name="E-EYE-O_RIAVaadinImpl" target="1.7" />
       <module name="E-EYE-O_SerializationJacksonImplMVN" target="1.7" />
     </bytecodeTargetLevel>
