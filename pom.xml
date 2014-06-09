@@ -21,6 +21,8 @@
         <module>E-EYE-O_EntitiesGroovyImplMVN</module>
         <module>E-EYE-O_Example-Integration-HibernateJacksonJerseyMVN</module>
         <module>E-EYE-O_Example-VaadinJerseyJacksonJavaMVN</module>
+        <module>E-EYE-O_SerializationGroovyImpl</module>
+        <module>E-EYE-O_Example-Integration-MongoGroovy</module>
     </modules>
     <build>
         <pluginManagement>
