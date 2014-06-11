@@ -45,7 +45,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>${springsecurity.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -97,7 +96,7 @@
                 <version>1.2.1</version>
                 <executions>
                     <execution>
-                        <phase>generate-sources</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>java</goal>
                         </goals>

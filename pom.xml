@@ -55,6 +55,7 @@
                 <artifactId>spring-security-bom</artifactId>
                 <version>${springsecurity.version}</version>
                 <scope>import</scope>
+                <type>pom</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
