@@ -216,6 +216,7 @@ public class HibernateReadOnlyDAO implements ReadOnlyDAO {
                         return idObjectFactory.
                                 newDeletedObjectBuilder(owned.getAppUser()).
                                 withDeletedId(owned.getId()).
+                                withId("DELETE" + owned.getId()).
                                 withModificationTimestamp(new DateTime(((DefaultRevisionEntity) input[1]).getRevisionDate())).
                                 build();
                     } else {
